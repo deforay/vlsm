@@ -3,8 +3,7 @@ session_start();
 require_once('../startup.php');
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 include_once(APPLICATION_PATH . '/models/General.php');
-$tableName = "package_details";
-$primaryKey = "package_id";
+
 //system config
 $systemConfigQuery = "SELECT * from system_config";
 $systemConfigResult = $db->query($systemConfigQuery);
@@ -29,8 +28,8 @@ $general = new General($db);
 $aColumns = array('p.package_code', 'p.module', "DATE_FORMAT(p.request_created_datetime,'%d-%b-%Y %H:%i:%s')");
 $orderColumns = array('p.package_id', 'p.module', 'p.package_code', 'p.package_id', 'p.request_created_datetime');
 /* Indexed column (used for fast and accurate table cardinality) */
-$sIndexColumn = $primaryKey;
-$sTable = $tableName;
+// $sIndexColumn = "package_id";
+// $sTable = "package_details";
 /*
          * Paging
          */
@@ -99,18 +98,24 @@ for ($i = 0; $i < count($aColumns); $i++) {
         */
 $facilityQuery = '';
 
-if($_POST['module'] =='vl'){
+if ($_POST['module'] == 'vl') {
+    $tableName = "vl_request_form";
+    $primaryKey = "vl_sample_id";
     $sQuery = "select p.request_created_datetime, p.package_code, p.package_status, p.module, p.package_id,count(vl." . $sCode . ") as sample_code from vl_request_form vl right join package_details p on vl.sample_package_id = p.package_id";
-}else if($_POST['module'] =='eid'){
+} else if ($_POST['module'] == 'eid') {
+    $tableName = "eid_form";
+    $primaryKey = "eid_id";
     $sQuery = "select p.request_created_datetime, p.package_code, p.package_status, p.module, p.package_id,count(vl." . $sCode . ") as sample_code from eid_form vl right join package_details p on vl.sample_package_id = p.package_id";
-}else if($_POST['module'] =='covid19'){
+} else if ($_POST['module'] == 'C19') {
+    $tableName = "form_covid19";
+    $primaryKey = "covid19_id";
     $sQuery = "select p.request_created_datetime, p.package_code, p.package_status, p.module, p.package_id,count(vl." . $sCode . ") as sample_code from form_covid19 vl right join package_details p on vl.sample_package_id = p.package_id";
 }
 
 
 if (isset($sWhere) && $sWhere != "") {
-    $sWhere = ' where ' . $sWhere;
-    $sWhere = $sWhere . 'AND vl.vlsm_country_id ="' . $configResult[0]['value'] . '"';
+    $sWhere = ' WHERE ' . $sWhere;
+    $sWhere = $sWhere . ' AND vl.vlsm_country_id ="' . $configResult[0]['value'] . '"';
 } else {
     $sWhere = ' where vl.vlsm_country_id ="' . $configResult[0]['value'] . '"';
 }
@@ -119,22 +124,22 @@ if (isset($vlfmResult[0]['facilityId'])) {
     $facilityQuery = " AND facility_id IN(" . $vlfmResult[0]['facilityId'] . ")";
 }
 $sQuery = $sQuery . ' ' . $sWhere;
-$sQuery = $sQuery . ' group by p.package_id';
+$sQuery = $sQuery . ' GROUP BY p.package_id';
 if (isset($sOrder) && $sOrder != "") {
     $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
-    $sQuery = $sQuery . ' order by ' . $sOrder;
+    $sQuery = $sQuery . ' ORDER BY ' . $sOrder;
 }
 if (isset($sLimit) && isset($sOffset)) {
     $sQuery = $sQuery . ' LIMIT ' . $sOffset . ',' . $sLimit;
 }
-//error_log($sQuery);die;
+//echo($sQuery);die;
 $rResult = $db->rawQuery($sQuery);
 /* Data set length after filtering */
-$aResultFilterTotal = $db->rawQuery("select p.request_created_datetime ,p.package_code,p.package_status,count(vl." . $sCode . ") as sample_code from vl_request_form vl right join package_details p on vl.sample_package_id = p.package_id $sWhere group by p.package_id order by $sOrder");
+$aResultFilterTotal = $db->rawQuery("select p.request_created_datetime ,p.package_code,p.package_status,count(vl." . $sCode . ") as sample_code from $tableName vl right join package_details p on vl.sample_package_id = p.package_id $sWhere group by p.package_id order by $sOrder");
 $iFilteredTotal = count($aResultFilterTotal);
 
 /* Total data set length */
-$aResultTotal =  $db->rawQuery("select p.request_created_datetime ,p.package_code,p.package_status,count(vl." . $sCode . ") as sample_code from vl_request_form vl right join package_details p on vl.sample_package_id = p.package_id where vl.vlsm_country_id ='" . $configResult[0]['value'] . "' $facilityQuery group by p.package_id");
+$aResultTotal =  $db->rawQuery("select p.request_created_datetime ,p.package_code,p.package_status,count(vl." . $sCode . ") as sample_code from $tableName vl right join package_details p on vl.sample_package_id = p.package_id where vl.vlsm_country_id ='" . $configResult[0]['value'] . "' $facilityQuery group by p.package_id");
 // $aResultTotal = $countResult->fetch_row();
 //print_r($aResultTotal);
 $iTotal = count($aResultTotal);
@@ -173,7 +178,7 @@ foreach ($rResult as $aRow) {
     $row[] = $humanDate;
     if ($package) {
         if ($_SESSION['roleCode'] == 'AD' || $_SESSION['roleCode'] == 'ad') {
-            $editBtn = '<a href="editSpecimenReferralManifest.php?t='.base64_encode($_POST['module']).'&id=' . base64_encode($aRow['package_id']) . '" class="btn btn-primary btn-xs" ' . $disable . ' style="margin-right: 2px;' . $pointerEvent . '" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
+            $editBtn = '<a href="editSpecimenReferralManifest.php?t=' . base64_encode($_POST['module']) . '&id=' . base64_encode($aRow['package_id']) . '" class="btn btn-primary btn-xs" ' . $disable . ' style="margin-right: 2px;' . $pointerEvent . '" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
         } else {
             $editBtn = '';
         }

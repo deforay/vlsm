@@ -96,8 +96,6 @@ try {
   $covid19Data = array(
     'vlsm_instance_id' => $instanceId,
     'vlsm_country_id' => $_POST['formId'],
-    'sample_code_key' => isset($_POST['sampleCodeKey']) ? $_POST['sampleCodeKey'] : null,
-    'sample_code_format' => isset($_POST['sampleCodeFormat']) ? $_POST['sampleCodeFormat'] : null,
     'facility_id' => isset($_POST['facilityId']) ? $_POST['facilityId'] : null,
     'province_id' => isset($_POST['provinceId']) ? $_POST['provinceId'] : null,
     'lab_id' => isset($_POST['labId']) ? $_POST['labId'] : null,
@@ -146,13 +144,13 @@ try {
   if ($id > 0) {
     $_SESSION['alertMsg'] = "Covid-19 test request added successfully";
     //Add event log
-    $eventType = 'add-covid-19-request-drc';
+    $eventType = 'covid-19-add-request';
     $action = ucwords($_SESSION['userName']) . ' added a new Covid-19 request data with the sample id ' . $_POST['covid19SampleId'];
     $resource = 'covid-19-add-request';
 
     $general->activityLog($eventType, $action, $resource);
   } else {
-    $_SESSION['alertMsg'] = "Please try again later";
+    $_SESSION['alertMsg'] = "Unable to add this Covid-19 sample. Please try again later";
   }
   if (isset($_POST['saveNext']) && $_POST['saveNext'] == 'next') {
     header("location:/covid-19/requests/covid-19-add-request.php");

@@ -3,7 +3,7 @@ ob_start();
 session_start();
 include_once '../../startup.php';
 include_once APPLICATION_PATH . '/includes/MysqliDb.php';
-include_once(APPLICATION_PATH.'/models/General.php');
+include_once(APPLICATION_PATH . '/models/General.php');
 $general = new General($db);
 $tableName = "form_covid19";
 //system config
@@ -27,9 +27,11 @@ if ($sarr['user_type'] == 'remoteuser') {
     $rKey = 'R';
     $sampleCode = 'remote_sample_code';
     $sampleCodeKey = 'remote_sample_code_key';
+    $sampleCodeFormat = 'remote_sample_code_format';
 } else {
     $sampleCode = 'sample_code';
     $sampleCodeKey = 'sample_code_key';
+    $sampleCodeFormat = 'sample_code_format';
 }
 
 $existSampleQuery = "SELECT " . $sampleCode . "," . $sampleCodeKey . " FROM form_covid19 where " . $sampleCode . " ='" . trim($_POST['sampleCode']) . "'";
@@ -105,15 +107,18 @@ $vldata = array(
     'last_modified_datetime' => $general->getDateTime(),
     //'manual_result_entry' => 'yes',
     'result_status' => 9,
-    'sample_code_format' => (isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat'] != '') ? $_POST['sampleCodeFormat'] : null,
+    //'sample_code_format' => (isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat'] != '') ? $_POST['sampleCodeFormat'] : null,
 );
 if ($sarr['user_type'] == 'remoteuser') {
     $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] : null;
     $vldata['remote_sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey'] != '') ? $_POST['sampleCodeKey'] : null;
     $vldata['remote_sample'] = 'yes';
+    $vldata['remote_sample_code_format'] = (isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat'] != '') ? $_POST['sampleCodeFormat'] : null;
 } else {
     $vldata['sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] : null;
     $vldata['sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey'] != '') ? $_POST['sampleCodeKey'] : null;
+    $vldata['remote_sample'] = 'no';
+    $vldata['sample_code_format'] = (isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat'] != '') ? $_POST['sampleCodeFormat'] : null;
 }
 if (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '' && $_POST['sampleCollectionDate'] != null && $_POST['sampleCollectionDate'] != '') {
     //echo $tableName;

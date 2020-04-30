@@ -1,5 +1,5 @@
 <?php
-//this file receives the lab data value and updates in the remote db
+//this file is receive lab data value and update in remote db
 $data = json_decode(file_get_contents('php://input'), true);
 
 require_once(dirname(__FILE__) . "/../../startup.php");
@@ -16,42 +16,33 @@ for ($i = 0; $i < sizeof($cResult); $i++) {
 
 $general = new General($db);
 
-function var_error_log($object = null)
-{
-    ob_start();
-    var_dump($object);
-    error_log(ob_get_clean());
-}
-
-
-$allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='vl_request_form'";
+$allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='form_covid19'";
 $allColResult = $db->rawQuery($allColumns);
 $oneDimensionalArray = array_map('current', $allColResult);
-
 $sampleCode = array();
 if (count($data['result']) > 0) {
-
+    $lab = array();
     foreach ($data['result'] as $key => $remoteData) {
-        $lab = array();
-        foreach ($oneDimensionalArray as $columnName) {
-            if (isset($remoteData[$columnName])) {
-                $lab[$columnName] = $remoteData[$columnName];
+        foreach ($oneDimensionalArray as $result) {
+            if (isset($remoteData[$result])) {
+                $lab[$result] = $remoteData[$result];
             } else {
-                $lab[$columnName] = null;
+                $lab[$result] = null;
             }
         }
-        //remove unwanted columns
-        $unwantedColumns = array(
-            'vl_sample_id',
+        //remove result value
+
+        $removeKeys = array(
+            'covid19_id',
             'sample_package_id',
             'sample_package_code',
             //'last_modified_by',
             'request_created_by',
-            'result_printed_datetime'
         );
-        foreach ($unwantedColumns as $removeColumn) {
-            unset($lab[$removeColumn]);
+        foreach ($removeKeys as $keys) {
+            unset($lab[$keys]);
         }
+
 
 
         if (isset($remoteData['approved_by_name']) && $remoteData['approved_by_name'] != '') {
@@ -76,53 +67,37 @@ if (count($data['result']) > 0) {
             //unset($remoteData['approved_by_name']);
         }
 
-
-        //data_sync = 1 means data sync done. data_sync = 0 means sync is not yet done.
-        $lab['data_sync'] = 1; 
+        $lab['data_sync'] = 1; //data_sync = 1 means data sync done. data_sync = 0 means sync is not yet done.
         $lab['last_modified_datetime'] = $general->getDateTime();
 
-        // unset($lab['request_created_by']);
-        // unset($lab['last_modified_by']);
-        // unset($lab['request_created_datetime']);
+        unset($lab['request_created_by']);
+        unset($lab['last_modified_by']);
+        unset($lab['request_created_datetime']);
 
         if ($lab['result_status'] != 7 && $lab['result_status'] != 4) {
             unset($lab['result']);
-            unset($lab['result_value_log']);
-            unset($lab['result_value_absolute']);
-            unset($lab['result_value_text']);
-            unset($lab['result_value_absolute_decimal']);
             unset($lab['is_sample_rejected']);
             unset($lab['reason_for_sample_rejection']);
         }
 
         // Checking if Remote Sample Code is set, if not set we will check if Sample Code is set
         if (isset($lab['remote_sample_code']) && $lab['remote_sample_code'] != '') {
-            error_log("INSIDE REMOTE");
-            $sQuery = "SELECT vl_sample_id,sample_code,remote_sample_code,remote_sample_code_key FROM vl_request_form WHERE remote_sample_code='" . $lab['remote_sample_code'] . "'";
-        } else if (isset($lab['sample_code']) && $lab['sample_code'] != '') {
-            error_log("INSIDE LOCAL");
-            $sQuery = "SELECT vl_sample_id,sample_code,remote_sample_code,remote_sample_code_key FROM vl_request_form WHERE sample_code='" . $lab['sample_code'] . "' AND facility_id = " . $lab['facility_id'];
-            error_log($sQuery);
-        }
+            $sQuery = "SELECT covid19_id,sample_code,remote_sample_code,remote_sample_code_key FROM form_covid19 WHERE remote_sample_code='" . $lab['remote_sample_code'] . "'";
+        } else if (isset($lab['sample_code']) && $lab['sample_code'] != '' && !empty($lab['facility_id'])) {
+            $sQuery = "SELECT covid19_id,sample_code,remote_sample_code,remote_sample_code_key FROM form_covid19 WHERE sample_code='" . $lab['sample_code'] . "' AND facility_id = " . $lab['facility_id'];
+        } else {
 
-        try{
-            $sResult = $db->rawQuery($sQuery);
-
-            //$lab['result_printed_datetime'] = null;            
-    
-            if ($sResult) {
-                $db = $db->where('vl_sample_id', $sResult[0]['vl_sample_id']);
-                $id = $db->update('vl_request_form', $lab);
-            } else {
-                $id = $db->insert('vl_request_form', $lab);
-            }
-        }
-        catch(Exception $e){
+            $sampleCode[] = $lab['sample_code'];
             continue;
         }
 
-       
-
+        $sResult = $db->rawQuery($sQuery);
+        if ($sResult) {
+            $db = $db->where('covid19_id', $sResult[0]['covid19_id']);
+            $id = $db->update('form_covid19', $lab);
+        } else {
+            $id = $db->insert('form_covid19', $lab);
+        }
 
         if ($id > 0 && isset($lab['sample_code'])) {
             $sampleCode[] = $lab['sample_code'];

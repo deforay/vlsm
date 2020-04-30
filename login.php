@@ -15,9 +15,11 @@ $sarr = array();
 for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
   $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
 }
-$shortName = 'VLSM';
+$shortName = 'Sample Management';
+$systemType = "Lab Sample Management Module";
 if ($sarr['user_type'] == 'remoteuser') {
-  $shortName = 'VLSTS';
+  $shortName = 'Sample Tracking';
+  $systemType = "Remote Sample Tracking Module";
   $path = 'assets/img/remote-bg.jpg';
 } else {
   $path = 'assets/img/bg.jpg';
@@ -29,7 +31,7 @@ if ($sarr['user_type'] == 'remoteuser') {
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title><?php echo $shortName; ?> | Viral Load LIS | Login</title>
+  <title><?php echo $shortName; ?> | Login</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
@@ -109,7 +111,7 @@ if ($sarr['user_type'] == 'remoteuser') {
     <div id="loginbox" style="margin-top:20px;margin-bottom:70px;float:right;margin-right:10px;" class="mainbox col-md-3 col-sm-8 ">
       <div class="panel panel-default" style="opacity: 0.93;">
         <div class="panel-heading">
-          <div class="panel-title">Viral Load Sample Management</div>
+          <div class="panel-title"><?php echo $systemType; ?></div>
         </div>
 
         <div style="padding-top:10px;" class="panel-body">

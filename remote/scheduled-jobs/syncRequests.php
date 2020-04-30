@@ -244,3 +244,106 @@ if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] ==
         }
     }
 }
+
+
+/* 
+  ****************************************************************
+  *  COVID-19 TEST REQUESTS 
+  ****************************************************************
+  */
+  $request = array();
+  //$remoteSampleCodeList = array();
+  if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) {
+      $url = $systemConfig['remoteURL'] . '/remote/remote/covid-19-test-requests.php';
+      $data = array(
+          'labName' => $sarr['lab_name'],
+          "Key" => "vlsm-lab-data--",
+      );
+      //open connection
+      $ch = curl_init($url);
+      $json_data = json_encode($data);
+      curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt(
+          $ch,
+          CURLOPT_HTTPHEADER,
+          array(
+              'Content-Type: application/json',
+              'Content-Length: ' . strlen($json_data)
+          )
+      );
+      // execute post
+      $curl_response = curl_exec($ch);
+  
+      //close connection
+      curl_close($ch);
+      $apiResult = json_decode($curl_response, true);
+  
+      if (count($apiResult) > 0) {
+          $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='form_covid19'";
+          $allColResult = $db->rawQuery($allColumns);
+          $columnList = array_map('current', $allColResult);
+          foreach ($apiResult as $key => $remoteData) {
+              foreach ($columnList as $colName) {
+                  if (isset($remoteData[$colName])) {
+                      $request[$colName] = $remoteData[$colName];
+                  } else {
+                      $request[$colName] = null;
+                  }
+              }
+              $removeKeys = array(
+                  'covid19_id',
+                  'sample_batch_id',
+                  'result',
+                  'sample_tested_datetime',
+                  'sample_received_at_vl_lab_datetime',
+                  'result_dispatched_datetime',
+                  'is_sample_rejected',
+                  'reason_for_sample_rejection',
+                  'result_approved_by',
+                  'request_created_by',
+                  'last_modified_by',
+                  'request_created_datetime',
+                  'data_sync'
+              );
+              foreach ($removeKeys as $keys) {
+                  unset($request[$keys]);
+              }
+  
+              $remoteSampleCodeList[] = $request['remote_sample_code'];
+              $request['last_modified_datetime'] = $general->getDateTime();
+  
+              //check whether sample code empty or not
+              // if ($request['sample_code'] != '' && $request['sample_code'] != 0 && $request['sample_code'] != null) {
+              //     $sQuery = "SELECT eid_id FROM eid_form WHERE sample_code='" . $request['sample_code'] . "'";
+              //     $sResult = $db->rawQuery($sQuery);
+              //     $db = $db->where('eid_id', $sResult[0]['eid_id']);
+              //     $id = $db->update('eid_form', $request);
+              // } else {
+              //check exist remote
+              $exsvlQuery = "SELECT covid19_id,sample_code FROM form_covid19 AS vl WHERE remote_sample_code='" . $request['remote_sample_code'] . "'";
+
+              $exsvlResult = $db->query($exsvlQuery);
+              if ($exsvlResult) {
+  
+                  $dataToUpdate = array();
+                  $dataToUpdate['sample_package_code'] = $request['sample_package_code'];
+                  $dataToUpdate['sample_package_id'] = $request['sample_package_id'];
+                  
+                  $db = $db->where('covid19_id', $exsvlResult[0]['covid19_id']);
+                  $id = $db->update('form_covid19', $dataToUpdate);
+              } else {
+                  if (!empty($request['sample_collection_date'])) {
+                      $request['request_created_by'] = 0;
+                      $request['last_modified_by'] = 0;
+                      $request['request_created_datetime'] = $general->getDateTime();
+                      //$request['result_status'] = 6;
+                      $request['data_sync'] = 0; //column data_sync value is 1 equal to data_sync done.value 0 is not done.
+                      $id = $db->insert('form_covid19', $request);
+                  }
+              }
+              //}
+          }
+      }
+  }

@@ -110,11 +110,13 @@ curl_close($ch);
 $result = json_decode($curl_response, true);
 
 if (!empty($result) && count($result) > 0) {
-    foreach ($result as $code) {
-        $db = $db->where('sample_code', $code);
+    //foreach ($result as $code) {
+        $db = $db->where("sample_code IN ('".implode("','",$result)."')");
         $id = $db->update('vl_request_form', array('data_sync' => 1));
-    }
+    //}
 }
+
+
 
 // EID TEST RESULTS
 
@@ -156,9 +158,58 @@ if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] ==
     $result = json_decode($curl_response, true);
 
     if (!empty($result) && count($result) > 0) {
-        foreach ($result as $code) {
-            $db = $db->where('sample_code', $code);
+        //foreach ($result as $code) {
+            $db = $db->where("sample_code IN ('".implode("','",$result)."')");
             $id = $db->update('eid_form', array('data_sync' => 1));
-        }
+        //}
+    }
+}
+
+
+
+// COVID-19 TEST RESULTS
+
+if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) {
+
+    $covid19Query = "SELECT vl.*, a.user_name as 'approved_by_name' 
+                 FROM `form_covid19` AS vl 
+                 LEFT JOIN `user_details` AS a ON vl.result_approved_by = a.user_id 
+                 WHERE result_status NOT IN (9) 
+                 AND sample_code !='' 
+                 AND sample_code is not null 
+                 AND data_sync=0"; // AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
+
+    $vlLabResult = $db->rawQuery($covid19Query);
+
+    $url = $systemConfig['remoteURL'] . '/remote/remote/covid-19-test-results.php';
+    $data = array(
+        "result" => $vlLabResult,
+        "Key" => "vlsm-lab-data--",
+    );
+    //open connection
+    $ch = curl_init($url);
+    $json_data = json_encode($data);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt(
+        $ch,
+        CURLOPT_HTTPHEADER,
+        array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($json_data)
+        )
+    );
+    // execute post
+    $curl_response = curl_exec($ch);
+    //close connection
+    curl_close($ch);
+    $result = json_decode($curl_response, true);
+
+    if (!empty($result) && count($result) > 0) {
+        //foreach ($result as $code) {
+            $db = $db->where("sample_code IN ('".implode("','",$result)."')");
+            $id = $db->update('form_covid19', array('data_sync' => 1));
+        //}
     }
 }
