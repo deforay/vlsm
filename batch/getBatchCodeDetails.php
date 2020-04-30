@@ -179,7 +179,7 @@ foreach ($rResult as $aRow) {
     $noOfSampleLastDateTested = $db->rawQuery($noOfSampleLastDateTested);
 
     $row = array();
-    $printBarcode = '<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Print bar code" onclick="generateBarcode(\'' . base64_encode($aRow['batch_id']) . '\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
+    $printBarcode = '<a href="/batch/generateBarcode.php?id=' . base64_encode($aRow['batch_id']) . '&type='.$_POST['type'].'" target="_blank" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Print bar code"><i class="fa fa-barcode"> Print Barcode</i></a>';
     $printQrcode = '<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Print qr code" onclick="generateQRcode(\'' . base64_encode($aRow['batch_id']) . '\');"><i class="fa fa-qrcode"> Print QR code</i></a>';
     $editPosition = '<a href="'.$editPositionFileName.'?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;margin-top:6px;" title="Edit Position"><i class="fa fa-sort-numeric-desc"> Edit Position</i></a>';
 

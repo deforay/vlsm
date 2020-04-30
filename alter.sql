@@ -2282,8 +2282,8 @@ CREATE TABLE `import_config_controls` (
  `number_of_calibrators` int(11) DEFAULT NULL,
  PRIMARY KEY (`test_type`,`config_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
+--  Thanaseelan April 28, 2020
+ALTER TABLE `import_config` DROP `number_of_in_house_controls`, DROP `number_of_manufacturer_controls`, DROP `number_of_calibrators`;
 
 -- Amit April 30, 2020
 

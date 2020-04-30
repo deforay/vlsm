@@ -21,7 +21,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 
 $eidResults = $general->getEidResults();
 
-
+$labFieldDisabled = '';$rejectionReason='';
 $rKey = '';
 $sKey = '';
 $sFormat = '';
