@@ -20,13 +20,13 @@ $skin = "skin-blue";
 $logoName = "<img src='/assets/img/flask.png' style='margin-top:-5px;max-width:22px;'> <span style=''>VLSM</span>";
 $smallLogoName = "<img src='/assets/img/flask.png'>";
 $systemType = "Lab Sample Management Module";
-$shortName = "VLSM";
+$shortName = "Sample Management";
 if (isset($sarr['user_type']) && $sarr['user_type'] == 'remoteuser') {
 	$skin = "skin-red";
 	$systemType = "Remote Sample Tracking Module";
 	$logoName = "<i class='fa fa-medkit'></i> VLSTS";
 	$smallLogoName = "<i class='fa fa-medkit'></i>";
-	$shortName = "VLSTS";
+	$shortName = "Sample Tracking";
 }
 
 if (isset($systemConfig['instanceName']) && !empty($systemConfig['instanceName'])) {
@@ -162,7 +162,7 @@ $formConfigResult = $db->query($formConfigQuery);
 <head>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title><?php echo $shortName . " | " . ((isset($title) && $title != null && $title != "") ? $title : "Viral Load LIS"); ?></title>
+	<title><?php echo $shortName . " | " . ((isset($title) && $title != null && $title != "") ? $title : "VLSM"); ?></title>
 	<!-- Tell the browser to be responsive to screen width -->
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
