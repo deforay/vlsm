@@ -6,20 +6,20 @@ include_once(APPLICATION_PATH . '/includes/tcpdf/tcpdf.php');
 include_once(APPLICATION_PATH . '/models/General.php');
 
 $general = new General($db);
-$id = base64_decode($_POST['id']);
+$id = base64_decode($_GET['id']);
 
 
-if (isset($_POST['type']) && $_POST['type'] == 'vl') {
+if (isset($_GET['type']) && $_GET['type'] == 'vl') {
     $refTable = "vl_request_form";
     $refPrimaryColumn = "vl_sample_id";
     $patientIdColumn = 'patient_art_no';
     $worksheetName = 'Viral Load Test Worksheet';
-} else if (isset($_POST['type']) && $_POST['type'] == 'eid') {
+} else if (isset($_GET['type']) && $_GET['type'] == 'eid') {
     $refTable = "eid_form";
     $refPrimaryColumn = "eid_id";
     $patientIdColumn = 'child_id';
     $worksheetName = 'EID Test Worksheet';
-}else if (isset($_POST['type']) && $_POST['type'] == 'covid19') {
+}else if (isset($_GET['type']) && $_GET['type'] == 'covid19') {
     $refTable = "form_covid19";
     $refPrimaryColumn = "covid19_id";
     $patientIdColumn = 'patient_id';
