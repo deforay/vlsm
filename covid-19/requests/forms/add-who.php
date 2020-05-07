@@ -370,28 +370,22 @@ foreach ($fResult as $fDetails) {
                                                         <th class="text-center">Date of Testing</th>
                                                         <th class="text-center">Test Result</th>
                                                     </tr>
-                                                    <tr>
-                                                        <td class="text-center">1</td>
-                                                        <td><input type="text" name="testName[]" class="form-control" placeholder="Test name" /></td>
-                                                        <td><input type="text" name="testDate[]" class="form-control dateTime" placeholder="Tested on" /></td>
-                                                        <td><select class="form-control" name="testResult[]">
-                                                                <option value=''> -- Select -- </option>
-                                                                <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
-                                                                    <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option>
-                                                                <?php } ?>
-                                                            </select></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="text-center">2</td>
-                                                        <td><input type="text" name="testName[]" class="form-control" placeholder="Test name" /></td>
-                                                        <td><input type="text" name="testDate[]" class="form-control dateTime" placeholder="Tested on" /></td>
-                                                        <td><select class="form-control" name="testResult[]">
-                                                                <option value=''> -- Select -- </option>
-                                                                <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
-                                                                    <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option>
-                                                                <?php } ?>
-                                                            </select></td>
-                                                    </tr>
+                                                    <?php if(isset($arr['covid19_mandatory_tests']) && $arr['covid19_mandatory_tests'] > 0){
+                                                        foreach(range(1,$arr['covid19_mandatory_tests']) as $rows){?>
+                                                            <tr>
+                                                                <td class="text-center"><?php echo $rows;?></td>
+                                                                <td><input type="text" name="testName[]" id="testName<?php echo $rows;?>" class="form-control" placeholder="Test name" title="Please enter the test name"/></td>
+                                                                <td><input type="text" name="testDate[]" id="testDate<?php echo $rows;?>" class="form-control dateTime" placeholder="Tested on"  title="Please enter the tested on"/></td>
+                                                                <td><select class="form-control" name="testResult[]" id="testResult<?php echo $rows;?>" title="Please select the result <?php echo $rows;?>">
+                                                                        <option value=''> -- Select -- </option>
+                                                                        <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
+                                                                            <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                </td>
+                                                            </tr>
+                                                        <?php }
+                                                     }?>
                                                     <th colspan="3" class="text-right">Final Result</th>
                                                     <td>
                                                         <select class="form-control" name="result" id="result">

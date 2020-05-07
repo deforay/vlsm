@@ -6,11 +6,12 @@ include_once APPLICATION_PATH . '/includes/MysqliDb.php';
 include_once(APPLICATION_PATH . '/models/General.php');
 $general = new General($db);
 
-//echo "<pre>";var_dump($_POST);die;
+// echo "<pre>";var_dump($_POST);die;
 
 
 $tableName = "form_covid19";
 $tableName1 = "activity_log";
+$testTableName = 'covid19_tests';
 
 try {
 	//system config
@@ -121,9 +122,13 @@ try {
 		'travel_country_names'                => isset($_POST['countryName']) ? $_POST['countryName'] : null,
 		'travel_return_date'                  => isset($_POST['returnDate']) ? $_POST['returnDate'] : null,
 		'sample_received_at_vl_lab_datetime'  => isset($_POST['sampleReceivedDate']) ? $_POST['sampleReceivedDate'] : null,
-		'sample_tested_datetime'              => isset($_POST['sampleTestedDateTime']) ? $_POST['sampleTestedDateTime'] : null,
+		// 'sample_tested_datetime'              => isset($_POST['sampleTestedDateTime']) ? $_POST['sampleTestedDateTime'] : null,
+		'sample_tested_datetime'              => $general->getDateTime(),
 		'is_sample_rejected'                  => isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
 		'result'                              => isset($_POST['result']) ? $_POST['result'] : null,
+		'is_result_authorised'                => isset($_POST['isResultAuthorized']) ? $_POST['isResultAuthorized'] : null,
+		'authorized_by'                       => isset($_POST['authorizedBy']) ? $_POST['authorizedBy'] : null,
+		'authorized_on' 					  => isset($_POST['authorizedOn']) ? $general->dateFormat($_POST['authorizedOn']) : null,
 		'result_status'                       => $status,
 		'data_sync'                           => 0,
 		'reason_for_sample_rejection'         => isset($_POST['sampleRejectionReason']) ? $_POST['sampleRejectionReason'] : null,
@@ -134,13 +139,32 @@ try {
 		'last_modified_datetime'              => $general->getDateTime()
 	);
 
-
-	//echo "<pre>";
-	//var_dump($covid19Data);die;
-
+	// echo "<pre>";
+	// var_dump($covid19Data);die;
+	
 	if (isset($_POST['covid19SampleId']) && $_POST['covid19SampleId'] != '') {
+		// echo "<pre>"; print_r($covid19Data);die;
 		$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 		$id = $db->update($tableName, $covid19Data);
+	}
+	if (isset($_POST['covid19SampleId']) && $_POST['covid19SampleId'] != '') {
+		if(isset($_POST['testName']) && count($_POST['testName']) > 0){
+			foreach($_POST['testName'] as $testKey=>$testKitName){
+				if (isset($_POST['testDate'][$testKey]) && trim($_POST['testDate'][$testKey]) != "") {
+					$testedDateTime = explode(" ", $_POST['testDate'][$testKey]);
+					$_POST['testDate'][$testKey] = $general->dateFormat($testedDateTime[0]) . " " . $testedDateTime[1];
+				} else {
+					$_POST['testDate'][$testKey] = NULL;
+				}
+				$covid19TestData = array(
+					'covid19_id'			=> $_POST['covid19SampleId'],
+					'test_name'				=> $testKitName,
+					'sample_tested_datetime'=> date('Y-m-d H:i:s',strtotime($_POST['testDate'][$testKey])),
+					'result'				=> $_POST['testResult'][$testKey],
+				);
+				$db->insert($testTableName,$covid19TestData);
+			}
+		}
 	}
 
 	if ($id > 0) {
