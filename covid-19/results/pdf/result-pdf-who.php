@@ -160,7 +160,7 @@ if (sizeof($requestResult) > 0) {
                 //$smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_frown.png" alt="smile_face"/>';
             } else if ($result['result'] == 'negative') {
                 $vlResult = $result['result'];
-                //$smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_smile.png" alt="smile_face"/>';
+                $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_smile.png" alt="smile_face"/>';
             } else if ($result['result'] == 'indeterminate') {
                 $vlResult = $result['result'];
                 $smileyContent = '';
@@ -300,15 +300,21 @@ if (sizeof($requestResult) > 0) {
             $html .= '<tr>';
                 $html .= '<td colspan="3" style="line-height:10px;"></td>';
             $html .= '</tr>';
+            $html .= '<tr>';
+                $html .= '<td colspan="3" style="line-height:10px;"></td>';
+            $html .= '</tr>';
+            $html .= '<tr>';
+                $html .= '<td colspan="3" style="line-height:10px;"></td>';
+            $html .= '</tr>';
         
             $html .= '<tr>';
                 $html .= '<td colspan="3">';
                     // $html .= '<table style="padding:12px 2px 2px 2px;">';
                     $html .= '<table>';
-                        $html .= '<tr style="background-color:#dbdbdb;">
+                        // $html .= '<tr style="background-color:#dbdbdb;">
+                        $html .= '<tr>
                             <td colspan="3" style="line-height:40px;font-size:12px;font-weight:normal;">';
-                            // $html .= '&nbsp;&nbsp;Result &nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . $covid19Results[$result['result']];
-                                /* Result Section */
+                                /* Test Result Section */
                                 $html .= '<table border="1">
                                         <tr>
                                             <td align="center" width="15%"><b>Test No.</b></td>
@@ -326,13 +332,19 @@ if (sizeof($requestResult) > 0) {
                                         </tr>';
                                     }
                                 }
-                                $html .='<tr>
+                                $html .='</table>';
+                                $html .='<table style="padding:12px 2px 2px 2px;">
+                                            <tr>
+                                                <td style="line-height:70px;font-size:18px;font-weight:normal;">&nbsp;&nbsp;Result &nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . $covid19Results[$result['result']] .'</td>
+                                                <td align="center">'.$smileyContent.'</td>
+                                            </tr>
+                                        </table>';
+                                /* $html .='<tr>
                                         <td colspan="2"></td>
                                         <td align="center"><b>Final Result</b></td>
                                         <td align="center"><b>'.ucwords($result['result']).'</b></td>
-                                    </tr>
-                                </table>
-                            </td>';
+                                    </tr>'; */
+                            $html .='</td>';
                             // $html .= '<td>' . $smileyContent . '</td>';
                         $html .='</tr>';
                         //$html .= '<tr style="background-color:#dbdbdb;"><td colspan="2" style="line-height:70px;font-size:18px;font-weight:normal;">&nbsp;&nbsp;Result &nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . ucfirst($result['result']) . '</td><td style="">' . $smileyContent . '</td></tr>';
