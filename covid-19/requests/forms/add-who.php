@@ -58,7 +58,7 @@ foreach ($fResult as $fDetails) {
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <h1><i class="fa fa-edit"></i> COVID-19 VIRUS LABORATORY TEST REQUEST</h1>
+        <h1><i class="fa fa-edit"></i> WHO COVID-19 VIRUS LABORATORY TEST REQUEST FORM</h1>
         <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
             <li class="active">Add New Request</li>
@@ -69,6 +69,7 @@ foreach ($fResult as $fDetails) {
         <!-- SELECT2 EXAMPLE -->
         <div class="box box-default">
             <div class="box-header with-border">
+
                 <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
             </div>
             <!-- /.box-header -->
@@ -234,7 +235,7 @@ foreach ($fResult as $fDetails) {
                                     </tr>
                                     <tr>
                                         <td colspan=4>
-                                        <ul>
+                                            <ul>
                                                 <li>All specimens collected should be regarded as potentially infectious and you <u>MUST CONTACT</u> the reference laboratory before sending samples.</li>
                                                 <li>All samples must be sent in accordance with category B transport requirements.</li>
                                             </ul>
@@ -288,9 +289,9 @@ foreach ($fResult as $fDetails) {
                                     <tr>
                                         <th style="width:15% !important">Date of Symptom Onset <span class="mandatory">*</span> </th>
                                         <td style="width:35% !important;">
-                                            <input class="form-control date isRequired" type="text" name="dateOfSymptomOnset" id="dateOfSymptomOnset" placeholder="Symptom Onset Date"  />
+                                            <input class="form-control date isRequired" type="text" name="dateOfSymptomOnset" id="dateOfSymptomOnset" placeholder="Symptom Onset Date" />
                                         </td>
-                                        <th style="width:15% !important">Has the patient had contact with a confirmed case?  <span class="mandatory">*</span></th>
+                                        <th style="width:15% !important">Has the patient had contact with a confirmed case? <span class="mandatory">*</span></th>
                                         <td style="width:25% !important;">
                                             <select name="contactWithConfirmedCase" id="contactWithConfirmedCase" class="form-control isRequired" title="Please choose if the patient has had a contact with confirmed case" style="width:100%">
                                                 <option value="">-- Select --</option>
@@ -302,7 +303,7 @@ foreach ($fResult as $fDetails) {
                                         </td>
                                     </tr>
                                     <tr>
-                                    <th colspan=2>Has the patient had a recent history of travelling to an affected area?  <span class="mandatory">*</span></th>
+                                        <th colspan=2>Has the patient had a recent history of travelling to an affected area? <span class="mandatory">*</span></th>
                                         <td style="width:25% !important;">
                                             <select name="hasRecentTravelHistory" id="hasRecentTravelHistory" class="form-control isRequired" title="Please choose if the patient has had a recent history of travelling to an affected area" style="width:100%">
                                                 <option value="">-- Select --</option>
@@ -311,19 +312,19 @@ foreach ($fResult as $fDetails) {
                                                 <option value='unknown'> Unknown </option>
                                             </select>
                                         </td>
-                                        </tr>
-                                    <tr class="historyfield">   
+                                    </tr>
+                                    <tr class="historyfield">
                                         <th>If Yes, Country Name(s)</th>
                                         <td>
-                                        <input class="historyfield form-control" type="text" name="countryName" id="countryName" placeholder="Country Name(s)"  />
+                                            <input class="historyfield form-control" type="text" name="countryName" id="countryName" placeholder="Country Name(s)" />
                                         </td>
                                         <th>Return Date</th>
                                         <td>
-                                        <input class="historyfield form-control date" type="text" name="returnDate" id="returnDate" placeholder="Return Date"  />
+                                            <input class="historyfield form-control date" type="text" name="returnDate" id="returnDate" placeholder="Return Date" />
                                         </td>
                                     </tr>
 
-                                </table>                                
+                                </table>
 
 
                             </div>
@@ -361,21 +362,79 @@ foreach ($fResult as $fDetails) {
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style="width:25%;"><label for="">Sample Test Date </label></td>
-                                            <td style="width:25%;">
-                                                <input type="text" class="form-control dateTime" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Sample Tested Date and Time" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;" />
+                                            <td colspan="4">
+                                                <table class="table table-bordered table-striped">
+                                                    <tr>
+                                                        <th class="text-center">Test No.</th>
+                                                        <th class="text-center">Name of the Testkit (or) Test Method used</th>
+                                                        <th class="text-center">Date of Testing</th>
+                                                        <th class="text-center">Test Result</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-center">1</td>
+                                                        <td><input type="text" name="testName[]" class="form-control" placeholder="Test name" /></td>
+                                                        <td><input type="text" name="testDate[]" class="form-control dateTime" placeholder="Tested on" /></td>
+                                                        <td><select class="form-control" name="testResult[]">
+                                                                <option value=''> -- Select -- </option>
+                                                                <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
+                                                                    <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option>
+                                                                <?php } ?>
+                                                            </select></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-center">2</td>
+                                                        <td><input type="text" name="testName[]" class="form-control" placeholder="Test name" /></td>
+                                                        <td><input type="text" name="testDate[]" class="form-control dateTime" placeholder="Tested on" /></td>
+                                                        <td><select class="form-control" name="testResult[]">
+                                                                <option value=''> -- Select -- </option>
+                                                                <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
+                                                                    <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option>
+                                                                <?php } ?>
+                                                            </select></td>
+                                                    </tr>
+                                                    <th colspan="3" class="text-right">Final Result</th>
+                                                    <td>
+                                                        <select class="form-control" name="result" id="result">
+                                                            <option value=''> -- Select -- </option>
+                                                            <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
+                                                                <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </td>
+                                                </table>
                                             </td>
+                                        </tr>
+                                        <tr>
 
-
-                                            <th>Result</th>
+                                            <th>Is Result Authorized ?</th>
                                             <td>
-                                                <select class="form-control" name="result" id="result">
-                                                    <option value=''> -- Select -- </option>
-                                                    <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
-                                                        <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option>
-                                                    <?php } ?>
+                                                <select name="isResultAuthorized" id="isResultAuthorized" class="form-control" title="Is Result authorized ?" style="width:100%">
+                                                    <option value="">-- Select --</option>
+                                                    <option value='yes'> Yes </option>
+                                                    <option value='no'> No </option>
                                                 </select>
                                             </td>
+                                            <th>Authorized By</th>
+                                            <td><input type="text" name="authorizedBy" id="authorizedBy" class="form-control" placeholder="Authorized By" /></td>
+
+                                        </tr>
+                                        <tr>
+
+                                            <th>Authorized on</td>
+                                            <td><input type="text" name="authorizedOn" class="form-control date" placeholder="Authorized on" /></td>
+                                            <th></th>
+                                            <td></td>
+
+                                        </tr>
+                                        <tr>
+                                            <!-- <td style="width:25%;"><label for="">Sample Test Date </label></td>
+                                            <td style="width:25%;">
+                                                <input type="text" class="form-control dateTime" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Sample Tested Date and Time" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;" />
+                                            </td> -->
+
+
+                                            <td></td>
+                                            <td></td>
                                         </tr>
 
                                     </table>
@@ -539,13 +598,6 @@ foreach ($fResult as $fDetails) {
         }
     }
 
-    function updateMotherViralLoad() {
-        //var motherVl = $("#motherViralLoadCopiesPerMl").val();
-        var motherVlText = $("#motherViralLoadText").val();
-        if (motherVlText != '') {
-            $("#motherViralLoadCopiesPerMl").val('');
-        }
-    }
 
     $(document).ready(function() {
 
@@ -558,13 +610,6 @@ foreach ($fResult as $fDetails) {
         // $('#province').select2({
         //     placeholder: "Province"
         // });
-        $("#motherViralLoadCopiesPerMl").on("change keyup paste", function() {
-            var motherVl = $("#motherViralLoadCopiesPerMl").val();
-            //var motherVlText = $("#motherViralLoadText").val();
-            if (motherVl != '') {
-                $("#motherViralLoadText").val('');
-            }
-        });
 
 
     });
