@@ -216,13 +216,15 @@ foreach ($fResult as $fDetails) {
 
                                         <th>Patient address</th>
                                         <td><textarea class="form-control " id="patientAddress" name="patientAddress" placeholder="Patient Address" title="Patient Address" style="width:100%;" onchange=""></textarea></td>
-
                                     </tr>
+                                    <tr>
+                                        <th>Province</th>
+                                        <td><input type="text" class="form-control " id="patientProvince" name="patientProvince" placeholder="Patient Province" title="Please enter the patient province" style="width:100%;"/></td>
 
-
+                                        <th>District</th>
+                                        <td><input class="form-control" id="patientDistrict" name="patientDistrict" placeholder="Patient District" title="Please enter the patient district" style="width:100%;"></td>
+                                    </tr>
                                 </table>
-
-
                                 <br><br>
                                 <table class="table">
                                     <tr>
