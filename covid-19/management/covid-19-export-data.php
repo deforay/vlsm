@@ -69,7 +69,7 @@ $covid19Results = $general->getCovid19Results();
 									<option value=""> -- Select -- </option>
 									<?php
 									foreach ($fResult as $name) {
-										?>
+									?>
 										<option value="<?php echo $name['facility_id']; ?>"><?php echo ucwords($name['facility_name'] . "-" . $name['facility_code']); ?></option>
 									<?php
 									}
@@ -82,30 +82,30 @@ $covid19Results = $general->getCovid19Results();
 									<option value=""> -- Select -- </option>
 									<?php
 									foreach ($vlLabResult as $vlLab) {
-										?>
+									?>
 										<option value="<?php echo $vlLab['facility_id']; ?>"><?php echo ucwords($vlLab['facility_name'] . "-" . $vlLab['facility_code']); ?></option>
 									<?php
 									}
 									?>
 								</select>
-                            </td>
-                            </tr>
-						<tr>                            
+							</td>
+						</tr>
+						<tr>
 							<th>Sample Test Date</th>
 							<td>
 								<input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;" />
 							</td>
-						
+
 							<th>Result </th>
 							<td>
 								<select class="form-control" id="vLoad" name="vLoad" title="Please select batch code" style="width:220px;">
 									<option value=""> -- Select -- </option>
-									    <?php foreach($covid19Results as $covid19ResultKey => $covid19ResultValue){ ?>
-                                        <option value="<?php echo $covid19ResultKey; ?>"> <?php echo $covid19ResultValue; ?> </option>
-                                        <?php } ?>
+									<?php foreach ($covid19Results as $covid19ResultKey => $covid19ResultValue) { ?>
+										<option value="<?php echo $covid19ResultKey; ?>"> <?php echo $covid19ResultValue; ?> </option>
+									<?php } ?>
 								</select>
-                            </td>
-                            
+							</td>
+
 							<th>Last Print Date</th>
 							<td>
 								<input type="text" id="printDate" name="printDate" class="form-control" placeholder="Select Print Date" readonly style="width:220px;background:#fff;" />
@@ -121,14 +121,14 @@ $covid19Results = $general->getCovid19Results();
 									<option value="6">Awaiting Clinic Approval</option>
 								</select>
 							</td>
-							
+
 							<th>Funding Sources</th>
 							<td>
 								<select class="form-control" name="fundingSource" id="fundingSource" title="Please choose funding source">
 									<option value=""> -- Select -- </option>
 									<?php
 									foreach ($fundingSourceList as $fundingSource) {
-										?>
+									?>
 										<option value="<?php echo base64_encode($fundingSource['funding_source_id']); ?>"><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
 									<?php } ?>
 								</select>
@@ -139,7 +139,7 @@ $covid19Results = $general->getCovid19Results();
 									<option value=""> -- Select -- </option>
 									<?php
 									foreach ($implementingPartnerList as $implementingPartner) {
-										?>
+									?>
 										<option value="<?php echo base64_encode($implementingPartner['i_partner_id']); ?>"><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
 									<?php } ?>
 								</select>
@@ -321,20 +321,40 @@ $covid19Results = $general->getCovid19Results();
 			//"bStateSave" : true,
 			"iDisplayLength": 100,
 			"bRetrieve": true,
-			"aoColumns": [
-                { "sClass": "center" }, 
-                <?php if ($sarr['user_type'] != 'standalone') { ?> 
-                    { "sClass": "center"},
-                <?php } ?> 
-                { "sClass": "center"},
-				{ "sClass": "center"},
-				{ "sClass": "center"},
-				{ "sClass": "center"},
-				{ "sClass": "center"},
-				{ "sClass": "center"},
-				{ "sClass": "center"},
-				{ "sClass": "center"},
-				{ "sClass": "center", "bSortable": false },
+			"aoColumns": [{
+					"sClass": "center"
+				},
+				<?php if ($sarr['user_type'] != 'standalone') { ?> {
+						"sClass": "center"
+					},
+				<?php } ?> {
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center",
+					"bSortable": false
+				},
 			],
 			"aaSorting": [
 				[0, "asc"]
@@ -343,7 +363,7 @@ $covid19Results = $general->getCovid19Results();
 			"bServerSide": true,
 			"sAjaxSource": "/covid-19/management/get-data-export.php",
 			"fnServerData": function(sSource, aoData, fnCallback) {
-				
+
 				aoData.push({
 					"name": "sampleCollectionDate",
 					"value": $("#sampleCollectionDate").val()
@@ -404,9 +424,9 @@ $covid19Results = $general->getCovid19Results();
 
 	function convertSearchResultToPdf(id) {
 		<?php
-		    $path = '';
-            $path = '/covid-19/results/generate-result-pdf.php'; 
-        ?>
+		$path = '';
+		$path = '/covid-19/results/generate-result-pdf.php';
+		?>
 		$.post("<?php echo $path; ?>", {
 				source: 'print',
 				id: id
@@ -444,7 +464,6 @@ $covid19Results = $general->getCovid19Results();
 				}
 			});
 	}
-
 </script>
 <?php
 include(APPLICATION_PATH . '/footer.php');
