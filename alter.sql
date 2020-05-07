@@ -2297,3 +2297,4 @@ CREATE TABLE `covid19_tests` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `global_config` (`display_name`, `name`, `value`, `status`) VALUES ('No. of Covid-19 Mandatory Tests', 'covid19_mandatory_tests', '2', 'active');
+ALTER TABLE `form_covid19` ADD `is_result_authorised` VARCHAR(255) NULL DEFAULT NULL AFTER `result`, ADD `authorized_by` VARCHAR(255) NULL DEFAULT NULL AFTER `is_result_authorised`, ADD `authorized_on` DATE NULL DEFAULT NULL AFTER `authorized_by`;

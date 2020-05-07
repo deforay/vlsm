@@ -83,6 +83,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
     </section>
     <!-- Main content -->
     <section class="content">
+        <pre><?php print_r($covid19TestQuery);?></pre>
         <!-- SELECT2 EXAMPLE -->
         <div class="box box-default">
             <div class="box-header with-border">
@@ -251,9 +252,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
 
                                         <th>District</th>
                                         <td><input class="form-control" value="<?php echo $covid19Info['patient_district']; ?>" id="patientDistrict" name="patientDistrict" placeholder="Patient District" title="Please enter the patient district" style="width:100%;"></td>
-
                                     </tr>
-
                                 </table>
 
 
@@ -403,6 +402,61 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             </td>
                                         </tr>
                                         <tr>
+                                            <td colspan="4">
+                                                <table class="table table-bordered table-striped">
+                                                    <tr>
+                                                        <th class="text-center">Test No.</th>
+                                                        <th class="text-center">Name of the Testkit (or) Test Method used</th>
+                                                        <th class="text-center">Date of Testing</th>
+                                                        <th class="text-center">Test Result</th>
+                                                    </tr>
+                                                    <?php if(isset($arr['covid19_mandatory_tests']) && $arr['covid19_mandatory_tests'] > 0){
+                                                        foreach(range(1,$arr['covid19_mandatory_tests']) as $indexKey=>$rows){?>
+                                                            <tr>
+                                                                <td class="text-center"><?php echo $rows;?><input type="hidden" name="testId[]" value="<?php echo base64_encode($covid19TestInfo[$indexKey]['test_id']);?>"></td>
+                                                                <td><input type="text" value="<?php echo $covid19TestInfo[$indexKey]['test_name'];?>" name="testName[]" id="testName<?php echo $rows;?>" class="form-control" placeholder="Test name" title="Please enter the test name"/></td>
+                                                                <td><input type="text" value="<?php echo $general->humanDateFormat($covid19TestInfo[$indexKey]['sample_tested_datetime']);?>" name="testDate[]" id="testDate<?php echo $rows;?>" class="form-control dateTime" placeholder="Tested on"  title="Please enter the tested on"/></td>
+                                                                <td><select class="form-control" name="testResult[]" id="testResult<?php echo $rows;?>" title="Please select the result <?php echo $rows;?>">
+                                                                        <option value=''> -- Select -- </option>
+                                                                        <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
+                                                                            <option value="<?php echo $c19ResultKey; ?>" <?php echo ($covid19TestInfo[$indexKey]['result'] == $c19ResultKey) ? "selected='selected'" : ""; ?>> <?php echo $c19ResultValue; ?> </option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                </td>
+                                                            </tr>
+                                                        <?php }
+                                                     }?>
+                                                    <th colspan="3" class="text-right">Final Result</th>
+                                                    <td>
+                                                        <select class="form-control" name="result" id="result">
+                                                            <option value=''> -- Select -- </option>
+                                                            <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
+                                                                <option value="<?php echo $c19ResultKey; ?>" <?php echo ($covid19Info['result'] == $c19ResultKey) ? "selected='selected'" : ""; ?>> <?php echo $c19ResultValue; ?> </option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </td>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Is Result Authorized ?</th>
+                                            <td>
+                                                <select name="isResultAuthorized" id="isResultAuthorized" class="form-control" title="Is Result authorized ?" style="width:100%">
+                                                    <option value="">-- Select --</option>
+                                                    <option value='yes' <?php echo ($covid19Info['is_result_authorised'] == 'yes') ? "selected='selected'" : ""; ?>> Yes </option>
+                                                    <option value='no' <?php echo ($covid19Info['is_result_authorised'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
+                                                </select>
+                                            </td>
+                                            <th>Authorized By</th>
+                                            <td><input type="text" value="<?php echo $covid19Info['authorized_by'];?>" name="authorizedBy" id="authorizedBy" class="form-control" placeholder="Authorized By" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Authorized on</td>
+                                            <td><input type="text" value="<?php echo $general->humanDateFormat($covid19Info['authorized_on']);?>" name="authorizedOn" class="form-control date" placeholder="Authorized on" /></td>
+                                            <th></th>
+                                            <td></td>
+                                        </tr>
+                                        <!-- <tr>
                                             <td style="width:25%;"><label for="">Sample Test Date </label></td>
                                             <td style="width:25%;">
                                                 <input type="text" class="form-control dateTime" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Test effectué le" <?php echo $labFieldDisabled; ?> onchange="" value="<?php echo $general->humanDateFormat($covid19Info['sample_tested_datetime']) ?>" style="width:100%;" />
@@ -418,7 +472,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                     <?php } ?>
                                                 </select>
                                             </td>
-                                        </tr>
+                                        </tr> -->
 
                                     </table>
                                 </div>
