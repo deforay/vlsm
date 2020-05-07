@@ -2264,16 +2264,11 @@ CREATE TABLE `covid19_imported_controls` (
  `imported_date_time` datetime DEFAULT NULL,
  PRIMARY KEY (`control_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;  
-
-
-
 ALTER TABLE `form_covid19` ADD `is_result_mail_sent` VARCHAR(255) NULL DEFAULT 'no' AFTER `lot_expiration_date`;
-
-
+-- ------------------------------------------------------------
 -- Version 3.20 ---- Amit April 22 2020
-
+-- ------------------------------------------------------------
 -- Thanaseelan April 27, 2020
-
 CREATE TABLE `import_config_controls` (
  `test_type` varchar(255) NOT NULL,
  `config_id` int(11) NOT NULL,
@@ -2286,5 +2281,19 @@ CREATE TABLE `import_config_controls` (
 ALTER TABLE `import_config` DROP `number_of_in_house_controls`, DROP `number_of_manufacturer_controls`, DROP `number_of_calibrators`;
 
 -- Amit April 30, 2020
-
 ALTER TABLE `form_covid19` CHANGE `sample_code_key` `sample_code_key` INT(11) NULL;
+-- Thanaseelan May 7, 2020
+ALTER TABLE `form_covid19` ADD `patient_province` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_address`, ADD `patient_district` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_province`;
+-- From Amit May 7, 2020
+CREATE TABLE `covid19_tests` (
+ `test_id` int(11) NOT NULL AUTO_INCREMENT,
+ `covid19_id` int(11) NOT NULL,
+ `test_name` varchar(500) NOT NULL,
+ `sample_tested_datetime` datetime NOT NULL,
+ `result` varchar(500) NOT NULL,
+ PRIMARY KEY (`test_id`),
+ KEY `covid19_id` (`covid19_id`),
+ CONSTRAINT `covid19_tests_ibfk_1` FOREIGN KEY (`covid19_id`) REFERENCES `form_covid19` (`covid19_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `global_config` (`display_name`, `name`, `value`, `status`) VALUES ('No. of Covid-19 Mandatory Tests', 'covid19_mandatory_tests', '2', 'active');
