@@ -333,10 +333,13 @@ if (sizeof($requestResult) > 0) {
                                     }
                                 }
                                 $html .='</table>';
-                                $html .='<table style="padding:12px 2px 2px 2px;">
+                                $html .='<table style="padding:10px">
                                             <tr>
-                                                <td style="line-height:70px;font-size:18px;font-weight:normal;">&nbsp;&nbsp;Result &nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . $covid19Results[$result['result']] .'</td>
-                                                <td align="center">'.$smileyContent.'</td>
+                                                <td colspan="2" style="line-height:10px;"></td>
+                                            </tr>
+                                            <tr style="background-color:#dbdbdb;">
+                                                <td style="line-height:70px;font-size:18px;font-weight:normal;"><br>&nbsp;&nbsp;Result &nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . $covid19Results[$result['result']] .'</td>
+                                                <td align="center"><br>'.$smileyContent.'</td>
                                             </tr>
                                         </table>';
                                 /* $html .='<tr>
