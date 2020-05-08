@@ -79,6 +79,9 @@ try {
 				}
 			}
 		}
+	}else{
+		$db = $db->where('covid19_id', $_POST['covid19SampleId']);
+		$id = $db->delete($testTableName);
 	}
 	// echo '<pre>'; print_r($_POST);die;
 	//var_dump($covid19Data);die;
