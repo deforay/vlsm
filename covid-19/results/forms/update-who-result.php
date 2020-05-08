@@ -402,9 +402,9 @@ foreach ($fResult as $fDetails) {
                                                 }else { ?>
                                                     <tr>
                                                         <td class="text-center">1</td>
-                                                        <td><input type="text" name="testName[]" id="testName1" class="form-control test-name-table" placeholder="Test name" title="Please enter the test name for row 1"/></td>
-                                                        <td><input type="text" name="testDate[]" id="testDate1" class="form-control test-name-table dateTime" placeholder="Tested on"  title="Please enter the tested on for row 1"/></td>
-                                                        <td><select class="form-control test-name-table" name="testResult[]" id="testResult1" title="Please select the result for row 1">
+                                                        <td><input type="text" name="testName[]" id="testName1" class="form-control test-name-table-input" placeholder="Test name" title="Please enter the test name for row 1"/></td>
+                                                        <td><input type="text" name="testDate[]" id="testDate1" class="form-control test-name-table-input dateTime" placeholder="Tested on"  title="Please enter the tested on for row 1"/></td>
+                                                        <td><select class="form-control test-name-table-input" name="testResult[]" id="testResult1" title="Please select the result for row 1">
                                                                 <option value=''> -- Select -- </option>
                                                                 <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
                                                                     <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option>
