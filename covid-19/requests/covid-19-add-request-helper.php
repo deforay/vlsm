@@ -165,6 +165,9 @@ try {
 				$db->insert($testTableName,$covid19TestData);
 			}
 		}
+	}else{
+		$db = $db->where('covid19_id', $_POST['covid19SampleId']);
+		$id = $db->delete($testTableName);
 	}
 
 	if ($id > 0) {
