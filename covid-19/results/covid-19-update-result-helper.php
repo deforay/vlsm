@@ -49,7 +49,14 @@ try {
 		$covid19Data['result'] = null;
 		$covid19Data['result_status'] = 4;
 	}
-	if (isset($_POST['covid19SampleId']) && $_POST['covid19SampleId'] != '') {
+	if(isset($_POST['deletedRow']) && trim($_POST['deletedRow']) != '' && ($_POST['isSampleRejected'] == 'no' || $_POST['isSampleRejected'] == '')){
+		$deleteRows = explode(',',$_POST['deletedRow']);
+		foreach($deleteRows as $delete){
+			$db = $db->where('test_id', base64_decode($delete));
+			$id = $db->delete($testTableName);
+		}
+	}
+	if (isset($_POST['covid19SampleId']) && $_POST['covid19SampleId'] != '' && ($_POST['isSampleRejected'] == 'no' || $_POST['isSampleRejected'] == '')) {
 		if(isset($_POST['testName']) && count($_POST['testName']) > 0){
 			foreach($_POST['testName'] as $testKey=>$testerName){
 				if (isset($_POST['testDate'][$testKey]) && trim($_POST['testDate'][$testKey]) != "") {

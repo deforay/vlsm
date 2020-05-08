@@ -106,7 +106,7 @@ try {
 	} else if ($sarr['user_type'] == 'vluser' && $_POST['oldStatus'] == 9) {
 		$_POST['status'] = 6;
 	}
-	if ($_POST['status'] == '') {
+	if (isset($_POST['status']) && $_POST['status'] == '') {
 		$_POST['status']  = $_POST['oldStatus'];
 	}
 
@@ -155,7 +155,7 @@ try {
 	if ($sarr['user_type'] == 'remoteuser') {
 		//$covid19Data['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] : NULL;
 	} else {
-		if ($_POST['sampleCodeCol'] != '') {
+		if (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') {
 			//$covid19Data['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') ? $_POST['sampleCodeCol'] : NULL;
 		} else {
 			$covid19Model = new Model_Covid19($db);
@@ -175,8 +175,14 @@ try {
 		$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 		$id = $db->update($tableName, $covid19Data);
 	}
-	
-	if (isset($_POST['covid19SampleId']) && $_POST['covid19SampleId'] != '') {
+	if(isset($_POST['deletedRow']) && trim($_POST['deletedRow']) != '' && ($_POST['isSampleRejected'] == 'no' || $_POST['isSampleRejected'] == '')){
+		$deleteRows = explode(',',$_POST['deletedRow']);
+		foreach($deleteRows as $delete){
+			$db = $db->where('test_id', base64_decode($delete));
+			$id = $db->delete($testTableName);
+		}
+	}
+	if (isset($_POST['covid19SampleId']) && $_POST['covid19SampleId'] != '' && ($_POST['isSampleRejected'] == 'no' || $_POST['isSampleRejected'] == '')) {
 		if(isset($_POST['testName']) && count($_POST['testName']) > 0){
 			foreach($_POST['testName'] as $testKey=>$testerName){
 				if (isset($_POST['testDate'][$testKey]) && trim($_POST['testDate'][$testKey]) != "") {

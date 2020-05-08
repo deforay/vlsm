@@ -312,8 +312,9 @@ if (sizeof($requestResult) > 0) {
                     // $html .= '<table style="padding:12px 2px 2px 2px;">';
                     $html .= '<table>';
                         // $html .= '<tr style="background-color:#dbdbdb;">
-                        $html .= '<tr>
-                            <td colspan="3" style="line-height:40px;font-size:12px;font-weight:normal;">';
+                        $html .= '<tr>';
+                            $html .= '<td colspan="3" style="line-height:40px;font-size:12px;font-weight:normal;">';
+                                if(isset($covid19TestInfo) && count($covid19TestInfo) > 0 && $arr['covid19_tests_table_in_results_pdf'] == 'yes'){
                                 /* Test Result Section */
                                 $html .= '<table border="1">
                                         <tr>
@@ -322,17 +323,17 @@ if (sizeof($requestResult) > 0) {
                                             <td align="center" width="25%"><b>Date of Testing</b></td>
                                             <td align="center" width="15%"><b>Test Result</b></td>
                                         </tr>';
-                                if(isset($arr['covid19_mandatory_tests']) && $arr['covid19_mandatory_tests'] > 0){
-                                    foreach(range(1,$arr['covid19_mandatory_tests']) as $indexKey=>$rows){
+                                
+                                    foreach($covid19TestInfo as $indexKey=>$rows){
                                         $html .= '<tr>
-                                            <td align="center" width="15%">'.$rows.'</td>
+                                            <td align="center" width="15%">'.($indexKey+1).'</td>
                                             <td align="center" width="45%">'.$covid19TestInfo[$indexKey]['test_name'].'</td>
                                             <td align="center" width="25%">'.$general->humanDateFormat($covid19TestInfo[$indexKey]['sample_tested_datetime']).'</td>
                                             <td align="center" width="15%">'.ucwords($covid19TestInfo[$indexKey]['result']).'</td>
                                         </tr>';
                                     }
-                                }
                                 $html .='</table>';
+                                }
                                 $html .='<table style="padding:10px">
                                             <tr>
                                                 <td colspan="2" style="line-height:10px;"></td>
@@ -342,13 +343,7 @@ if (sizeof($requestResult) > 0) {
                                                 <td align="center"><br>'.$smileyContent.'</td>
                                             </tr>
                                         </table>';
-                                /* $html .='<tr>
-                                        <td colspan="2"></td>
-                                        <td align="center"><b>Final Result</b></td>
-                                        <td align="center"><b>'.ucwords($result['result']).'</b></td>
-                                    </tr>'; */
                             $html .='</td>';
-                            // $html .= '<td>' . $smileyContent . '</td>';
                         $html .='</tr>';
                         //$html .= '<tr style="background-color:#dbdbdb;"><td colspan="2" style="line-height:70px;font-size:18px;font-weight:normal;">&nbsp;&nbsp;Result &nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . ucfirst($result['result']) . '</td><td style="">' . $smileyContent . '</td></tr>';
                         if ($result['reason_for_sample_rejection'] != '') {

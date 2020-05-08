@@ -212,13 +212,17 @@ if ($arr['vl_form'] == 1) {
     }
 	function changeReject(val){
 		if (val == 'yes') {
+			$('.test-name-table-input').prop('disabled',true);
+			$('.test-name-table').addClass('disabled');
 			$('#sampleRejectionReason').addClass('isRequired');
-			$('#sampleTestedDateTime,#result').removeClass('isRequired');
+			$('#sampleTestedDateTime,#result,.test-name-table-input').removeClass('isRequired');
 			$('#result').prop('disabled', true);
 			$('#sampleRejectionReason').prop('disabled', false);
 		} else if (val == 'no') {
+			$('.test-name-table-input').prop('disabled',false);
+			$('.test-name-table').removeClass('disabled');
 			$('#sampleRejectionReason').removeClass('isRequired');
-			$('#sampleTestedDateTime,#result').addClass('isRequired');
+			$('#sampleTestedDateTime,#result,.test-name-table-input').addClass('isRequired');
 			$('#result').prop('disabled', false);
 			$('#sampleRejectionReason').prop('disabled', true);
 		}

@@ -87,21 +87,17 @@ foreach ($fResult as $fDetails) {
                             <table class="table" style="width:100%">
                                 <tr>
                                     <?php if ($sarr['user_type'] == 'remoteuser') { ?>
-                                        <td><label for="sampleCode">Sample ID </label></td>
-                                        <td>
-                                            <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"><?php echo ($sCode != '') ? $sCode : $covid19Info[$sampleCode]; ?></span>
+                                        <td><label for="sampleCode">Sample ID </label> </td>
+                                        <td colspan="5">
+                                            <span id="sampleCodeInText" style="width:30%;border-bottom:1px solid #333;"><?php echo ($sCode != '') ? $sCode : $covid19Info[$sampleCode]; ?></span>
                                             <input type="hidden" class="<?php echo $sampleClass; ?>" id="sampleCode" name="sampleCode" value="<?php echo ($sCode != '') ? $sCode : $covid19Info[$sampleCode]; ?>" />
                                         </td>
                                     <?php } else { ?>
-                                        <td><label for="sampleCode">Sample ID </label><span class="mandatory">*</span></td>
-                                        <td>
-                                            <input type="text" readonly value="<?php echo $covid19Info['sample_code'] ?>" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Échantillon ID" title="Please enter échantillon id" style="width:100%;" onchange="" />
+                                        <td><label for="sampleCode">Sample ID </label><span class="mandatory">*</span> </td>
+                                        <td colspan="5">
+                                            <input type="text" readonly value="<?php echo ($sCode != '') ? $sCode : $covid19Info[$sampleCode]; ?>" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Sample ID" title="Please enter Sample ID" style="width:30%;" onchange="" />
                                         </td>
                                     <?php } ?>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
                                 </tr>
                                 <tr>
                                     <td><label for="province">Province </label><span class="mandatory">*</span></td>
@@ -375,37 +371,66 @@ foreach ($fResult as $fDetails) {
                                     <tr>
                                         <td colspan="4">
                                             <table class="table table-bordered table-striped">
+                                            <thead>
                                                 <tr>
                                                     <th class="text-center">Test No.</th>
                                                     <th class="text-center">Name of the Testkit (or) Test Method used</th>
                                                     <th class="text-center">Date of Testing</th>
                                                     <th class="text-center">Test Result</th>
                                                 </tr>
-                                                <?php if(isset($arr['covid19_mandatory_tests']) && $arr['covid19_mandatory_tests'] > 0){
-                                                    foreach(range(1,$arr['covid19_mandatory_tests']) as $indexKey=>$rows){?>
+                                            </thead>
+                                            <tbody id="testKitNameTable">
+                                                <?php if(isset($covid19TestInfo) && count($covid19TestInfo) > 0){
+                                                    foreach($covid19TestInfo as $indexKey=>$rows){?>
                                                         <tr>
-                                                            <td class="text-center"><?php echo $rows;?><input type="hidden" name="testId[]" value="<?php echo base64_encode($covid19TestInfo[$indexKey]['test_id']);?>"></td>
-                                                            <td><input type="text" value="<?php echo $covid19TestInfo[$indexKey]['test_name'];?>" name="testName[]" id="testName<?php echo $rows;?>" class="form-control" placeholder="Test name" title="Please enter the test name"/></td>
-                                                            <td><input type="text" value="<?php echo $general->humanDateFormat($covid19TestInfo[$indexKey]['sample_tested_datetime']);?>" name="testDate[]" id="testDate<?php echo $rows;?>" class="form-control dateTime" placeholder="Tested on"  title="Please enter the tested on"/></td>
-                                                            <td><select class="form-control" name="testResult[]" id="testResult<?php echo $rows;?>" title="Please select the result <?php echo $rows;?>">
+                                                            <td class="text-center"><?php echo ($indexKey+1);?><input type="hidden" name="testId[]" value="<?php echo base64_encode($covid19TestInfo[$indexKey]['test_id']);?>"></td>
+                                                            <td><input type="text" value="<?php echo $covid19TestInfo[$indexKey]['test_name'];?>" name="testName[]" id="testName<?php echo ($indexKey+1);?>" class="form-control test-name-table-input" placeholder="Test name" title="Please enter the test name for row <?php echo ($indexKey+1);?>"/></td>
+                                                            <td><input type="text" value="<?php echo $general->humanDateFormat($covid19TestInfo[$indexKey]['sample_tested_datetime']);?>" name="testDate[]" id="testDate<?php echo ($indexKey+1);?>" class="form-control test-name-table-input dateTime" placeholder="Tested on"  title="Please enter the tested on for row <?php echo ($indexKey+1);?>"/></td>
+                                                            <td><select class="form-control test-name-table-input" name="testResult[]" id="testResult<?php echo ($indexKey+1);?>" title="Please select the result for row <?php echo ($indexKey+1);?>">
                                                                     <option value=''> -- Select -- </option>
                                                                     <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
                                                                         <option value="<?php echo $c19ResultKey; ?>" <?php echo ($covid19TestInfo[$indexKey]['result'] == $c19ResultKey) ? "selected='selected'" : ""; ?>> <?php echo $c19ResultValue; ?> </option>
                                                                     <?php } ?>
                                                                 </select>
                                                             </td>
+                                                            <td style="vertical-align:middle;text-align: center;">
+                                                                <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;
+                                                                <a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);deleteRow('<?php echo base64_encode($covid19TestInfo[$indexKey]['test_id']);?>');"><i class="fa fa-minus"></i></a>
+                                                            </td>
                                                         </tr>
                                                     <?php }
-                                                    }?>
-                                                <th colspan="3" class="text-right">Final Result</th>
-                                                <td>
-                                                    <select class="form-control" name="result" id="result">
-                                                        <option value=''> -- Select -- </option>
-                                                        <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
-                                                            <option value="<?php echo $c19ResultKey; ?>" <?php echo ($covid19Info['result'] == $c19ResultKey) ? "selected='selected'" : ""; ?>> <?php echo $c19ResultValue; ?> </option>
-                                                        <?php } ?>
-                                                    </select>
-                                                </td>
+                                                }else { ?>
+                                                    <tr>
+                                                        <td class="text-center">1</td>
+                                                        <td><input type="text" name="testName[]" id="testName1" class="form-control test-name-table" placeholder="Test name" title="Please enter the test name for row 1"/></td>
+                                                        <td><input type="text" name="testDate[]" id="testDate1" class="form-control test-name-table dateTime" placeholder="Tested on"  title="Please enter the tested on for row 1"/></td>
+                                                        <td><select class="form-control test-name-table" name="testResult[]" id="testResult1" title="Please select the result for row 1">
+                                                                <option value=''> -- Select -- </option>
+                                                                <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
+                                                                    <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option>
+                                                                <?php } ?>
+                                                            </select>
+                                                        </td>
+                                                        <td style="vertical-align:middle;text-align: center;">
+                                                            <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;
+                                                            <a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                <?php }?>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th colspan="3" class="text-right">Final Result</th>
+                                                    <td>
+                                                        <select class="form-control" name="result" id="result">
+                                                            <option value=''> -- Select -- </option>
+                                                            <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
+                                                                <option value="<?php echo $c19ResultKey; ?>" <?php echo ($covid19Info['result'] == $c19ResultKey) ? "selected='selected'" : ""; ?>> <?php echo $c19ResultValue; ?> </option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
                                             </table>
                                         </td>
                                     </tr>
@@ -459,6 +484,7 @@ foreach ($fResult as $fDetails) {
                     <?php } ?>
                     <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                     <input type="hidden" name="formId" id="formId" value="7" />
+                    <input type="hidden" name="deletedRow" id="deletedRow" value="" />
                     <input type="hidden" name="covid19SampleId" id="covid19SampleId" value="<?php echo ($covid19Info['covid19_id']); ?>" />
                     <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
                     <input type="hidden" id="sampleCode" name="sampleCode" value="<?php echo $covid19Info['sample_code'] ?>" />
@@ -482,6 +508,8 @@ foreach ($fResult as $fDetails) {
     provinceName = true;
     facilityName = true;
     machineName = true;
+    tableRowId = <?php echo (isset($covid19TestInfo) && count($covid19TestInfo) > 0)?(count($covid19TestInfo) + 1):2;?>;
+    deletedRow = [];
 
     function getfacilityDetails(obj) {
         $.blockUI();
@@ -585,10 +613,7 @@ foreach ($fResult as $fDetails) {
 
 
     $(document).ready(function() {
-
-
         $('.disabledForm input, .disabledForm select , .disabledForm textarea ').attr('disabled', true);
-
         $('#facilityId').select2({
             placeholder: "Select Clinic/Health Center"
         });
@@ -599,7 +624,57 @@ foreach ($fResult as $fDetails) {
             placeholder: "Province"
         });
         getfacilityProvinceDetails($("#facilityId").val());
-
-
     });
+
+    function insRow() {
+        rl = document.getElementById("testKitNameTable").rows.length;
+        var a = document.getElementById("testKitNameTable").insertRow(rl);
+        a.setAttribute("style", "display:none");
+        var b = a.insertCell(0);
+        var c = a.insertCell(1);
+        var d = a.insertCell(2);
+        var e = a.insertCell(3);
+        var f = a.insertCell(4);
+        f.setAttribute("align", "center");
+        b.setAttribute("align", "center");
+        f.setAttribute("style", "vertical-align:middle");
+
+        b.innerHTML = tableRowId;
+        c.innerHTML = '<input type="text" name="testName[]" id="testName'+tableRowId+'" class="form-control test-name-table-input" placeholder="Test name" title="Please enter the test name for row '+tableRowId+'"/>';
+        d.innerHTML = '<input type="text" name="testDate[]" id="testDate'+tableRowId+'" class="form-control test-name-table-input dateTime" placeholder="Tested on"  title="Please enter the tested on for row '+tableRowId+'"/>';
+        e.innerHTML = '<select class="form-control test-name-table-input" name="testResult[]" id="testResult'+tableRowId+'" title="Please select the result for row '+tableRowId+'"><option value=""> -- Select -- </option><?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?> <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option> <?php } ?> </select>';
+        f.innerHTML = '<a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;<a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>';
+        $(a).fadeIn(800);
+        $('.dateTime').datetimepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'dd-M-yy',
+            timeFormat: "HH:mm",
+            maxDate: "Today",
+            onChangeMonthYear: function(year, month, widget) {
+                setTimeout(function() {
+                    $('.ui-datepicker-calendar').show();
+                });
+            },
+            yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+        }).click(function() {
+            $('.ui-datepicker-calendar').show();
+        });
+        tableRowId++;
+    }
+
+    function removeAttributeRow(el) {
+        $(el).fadeOut("slow", function() {
+            el.parentNode.removeChild(el);
+            rl = document.getElementById("testKitNameTable").rows.length;
+            if (rl == 0) {
+                insRow();
+            }
+        });
+    }
+
+    function deleteRow(id){
+        deletedRow.push(id);
+        $('#deletedRow').val(deletedRow);
+    }
 </script>

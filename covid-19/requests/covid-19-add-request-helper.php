@@ -147,7 +147,7 @@ try {
 		$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 		$id = $db->update($tableName, $covid19Data);
 	}
-	if (isset($_POST['covid19SampleId']) && $_POST['covid19SampleId'] != '') {
+	if (isset($_POST['covid19SampleId']) && $_POST['covid19SampleId'] != '' && ($_POST['isSampleRejected'] == 'no' || $_POST['isSampleRejected'] == '')) {
 		if(isset($_POST['testName']) && count($_POST['testName']) > 0){
 			foreach($_POST['testName'] as $testKey=>$testKitName){
 				if (isset($_POST['testDate'][$testKey]) && trim($_POST['testDate'][$testKey]) != "") {
