@@ -369,7 +369,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         <tr>
                                             <th>Is Sample Rejected ?</th>
                                             <td>
-                                                <select class="form-control" name="isSampleRejected" id="isSampleRejected">
+                                                <select class="form-control result-focus" name="isSampleRejected" id="isSampleRejected">
                                                     <option value=''> -- Select -- </option>
                                                     <option value="yes" <?php echo ($covid19Info['is_sample_rejected'] == 'yes') ? "selected='selected'" : ""; ?>> Yes </option>
                                                     <option value="no" <?php echo ($covid19Info['is_sample_rejected'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
@@ -411,7 +411,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                                     <td class="text-center"><?php echo ($indexKey+1);?><input type="hidden" name="testId[]" value="<?php echo base64_encode($covid19TestInfo[$indexKey]['test_id']);?>"></td>
                                                                     <td><input type="text" value="<?php echo $covid19TestInfo[$indexKey]['test_name'];?>" name="testName[]" id="testName<?php echo ($indexKey+1);?>" class="form-control test-name-table-input" placeholder="Test name" title="Please enter the test name for row <?php echo ($indexKey+1);?>"/></td>
                                                                     <td><input type="text" value="<?php echo $general->humanDateFormat($covid19TestInfo[$indexKey]['sample_tested_datetime']);?>" name="testDate[]" id="testDate<?php echo ($indexKey+1);?>" class="form-control test-name-table-input dateTime" placeholder="Tested on"  title="Please enter the tested on for row <?php echo ($indexKey+1);?>"/></td>
-                                                                    <td><select class="form-control test-name-table-input" name="testResult[]" id="testResult<?php echo ($indexKey+1);?>" title="Please select the result for row <?php echo ($indexKey+1);?>">
+                                                                    <td><select class="form-control test-name-table-input result-focus" name="testResult[]" id="testResult<?php echo ($indexKey+1);?>" title="Please select the result for row <?php echo ($indexKey+1);?>">
                                                                             <option value=''> -- Select -- </option>
                                                                             <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
                                                                                 <option value="<?php echo $c19ResultKey; ?>" <?php echo ($covid19TestInfo[$indexKey]['result'] == $c19ResultKey) ? "selected='selected'" : ""; ?>> <?php echo $c19ResultValue; ?> </option>
@@ -447,7 +447,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                         <tr>
                                                             <th colspan="3" class="text-right">Final Result</th>
                                                             <td>
-                                                                <select class="form-control" name="result" id="result">
+                                                                <select class="form-control result-focus" name="result" id="result">
                                                                     <option value=''> -- Select -- </option>
                                                                     <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
                                                                         <option value="<?php echo $c19ResultKey; ?>" <?php echo ($covid19Info['result'] == $c19ResultKey) ? "selected='selected'" : ""; ?>> <?php echo $c19ResultValue; ?> </option>
@@ -458,6 +458,10 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                     </tfoot>
                                                 </table>
                                             </td>
+                                        </tr>
+                                        <tr class="change-reason" style="display: none;">
+                                            <th>Reason for Changing <span class="mandatory">*</span></td>
+                                            <td colspan="3"><textarea type="text" name="reasonForChanging" id="reasonForChanging" class="form-control date" placeholder="Enter the reason for changing" title="Please enter the reason for changing"></textarea></td>
                                         </tr>
                                         <tr>
                                             <th>Is Result Authorized ?</th>
@@ -642,7 +646,10 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
 
 
     $(document).ready(function() {
-
+        $('.result-focus').change(function(e){
+            $('.change-reason').show(500);
+            $('#reasonForChanging').addClass('isRequired');
+        });
 
         $('#facilityId').select2({
             placeholder: "Select Clinic/Health Center"

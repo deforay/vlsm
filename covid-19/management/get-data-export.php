@@ -121,12 +121,11 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                         vl.patient_gender,
                         vl.patient_age,
                         vl.sample_collection_date,
-                        -- vl.treatment_initiated_date,
-                        -- vl.date_of_initiation_of_current_regimen,
-                        -- vl.test_requested_on,
                         vl.sample_tested_datetime,
+                        vl.sample_received_at_vl_lab_datetime,
                         vl.is_sample_rejected,
                         vl.result,
+                        vl.is_result_authorised,
                         vl.approver_comments,
                         b.batch_code,
                         ts.status_name,
@@ -412,7 +411,11 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                $row[] = ucwords($aRow['status_name']);
                $row[] = (isset($aRow['funding_source_name']) && trim($aRow['funding_source_name'])!= '')?ucwords($aRow['funding_source_name']):'';
                $row[] = (isset($aRow['i_partner_name']) && trim($aRow['i_partner_name'])!= '')?ucwords($aRow['i_partner_name']):'';
-               $row[] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertSearchResultToPdf('.$aRow['covid19_id'].');"><i class="fa fa-file-text"></i> Result PDF</a>';
+               if($aRow['is_result_authorised'] == 'yes'){
+                    $row[] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertSearchResultToPdf('.$aRow['covid19_id'].');"><i class="fa fa-file-text"></i> Result PDF</a>';
+               }else{
+                    $row[] = '<a href="javascript:void(0);" class="btn btn-default btn-xs disabled" style="margin-right: 2px;" title="View"><i class="fa fa-ban"></i> Not Authorized</a>';
+               }
 
                $output['aaData'][] = $row;
           }
