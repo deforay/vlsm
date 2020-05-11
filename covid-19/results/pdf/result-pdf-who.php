@@ -292,7 +292,7 @@ if (sizeof($requestResult) > 0) {
             $html .= '</tr>';
 
             $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['travel_country_names']. '</td>';
+                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['travel_country_names']). '</td>';
                 $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $general->humanDateFormat($result['travel_return_date']) . '</td>';
                 $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
             $html .= '</tr>';

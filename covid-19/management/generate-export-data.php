@@ -26,7 +26,7 @@ if (isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery']) != "")
 	$output = array();
 	$sheet = $excel->getActiveSheet();
 
-	$headings = array("S.No.", "Sample Code", "Health Facility Name", "Health Facility Code", "District/County", "Province/State", "Patient ID", "Patient Name", "Patient DoB", "Patient Age", "Patient Gender", "Sample Collection Date", "Is Sample Rejected?", "Sample Tested On", "Result", "Sample Received On", "Date Result Dispatched", "Comments", "Funding Source", "Implementing Partner");
+	$headings = array("S.No.", "Sample Code", "Health Facility Name", "Health Facility Code", "District/County", "Province/State", "Patient ID", "Patient Name", "Patient DoB", "Patient Age", "Patient Gender", "Sample Collection Date","Date of Symptom Onset", "Has the patient had contact with a confirmed case?", "Has the patient had a recent history of travelling to an affected area?", "If Yes, Country Name(s)", "Return Date", "Is Sample Rejected?", "Sample Tested On", "Result", "Sample Received On", "Date Result Dispatched", "Comments", "Funding Source", "Implementing Partner");
 
 	$colNo = 1;
 
@@ -151,6 +151,11 @@ if (isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery']) != "")
 		$row[] = ($aRow['patient_age'] != NULL && trim($aRow['patient_age']) != '' && $aRow['patient_age'] > 0) ? $aRow['patient_age'] : 0;
 		$row[] = $gender;
 		$row[] = $sampleCollectionDate;
+		$row[] = $general->humanDateFormat($aRow['date_of_symptom_onset']);
+		$row[] = ucwords($aRow['contact_with_confirmed_case']);
+		$row[] = ucwords($aRow['has_recent_travel_history']);
+		$row[] = ucwords($aRow['travel_country_names']);
+		$row[] = $general->humanDateFormat($aRow['travel_return_date']);
 		$row[] = $sampleRejection;
 		$row[] = $sampleTestedOn;
 		$row[] = $eidResults[$aRow['result']];
