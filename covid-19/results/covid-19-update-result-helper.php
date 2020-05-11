@@ -37,6 +37,7 @@ try {
 		'is_result_authorised'                => isset($_POST['isResultAuthorized']) ? $_POST['isResultAuthorized'] : null,
 		'authorized_by'                       => isset($_POST['authorizedBy']) ? $_POST['authorizedBy'] : null,
 		'authorized_on' 					  => isset($_POST['authorizedOn']) ? $general->dateFormat($_POST['authorizedOn']) : null,
+		'reason_for_changing'				  => (isset($_POST['reasonForChanging']) && !empty($_POST['reasonForChanging'])) ? $_POST['reasonForChanging'] : null,
 		'result_status'                       => 6,
 		'data_sync'                           => 0,
 		'reason_for_sample_rejection'         => isset($_POST['sampleRejectionReason']) ? $_POST['sampleRejectionReason'] : null,

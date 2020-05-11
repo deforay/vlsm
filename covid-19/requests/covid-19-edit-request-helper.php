@@ -143,6 +143,7 @@ try {
 		'is_result_authorised'                => isset($_POST['isResultAuthorized']) ? $_POST['isResultAuthorized'] : null,
 		'authorized_by'                       => isset($_POST['authorizedBy']) ? $_POST['authorizedBy'] : null,
 		'authorized_on' 					  => isset($_POST['authorizedOn']) ? $general->dateFormat($_POST['authorizedOn']) : null,
+		'reason_for_changing'				  => (isset($_POST['reasonForChanging']) && !empty($_POST['reasonForChanging'])) ? $_POST['reasonForChanging'] : null,
 		'result_status'                       => $status,
 		'data_sync'                           => 0,
 		'reason_for_sample_rejection'         => isset($_POST['sampleRejectionReason']) ? $_POST['sampleRejectionReason'] : null,
@@ -179,7 +180,7 @@ try {
 		$deleteRows = explode(',',$_POST['deletedRow']);
 		foreach($deleteRows as $delete){
 			$db = $db->where('test_id', base64_decode($delete));
-			$id = $db->delete($testTableName);
+			$db->delete($testTableName);
 		}
 	}
 	if (isset($_POST['covid19SampleId']) && $_POST['covid19SampleId'] != '' && ($_POST['isSampleRejected'] == 'no' || $_POST['isSampleRejected'] == '')) {
@@ -207,7 +208,7 @@ try {
 		}
 	}else{
 		$db = $db->where('covid19_id', $_POST['covid19SampleId']);
-		$id = $db->delete($testTableName);
+		$db->delete($testTableName);
 	}
 
 	if ($id > 0) {
