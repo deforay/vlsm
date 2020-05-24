@@ -2301,3 +2301,7 @@ ALTER TABLE `form_covid19` ADD `is_result_authorised` VARCHAR(255) NULL DEFAULT 
 INSERT INTO `global_config` (`display_name`, `name`, `value`, `status`) VALUES ('Covid19 Tests Table in Results Pdf', 'covid19_tests_table_in_results_pdf', 'no', 'active');
 -- Thanaseelan May 11, 2020
 ALTER TABLE `form_covid19` ADD `reason_for_changing` TEXT NULL DEFAULT NULL AFTER `authorized_on`;
+
+-- ------------------------------------------------------------
+-- Version 3.21 ---- Amit April 22 2020
+-- ------------------------------------------------------------
