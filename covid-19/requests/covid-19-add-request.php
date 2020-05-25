@@ -4,6 +4,7 @@ $title = "COVID-19 | Add New Request";
 require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 include_once(APPLICATION_PATH . '/models/General.php');
+include_once(APPLICATION_PATH . '/models/Covid19.php');
 ?>
 <style>
     .ui_tpicker_second_label,
@@ -37,6 +38,7 @@ if ($sarr['user_type'] == 'remoteuser') {
 }
 
 $general = new General($db);
+//$covid19Obj = new Model_Covid19($db);
 
 
 
