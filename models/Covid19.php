@@ -142,12 +142,80 @@ class Model_Covid19
     }
 
 
+    public function getCovid19SampleTypes()
+    {
+        $results = $this->db->rawQuery("SELECT * FROM r_covid19_sample_type where status='active'");
+        $response = array();
+        foreach ($results as $row) {
+            $response[$row['sample_id']] = $row['sample_name'];
+        }
+        return $response;
+    }
     public function getCovid19Results()
     {
         $results = $this->db->rawQuery("SELECT * FROM r_covid19_results where status='active' ORDER BY result_id DESC");
         $response = array();
         foreach ($results as $row) {
             $response[$row['result_id']] = $row['result'];
+        }
+        return $response;
+    }
+
+    public function getCovid19ReasonsForTesting()
+    {
+        $results = $this->db->rawQuery("SELECT * FROM r_covid19_test_reasons WHERE `test_reason_status` LIKE 'active'");
+        $response = array();
+        foreach ($results as $row) {
+            $response[$row['test_reason_id']] = $row['test_reason_name'];
+        }
+        return $response;
+    }
+    public function getCovid19Symptoms()
+    {
+        $results = $this->db->rawQuery("SELECT * FROM r_covid19_symptoms WHERE `symptom_status` LIKE 'active'");
+        $response = array();
+        foreach ($results as $row) {
+            $response[$row['symptom_id']] = $row['symptom_name'];
+        }
+        return $response;
+    }
+
+    public function getCovid19Comorbidities()
+    {
+        $results = $this->db->rawQuery("SELECT * FROM r_covid19_comorbidities WHERE `comorbidity_status` LIKE 'active'");
+        $response = array();
+        foreach ($results as $row) {
+            $response[$row['comorbidity_id']] = $row['comorbidity_name'];
+        }
+        return $response;
+    }
+
+
+    public function getCovid19SymptomsByFormId($formId)
+    {
+        if (empty($formId)) {
+            return null;
+        }
+
+        $results = $this->db->rawQuery("SELECT * FROM covid19_patient_symptoms WHERE `form_id` = $formId");
+        $response = array();
+        foreach ($results as $row) {
+            $response[$row['symptom_id']] = $row['symptom_detected'];
+        }
+        return $response;
+    }
+
+
+    public function getCovid19ComorbiditiesByFormId($formId)
+    {
+        if (empty($formId)) {
+            return null;
+        }
+
+        $results = $this->db->rawQuery("SELECT * FROM covid19_patient_comorbidities WHERE `form_id` = $formId");
+        $response = array();
+        foreach ($results as $row) {
+            $response[$row['comorbidity_id']] = $row['comorbidity_detected'];
         }
         return $response;
     }

@@ -64,7 +64,7 @@ class General
     {
         $date = trim($date);
         if (!isset($date) || $date == null || $date == "" || $date == "0000-00-00") {
-            return "0000-00-00";
+            return null;
         } else {
             $dateArray = explode('-', $date);
             if (sizeof($dateArray) == 0) {
@@ -87,7 +87,7 @@ class General
     {
         $date = trim($date);
         if ($date == null || $date == "" || $date == "0000-00-00" || substr($date, 0, strlen("0000-00-00")) === "0000-00-00") {
-            return "";
+            return null;
         } else {
 
             $dateTimeArray = explode(' ', $date);
@@ -195,20 +195,20 @@ class General
         }
     }
 
-// get province id from the province table
-public function getProvinceIDFromCode($code)
-{
-    if ($this->db == null) {
-        return false;
+    // get province id from the province table
+    public function getProvinceIDFromCode($code)
+    {
+        if ($this->db == null) {
+            return false;
+        }
+
+
+        $pQuery = "SELECT * FROM province_details WHERE province_code like '$code'";
+
+
+        $pResult = $this->db->rawQueryOne($pQuery);
+        return $pResult['province_id'];
     }
-
-    
-    $pQuery = "SELECT * FROM province_details WHERE province_code like '$code'";
-    
-
-    $pResult = $this->db->rawQueryOne($pQuery);
-    return $pResult['province_id'];
-}    
 
     // get data from the global_config table from database
     public function getGlobalConfig($name = null)
@@ -402,6 +402,24 @@ public function getProvinceIDFromCode($code)
         $response = array();
         foreach ($results as $row) {
             $response[$row['result_id']] = $row['result'];
+        }
+        return $response;
+    }
+
+    public function generateSelectOptions($optionList, $selectedOptions = array())
+    {
+
+        $response = "";
+        foreach ($optionList as $optId => $optName) {
+            $selectedText = '';
+            if (!empty($selectedOptions)) {
+                if (is_array($selectedOptions) && in_array($optId, $selectedOptions)) {
+                    $selectedText = "selected='selected'";
+                }else if($optId == $selectedOptions ){
+                    $selectedText = "selected='selected'";
+                }
+            }
+            $response .= "<option value='$optId' $selectedText>$optName</option>";
         }
         return $response;
     }

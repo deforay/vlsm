@@ -2305,3 +2305,74 @@ ALTER TABLE `form_covid19` ADD `reason_for_changing` TEXT NULL DEFAULT NULL AFTE
 -- ------------------------------------------------------------
 -- Version 3.21 ---- Amit April 22 2020
 -- ------------------------------------------------------------
+
+
+
+-- Amit 24 May, 2020
+
+
+ALTER TABLE `covid19_tests` ADD `facility_id` INT NULL DEFAULT NULL AFTER `covid19_id`;
+ALTER TABLE `form_covid19` ADD `is_sample_collected` VARCHAR(255) NULL DEFAULT NULL AFTER `reason_of_visit`;
+ALTER TABLE `form_covid19` ADD `reason_for_covid19_test` INT NULL DEFAULT NULL AFTER `is_sample_collected`;
+
+
+CREATE TABLE `r_covid19_test_reasons` (
+ `test_reason_id` int(11) NOT NULL AUTO_INCREMENT,
+ `test_reason_name` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+ `test_reason_status` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
+ PRIMARY KEY (`test_reason_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `r_covid19_comorbidities` (
+ `comorbidity_id` int(11) NOT NULL AUTO_INCREMENT,
+ `comorbidity_name` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+ `comorbidity_status` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
+ PRIMARY KEY (`comorbidity_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `r_covid19_symptoms` (
+ `symptom_id` int(11) NOT NULL AUTO_INCREMENT,
+ `symptom_name` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+ `symptom_status` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
+ PRIMARY KEY (`symptom_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `form_covid19` ADD `patient_occupation` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_phone_number`;
+ALTER TABLE `form_covid19` ADD `patient_nationality` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_phone_number`;
+ALTER TABLE `form_covid19` ADD `patient_province` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_address`, ADD `patient_district` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_province`;
+
+ALTER TABLE `form_covid19` ADD `flight_airline` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_address`, 
+                           ADD `flight_seat_no` VARCHAR(255) NULL DEFAULT NULL AFTER `flight_airline`, 
+                           ADD `flight_arrival_datetime` DATETIME NULL DEFAULT NULL AFTER `flight_seat_no`, 
+                           ADD `flight_airport_of_departure` VARCHAR(255) NULL DEFAULT NULL AFTER `flight_arrival_date`, 
+                           ADD `flight_transit` VARCHAR(255) NULL DEFAULT NULL AFTER `flight_airport_of_departure`, 
+                           ADD `reason_of_visit` VARCHAR(500) NULL DEFAULT NULL AFTER `flight_transit`;
+
+ALTER TABLE `form_covid19`  ADD `date_of_initial_consultation` DATE NULL DEFAULT NULL  AFTER `date_of_symptom_onset`;                           
+
+ALTER TABLE `form_covid19` ADD `fever_temp` VARCHAR(255) NULL DEFAULT NULL AFTER `date_of_initial_consultation`;
+ALTER TABLE `form_covid19` ADD `close_contacts` TEXT NULL DEFAULT NULL AFTER `fever_temp`;
+
+CREATE TABLE `covid19_patient_symptoms` (
+ `form_id` int(11) NOT NULL,
+ `symptom_id` int(11) NOT NULL,
+ `symptom_detected` varchar(255) NOT NULL, -- yes, no, unknown
+ PRIMARY KEY (`form_id`,`symptom_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `covid19_patient_symptoms` (
+ `form_id` int(11) NOT NULL,
+ `symptom_id` int(11) NOT NULL,
+ `symptom_detected` varchar(255) NOT NULL, -- yes, no, unknown
+ PRIMARY KEY (`form_id`,`symptom_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `covid19_patient_comorbidities` (
+ `form_id` int(11) NOT NULL,
+ `comorbidity_id` int(11) NOT NULL,
+ `comorbidity_detected` varchar(255) NOT NULL, -- yes, no, unknown
+ PRIMARY KEY (`form_id`,`comorbidity_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
