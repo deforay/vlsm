@@ -4,6 +4,8 @@ $title = "Enter Covid-19 Result";
 require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 include_once(APPLICATION_PATH . '/models/General.php');
+require_once(APPLICATION_PATH . '/models/Covid19.php');
+
 $general = new General($db);
 $id = base64_decode($_GET['id']);
 $configQuery = "SELECT * from global_config";
@@ -212,16 +214,19 @@ if ($arr['vl_form'] == 1) {
     }
 	function changeReject(val){
 		if (val == 'yes') {
+			$('.show-rejection').show(500);
 			$('.test-name-table-input').prop('disabled',true);
 			$('.test-name-table').addClass('disabled');
-			$('#sampleRejectionReason').addClass('isRequired');
+			$('#sampleRejectionReason,#rejectionDate').addClass('isRequired');
 			$('#sampleTestedDateTime,#result,.test-name-table-input').removeClass('isRequired');
 			$('#result').prop('disabled', true);
 			$('#sampleRejectionReason').prop('disabled', false);
 		} else if (val == 'no') {
+			$('#rejectionDate').val('');
+            $('.show-rejection').hide(500);
 			$('.test-name-table-input').prop('disabled',false);
 			$('.test-name-table').removeClass('disabled');
-			$('#sampleRejectionReason').removeClass('isRequired');
+			$('#sampleRejectionReason,#rejectionDate').removeClass('isRequired');
 			$('#sampleTestedDateTime,#result,.test-name-table-input').addClass('isRequired');
 			$('#result').prop('disabled', false);
 			$('#sampleRejectionReason').prop('disabled', true);

@@ -31,13 +31,13 @@ try {
 	$covid19Data = array(
 		'sample_received_at_vl_lab_datetime'  => $_POST['sampleReceivedDate'],
 		'lab_id'                              => isset($_POST['labId']) ? $_POST['labId'] : null,
-		'sample_tested_datetime'              => $_POST['sampleTestedDateTime'],
 		'is_sample_rejected'                  => isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
 		'result'                              => isset($_POST['result']) ? $_POST['result'] : null,
 		'is_result_authorised'                => isset($_POST['isResultAuthorized']) ? $_POST['isResultAuthorized'] : null,
 		'authorized_by'                       => isset($_POST['authorizedBy']) ? $_POST['authorizedBy'] : null,
 		'authorized_on' 					  => isset($_POST['authorizedOn']) ? $general->dateFormat($_POST['authorizedOn']) : null,
 		'reason_for_changing'				  => (isset($_POST['reasonForChanging']) && !empty($_POST['reasonForChanging'])) ? $_POST['reasonForChanging'] : null,
+		'rejection_on'	 					  => (isset($_POST['rejectionDate']) && $_POST['isSampleRejected'] == 'yes') ? $general->dateFormat($_POST['rejectionDate']) : null,
 		'result_status'                       => 6,
 		'data_sync'                           => 0,
 		'reason_for_sample_rejection'         => isset($_POST['sampleRejectionReason']) ? $_POST['sampleRejectionReason'] : null,
@@ -78,11 +78,13 @@ try {
 				}else{
 					$db->insert($testTableName,$covid19TestData);
 				}
+				$covid19Data['sample_tested_datetime'] = date('Y-m-d H:i:s', strtotime($_POST['testDate'][$testKey]));
 			}
 		}
 	}else{
 		$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 		$id = $db->delete($testTableName);
+		$covid19Data['sample_tested_datetime'] = null;
 	}
 	// echo '<pre>'; print_r($_POST);die;
 	//var_dump($covid19Data);die;

@@ -252,16 +252,19 @@ require_once($fileArray[$arr['vl_form']]);
     }
     function changeReject(val){
 		if (val == 'yes') {
+            $('.show-rejection').show(500);
             $('.test-name-table-input').prop('disabled',true);
             $('.test-name-table').addClass('disabled');
-			$('#sampleRejectionReason').addClass('isRequired');
+			$('#sampleRejectionReason,#rejectionDate').addClass('isRequired');
 			$('#sampleTestedDateTime,#result,.test-name-table-input').removeClass('isRequired');
 			$('#result').prop('disabled', true);
 			$('#sampleRejectionReason').prop('disabled', false);
 		} else if (val == 'no') {
+            $('#rejectionDate').val('');
+            $('.show-rejection').hide(500);
             $('.test-name-table-input').prop('disabled',false);
             $('.test-name-table').removeClass('disabled');
-			$('#sampleRejectionReason').removeClass('isRequired');
+			$('#sampleRejectionReason,#rejectionDate').removeClass('isRequired');
 			$('#sampleTestedDateTime,#result,.test-name-table-input').addClass('isRequired');
 			$('#result').prop('disabled', false);
 			$('#sampleRejectionReason').prop('disabled', true);

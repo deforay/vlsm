@@ -484,6 +484,12 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                 </select>
                                             </td>
                                         </tr>
+                                        <tr class="show-rejection" style="display:none;">
+                                            <th>Rejection Date<span class="mandatory">*</span></th>
+                                            <td><input value="<?php echo $general->humanDateFormat($covid19Info['rejection_on']); ?>" class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Select Rejection Date"/></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
                                         <tr>
                                             <td colspan="4">
                                                 <table class="table table-bordered table-striped" id="testNameTable">
