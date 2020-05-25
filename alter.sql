@@ -2374,5 +2374,6 @@ CREATE TABLE `covid19_patient_comorbidities` (
  `comorbidity_detected` varchar(255) NOT NULL, -- yes, no, unknown
  PRIMARY KEY (`form_id`,`comorbidity_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
+-- Thanaseelan 25 May, 2020
+INSERT INTO `global_config` (`display_name`, `name`, `value`, `status`) VALUES ('Report Type', 'covid19_report_type', 'rwanda', 'active');
+ALTER TABLE `form_covid19` ADD `rejection_on` DATE NULL DEFAULT NULL AFTER `reason_for_sample_rejection`;

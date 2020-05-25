@@ -140,12 +140,12 @@ try {
 		'travel_country_names'                => isset($_POST['countryName']) ? $_POST['countryName'] : null,
 		'travel_return_date'                  => isset($_POST['returnDate']) ? $general->dateFormat($_POST['returnDate']) : null,
 		'sample_received_at_vl_lab_datetime'  => isset($_POST['sampleReceivedDate']) ? $_POST['sampleReceivedDate'] : null,
-		'sample_tested_datetime'              => isset($_POST['sampleTestedDateTime']) ? $_POST['sampleTestedDateTime'] : null,
 		'is_sample_rejected'                  => isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
 		'result'                              => isset($_POST['result']) ? $_POST['result'] : null,
 		'is_result_authorised'                => isset($_POST['isResultAuthorized']) ? $_POST['isResultAuthorized'] : null,
 		'authorized_by'                       => isset($_POST['authorizedBy']) ? $_POST['authorizedBy'] : null,
 		'authorized_on' 					  => isset($_POST['authorizedOn']) ? $general->dateFormat($_POST['authorizedOn']) : null,
+		'rejection_on'	 					  => (isset($_POST['rejectionDate']) && $_POST['isSampleRejected'] == 'yes') ? $general->dateFormat($_POST['rejectionDate']) : null,
 		'reason_for_changing'				  => (isset($_POST['reasonForChanging']) && !empty($_POST['reasonForChanging'])) ? $_POST['reasonForChanging'] : null,
 		'result_status'                       => $status,
 		'data_sync'                           => 0,
@@ -172,13 +172,6 @@ try {
 		}
 	}
 
-
-	// echo "<pre>"; var_dump($covid19Data); die;
-	if (isset($_POST['covid19SampleId']) && $_POST['covid19SampleId'] != '') {
-		// echo "<pre>"; print_r($_POST);die;
-		$db = $db->where('covid19_id', $_POST['covid19SampleId']);
-		$id = $db->update($tableName, $covid19Data);
-	}
 	if (isset($_POST['deletedRow']) && trim($_POST['deletedRow']) != '' && ($_POST['isSampleRejected'] == 'no' || $_POST['isSampleRejected'] == '')) {
 		$deleteRows = explode(',', $_POST['deletedRow']);
 		foreach ($deleteRows as $delete) {
@@ -188,7 +181,7 @@ try {
 	}
 
 	$db = $db->where('form_id', $_POST['covid19SampleId']);
-	$id = $db->delete("covid19_patient_symptoms");
+	$sid = $db->delete("covid19_patient_symptoms");
 	if (isset($_POST['symptomDetected']) && !empty($_POST['symptomDetected'])) {
 
 		for ($i = 0; $i < count($_POST['symptomDetected']); $i++) {
@@ -201,7 +194,7 @@ try {
 	}
 
 	$db = $db->where('form_id', $_POST['covid19SampleId']);
-	$id = $db->delete("covid19_patient_comorbidities");
+	$pid = $db->delete("covid19_patient_comorbidities");
 	if (isset($_POST['comorbidityDetected']) && !empty($_POST['comorbidityDetected'])) {
 
 		for ($i = 0; $i < count($_POST['comorbidityDetected']); $i++) {
@@ -235,14 +228,21 @@ try {
 				} else {
 					$db->insert($testTableName, $covid19TestData);
 				}
+				$covid19Data['sample_tested_datetime'] = date('Y-m-d H:i:s', strtotime($_POST['testDate'][$testKey]));
 			}
 		}
 	} else {
 		$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 		$db->delete($testTableName);
+		$covid19Data['sample_tested_datetime'] = null;
 	}
 
-	if ($id > 0) {
+	if (isset($_POST['covid19SampleId']) && $_POST['covid19SampleId'] != '') {
+		$db = $db->where('covid19_id', $_POST['covid19SampleId']);
+		$id = $db->update($tableName, $covid19Data);
+	}
+
+	if ($id > 0 || $sid > 0 || $pid > 0) {
 		$_SESSION['alertMsg'] = "Covid-19 request updated successfully";
 		//Add event log
 		$eventType = 'update-covid-19-request';

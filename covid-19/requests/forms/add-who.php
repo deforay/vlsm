@@ -361,6 +361,12 @@ foreach ($fResult as $fDetails) {
                                                 </select>
                                             </td>
                                         </tr>
+                                        <tr class="show-rejection" style="display:none;">
+                                            <th>Rejection Date<span class="mandatory">*</span></th>
+                                            <td><input class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Select Rejection Date"/></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
                                         <tr>
                                             <td colspan="4">
                                                 <table class="table table-bordered table-striped">

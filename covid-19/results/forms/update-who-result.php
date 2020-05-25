@@ -368,6 +368,12 @@ foreach ($fResult as $fDetails) {
                                             </select>
                                         </td>
                                     </tr>
+                                    <tr class="show-rejection" style="display:none;">
+                                        <th>Rejection Date<span class="mandatory">*</span></th>
+                                        <td><input value="<?php echo $general->humanDateFormat($covid19Info['rejection_on']); ?>" class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Select Rejection Date"/></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
                                     <tr>
                                         <td colspan="4">
                                             <table class="table table-bordered table-striped">
@@ -386,7 +392,7 @@ foreach ($fResult as $fDetails) {
                                                             <td class="text-center"><?php echo ($indexKey+1);?><input type="hidden" name="testId[]" value="<?php echo base64_encode($covid19TestInfo[$indexKey]['test_id']);?>"></td>
                                                             <td><input type="text" value="<?php echo $covid19TestInfo[$indexKey]['test_name'];?>" name="testName[]" id="testName<?php echo ($indexKey+1);?>" class="form-control test-name-table-input" placeholder="Test name" title="Please enter the test name for row <?php echo ($indexKey+1);?>"/></td>
                                                             <td><input type="text" value="<?php echo $general->humanDateFormat($covid19TestInfo[$indexKey]['sample_tested_datetime']);?>" name="testDate[]" id="testDate<?php echo ($indexKey+1);?>" class="form-control test-name-table-input dateTime" placeholder="Tested on"  title="Please enter the tested on for row <?php echo ($indexKey+1);?>"/></td>
-                                                            <td><select class="form-control test-name-table-input result-focus" name="testResult[]" id="testResult<?php echo ($indexKey+1);?>" title="Please select the result for row <?php echo ($indexKey+1);?>">
+                                                            <td><select class="form-control test-name-table-input" name="testResult[]" id="testResult<?php echo ($indexKey+1);?>" title="Please select the result for row <?php echo ($indexKey+1);?>">
                                                                     <option value=''> -- Select -- </option>
                                                                     <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
                                                                         <option value="<?php echo $c19ResultKey; ?>" <?php echo ($covid19TestInfo[$indexKey]['result'] == $c19ResultKey) ? "selected='selected'" : ""; ?>> <?php echo $c19ResultValue; ?> </option>
@@ -422,7 +428,7 @@ foreach ($fResult as $fDetails) {
                                                 <tr>
                                                     <th colspan="3" class="text-right">Final Result</th>
                                                     <td>
-                                                        <select class="form-control result-focus" name="result" id="result">
+                                                        <select class="form-control" name="result" id="result">
                                                             <option value=''> -- Select -- </option>
                                                             <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
                                                                 <option value="<?php echo $c19ResultKey; ?>" <?php echo ($covid19Info['result'] == $c19ResultKey) ? "selected='selected'" : ""; ?>> <?php echo $c19ResultValue; ?> </option>
@@ -614,12 +620,12 @@ foreach ($fResult as $fDetails) {
         }
     }
 
-
-
     $(document).ready(function() {
         $('.result-focus').change(function(e){
-            $('.change-reason').show(500);
-            $('#reasonForChanging').addClass('isRequired');
+            if($('#result').val()!= '' || $('#sampleRejectionReason').val()!= ''){
+                $('.change-reason').show(500);
+                $('#reasonForChanging').addClass('isRequired');
+            }
         });
 
         $('.disabledForm input, .disabledForm select , .disabledForm textarea ').attr('disabled', true);

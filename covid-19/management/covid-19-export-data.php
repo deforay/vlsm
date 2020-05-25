@@ -32,7 +32,11 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 
 $general = new General($db);
 $covid19Results = $general->getCovid19Results();
-
+if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda')){
+	$reportType = 'generate-export-rwanda.php';
+}else{
+	$reportType = 'generate-export-data.php';
+}
 
 ?>
 <style>
@@ -54,6 +58,7 @@ $covid19Results = $general->getCovid19Results();
 	</section>
 	<!-- Main content -->
 	<section class="content">
+		<!-- <pre><?php print_r($arr);?></pre> -->
 		<div class="row">
 			<div class="col-xs-12">
 				<div class="box">
@@ -151,7 +156,7 @@ $covid19Results = $general->getCovid19Results();
 
 								&nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Clear Search</span></button>
 
-								&nbsp;<button class="btn btn-success" type="button" onclick="exportInexcel('generate-export-data.php')"><i class="fa fa-cloud-download" aria-hidden="true"></i> Download</button>
+								&nbsp;<button class="btn btn-success" type="button" onclick="exportInexcel('<?php echo $reportType;?>')"><i class="fa fa-cloud-download" aria-hidden="true"></i> Download</button>
 
 								&nbsp;<button class="btn btn-default pull-right" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
 							</td>

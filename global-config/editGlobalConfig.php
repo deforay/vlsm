@@ -522,7 +522,7 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 								</div>
 							</div>
 						</div>
-						<?php if(isset($arr['covid19_tests_table_in_results_pdf']) && $arr['covid19_tests_table_in_results_pdf'] != ''){ ?>
+						<?php if(isset($arr['covid19_report_type']) && $arr['covid19_report_type'] != ''){ ?>
 							<div class="panel panel-default">
 								<div class="panel-heading">
 									<h3 class="panel-title">Covid-19 Settings</h3>
@@ -531,12 +531,12 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 									<div class="row">
 										<div class="col-md-12">
 											<div class="form-group">
-												<label for="covid19TestsTableInResultsPdf" class="col-lg-2 control-label">Covid19 Tests Table in Results Pdf <span class="mandatory ">*</span></label>
+												<label for="covid19ReportType" class="col-lg-2 control-label">Covid19 Report Type <span class="mandatory ">*</span></label>
 												<div class="col-lg-2">
-													<select name="covid19TestsTableInResultsPdf" id="covid19TestsTableInResultsPdf" class="form-control isRequired" title="Please select covid19 tests table in results PDF" style="width:100%">
+													<select name="covid19ReportType" id="covid19ReportType" class="form-control isRequired" title="Please select covid19 report type" style="width:100%">
 														<option value="">-- Select --</option>
-														<option value='yes' <?php echo ($arr['covid19_tests_table_in_results_pdf'] == 'yes') ? "selected='selected'" : ""; ?>> Yes </option>
-														<option value='no' <?php echo ($arr['covid19_tests_table_in_results_pdf'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
+														<option value='rwanda' <?php echo ($arr['covid19_report_type'] == 'rwanda') ? "selected='selected'" : ""; ?>> Rawanda </option>
+														<option value='who' <?php echo ($arr['covid19_report_type'] == 'who') ? "selected='selected'" : ""; ?>> Who </option>
 													</select>
 												</div>
 											</div>

@@ -152,9 +152,9 @@ try {
         $db->update('r_eid_results', $data);
     }
     
-    if (isset($_POST['covid19TestsTableInResultsPdf']) && trim($_POST['covid19TestsTableInResultsPdf']) != "") {
-        $data = array('value' => trim($_POST['covid19TestsTableInResultsPdf']));
-        $db = $db->where('name', 'covid19_tests_table_in_results_pdf');
+    if (isset($_POST['covid19ReportType']) && trim($_POST['covid19ReportType']) != "") {
+        $data = array('value' => trim($_POST['covid19ReportType']));
+        $db = $db->where('name', 'covid19_report_type');
         $db->update('global_config', $data);
     }
 
