@@ -474,8 +474,8 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                 </select>
                                             </td>
 
-                                            <th>Reason for Rejection</th>
-                                            <td>
+                                            <th class="show-rejection" style="display:none;">Reason for Rejection</th>
+                                            <td class="show-rejection" style="display:none;">
                                                 <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason">
                                                     <option value="">-- Select --</option>
                                                     <?php foreach ($rejectionTypeResult as $type) { ?>

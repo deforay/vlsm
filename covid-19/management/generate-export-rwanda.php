@@ -146,11 +146,15 @@ if (isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery']) != "")
         /* To get Symptoms and Comorbidities details */
         $covid19SelectedSymptoms = $covid19Obj->getCovid19SymptomsByFormId($aRow['covid19_id']);
         foreach ($covid19Symptoms as $symptomId => $symptomName) {
-            $sysmtomsArr[] =$symptomName.':'.$covid19SelectedSymptoms[$symptomId];
+			if($covid19SelectedSymptoms[$symptomId] == 'yes'){
+				$sysmtomsArr[] =$symptomName.':'.$covid19SelectedSymptoms[$symptomId];
+			}
         }
         $covid19SelectedComorbidities = $covid19Obj->getCovid19ComorbiditiesByFormId($aRow['covid19_id']);
         foreach ($covid19Comorbidities as $comId => $comName) {
-            $comorbiditiesArr[] =$comName.':'.$covid19SelectedComorbidities[$comId];
+			if($covid19SelectedComorbidities[$symptomId] == 'yes'){
+				$comorbiditiesArr[] =$comName.':'.$covid19SelectedComorbidities[$comId];
+			}
         }
 
 		$row[] = $no;

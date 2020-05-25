@@ -353,8 +353,8 @@ foreach ($fResult as $fDetails) {
                                                 </select>
                                             </td>
 
-                                            <th>Reason for Rejection</th>
-                                            <td>
+                                            <th class="show-rejection" style="display:none;">Reason for Rejection</th>
+                                            <td class="show-rejection" style="display:none;">
                                                 <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason">
                                                     <option value=''> -- Select -- </option>
                                                     <?php echo $rejectionReason; ?>
@@ -363,7 +363,7 @@ foreach ($fResult as $fDetails) {
                                         </tr>
                                         <tr class="show-rejection" style="display:none;">
                                             <th>Rejection Date<span class="mandatory">*</span></th>
-                                            <td><input class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Select Rejection Date"/></td>
+                                            <td><input class="form-control date rejection-show" type="text" name="rejectionDate" id="rejectionDate" placeholder="Select Rejection Date"/></td>
                                             <td></td>
                                             <td></td>
                                         </tr>
