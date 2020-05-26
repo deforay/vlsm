@@ -2377,3 +2377,6 @@ CREATE TABLE `covid19_patient_comorbidities` (
 -- Thanaseelan 25 May, 2020
 INSERT INTO `global_config` (`display_name`, `name`, `value`, `status`) VALUES ('Report Type', 'covid19_report_type', 'rwanda', 'active');
 ALTER TABLE `form_covid19` ADD `rejection_on` DATE NULL DEFAULT NULL AFTER `reason_for_sample_rejection`;
+-- Thanaseelan 26 May, 2020
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '29', 'record-final-result.php', 'Record Final Result'), (NULL, '29', 'can-record-confirmatory-tests.php', 'Can Record Confirmatory Tests'), (NULL, '29', 'update-record-confirmatory-tests.php', 'Update Record Confirmatory Tests');
+INSERT INTO `global_config` (`display_name`, `name`, `value`, `status`) VALUES ('Positive Confirmatory Tests Required By Central Lab', 'covid19_positive_confirmatory_tests_required_by_central_lab', 'no', 'active');

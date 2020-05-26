@@ -58,9 +58,10 @@ foreach ($fResult as $fDetails) {
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <h1><i class="fa fa-edit"></i> COVID-19 LABORATORY REQUEST FORM</h1>
+        <h1><i class="fa fa-edit"></i> WHO COVID-19 VIRUS RECORD CONFIRMATORY TEST REQUEST FORM</h1>
         <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="/covid-19/requests/can-record-confirmatory-tests.php">Record Confirmatory Tests</a></li>
             <li class="active">Covid-19 Request</li>
         </ol>
     </section>
@@ -320,7 +321,7 @@ foreach ($fResult as $fDetails) {
                         </div>
                     </div>
 
-                    <form class="form-horizontal" method="post" name="editCovid19RequestForm" id="editCovid19RequestForm" autocomplete="off" action="covid-19-update-result-helper.php">
+                    <form class="form-horizontal" method="post" name="editCovid19RequestForm" id="editCovid19RequestForm" autocomplete="off" action="update-record-confirmatory-tests-helper.php">
                         <div class="box box-primary">
                             <div class="box-body">
                                 <div class="box-header with-border">
@@ -400,8 +401,8 @@ foreach ($fResult as $fDetails) {
                                                                 </select>
                                                             </td>
                                                             <td style="vertical-align:middle;text-align: center;">
-                                                                <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;
-                                                                <a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);deleteRow('<?php echo base64_encode($covid19TestInfo[$indexKey]['test_id']);?>');"><i class="fa fa-minus"></i></a>
+                                                                <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);"><i class="fa fa-plus"></i></a>&nbsp;
+                                                                <a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);"><i class="fa fa-minus"></i></a>
                                                             </td>
                                                         </tr>
                                                     <?php }
@@ -493,13 +494,13 @@ foreach ($fResult as $fDetails) {
                         <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat; ?>" />
                         <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey; ?>" />
                     <?php } ?>
-                    <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
+                    <a class="btn btn-primary submit-btn" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                     <input type="hidden" name="formId" id="formId" value="7" />
                     <input type="hidden" name="deletedRow" id="deletedRow" value="" />
                     <input type="hidden" name="covid19SampleId" id="covid19SampleId" value="<?php echo ($covid19Info['covid19_id']); ?>" />
                     <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
                     <input type="hidden" id="sampleCode" name="sampleCode" value="<?php echo $covid19Info['sample_code'] ?>" />
-                    <a href="/covid-19/results/covid-19-manual-results.php" class="btn btn-default"> Cancel</a>
+                    <a href="/covid-19/requests/can-record-confirmatory-tests.php" class="btn btn-default"> Cancel</a>
                 </div>
                 <!-- /.box-footer -->
                 </form>
@@ -521,6 +522,7 @@ foreach ($fResult as $fDetails) {
     machineName = true;
     tableRowId = <?php echo (isset($covid19TestInfo) && count($covid19TestInfo) > 0)?(count($covid19TestInfo) + 1):2;?>;
     deletedRow = [];
+    totalrow = <?php echo (int)count($covid19TestInfo);?>
 
     function getfacilityDetails(obj) {
         $.blockUI();
@@ -640,13 +642,14 @@ foreach ($fResult as $fDetails) {
             placeholder: "Province"
         });
         getfacilityProvinceDetails($("#facilityId").val());
-
-        <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
-        $('.test-result,#result').change(function(e){
-            checkPostive();
-        });
+        <?php if(isset($covid19Info['result']) && $covid19Info['result'] != ""){ ?>
+            $("#updateCovid19ConfirmatoryRequestForm :input").prop("disabled", true);
+            $('.submit-btn').remove();
+        <?php }else{?>
+        $('.disabledForm input, .disabledForm select , .disabledForm textarea, .test-name-table-input').attr('disabled', true);
+        $('.test-name-table-input').prop('disabled',true);
+        insRow();
         <?php }?>
-
     });
 
     function insRow() {
@@ -684,19 +687,13 @@ foreach ($fResult as $fDetails) {
             $('.ui-datepicker-calendar').show();
         });
         tableRowId++;
-
-        <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
-        $('.test-result,#result').change(function(e){
-            checkPostive();
-        });
-        <?php }?>
     }
 
     function removeAttributeRow(el) {
         $(el).fadeOut("slow", function() {
             el.parentNode.removeChild(el);
             rl = document.getElementById("testKitNameTable").rows.length;
-            if (rl == 0) {
+            if (rl == 0 || rl == totalrow) {
                 insRow();
             }
         });
@@ -705,18 +702,5 @@ foreach ($fResult as $fDetails) {
     function deleteRow(id){
         deletedRow.push(id);
         $('#deletedRow').val(deletedRow);
-    }
-
-    function checkPostive(){
-        var itemLength = document.getElementsByName("testResult[]");
-        for (i = 0; i < itemLength.length; i++) {
-            
-            if(itemLength[i].value == 'positive'){
-                $('#result').val();
-                $('#result').prop('disabled',true);
-                $('#result').addClass('disabled');
-                $('#result').removeClass('isRequired');
-            }
-        }
     }
 </script>

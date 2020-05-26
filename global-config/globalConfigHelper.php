@@ -157,6 +157,11 @@ try {
         $db = $db->where('name', 'covid19_report_type');
         $db->update('global_config', $data);
     }
+    if (isset($_POST['covid19PositiveConfirmatoryTestsRequiredByCentralLab']) && trim($_POST['covid19PositiveConfirmatoryTestsRequiredByCentralLab']) != "") {
+        $data = array('value' => trim($_POST['covid19PositiveConfirmatoryTestsRequiredByCentralLab']));
+        $db = $db->where('name', 'covid19_positive_confirmatory_tests_required_by_central_lab');
+        $db->update('global_config', $data);
+    }
 
 
 

@@ -219,6 +219,7 @@ try {
 				$covid19TestData = array(
 					'covid19_id'			=> $_POST['covid19SampleId'],
 					'test_name'				=> $_POST['testName'][$testKey],
+					'facility_id'           => isset($_POST['labId']) ? $_POST['labId'] : null,
 					'sample_tested_datetime' => $_POST['testDate'][$testKey],
 					'result'				=> $_POST['testResult'][$testKey],
 				);

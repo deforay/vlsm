@@ -387,11 +387,11 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
             $db = $db->where('covid19_id', $id);
             $db->delete("covid19_tests");
             if (isset($testResults) && !empty($testResults)) {
-    
                 foreach ($testResults as $testValue) {
                     $covid19TestData = array(
                         'covid19_id'			=> $id,
                         'test_name'				=> $testValue['test_name'],
+                        'facility_id'           => $request['lab_id'],
                         'sample_tested_datetime' => $testValue['sample_tested_datetime'],
                         'result'				=> $testValue['result'],
                     );
