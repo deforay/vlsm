@@ -222,13 +222,13 @@ class Model_Covid19
 
         // Using this in sync requests/results
         if (is_array($formId)) {
-            $results = $this->db->rawQuery("SELECT * FROM covid19_patient_symptoms WHERE `form_id` IN (" . implode(",", $formId) . ")");
+            $results = $this->db->rawQuery("SELECT * FROM covid19_patient_symptoms WHERE `covid19_id` IN (" . implode(",", $formId) . ")");
 
             foreach ($results as $row) {
-                $response[$row['form_id']][$row['symptom_id']] = $row['symptom_detected'];
+                $response[$row['covid19_id']][$row['symptom_id']] = $row['symptom_detected'];
             }
         } else {
-            $results = $this->db->rawQuery("SELECT * FROM covid19_patient_symptoms WHERE `form_id` = $formId");
+            $results = $this->db->rawQuery("SELECT * FROM covid19_patient_symptoms WHERE `covid19_id` = $formId");
 
             foreach ($results as $row) {
                 $response[$row['symptom_id']] = $row['symptom_detected'];
@@ -250,14 +250,14 @@ class Model_Covid19
         // Using this in sync requests/results
         if (is_array($formId)) {
 
-            $results = $this->db->rawQuery("SELECT * FROM covid19_patient_comorbidities WHERE `form_id` IN (" . implode(",", $formId) . ")");
+            $results = $this->db->rawQuery("SELECT * FROM covid19_patient_comorbidities WHERE `covid19_id` IN (" . implode(",", $formId) . ")");
 
             foreach ($results as $row) {
-                $response[$row['form_id']][$row['comorbidity_id']] = $row['comorbidity_detected'];
+                $response[$row['covid19_id']][$row['comorbidity_id']] = $row['comorbidity_detected'];
             }
         } else {
 
-            $results = $this->db->rawQuery("SELECT * FROM covid19_patient_comorbidities WHERE `form_id` = $formId");
+            $results = $this->db->rawQuery("SELECT * FROM covid19_patient_comorbidities WHERE `covid19_id` = $formId");
 
             foreach ($results as $row) {
                 $response[$row['comorbidity_id']] = $row['comorbidity_detected'];
