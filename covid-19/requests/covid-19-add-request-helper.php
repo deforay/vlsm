@@ -143,26 +143,26 @@ try {
 	// echo "<pre>";
 	// var_dump($covid19Data);die;
 
-	$db = $db->where('form_id', $_POST['covid19SampleId']);
+	$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 	$db->delete("covid19_patient_symptoms");
 	if (isset($_POST['symptomDetected']) && !empty($_POST['symptomDetected'])) {
 
 		for ($i = 0; $i < count($_POST['symptomDetected']); $i++) {
 			$symptomData = array();
-			$symptomData["form_id"] = $_POST['covid19SampleId'];
+			$symptomData["covid19_id"] = $_POST['covid19SampleId'];
 			$symptomData["symptom_id"] = $_POST['symptomId'][$i];
 			$symptomData["symptom_detected"] = $_POST['symptomDetected'][$i];
 			$db->insert("covid19_patient_symptoms", $symptomData);
 		}
 	}
 
-	$db = $db->where('form_id', $_POST['covid19SampleId']);
+	$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 	$db->delete("covid19_patient_comorbidities");
 	if (isset($_POST['comorbidityDetected']) && !empty($_POST['comorbidityDetected'])) {
 
 		for ($i = 0; $i < count($_POST['comorbidityDetected']); $i++) {
 			$comorbidityData = array();
-			$comorbidityData["form_id"] = $_POST['covid19SampleId'];
+			$comorbidityData["covid19_id"] = $_POST['covid19SampleId'];
 			$comorbidityData["comorbidity_id"] = $_POST['comorbidityId'][$i];
 			$comorbidityData["comorbidity_detected"] = $_POST['comorbidityDetected'][$i];
 			$db->insert("covid19_patient_comorbidities", $comorbidityData);

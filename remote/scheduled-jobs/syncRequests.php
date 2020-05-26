@@ -358,26 +358,26 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
             }
 
 
-            $db = $db->where('form_id', $id);
+            $db = $db->where('covid19_id', $id);
             $db->delete("covid19_patient_symptoms");
             if (isset($symptoms) && !empty($symptoms)) {
 
                 foreach ($symptoms as $symId => $symValue) {
                     $symptomData = array();
-                    $symptomData["form_id"] = $id;
+                    $symptomData["covid19_id"] = $id;
                     $symptomData["symptom_id"] = $symId;
                     $symptomData["symptom_detected"] = $symValue;
                     $db->insert("covid19_patient_symptoms", $symptomData);
                 }
             }
 
-            $db = $db->where('form_id', $id);
+            $db = $db->where('covid19_id', $id);
             $db->delete("covid19_patient_comorbidities");
             if (isset($comorbidities) && !empty($comorbidities)) {
 
                 foreach ($comorbidities as $comoId => $comoValue) {
                     $comorbidityData = array();
-                    $comorbidityData["form_id"] = $id;
+                    $comorbidityData["covid19_id"] = $id;
                     $comorbidityData["comorbidity_id"] = $comoId;
                     $comorbidityData["comorbidity_detected"] = $comoValue;
                     $db->insert("covid19_patient_comorbidities", $comorbidityData);
@@ -391,7 +391,7 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
                     $covid19TestData = array(
                         'covid19_id'			=> $id,
                         'test_name'				=> $testValue['test_name'],
-                        'facility_id'           => $request['lab_id'],
+                        'facility_id'           => $testValue['facility_id'],
                         'sample_tested_datetime' => $testValue['sample_tested_datetime'],
                         'result'				=> $testValue['result'],
                     );
