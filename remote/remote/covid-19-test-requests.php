@@ -4,6 +4,7 @@ $data = json_decode(file_get_contents('php://input'), true);
 include(dirname(__FILE__) . "/../../startup.php"); 
 include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 include_once(APPLICATION_PATH.'/models/General.php');
+include_once(APPLICATION_PATH . '/models/Covid19.php');
 
 $labId = $data['labName'];
 
@@ -47,4 +48,22 @@ $covid19Query="SELECT * FROM form_covid19 WHERE $condition
 
 $covid19RemoteResult = $db->rawQuery($covid19Query);
 
-echo json_encode($covid19RemoteResult);
+
+$forms = array();
+foreach ($covid19RemoteResult as $row) {
+    $forms[] = $row['covid19_id'];
+}
+
+$covid19Obj = new Model_Covid19($db);
+$symptoms = $covid19Obj->getCovid19SymptomsByFormId($forms);
+$comorbidities = $covid19Obj->getCovid19ComorbiditiesByFormId($forms);
+$testResults = $covid19Obj->getCovid19TestsByFormId($forms);
+
+$data = array();
+$data['result'] = $covid19RemoteResult;
+$data['symptoms'] = $symptoms;
+$data['comorbidities'] = $comorbidities;
+$data['testResults'] = $testResults;
+
+
+echo json_encode($data);

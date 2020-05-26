@@ -17,10 +17,10 @@ $sarr = array();
 for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
 	$sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
 }
-// die($_SESSION['vlResultQuery']);
-if (isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery']) != "") {
+// die($_SESSION['covid19ResultQuery']);
+if (isset($_SESSION['covid19ResultQuery']) && trim($_SESSION['covid19ResultQuery']) != "") {
 
-	$rResult = $db->rawQuery($_SESSION['vlResultQuery']);
+	$rResult = $db->rawQuery($_SESSION['covid19ResultQuery']);
 
 	$excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
 	$output = array();

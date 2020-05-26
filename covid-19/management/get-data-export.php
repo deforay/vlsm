@@ -353,7 +353,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                $sQuery = $sQuery.' order by '.$sOrder;
           }
           
-          $_SESSION['vlResultQuery']=$sQuery;
+          $_SESSION['covid19ResultQuery']=$sQuery;
           
           if (isset($sLimit) && isset($sOffset)) {
                $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;

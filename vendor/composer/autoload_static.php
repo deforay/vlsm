@@ -65,6 +65,7 @@ class ComposerStaticInit1131c7b5f01462191cb9ae34879d13b9
         'aa53dcba601214d17ad405b7c291b7e8' => __DIR__ . '/..' . '/markbaker/matrix/classes/src/operations/multiply.php',
         '75c79eb1b25749b05a47976f32b0d8a2' => __DIR__ . '/..' . '/markbaker/matrix/classes/src/operations/divideby.php',
         '6ab8ad87a734f276a6bcd5a0fe1289be' => __DIR__ . '/..' . '/markbaker/matrix/classes/src/operations/divideinto.php',
+        '9e4824c5afbdc1482b6025ce3d4dfde8' => __DIR__ . '/..' . '/league/csv/src/functions_include.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -76,6 +77,10 @@ class ComposerStaticInit1131c7b5f01462191cb9ae34879d13b9
         'M' => 
         array (
             'Matrix\\' => 7,
+        ),
+        'L' => 
+        array (
+            'League\\Csv\\' => 11,
         ),
         'C' => 
         array (
@@ -95,6 +100,10 @@ class ComposerStaticInit1131c7b5f01462191cb9ae34879d13b9
         'Matrix\\' => 
         array (
             0 => __DIR__ . '/..' . '/markbaker/matrix/classes/src',
+        ),
+        'League\\Csv\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/league/csv/src',
         ),
         'Complex\\' => 
         array (
