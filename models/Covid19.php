@@ -191,17 +191,50 @@ class Model_Covid19
     }
 
 
+    public function getCovid19TestsByFormId($formId)
+    {
+        if (empty($formId)) {
+            return null;
+        }
+
+        $response = array();
+
+        // Using this in sync requests/results
+        if (is_array($formId)) {
+            $results = $this->db->rawQuery("SELECT * FROM covid19_tests WHERE `covid19_id` IN (" . implode(",", $formId) . ") ORDER BY test_id ASC");
+
+            foreach ($results as $row) {
+                $response[$row['covid19_id']][$row['test_id']] = $row;
+            }
+        } else {
+            $response = $this->db->rawQuery("SELECT * FROM covid19_tests WHERE `covid19_id` = $formId ORDER BY test_id ASC");
+        }
+
+        return $response;
+    }
     public function getCovid19SymptomsByFormId($formId)
     {
         if (empty($formId)) {
             return null;
         }
 
-        $results = $this->db->rawQuery("SELECT * FROM covid19_patient_symptoms WHERE `form_id` = $formId");
         $response = array();
-        foreach ($results as $row) {
-            $response[$row['symptom_id']] = $row['symptom_detected'];
+
+        // Using this in sync requests/results
+        if (is_array($formId)) {
+            $results = $this->db->rawQuery("SELECT * FROM covid19_patient_symptoms WHERE `form_id` IN (" . implode(",", $formId) . ")");
+
+            foreach ($results as $row) {
+                $response[$row['form_id']][$row['symptom_id']] = $row['symptom_detected'];
+            }
+        } else {
+            $results = $this->db->rawQuery("SELECT * FROM covid19_patient_symptoms WHERE `form_id` = $formId");
+
+            foreach ($results as $row) {
+                $response[$row['symptom_id']] = $row['symptom_detected'];
+            }
         }
+
         return $response;
     }
 
@@ -212,11 +245,26 @@ class Model_Covid19
             return null;
         }
 
-        $results = $this->db->rawQuery("SELECT * FROM covid19_patient_comorbidities WHERE `form_id` = $formId");
         $response = array();
-        foreach ($results as $row) {
-            $response[$row['comorbidity_id']] = $row['comorbidity_detected'];
+
+        // Using this in sync requests/results
+        if (is_array($formId)) {
+
+            $results = $this->db->rawQuery("SELECT * FROM covid19_patient_comorbidities WHERE `form_id` IN (" . implode(",", $formId) . ")");
+
+            foreach ($results as $row) {
+                $response[$row['form_id']][$row['comorbidity_id']] = $row['comorbidity_detected'];
+            }
+        } else {
+
+            $results = $this->db->rawQuery("SELECT * FROM covid19_patient_comorbidities WHERE `form_id` = $formId");
+
+            foreach ($results as $row) {
+                $response[$row['comorbidity_id']] = $row['comorbidity_detected'];
+            }
         }
+
+
         return $response;
     }
 }

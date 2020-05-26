@@ -1,6 +1,9 @@
 <?php
 
 // File included in addImportResultHelper.php
+use League\Csv\Reader;
+use League\Csv\Statement;
+
 
 try {
 
@@ -30,8 +33,6 @@ try {
     }
     if (move_uploaded_file($_FILES['resultFile']['tmp_name'], TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName)) {
 
-        $file_info = new finfo(FILEINFO_MIME); // object oriented approach!
-        $mime_type = $file_info->buffer(file_get_contents(TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName)); // e.g. gives "image/jpeg"
 
         $bquery = "select MAX(batch_code_key) from batch_details";
         $bvlResult = $db->rawQuery($bquery);
@@ -44,21 +45,54 @@ try {
 
         $newBatchCode = date('Ymd') . $maxBatchCodeKey;
 
-        $m = 1;
-        $skipTillRow = 23;
 
-        $sampleIdCol = 1;
-        $sampleTypeCol = 2;
-        $resultCol = 5;
-        $txtValCol = 6;
+        //load the CSV document from a file path
+        $csv = Reader::createFromPath(TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName, 'r');
+        $csv->setDelimiter("\t");
+        $csv->setHeaderOffset(20); //set the CSV header offset - including empty lines
 
-        $batchCodeVal = "";
-        $flagCol = 10;
-        $testDateCol = 11;
 
-        $lotNumberCol = 12;
-        $reviewByCol = '';
-        $lotExpirationDateCol = 13;
+        $stmt = new Statement();
+
+
+        // get records starting from the specified row number
+        // remember this does not count empty lines
+        // So in your file you may have the data starting from line 20
+        // but there are 2 empty lines, so we instruct to offset 18
+        $records = $stmt->offset(18)->process($csv);
+
+        foreach ($records as $record) {
+            echo "<pre>";
+            var_dump($record);
+
+            echo "</pre>";
+        }
+
+
+
+
+
+        die;
+
+        
+
+        
+
+        // $m = 1;
+        // $skipTillRow = 23;
+
+        // $sampleIdCol = 1;
+        // $sampleTypeCol = 2;
+        // $resultCol = 5;
+        // $txtValCol = 6;
+
+        // $batchCodeVal = "";
+        // $flagCol = 10;
+        // $testDateCol = 11;
+
+        // $lotNumberCol = 12;
+        // $reviewByCol = '';
+        // $lotExpirationDateCol = 13;
 
         if (strpos($mime_type, 'text/plain') !== false) {
             $infoFromFile = array();
@@ -71,14 +105,14 @@ try {
                     $num = count($sheetData);
                     $row++;
                     if ($row < $skip) {
-                        if($row == 8){                           
+                        if ($row == 8) {
                             $timestamp = DateTime::createFromFormat('!m/d/Y h:i:s A', $sheetData[1]);
-                            if(!empty($timestamp)){
+                            if (!empty($timestamp)) {
                                 $timestamp = $timestamp->getTimestamp();
                                 $testingDate = date('Y-m-d H:i', ($timestamp));
-                            }else{
+                            } else {
                                 $testingDate = null;
-                            }                            
+                            }
                         }
                         continue;
                     }
@@ -92,8 +126,8 @@ try {
                     $resultFlag = "";
 
                     $sampleCode = $sheetData[$sampleIdCol];
-                    
-                    if($sampleCode == "SAMPLE ID" || $sampleCode == ""){
+
+                    if ($sampleCode == "SAMPLE ID" || $sampleCode == "") {
                         continue;
                     }
 
@@ -103,45 +137,45 @@ try {
                     $resultFlag = $sheetData[$flagCol];
                     //$reviewBy = $sheetData[$reviewByCol];
 
-                    // //Changing date to European format for strtotime - https://stackoverflow.com/a/5736255
+                    // Changing date to European format for strtotime - https://stackoverflow.com/a/5736255
                     // $sheetData[$testDateCol] = str_replace("/", "-", $sheetData[$testDateCol]);
                     // $testingDate = date('Y-m-d H:i', strtotime($sheetData[$testDateCol]));
                     $result = $absVal = $logVal = $absDecimalVal = $txtVal = '';
-                    
-                    if(strpos(strtolower($sheetData[$resultCol]), 'not detected') !== false) {
+
+                    if (strpos(strtolower($sheetData[$resultCol]), 'not detected') !== false) {
                         $result = 'negative';
                     } else if ((strpos(strtolower($sheetData[$resultCol]), 'detected') !== false) || (strpos(strtolower($sheetData[$resultCol]), 'passed') !== false)) {
                         $result = 'positive';
-                    } else{
+                    } else {
                         $result = 'indeterminate';
                     }
-                    
+
 
                     $lotNumberVal = $sheetData[$lotNumberCol];
                     if (trim($sheetData[$lotExpirationDateCol]) != '') {
                         $timestamp = DateTime::createFromFormat('!m/d/Y', $sheetData[$lotExpirationDateCol]);
-                        if(!empty($timestamp)){
+                        if (!empty($timestamp)) {
                             $timestamp = $timestamp->getTimestamp();
                             $lotExpirationDateVal = date('Y-m-d H:i', $timestamp);
-                        }else{
+                        } else {
                             $lotExpirationDateVal = null;
                         }
-                    }                    
+                    }
 
                     $sampleType = $sheetData[$sampleTypeCol];
                     if ($sampleType == 'Patient') {
                         $sampleType = 'S';
                     } else if ($sampleType == 'Control') {
-                        
-                        if($sampleCode == 'HIV_HIPOS'){
+
+                        if ($sampleCode == 'HIV_HIPOS') {
                             $sampleType = 'HPC';
-                            $sampleCode = $sampleCode.'-'.$lotNumberVal;
-                        } else if($sampleCode == 'HIV_LOPOS'){
+                            $sampleCode = $sampleCode . '-' . $lotNumberVal;
+                        } else if ($sampleCode == 'HIV_LOPOS') {
                             $sampleType = 'LPC';
-                            $sampleCode = $sampleCode.'-'.$lotNumberVal;
-                        } else if($sampleCode == 'HIV_NEG'){
+                            $sampleCode = $sampleCode . '-' . $lotNumberVal;
+                        } else if ($sampleCode == 'HIV_NEG') {
                             $sampleType = 'NC';
-                            $sampleCode = $sampleCode.'-'.$lotNumberVal;
+                            $sampleCode = $sampleCode . '-' . $lotNumberVal;
                         }
                     }
 
@@ -174,7 +208,6 @@ try {
                     }
 
                     $m++;
-
                 }
             }
         }
@@ -276,7 +309,6 @@ try {
         $db->insert("log_result_updates", $data);
     }
     header("location:/import-result/imported-results.php");
-
 } catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());
