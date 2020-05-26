@@ -139,7 +139,8 @@ if (count($data['result']) > 0) {
             foreach ($testResults as $testValue) {
                 $covid19TestData = array(
 					'covid19_id'			=> $id,
-					'test_name'				=> $testValue['test_name'],
+                    'test_name'				=> $testValue['test_name'],
+                    'facility_id'           => isset($lab['facility_id']) ? $lab['facility_id'] : null,
 					'sample_tested_datetime' => $testValue['sample_tested_datetime'],
 					'result'				=> $testValue['result'],
 				);

@@ -421,8 +421,15 @@ foreach ($fResult as $fDetails) {
                                             <td>
                                                 <input type="text" class="form-control" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter sample receipt date" <?php echo (isset($labFieldDisabled) && trim($labFieldDisabled) != '') ? $labFieldDisabled : ''; ?> onchange="" style="width:100%;" />
                                             </td>
-                                            <td></td>
-                                            <td></td>
+                                            <td class="lab-show"><label for="labId">Lab Name </label> </td>
+                                            <td class="lab-show">
+                                                <select name="labId" id="labId" class="form-control" title="Lab Name" style="width:100%;">
+                                                    <option value=""> -- Select -- </option>
+                                                    <?php foreach ($lResult as $labName) { ?>
+                                                        <option value="<?php echo $labName['facility_id']; ?>" <?php echo ($covid19Info['lab_id'] == $labName['facility_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($labName['facility_name']); ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </td>
                                         <tr>
                                             <th>Is Sample Rejected ?</th>
                                             <td>
@@ -463,7 +470,7 @@ foreach ($fResult as $fDetails) {
                                                             <td class="text-center">1</td>
                                                             <td><input type="text" name="testName[]" id="testName1" class="form-control test-name-table-input" placeholder="Test name" title="Please enter the test name for row 1s" /></td>
                                                             <td><input type="text" name="testDate[]" id="testDate1" class="form-control test-name-table-input dateTime" placeholder="Tested on" title="Please enter the tested on for row 1" /></td>
-                                                            <td><select class="form-control test-name-table-input" name="testResult[]" id="testResult1" title="Please select the result for row 1">
+                                                            <td><select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult1" title="Please select the result for row 1">
                                                                     <option value=''> -- Select -- </option>
                                                                     <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
                                                                         <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option>
@@ -476,6 +483,7 @@ foreach ($fResult as $fDetails) {
                                                             </td>
                                                         </tr>
                                                     </tbody>
+                                                    <?php if (isset($_SESSION['privileges']) && in_array("record-final-result.php", $_SESSION['privileges'])) { ?>
                                                     <tfoot>
                                                         <tr>
                                                             <th colspan="3" class="text-right">Final Result</th>
@@ -489,6 +497,7 @@ foreach ($fResult as $fDetails) {
                                                             </td>
                                                         </tr>
                                                     </tfoot>
+                                                    <?php }?>
                                                 </table>
                                             </td>
                                         </tr>
@@ -699,7 +708,11 @@ foreach ($fResult as $fDetails) {
         // $('#province').select2({
         //     placeholder: "Province"
         // });
-
+        <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
+        $('.test-result,#result').change(function(e){
+            checkPostive();
+        });
+        <?php }?>
 
     });
 
@@ -720,8 +733,8 @@ foreach ($fResult as $fDetails) {
         b.innerHTML = tableRowId;
         c.innerHTML = '<input type="text" name="testName[]" id="testName' + tableRowId + '" class="form-control test-name-table-input" placeholder="Test name" title="Please enter the test name for row ' + tableRowId + '"/>';
         d.innerHTML = '<input type="text" name="testDate[]" id="testDate' + tableRowId + '" class="form-control test-name-table-input dateTime" placeholder="Tested on"  title="Please enter the tested on for row ' + tableRowId + '"/>';
-        e.innerHTML = '<select class="form-control test-name-table-input" name="testResult[]" id="testResult' + tableRowId + '" title="Please select the result for row ' + tableRowId + '"><option value=""> -- Select -- </option><?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?> <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option> <?php } ?> </select>';
-        f.innerHTML = '<a class="btn btn-xs btn-primary test-name-table-input" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;<a class="btn btn-xs btn-default test-name-table-input" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>';
+        e.innerHTML = '<select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult' + tableRowId + '" title="Please select the result for row ' + tableRowId + '"><option value=""> -- Select -- </option><?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?> <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option> <?php } ?> </select>';
+        f.innerHTML = '<a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;<a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>';
         $(a).fadeIn(800);
         $('.dateTime').datetimepicker({
             changeMonth: true,
@@ -739,6 +752,11 @@ foreach ($fResult as $fDetails) {
             $('.ui-datepicker-calendar').show();
         });
         tableRowId++;
+        <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
+        $('.test-result,#result').change(function(e){
+            checkPostive();
+        });
+        <?php }?>
     }
 
     function removeAttributeRow(el) {
@@ -749,5 +767,21 @@ foreach ($fResult as $fDetails) {
                 insRow();
             }
         });
+    }
+
+    function checkPostive(){
+        var itemLength = document.getElementsByName("testResult[]");
+        for (i = 0; i < itemLength.length; i++) {
+            
+            if(itemLength[i].value == 'positive'){
+                $('#result').val();
+                $('#result').prop('disabled',true);
+                $('#result').addClass('disabled');
+                $('#result').removeClass('isRequired');
+            }
+            if(itemLength[i].value != ''){
+                $('#labId').addClass('isRequired');
+            }
+        }
     }
 </script>

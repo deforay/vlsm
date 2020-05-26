@@ -522,7 +522,7 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 								</div>
 							</div>
 						</div>
-						<?php if(isset($arr['covid19_report_type']) && $arr['covid19_report_type'] != ''){ ?>
+						<?php if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] != '') || (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] != '')){ ?>
 							<div class="panel panel-default">
 								<div class="panel-heading">
 									<h3 class="panel-title">Covid-19 Settings</h3>
@@ -531,14 +531,25 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 									<div class="row">
 										<div class="col-md-12">
 											<div class="form-group">
-												<label for="covid19ReportType" class="col-lg-2 control-label">Covid19 Report Type <span class="mandatory ">*</span></label>
-												<div class="col-lg-2">
-													<select name="covid19ReportType" id="covid19ReportType" class="form-control isRequired" title="Please select covid19 report type" style="width:100%">
-														<option value="">-- Select --</option>
-														<option value='rwanda' <?php echo ($arr['covid19_report_type'] == 'rwanda') ? "selected='selected'" : ""; ?>> Rawanda </option>
-														<option value='who' <?php echo ($arr['covid19_report_type'] == 'who') ? "selected='selected'" : ""; ?>> Who </option>
-													</select>
-												</div>
+												<?php if(isset($arr['covid19_report_type']) && $arr['covid19_report_type'] != ''){ ?>
+													<label for="covid19ReportType" class="col-lg-2 control-label">Covid19 Report Type<span class="mandatory ">*</span></label>
+													<div class="col-lg-2">
+														<select name="covid19ReportType" id="covid19ReportType" class="form-control isRequired" title="Please select covid19 report type" style="width:100%">
+															<option value="">-- Select --</option>
+															<option value='rwanda' <?php echo ($arr['covid19_report_type'] == 'rwanda') ? "selected='selected'" : ""; ?>> Rawanda </option>
+															<option value='who' <?php echo ($arr['covid19_report_type'] == 'who') ? "selected='selected'" : ""; ?>> Who </option>
+														</select>
+													</div>
+												<?php } if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] != ''){ ?>
+													<label for="covid19PositiveConfirmatoryTestsRequiredByCentralLab" class="col-lg-2 control-label">Covid19 Positive Confirmatory Tests Required By CentralLab<span class="mandatory ">*</span></label>
+													<div class="col-lg-2">
+														<select name="covid19PositiveConfirmatoryTestsRequiredByCentralLab" id="covid19PositiveConfirmatoryTestsRequiredByCentralLab" class="form-control isRequired" title="Please select covid19 report type" style="width:100%">
+															<option value="">-- Select --</option>
+															<option value='yes' <?php echo ($arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes') ? "selected='selected'" : ""; ?>> Yes </option>
+															<option value='no' <?php echo ($arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
+														</select>
+													</div>
+												<?php }?>
 											</div>
 										</div>
 									</div>
