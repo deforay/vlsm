@@ -283,7 +283,7 @@ try {
         $general->resultImportStats($numberOfResults, $fileName, $importedBy);
     }
 
-    die;
+
     if (!$stResult) {
         $result = "importedStatistics.php";
     }

@@ -295,6 +295,7 @@ try {
         $data = array(
         'user_id' => $_SESSION['userId'],
         'vl_sample_id' => $id,
+        'test_type' => 'eid',
         'updated_on' => $general->getDateTime()
         );
         $db->insert("log_result_updates", $data);

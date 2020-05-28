@@ -12,6 +12,6 @@ if($module == 'vl'){
     include_once('process-vl.php');
 }else if($module == 'eid'){
     include_once('process-eid.php');
-}else if($module == 'eid'){
+}else if($module == 'covid19'){
     include_once('process-covid-19.php');
 }

@@ -39,8 +39,7 @@ class General
         $seeds_count = strlen($seeds);
 
         for ($i = 0; $length > $i; $i++) {
-            $str .= $seeds{
-                mt_rand(0, $seeds_count - 1)};
+            $str .= $seeds[mt_rand(0, $seeds_count - 1)];
         }
 
         return $str;

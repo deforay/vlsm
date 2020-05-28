@@ -4,6 +4,7 @@ ob_start();
 require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 include_once(APPLICATION_PATH . '/models/General.php');
+include_once(APPLICATION_PATH . '/models/Covid19.php');
 include_once(APPLICATION_PATH . '/models/Users.php');
 include_once(APPLICATION_PATH . '/includes/tcpdf/tcpdf.php');
 include_once(APPLICATION_PATH . '/includes/fpdi/fpdi.php');
@@ -13,6 +14,7 @@ $tableName1 = "activity_log";
 $tableName2 = "form_covid19";
 $general = new General($db);
 $users = new Model_Users($db);
+$covid19Obj = new Model_Covid19($db);
 
 $configQuery = "SELECT * from global_config";
 $configResult = $db->query($configQuery);
@@ -66,8 +68,6 @@ if (isset($_POST['id']) && trim($_POST['id']) != '') {
 //echo($searchQuery);die;
 $requestResult = $db->query($searchQuery);
 /* Test Results */
-$covid19TestQuery = "SELECT * from covid19_tests where covid19_id= ".$_POST['id']." ORDER BY test_id ASC";
-$covid19TestInfo = $db->rawQuery($covid19TestQuery);
 
 $_SESSION['nbPages'] = sizeof($requestResult);
 $_SESSION['aliasPage'] = 1;

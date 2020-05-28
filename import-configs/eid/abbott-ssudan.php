@@ -85,10 +85,6 @@ try {
                     $sampleCode = "";
                     $batchCode = "";
                     $sampleType = "";
-                    $absDecimalVal = "";
-                    $absVal = "";
-                    $logVal = "";
-                    $txtVal = "";
                     $resultFlag = "";
 
                     $sampleCode = $sheetData[$sampleIdCol];
@@ -106,7 +102,7 @@ try {
                     // //Changing date to European format for strtotime - https://stackoverflow.com/a/5736255
                     // $sheetData[$testDateCol] = str_replace("/", "-", $sheetData[$testDateCol]);
                     // $testingDate = date('Y-m-d H:i', strtotime($sheetData[$testDateCol]));
-                    $result = $absVal = $logVal = $absDecimalVal = $txtVal = '';
+                    $result = '';
 
                     if (strpos(strtolower($sheetData[$resultCol]), 'not detected') !== false) {
                         $result = 'negative';
@@ -155,10 +151,6 @@ try {
                     if (!isset($infoFromFile[$sampleCode])) {
                         $infoFromFile[$sampleCode] = array(
                             "sampleCode" => $sampleCode,
-                            "logVal" => ($logVal),
-                            "absVal" => $absVal,
-                            "absDecimalVal" => $absDecimalVal,
-                            "txtVal" => $txtVal,
                             "resultFlag" => $resultFlag,
                             "testingDate" => $testingDate,
                             "sampleType" => $sampleType,
@@ -167,10 +159,6 @@ try {
                             "result" => $result,
                             "lotExpirationDate" => $lotExpirationDateVal,
                         );
-                    } else {
-                        if (isset($logVal) && trim($logVal) != "") {
-                            $infoFromFile[$sampleCode]['logVal'] = trim($logVal);
-                        }
                     }
 
                     $m++;
@@ -190,11 +178,7 @@ try {
                 'import_machine_name' => $_POST['configMachineName'],
                 'result_reviewed_by' => $_SESSION['userId'],
                 'sample_code' => $d['sampleCode'],
-                'result_value_log' => $d['logVal'],
                 'sample_type' => $d['sampleType'],
-                'result_value_absolute' => $d['absVal'],
-                'result_value_text' => $d['txtVal'],
-                'result_value_absolute_decimal' => $d['absDecimalVal'],
                 'sample_tested_datetime' => $testingDate,
                 'result_status' => '6',
                 'import_machine_file_name' => $fileName,
@@ -229,7 +213,7 @@ try {
                 }
             }
 
-            $query = "select facility_id,vl_sample_id,result,result_value_log,result_value_absolute,result_value_text,result_value_absolute_decimal from vl_request_form where sample_code='" . $sampleCode . "'";
+            $query = "select facility_id,eid_id,result from eid_form where sample_code='" . $sampleCode . "'";
             $vlResult = $db->rawQuery($query);
             //insert sample controls
             $scQuery = "select r_sample_control_name from r_sample_controls where r_sample_control_name='" . trim($d['sampleType']) . "'";
@@ -239,7 +223,7 @@ try {
                 $scId = $db->insert("r_sample_controls", $scData);
             }
             if ($vlResult && $sampleCode != '') {
-                if ($vlResult[0]['result_value_log'] != '' || $vlResult[0]['result_value_absolute'] != '' || $vlResult[0]['result_value_text'] != '' || $vlResult[0]['result_value_absolute_decimal'] != '') {
+                if (isset($vlResult[0]['result']) && !empty($vlResult[0]['result'])) {
                     $data['sample_details'] = 'Result already exists';
                 } else {
                     $data['result_status'] = '7';
@@ -249,7 +233,7 @@ try {
                 $data['sample_details'] = 'New Sample';
             }
             //echo "<pre>";var_dump($data);echo "</pre>";continue;
-            if ($sampleCode != '' || $batchCode != '' || $sampleType != '' || $logVal != '' || $absVal != '' || $absDecimalVal != '') {
+            if ($sampleCode != '' || $batchCode != '' || $sampleType != '') {
                 $data['result_imported_datetime'] = $general->getDateTime();
                 $data['imported_by'] = $_SESSION['userId'];
                 $id = $db->insert("temp_sample_import", $data);
@@ -270,6 +254,7 @@ try {
         $data = array(
             'user_id' => $_SESSION['userId'],
             'vl_sample_id' => $id,
+            'test_type' => 'eid',
             'updated_on' => $general->getDateTime(),
         );
         $db->insert("log_result_updates", $data);

@@ -8,7 +8,7 @@ $tsQuery = "SELECT COUNT(temp_sample_id) AS totalCount,
             SUM(CASE WHEN tsr.result = 'positive' THEN 1 ELSE 0 END) AS positive, 
             SUM(CASE WHEN tsr.result = 'negative' THEN 1 ELSE 0 END) AS negative,
             SUM(CASE WHEN tsr.result = 'indeterminate' THEN 1 ELSE 0 END) AS indeterminate 
-            FROM temp_sample_import as tsr $import_decided vl_request_form as vl ON vl.sample_code=tsr.sample_code 
+            FROM temp_sample_import as tsr $import_decided form_covid19 as vl ON vl.sample_code=tsr.sample_code 
             WHERE  imported_by ='$importedBy' ";
 $tsResult = $db->rawQuery($tsQuery);
 
@@ -53,7 +53,7 @@ $_SESSION['covid19PrintSearchResultQuery'] = $samplePrintQuery;
 
 // We can clear the temp sample import table
 $db = $db->where('imported_by', $_SESSION['userId']);
-$db->delete('temp_sample_import');
+//$db->delete('temp_sample_import');
 unset($_SESSION['controllertrack']);
 
 ?>
@@ -97,13 +97,7 @@ unset($_SESSION['controllertrack']);
                     <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:30px;width: 75%;">
                         <tr>
                             <td>
-                                <?php
-                                if (isset($tsResult[0]['totalCount']) && $tsResult[0]['totalCount'] > 0) { ?>
-                                    <input type="button" onclick="convertSearchResultToPdf();return false;" value="Print all results" class="btn btn-success btn-sm">&nbsp;&nbsp;
-                                    <a href="/covid-19/results/covid-19-print-results.php" class="btn btn-success btn-sm">Continue without printing results</a>
-                                <?php } else { ?>
-                                    <a href="/covid-19/results/covid-19-print-results.php" class="btn btn-success btn-sm">Continue </a>
-                                <?php } ?>
+                            <a href="/covid-19/requests/covid-19-requests.php" class="btn btn-success btn-sm">Continue </a>
                             </td>
                         </tr>
 

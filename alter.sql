@@ -2385,3 +2385,6 @@ INSERT INTO `global_config` (`display_name`, `name`, `value`, `status`) VALUES (
 
 ALTER TABLE `covid19_patient_symptoms` CHANGE `form_id` `covid19_id` INT(11) NOT NULL;
 ALTER TABLE `covid19_patient_comorbidities` CHANGE `form_id` `covid19_id` INT(11) NOT NULL;
+
+-- Amit 28 May, 2020
+ALTER TABLE `log_result_updates` ADD `test_type` VARCHAR(244) NULL DEFAULT NULL COMMENT 'vl, eid, covid19' AFTER `vl_sample_id`;
