@@ -107,26 +107,26 @@ if (count($data['result']) > 0) {
             $id = $db->insert('form_covid19', $lab);
         }
 
-        $db = $db->where('form_id', $id);
+        $db = $db->where('covid19_id', $id);
         $db->delete("covid19_patient_symptoms");
         if (isset($symptoms) && !empty($symptoms)) {
 
             foreach ($symptoms as $symId => $symValue) {
                 $symptomData = array();
-                $symptomData["form_id"] = $id;
+                $symptomData["covid19_id"] = $id;
                 $symptomData["symptom_id"] = $symId;
                 $symptomData["symptom_detected"] = $symValue;
                 $db->insert("covid19_patient_symptoms", $symptomData);
             }
         }
 
-        $db = $db->where('form_id', $id);
+        $db = $db->where('covid19_id', $id);
         $db->delete("covid19_patient_comorbidities");
         if (isset($comorbidities) && !empty($comorbidities)) {
 
             foreach ($comorbidities as $comoId => $comoValue) {
                 $comorbidityData = array();
-                $comorbidityData["form_id"] = $id;
+                $comorbidityData["covid19_id"] = $id;
                 $comorbidityData["comorbidity_id"] = $comoId;
                 $comorbidityData["comorbidity_detected"] = $comoValue;
                 $db->insert("covid19_patient_comorbidities", $comorbidityData);
@@ -138,12 +138,12 @@ if (count($data['result']) > 0) {
 
             foreach ($testResults as $testValue) {
                 $covid19TestData = array(
-					'covid19_id'			=> $id,
-                    'test_name'				=> $testValue['test_name'],
-                    'facility_id'           => isset($lab['facility_id']) ? $lab['facility_id'] : null,
-					'sample_tested_datetime' => $testValue['sample_tested_datetime'],
-					'result'				=> $testValue['result'],
-				);
+                    'covid19_id'                => $id,
+                    'test_name'                 => $testValue['test_name'],
+                    'facility_id'               => $testValue['facility_id'],
+                    'sample_tested_datetime'    => $testValue['sample_tested_datetime'],
+                    'result'                    => $testValue['result'],
+                );
                 $db->insert("covid19_tests", $covid19TestData);
             }
         }
