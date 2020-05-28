@@ -192,7 +192,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 			function(data) {
 				if (data > 0) {
 					alert('Samples from this Manifest have been activated');
-					$('.activateSample').hide(500);
+					$('.activateSample').hide();
 				}
 				oTable.fnDraw();
 				$.unblockUI();

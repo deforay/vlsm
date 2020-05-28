@@ -243,16 +243,16 @@ require_once($fileArray[$arr['vl_form']]);
     });
     function changeHistory(val){
         if(val == 'no' || val == 'unknown'){
-            $('.historyfield').hide(500);
+            $('.historyfield').hide();
             $('#countryName,#returnDate').removeClass('isRequired');
         }else if(val == 'yes'){
-            $('.historyfield').show(500);
+            $('.historyfield').show();
             $('#countryName,#returnDate').addClass('isRequired');
         }
     }
     function changeReject(val){
 		if (val == 'yes') {
-            $('.show-rejection').show(500);
+            $('.show-rejection').show();
             $('.test-name-table-input').prop('disabled',true);
             $('.test-name-table').addClass('disabled');
 			$('#sampleRejectionReason,#rejectionDate').addClass('isRequired');
@@ -261,13 +261,14 @@ require_once($fileArray[$arr['vl_form']]);
 			$('#sampleRejectionReason').prop('disabled', false);
 		} else if (val == 'no') {
             $('#rejectionDate').val('');
-            $('.show-rejection').hide(500);
+            $('.show-rejection').hide();
             $('.test-name-table-input').prop('disabled',false);
             $('.test-name-table').removeClass('disabled');
 			$('#sampleRejectionReason,#rejectionDate').removeClass('isRequired');
 			$('#sampleTestedDateTime,#result,.test-name-table-input').addClass('isRequired');
 			$('#result').prop('disabled', false);
 			$('#sampleRejectionReason').prop('disabled', true);
+            checkPostive();
 		}
 	}
 

@@ -328,7 +328,7 @@ foreach ($fResult as $fDetails) {
                                     <h3 class="box-title">B. Reserved for Laboratory Use </h3>
                                 </div>
                                 <table class="table" style="width:100%">
-                                    <tr>
+                                    <tr class="disabledForm">
                                         <th><label for="">Sample Received Date <span class="mandatory">*</span></label></th>
                                         <td>
                                             <input type="text" class="form-control isRequired" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter sample receipt date" value="<?php echo $general->humanDateFormat($covid19Info['sample_received_at_vl_lab_datetime']) ?>" onchange="" style="width:100%;" />
@@ -342,7 +342,7 @@ foreach ($fResult as $fDetails) {
                                                 <?php } ?>
                                             </select>
                                         </td>
-                                    <tr>
+                                    <tr class="disabledForm">
                                         <th>Is Sample Rejected ? <span class="mandatory">*</span></th>
                                         <td>
                                             <select class="form-control isRequired result-focus" name="isSampleRejected" id="isSampleRejected">
@@ -352,8 +352,8 @@ foreach ($fResult as $fDetails) {
                                             </select>
                                         </td>
 
-                                        <th class="show-rejection" style="display:none;">Reason for Rejection</th>
-                                        <td class="show-rejection" style="display:none;">
+                                        <th class="show-rejection disabledForm" style="display:none;">Reason for Rejection</th>
+                                        <td class="show-rejection disabledForm" style="display:none;">
                                             <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason">
                                                 <option value="">-- Select --</option>
                                                 <?php foreach ($rejectionTypeResult as $type) { ?>
@@ -369,7 +369,7 @@ foreach ($fResult as $fDetails) {
                                             </select>
                                         </td>
                                     </tr>
-                                    <tr class="show-rejection" style="display:none;">
+                                    <tr class="show-rejection disabledForm" style="display:none;">
                                         <th>Rejection Date<span class="mandatory">*</span></th>
                                         <td><input value="<?php echo $general->humanDateFormat($covid19Info['rejection_on']); ?>" class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Select Rejection Date"/></td>
                                         <td></td>
