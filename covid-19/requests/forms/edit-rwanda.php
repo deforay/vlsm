@@ -571,18 +571,18 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         <tr>
                                             <th>Is Result Authorized ?</th>
                                             <td>
-                                                <select name="isResultAuthorized" id="isResultAuthorized" class="form-control" title="Is Result authorized ?" style="width:100%">
+                                                <select name="isResultAuthorized" id="isResultAuthorized" class="disabled-field form-control" title="Is Result authorized ?" style="width:100%">
                                                     <option value="">-- Select --</option>
                                                     <option value='yes' <?php echo ($covid19Info['is_result_authorised'] == 'yes') ? "selected='selected'" : ""; ?>> Yes </option>
                                                     <option value='no' <?php echo ($covid19Info['is_result_authorised'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
                                                 </select>
                                             </td>
                                             <th>Authorized By</th>
-                                            <td><input type="text" value="<?php echo $covid19Info['authorized_by']; ?>" name="authorizedBy" id="authorizedBy" class="form-control" placeholder="Authorized By" /></td>
+                                            <td><input type="text" value="<?php echo $covid19Info['authorized_by']; ?>" name="authorizedBy" id="authorizedBy" class="disabled-field form-control" placeholder="Authorized By" /></td>
                                         </tr>
                                         <tr>
                                             <th>Authorized on</td>
-                                            <td><input type="text" value="<?php echo $general->humanDateFormat($covid19Info['authorized_on']); ?>" name="authorizedOn" class="form-control date" placeholder="Authorized on" /></td>
+                                            <td><input type="text" value="<?php echo $general->humanDateFormat($covid19Info['authorized_on']); ?>" name="authorizedOn" class="disabled-field form-control date" placeholder="Authorized on" /></td>
                                             <th></th>
                                             <td></td>
                                         </tr>
@@ -785,6 +785,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         $('.test-result,#result').change(function(e){
             checkPostive();
         });
+        checkPostive();
         <?php }?>
 
     });
@@ -852,10 +853,15 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         for (i = 0; i < itemLength.length; i++) {
             
             if(itemLength[i].value == 'positive'){
-                $('#result').val();
-                $('#result').prop('disabled',true);
-                $('#result').addClass('disabled');
-                $('#result').removeClass('isRequired');
+                $('#result,.disabled-field').val('');
+                $('#result,.disabled-field').prop('disabled',true);
+                $('#result,.disabled-field').addClass('disabled');
+                $('#result,.disabled-field').removeClass('isRequired');
+                return false;
+            }else{
+                $('#result,.disabled-field').prop('disabled',false);
+                $('#result,.disabled-field').removeClass('disabled');
+                $('#result,.disabled-field').addClass('isRequired');
             }
             if(itemLength[i].value != ''){
                 $('#labId').addClass('isRequired');

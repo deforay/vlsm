@@ -568,7 +568,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             <th>Reason for Changing <span class="mandatory">*</span></td>
                                             <td colspan="3"><textarea type="text" name="reasonForChanging" id="reasonForChanging" class="form-control date" placeholder="Enter the reason for changing" title="Please enter the reason for changing"></textarea></td>
                                         </tr>
-                                        <tr class="disabledForm">
+                                        <tr>
                                             <th>Is Result Authorized ?</th>
                                             <td>
                                                 <select name="isResultAuthorized" id="isResultAuthorized" class="form-control" title="Is Result authorized ?" style="width:100%">
@@ -580,7 +580,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             <th>Authorized By</th>
                                             <td><input type="text" value="<?php echo $covid19Info['authorized_by']; ?>" name="authorizedBy" id="authorizedBy" class="form-control" placeholder="Authorized By" /></td>
                                         </tr>
-                                        <tr class="disabledForm">
+                                        <tr>
                                             <th>Authorized on</td>
                                             <td><input type="text" value="<?php echo $general->humanDateFormat($covid19Info['authorized_on']); ?>" name="authorizedOn" class="form-control date" placeholder="Authorized on" /></td>
                                             <th></th>
