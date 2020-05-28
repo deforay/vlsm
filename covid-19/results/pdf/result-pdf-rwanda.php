@@ -23,6 +23,10 @@ if (sizeof($requestResult) > 0) {
     $pages = array();
     $page = 1;
     foreach ($requestResult as $result) {
+
+        $covid19TestQuery = "SELECT * from covid19_tests where covid19_id= ".$result['covid19_id']." ORDER BY test_id ASC";
+        $covid19TestInfo = $db->rawQuery($covid19TestQuery);
+
         $currentTime = $general->getDateTime();
         $_SESSION['aliasPage'] = $page;
         if (!isset($result['labName'])) {

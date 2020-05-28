@@ -8,7 +8,7 @@ $tsQuery = "SELECT COUNT(temp_sample_id) AS totalCount,
             SUM(CASE WHEN tsr.result = 'positive' THEN 1 ELSE 0 END) AS positive, 
             SUM(CASE WHEN tsr.result = 'negative' THEN 1 ELSE 0 END) AS negative,
             SUM(CASE WHEN tsr.result = 'indeterminate' THEN 1 ELSE 0 END) AS indeterminate 
-            FROM temp_sample_import as tsr $import_decided vl_request_form as vl ON vl.sample_code=tsr.sample_code 
+            FROM temp_sample_import as tsr $import_decided eid_form as vl ON vl.sample_code=tsr.sample_code 
             WHERE  imported_by ='$importedBy' ";
 $tsResult = $db->rawQuery($tsQuery);
 

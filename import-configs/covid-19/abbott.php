@@ -49,10 +49,24 @@ try {
         //load the CSV document from a file path
         $csv = Reader::createFromPath(TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName, 'r');
         $csv->setDelimiter("\t");
+
+        $stmt = new Statement();
+        $topRecords = $stmt->limit(18)->process($csv);
+
+        $metaRecords = array();
+        foreach ($topRecords as $topRecord) {
+            if (empty($topRecord[0])) continue;
+            $metaRecords[$topRecord[0]] = $topRecord[1];
+        }
+
+
+
+
+
         $csv->setHeaderOffset(20); //set the CSV header offset - including empty lines
 
 
-        $stmt = new Statement();
+
 
 
         // get records starting from the specified row number
@@ -60,157 +74,79 @@ try {
         // So in your file you may have the data starting from line 20
         // but there are 2 empty lines, so we instruct to offset 18
         $records = $stmt->offset(18)->process($csv);
-
+        $m = 0;
+        $infoFromFile = array();
         foreach ($records as $record) {
-            echo "<pre>";
-            var_dump($record);
+            $m++;
 
-            echo "</pre>";
-        }
+            $sampleCode = "";
+            $batchCode = "";
+            $sampleType = "";
+            $txtVal = "";
+            $resultFlag = "";
 
+            $sampleCode = $record['SAMPLE ID'];
+            $sampleType = $record['SAMPLE TYPE'];
 
+            //$batchCode = $record[$batchCodeCol];
+            $resultFlag = $record['FLAGS'];
+            //$reviewBy = $record[$reviewByCol];
 
+            // Changing date to European format for strtotime - https://stackoverflow.com/a/5736255
 
+            $testingDate = date('Y-m-d H:i', strtotime($metaRecords['RUN COMPLETION TIME']));
+            $result = '';
 
-        die;
-
-        
-
-        
-
-        // $m = 1;
-        // $skipTillRow = 23;
-
-        // $sampleIdCol = 1;
-        // $sampleTypeCol = 2;
-        // $resultCol = 5;
-        // $txtValCol = 6;
-
-        // $batchCodeVal = "";
-        // $flagCol = 10;
-        // $testDateCol = 11;
-
-        // $lotNumberCol = 12;
-        // $reviewByCol = '';
-        // $lotExpirationDateCol = 13;
-
-        if (strpos($mime_type, 'text/plain') !== false) {
-            $infoFromFile = array();
-            $testDateRow = "";
-            $skip = 23;
-
-            $row = 1;
-            if (($handle = fopen(TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName, "r")) !== false) {
-                while (($sheetData = fgetcsv($handle, 10000, "\t")) !== false) {
-                    $num = count($sheetData);
-                    $row++;
-                    if ($row < $skip) {
-                        if ($row == 8) {
-                            $timestamp = DateTime::createFromFormat('!m/d/Y h:i:s A', $sheetData[1]);
-                            if (!empty($timestamp)) {
-                                $timestamp = $timestamp->getTimestamp();
-                                $testingDate = date('Y-m-d H:i', ($timestamp));
-                            } else {
-                                $testingDate = null;
-                            }
-                        }
-                        continue;
-                    }
-                    $sampleCode = "";
-                    $batchCode = "";
-                    $sampleType = "";
-                    $absDecimalVal = "";
-                    $absVal = "";
-                    $logVal = "";
-                    $txtVal = "";
-                    $resultFlag = "";
-
-                    $sampleCode = $sheetData[$sampleIdCol];
-
-                    if ($sampleCode == "SAMPLE ID" || $sampleCode == "") {
-                        continue;
-                    }
-
-                    $sampleType = $sheetData[$sampleTypeCol];
-
-                    $batchCode = $sheetData[$batchCodeCol];
-                    $resultFlag = $sheetData[$flagCol];
-                    //$reviewBy = $sheetData[$reviewByCol];
-
-                    // Changing date to European format for strtotime - https://stackoverflow.com/a/5736255
-                    // $sheetData[$testDateCol] = str_replace("/", "-", $sheetData[$testDateCol]);
-                    // $testingDate = date('Y-m-d H:i', strtotime($sheetData[$testDateCol]));
-                    $result = $absVal = $logVal = $absDecimalVal = $txtVal = '';
-
-                    if (strpos(strtolower($sheetData[$resultCol]), 'not detected') !== false) {
-                        $result = 'negative';
-                    } else if ((strpos(strtolower($sheetData[$resultCol]), 'detected') !== false) || (strpos(strtolower($sheetData[$resultCol]), 'passed') !== false)) {
-                        $result = 'positive';
-                    } else {
-                        $result = 'indeterminate';
-                    }
+            $result = strtolower($record['INTERPRETATION']);
 
 
-                    $lotNumberVal = $sheetData[$lotNumberCol];
-                    if (trim($sheetData[$lotExpirationDateCol]) != '') {
-                        $timestamp = DateTime::createFromFormat('!m/d/Y', $sheetData[$lotExpirationDateCol]);
-                        if (!empty($timestamp)) {
-                            $timestamp = $timestamp->getTimestamp();
-                            $lotExpirationDateVal = date('Y-m-d H:i', $timestamp);
-                        } else {
-                            $lotExpirationDateVal = null;
-                        }
-                    }
 
-                    $sampleType = $sheetData[$sampleTypeCol];
-                    if ($sampleType == 'Patient') {
-                        $sampleType = 'S';
-                    } else if ($sampleType == 'Control') {
+            $lotNumberVal = $record['REAGENT LOT NUMBER'];
+            
+            if (trim($record["REAGENT LOT EXPIRATION DATE"]) != '') {
+                $lotExpirationDateVal = (date('Y-m-d', strtotime($record["REAGENT LOT EXPIRATION DATE"])));
+            }
 
-                        if ($sampleCode == 'HIV_HIPOS') {
-                            $sampleType = 'HPC';
-                            $sampleCode = $sampleCode . '-' . $lotNumberVal;
-                        } else if ($sampleCode == 'HIV_LOPOS') {
-                            $sampleType = 'LPC';
-                            $sampleCode = $sampleCode . '-' . $lotNumberVal;
-                        } else if ($sampleCode == 'HIV_NEG') {
-                            $sampleType = 'NC';
-                            $sampleCode = $sampleCode . '-' . $lotNumberVal;
-                        }
-                    }
+            if ($sampleType == 'Patient') {
+                $sampleType = 'S';
+            } else if ($sampleType == 'Control') {
 
-                    $batchCode = "";
-
-
-                    if ($sampleCode == "") {
-                        $sampleCode = $sampleType . $m;
-                    }
-
-                    if (!isset($infoFromFile[$sampleCode])) {
-                        $infoFromFile[$sampleCode] = array(
-                            "sampleCode" => $sampleCode,
-                            "logVal" => ($logVal),
-                            "absVal" => $absVal,
-                            "absDecimalVal" => $absDecimalVal,
-                            "txtVal" => $txtVal,
-                            "resultFlag" => $resultFlag,
-                            "testingDate" => $testingDate,
-                            "sampleType" => $sampleType,
-                            "batchCode" => $batchCode,
-                            "lotNumber" => $lotNumberVal,
-                            "result" => $result,
-                            "lotExpirationDate" => $lotExpirationDateVal,
-                        );
-                    } else {
-                        if (isset($logVal) && trim($logVal) != "") {
-                            $infoFromFile[$sampleCode]['logVal'] = trim($logVal);
-                        }
-                    }
-
-                    $m++;
+                if ($sampleCode == 'COV-2_POS') {
+                    $sampleType = 'HPC';
+                    $sampleCode = $sampleCode . '-' . $lotNumberVal;
+                } else if ($sampleCode == 'COV-2_NEG') {
+                    $sampleType = 'NC';
+                    $sampleCode = $sampleCode . '-' . $lotNumberVal;
                 }
             }
+
+            $batchCode = "";
+
+
+            if ($sampleCode == "") {
+                $sampleCode = $sampleType . $m;
+            }
+
+
+            if (!isset($infoFromFile[$sampleCode])) {
+                $infoFromFile[$sampleCode] = array(
+                    "sampleCode" => $sampleCode,
+                    "resultFlag" => $resultFlag,
+                    "testingDate" => $testingDate,
+                    "sampleType" => $sampleType,
+                    "batchCode" => $batchCode,
+                    "lotNumber" => $lotNumberVal,
+                    "result" => $result,
+                    "lotExpirationDate" => $lotExpirationDateVal,
+                );
+            }
         }
+
+
+
+
+
+
 
         $inc = 0;
         foreach ($infoFromFile as $sampleCode => $d) {
@@ -224,11 +160,7 @@ try {
                 'import_machine_name' => $_POST['configMachineName'],
                 'result_reviewed_by' => $_SESSION['userId'],
                 'sample_code' => $d['sampleCode'],
-                'result_value_log' => $d['logVal'],
                 'sample_type' => $d['sampleType'],
-                'result_value_absolute' => $d['absVal'],
-                'result_value_text' => $d['txtVal'],
-                'result_value_absolute_decimal' => $d['absDecimalVal'],
                 'sample_tested_datetime' => $testingDate,
                 'result_status' => '6',
                 'import_machine_file_name' => $fileName,
@@ -245,7 +177,7 @@ try {
                 $data['batch_code'] = $batchCode;
             }
             //get user name
-            if ($d['reviewBy'] != '') {
+            if (isset($d['reviewBy']) && $d['reviewBy'] != '') {
                 $uQuery = "select user_name,user_id from user_details where user_name='" . $d['reviewBy'] . "'";
                 $uResult = $db->rawQuery($uQuery);
                 if ($uResult) {
@@ -263,7 +195,7 @@ try {
                 }
             }
 
-            $query = "select facility_id,vl_sample_id,result,result_value_log,result_value_absolute,result_value_text,result_value_absolute_decimal from vl_request_form where sample_code='" . $sampleCode . "'";
+            $query = "select facility_id,covid19_id,result from form_covid19 where sample_code='" . $sampleCode . "'";
             $vlResult = $db->rawQuery($query);
             //insert sample controls
             $scQuery = "select r_sample_control_name from r_sample_controls where r_sample_control_name='" . trim($d['sampleType']) . "'";
@@ -273,7 +205,7 @@ try {
                 $scId = $db->insert("r_sample_controls", $scData);
             }
             if ($vlResult && $sampleCode != '') {
-                if ($vlResult[0]['result_value_log'] != '' || $vlResult[0]['result_value_absolute'] != '' || $vlResult[0]['result_value_text'] != '' || $vlResult[0]['result_value_absolute_decimal'] != '') {
+                if (isset($vlResult[0]['result']) && !empty($vlResult[0]['result'])) {
                     $data['sample_details'] = 'Result already exists';
                 } else {
                     $data['result_status'] = '7';
@@ -283,7 +215,7 @@ try {
                 $data['sample_details'] = 'New Sample';
             }
             //echo "<pre>";var_dump($data);echo "</pre>";continue;
-            if ($sampleCode != '' || $batchCode != '' || $sampleType != '' || $logVal != '' || $absVal != '' || $absDecimalVal != '') {
+            if ($sampleCode != '' || $batchCode != '' || $sampleType != '') {
                 $data['result_imported_datetime'] = $general->getDateTime();
                 $data['imported_by'] = $_SESSION['userId'];
                 $id = $db->insert("temp_sample_import", $data);
@@ -304,6 +236,7 @@ try {
         $data = array(
             'user_id' => $_SESSION['userId'],
             'vl_sample_id' => $id,
+            'test_type' => 'covid19',
             'updated_on' => $general->getDateTime(),
         );
         $db->insert("log_result_updates", $data);

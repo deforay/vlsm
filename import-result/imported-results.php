@@ -45,6 +45,17 @@ if ($module == 'vl') {
   $rejectionQuery = "SELECT * FROM r_eid_sample_rejection_reasons where rejection_reason_status = 'active'";
   $rejectionResult = $db->rawQuery($rejectionQuery);
 }
+else if ($module == 'covid19') {
+
+  $rejectionTypeQuery = "SELECT DISTINCT rejection_type FROM r_covid19_sample_rejection_reasons WHERE rejection_reason_status ='active'";
+  $rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
+
+  //sample rejection reason
+  $rejectionQuery = "SELECT * FROM r_covid19_sample_rejection_reasons where rejection_reason_status = 'active'";
+  $rejectionResult = $db->rawQuery($rejectionQuery);
+}else{
+  die('NO TEST TYPE MATCHED');
+}
 
 
 $rejectionReason = '<option value="">-- Select --</option>';

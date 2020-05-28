@@ -151,6 +151,32 @@ class Model_Covid19
         }
         return $response;
     }
+
+    public function insertCovid19Tests($covid19SampleId, $testKitName = null, $labId = null, $sampleTestedDatetime = null, $result=null)
+    {
+        $covid19TestData = array(
+            'covid19_id'            => $covid19SampleId,
+            'test_name'                => $testKitName,
+            'facility_id'           => $labId,
+            'sample_tested_datetime' => $sampleTestedDatetime,
+            'result'                => $result
+        );
+        return $this->db->insert("covid19_tests", $covid19TestData);
+    }
+
+    public function checkAllCovid19TestsForPositive($covid19SampleId)
+    {
+        $response = $this->db->rawQuery("SELECT * FROM covid19_tests WHERE `covid19_id` = $covid19SampleId ORDER BY test_id ASC");
+
+        foreach($response as $row){
+            if($row['result'] == 'positive') return true;
+        }
+        
+        return false;
+
+    }    
+
+
     public function getCovid19Results()
     {
         $results = $this->db->rawQuery("SELECT * FROM r_covid19_results where status='active' ORDER BY result_id DESC");

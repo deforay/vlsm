@@ -59,12 +59,13 @@ try {
 
   $general->activityLog($eventType, $action, $resource);
 
-  // $data = array(
-  //   'user_id' => $_SESSION['userId'],
-  //   'vl_sample_id' => $_POST['vlSampleId'],
-  //   'updated_on' => $general->getDateTime()
-  // );
-  // $db->insert($tableName2, $data);
+	$data = array(
+		'user_id' => $_SESSION['userId'],
+		'vl_sample_id' => $_POST['eidSampleId'],
+		'test_type' => 'eid',
+		'updated_on' => $general->getDateTime()
+	  );
+	  $db->insert($tableName2, $data);
 
   header("location:eid-manual-results.php");
 } catch (Exception $exc) {

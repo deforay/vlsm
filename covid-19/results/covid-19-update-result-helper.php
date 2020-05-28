@@ -100,12 +100,13 @@ try {
 
 	$general->activityLog($eventType, $action, $resource);
 
-	// $data = array(
-	//   'user_id' => $_SESSION['userId'],
-	//   'vl_sample_id' => $_POST['vlSampleId'],
-	//   'updated_on' => $general->getDateTime()
-	// );
-	// $db->insert($tableName2, $data);
+	$data = array(
+		'user_id' => $_SESSION['userId'],
+		'vl_sample_id' => $_POST['covid19SampleId'],
+		'test_type' => 'covid19',
+		'updated_on' => $general->getDateTime()
+	  );
+	  $db->insert($tableName2, $data);
 
 	header("location:covid-19-manual-results.php");
 } catch (Exception $exc) {
