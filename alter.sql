@@ -2278,7 +2278,7 @@ CREATE TABLE `import_config_controls` (
  PRIMARY KEY (`test_type`,`config_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --  Thanaseelan April 28, 2020
-ALTER TABLE `import_config` DROP `number_of_in_house_controls`, DROP `number_of_manufacturer_controls`, DROP `number_of_calibrators`;
+-- ALTER TABLE `import_config` DROP `number_of_in_house_controls`, DROP `number_of_manufacturer_controls`, DROP `number_of_calibrators`;
 
 -- Amit April 30, 2020
 ALTER TABLE `form_covid19` CHANGE `sample_code_key` `sample_code_key` INT(11) NULL;
@@ -2340,7 +2340,7 @@ CREATE TABLE `r_covid19_symptoms` (
 
 ALTER TABLE `form_covid19` ADD `patient_occupation` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_phone_number`;
 ALTER TABLE `form_covid19` ADD `patient_nationality` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_phone_number`;
-ALTER TABLE `form_covid19` ADD `patient_province` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_address`, ADD `patient_district` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_province`;
+-- ALTER TABLE `form_covid19` ADD `patient_province` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_address`, ADD `patient_district` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_province`;
 
 ALTER TABLE `form_covid19` ADD `flight_airline` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_address`, 
                            ADD `flight_seat_no` VARCHAR(255) NULL DEFAULT NULL AFTER `flight_airline`, 
