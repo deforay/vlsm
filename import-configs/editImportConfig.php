@@ -126,21 +126,21 @@ foreach($configControlInfo as $info){
 									</tr>
 								</thead>
 								<tbody id="testTypesTable">
-									<?php if($systemConfig['modules']['vl']){?>
+									<?php if(isset($systemConfig['modules']['vl'])){?>
 									<tr>
 										<td align="left">VL<input type="hidden" name="testType[]" id="testType1" value="vl"/></td>
 										<td><input type="text" value="<?php echo $configControl['vl']['noHouseCtrl'];?>" name="noHouseCtrl[]" id="noHouseCtrl1" class="form-control" placeholder="No of In-House Controls in vl" title="Please enter No of In-House Controls in vl" /></td>
 										<td><input type="text" value="<?php echo $configControl['vl']['noManufacturerCtrl'];?>" name="noManufacturerCtrl[]" id="noManufacturerCtrl1" class="form-control" placeholder="No of Manufacturer Controls in vl" title="Please enter No of Manufacturer Controls in vl" /></td>
 										<td><input type="text" value="<?php echo $configControl['vl']['noCalibrators'];?>" name="noCalibrators[]" id="noCalibrators1" class="form-control" placeholder="No of Calibrators in vl" title="Please enter No of Calibrators in vl" /></td>
 									</tr>
-									<?php } if($systemConfig['modules']['eid']){?>
+									<?php } if(isset($systemConfig['modules']['eid'])){?>
 									<tr>
 										<td align="left">EID<input type="hidden" name="testType[]" id="testType1" value="eid"/></td>
 										<td><input type="text" value="<?php echo $configControl['eid']['noHouseCtrl'];?>" name="noHouseCtrl[]" id="noHouseCtrl1" class="form-control" placeholder="No of In-House Controls in eid" title="Please enter No of In-House Controls in eid" /></td>
 										<td><input type="text" value="<?php echo $configControl['eid']['noManufacturerCtrl'];?>" name="noManufacturerCtrl[]" id="noManufacturerCtrl1" class="form-control" placeholder="No of Manufacturer Controls in eid" in eid title="Please enter No of Manufacturer Controls in eid" /></td>
 										<td><input type="text" value="<?php echo $configControl['eid']['noCalibrators'];?>" name="noCalibrators[]" id="noCalibrators1" class="form-control" placeholder="No of Calibrators in eid" title="Please enter No of Calibrators in eid" /></td>
 									</tr>
-									<?php } if($systemConfig['modules']['covid19']){?>
+									<?php } if(isset($systemConfig['modules']['covid19'])){?>
 									<tr>
 										<td align="left">Covid-19<input type="hidden" name="testType[]" id="testType1" value="covid-19"/></td>
 										<td><input type="text" value="<?php echo $configControl['covid-19']['noHouseCtrl'];?>" name="noHouseCtrl[]" id="noHouseCtrl1" class="form-control" placeholder="No of In-House Controls in covid-19" title="Please enter No of In-House Controls in covid-19" /></td>
