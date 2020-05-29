@@ -497,7 +497,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         </tr>
                                         <tr>
                                             <th>Authorized on</td>
-                                            <td><input type="text" value="<?php echo $general->humanDateFormat($covid19Info['authorized_on']); ?>" name="authorizedOn" class="disabled-field form-control date" placeholder="Authorized on" /></td>
+                                            <td><input type="text" value="<?php echo $general->humanDateFormat($covid19Info['authorized_on']); ?>" name="authorizedOn" id="authorizedOn" class="disabled-field form-control date" placeholder="Authorized on" /></td>
                                             <th></th>
                                             <td></td>
                                         </tr>
@@ -696,7 +696,10 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                 $("#motherViralLoadText").val('');
             }
         });
-
+        $('#isResultAuthorized').change(function(e){
+            checkIsResultAuthorized();
+        });
+        checkIsResultAuthorized();
         <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
         $('.test-result,#result').change(function(e){
             checkPostive();
@@ -740,6 +743,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
             $('.ui-datepicker-calendar').show();
         });
         tableRowId++;
+        
         <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
         $('.test-result,#result').change(function(e){
             checkPostive();
@@ -780,6 +784,20 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
             if(itemLength[i].value != ''){
                 $('#labId').addClass('isRequired');
             }
+        }
+    }
+
+    function checkIsResultAuthorized(){
+        if($('#isResultAuthorized').val() == 'no'){
+            $('#authorizedBy,#authorizedOn').val('');
+            $('#authorizedBy,#authorizedOn').prop('disabled',true);
+            $('#authorizedBy,#authorizedOn').addClass('disabled');
+            $('#authorizedBy,#authorizedOn').removeClass('isRequired');
+            return false;
+        }else{
+            $('#authorizedBy,#authorizedOn').prop('disabled',false);
+            $('#authorizedBy,#authorizedOn').removeClass('disabled');
+            $('#authorizedBy,#authorizedOn').addClass('isRequired');
         }
     }
 </script>
