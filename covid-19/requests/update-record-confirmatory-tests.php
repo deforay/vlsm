@@ -5,9 +5,9 @@ require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 include_once(APPLICATION_PATH . '/models/General.php');
 require_once(APPLICATION_PATH . '/models/Covid19.php');
-
 $general = new General($db);
 $id = base64_decode($_GET['id']);
+
 $configQuery = "SELECT * from global_config";
 $configResult = $db->query($configQuery);
 $arr = array();

@@ -425,7 +425,6 @@ foreach ($fResult as $fDetails) {
                                                     </tr>
                                                 <?php }?>
                                             </tbody>
-                                            <?php if (isset($_SESSION['privileges']) && in_array("record-final-result.php", $_SESSION['privileges'])) { ?>
                                                 <tfoot>
                                                         <th colspan="3" class="text-right">Final Result</th>
                                                         <td>
@@ -438,7 +437,6 @@ foreach ($fResult as $fDetails) {
                                                         </td>
                                                     </tr>
                                                 </tfoot>
-                                            <?php } ?>
                                             </table>
                                         </td>
                                     </tr>

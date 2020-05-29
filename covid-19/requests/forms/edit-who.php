@@ -461,7 +461,6 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                             </tr>
                                                         <?php } ?>
                                                     </tbody>
-                                                    <?php if (isset($_SESSION['privileges']) && in_array("record-final-result.php", $_SESSION['privileges'])) { ?>
                                                     <tfoot>
                                                         <tr>
                                                             <th colspan="3" class="text-right">Final Result</th>
@@ -475,7 +474,6 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                             </td>
                                                         </tr>
                                                     </tfoot>
-                                                    <?php } ?> 
                                                 </table>
                                             </td>
                                         </tr>

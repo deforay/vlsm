@@ -269,10 +269,8 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
           if(isset($_SESSION['privileges']) && (in_array("covid-19-view-request.php", $_SESSION['privileges']))){
                $viewRequest = true;
           }
-
-
+          
           foreach ($rResult as $aRow) {
-
                $vlResult='';
                $edit='';
                $barcode='';
@@ -328,7 +326,6 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                     $barcode='<br><a href="javascript:void(0)" onclick="printBarcodeLabel(\''.$aRow[$sampleCode].'\',\''.$fac.'\')" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Barcode"><i class="fa fa-barcode"> </i> Barcode </a>';
                }
 
-               
                if($editRequest){
                     $row[] = $edit.$barcode;//.$pdf;
                }else if($viewRequest){
