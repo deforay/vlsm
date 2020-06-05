@@ -86,10 +86,11 @@ foreach ($importConfigResult as $machine) {
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <h1><i class="fa fa-edit"></i> Create Confirmation Manifest</h1>
+        <h1><i class="fa fa-edit"></i> Create Confirmation Test Manifest</h1>
         <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">Batch</li>
+            <li><a href="/covid-19/results/covid-19-confirmation-manifest.php"><i class="fa fa-check-square-o"></i> Confirmation Test Manifest</a></li>
+            <li class="active">Create Confirmation Test Manifest</li>
         </ol>
     </section>
 
