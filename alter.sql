@@ -2263,12 +2263,15 @@ CREATE TABLE `covid19_imported_controls` (
  `file_name` varchar(255) DEFAULT NULL,
  `imported_date_time` datetime DEFAULT NULL,
  PRIMARY KEY (`control_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;  
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci; 
+
 ALTER TABLE `form_covid19` ADD `is_result_mail_sent` VARCHAR(255) NULL DEFAULT 'no' AFTER `lot_expiration_date`;
+
 -- ------------------------------------------------------------
 -- Version 3.20 ---- Amit April 22 2020
 -- ------------------------------------------------------------
 -- Thanaseelan April 27, 2020
+
 CREATE TABLE `import_config_controls` (
  `test_type` varchar(255) NOT NULL,
  `config_id` int(11) NOT NULL,
@@ -2311,9 +2314,6 @@ ALTER TABLE `form_covid19` ADD `reason_for_changing` TEXT NULL DEFAULT NULL AFTE
 -- Amit 24 May, 2020
 
 
-ALTER TABLE `covid19_tests` ADD `facility_id` INT NULL DEFAULT NULL AFTER `covid19_id`;
-ALTER TABLE `form_covid19` ADD `is_sample_collected` VARCHAR(255) NULL DEFAULT NULL AFTER `reason_of_visit`;
-ALTER TABLE `form_covid19` ADD `reason_for_covid19_test` INT NULL DEFAULT NULL AFTER `is_sample_collected`;
 
 
 CREATE TABLE `r_covid19_test_reasons` (
@@ -2345,7 +2345,7 @@ ALTER TABLE `form_covid19` ADD `patient_nationality` VARCHAR(255) NULL DEFAULT N
 ALTER TABLE `form_covid19` ADD `flight_airline` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_address`, 
                            ADD `flight_seat_no` VARCHAR(255) NULL DEFAULT NULL AFTER `flight_airline`, 
                            ADD `flight_arrival_datetime` DATETIME NULL DEFAULT NULL AFTER `flight_seat_no`, 
-                           ADD `flight_airport_of_departure` VARCHAR(255) NULL DEFAULT NULL AFTER `flight_arrival_date`, 
+                           ADD `flight_airport_of_departure` VARCHAR(255) NULL DEFAULT NULL AFTER `flight_arrival_datetime`, 
                            ADD `flight_transit` VARCHAR(255) NULL DEFAULT NULL AFTER `flight_airport_of_departure`, 
                            ADD `reason_of_visit` VARCHAR(500) NULL DEFAULT NULL AFTER `flight_transit`;
 
@@ -2354,12 +2354,11 @@ ALTER TABLE `form_covid19`  ADD `date_of_initial_consultation` DATE NULL DEFAULT
 ALTER TABLE `form_covid19` ADD `fever_temp` VARCHAR(255) NULL DEFAULT NULL AFTER `date_of_initial_consultation`;
 ALTER TABLE `form_covid19` ADD `close_contacts` TEXT NULL DEFAULT NULL AFTER `fever_temp`;
 
-CREATE TABLE `covid19_patient_symptoms` (
- `form_id` int(11) NOT NULL,
- `symptom_id` int(11) NOT NULL,
- `symptom_detected` varchar(255) NOT NULL, -- yes, no, unknown
- PRIMARY KEY (`form_id`,`symptom_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `covid19_tests` ADD `facility_id` INT NULL DEFAULT NULL AFTER `covid19_id`;
+ALTER TABLE `form_covid19` ADD `is_sample_collected` VARCHAR(255) NULL DEFAULT NULL AFTER `reason_of_visit`;
+ALTER TABLE `form_covid19` ADD `reason_for_covid19_test` INT NULL DEFAULT NULL AFTER `is_sample_collected`;
+
 
 CREATE TABLE `covid19_patient_symptoms` (
  `form_id` int(11) NOT NULL,
@@ -2379,7 +2378,7 @@ INSERT INTO `global_config` (`display_name`, `name`, `value`, `status`) VALUES (
 ALTER TABLE `form_covid19` ADD `rejection_on` DATE NULL DEFAULT NULL AFTER `reason_for_sample_rejection`;
 -- Thanaseelan 26 May, 2020
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '29', 'record-final-result.php', 'Record Final Result'), (NULL, '29', 'can-record-confirmatory-tests.php', 'Can Record Confirmatory Tests'), (NULL, '29', 'update-record-confirmatory-tests.php', 'Update Record Confirmatory Tests');
-INSERT INTO `global_config` (`display_name`, `name`, `value`, `status`) VALUES ('Positive Confirmatory Tests Required By Central Lab', 'covid19_positive_confirmatory_tests_required_by_central_lab', 'no', 'active');
+INSERT INTO `global_config` (`display_name`, `name`, `value`, `status`) VALUES ('Positive Confirmatory Tests Required By Central Lab', 'covid19_positive_confirmatory_tests_required_by_central_lab', 'yes', 'active');
 
 -- Amit 27 may, 2020
 

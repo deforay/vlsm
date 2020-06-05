@@ -102,9 +102,8 @@ if ($table == "eid_form") {
 			WHEN (result_printed_datetime not like '' AND result_printed_datetime is not NULL AND result_printed_datetime != '0000-00-00 00:00:00') THEN 1
 				ELSE 0
 			END) AS printCount
-		FROM " . $table . " as eid JOIN facility_details as f ON f.facility_id=eid.facility_id
-		where  eid.vlsm_country_id =" . $country;
-    $sQuery = $sQuery . ' AND DATE(eid.sample_collection_date) >= "' . $start_date . '" AND DATE(eid.sample_collection_date) <= "' . $end_date . '"';
+		FROM " . $table . " as eid JOIN facility_details as f ON f.facility_id=eid.facility_id";
+    $sQuery = $sQuery . ' WHERE DATE(eid.sample_collection_date) >= "' . $start_date . '" AND DATE(eid.sample_collection_date) <= "' . $end_date . '"';
     $sQuery = $sQuery . $whereCondition;
     $sQuery = $sQuery . ' GROUP BY eid.facility_id';
 } else {
