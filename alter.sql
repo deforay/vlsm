@@ -2393,3 +2393,16 @@ ALTER TABLE `log_result_updates` ADD `test_type` VARCHAR(244) NULL DEFAULT NULL 
 -- ------------------------------------------------------------
 -- Version 3.22 ---- Amit May 29 2020
 -- ------------------------------------------------------------
+-- Thanaseelan 02 Jun, 2020
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '30', 'covid-19-confirmation-manifest.php', 'Covid-19 Confirmation Manifest'), (NULL, '30', 'covid-19-add-confirmation-manifest.php', 'Add New Confirmation Manifest');
+
+ALTER TABLE `form_covid19` ADD `positive_test_manifest_id` INT(11) NULL DEFAULT NULL AFTER `sample_package_code`, ADD `positive_test_manifest_code` VARCHAR(255) NULL DEFAULT NULL AFTER `positive_test_manifest_id`;
+CREATE TABLE `covid19_positive_confirmation_manifest` (
+ `manifest_id` int NOT NULL AUTO_INCREMENT,
+ `manifest_code` varchar(255) NOT NULL,
+ `added_by` varchar(255) NOT NULL,
+ `manifest_status` varchar(255) DEFAULT NULL,
+ `module` varchar(255) DEFAULT NULL,
+ `request_created_datetime` datetime DEFAULT NULL,
+ PRIMARY KEY (`manifest_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
