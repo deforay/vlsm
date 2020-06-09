@@ -35,15 +35,15 @@ $batResult = $db->rawQuery($batQuery);
 		<div class="row">
 			<div class="col-xs-12">
 				<div class="box">
-				<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
-					<tr>
-						<td>
-							<?php if (isset($_SESSION['privileges']) && in_array("covid-19-add-confirmation-manifest.php", $_SESSION['privileges'])) { ?>
-								<a href="/covid-19/results/covid-19-add-confirmation-manifest.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Add new Covid-19 Confirmation Manifest</a>
-							<?php } ?>
-						</td>
-					</tr>
-				</table>
+					<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
+						<tr>
+							<td>
+								<?php if (isset($_SESSION['privileges']) && in_array("covid-19-add-confirmation-manifest.php", $_SESSION['privileges'])) { ?>
+									<a href="/covid-19/results/covid-19-add-confirmation-manifest.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Add new Covid-19 Confirmation Manifest</a>
+								<?php } ?>
+							</td>
+						</tr>
+					</table>
 					<!-- /.box-header -->
 					<div class="box-body table-responsive">
 						<table id="covid19ManifestDataTable" class="table table-bordered table-striped table-vcenter">
@@ -63,6 +63,9 @@ $batResult = $db->rawQuery($batQuery);
 									<th>District/County</th>
 									<th>Result</th>
 									<th>Status</th>
+									<?php if (isset($_SESSION['privileges']) && in_array("generate-confirmation-manifest.php", $_SESSION['privileges'])) { ?>
+									<th>Action</th>
+									<?php } ?>
 								</tr>
 							</thead>
 							<tbody>
@@ -89,13 +92,13 @@ $batResult = $db->rawQuery($batQuery);
 <?php
 if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off") {
 	if ($global['bar_code_printing'] == 'dymo-labelwriter-450') {
-		?>
+?>
 		<script src="../assets/js/DYMO.Label.Framework.js"></script>
 		<script src="../configs/dymo-format.js"></script>
 		<script src="../assets/js/dymo-print.js"></script>
 	<?php
-		} else if ($global['bar_code_printing'] == 'zebra-printer') {
-			?>
+	} else if ($global['bar_code_printing'] == 'zebra-printer') {
+	?>
 		<script src="../assets/js/zebra-browserprint.js.js"></script>
 		<script src="../configs/zebra-format.js"></script>
 		<script src="../assets/js/zebra-print.js"></script>
@@ -124,8 +127,29 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 				<?php if ($sarr['user_type'] != 'standalone') { ?> {
 						"sClass": "center"
 					},
-				<?php } ?> 
-				{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"}
+				<?php } ?> {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}
 			],
 			"aaSorting": [
 				[<?php echo ($sarr['user_type'] == 'remoteuser' || $sarr['user_type'] == 'vluser') ? 9 : 8 ?>, "desc"]

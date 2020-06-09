@@ -2405,3 +2405,6 @@ CREATE TABLE `covid19_positive_confirmation_manifest` (
  `request_created_datetime` datetime DEFAULT NULL,
  PRIMARY KEY (`manifest_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Thanaseelan 09 Jun, 2020
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '30', 'generate-confirmation-manifest.php', 'Generate Positive Confirmation Manifest');
