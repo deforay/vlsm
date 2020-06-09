@@ -221,6 +221,9 @@ foreach ($rResult as $aRow) {
      $row[] = ucwords($aRow['facility_district']);
      $row[] = $covid19Results[$aRow['result']];;
      $row[] = ucwords($aRow['status_name']);
+     if (isset($_SESSION['privileges']) && in_array("generate-confirmation-manifest.php", $_SESSION['privileges'])) {
+          $row[] = '<a href="generate-confirmation-manifest.php?id='.base64_encode($aRow['manifest_id']).'" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Print bar code" target="_blank"><i class="fa fa-barcode"> Print Barcode</i></a>';
+     }
      
      $output['aaData'][] = $row;
 }
