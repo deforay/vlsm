@@ -134,14 +134,17 @@ $output = array(
     "iTotalDisplayRecords" => $iFilteredTotal,
     "aaData" => array()
 );
-$package = false;
+$package = false;$edit = false;
 if (isset($_SESSION['privileges']) && (in_array("generate-confirmation-manifest.php", $_SESSION['privileges']))) {
     $package = true;
+}
+if (isset($_SESSION['privileges']) && (in_array("covid-19-edit-confirmation-manifest.php", $_SESSION['privileges']))) {
+    $edit = true;
 }
 
 foreach ($rResult as $aRow) {
     $humanDate = "";
-    $printBarcode = '<a href="generate-confirmation-manifest.php?id='. base64_encode($aRow['manifest_code']).'" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Print bar code"><i class="fa fa-barcode"> Print Barcode</i></a>';
+    $printBarcode = '<a href="generate-confirmation-manifest.php?id='. base64_encode($aRow['manifest_code']).'" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Print bar code" target="_blank"><i class="fa fa-barcode"> Print Barcode</i></a>';
     if (trim($aRow['request_created_datetime']) != "" && $aRow['request_created_datetime'] != '0000-00-00 00:00:00') {
         $date = $aRow['request_created_datetime'];
         $humanDate =  date("d-M-Y H:i:s", strtotime($date));
@@ -158,14 +161,13 @@ foreach ($rResult as $aRow) {
     $row[] = strtoupper($aRow['module']);
     $row[] = $aRow['sample_code'];
     $row[] = $humanDate;
-    if ($package) {
-        /* if ($_SESSION['roleCode'] == 'AD' || $_SESSION['roleCode'] == 'ad') {
-            $editBtn = '<a href="editSpecimenReferralManifest.php?t=' . base64_encode($_POST['module']) . '&id=' . base64_encode($aRow['manifest_id']) . '" class="btn btn-primary btn-xs" ' . $disable . ' style="margin-right: 2px;' . $pointerEvent . '" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
+    if ($package || $edit) {
+        if ($edit) {
+            $editBtn = '<a href="covid-19-edit-confirmation-manifest.php?id=' . base64_encode($aRow['manifest_id']) . '" class="btn btn-primary btn-xs" ' . $disable . ' style="margin-right: 2px;' . $pointerEvent . '" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
         } else {
             $editBtn = '';
-        } */
-     //    $row[] = $editBtn . '&nbsp;&nbsp;' . $printBarcode;
-        $row[] = $printBarcode;
+        }
+        $row[] = $editBtn . '&nbsp;&nbsp;' . $printBarcode;
     }
     $output['aaData'][] = $row;
 }
