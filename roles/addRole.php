@@ -105,7 +105,7 @@ $rInfo=$db->query($resourcesQuery);
                             //  $allowChecked = "";
                             //  }
                           echo "<div class='col-lg-3' style='margin-top:5px;border:1px solid #eee;padding:10px;'>
-                                  <label class='labelName' style='white-space:nowrap'>" . ucwords($privilege['display_name']) . "</label>
+                                  <label class='labelName'>" . ucwords($privilege['display_name']) . "</label>
                                   <br>
                                   <input type='radio' class='cekAll layCek'  name='resource[" . $privilege['privilege_id'] . "]" . "' value='allow' > <i class='fa fa-check'></i>
                                   <input type='radio' class='unCekAll layCek'  name='resource[" . $privilege['privilege_id'] . "]" . "' value='deny' >  <i class='fa fa-times'></i>

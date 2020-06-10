@@ -45,11 +45,11 @@ $packageNo = strtoupper($module) . date('ymd') .  $general->generateRandomString
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
-    <h1><i class="fa fa-edit"></i> Confirm Positive Manifest</h1>
+    <h1><i class="fa fa-edit"></i> Positive Confirmation Manifest</h1>
     <ol class="breadcrumb">
       <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li><a href="/covid-19/results/covid-19-confirmation-manifest.php"> Manage Confirmation Test Manifest</a></li>
-      <li class="active">Confirm Positive Manifest</li>
+      <li><a href="/covid-19/results/covid-19-confirmation-manifest.php"> Manage Positive Confirmation Manifest</a></li>
+      <li class="active">Add Positive Confirmation Manifest</li>
     </ol>
   </section>
 
@@ -229,7 +229,7 @@ $packageNo = strtoupper($module) . date('ymd') .  $general->generateRandomString
   function getSampleCodeDetails() {
     $.blockUI();
 
-    $.post("/covid-19/batch/get-covid-19-confirmation-manifest.php", {
+    $.post("get-covid-19-confirmation-manifest.php", {
         module: $("#module").val()
       },
       function(data) {
