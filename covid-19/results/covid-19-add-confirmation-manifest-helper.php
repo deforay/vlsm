@@ -28,7 +28,8 @@ try {
                 }
                 if ($sampleResult['positive_test_manifest_code'] == null || $sampleResult['positive_test_manifest_code'] == '' || $sampleResult['positive_test_manifest_code'] == 'null') {
                     
-                    $packageNo = strtoupper($module) . date('ymd') . $provinceCode . $sampleResult['covid19_id'] .  strtoupper($general->generateRandomString(6));
+                    // $packageNo = strtoupper($module) . date('ymd') . $provinceCode . $sampleResult['covid19_id'] .  strtoupper($general->generateRandomString(6));
+                    $packageNo = $_POST['packageCode'];
                     
                     $data=array(
                         'manifest_code'             =>  $packageNo,
