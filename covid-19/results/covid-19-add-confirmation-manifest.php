@@ -48,7 +48,7 @@ $packageNo = strtoupper($module) . date('ymd') .  $general->generateRandomString
     <h1><i class="fa fa-edit"></i> Confirm Positive Manifest</h1>
     <ol class="breadcrumb">
       <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li><a href="covid-19/results/covid-19-confirmation-manifest.php"> Manage Confirmation Test Manifest</a></li>
+      <li><a href="/covid-19/results/covid-19-confirmation-manifest.php"> Manage Confirmation Test Manifest</a></li>
       <li class="active">Confirm Positive Manifest</li>
     </ol>
   </section>
@@ -98,7 +98,7 @@ $packageNo = strtoupper($module) . date('ymd') .  $general->generateRandomString
       <!-- /.box-body -->
       <div class="box-footer">
         <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();">Save </a>
-        <a href="specimenReferralManifestList.php" class="btn btn-default"> Cancel</a>
+        <a href="/covid-19/results/covid-19-confirmation-manifest.php" class="btn btn-default"> Cancel</a>
       </div>
       <!-- /.box-footer -->
       </form>
