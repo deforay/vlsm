@@ -49,20 +49,10 @@ $batResult = $db->rawQuery($batQuery);
 						<table id="covid19ManifestDataTable" class="table table-bordered table-striped table-vcenter">
 							<thead>
 								<tr>
-									<th>Sample Code</th>
 									<th>Manifest Code</th>
-									<?php if ($sarr['user_type'] != 'standalone') { ?>
-										<th>Remote Sample <br />Code</th>
-									<?php } ?>
-									<th>Sample Collection<br /> Date</th>
-									<th>Batch Code</th>
-									<th>Facility Name</th>
-									<th>Patient ID</th>
-									<th>Patient Name</th>
-									<th>Province/State</th>
-									<th>District/County</th>
-									<th>Result</th>
-									<th>Status</th>
+									<th>Type of Test</th>
+									<th>Number of samples</th>
+									<th>Added On</th>
 									<?php if (isset($_SESSION['privileges']) && in_array("generate-confirmation-manifest.php", $_SESSION['privileges'])) { ?>
 									<th>Action</th>
 									<?php } ?>
@@ -70,7 +60,7 @@ $batResult = $db->rawQuery($batQuery);
 							</thead>
 							<tbody>
 								<tr>
-									<td colspan="12" class="dataTables_empty" style="text-align:center;">Please enter the manifest code then submit!</td>
+									<td colspan="5" class="dataTables_empty" style="text-align:center;">Loading data from server</td>
 								</tr>
 							</tbody>
 						</table>
@@ -123,12 +113,6 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 			"bRetrieve": true,
 			"aoColumns": [{
 					"sClass": "center"
-				},
-				<?php if ($sarr['user_type'] != 'standalone') { ?> {
-						"sClass": "center"
-					},
-				<?php } ?> {
-					"sClass": "center"
 				}, {
 					"sClass": "center"
 				}, {
@@ -136,23 +120,12 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 				}, {
 					"sClass": "center"
 				}, {
-					"sClass": "center"
-				}, {
-					"sClass": "center"
-				}, {
-					"sClass": "center"
-				}, {
-					"sClass": "center"
-				}, {
-					"sClass": "center"
-				}, {
-					"sClass": "center"
-				}, {
-					"sClass": "center"
+					"sClass": "center",
+          			"bSortable": false
 				}
 			],
 			"aaSorting": [
-				[<?php echo ($sarr['user_type'] == 'remoteuser' || $sarr['user_type'] == 'vluser') ? 9 : 8 ?>, "desc"]
+				[<?php echo ($sarr['user_type'] == 'remoteuser' || $sarr['user_type'] == 'vluser') ? 1 : 1 ?>, "desc"]
 			],
 			"fnDrawCallback": function() {},
 			"bProcessing": true,

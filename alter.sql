@@ -2408,3 +2408,5 @@ CREATE TABLE `covid19_positive_confirmation_manifest` (
 
 -- Thanaseelan 09 Jun, 2020
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '30', 'generate-confirmation-manifest.php', 'Generate Positive Confirmation Manifest');
+-- Thanaseelan 10 Jun, 2020
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '30', 'covid-19-edit-confirmation-manifest.php', 'Edit Positive Confirmation Manifest');
