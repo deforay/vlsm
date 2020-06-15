@@ -66,9 +66,9 @@ class MYPDF extends TCPDF
 
 if (trim($id) != '') {
 
-    $sQuery = "SELECT sample_code,remote_sample_code,fd.facility_name as clinic_name,fd.facility_district,CONCAT(patient_name,patient_surname) as `patient_fullname`,patient_dob,patient_age,sample_collection_date,patient_gender,patient_id,cpcm.manifest_code, l.facility_name as lab_name from covid19_positive_confirmation_manifest as cpcm Join form_covid19 as vl ON vl.positive_test_manifest_id=cpcm.manifest_id Join facility_details as fd ON fd.facility_id=vl.facility_id Join facility_details as l ON l.facility_id=vl.lab_id where cpcm.manifest_id IN($id)";
+    $sQuery = "SELECT sample_code,remote_sample_code,fd.facility_name as clinic_name,fd.facility_district,CONCAT(patient_name,patient_surname) as `patient_fullname`,patient_dob,patient_age,sample_collection_date,patient_gender,patient_id,cpcm.manifest_code, l.facility_name as lab_name from covid19_positive_confirmation_manifest as cpcm Join form_covid19 as vl ON vl.positive_test_manifest_id=cpcm.manifest_id Join facility_details as fd ON fd.facility_id=vl.facility_id Join facility_details as l ON l.facility_id=vl.lab_id where cpcm.manifest_code LIKE '%$id%'";
+    // die($sQuery);
     $result = $db->query($sQuery);
-
 
     $labname = isset($result[0]['lab_name']) ? $result[0]['lab_name'] : "";
 
@@ -79,7 +79,7 @@ if (trim($id) != '') {
     for ($i = 0; $i < sizeof($configResult); $i++) {
         $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
     }
-    $bQuery = "SELECT * from covid19_positive_confirmation_manifest as cpcm where manifest_id IN($id)";
+    $bQuery = "SELECT * from covid19_positive_confirmation_manifest as cpcm where manifest_code LIKE '%$id%'";
     //echo $bQuery;die;
     $bResult = $db->query($bQuery);
     if (count($bResult) > 0) {

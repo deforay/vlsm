@@ -9,53 +9,9 @@ $end_date = '';
 $configQuery = "SELECT `value` FROM global_config WHERE name ='vl_form'";
 $configResult = $db->query($configQuery);
 $country = $configResult[0]['value'];
-if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != '') {
-    $s_c_date = explode("to", $_POST['sampleCollectionDate']);
-    //print_r($s_c_date);die;
-    if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
-        $start_date = $general->dateFormat(trim($s_c_date[0]));
-    }
-    if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
-        $end_date = $general->dateFormat(trim($s_c_date[1]));
-    }
-}
-if (isset($_POST['sampleReceivedAtLab']) && trim($_POST['sampleReceivedAtLab']) != '') {
-    $s_c_date = explode("to", $_POST['sampleReceivedAtLab']);
-    //print_r($s_c_date);die;
-    if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
-        $sampleReceivedStartDate = $general->dateFormat(trim($s_c_date[0]));
-    }
-    if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
-        $sampleReceivedEndDate = $general->dateFormat(trim($s_c_date[1]));
-    }
-}
 
-$query = "SELECT vl.sample_code,vl.covid19_id,vl.facility_id,vl.result_status,f.facility_name,f.facility_code FROM form_covid19 as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE (vl.is_sample_rejected IS NULL OR vl.is_sample_rejected = '' OR vl.is_sample_rejected = 'no') AND (vl.reason_for_sample_rejection IS NULL OR vl.reason_for_sample_rejection ='' OR vl.reason_for_sample_rejection = 0) AND vl.result LIKE '%positive%' AND vlsm_country_id = $country  AND (vl.positive_test_manifest_id IS NULL OR vl.positive_test_manifest_id = '') AND (vl.positive_test_manifest_code IS NULL OR vl.positive_test_manifest_code = '')";
-if (isset($_POST['batchId'])) {
-    $query = $query . " AND (sample_batch_id = '" . $_POST['batchId'] . "' OR sample_batch_id IS NULL OR sample_batch_id = '')";
-} else {
-    $query = $query . " AND (sample_batch_id IS NULL OR sample_batch_id='')";
-}
+$query = "SELECT vl.sample_code,vl.covid19_id,vl.facility_id,vl.result_status,f.facility_name,f.facility_code FROM form_covid19 as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE (vl.is_sample_rejected IS NULL OR vl.is_sample_rejected = '' OR vl.is_sample_rejected = 'no') AND (vl.reason_for_sample_rejection IS NULL OR vl.reason_for_sample_rejection ='' OR vl.reason_for_sample_rejection = 0) AND vl.result = 'positive' AND vlsm_country_id = $country  AND (vl.positive_test_manifest_id IS NULL OR vl.positive_test_manifest_id = '') AND (vl.positive_test_manifest_code IS NULL OR vl.positive_test_manifest_code = '')";
 
-if (isset($_POST['fName']) && is_array($_POST['fName']) && count($_POST['fName']) > 0) {
-    $query = $query . " AND vl.facility_id IN (" . implode(',', $_POST['fName']) . ")";
-}
-
-if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != '') {
-    if (trim($start_date) == trim($end_date)) {
-        $query = $query . ' AND DATE(sample_collection_date) = "' . $start_date . '"';
-    } else {
-        $query = $query . ' AND DATE(sample_collection_date) >= "' . $start_date . '" AND DATE(sample_collection_date) <= "' . $end_date . '"';
-    }
-}
-
-if (isset($_POST['sampleReceivedAtLab']) && trim($_POST['sampleReceivedAtLab']) != '') {
-    if (trim($sampleReceivedStartDate) == trim($sampleReceivedEndDate)) {
-        $query = $query . ' AND DATE(sample_received_at_vl_lab_datetime) = "' . $sampleReceivedStartDate . '"';
-    } else {
-        $query = $query . ' AND DATE(sample_received_at_vl_lab_datetime) >= "' . $sampleReceivedStartDate . '" AND DATE(sample_received_at_vl_lab_datetime) <= "' . $sampleReceivedEndDate . '"';
-    }
-}
 $query = $query . " ORDER BY vl.last_modified_datetime ASC";
 // echo $query;die;
 $result = $db->rawQuery($query);
@@ -68,13 +24,9 @@ $result = $db->rawQuery($query);
                     <a href="#" id="select-all-samplecode" style="float:left" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a> <a href='#' id='deselect-all-samplecode' style="float:right" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
                 </div><br /><br />
                 <select id="sampleCode" name="sampleCode[]" multiple="multiple" class="search">
-                    <?php
-                    foreach ($result as $sample) {
-                        ?>
+                    <?php foreach ($result as $sample) { ?>
                         <option value="<?php echo $sample['covid19_id']; ?>"><?php echo ucwords($sample['sample_code']) . " - " . ucwords($sample['facility_name']); ?></option>
-                    <?php
-                }
-                ?>
+                    <?php } ?>
                 </select>
             </div>
         </div>
