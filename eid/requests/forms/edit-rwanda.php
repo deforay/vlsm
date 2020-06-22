@@ -258,9 +258,9 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         </th>
                                     </tr>
                                     <tr>
-                                        <th style="width:15% !important">Mother's HIV Status:</th>
-                                        <td style="width:35% !important">
-                                            <select class="form-control" name="mothersHIVStatus" id="mothersHIVStatus">
+                                        <th style="width:16% !important">Mother's HIV Status: <span class="mandatory">*</span></th>
+                                        <td style="width:30% !important">
+                                            <select class="form-control isRequired" name="mothersHIVStatus" id="mothersHIVStatus">
                                                 <option value=''> -- Select -- </option>
                                                 <option value="positive" <?php echo ($eidInfo['mother_hiv_status'] == 'positive') ? "selected='selected'" : ""; ?>> Positive </option>
                                                 <option value="negative" <?php echo ($eidInfo['mother_hiv_status'] == 'negative') ? "selected='selected'" : ""; ?>> Negative </option>
@@ -280,9 +280,9 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                     </tr>
 
                                     <tr>
-                                        <th>Infant Rapid HIV Test Done</th>
+                                        <th>Infant Rapid HIV Test Done <span class="mandatory">*</span></th>
                                         <td>
-                                            <select class="form-control" name="rapidTestPerformed" id="rapidTestPerformed">
+                                            <select class="form-control isRequired" name="rapidTestPerformed" id="rapidTestPerformed">
                                                 <option value=''> -- Select -- </option>
                                                 <option value="yes" <?php echo ($eidInfo['rapid_test_performed'] == 'yes') ? "selected='selected'" : ""; ?>> Yes </option>
                                                 <option value="no" <?php echo ($eidInfo['rapid_test_performed'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
@@ -306,7 +306,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             </select>
                                         </td>
 
-                                        <th>Infant stopped breastfeeding ?</th>
+                                        <th>Stopped breastfeeding ?</th>
                                         <td>
                                             <select class="form-control" name="hasInfantStoppedBreastfeeding" id="hasInfantStoppedBreastfeeding">
                                                 <option value=''> -- Select -- </option>
@@ -322,9 +322,9 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             <input type="number" class="form-control" style="max-width:200px;display:inline;" placeholder="Age (months) breastfeeding stopped" type="text" name="ageBreastfeedingStopped" id="ageBreastfeedingStopped" value="<?php echo $eidInfo['age_breastfeeding_stopped_in_months'] ?>" />
                                         </td>
 
-                                        <th>PCR test performed on child before :</th>
+                                        <th>PCR test performed on child before : <span class="mandatory">*</span></th>
                                         <td>
-                                            <select class="form-control" name="pcrTestPerformedBefore" id="pcrTestPerformedBefore">
+                                            <select class="form-control isRequired" name="pcrTestPerformedBefore" id="pcrTestPerformedBefore">
                                                 <option value=''> -- Select -- </option>
                                                 <option value="yes"> Yes </option>
                                                 <option value="no"> No </option>
