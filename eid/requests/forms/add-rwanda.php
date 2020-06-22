@@ -222,9 +222,9 @@ foreach ($fResult as $fDetails) {
                                         </th>
                                     </tr>
                                     <tr>
-                                        <th style="width:15% !important">Mother's HIV Status:</th>
-                                        <td style="width:35% !important">
-                                            <select class="form-control" name="mothersHIVStatus" id="mothersHIVStatus">
+                                        <th style="width:16% !important">Mother's HIV Status: <span class="mandatory">*</span></th>
+                                        <td style="width:30% !important">
+                                            <select class="form-control isRequired" name="mothersHIVStatus" id="mothersHIVStatus">
                                                 <option value=''> -- Select -- </option>
                                                 <option value="positive"> Positive </option>
                                                 <option value="negative" /> Negative </option>
@@ -244,9 +244,9 @@ foreach ($fResult as $fDetails) {
                                     </tr>
 
                                     <tr>
-                                        <th>Infant Rapid HIV Test Done</th>
+                                        <th>Infant Rapid HIV Test Done <span class="mandatory">*</span></th>
                                         <td>
-                                            <select class="form-control" name="rapidTestPerformed" id="rapidTestPerformed">
+                                            <select class="form-control isRequired" name="rapidTestPerformed" id="rapidTestPerformed">
                                                 <option value=''> -- Select -- </option>
                                                 <option value="yes"> Yes </option>
                                                 <option value="no" /> No </option>
@@ -270,7 +270,7 @@ foreach ($fResult as $fDetails) {
                                             </select>
                                         </td>
 
-                                        <th>Infant stopped breastfeeding ?</th>
+                                        <th>Stopped breastfeeding ?</th>
                                         <td>
                                             <select class="form-control" name="hasInfantStoppedBreastfeeding" id="hasInfantStoppedBreastfeeding">
                                                 <option value=''> -- Select -- </option>
@@ -286,9 +286,9 @@ foreach ($fResult as $fDetails) {
                                             <input type="number" class="form-control" style="max-width:200px;display:inline;" placeholder="Age (months) breastfeeding stopped" type="text" name="ageBreastfeedingStopped" id="ageBreastfeedingStopped" />
                                         </td>
 
-                                        <th>PCR test performed on child before :</th>
+                                        <th>PCR test performed on child before : <span class="mandatory">*</span></th>
                                         <td>
-                                            <select class="form-control" name="pcrTestPerformedBefore" id="pcrTestPerformedBefore">
+                                            <select class="form-control isRequired" name="pcrTestPerformedBefore" id="pcrTestPerformedBefore">
                                                 <option value=''> -- Select -- </option>
                                                 <option value="yes" /> Yes </option>
                                                 <option value="no"> No </option>

@@ -150,6 +150,7 @@ try {
     'mother_cd4' => isset($_POST['mothercd4']) ? $_POST['mothercd4'] : null,
     'mother_vl_result' => $motherVlResult,
     'mother_hiv_status' => isset($_POST['mothersHIVStatus']) ? $_POST['mothersHIVStatus'] : null,
+    'pcr_test_performed_before' => isset($_POST['pcrTestPerformedBefore']) ? $_POST['pcrTestPerformedBefore'] : null,
     'last_pcr_date' => isset($_POST['previousPCRTestDate']) ? $_POST['previousPCRTestDate'] : null,
     'reason_for_pcr' => isset($_POST['pcrTestReason']) ? $_POST['pcrTestReason'] : null,
     'sample_requestor_name' => isset($_POST['sampleRequestorName']) ? $_POST['sampleRequestorName'] : null,
