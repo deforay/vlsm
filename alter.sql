@@ -661,11 +661,11 @@ ALTER TABLE `r_sample_type` CHANGE `form_identification` `status` VARCHAR(45) NU
 --Pal 7th-Nov-2016
 ALTER TABLE `import_config` ADD `max_no_of_samples_in_a_batch` INT(11) NOT NULL AFTER `higher_limit`, ADD `number_of_in_house_controls` INT(11) NULL DEFAULT NULL AFTER `max_no_of_samples_in_a_batch`, ADD `number_of_manufacturer_controls` INT(11) NULL DEFAULT NULL AFTER `number_of_in_house_controls`, ADD `number_of_calibrators` INT(11) NULL DEFAULT NULL AFTER `number_of_manufacturer_controls`;
 
-DELETE FROM `global_config` WHERE `global_config`.`name` = \'max_no_of_samples_in_a_batch\'';
+DELETE FROM `global_config` WHERE `global_config`.`name` = 'max_no_of_samples_in_a_batch';
 
-DELETE FROM `global_config` WHERE `global_config`.`name` = \'number_of_in_house_controls\'';
+DELETE FROM `global_config` WHERE `global_config`.`name` = 'number_of_in_house_controls';
 
-DELETE FROM `global_config` WHERE `global_config`.`name` = \'number_of_manufacturer_controls\'';
+DELETE FROM `global_config` WHERE `global_config`.`name` = 'number_of_manufacturer_controls';
 
 ALTER TABLE `batch_details` ADD `machine` INT(11) NOT NULL AFTER `batch_id`;
 
@@ -2070,7 +2070,7 @@ CREATE TABLE `r_covid19_results` (
   `result` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `status` varchar(255) NOT NULL DEFAULT 'active',
   `data_sync` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT  CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `r_covid19_results` (`result_id`, `result`, `status`, `data_sync`) VALUES
 ('indeterminate', 'Indeterminate', 'active', 0),
