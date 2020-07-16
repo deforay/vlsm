@@ -12,10 +12,10 @@ try {
     $instanceResult = $db->query($instanceQuery);
     if ($instanceResult) {
         $vlsmInstanceId = $instanceResult[0]['vlsm_instance_id'];
-        if ($instanceResult[0]['last_vldash_sync'] == '' || $instanceResult[0]['last_vldash_sync'] == null) {
+        if ($instanceResult[0]['vl_last_dash_sync'] == '' || $instanceResult[0]['vl_last_dash_sync'] == null) {
             $instanceUpdateOn = "";
         } else {
-            $expDate = explode(" ", $instanceResult[0]['last_vldash_sync']);
+            $expDate = explode(" ", $instanceResult[0]['vl_last_dash_sync']);
             $instanceUpdateOn = $expDate[0];
         }
 
@@ -211,10 +211,10 @@ try {
         
         if (isset($deResult['status']) && trim($deResult['status']) == 'success') {
             $data = array(
-                'last_vldash_sync' => $general->getDateTime()
+                'vl_last_dash_sync' => $general->getDateTime()
             );
             // $data = array(
-            //     'last_vldash_sync' => $rResult[count($rResult) -1]['last_modified_datetime']
+            //     'vl_last_dash_sync' => $rResult[count($rResult) -1]['last_modified_datetime']
             // );
             $db = $db->where('vlsm_instance_id', $vlsmInstanceId);
             $db->update('s_vlsm_instance', $data);

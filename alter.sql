@@ -1446,7 +1446,7 @@ ALTER TABLE `vl_facility_map` CHANGE `facility_map_id` `facility_map_id` INT(11)
 
 -- Amit 17 March 2018
 
-ALTER TABLE `s_vlsm_instance` ADD `last_vldash_sync` DATETIME NULL AFTER `instance_mac_address`;
+ALTER TABLE `s_vlsm_instance` ADD `vl_last_dash_sync` DATETIME NULL AFTER `instance_mac_address`;
 
 
 
@@ -2414,3 +2414,6 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 -- Amit 22 June 2020
 
 ALTER TABLE `eid_form` ADD `pcr_test_performed_before` VARCHAR(255) NULL DEFAULT NULL AFTER `reason_for_eid_test`
+-- Thana 16 Jul, 2020
+ALTER TABLE `s_vlsm_instance` DROP `last_vldash_sync`;
+ALTER TABLE `s_vlsm_instance` ADD `vl_last_dash_sync` DATETIME NULL DEFAULT NULL AFTER `instance_mac_address`, ADD `eid_last_dash_sync` DATETIME NULL DEFAULT NULL AFTER `vl_last_dash_sync`, ADD `covid19_last_dash_sync` DATETIME NULL DEFAULT NULL AFTER `eid_last_dash_sync`;
