@@ -93,7 +93,7 @@ try {
                     $sampleCode = $sheetData[$sampleIdCol];
                     $sampleType = $sheetData[$sampleTypeCol];
 
-                    $batchCode = $sheetData[$batchCodeCol];
+                    //$batchCode = $sheetData[$batchCodeCol];
                     $resultFlag = $sheetData[$flagCol];
                     //$reviewBy = $sheetData[$reviewByCol];
 
@@ -244,7 +244,7 @@ try {
                 $data['batch_code'] = $batchCode;
             }
             //get user name
-            if ($d['reviewBy'] != '') {
+            if (isset($d['reviewBy']) && $d['reviewBy'] != '') {
                 $uQuery = "select user_name,user_id from user_details where user_name='" . $d['reviewBy'] . "'";
                 $uResult = $db->rawQuery($uQuery);
                 if ($uResult) {
