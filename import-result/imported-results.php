@@ -52,7 +52,7 @@ if ($module == 'vl') {
 	$rejectionQuery = "SELECT * FROM r_covid19_sample_rejection_reasons where rejection_reason_status = 'active'";
 	$rejectionResult = $db->rawQuery($rejectionQuery);
 } else {
-	die('NO TEST TYPE MATCHED');
+	die('You seem to have reached this page by mistake. Please contact support if you need assistance.');
 }
 
 
@@ -319,6 +319,10 @@ foreach ($rejectionTypeResult as $type) {
 			"bServerSide": true,
 			"sAjaxSource": "getImportedResults.php",
 			"fnServerData": function(sSource, aoData, fnCallback) {
+				aoData.push({
+                    "name": "module",
+                    "value": '<?= $module; ?>'
+                });
 				$.ajax({
 					"dataType": 'json',
 					"type": "POST",
