@@ -2,15 +2,20 @@
 session_start();
 require_once('../startup.php');
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
-include_once(APPLICATION_PATH.'/models/General.php');
+include_once(APPLICATION_PATH . '/models/General.php');
 $general = new General($db);
 $tableName = "temp_sample_import";
 $primaryKey = "temp_sample_id";
 
 $importedBy = $_SESSION['userId'];
+$module = $_POST['module'];
 
+if ($module == 'eid') {
+    $eidResults = $general->getEidResults();
+} else if ($module == 'covid19') {
+    $covid19Results = $general->getCovid19Results();
+}
 
-$eidResults = $general->getEidResults();
 
 
 $configQuery = "SELECT `value` FROM global_config WHERE name ='import_non_matching_sample'";
@@ -46,7 +51,7 @@ $tsResult = $db->rawQuery($tsQuery);
 $scQuery = "select r_sample_control_name from r_sample_controls ORDER BY r_sample_control_name DESC";
 $scResult = $db->rawQuery($scQuery);
 //in-house control limit
-$inQuery = "select ic.number_of_in_house_controls,ic.number_of_manufacturer_controls,i.machine_name from temp_sample_import as ts INNER JOIN import_config as i ON i.machine_name=ts.vl_test_platform INNER JOIN import_config_controls as ic ON ic.config_id=i.config_id WHERE ic.test_type = 'covid-19' limit 0,1";
+$inQuery = "SELECT ic.number_of_in_house_controls,ic.number_of_manufacturer_controls,i.machine_name from temp_sample_import as ts INNER JOIN import_config as i ON i.machine_name=ts.vl_test_platform INNER JOIN import_config_controls as ic ON ic.config_id=i.config_id WHERE ic.test_type = '".$module."' limit 0,1";
 $inResult = $db->rawQuery($inQuery);
 
 $sampleTypeTotal = 0;
@@ -260,12 +265,14 @@ foreach ($rResult as $aRow) {
         . $aRow['rejection_reason_name'] .
         '</span>';
     $row[] = $controlName;
-    if($aRow['module'] == 'eid'){
+    if ($aRow['module'] == 'eid') {
         $row[] = $eidResults[$aRow['result']];
-    }else{
+    } else if ($aRow['module'] == 'covid19') {
+        $row[] = $covid19Results[$aRow['result']];
+    } else {
         $row[] = $aRow['result'];
     }
-    
+
     $row[] = $status;
     $output['aaData'][] = $row;
 }
