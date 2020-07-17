@@ -12,10 +12,10 @@ try {
     $instanceResult = $db->query($instanceQuery);
     if ($instanceResult) {
         $vlsmInstanceId = $instanceResult[0]['vlsm_instance_id'];
-        if ($instanceResult[0]['eid_last_dash_sync'] == '' || $instanceResult[0]['eid_last_dash_sync'] == null) {
+        if ($instanceResult[0]['covid19_last_dash_sync'] == '' || $instanceResult[0]['covid19_last_dash_sync'] == null) {
             $instanceUpdateOn = "";
         } else {
-            $expDate = explode(" ", $instanceResult[0]['eid_last_dash_sync']);
+            $expDate = explode(" ", $instanceResult[0]['covid19_last_dash_sync']);
             $instanceUpdateOn = $expDate[0];
         }
 
@@ -36,20 +36,20 @@ try {
                     l_f.facility_type as labFacilityType,
                     l_f.status as labFacilityStatus,
                     rsrr.rejection_reason_status 
-                        FROM eid_form as vl 
+                        FROM form_covid19 as vl 
                         LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
                         LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id 
                         INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
                         LEFT JOIN facility_type as ft ON ft.facility_type_id=f.facility_type 
                         LEFT JOIN facility_type as lft ON lft.facility_type_id=l_f.facility_type 
                         LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection
-                        WHERE sample_code is not null AND sample_code !='' ";
+                        WHERE sample_code is not null AND sample_code !=''";
 
         if ($instanceUpdateOn != "") {
             $sQuery .= " AND DATE(vl.last_modified_datetime) >= $instanceUpdateOn";
         }
 
-        $sQuery .= " ORDER BY vl.last_modified_datetime ASC ";
+        $sQuery .= " ORDER BY vl.last_modified_datetime ASC";
 
         // echo $sQuery;die;
         $rResult = $db->rawQuery($sQuery);
@@ -83,13 +83,13 @@ try {
         
         //$vldashboardUrl = "http://vldashboard";
 
-        $apiUrl = $vldashboardUrl . "/api/vlsm-eid";
+        $apiUrl = $vldashboardUrl . "/api/vlsm-covid";
         //error_log($apiUrl);
         //$apiUrl.="?key_identity=XXX&key_credential=YYY";
         
         
         $data = [];
-        $data['eidFile'] = new CURLFile(__DIR__ . "/../temporary" . DIRECTORY_SEPARATOR . $filename, 'application/json', $filename);
+        $data['covid19File'] = new CURLFile(__DIR__ . "/../temporary" . DIRECTORY_SEPARATOR . $filename, 'application/json', $filename);
         
         $options = [
             CURLOPT_RETURNTRANSFER => true,
@@ -102,13 +102,13 @@ try {
         curl_setopt_array($ch, $options);
         $result = curl_exec($ch);
         curl_close($ch);
+        
         /* echo "<pre>";
         print_r($result);die; */
-        
         $deResult = json_decode($result, true);
         if (isset($deResult['status']) && trim($deResult['status']) == 'success') {
             $data = array(
-                'eid_last_dash_sync' => $general->getDateTime()
+                'covid19_last_dash_sync' => $general->getDateTime()
             );
             $db = $db->where('vlsm_instance_id', $vlsmInstanceId);
             $db->update('s_vlsm_instance', $data);
