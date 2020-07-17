@@ -406,7 +406,7 @@ $selectedResult = $db->rawQuery($selectedQuery);
   function getFacilityUser()
   {
     if($("#facilityType").val()=='1' || $("#facilityType").val()=='4'){
-      $.post("getFacilityMapUser.php", {fType: $("#facilityType").val()},
+      $.post("/facilities/getFacilityMapUser.php", {fType: $("#facilityType").val()},
         function(data){
           $("#userDetails").html(data);
         });

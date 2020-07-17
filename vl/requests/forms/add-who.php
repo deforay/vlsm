@@ -580,7 +580,7 @@ $sKey = '';$sFormat = '';
     if(pName!='' && provinceName && facilityName){ facilityName = false; }
     if(pName!=''){
       if(provinceName){
-        $.post("../includes/getFacilityForClinic.php", { pName : pName},
+        $.post("/includes/getFacilityForClinic.php", { pName : pName},
         function(data){
           if(data != ""){
             details = data.split("###");
@@ -627,7 +627,7 @@ $sKey = '';$sFormat = '';
     var dName = $("#district").val();
     var cName = $("#fName").val();
     if(dName!=''){
-      $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
+      $.post("/includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
       function(data){
         if(data != ""){
           details = data.split("###");

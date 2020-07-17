@@ -390,7 +390,7 @@ $batchResult = $db->rawQuery($batchQuery);
       var status = $('#sampleStatus').val();
       var sampleMailSentStatus = $('#sampleMailSentStatus').val();
       var type = $('#type').val();
-      $.post("getRequestSampleCodeDetails.php", { facility : facilityName,sType:sTypeName,sampleCollectionDate:$("#sampleCollectionDate").val(),gender:gender,pregnant:pregnant,urgent:urgent,state:state,district:district,batch:batch,status:status,mailSentStatus:sampleMailSentStatus,type:type},
+      $.post("/mail/getRequestSampleCodeDetails.php", { facility : facilityName,sType:sTypeName,sampleCollectionDate:$("#sampleCollectionDate").val(),gender:gender,pregnant:pregnant,urgent:urgent,state:state,district:district,batch:batch,status:status,mailSentStatus:sampleMailSentStatus,type:type},
       function(data){
         if($.trim(data) !== ""){
           $("#sampleDetails").html(data);

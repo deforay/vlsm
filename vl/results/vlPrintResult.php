@@ -1,6 +1,6 @@
 <?php
 $title = "Print VL Results";
-require_once('../startup.php');
+require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 $tsQuery = "SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
@@ -576,7 +576,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 			},
 			"bProcessing": true,
 			"bServerSide": true,
-			"sAjaxSource": "/vl-print/getVlTestResultDetails.php",
+			"sAjaxSource": "/vl/results/getVlTestResultDetails.php",
 			"fnServerData": function(sSource, aoData, fnCallback) {
 				aoData.push({
 					"name": "batchCode",
@@ -702,7 +702,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 			},
 			"bProcessing": true,
 			"bServerSide": true,
-			"sAjaxSource": "/vl-print/getPrintedVltestResultDetails.php",
+			"sAjaxSource": "/vl/results/getPrintedVltestResultDetails.php",
 			"fnServerData": function(sSource, aoData, fnCallback) {
 				aoData.push({
 					"name": "batchCode",

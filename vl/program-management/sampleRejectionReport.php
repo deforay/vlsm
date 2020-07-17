@@ -144,14 +144,14 @@ $cResult = $db->rawQuery($cQuery);
   }
   function exportInexcel() {
     $.blockUI();
-    $.post("exportSampleRejectionReport.php",{sampleCollectionDate:$("#sampleCollectionDate").val(),lab_name:$("#labName").val(),clinic_name:$("#clinicName").val(),sample_type:$("#sampleType").val()},
+    $.post("/vl/program-management/exportSampleRejectionReport.php",{sampleCollectionDate:$("#sampleCollectionDate").val(),lab_name:$("#labName").val(),clinic_name:$("#clinicName").val(),sample_type:$("#sampleType").val()},
     function(data){
 	  if(data == "" || data == null || data == undefined){
 			$.unblockUI();
 				alert('Unable to generate excel.');
 			}else{
 				$.unblockUI();
-				location.href = '../temporary/'+data;
+				location.href = '/temporary/'+data;
 			}
     });
   }

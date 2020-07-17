@@ -197,7 +197,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 		if ($("#samplePackageCode").val() != "") {
 			$.blockUI();
 			loadVlRequestData();
-			$.post("getRemoteManifestHelper.php", {
+			$.post("/vl/requests/getRemoteManifestHelper.php", {
 					samplePackageCode: $("#samplePackageCode").val()
 				},
 				function(data) {
@@ -214,7 +214,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 
 	function activeSampleCode() {
 		$.blockUI();
-		$.post("addSamplesByPackageHelper.php", {
+		$.post("/vl/requests/addSamplesByPackageHelper.php", {
 				sampleId: $("#sampleId").val()
 			},
 			function(data) {

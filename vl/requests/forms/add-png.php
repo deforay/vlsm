@@ -681,7 +681,7 @@ foreach ($fResult as $fDetails) {
     }
     if (pName != '') {
       if (provinceName) {
-        $.post("../includes/getFacilityForClinic.php", {
+        $.post("/includes/getFacilityForClinic.php", {
             pName: pName
           },
           function(data) {
@@ -708,7 +708,7 @@ foreach ($fResult as $fDetails) {
     var cName = $("#clinicName").val();
     $('#telephone').val('');
     if (dName != '') {
-      $.post("../includes/getFacilityForClinic.php", {
+      $.post("/includes/getFacilityForClinic.php", {
           dName: dName,
           cliName: cName
         },
@@ -734,7 +734,7 @@ foreach ($fResult as $fDetails) {
     //    }
     //    
     //    if(cName!='' && facilityName){
-    //      $.post("../includes/getFacilityForClinic.php", { cName : cName},
+    //      $.post("/includes/getFacilityForClinic.php", { cName : cName},
     //      function(data){
     //	  if(data != ""){
     //            details = data.split("###");
@@ -767,7 +767,7 @@ foreach ($fResult as $fDetails) {
     var removeDots = removeDots.replace(/\,/g, "");
     //str=obj.value;
     removeDots = removeDots.replace(/\s{2,}/g, ' ');
-    $.post("../includes/checkDuplicate.php", {
+    $.post("/includes/checkDuplicate.php", {
         tableName: tableName,
         fieldName: fieldName,
         value: removeDots.trim(),

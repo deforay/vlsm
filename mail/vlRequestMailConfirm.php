@@ -208,7 +208,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
          $filename = 'VLSM-requests-' . date('d-M-Y-H-i-s') . '.xlsx';
          $pathFront=realpath(TEMP_PATH);
          $writer->save($pathFront. DIRECTORY_SEPARATOR . $filename);
-         $downloadFile = '../temporary/' . $filename;
+         $downloadFile = '/temporary/' . $filename;
      }else{
          $_SESSION['alertMsg']='Unable to generate the test request excel. Please check the request fields.';
          header('location:vlRequestMail.php');

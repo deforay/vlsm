@@ -1,6 +1,6 @@
 <?php
 $title = "Manage Result Status";
-require_once('../startup.php');
+require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 
 $tsQuery = "SELECT * FROM r_sample_status";
@@ -355,7 +355,7 @@ foreach ($rejectionTypeResult as $type) {
   }
 
   function convertPdf(id) {
-    $.post("../result-pdf/vlRequestPdf.php", {
+    $.post("/result-pdf/vlRequestPdf.php", {
         id: id,
         format: "html"
       },
@@ -422,7 +422,7 @@ foreach ($rejectionTypeResult as $type) {
     if (stValue != '' && testIds != '') {
       conf = confirm("Do you wish to change the test status ?");
       if (conf) {
-        $.post("updateTestStatus.php", {
+        $.post("/vl/results/updateTestStatus.php", {
             status: stValue,
             id: testIds,
             rejectedReason: $("#bulkRejectionReason").val()
@@ -471,7 +471,7 @@ foreach ($rejectionTypeResult as $type) {
     if (obj.value != '') {
       conf = confirm("Do you wish to change the status ?");
       if (conf) {
-        $.post("updateTestStatus.php", {
+        $.post("/vl/results/updateTestStatus.php", {
             status: obj.value,
             id: obj.id
           },
@@ -497,7 +497,7 @@ foreach ($rejectionTypeResult as $type) {
     if (obj.value != '') {
       conf = confirm("Do you wish to change the status ?");
       if (conf) {
-        $.post("updateTestStatus.php", {
+        $.post("/vl/results/updateTestStatus.php", {
             status: '4',
             id: $("#statusDropDownId").val(),
             rejectedReason: obj.value

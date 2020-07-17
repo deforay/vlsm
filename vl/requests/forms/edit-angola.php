@@ -693,7 +693,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
       }
       if($.trim(pName)!=''){
         if(provinceName){
-            $.post("../includes/getFacilityForClinic.php", { pName : pName},
+            $.post("/includes/getFacilityForClinic.php", { pName : pName},
             function(data){
                 if(data!= ""){
                   details = data.split("###");
@@ -719,7 +719,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
       var dName = $("#district").val();
       var cName = $("#clinicName").val();
       if(dName!=''){
-        $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
+        $.post("/includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
         function(data){
             if(data != ""){
               //$("#clinicName").html(data);
@@ -743,7 +743,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
           provinceName = false;
         }
       if(cName!='' && facilityName){
-        $.post("../includes/getFacilityForClinic.php", { cName : cName},
+        $.post("/includes/getFacilityForClinic.php", { cName : cName},
         function(data){
             if(data != ""){
               details = data.split("###");

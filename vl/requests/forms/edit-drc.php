@@ -648,7 +648,7 @@ if($vlQueryInfo[0]['sample_code']!='')
       $.blockUI();
       var pName = $("#province").val();
       if($.trim(pName)!=''){
-            $.post("../includes/getFacilityForClinic.php", { pName : pName},
+            $.post("/includes/getFacilityForClinic.php", { pName : pName},
             function(data){
                 if(data!= ""){
                   details = data.split("###");
@@ -665,7 +665,7 @@ if($vlQueryInfo[0]['sample_code']!='')
       var dName = $("#district").val();
       var cName = $("#clinicName").val();
       if(dName!=''){
-        $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
+        $.post("/includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
         function(data){
             if(data != ""){
                 details = data.split("###");

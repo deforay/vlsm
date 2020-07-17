@@ -461,7 +461,7 @@ machineName = true;
       }
     if(pName!=''){
       if(provinceName){
-      $.post("../includes/getFacilityForClinic.php", { pName : pName},
+      $.post("/includes/getFacilityForClinic.php", { pName : pName},
       function(data){
 	  if(data != ""){
             details = data.split("###");
@@ -483,7 +483,7 @@ machineName = true;
     var dName = $("#district").val();
     var cName = $("#clinicName").val();
     if(dName!=''){
-      $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
+      $.post("/includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
       function(data){
 	  if(data != ""){
             $("#clinicName").html(data);
@@ -500,7 +500,7 @@ machineName = true;
         provinceName = false;
       }
     if(cName!='' && facilityName){
-      $.post("../includes/getFacilityForClinic.php", { cName : cName},
+      $.post("/includes/getFacilityForClinic.php", { cName : cName},
       function(data){
 	  if(data != ""){
             details = data.split("###");

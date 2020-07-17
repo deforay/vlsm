@@ -320,9 +320,9 @@ foreach ($rejectionTypeResult as $type) {
 			"sAjaxSource": "getImportedResults.php",
 			"fnServerData": function(sSource, aoData, fnCallback) {
 				aoData.push({
-                    "name": "module",
-                    "value": '<?= $module; ?>'
-                });
+					"name": "module",
+					"value": '<?= $module; ?>'
+				});
 				$.ajax({
 					"dataType": 'json',
 					"type": "POST",
@@ -462,7 +462,7 @@ foreach ($rejectionTypeResult as $type) {
 			conf = confirm("Are you sure you want to continue ?");
 			if (conf) {
 				$.blockUI();
-				$.post("processImportedResults.php", {
+				$.post("/import-result/processImportedResults.php", {
 						rejectReasonId: rejectReasonId,
 						value: id,
 						status: status,
@@ -506,7 +506,7 @@ foreach ($rejectionTypeResult as $type) {
 			conf = confirm("Do you wish to change the status ?");
 			if (conf) {
 				$.blockUI();
-				$.post("processImportedResults.php", {
+				$.post("/import-result/processImportedResults.php", {
 						value: value,
 						status: status,
 						format: "html"
@@ -535,7 +535,7 @@ foreach ($rejectionTypeResult as $type) {
 			onProceed: function(trigger) {
 				var pos = oTable.fnGetPosition(obj);
 				$.blockUI();
-				$.post("updateImportedSample.php", {
+				$.post("/import-result/updateImportedSample.php", {
 						sampleCode: obj.value,
 						tempsampleId: tempsampleId
 					},
@@ -560,7 +560,7 @@ foreach ($rejectionTypeResult as $type) {
 			onProceed: function(trigger) {
 				var pos = oTable.fnGetPosition(obj);
 				$.blockUI();
-				$.post("updateImportedSample.php", {
+				$.post("/import-result/updateImportedSample.php", {
 						batchCode: obj.value,
 						tempsampleId: tempsampleId
 					},
@@ -585,7 +585,7 @@ foreach ($rejectionTypeResult as $type) {
 			onProceed: function(trigger) {
 				var pos = oTable.fnGetPosition(obj);
 				$.blockUI();
-				$.post("updateImportedSample.php", {
+				$.post("/import-result/updateImportedSample.php", {
 						sampleType: obj.value,
 						tempsampleId: tempsampleId
 					},
@@ -620,7 +620,7 @@ foreach ($rejectionTypeResult as $type) {
 		conf = confirm("Are you sure you want to mark all samples as 'Accepted' ?");
 		if (conf) {
 			$.blockUI();
-			$.post("updateAllSampleStatus.php", {},
+			$.post("/import-result/updateAllSampleStatus.php", {},
 				function(data) {
 					oTable.fnDraw();
 				});

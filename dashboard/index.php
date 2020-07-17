@@ -252,7 +252,7 @@ $facilityCount = $facilityTotal[0]['total'];
 	function searchVlRequestData(requestType) {
 		$.blockUI();
 		if (requestType == 'vl') {
-			$.post("getSampleResult.php", {
+			$.post("/dashboard/getSampleResult.php", {
 					sampleCollectionDate: $("#vlSampleCollectionDate").val(),
 					type: 'vl'
 				},
@@ -262,7 +262,7 @@ $facilityCount = $facilityTotal[0]['total'];
 					}
 				});
 		} else if (requestType == 'recency') {
-			$.post("getSampleResult.php", {
+			$.post("/dashboard/getSampleResult.php", {
 					sampleCollectionDate: $("#recencySampleCollectionDate").val(),
 					type: 'recency'
 				},
@@ -272,7 +272,7 @@ $facilityCount = $facilityTotal[0]['total'];
 					}
 				});
 		} else if (requestType == 'eid') {
-			$.post("getSampleResult.php", {
+			$.post("/dashboard/getSampleResult.php", {
 					sampleCollectionDate: $("#eidSampleCollectionDate").val(),
 					type: 'eid'
 				},
@@ -282,7 +282,7 @@ $facilityCount = $facilityTotal[0]['total'];
 					}
 				});
 		} else if (requestType == 'covid19') {
-			$.post("getSampleResult.php", {
+			$.post("/dashboard/getSampleResult.php", {
 					sampleCollectionDate: $("#covid19SampleCollectionDate").val(),
 					type: 'covid19'
 				},
@@ -299,7 +299,7 @@ $facilityCount = $facilityTotal[0]['total'];
 	function getNoOfSampleCount(requestType) {
 		$.blockUI();
 		if (requestType == 'vl') {
-			$.post("getSampleCount.php", {
+			$.post("/dashboard/getSampleCount.php", {
 					sampleCollectionDate: $("#vlSampleCollectionDate").val(),
 					type: 'vl'
 				},
@@ -309,7 +309,7 @@ $facilityCount = $facilityTotal[0]['total'];
 					}
 				});
 		} else if (requestType == 'recency') {
-			$.post("getSampleCount.php", {
+			$.post("/dashboard/getSampleCount.php", {
 					sampleCollectionDate: $("#recencySampleCollectionDate").val(),
 					type: 'recency'
 				},
@@ -319,7 +319,7 @@ $facilityCount = $facilityTotal[0]['total'];
 					}
 				});
 		} else if (requestType == 'eid') {
-			$.post("getSampleCount.php", {
+			$.post("/dashboard/getSampleCount.php", {
 					sampleCollectionDate: $("#eidSampleCollectionDate").val(),
 					type: 'eid'
 				},

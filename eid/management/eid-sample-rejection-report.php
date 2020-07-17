@@ -123,7 +123,7 @@ $cResult = $facilityList['facilities'];
   function searchResultData()
   {
     $.blockUI();
-    $.post("get-rejected-samples.php",{sampleCollectionDate:$("#sampleCollectionDate").val(),labName:$("#labName").val(),clinicName:$("#clinicName").val()},
+    $.post("/covid-19/management/get-rejected-samples.php",{sampleCollectionDate:$("#sampleCollectionDate").val(),labName:$("#labName").val(),clinicName:$("#clinicName").val()},
       function(data){
 	  if(data!=''){
 	    $("#pieChartDiv").html(data);
@@ -133,7 +133,7 @@ $cResult = $facilityList['facilities'];
   }
   function exportInexcel() {
     $.blockUI();
-    $.post("generate-rejected-samples-export.php",{sampleCollectionDate:$("#sampleCollectionDate").val(),lab_name:$("#labName").val(),clinic_name:$("#clinicName").val()},
+    $.post("/covid-19/management/generate-rejected-samples-export.php",{sampleCollectionDate:$("#sampleCollectionDate").val(),lab_name:$("#labName").val(),clinic_name:$("#clinicName").val()},
     function(data){
 	  if(data == "" || data == null || data == undefined){
 			$.unblockUI();
