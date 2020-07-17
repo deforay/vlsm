@@ -195,10 +195,10 @@ $formConfigResult = $db->query($formConfigQuery);
 	<!-- DataTables -->
 	<link rel="stylesheet" href="/assets/plugins/datatables/dataTables.bootstrap.css">
 	<!-- Theme style -->
-	<link rel="stylesheet" href="/dist/css/AdminLTE.min.css">
+	<link rel="stylesheet" href="/assets/css/AdminLTE.min.css">
 	<!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
-	<link rel="stylesheet" href="/dist/css/skins/_all-skins.min.css">
+	<link rel="stylesheet" href="/assets/css/skins/_all-skins.min.css">
 	<!-- iCheck -->
 
 	<link href="/assets/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
@@ -415,22 +415,22 @@ $formConfigResult = $db->query($formConfigQuery);
 									<?php
 									if (isset($_SESSION['privileges']) && in_array("vlRequest.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu vlRequestMenu">
-											<a href="/vl-request/vlRequest.php"><i class="fa fa-circle-o"></i> View Test Requests</a>
+											<a href="/vl/requests/vlRequest.php"><i class="fa fa-circle-o"></i> View Test Requests</a>
 										</li>
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("addVlRequest.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu addVlRequestMenu">
-											<a href="/vl-request/addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a>
+											<a href="/vl/requests/addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a>
 										</li>
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("addSamplesFromManifest.php", $_SESSION['privileges']) && ($sarr['user_type'] != 'remoteuser')) { ?>
 										<li class="allMenu addSamplesFromManifestMenu">
-											<a href="/vl-request/addSamplesFromManifest.php"><i class="fa fa-circle-o"></i> Add Samples from Manifest</a>
+											<a href="/vl/requests/addSamplesFromManifest.php"><i class="fa fa-circle-o"></i> Add Samples from Manifest</a>
 										</li>
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("batchcode.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu batchCodeMenu">
-											<a href="/batch/batchcode.php"><i class="fa fa-circle-o"></i> Manage Batch</a>
+											<a href="/vl/batch/batchcode.php"><i class="fa fa-circle-o"></i> Manage Batch</a>
 										</li>
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("vlRequestMail.php", $_SESSION['privileges'])) { ?>
@@ -489,33 +489,33 @@ $formConfigResult = $db->query($formConfigQuery);
 								</a>
 								<ul class="treeview-menu">
 									<?php if (isset($_SESSION['privileges']) && in_array("vl-sample-status.php", $_SESSION['privileges'])) { ?>
-										<li class="allMenu missingResultMenu"><a href="/program-management/vl-sample-status.php"><i class="fa fa-circle-o"></i> Sample Status Report</a></li>
+										<li class="allMenu missingResultMenu"><a href="/vl/program-management/vl-sample-status.php"><i class="fa fa-circle-o"></i> Sample Status Report</a></li>
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("vlControlReport.php", $_SESSION['privileges'])) { ?>
-										<li class="allMenu vlControlReport"><a href="/program-management/vlControlReport.php"><i class="fa fa-circle-o"></i> Control Report</a></li>
+										<li class="allMenu vlControlReport"><a href="/vl/program-management/vlControlReport.php"><i class="fa fa-circle-o"></i> Control Report</a></li>
 									<?php } ?>
 									<!--<li><a href="#"><i class="fa fa-circle-o"></i> TOT Report</a></li>
                                 <li><a href="#"><i class="fa fa-circle-o"></i> VL Suppression Report</a></li>-->
 									<?php if (isset($_SESSION['privileges']) && in_array("vlResult.php", $_SESSION['privileges'])) { ?>
-										<li class="allMenu vlResultMenu"><a href="/program-management/vlResult.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
+										<li class="allMenu vlResultMenu"><a href="/vl/program-management/vlResult.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("vlPrintResult.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu vlPrintResultMenu"><a href="/vl-print/vlPrintResult.php"><i class="fa fa-circle-o"></i> Print Result</a></li>
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("highViralLoad.php", $_SESSION['privileges'])) { ?>
-										<li class="allMenu vlHighMenu"><a href="/program-management/highViralLoad.php"><i class="fa fa-circle-o"></i> Clinic Reports</a></li>
+										<li class="allMenu vlHighMenu"><a href="/vl/program-management/highViralLoad.php"><i class="fa fa-circle-o"></i> Clinic Reports</a></li>
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("patientList.php", $_SESSION['privileges'])) { ?>
 										<!--<li class="allMenu patientList"><a href="patientList.php"><i class="fa fa-circle-o"></i> Export Patient List</a></li>-->
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("vlWeeklyReport.php", $_SESSION['privileges'])) { ?>
-										<li class="allMenu vlWeeklyReport"><a href="/program-management/vlWeeklyReport.php"><i class="fa fa-circle-o"></i> VL Lab Weekly Report</a></li>
+										<li class="allMenu vlWeeklyReport"><a href="/vl/program-management/vlWeeklyReport.php"><i class="fa fa-circle-o"></i> VL Lab Weekly Report</a></li>
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("sampleRejectionReport.php", $_SESSION['privileges'])) { ?>
-										<li class="allMenu sampleRejectionReport"><a href="/program-management/sampleRejectionReport.php"><i class="fa fa-circle-o"></i> Sample Rejection Report</a></li>
+										<li class="allMenu sampleRejectionReport"><a href="/vl/program-management/sampleRejectionReport.php"><i class="fa fa-circle-o"></i> Sample Rejection Report</a></li>
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("vlMonitoringReport.php", $_SESSION['privileges'])) { ?>
-										<li class="allMenu vlMonitoringReport"><a href="/program-management/vlMonitoringReport.php"><i class="fa fa-circle-o"></i> Sample Monitoring Report</a></li>
+										<li class="allMenu vlMonitoringReport"><a href="/vl/program-management/vlMonitoringReport.php"><i class="fa fa-circle-o"></i> Sample Monitoring Report</a></li>
 									<?php } ?>
 								</ul>
 							</li>

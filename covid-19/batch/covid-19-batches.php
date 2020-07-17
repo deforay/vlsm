@@ -132,7 +132,7 @@ include_once(APPLICATION_PATH . '/models/General.php');
 			],
 			"bProcessing": true,
 			"bServerSide": true,
-			"sAjaxSource": "/batch/getBatchCodeDetails.php",
+			"sAjaxSource": "/vl/batch/getBatchCodeDetails.php",
 			"fnServerData": function(sSource, aoData, fnCallback) {
 				aoData.push({
 					"name": "type",
@@ -169,7 +169,7 @@ include_once(APPLICATION_PATH . '/models/General.php');
 	function deleteBatchCode(bId, batchCode) {
 		var conf = confirm("Are you sure you want to delete Batch : " + batchCode + "?\nThis action cannot be undone.");
 		if (conf) {
-			$.post("/batch/deleteBatchCode.php", {
+			$.post("/vl/batch/deleteBatchCode.php", {
 					id: bId,
 					type: 'covid19'
 				},

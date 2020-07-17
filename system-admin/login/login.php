@@ -4,7 +4,7 @@ if(isset($_SESSION['adminUserId'])){
     header("location:../edit-config/index.php");
 }
 require_once('../../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-$path = '../../assets/img/remote-bg.jpg';
+$path = '..//assets/img/remote-bg.jpg';
 ?>
 <!DOCTYPE html>
 <html>
@@ -15,12 +15,12 @@ $path = '../../assets/img/remote-bg.jpg';
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.6 -->
-  <link rel="stylesheet" href="../../assets/css/fonts.css">
-  <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="..//assets/css/fonts.css">
+  <link rel="stylesheet" href="..//assets/css/bootstrap.min.css">
   
   <!-- Theme style -->
   <link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
-  <link href="../../assets/css/deforayModal.css" rel="stylesheet" />
+  <link href="..//assets/css/deforayModal.css" rel="stylesheet" />
   <!-- iCheck -->
     <style>
         body{
@@ -38,7 +38,7 @@ $path = '../../assets/img/remote-bg.jpg';
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
-  <script type="text/javascript" src="../../assets/js/jquery.min.js"></script>
+  <script type="text/javascript" src="..//assets/js/jquery.min.js"></script>
 </head>
 <body class="">
     <div class="container-fluid">
@@ -70,8 +70,8 @@ $path = '../../assets/img/remote-bg.jpg';
             </div>  
         </div>
     </div>
-    <script src="../../assets/js/deforayValidation.js"></script>
-    <script src="../../assets/js/jquery.blockUI.js"></script>
+    <script src="..//assets/js/deforayValidation.js"></script>
+    <script src="..//assets/js/jquery.blockUI.js"></script>
     <script type="text/javascript">
     function validateNow(){
       flag = deforayValidator.init({

@@ -59,16 +59,16 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
 //suggest sample id when lab user add request sample
 $sampleSuggestion = '';
 $sampleSuggestionDisplay = 'display:none;';
-$sCode = $_GET['c'];
-if ($sarr['user_type'] == 'vluser' && $sCode != '') {
-     $vlObj = new Model_Eid($db);
-     $sampleCollectionDate = explode(" ",$sampleCollectionDate);
-     $sampleCollectionDate = $general->humanDateFormat($sampleCollectionDate[0]);
-     $sampleSuggestionJson = $vlObj->generateEIDSampleCode($stateResult[0]['province_code'],$sampleCollectionDate,'png');
-     $sampleCodeKeys = json_decode($sampleSuggestionJson, true);
-     $sampleSuggestion = $sampleCodeKeys['sampleCode'];
-     $sampleSuggestionDisplay = 'display:block;';
-}    
+$sCode = isset($_GET['c']) ? $_GET['c'] : null;
+if ($sarr['user_type'] == 'vluser' && !empty($sCode)) {
+    $vlObj = new Model_Eid($db);
+    $sampleCollectionDate = explode(" ", $sampleCollectionDate);
+    $sampleCollectionDate = $general->humanDateFormat($sampleCollectionDate[0]);
+    $sampleSuggestionJson = $vlObj->generateEIDSampleCode($stateResult[0]['province_code'], $sampleCollectionDate, 'png');
+    $sampleCodeKeys = json_decode($sampleSuggestionJson, true);
+    $sampleSuggestion = $sampleCodeKeys['sampleCode'];
+    $sampleSuggestionDisplay = 'display:block;';
+}
 
 ?>
 
@@ -91,7 +91,6 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-                <pre><?php print_r($eidInfo);?></pre>
                 <!-- form start -->
                 <form class="form-horizontal" method="post" name="editEIDRequestForm" id="editEIDRequestForm" autocomplete="off" action="eid-edit-request-helper.php">
                     <div class="box-body">
@@ -104,28 +103,32 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                     <h3 class="box-title" style="font-size:1em;">To be filled by requesting Clinician/Nurse</h3>
                                 </div>
                                 <table class="table" style="width:100%">
-                                <tr>
-                                        <?php
-                                        if ($eidInfo['sample_code'] != '') {
-                                        ?>
-                                            <td> <label for="sampleSuggest" class="text-danger">&nbsp;&nbsp;&nbsp;Please note that this Remote Sample has already been imported with VLSM Sample ID </td>
-                                            <td> <?php echo $eidInfo['sample_code']; ?></label> </td>
-                                        <?php
-                                        } else {
-                                        ?>
-                                            <td> <label for="sampleSuggest">Sample ID (might change while submitting the form)</label></td>
-                                            <td> <?php echo $sampleSuggestion; ?></td>
-                                        <?php } ?>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>                                
+                                    <?php if (!empty($sCode)) { ?>
+                                        <tr>
+                                            <td colspan="6">
+                                                <?php
+                                                if ($eidInfo['sample_code'] != '') {
+                                                ?>
+
+                                                    <label for="sampleSuggest" class="text-danger">&nbsp;&nbsp;&nbsp;Please note that this Remote Sample has already been imported with VLSM Sample ID :
+                                                        <?php echo $eidInfo['sample_code']; ?></label>
+
+                                                <?php
+                                                } else {
+                                                ?>
+
+                                                    <label for="sampleSuggest">Sample ID (might change while submitting the form)</label>
+                                                    <?php echo $sampleSuggestion; ?>
+
+                                                <?php } ?>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
                                     <tr>
                                         <?php if ($sarr['user_type'] == 'remoteuser') { ?>
                                             <td><label for="sampleCode">Sample ID </label></td>
                                             <td>
-                                            <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"><?php echo ($sCode != '') ? $sCode : $eidInfo[$sampleCode]; ?></span>
+                                                <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"><?php echo ($sCode != '') ? $sCode : $eidInfo[$sampleCode]; ?></span>
                                                 <input type="hidden" class="<?php echo $sampleClass; ?>" id="sampleCode" name="sampleCode" value="<?php echo ($sCode != '') ? $sCode : $eidInfo[$sampleCode]; ?>" />
                                             </td>
                                         <?php } else { ?>
@@ -167,7 +170,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                 <option value=""> -- Select -- </option>
                                                 <?php
                                                 foreach ($implementingPartnerList as $implementingPartner) {
-                                                    ?>
+                                                ?>
                                                     <option value="<?php echo ($implementingPartner['i_partner_id']); ?>" <?php echo ($eidInfo['implementing_partner'] == $implementingPartner['i_partner_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
                                                 <?php } ?>
                                             </select>
@@ -178,7 +181,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                 <option value=""> -- Select -- </option>
                                                 <?php
                                                 foreach ($fundingSourceList as $fundingSource) {
-                                                    ?>
+                                                ?>
                                                     <option value="<?php echo ($fundingSource['funding_source_id']); ?>" <?php echo ($eidInfo['funding_source'] == $fundingSource['funding_source_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
                                                 <?php } ?>
                                             </select>
@@ -198,11 +201,12 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         <?php } ?>
                                     </tr>
                                 </table>
-                                <br><hr style="border: 1px solid #ccc;">
+                                <br>
+                                <hr style="border: 1px solid #ccc;">
 
                                 <div class="box-header with-border">
                                     <h3 class="box-title">CHILD and MOTHER INFORMATION</h3>
-                                </div>                                
+                                </div>
                                 <table class="table" style="width:100%">
 
                                     <tr>
@@ -218,7 +222,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                     <tr>
                                         <th><label for="childDob">Date of Birth <span class="mandatory">*</span> </label></th>
                                         <td>
-                                            <input type="text" class="form-control isRequired" id="childDob" name="childDob" placeholder="Date of birth" title="Please enter Date of birth" style="width:100%;" value="<?php echo $general->humanDateFormat($eidInfo['child_dob']) ?>"  onchange="calculateAgeInMonths();" />
+                                            <input type="text" class="form-control isRequired" id="childDob" name="childDob" placeholder="Date of birth" title="Please enter Date of birth" style="width:100%;" value="<?php echo $general->humanDateFormat($eidInfo['child_dob']) ?>" onchange="calculateAgeInMonths();" />
                                         </td>
                                         <th><label for="childGender">Gender <span class="mandatory">*</span> </label></th>
                                         <td>
@@ -342,8 +346,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             <select class="form-control" name="pcrTestReason" id="pcrTestReason">
                                                 <option value=''> -- Select -- </option>
                                                 <option value="Confirmation of positive first EID PCR test result" <?php echo ($eidInfo['reason_for_pcr'] == 'Confirmation of positive first EID PCR test result') ? "selected='selected'" : ""; ?>> Confirmation of positive first EID PCR test result </option>
-                                                <option value="Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months" <?php echo ($eidInfo['reason_for_pcr'] == 'Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months') ? "selected='selected'" : ""; ?>> Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months </option>
-                                                <option value="Positive HIV rapid test result at 9 months or later" <?php echo ($eidInfo['reason_for_pcr'] == 'Positive HIV rapid test result at 9 months or later') ? "selected='selected'" : ""; ?>> Positive HIV rapid test result at 9 months or later </option>
+                                                <option value="Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months" <?php echo ($eidInfo['reason_for_pcr'] == 'Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months') ? "selected='selected'" : ""; ?>> Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months </option> <option value="Positive HIV rapid test result at 9 months or later" <?php echo ($eidInfo['reason_for_pcr'] == 'Positive HIV rapid test result at 9 months or later') ? "selected='selected'" : ""; ?>> Positive HIV rapid test result at 9 months or later </option>
                                                 <option value="Other" <?php echo ($eidInfo['reason_for_pcr'] == 'Other') ? "selected='selected'" : ""; ?>> Other </option>
                                             </select>
                                         </td>
@@ -417,8 +420,8 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                             foreach ($rejectionResult as $reject) {
                                                                 if ($type['rejection_type'] == $reject['rejection_type']) { ?>
                                                                     <option value="<?php echo $reject['rejection_reason_id']; ?>" <?php echo ($eidInfo['reason_for_sample_rejection'] == $reject['rejection_reason_id']) ? 'selected="selected"' : ''; ?>><?php echo ucwords($reject['rejection_reason_name']); ?></option>
-                                                                <?php }
-                                                        } ?>
+                                                            <?php }
+                                                            } ?>
                                                         </optgroup>
                                                     <?php }  ?>
                                                 </select>
@@ -456,11 +459,11 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                         <?php } ?>
                         <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                         <input type="hidden" name="formId" id="formId" value="7" />
-                        <input type="hidden" name="eidSampleId" id="eidSampleId"  value="<?php echo $eidInfo['eid_id']; ?>" />
+                        <input type="hidden" name="eidSampleId" id="eidSampleId" value="<?php echo $eidInfo['eid_id']; ?>" />
                         <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
-                        
+
                         <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
-                        <input type="hidden" name="oldStatus" id="oldStatus" value="<?php echo $eidInfo['result_status']; ?>" />                        
+                        <input type="hidden" name="oldStatus" id="oldStatus" value="<?php echo $eidInfo['result_status']; ?>" />
                         <input type="hidden" name="provinceCode" id="provinceCode" />
                         <input type="hidden" name="provinceId" id="provinceId" />
                         <a href="/eid/requests/eid-requests.php" class="btn btn-default"> Cancel</a>
@@ -493,17 +496,17 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         }
         if ($.trim(pName) != '') {
             //if (provinceName) {
-                $.post("/includes/getFacilityForClinic.php", {
-                        pName: pName
-                    },
-                    function(data) {
-                        if (data != "") {
-                            details = data.split("###");
-                            $("#facilityId").html(details[0]);
-                            $("#district").html(details[1]);
-                            $("#clinicianName").val(details[2]);
-                        }
-                    });
+            $.post("/includes/getFacilityForClinic.php", {
+                    pName: pName
+                },
+                function(data) {
+                    if (data != "") {
+                        details = data.split("###");
+                        $("#facilityId").html(details[0]);
+                        $("#district").html(details[1]);
+                        $("#clinicianName").val(details[2]);
+                    }
+                });
             //}
         } else if (pName == '') {
             provinceName = true;

@@ -335,7 +335,7 @@ $facilityCount = $facilityTotal[0]['total'];
 	function getSamplesOverview(requestType) {
 		$.blockUI();
 		if (requestType == 'vl') {
-			$.post("/program-management/getSampleStatus.php", {
+			$.post("/vl/program-management/getSampleStatus.php", {
 					sampleCollectionDate: $("#vlSampleCollectionDate").val(),
 					batchCode: '',
 					facilityName: '',
@@ -349,7 +349,7 @@ $facilityCount = $facilityTotal[0]['total'];
 					}
 				});
 		} else if (requestType == 'recency') {
-			$.post("/program-management/getSampleStatus.php", {
+			$.post("/vl/program-management/getSampleStatus.php", {
 					sampleCollectionDate: $("#recencySampleCollectionDate").val(),
 					batchCode: '',
 					facilityName: '',

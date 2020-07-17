@@ -19,7 +19,7 @@ if(isset($arr['rq_field']) && trim($arr['rq_field'])!= ''){
   }
 }
 ?>
-<link href="../assets/css/multi-select.css" rel="stylesheet" />
+<link href="/assets/css/multi-select.css" rel="stylesheet" />
 <style>
     .ms-container{
         width:100%;
@@ -137,8 +137,8 @@ if(isset($arr['rq_field']) && trim($arr['rq_field'])!= ''){
     </section>
     <!-- /.content -->
   </div>
-  <script src="../assets/js/jquery.multi-select.js"></script>
-  <script src="../assets/js/jquery.quicksearch.js"></script>
+  <script src="/assets/js/jquery.multi-select.js"></script>
+  <script src="/assets/js/jquery.quicksearch.js"></script>
   <script type="text/javascript">
   $(document).ready(function() {
       $('.search').multiSelect({

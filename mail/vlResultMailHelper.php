@@ -2,7 +2,7 @@
 ob_start();
 session_start();
 require_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-require '../includes/mail/PHPMailerAutoload.php';
+require '/includes/mail/PHPMailerAutoload.php';
 include_once(APPLICATION_PATH.'/models/General.php');
 $general=new General($db);
 $tableName="vl_request_form";

@@ -50,12 +50,12 @@ if ($sarr['user_type'] == 'remoteuser') {
 
 
   <!-- Bootstrap 3.3.6 -->
-  <link rel="stylesheet" href="assets/css/fonts.css">
-  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
 
   <!-- Theme style -->
-  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
-  <link href="assets/css/deforayModal.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/AdminLTE.min.css">
+  <link href="/assets/css/deforayModal.css" rel="stylesheet" />
   <!-- iCheck -->
   <style>
     body {
@@ -152,8 +152,8 @@ if ($sarr['user_type'] == 'remoteuser') {
         </span> -->
     <span class="pull-right" style="font-weight:bold;">v <?php echo VERSION; ?></span>
   </div>
-  <script src="assets/js/deforayValidation.js"></script>
-  <script src="assets/js/jquery.blockUI.js"></script>
+  <script src="/assets/js/deforayValidation.js"></script>
+  <script src="/assets/js/jquery.blockUI.js"></script>
   <script type="text/javascript">
     function validateNow() {
       flag = deforayValidator.init({

@@ -262,10 +262,10 @@ $batchResult = $db->rawQuery($batchQuery);
     </section>
     <!-- /.content -->
   </div>
-  <script src="../assets/js/jquery.multi-select.js"></script>
-  <script src="../assets/js/jquery.quicksearch.js"></script>
-  <script type="text/javascript" src="../assets/plugins/daterangepicker/moment.min.js"></script>
-  <script type="text/javascript" src="../assets/plugins/daterangepicker/daterangepicker.js"></script>
+  <script src="/assets/js/jquery.multi-select.js"></script>
+  <script src="/assets/js/jquery.quicksearch.js"></script>
+  <script type="text/javascript" src="/assets/plugins/daterangepicker/moment.min.js"></script>
+  <script type="text/javascript" src="/assets/plugins/daterangepicker/daterangepicker.js"></script>
   <script type="text/javascript">
 		noOfAllowedSamples = 100;
   var startDate = "";
@@ -440,7 +440,7 @@ $batchResult = $db->rawQuery($batchQuery);
   function getProvinceDistricts(){
     var pName = $("#state").val();
     if($.trim(pName)!=''){
-      $.post("../includes/getFacilityForClinic.php", { pName : pName},
+      $.post("/includes/getFacilityForClinic.php", { pName : pName},
       function(data){
 	if($.trim(data) != ""){
           details = data.split("###");

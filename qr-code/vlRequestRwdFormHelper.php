@@ -222,7 +222,7 @@ try {
             'date_time'=>$general->getDateTime()
             );
             $db->insert($tableName1,$data);
-            header("location:/vl-request/vlRequest.php");
+            header("location://vl/requests/vlRequest.php");
         }else{
             $id=$db->insert($tableName,$vldata);
             if($id>0){
@@ -238,7 +238,7 @@ try {
                 'date_time'=>$general->getDateTime()
                 );
                 $db->insert($tableName1,$data);
-                header("location:/vl-request/vlRequest.php");
+                header("location://vl/requests/vlRequest.php");
             }else{
                 $_SESSION['alertMsg']="Please try again later";
             }

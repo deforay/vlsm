@@ -304,7 +304,7 @@ function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback){
      var removeDots=obj.value.replace(/\,/g,"");
      //str=obj.value;
      removeDots = removeDots.replace(/\s{2,}/g,' ');
-     $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
+     $.post("/includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
      function(data){
           if(data==='1'){
                alert(alrt);
@@ -327,7 +327,7 @@ function getProvinceDistricts(){
      $.blockUI();
      var pName = $("#province").val();
      if(pName!=''){
-               $.post("../includes/getFacilityForClinic.php", { pName : pName,fType:$("#facilityType").val(),comingFromUser:'yes'},
+               $.post("/includes/getFacilityForClinic.php", { pName : pName,fType:$("#facilityType").val(),comingFromUser:'yes'},
                function(data){
                     if(data != ""){
                          details = data.split("###");
@@ -342,7 +342,7 @@ function getFacilities(){
      $.blockUI();
      var dName = $("#district").val();
      if(dName!=''){
-          $.post("../includes/getFacilityForClinic.php", {dName:dName,fType:$("#facilityType").val(),comingFromUser:'yes'},
+          $.post("/includes/getFacilityForClinic.php", {dName:dName,fType:$("#facilityType").val(),comingFromUser:'yes'},
           function(data){
                if(data != ""){
                     details = data.split("###");
@@ -364,7 +364,7 @@ function getFacility()
     }else if(pName!=''){
         getProvinceDistricts();
     }else if(fType!=''){
-        $.post("../includes/getFacilityForClinic.php", { fType:fType,comingFromUser:'yes'},
+        $.post("/includes/getFacilityForClinic.php", { fType:fType,comingFromUser:'yes'},
         function(data){
             $("#search").html(data);
         });

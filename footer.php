@@ -20,7 +20,7 @@
 <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="/assets/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <!-- AdminLTE App -->
-<script src="/dist/js/app.min.js"></script>
+<script src="/assets/js/app.min.js"></script>
 <script src="/assets/js/deforayValidation.js"></script>
 <script src="/assets/js/jquery.maskedinput.js"></script>
 <script src="/assets/js/jquery.blockUI.js"></script>

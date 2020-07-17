@@ -715,7 +715,7 @@ $disable = "disabled = 'disabled'";
       }
       if($.trim(pName)!=''){
         if(provinceName){
-            $.post("../includes/getFacilityForClinic.php", { pName : pName},
+            $.post("/includes/getFacilityForClinic.php", { pName : pName},
             function(data){
                 if(data!= ""){
                   details = data.split("###");
@@ -741,7 +741,7 @@ $disable = "disabled = 'disabled'";
       var dName = $("#district").val();
       var cName = $("#clinicName").val();
       if(dName!=''){
-        $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
+        $.post("/includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
         function(data){
             if(data != ""){
               $("#clinicName").html(data);
@@ -762,7 +762,7 @@ $disable = "disabled = 'disabled'";
           provinceName = false;
         }
       if(cName!='' && facilityName){
-        $.post("../includes/getFacilityForClinic.php", { cName : cName},
+        $.post("/includes/getFacilityForClinic.php", { cName : cName},
         function(data){
             if(data != ""){
               details = data.split("###");
@@ -839,7 +839,7 @@ $disable = "disabled = 'disabled'";
     function checkNameValidation(tableName,fieldName,obj,fnct)
     {
       if($.trim(obj.value)!=''){
-        $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : obj.value,fnct : fnct, format: "html"},
+        $.post("/includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : obj.value,fnct : fnct, format: "html"},
         function(data){
             if(data==='1'){
                 showModal('patientModal.php?artNo='+obj.value,900,520);

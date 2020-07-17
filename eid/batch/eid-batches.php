@@ -110,7 +110,7 @@ include_once(APPLICATION_PATH.'/models/General.php');
             "aaSorting": [[ 6, "desc" ]],
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "/batch/getBatchCodeDetails.php",
+            "sAjaxSource": "/vl/batch/getBatchCodeDetails.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
               aoData.push({"name": "type", "value": "eid"});
               $.ajax({
@@ -127,7 +127,7 @@ include_once(APPLICATION_PATH.'/models/General.php');
   } );
   
   function generateBarcode(bId){
-    $.post("/batch/generateBarcode.php",{id:bId,type:'eid'},
+    $.post("/vl/batch/generateBarcode.php",{id:bId,type:'eid'},
       function(data){
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate barcode');
@@ -155,7 +155,7 @@ include_once(APPLICATION_PATH.'/models/General.php');
   {
     var conf = confirm("Are you sure you want to delete Batch : "+batchCode+"?\nThis action cannot be undone.");
     if(conf){
-      $.post("/batch/deleteBatchCode.php",{id:bId, type: 'eid'},
+      $.post("/vl/batch/deleteBatchCode.php",{id:bId, type: 'eid'},
       function(data){
         if(data==1){
           alert("Batch deleted");
