@@ -2508,3 +2508,5 @@ CREATE TABLE `dash_covid19_form` (
  `data_sync` int NOT NULL DEFAULT '0',
  PRIMARY KEY (`covid19_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Version 4.0 -- Amit -- 17-July-2020
