@@ -404,7 +404,7 @@ foreach ($importConfigResult as $machine) {
 			breastfeeding = $('input[name=breastfeeding]:checked').val();
 		}
 		$.blockUI();
-		$.post("getSampleCodeDetails.php", {
+		$.post("/vl/batch/getSampleCodeDetails.php", {
 				urgent: urgent,
 				sampleCollectionDate: $("#sampleCollectionDate").val(),
 				sampleReceivedAtLab: $("#sampleReceivedAtLab").val(),

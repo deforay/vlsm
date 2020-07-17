@@ -140,7 +140,7 @@ include_once(APPLICATION_PATH.'/models/General.php');
   
   function generateQRcode(bId){
      $.blockUI();
-     $.post("generateQRcode.php",{id:bId},
+     $.post("/qr-code/generateQRcode.php",{id:bId},
       function(data){
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate QR code');

@@ -7,14 +7,14 @@ include_once(APPLICATION_PATH.'/header.php');
         exportInexcel();
     });
 function exportInexcel() {
-    $.post("vlResultAllFieldExportInExcel.php",
+    $.post("/vl/program-management/vlResultAllFieldExportInExcel.php",
     function(data){
 	  if(data == "" || data == null || data == undefined){
 	  
 	      alert('Unable to generate excel..');
 	  }else{
 		
-	     location.href = '../temporary/'+data;
+	     location.href = '/temporary/'+data;
 	  }
     });
   }

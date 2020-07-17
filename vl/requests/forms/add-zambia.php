@@ -603,7 +603,7 @@ $artResult=$db->query($artQuery);
     $.blockUI();
     var pName = $("#province").val();
     if($.trim(pName)!=''){
-      $.post("../includes/getFacilityForClinic.php", { pName : pName},
+      $.post("/includes/getFacilityForClinic.php", { pName : pName},
       function(data){
         $.unblockUI();
         if(data != ""){
@@ -650,7 +650,7 @@ $artResult=$db->query($artQuery);
     var dName = $("#district").val();
     var cName = $("#fName").val();
     if($.trim(dName)!=''){
-      $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
+      $.post("/includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
       function(data){
            $.unblockUI();
           if(data != ""){

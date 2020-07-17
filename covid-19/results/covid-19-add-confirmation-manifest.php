@@ -229,7 +229,7 @@ $packageNo = strtoupper($module) . date('ymd') .  $general->generateRandomString
   function getSampleCodeDetails() {
     $.blockUI();
 
-    $.post("get-covid-19-confirmation-manifest.php", {
+    $.post("/covid-19/results/get-covid-19-confirmation-manifest.php", {
         module: $("#module").val()
       },
       function(data) {

@@ -162,7 +162,7 @@
       notes = $("#notes").val();
       dateVal = $("#date").val();
       if (notes != '' && dateVal != '') {
-        $.post("addContactNotesHelper.php", {
+        $.post("/vl/program-management/addContactNotesHelper.php", {
             notes: $("#notes").val(),
             dateVal: $("#date").val(),
             treamentId: $("#treamentId").val(),

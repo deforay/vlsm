@@ -621,7 +621,7 @@ $sFormat = '';
     }
     if ($.trim(pName) != '') {
       //if (provinceName) {
-        $.post("../includes/getFacilityForClinic.php", {
+        $.post("/includes/getFacilityForClinic.php", {
             pName: pName
           },
           function(data) {
@@ -682,7 +682,7 @@ $sFormat = '';
     var dName = $("#district").val();
     var cName = $("#clinicName").val();
     if (dName != '') {
-      $.post("../includes/getFacilityForClinic.php", {
+      $.post("/includes/getFacilityForClinic.php", {
           dName: dName,
           cliName: cName
         },

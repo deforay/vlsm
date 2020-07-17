@@ -3,7 +3,7 @@ ob_start();
 $title = "Import Test Results From File";
 require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-include_once(APPLICATION_PATH.'/models/General.php');
+include_once(APPLICATION_PATH . '/models/General.php');
 $general = new General($db);
 $query = "SELECT config_id,machine_name,import_machine_file_name FROM import_config WHERE status='active'";
 $iResult = $db->rawQuery($query);
@@ -113,7 +113,7 @@ $type = base64_decode($_GET['t']);
                               <option value=""> -- Select -- </option>
                               <?php
                               foreach ($fResult as $val) {
-                                ?>
+                              ?>
                                 <option value="<?php echo base64_encode($val['facility_id']); ?>" <?php echo (isset($lastResult[0]['lab_id']) && $lastResult[0]['lab_id'] == $val['facility_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($val['facility_name']); ?></option>
                               <?php } ?>
                             </select>
@@ -168,7 +168,7 @@ $type = base64_decode($_GET['t']);
 
   function getConfigMachineName() {
     if ($("#machineName").val() != '') {
-      $.post("getConfigMachineName.php", {
+      $.post("/import-result/getConfigMachineName.php", {
           configId: $("#machineName").val()
         },
         function(data) {

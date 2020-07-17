@@ -338,12 +338,12 @@ $fResult = $db->rawQuery($fQuery);
   function exportInexcel() {
     $.blockUI();
     oTable.fnDraw();
-    $.post("vlMonitoringExportInExcel.php",{sampleCollectionDate:$("#mrp-lowerDate").val() +' to '+ $("#mrp-upperDate").val(),fyName:$("#facilityName  option:selected").text(),facilityName:$("#facilityName").val(),state:$("#state").val(),district:$("#city").val(),sampleTestDate:$("#sampleTestDate").val()},
+    $.post("/vl/program-management/vlMonitoringExportInExcel.php",{sampleCollectionDate:$("#mrp-lowerDate").val() +' to '+ $("#mrp-upperDate").val(),fyName:$("#facilityName  option:selected").text(),facilityName:$("#facilityName").val(),state:$("#state").val(),district:$("#city").val(),sampleTestDate:$("#sampleTestDate").val()},
     function(data){
 	  if(data == "" || data == null || data == undefined){
-	      alert('Unable to generate excel..');
+	      alert('Unable to generate excel file');
 	  }else{
-	     location.href = '../temporary/'+data;
+	     location.href = '/temporary/'+data;
 	  }
     });
     $.unblockUI();

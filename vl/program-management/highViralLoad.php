@@ -708,7 +708,7 @@ function incompleteForm(){
   function updateStatus(id,value){
     conf = confirm("Do you wisht to change the contact completed status?");
     if(conf){
-    $.post("updateContactCompletedStatus.php",{id:id,value:value},
+    $.post("/vl/program-management/updateContactCompletedStatus.php",{id:id,value:value},
       function(data){
 	  alert("Status updated successfully");
 	  oTableViralLoad.fnDraw();
@@ -725,53 +725,53 @@ function incompleteForm(){
 			var markAsComplete = true;
 		}
     $.blockUI();
-    $.post("vlHighViralLoadResultExportInExcel.php",{Sample_Test_Date:$("#hvlSampleTestDate").val(),Batch_Code:$("#hvlBatchCode  option:selected").text(),Sample_Type:$("#hvlSampleType  option:selected").text(),Facility_Name:$("#hvlFacilityName  option:selected").text(),Gender:$("#hvlGender  option:selected").text(),Pregnant:$("#hvlPatientPregnant  option:selected").text(),Breastfeeding:$("#hvlPatientBreastfeeding  option:selected").text(),markAsComplete:markAsComplete},
+    $.post("/vl/program-management/vlHighViralLoadResultExportInExcel.php",{Sample_Test_Date:$("#hvlSampleTestDate").val(),Batch_Code:$("#hvlBatchCode  option:selected").text(),Sample_Type:$("#hvlSampleType  option:selected").text(),Facility_Name:$("#hvlFacilityName  option:selected").text(),Gender:$("#hvlGender  option:selected").text(),Pregnant:$("#hvlPatientPregnant  option:selected").text(),Breastfeeding:$("#hvlPatientBreastfeeding  option:selected").text(),markAsComplete:markAsComplete},
     function(data){
 	  if(data == "" || data == null || data == undefined){
 	  $.unblockUI();
 	      alert('Unable to generate excel..');
 	  }else{
 		$.unblockUI();
-	     location.href = '../temporary/'+data;
+	     location.href = '/temporary/'+data;
 	  }
     });
   }
 	function exportRejectedResultInexcel() {
     $.blockUI();
-    $.post("vlRejectedResultExportInExcel.php",{Sample_Test_Date:$("#rjtSampleTestDate").val(),Batch_Code:$("#rjtBatchCode  option:selected").text(),Sample_Type:$("#rjtSampleType  option:selected").text(),Facility_Name:$("#rjtFacilityName  option:selected").text(),Gender:$("#rjtGender  option:selected").text(),Pregnant:$("#rjtPatientPregnant  option:selected").text(),Breastfeeding:$("#rjtPatientBreastfeeding  option:selected").text()},
+    $.post("/vl/program-management/vlRejectedResultExportInExcel.php",{Sample_Test_Date:$("#rjtSampleTestDate").val(),Batch_Code:$("#rjtBatchCode  option:selected").text(),Sample_Type:$("#rjtSampleType  option:selected").text(),Facility_Name:$("#rjtFacilityName  option:selected").text(),Gender:$("#rjtGender  option:selected").text(),Pregnant:$("#rjtPatientPregnant  option:selected").text(),Breastfeeding:$("#rjtPatientBreastfeeding  option:selected").text()},
     function(data){
 	  if(data == "" || data == null || data == undefined){
 	  $.unblockUI();
 	      alert('Unable to generate excel..');
 	  }else{
 		$.unblockUI();
-	     location.href = '../temporary/'+data;
+	     location.href = '/temporary/'+data;
 	  }
     });
   }
 	function exportNotAvailableResultInexcel() {
     $.blockUI();
-    $.post("vlNotAvailableResultExportInExcel.php",{Sample_Test_Date:$("#noResultSampleTestDate").val(),Batch_Code:$("#noResultBatchCode  option:selected").text(),Sample_Type:$("#noResultSampleType  option:selected").text(),Facility_Name:$("#noResultFacilityName  option:selected").text(),Gender:$("#noResultGender  option:selected").text(),Pregnant:$("#noResultPatientPregnant  option:selected").text(),Breastfeeding:$("#noResultPatientBreastfeeding  option:selected").text()},
+    $.post("/vl/program-management/vlNotAvailableResultExportInExcel.php",{Sample_Test_Date:$("#noResultSampleTestDate").val(),Batch_Code:$("#noResultBatchCode  option:selected").text(),Sample_Type:$("#noResultSampleType  option:selected").text(),Facility_Name:$("#noResultFacilityName  option:selected").text(),Gender:$("#noResultGender  option:selected").text(),Pregnant:$("#noResultPatientPregnant  option:selected").text(),Breastfeeding:$("#noResultPatientBreastfeeding  option:selected").text()},
     function(data){
 	  if(data == "" || data == null || data == undefined){
 	  $.unblockUI();
 	      alert('Unable to generate excel..');
 	  }else{
 		$.unblockUI();
-	     location.href = '../temporary/'+data;
+	     location.href = '/temporary/'+data;
 	  }
     });
 	}
 	function exportDataQualityInexcel() {
     $.blockUI();
-    $.post("vlDataQualityExportInExcel.php",{Sample_Collection_Date:$("#sampleCollectionDate").val(),Field_Name:$("#formField  option:selected").text()},
+    $.post("/vl/program-management/vlDataQualityExportInExcel.php",{Sample_Collection_Date:$("#sampleCollectionDate").val(),Field_Name:$("#formField  option:selected").text()},
     function(data){
 	  if(data == "" || data == null || data == undefined){
 	  $.unblockUI();
 	      alert('Unable to generate excel..');
 	  }else{
 		$.unblockUI();
-	     location.href = '../temporary/'+data;
+	     location.href = '/temporary/'+data;
 	  }
     });
 	}

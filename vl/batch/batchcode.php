@@ -165,7 +165,7 @@ include_once(APPLICATION_PATH . '/header.php');
 
 	function generateQRcode(bId) {
 		$.blockUI();
-		$.post("generateQRcode.php", {
+		$.post("/qr-code/generateQRcode.php", {
 				id: bId
 			},
 			function(data) {

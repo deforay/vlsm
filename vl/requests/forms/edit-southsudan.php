@@ -803,7 +803,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
       }
       if(pName!=''){
         if(provinceName){
-        $.post("../includes/getFacilityForClinic.php", { pName : pName},
+        $.post("/includes/getFacilityForClinic.php", { pName : pName},
         function(data){
             if(data != ""){
               details = data.split("###");
@@ -830,7 +830,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
     var dName = $("#district").val();
     var cName = $("#fName").val();
     if(dName!=''){
-      $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
+      $.post("/includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
       function(data){
 	  if(data != ""){
             details = data.split("###");

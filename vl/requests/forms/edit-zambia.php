@@ -576,7 +576,7 @@ $efResult = $db->rawQuery($efQuery);
       $.blockUI();
       var pName = $("#province").val();
       if($.trim(pName)!=''){
-        $.post("../includes/getFacilityForClinic.php", { pName : pName},
+        $.post("/includes/getFacilityForClinic.php", { pName : pName},
         function(data){
           $.unblockUI();
           if(data != ""){
@@ -597,7 +597,7 @@ $efResult = $db->rawQuery($efQuery);
       $.blockUI();
       var dName = $("#district").val();
       if($.trim(dName)!=''){
-        $.post("../includes/getFacilityForClinic.php", {dName:dName},
+        $.post("/includes/getFacilityForClinic.php", {dName:dName},
         function(data){
              $.unblockUI();
             if(data != ""){

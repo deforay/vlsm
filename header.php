@@ -465,10 +465,10 @@ $formConfigResult = $db->query($formConfigQuery);
 										<li class="allMenu importResultMenu"><a href="/import-result/addImportResult.php?t=<?php echo base64_encode('vl'); ?>"><i class="fa fa-circle-o"></i> Import Result From File</a></li>
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("vlTestResult.php", $_SESSION['privileges'])) { ?>
-										<li class="allMenu vlTestResultMenu"><a href="/vl-print/vlTestResult.php"><i class="fa fa-circle-o"></i> Enter Result Manually</a></li>
+										<li class="allMenu vlTestResultMenu"><a href="/vl/results/vlTestResult.php"><i class="fa fa-circle-o"></i> Enter Result Manually</a></li>
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("vlResultApproval.php", $_SESSION['privileges'])) { ?>
-										<li class="allMenu vlResultApprovalMenu"><a href="/vl-print/vlResultApproval.php"><i class="fa fa-circle-o"></i> Approve Results</a></li>
+										<li class="allMenu vlResultApprovalMenu"><a href="/vl/results/vlResultApproval.php"><i class="fa fa-circle-o"></i> Approve Results</a></li>
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("vlResultMail.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu vlResultMailMenu"><a href="/mail/vlResultMail.php"><i class="fa fa-circle-o"></i> E-mail Test Result</a></li>
@@ -500,7 +500,7 @@ $formConfigResult = $db->query($formConfigQuery);
 										<li class="allMenu vlResultMenu"><a href="/vl/program-management/vlResult.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("vlPrintResult.php", $_SESSION['privileges'])) { ?>
-										<li class="allMenu vlPrintResultMenu"><a href="/vl-print/vlPrintResult.php"><i class="fa fa-circle-o"></i> Print Result</a></li>
+										<li class="allMenu vlPrintResultMenu"><a href="/vl/results/vlPrintResult.php"><i class="fa fa-circle-o"></i> Print Result</a></li>
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("highViralLoad.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu vlHighMenu"><a href="/vl/program-management/highViralLoad.php"><i class="fa fa-circle-o"></i> Clinic Reports</a></li>

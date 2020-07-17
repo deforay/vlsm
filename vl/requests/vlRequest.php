@@ -544,7 +544,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 		if (stValue != '' && testIds != '') {
 			conf = confirm("Do you wish to change the test status ?");
 			if (conf) {
-				$.post("updateTestStatus.php", {
+				$.post("/vl/results/updateTestStatus.php", {
 						status: stValue,
 						id: testIds,
 						format: "html"

@@ -66,11 +66,11 @@ if ($lastUrl1 != '' || $lastUrl2 != '') {
                   <option value=""> -- Select -- </option>
                   <?php
                   foreach ($batResult as $code) {
-                    ?>
+                  ?>
                     <option value="<?php echo $code['batch_code']; ?>" <?php echo ($batchCode == $code['batch_code']) ? "selected='selected'" : "" ?>><?php echo $code['batch_code']; ?></option>
                   <?php
-                }
-                ?>
+                  }
+                  ?>
                 </select>
               </td>
 
@@ -81,11 +81,11 @@ if ($lastUrl1 != '' || $lastUrl2 != '') {
                   <option value=""> -- Select -- </option>
                   <?php
                   foreach ($fResult as $name) {
-                    ?>
+                  ?>
                     <option value="<?php echo $name['facility_id']; ?>" <?php echo (in_array($name['facility_id'], $facilityName)) ? "selected='selected'" : "" ?>><?php echo ucwords($name['facility_name'] . "-" . $name['facility_code']); ?></option>
                   <?php
-                }
-                ?>
+                  }
+                  ?>
                 </select>
               </td>
 
@@ -222,10 +222,10 @@ if ($lastUrl1 != '' || $lastUrl2 != '') {
       });
     <?php
     if (!isset($_COOKIE['collectionDate']) || $_COOKIE['collectionDate'] == '') {
-      ?>
+    ?>
       $('#sampleCollectionDate').val("");
     <?php
-  } else if (($lastUrl1 != '' || $lastUrl2 != '') && isset($_COOKIE['collectionDate'])) { ?>
+    } else if (($lastUrl1 != '' || $lastUrl2 != '') && isset($_COOKIE['collectionDate'])) { ?>
       $('#sampleCollectionDate').val("<?php echo $_COOKIE['collectionDate']; ?>");
     <?php } ?>
 
@@ -272,21 +272,44 @@ if ($lastUrl1 != '' || $lastUrl2 != '') {
       //"bStateSave" : true,
       "iDisplayLength": 100,
       "bRetrieve": true,
-      "aoColumns": [
-        {"sClass": "center"},
-        <?php if ($sarr['user_type'] != 'standalone') { ?> 
-          {"sClass": "center"},
-        <?php } ?> 
-        {"sClass": "center"},
-        {"sClass": "center"},
-        {"sClass": "center"},
-        {"sClass": "center"},
-        {"sClass": "center"},
-        {"sClass": "center"},
-        {"sClass": "center"},
-        {"sClass": "center"},
-        {"sClass": "center","bSortable": false},
-        {"sClass": "center","bSortable": false}
+      "aoColumns": [{
+          "sClass": "center"
+        },
+        <?php if ($sarr['user_type'] != 'standalone') { ?> {
+            "sClass": "center"
+          },
+        <?php } ?> {
+          "sClass": "center"
+        },
+        {
+          "sClass": "center"
+        },
+        {
+          "sClass": "center"
+        },
+        {
+          "sClass": "center"
+        },
+        {
+          "sClass": "center"
+        },
+        {
+          "sClass": "center"
+        },
+        {
+          "sClass": "center"
+        },
+        {
+          "sClass": "center"
+        },
+        {
+          "sClass": "center",
+          "bSortable": false
+        },
+        {
+          "sClass": "center",
+          "bSortable": false
+        }
       ],
       <?php if ($sarr['user_type'] != 'standalone') { ?> "aaSorting": [
           [8, "desc"]
@@ -386,7 +409,7 @@ if ($lastUrl1 != '' || $lastUrl2 != '') {
 
   function exportAllVlTestResult() {
     $.blockUI();
-    $.post("generateVlTestResultExcel.php", {},
+    $.post("/vl/results/generateVlTestResultExcel.php", {},
       function(data) {
         $.unblockUI();
         if (data === "" || data === null || data === undefined) {

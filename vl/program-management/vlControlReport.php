@@ -101,7 +101,7 @@ $sResult = $db->rawQuery($sQuery);
   function loadControlChart(){
 		if($("#sampleTestDate").val()!='' && $("#cType").val()!=''){
 			$.blockUI();
-			$.post("../program-management/getControlChart.php",{sampleTestDate:$("#sampleTestDate").val(),cType:$("#cType").val()},
+			$.post("/vl/program-management/getControlChart.php",{sampleTestDate:$("#sampleTestDate").val(),cType:$("#cType").val()},
 				function(data){
 					$("#chart").html(data);
 				});

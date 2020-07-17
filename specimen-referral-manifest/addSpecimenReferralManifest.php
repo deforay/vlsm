@@ -231,7 +231,7 @@ $packageNo = strtoupper($module) . date('ymd') .  $general->generateRandomString
   function getSampleCodeDetails() {
     $.blockUI();
 
-    $.post("getSpecimenReferralManifestSampleCodeDetails.php", {
+    $.post("/specimen-referral-manifest/getSpecimenReferralManifestSampleCodeDetails.php", {
         module: $("#module").val()
       },
       function(data) {

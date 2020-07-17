@@ -591,7 +591,7 @@ if($urgency==''){ $urgency= 'normal';}
       }
     if(pName!=''){
       if(provinceName){
-      $.post("../includes/getFacilityForClinic.php", { pName : pName},
+      $.post("/includes/getFacilityForClinic.php", { pName : pName},
       function(data){
 	  if(data != ""){
             details = data.split("###");
@@ -640,7 +640,7 @@ if($urgency==''){ $urgency= 'normal';}
     var dName = $("#district").val();
     var cName = $("#clinicName").val();
     if(dName!=''){
-      $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
+      $.post("/includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
       function(data){
 	  if(data != ""){
             $("#clinicName").html(data);
@@ -659,7 +659,7 @@ if($urgency==''){ $urgency= 'normal';}
         provinceName = false;
       }
     if(cName!='' && facilityName){
-      $.post("../includes/getFacilityForClinic.php", { cName : cName},
+      $.post("/includes/getFacilityForClinic.php", { cName : cName},
       function(data){
 	  if(data != ""){
             details = data.split("###");

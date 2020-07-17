@@ -821,7 +821,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
                provinceName = false;
           }
           if (cName != '' && facilityName) {
-               $.post("../includes/getFacilityForClinic.php", {
+               $.post("/includes/getFacilityForClinic.php", {
                          cName: cName
                     },
                     function(data) {

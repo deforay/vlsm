@@ -356,7 +356,7 @@ try {
         $_SESSION['alertMsg'] = "Please try again later";
     }
     if (isset($_POST['rSrc']) && trim($_POST['rSrc']) == "er") {
-        header("location:../vl-print/vlTestResult.php");
+        header("location:/vl/results/vlTestResult.php");
     } else {
         header("location:vlRequest.php");
     }
