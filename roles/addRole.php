@@ -56,7 +56,7 @@ $rInfo=$db->query($resourcesQuery);
                           <select class="form-control " name='landingPage' id='landingPage' title="Please select landing page">
                             <option value=""> -- Select -- </option>
                             <option value="dashboard/index.php">Dashboard</option>
-                            <option value="vl-request/addVlRequest.php">Add New Request</option>
+                            <option value="/vl/requests/addVlRequest.php">Add New Request</option>
                             <option value="import-result/addImportResult.php">Add Import Result</option>
                           </select>
                         </div>
@@ -166,7 +166,7 @@ $rInfo=$db->query($resourcesQuery);
         //str=obj.value;
         removeDots = removeDots.replace(/\s{2,}/g,' ');
 
-        $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
+        $.post("/includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
         function(data){
             if(data==='1'){
                 alert(alrt);

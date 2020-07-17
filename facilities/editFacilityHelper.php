@@ -4,7 +4,7 @@ session_start();
 require_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 include_once(APPLICATION_PATH.'/models/General.php');
 $general = new General($db);
-include('../includes/ImageResize.php');
+include('/includes/ImageResize.php');
 $tableName="facility_details";
 $facilityId=base64_decode($_POST['facilityId']);
 $tableName1="province_details";

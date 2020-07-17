@@ -72,7 +72,7 @@ if ($priInfo) {
                     <select class="form-control " name='landingPage' id='landingPage' title="Please select landing page">
                       <option value=""> -- Select -- </option>
                       <option value="dashboard/index.php" <?php echo ($roleInfo[0]['landing_page'] == 'dashboard/index.php') ? "selected='selected'" : "" ?>>Dashboard</option>
-                      <option value="vl-request/addVlRequest.php" <?php echo ($roleInfo[0]['landing_page'] == 'vl-request/addVlRequest.php') ? "selected='selected'" : "" ?>>Add New Request</option>
+                      <option value="/vl/requests/addVlRequest.php" <?php echo ($roleInfo[0]['landing_page'] == '/vl/requests/addVlRequest.php') ? "selected='selected'" : "" ?>>Add New Request</option>
                       <option value="import-result/addImportResult.php" <?php echo ($roleInfo[0]['landing_page'] == 'import-result/addImportResult.php') ? "selected='selected'" : "" ?>>Add Import Result</option>
                     </select>
                   </div>
@@ -180,7 +180,7 @@ if ($priInfo) {
     //str=obj.value;
     removeDots = removeDots.replace(/\s{2,}/g, ' ');
 
-    $.post("../includes/checkDuplicate.php", {
+    $.post("/includes/checkDuplicate.php", {
         tableName: tableName,
         fieldName: fieldName,
         value: removeDots.trim(),

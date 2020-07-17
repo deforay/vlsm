@@ -238,7 +238,7 @@ foreach ($rResult as $aRow) {
 			</select><br><br>';
     //}
     //sample to control & control to sample
-    if (count($scResult) > 0 && $inResult[0]['number_of_in_house_controls'] > 0 && $tsrResult[0]['count'] > 0 && $tsrResult[0]['count'] > $refno) {
+    if (!empty($scResult) && !empty($inResult) && !empty($inResult[0]) && count($scResult) > 0 && $inResult[0]['number_of_in_house_controls'] > 0 && $tsrResult[0]['count'] > 0 && $tsrResult[0]['count'] > $refno) {
         $controlName = '<select class="form-control" style="" name="controlName[]" id="controlName' . $aRow['temp_sample_id'] . '" title="Please select control" onchange="sampleToControl(this,' . $controlCode . ',' . $aRow['temp_sample_id'] . ')"><option value="">-- Select --</option>';
     } else {
         if ($aRow['sample_type'] == 'S' || $aRow['sample_type'] == 's') {

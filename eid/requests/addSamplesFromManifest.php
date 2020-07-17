@@ -93,22 +93,22 @@ $batResult = $db->rawQuery($batQuery);
 	</section>
 	<!-- /.content -->
 </div>
-<script type="text/javascript" src="../assets/plugins/daterangepicker/moment.min.js"></script>
-<script type="text/javascript" src="../assets/plugins/daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="/assets/plugins/daterangepicker/moment.min.js"></script>
+<script type="text/javascript" src="/assets/plugins/daterangepicker/daterangepicker.js"></script>
 
 <?php
 if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off") {
 	if ($global['bar_code_printing'] == 'dymo-labelwriter-450') {
-		?>
-		<script src="../assets/js/DYMO.Label.Framework.js"></script>
-		<script src="../configs/dymo-format.js"></script>
-		<script src="../assets/js/dymo-print.js"></script>
+?>
+		<script src="/assets/js/DYMO.Label.Framework.js"></script>
+		<script src="/configs/dymo-format.js"></script>
+		<script src="/assets/js/dymo-print.js"></script>
 	<?php
-		} else if ($global['bar_code_printing'] == 'zebra-printer') {
-			?>
-		<script src="../assets/js/zebra-browserprint.js.js"></script>
-		<script src="../configs/zebra-format.js"></script>
-		<script src="../assets/js/zebra-print.js"></script>
+	} else if ($global['bar_code_printing'] == 'zebra-printer') {
+	?>
+		<script src="/assets/js/zebra-browserprint.js.js"></script>
+		<script src="/configs/zebra-format.js"></script>
+		<script src="/assets/js/zebra-print.js"></script>
 <?php
 	}
 }
@@ -119,9 +119,9 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 
 	function loadEIDRequestData() {
 		$.blockUI();
-		if(oTable){
+		if (oTable) {
 			$("#eidManifestDataTable").dataTable().fnDestroy();
-		}		
+		}
 		oTable = $('#eidManifestDataTable').dataTable({
 			"oLanguage": {
 				"sLengthMenu": "_MENU_ records per page"
@@ -139,7 +139,31 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 				<?php if ($sarr['user_type'] != 'standalone') { ?> {
 						"sClass": "center"
 					},
-				<?php } ?> {"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"}
+				<?php } ?> {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}
 			],
 			"aaSorting": [
 				[<?php echo ($sarr['user_type'] == 'remoteuser' || $sarr['user_type'] == 'vluser') ? 11 : 10 ?>, "desc"]

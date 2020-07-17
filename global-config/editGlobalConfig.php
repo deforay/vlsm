@@ -24,8 +24,8 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 	$mFieldArray = explode(',', $arr['r_mandatory_fields']);
 }
 ?>
-<link href="../assets/css/jasny-bootstrap.min.css" rel="stylesheet" />
-<link href="../assets/css/multi-select.css" rel="stylesheet" />
+<link href="/assets/css/jasny-bootstrap.min.css" rel="stylesheet" />
+<link href="/assets/css/multi-select.css" rel="stylesheet" />
 <style>
 	.select2-selection__choice {
 		color: #000000 !important;
@@ -730,9 +730,9 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 	</section>
 	<!-- /.content -->
 </div>
-<script type="text/javascript" src="../assets/js/jasny-bootstrap.js"></script>
-<script src="../assets/js/jquery.multi-select.js"></script>
-<script src="../assets/js/jquery.quicksearch.js"></script>
+<script type="text/javascript" src="/assets/js/jasny-bootstrap.js"></script>
+<script src="/assets/js/jquery.multi-select.js"></script>
+<script src="/assets/js/jquery.quicksearch.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.search').multiSelect({

@@ -4,7 +4,7 @@ require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 $sQuery="SELECT serial_no,vl_sample_id FROM vl_request_form where vlsm_country_id=".$global['vl_form'];
 $sResult = $db->rawQuery($sQuery);
 ?>
-<link href="../assets/css/multi-select.css" rel="stylesheet" />
+<link href="/assets/css/multi-select.css" rel="stylesheet" />
 <style>
         .select2-selection__choice{
           color:#000000 !important;

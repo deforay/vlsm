@@ -47,7 +47,7 @@ $province = "";
   }
 
 ?>
-<link href="../assets/css/multi-select.css" rel="stylesheet" />
+<link href="/assets/css/multi-select.css" rel="stylesheet" />
 <style>
   .select2-selection__choice{
     color:#000000 !important;
@@ -211,8 +211,8 @@ $province = "";
     </section>
     <!-- /.content -->
   </div>
-  <script src="../assets/js/jquery.multi-select.js"></script>
-  <script src="../assets/js/jquery.quicksearch.js"></script>
+  <script src="/assets/js/jquery.multi-select.js"></script>
+  <script src="/assets/js/jquery.quicksearch.js"></script>
   <script type="text/javascript">
   noOfSamples = 0;
   provinceName = true;
@@ -340,7 +340,7 @@ $province = "";
     }
     if($.trim(pName)!=''){
       if(provinceName){
-          $.post("../includes/getFacilityForClinic.php", { pName : pName},
+          $.post("/includes/getFacilityForClinic.php", { pName : pName},
           function(data){
               if(data!= ""){
                 details = data.split("###");
@@ -365,7 +365,7 @@ $province = "";
     var dName = $("#districtName").val();
     var cName = $("#facilityName").val();
     if(dName!=''){
-      $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
+      $.post("/includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
       function(data){
           if(data != ""){
             details = data.split("###");

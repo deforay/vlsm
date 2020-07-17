@@ -21,7 +21,8 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 
 $eidResults = $general->getEidResults();
 
-$labFieldDisabled = '';$rejectionReason='';
+$labFieldDisabled = '';
+$rejectionReason = '';
 $rKey = '';
 $sKey = '';
 $sFormat = '';
@@ -131,7 +132,7 @@ foreach ($fResult as $fDetails) {
                                                 <option value=""> -- Select -- </option>
                                                 <?php
                                                 foreach ($implementingPartnerList as $implementingPartner) {
-                                                    ?>
+                                                ?>
                                                     <option value="<?php echo ($implementingPartner['i_partner_id']); ?>"><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
                                                 <?php } ?>
                                             </select>
@@ -142,7 +143,7 @@ foreach ($fResult as $fDetails) {
                                                 <option value=""> -- Select -- </option>
                                                 <?php
                                                 foreach ($fundingSourceList as $fundingSource) {
-                                                    ?>
+                                                ?>
                                                     <option value="<?php echo ($fundingSource['funding_source_id']); ?>"><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
                                                 <?php } ?>
                                             </select>
@@ -162,11 +163,12 @@ foreach ($fResult as $fDetails) {
                                         <?php } ?>
                                     </tr>
                                 </table>
-                                <br><hr style="border: 1px solid #ccc;">
-                                
+                                <br>
+                                <hr style="border: 1px solid #ccc;">
+
                                 <div class="box-header with-border">
                                     <h3 class="box-title">CHILD and MOTHER INFORMATION</h3>
-                                </div>                                
+                                </div>
                                 <table class="table" style="width:100%">
 
                                     <tr>
@@ -196,7 +198,7 @@ foreach ($fResult as $fDetails) {
                                     </tr>
                                     <tr>
                                         <th>Infant Age (months)</th>
-                                        <td><input type="number" max="24" maxlength="2"  oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="childAge" name="childAge" placeholder="Age" title="Age" style="width:100%;" onchange="" /></td>
+                                        <td><input type="number" max="24" maxlength="2" oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="childAge" name="childAge" placeholder="Age" title="Age" style="width:100%;" onchange="" /></td>
                                         <th>Mother ART Number</th>
                                         <td><input type="text" class="form-control " id="motherId" name="motherId" placeholder="Mother ART Number" title="Mother ART Number" style="width:100%;" onchange="" /></td>
                                     </tr>
@@ -437,7 +439,7 @@ foreach ($fResult as $fDetails) {
     machineName = true;
 
     function getfacilityDetails(obj) {
-        
+
         $.blockUI();
         var cName = $("#facilityId").val();
         var pName = $("#province").val();
@@ -446,17 +448,17 @@ foreach ($fResult as $fDetails) {
         }
         if ($.trim(pName) != '') {
             //if (provinceName) {
-                $.post("/includes/getFacilityForClinic.php", {
-                        pName: pName
-                    },
-                    function(data) {
-                        if (data != "") {
-                            details = data.split("###");
-                            $("#facilityId").html(details[0]);
-                            $("#district").html(details[1]);
-                            //$("#clinicianName").val(details[2]);
-                        }
-                    });
+            $.post("/includes/getFacilityForClinic.php", {
+                    pName: pName
+                },
+                function(data) {
+                    if (data != "") {
+                        details = data.split("###");
+                        $("#facilityId").html(details[0]);
+                        $("#district").html(details[1]);
+                        //$("#clinicianName").val(details[2]);
+                    }
+                });
             //}
             sampleCodeGeneration();
         } else if (pName == '') {
@@ -548,11 +550,11 @@ foreach ($fResult as $fDetails) {
             <?php
             if ($arr['eid_sample_code'] == 'auto' || $arr['eid_sample_code'] == 'YY' || $arr['eid_sample_code'] == 'MMYY') {
             ?>
-                insertSampleCode('addEIDRequestForm', 'eidSampleId', 'sampleCode', 'sampleCodeKey', 'sampleCodeFormat', 3, 'sampleCollectionDate'); 
+                insertSampleCode('addEIDRequestForm', 'eidSampleId', 'sampleCode', 'sampleCodeKey', 'sampleCodeFormat', 3, 'sampleCollectionDate');
             <?php
             } else {
             ?>
-                document.getElementById('addEIDRequestForm').submit(); 
+                //document.getElementById('addEIDRequestForm').submit();
             <?php
             } ?>
         }

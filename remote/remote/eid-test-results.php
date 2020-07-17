@@ -83,7 +83,7 @@ if (count($data['result']) > 0) {
         // Checking if Remote Sample Code is set, if not set we will check if Sample Code is set
         if (isset($lab['remote_sample_code']) && $lab['remote_sample_code'] != '') {
             $sQuery = "SELECT eid_id,sample_code,remote_sample_code,remote_sample_code_key FROM eid_form WHERE remote_sample_code='" . $lab['remote_sample_code'] . "'";
-        } else if (isset($lab['sample_code']) && $lab['sample_code'] != '' && !empty($lab['facility_id'])) {
+        } else if (isset($lab['sample_code']) && !empty($lab['sample_code']) && !empty($lab['facility_id']) && !empty($lab['lab_id'])) {
             $sQuery = "SELECT eid_id,sample_code,remote_sample_code,remote_sample_code_key FROM eid_form WHERE sample_code='" . $lab['sample_code'] . "' AND facility_id = " . $lab['facility_id'];
         } else {
 

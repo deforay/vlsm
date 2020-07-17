@@ -4,7 +4,7 @@ session_start();
 require_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 include_once(APPLICATION_PATH.'/models/General.php');
 $general = new General($db);
-include('../includes/ImageResize.php');
+include('/includes/ImageResize.php');
 $tableName="facility_details";
 $tableName1="province_details";
 $tableName2="vl_user_facility_map";

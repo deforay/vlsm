@@ -185,7 +185,7 @@ include_once(APPLICATION_PATH . '/header.php');
 	}
 
 	function checkNameValidation(tableName, fieldName, obj, fnct, alrt, callback) {
-		$.post("../includes/checkDuplicate.php", {
+		$.post("/includes/checkDuplicate.php", {
 				tableName: tableName,
 				fieldName: fieldName,
 				value: obj.value.trim(),

@@ -5,9 +5,9 @@ defined('APPLICATION_ENV')
                                   'production'));
 
 if(APPLICATION_ENV == 'production'){
-	require_once('../includes/config.production.php');
+	require_once('/includes/config.production.php');
 }else{
-	require_once('../includes/config.development.php');
+	require_once('/includes/config.development.php');
 }
 
 define("BACKUP_PATH", "../db-backup");

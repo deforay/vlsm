@@ -217,8 +217,8 @@ try {
   if ($id > 0) {
     $_SESSION['alertMsg'] = "EID request updated successfully";
     //Add event log
-    $eventType = 'add-eid-request-drc';
-    $action = ucwords($_SESSION['userName']) . ' updated EID request data with the sample id ' . $_POST['eidSampleId'];
+    $eventType = 'eid-edit-request';
+    $action = ucwords($_SESSION['userName']) . ' updated EID request data with the Sample ID ' . $_POST['eidSampleId'];
     $resource = 'eid-request-drc';
 
     $general->activityLog($eventType, $action, $resource);

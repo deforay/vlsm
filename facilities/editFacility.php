@@ -29,7 +29,7 @@ $uResult = $db->rawQuery($uQuery);
 $selectedQuery="SELECT * FROM vl_user_facility_map as vlfm join user_details as ud ON ud.user_id=vlfm.user_id join facility_details as fd ON fd.facility_id=vlfm.facility_id where vlfm.facility_id = ".$id;
 $selectedResult = $db->rawQuery($selectedQuery);
 ?>
-<link href="../assets/css/jasny-bootstrap.min.css" rel="stylesheet" />
+<link href="/assets/css/jasny-bootstrap.min.css" rel="stylesheet" />
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -327,8 +327,8 @@ $selectedResult = $db->rawQuery($selectedQuery);
     </section>
     <!-- /.content -->
   </div>
-  <script type="text/javascript" src="../assets/js/multiselect.min.js"></script>
-  <script type="text/javascript" src="../assets/js/jasny-bootstrap.js"></script>
+  <script type="text/javascript" src="/assets/js/multiselect.min.js"></script>
+  <script type="text/javascript" src="/assets/js/jasny-bootstrap.js"></script>
 
   <script type="text/javascript">
     var selVal = []; 
@@ -369,7 +369,7 @@ $selectedResult = $db->rawQuery($selectedQuery);
         //str=obj.value;
         removeDots = removeDots.replace(/\s{2,}/g,' ');
 
-        $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
+        $.post("/includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
         function(data){
             if(data==='1'){
                 alert(alrt);

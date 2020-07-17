@@ -132,7 +132,7 @@ $hcResult = $db->rawQuery($hcQuery);
         //str=obj.value;
         removeDots = removeDots.replace(/\s{2,}/g,' ');
 
-        $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
+        $.post("/includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
         function(data){
             if(data==='1'){
                 alert(alrt);
