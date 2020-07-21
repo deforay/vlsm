@@ -67,8 +67,8 @@ foreach ($fResult as $fDetails) {
     <section class="content-header">
         <h1><i class="fa fa-edit"></i> COVID-19 VIRUS LABORATORY TEST DRC REQUEST FORM</h1>
         <ol class="breadcrumb">
-            <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">Add New Request</li>
+            <li><a href="/"><i class="fa fa-dashboard"></i> Accueil</a></li>
+            <li class="active">Ajouter une nouvelle demande</li>
         </ol>
     </section>
     <!-- Main content -->
@@ -103,7 +103,7 @@ foreach ($fResult as $fDetails) {
                                         <?php } else { ?>
                                             <td><label for="sampleCode">N°EPID </label><span class="mandatory">*</span></td>
                                             <td>
-                                                <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" readonly="readonly" placeholder="Sample ID" title="Please enter sample id" style="width:100%;" onchange="checkSampleNameValidation('form_covid19','<?php echo $sampleCode; ?>',this.id,null,'The sample id that you entered already exists. Please try another sample id',null)" />
+                                                <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" readonly="readonly" placeholder="N°EPID" title="N°EPID" style="width:100%;" onchange="checkSampleNameValidation('form_covid19','<?php echo $sampleCode; ?>',this.id,null,'The sample id that you entered already exists. Please try another sample id',null)" />
                                             </td>
                                         <?php } ?>
                                         <td></td>
@@ -114,19 +114,19 @@ foreach ($fResult as $fDetails) {
                                     <tr>
                                         <td><label for="province">Province </label><span class="mandatory">*</span></td>
                                         <td>
-                                            <select class="form-control isRequired" name="province" id="province" title="Please choose province" onchange="getfacilityDetails(this);" style="width:100%;">
+                                            <select class="form-control isRequired" name="province" id="province" title="Province" onchange="getfacilityDetails(this);" style="width:100%;">
                                                 <?php echo $province; ?>
                                             </select>
                                         </td>
                                         <td><label for="district">Zone de Santé </label><span class="mandatory">*</span></td>
                                         <td>
-                                            <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getfacilityDistrictwise(this);">
+                                            <select class="form-control isRequired" name="district" id="district" title="Zone de Santé" style="width:100%;" onchange="getfacilityDistrictwise(this);">
                                                 <option value=""> -- Select -- </option>
                                             </select>
                                         </td>
-                                        <td><label for="facilityId">Nom de Structure </label><span class="mandatory">*</span></td>
+                                        <td><label for="facilityId">Nom de l'installation </label><span class="mandatory">*</span></td>
                                         <td>
-                                            <select class="form-control isRequired " name="facilityId" id="facilityId" title="Please choose service provider" style="width:100%;" onchange="getfacilityProvinceDetails(this);">
+                                            <select class="form-control isRequired " name="facilityId" id="facilityId" title="Nom de Structure" style="width:100%;" onchange="getfacilityProvinceDetails(this);">
                                                 <?php echo $facility; ?>
                                             </select>
                                         </td>
@@ -136,7 +136,7 @@ foreach ($fResult as $fDetails) {
                                             <!-- <tr> -->
                                             <td><label for="labId">LAB ID <span class="mandatory">*</span></label> </td>
                                             <td>
-                                                <select name="labId" id="labId" class="form-control isRequired" title="Lab Name" style="width:100%;">
+                                                <select name="labId" id="labId" class="form-control isRequired" title="LAB ID" style="width:100%;">
                                                     <option value=""> -- Select -- </option>
                                                     <?php foreach ($lResult as $labName) { ?>
                                                         <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
@@ -157,26 +157,26 @@ foreach ($fResult as $fDetails) {
                                     <tr>
                                         <th style="width:15% !important"><label for="firstName">Prénom <span class="mandatory">*</span> </label></th>
                                         <td style="width:35% !important">
-                                            <input type="text" class="form-control isRequired" id="firstName" name="firstName" placeholder="First Name" title="Please enter patient first name" style="width:100%;" onchange="" />
+                                            <input type="text" class="form-control isRequired" id="firstName" name="firstName" placeholder="Prénom" title="Prénom" style="width:100%;" onchange="" />
                                         </td>
                                         <th style="width:15% !important"><label for="lastName">Nom de famille </label></th>
                                         <td style="width:35% !important">
-                                            <input type="text" class="form-control " id="lastName" name="lastName" placeholder="Last name" title="Please enter patient last name" style="width:100%;" onchange="" />
+                                            <input type="text" class="form-control " id="lastName" name="lastName" placeholder="Nom de famille" title="Nom de famille" style="width:100%;" onchange="" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <th style="width:15% !important"><label for="patientId">Code Patient <span class="mandatory">*</span> </label></th>
                                         <td style="width:35% !important">
-                                            <input type="text" class="form-control isRequired" id="patientId" name="patientId" placeholder="Patient Identification" title="Please enter Patient ID" style="width:100%;" onchange="" />
+                                            <input type="text" class="form-control isRequired" id="patientId" name="patientId" placeholder="Code Patient" title="Code Patient" style="width:100%;" onchange="" />
                                         </td>
                                         <th><label for="patientDob">Date de naissance <span class="mandatory">*</span> </label></th>
                                         <td>
-                                            <input type="text" class="form-control isRequired" id="patientDob" name="patientDob" placeholder="Date of Birth" title="Please enter Date of birth" style="width:100%;" onchange="calculateAgeInYears();" />
+                                            <input type="text" class="form-control isRequired" id="patientDob" name="patientDob" placeholder="Date de naissance" title="Date de naissance" style="width:100%;" onchange="calculateAgeInYears();" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>Age (years)</th>
-                                        <td><input type="number" max="150" maxlength="3" oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="patientAge" name="patientAge" placeholder="Patient Age (in years)" title="Patient Age" style="width:100%;" onchange="" /></td>
+                                        <td><input type="number" max="150" maxlength="3" oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="patientAge" name="patientAge" placeholder="Age (years)" title="Age (years)" style="width:100%;" onchange="" /></td>
                                         <th><label for="patientGender">Sexe <span class="mandatory">*</span> </label></th>
                                         <td>
                                             <select class="form-control isRequired" name="patientGender" id="patientGender">
@@ -190,23 +190,23 @@ foreach ($fResult as $fDetails) {
                                     </tr>
                                     <tr>
                                         <th>Numéro de téléphone</th>
-                                        <td><input type="text" class="form-control " id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Patient Phone Number" title="Patient Phone Number" style="width:100%;" onchange="" /></td>
+                                        <td><input type="text" class="form-control " id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Numéro de téléphone" title="Numéro de téléphone" style="width:100%;" onchange="" /></td>
 
                                         <th>Adresse du patient</th>
-                                        <td><textarea class="form-control " id="patientAddress" name="patientAddress" placeholder="Patient Address" title="Patient Address" style="width:100%;" onchange=""></textarea></td>
+                                        <td><textarea class="form-control " id="patientAddress" name="patientAddress" placeholder="Adresse du patient" title="Adresse du patient" style="width:100%;" onchange=""></textarea></td>
                                     </tr>
                                                                         
                                     <tr>
                                         <th>Province du patient</th>
-                                        <td><input type="text" class="form-control " id="patientProvince" name="patientProvince" placeholder="Patient Province" title="Please enter the patient province" style="width:100%;" /></td>
+                                        <td><input type="text" class="form-control " id="patientProvince" name="patientProvince" placeholder="Province du patient" title="Province du patient" style="width:100%;" /></td>
 
                                         <th>District des patients</th>
-                                        <td><input class="form-control" id="patientDistrict" name="patientDistrict" placeholder="Patient District" title="Please enter the patient district" style="width:100%;"></td>
+                                        <td><input class="form-control" id="patientDistrict" name="patientDistrict" placeholder="District des patients" title="District des patients" style="width:100%;"></td>
                                     </tr>
 
                                     <tr>
                                         <th>Pays de résidence</th>
-                                        <td><input type="text" class="form-control" id="patientNationality" name="patientNationality" placeholder="Country of Residence" title="Please enter transit" style="width:100%;" /></td>
+                                        <td><input type="text" class="form-control" id="patientNationality" name="patientNationality" placeholder="Pays de résidence" title="Pays de résidence" style="width:100%;" /></td>
 
                                         <th></th>
                                         <td></td>
@@ -216,23 +216,23 @@ foreach ($fResult as $fDetails) {
                                     </tr>
                                     <tr>
                                         <th>Compagnie aérienne</th>
-                                        <td><input type="text" class="form-control " id="airline" name="airline" placeholder="Airline" title="Please enter the airline" style="width:100%;" /></td>
+                                        <td><input type="text" class="form-control " id="airline" name="airline" placeholder="Compagnie aérienne" title="Compagnie aérienne" style="width:100%;" /></td>
 
                                         <th>Numéro de siège</th>
-                                        <td><input type="text" class="form-control " id="seatNo" name="seatNo" placeholder="Seat Number" title="Please enter the seat number" style="width:100%;" /></td>
+                                        <td><input type="text" class="form-control " id="seatNo" name="seatNo" placeholder="Numéro de siège" title="Numéro de siège" style="width:100%;" /></td>
                                     </tr>                                    
                                     <tr>
                                         <th>Date et heure d'arrivée</th>
-                                        <td><input type="text" class="form-control dateTime" id="arrivalDateTime" name="arrivalDateTime" placeholder="Arrival Date and Time" title="Please enter the arrival date and time" style="width:100%;" /></td>
+                                        <td><input type="text" class="form-control dateTime" id="arrivalDateTime" name="arrivalDateTime" placeholder="Date et heure d'arrivée" title="Date et heure d'arrivée" style="width:100%;" /></td>
 
                                         <th>Aeroport DE DEPART</th>
-                                        <td><input type="text" class="form-control " id="airportOfDeparture" name="airportOfDeparture" placeholder="Airport of Departure" title="Please enter the airport of departure" style="width:100%;" /></td>
+                                        <td><input type="text" class="form-control " id="airportOfDeparture" name="airportOfDeparture" placeholder="Aeroport DE DEPART" title="Aeroport DE DEPART" style="width:100%;" /></td>
                                     </tr>
                                     <tr>
                                         <th>Transit</th>
-                                        <td><input type="text" class="form-control" id="transit" name="transit" placeholder="Transit" title="Please enter transit" style="width:100%;" /></td>
+                                        <td><input type="text" class="form-control" id="transit" name="transit" placeholder="Transit" title="Transit" style="width:100%;" /></td>
                                         <th>Raison de la visite (le cas échéant)</th>
-                                        <td><input type="text" class="form-control" id="reasonOfVisit" name="reasonOfVisit" placeholder="Reason of Visit" title="Please enter reason of visit" style="width:100%;" /></td>
+                                        <td><input type="text" class="form-control" id="reasonOfVisit" name="reasonOfVisit" placeholder="Raison de la visite (le cas échéant)" title="Raison de la visite (le cas échéant)" style="width:100%;" /></td>
 
                                     </tr> 
                                 </table>
@@ -246,7 +246,7 @@ foreach ($fResult as $fDetails) {
                                     <tr>
                                         <th style="width:10% !important;"><label for="suspectedCase">Cas suspect </label></th>
                                         <td style="width:50% !important;">
-                                            <select class="form-control" id="suspectedCase" name="suspectedCase">
+                                            <select class="form-control" id="suspectedCase" name="suspectedCase" title="Cas suspect de covdid 19">
                                                 <option value="">--Select--</option>
                                                 <option value="Fièvre d'accès brutal (Inferieur ou égale à 38°C, vérifié à la salle d'urgence, la consultation externe, ou l'hôpital) ET (cochez une ou deux des cases suivantes)">Fièvre d'accès brutal (Inferieur ou égale à 38°C, vérifié à la salle d'urgence, la consultation externe, ou l'hôpital) ET (cochez une ou deux des cases suivantes)</option>
                                                 <option value="Toux">Toux</option>
@@ -261,7 +261,7 @@ foreach ($fResult as $fDetails) {
                                     <tr>
                                         <th style="width:10% !important;"><label for="probableCase">Cas probable </label></th>
                                         <td style="width:50% !important;">
-                                            <select class="form-control" id="probableCase" name="probableCase">
+                                            <select class="form-control" id="probableCase" name="probableCase" title="Cas probable de covid 19">
                                                 <option value="">--Select--</option>
                                                 <option value="Tout cas suspects dont le résultat de laboratoire pour le diagnostic de COVID-19 n'est pas concluant (indéterminé)">Tout cas suspects dont le résultat de laboratoire pour le diagnostic de COVID-19 n'est pas concluant (indéterminé)</option>
                                                 <option value="Tout décès dans un tableau d'IRA pour lequel il n'a pas été possible d'obtenir des échantillons biologiques pour confirmation au">Tout décès dans un tableau d'IRA pour lequel il n'a pas été possible d'obtenir des échantillons biologiques pour confirmation au</option>
@@ -273,7 +273,7 @@ foreach ($fResult as $fDetails) {
                                     <tr>
                                         <th style="width:10% !important;"><label for="confirmeCase">Cas confirme </label></th>
                                         <td style="width:50% !important;">
-                                            <select class="form-control" id="confirmeCase" name="confirmeCase">
+                                            <select class="form-control" id="confirmeCase" name="confirmeCase" title="Cas confirme de covid 19">
                                                 <option value="">--Select--</option>
                                                 <option value="Toute personne avec une confirmation en laboratoire de l'infection au COVID-19, quelles que soient les signes et symptômes cliniques">Toute personne avec une confirmation en laboratoire de l'infection au COVID-19, quelles que soient les signes et symptômes cliniques</option>
                                             </select>
@@ -282,7 +282,7 @@ foreach ($fResult as $fDetails) {
                                     <tr>
                                         <th style="width:10% !important;"><label for="contactCase">Non cas contact </label></th>
                                         <td style="width:50% !important;">
-                                            <select class="form-control" id="contactCase" name="contactCase">
+                                            <select class="form-control" id="contactCase" name="contactCase" title="Non cas contact">
                                                 <option value="">--Select--</option>
                                                 <option value="Tout cas suspects avec deux résultats de laboratoire négatifs au COVID-19 a au moins 48 heures d'intervalle">Tout cas suspects avec deux résultats de laboratoire négatifs au COVID-19 a au moins 48 heures d'intervalle</option>
                                             </select>
@@ -299,7 +299,7 @@ foreach ($fResult as $fDetails) {
                                     <tr>
                                         <th style="width: 15% !important;"><label for="respiratoryRateSelect">Fréquence respiratoire </label></th>
                                         <td style="width:35% !important;">
-                                            <select class="form-control" id="respiratoryRateSelect" name="respiratoryRateSelect">
+                                            <select class="form-control" id="respiratoryRateSelect" name="respiratoryRateSelect" title="Fréquence respiratoire">
                                                 <option value="">--Select--</option>
                                                 <option value="yes">Oui</option>
                                                 <option value="unknown">Inconnu</option>
@@ -310,7 +310,7 @@ foreach ($fResult as $fDetails) {
                                         </td>
                                         <th style="width: 15% !important;"><label for="oxygenSaturationSelect">Saturation en oxygène </label></th>
                                         <td style="width:35% !important;">
-                                            <select class="form-control" id="oxygenSaturationSelect" name="oxygenSaturationSelect">
+                                            <select class="form-control" id="oxygenSaturationSelect" name="oxygenSaturationSelect" title="Saturation en oxygène">
                                                 <option value="">--Select--</option>
                                                 <option value="yes">Oui</option>
                                                 <option value="unknown">Inconnu</option>
@@ -323,7 +323,7 @@ foreach ($fResult as $fDetails) {
                                     <tr>
                                         <th style="width: 15%;"><label for="specimenType"> Type(s) d' échantillon(s) dans le tube (cochez au moins une des cases suivants) <span class="mandatory">*</span></label></th>
                                         <td style="width: 35%;">
-                                            <select class="form-control isRequired" id="specimenType" name="specimenType">
+                                            <select class="form-control isRequired" id="specimenType" name="specimenType" title="Type(s) d' échantillon(s) dans le tube">
                                                 <option value="">--Select--</option>
                                                 <option value="oropharyngeal">Oropharyngée</option>
                                                 <option value="nasal-both">Nasale / Les Deux</option>
@@ -333,9 +333,9 @@ foreach ($fResult as $fDetails) {
                                                 <option value="serum">Sérum</option>
                                             </select>
                                         </td>
-                                        <th style="width:15% !important"><label for="specimenType">Sample Collection Date <span class="mandatory">*</span></label></th>
+                                        <th style="width:15% !important"><label for="specimenType">Date de prélèvement de l'échantillon <span class="mandatory">*</span></label></th>
                                         <td style="width:35% !important;">
-                                            <input class="form-control isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" onchange="sampleCodeGeneration();" />
+                                            <input class="form-control isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Date de prélèvement de l'échantillon" title="Date de prélèvement de l'échantillon" onchange="sampleCodeGeneration();" />
                                         </td>
                                     </tr>
                                 </table>
@@ -349,7 +349,7 @@ foreach ($fResult as $fDetails) {
                                     <tr>
                                         <th style="width: 15% !important;"><label for="sickDays">Depuis combien de jours êtes-vous malade? </label></th>
                                         <td style="width:35% !important;">
-                                                <input type="text" placeholder="Depuis combien de jours êtes-vous malade" class="form-control" name="sickDays" id="sickDays">
+                                                <input type="text" placeholder="Depuis combien de jours êtes-vous malade" class="form-control" title="Depuis combien de jours êtes-vous malade?" name="sickDays" id="sickDays">
                                         </td>
                                         <th style="width: 15% !important;"><label for="onsetIllnessDate">Date de début de la maladie </label></th>
                                         <td style="width:35% !important;">
@@ -362,7 +362,7 @@ foreach ($fResult as $fDetails) {
                                     <tr>
                                         <th style="width: 15% !important;"><label for="medicalBackground">Antécédents Médicaux </label></th>
                                         <td style="width:35% !important;">
-                                            <select class="form-control" id="medicalBackground" name="medicalBackground">
+                                            <select class="form-control" id="medicalBackground" name="medicalBackground" title="Antécédents Médicaux">
                                                 <option value="">--Select--</option>
                                                 <option value="yes">Oui</option>
                                                 <option value="no">Non</option>
@@ -373,7 +373,7 @@ foreach ($fResult as $fDetails) {
                                     <tr class="medical-background-yes" style="display: none;">
                                         <th style="width: 15% !important;"><label for="heartDiseaseMbg">Maladie cardiaque (Cardiopathie) </label></th>
                                         <td style="width:35% !important;">
-                                            <select class="form-control" id="heartDiseaseMbg" name="medicalBg['heartDiseaseMbg']">
+                                            <select class="form-control" id="heartDiseaseMbg" name="medicalBg['heartDiseaseMbg']" title="Maladie cardiaque">
                                                 <option value="">--Select--</option>
                                                 <option value="yes">Oui</option>
                                                 <option value="no">Non</option>
@@ -382,7 +382,7 @@ foreach ($fResult as $fDetails) {
                                         </td>
                                         <th style="width: 15% !important;"><label for="dyspneaChronicRespiratoryMbg">Difficulté /Dyspnée Respiratoire chronique </label></th>
                                         <td style="width:35% !important;">
-                                            <select class="form-control" id="dyspneaChronicRespiratoryMbg" name="medicalBg['dyspneaChronicRespiratoryMbg']">
+                                            <select class="form-control" id="dyspneaChronicRespiratoryMbg" name="medicalBg['dyspneaChronicRespiratoryMbg']" title="Difficulté /Dyspnée Respiratoire chronique">
                                                 <option value="">--Select--</option>
                                                 <option value="yes">Oui</option>
                                                 <option value="no">Non</option>
@@ -394,7 +394,7 @@ foreach ($fResult as $fDetails) {
                                     <tr class="medical-background-yes" style="display: none;">
                                         <th style="width: 15% !important;"><label for="recurrentChestPainMbg">Douleur récurrentes du thorax </label></th>
                                         <td style="width:35% !important;">
-                                            <select class="form-control" id="recurrentChestPainMbg" name="medicalBg['recurrentChestPainMbg']">
+                                            <select class="form-control" id="recurrentChestPainMbg" name="medicalBg['recurrentChestPainMbg']" title="Douleur récurrentes du thorax">
                                                 <option value="">--Select--</option>
                                                 <option value="yes">Oui</option>
                                                 <option value="no">Non</option>
@@ -403,7 +403,7 @@ foreach ($fResult as $fDetails) {
                                         </td>
                                         <th style="width: 15% !important;"><label for="asthmaMbg">Asthme Asthma </label></th>
                                         <td style="width:35% !important;">
-                                            <select class="form-control" id="asthmaMbg" name="medicalBg['asthmaMbg']">
+                                            <select class="form-control" id="asthmaMbg" name="medicalBg['asthmaMbg']" title="Asthme Asthma">
                                                 <option value="">--Select--</option>
                                                 <option value="yes">Oui</option>
                                                 <option value="no">Non</option>
@@ -415,7 +415,7 @@ foreach ($fResult as $fDetails) {
                                     <tr class="medical-background-yes" style="display: none;">
                                         <th style="width: 15% !important;"><label for="cancerMbg">Cancer</label></th>
                                         <td style="width:35% !important;">
-                                            <select class="form-control" id="cancerMbg" name="medicalBg['cancerMbg']">
+                                            <select class="form-control" id="cancerMbg" name="medicalBg['cancerMbg']" title="Cancer">
                                                 <option value="">--Select--</option>
                                                 <option value="yes">Oui</option>
                                                 <option value="no">Non</option>
@@ -424,7 +424,7 @@ foreach ($fResult as $fDetails) {
                                         </td>
                                         <th style="width: 15% !important;"><label for="chronicCoughMbg">Toux Chronique (inférieur ou égal à 3 mois sur 2 années consécutives) </label></th>
                                         <td style="width:35% !important;">
-                                            <select class="form-control" id="chronicCoughMbg" name="medicalBg['chronicCoughMbg']">
+                                            <select class="form-control" id="chronicCoughMbg" name="medicalBg['chronicCoughMbg']" title="Toux Chronique">
                                                 <option value="">--Select--</option>
                                                 <option value="yes">Oui</option>
                                                 <option value="no">Non</option>
@@ -436,7 +436,7 @@ foreach ($fResult as $fDetails) {
                                     <tr class="medical-background-yes" style="display: none;">
                                         <th style="width: 15% !important;"><label for="activeTuberculosisMbg">Tuberculose active</label></th>
                                         <td style="width:35% !important;">
-                                            <select class="form-control" id="activeTuberculosisMbg" name="medicalBg['activeTuberculosisMbg']">
+                                            <select class="form-control" id="activeTuberculosisMbg" name="medicalBg['activeTuberculosisMbg']" title="Tuberculose active">
                                                 <option value="">--Select--</option>
                                                 <option value="yes">Oui</option>
                                                 <option value="no">Non</option>
@@ -445,7 +445,7 @@ foreach ($fResult as $fDetails) {
                                         </td>
                                         <th style="width: 15% !important;"><label for="ancientTuberculosisMbg">Tuberculose ancienne </label></th>
                                         <td style="width:35% !important;">
-                                            <select class="form-control" id="ancientTuberculosisMbg" name="medicalBg['ancientTuberculosisMbg']">
+                                            <select class="form-control" id="ancientTuberculosisMbg" name="medicalBg['ancientTuberculosisMbg']" title="Tuberculose ancienne">
                                                 <option value="">--Select--</option>
                                                 <option value="yes">Oui</option>
                                                 <option value="no">Non</option>
@@ -457,7 +457,7 @@ foreach ($fResult as $fDetails) {
                                     <tr class="medical-background-yes" style="display: none;">
                                         <th style="width: 15% !important;"><label for="hospitalizedMbg">Avez-vous été hospitalisé durant les 12 derniers mois? Have you been hospitalized in the past 12 months?</label></th>
                                         <td style="width:35% !important;">
-                                            <select class="form-control" id="hospitalizedMbg" name="medicalBg['hospitalizedMbg']">
+                                            <select class="form-control" id="hospitalizedMbg" name="medicalBg['hospitalizedMbg']" title="Avez-vous été hospitalisé durant les 12 derniers mois? Have you been hospitalized in the past 12 months?">
                                                 <option value="">--Select--</option>
                                                 <option value="yes">Oui</option>
                                                 <option value="no">Non</option>
@@ -466,7 +466,7 @@ foreach ($fResult as $fDetails) {
                                         </td>
                                         <th style="width: 15% !important;"><label for="liveChildrensMbg">Habitez-vous avec les enfants ? </label></th>
                                         <td style="width:35% !important;">
-                                            <select class="form-control" id="liveChildrensMbg" name="medicalBg['liveChildrensMbg']">
+                                            <select class="form-control" id="liveChildrensMbg" name="medicalBg['liveChildrensMbg']" title="Habitez-vous avec les enfants ?">
                                                 <option value="">--Select--</option>
                                                 <option value="yes">Oui</option>
                                                 <option value="no">Non</option>
@@ -478,7 +478,7 @@ foreach ($fResult as $fDetails) {
                                     <tr class="medical-background-yes" style="display: none;">
                                         <th style="width: 15% !important;"><label for="takeCraeOfChildrensMbg">Prenez-vous soins des enfants?</label></th>
                                         <td style="width:35% !important;">
-                                            <select class="form-control" id="takeCraeOfChildrensMbg" name="medicalBg['takeCraeOfChildrensMbg']">
+                                            <select class="form-control" id="takeCraeOfChildrensMbg" name="medicalBg['takeCraeOfChildrensMbg']" title="Prenez-vous soins des enfants?">
                                                 <option value="">--Select--</option>
                                                 <option value="yes">Oui</option>
                                                 <option value="no">Non</option>
@@ -487,7 +487,7 @@ foreach ($fResult as $fDetails) {
                                         </td>
                                         <th style="width: 15% !important;"><label for="past3WeeksMbg">Avez-vous eu des contacts étroits avec toute personne une maladie similaire a la vôtre durant ces 3 derniers semaines? </label></th>
                                         <td style="width:35% !important;">
-                                            <select class="form-control" id="past3WeeksMbg" name="medicalBg['past3WeeksMbg']">
+                                            <select class="form-control" id="past3WeeksMbg" name="medicalBg['past3WeeksMbg']" title="Avez-vous eu des contacts étroits avec toute personne une maladie similaire a la vôtre durant ces 3 derniers semaines?">
                                                 <option value="">--Select--</option>
                                                 <option value="yes">Oui</option>
                                                 <option value="no">Non</option>
@@ -506,7 +506,7 @@ foreach ($fResult as $fDetails) {
                                     <tr>
                                         <th style="width: 15% !important;"><label for="traveled14Days">Avez-vous voyagé au cours des 14 derniers jours ?  </label></th>
                                         <td style="width:35% !important;">
-                                            <select class="form-control" id="traveled14Days" name="traveled14Days">
+                                            <select class="form-control" id="traveled14Days" name="traveled14Days" title="Avez-vous voyagé au cours des 14 derniers jours ?">
                                                 <option value="">--Select--</option>
                                                 <option value="yes">Oui</option>
                                                 <option value="no">Non</option>
@@ -515,18 +515,18 @@ foreach ($fResult as $fDetails) {
                                         </td>                                        
                                         <th style="width: 15% !important;"><label for="inwhichCountries">Si oui, dans quels pays?</label></th>
                                         <td style="width:35% !important;">
-                                            <input type="text" class="form-control" id="inwhichCountries" name="inwhichCountries" placeholder="Si oui, dans quels pays ?" />
+                                            <input type="text" class="form-control" id="inwhichCountries" name="inwhichCountries" placeholder="Si oui, dans quels pays ?" title="Si oui, dans quels pays?"/>
                                         </td>
                                     </tr>
 
                                     <tr>
                                         <th style="width: 15% !important;"><label for="returnDate">Date de retour</label></th>
                                         <td style="width:35% !important;">
-                                            <input type="text" class="form-control date" id="returnDate" name="returnDate" placeholder="e.g 09-Jan-1992" />
+                                            <input type="text" class="form-control date" id="returnDate" name="returnDate" placeholder="e.g 09-Jan-1992" title="Date de retour"/>
                                         </td>
                                         <th style="width: 15% !important;"><label for="conacted14Days">Avez-vous été en contact avec un cas confirmé de COVID-19 au cours  de ces 14 derniers jours?</label></th>
                                         <td style="width:35% !important;">
-                                            <select class="form-control" id="conacted14Days" name="conacted14Days">
+                                            <select class="form-control" id="conacted14Days" name="conacted14Days" title="Avez-vous été en contact avec un cas confirmé de COVID-19 au cours  de ces 14 derniers jours?">
                                                 <option value="">--Select--</option>
                                                 <option value="yes">Oui</option>
                                                 <option value="no">Non</option>
@@ -540,7 +540,7 @@ foreach ($fResult as $fDetails) {
                                     <tr>
                                         <th style="width: 15% !important;"><label for="smoke">Fumez-vous?</label></th>
                                         <td style="width:35% !important;">
-                                            <select class="form-control" id="smoke" name="smoke">
+                                            <select class="form-control" id="smoke" name="smoke" title="Fumez-vous?">
                                                 <option value="">--Select--</option>
                                                 <option value="yes">Oui</option>
                                                 <option value="no">Non</option>
@@ -549,7 +549,7 @@ foreach ($fResult as $fDetails) {
                                         </td>
                                         <th style="width: 15% !important;"><label for="profession">Profession</label></th>
                                         <td style="width:35% !important;">
-                                            <select class="form-control" id="profession" name="profession">
+                                            <select class="form-control" id="profession" name="profession" title="Profession">
                                                 <option value="">--Select--</option>
                                                 <option value="faller">Abatteur</option>
                                                 <option value="laboratory-staff">Personnel de laboratoire</option>
@@ -570,7 +570,7 @@ foreach ($fResult as $fDetails) {
                                     <tr>
                                         <th style="width:15% !important"><label for="sampleCondtion">Condition de l'échantillon</label></th>
                                         <td style="width:35% !important;">
-                                            <select class="form-control" id="smoke" name="smoke">
+                                            <select class="form-control" id="smoke" name="smoke" title="Condition de l'échantillon">
                                                 <option value="">--Select--</option>
                                                 <option value="adequate">Adéquat</option>
                                                 <option value="not-adequate">Non Adéquat</option>
@@ -580,7 +580,7 @@ foreach ($fResult as $fDetails) {
                                         
                                         <th style="width:15% !important"><label for="confirmationLab">Méthode de confirmation en labo</label></th>
                                         <td style="width:35% !important;">
-                                            <select class="form-control" id="confirmationLab" name="confirmationLab">
+                                            <select class="form-control" id="confirmationLab" name="confirmationLab" title="Méthode de confirmation en labo">
                                                 <option value="">--Select--</option>
                                                 <option value="PCR/RT-PCR">PCR/RT-PCR</option>
                                                 <option value="RdRp-SARS CoV-2">RdRp-SARS CoV-2</option>
@@ -590,34 +590,34 @@ foreach ($fResult as $fDetails) {
                                     <tr>
                                         <th style="width: 15% !important;"><label for="resultPcr">Date de Result PCR</label></th>
                                         <td style="width:35% !important;">
-                                            <input type="text" class="form-control date" id="resultPcr" name="resultPcr" placeholder="e.g 09-Jan-1992" />
+                                            <input type="text" class="form-control date" id="resultPcr" name="resultPcr" placeholder="e.g 09-Jan-1992" title="Date de Result PCR"/>
                                         </td>
                                     </tr>
                                 </table>
                                 <div class="box-header with-border sectionHeader">
-                                    <h3 class="box-title">CLINICAL SIGNS AND SYMPTOMS</h3>
+                                    <h3 class="box-title">SIGNES ET SYMPTÔMES CLINIQUES</h3>
                                 </div>
                                 <table class="table">
                                     <tr>
-                                        <th style="width:15% !important">Date of Symptom Onset <span class="mandatory">*</span> </th>
+                                        <th style="width:15% !important">Date d'apparition des symptômes <span class="mandatory">*</span> </th>
                                         <td style="width:35% !important;">
-                                            <input class="form-control date isRequired" type="text" name="dateOfSymptomOnset" id="dateOfSymptomOnset" placeholder="Symptom Onset Date" />
+                                            <input class="form-control date isRequired" type="text" name="dateOfSymptomOnset" id="dateOfSymptomOnset" placeholder="Date d'apparition des symptômes" title="Date d'apparition des symptômes"/>
                                         </td>
-                                        <th style="width:15% !important">Date of Initial Consultation</th>
+                                        <th style="width:15% !important">Date de la consultation initiale</th>
                                         <td style="width:35% !important;">
-                                            <input class="form-control date" type="text" name="dateOfInitialConsultation" id="dateOfInitialConsultation" placeholder="Date of Initial Consultation" />
+                                            <input class="form-control date" type="text" name="dateOfInitialConsultation" id="dateOfInitialConsultation" placeholder="Date de la consultation initiale" title="Date de la consultation initiale" />
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th style="width:15% !important">Fever/Temperature (&deg;C) <span class="mandatory">*</span> </th>
+                                        <th style="width:15% !important">Fièvre / température (&deg;C) <span class="mandatory">*</span> </th>
                                         <td style="width:35% !important;">
-                                            <input class="form-control isRequired" type="number" name="feverTemp" id="feverTemp" placeholder="Fever/Temperature (in &deg;Celcius)" />
+                                            <input class="form-control isRequired" type="number" name="feverTemp" id="feverTemp" placeholder="Fièvre / température (en &deg;Celcius)" title="Fièvre / température (en &deg;Celcius)"/>
                                         </td>
                                         <th style="width:15% !important"></th>
                                         <td style="width:35% !important;"></td>
                                     </tr>
                                     <tr>
-                                        <th style="width:15% !important">Symptoms Presented in last 14 days <span class="mandatory">*</span> </th>
+                                        <th style="width:15% !important">Symptômes présentés au cours des 14 derniers jours <span class="mandatory">*</span> </th>
                                         <td colspan="3">
                                             <table style="width:60%;" class="table table-bordered">
                                                 <?php foreach ($covid19Symptoms as $symptomId => $symptomName) { ?>
@@ -625,11 +625,11 @@ foreach ($fResult as $fDetails) {
                                                         <th style="width:50%;"><?php echo $symptomName; ?></th>
                                                         <td>
                                                             <input name="symptomId[]" type="hidden" value="<?php echo $symptomId; ?>">
-                                                            <select name="symptomDetected[]" class="form-control isRequired" title="Please choose value for <?php echo $symptomName; ?>" style="width:100%">
+                                                            <select name="symptomDetected[]" class="form-control isRequired" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" style="width:100%">
                                                                 <option value="">-- Select --</option>
-                                                                <option value='yes'> Yes </option>
-                                                                <option value='no'> No </option>
-                                                                <option value='unknown'> Unknown </option>
+                                                                <option value='yes'> Oui </option>
+                                                                <option value='no'> Non </option>
+                                                                <option value='unknown'> Inconnu </option>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -640,13 +640,13 @@ foreach ($fResult as $fDetails) {
                                 </table>
 
                                 <div class="box-header with-border sectionHeader">
-                                    <h3 class="box-title">EPIDEMIOLOGICAL RISK FACTORS AND EXPOSURES</h3>
+                                    <h3 class="box-title">FACTEURS DE RISQUE ÉPIDÉMIOLOGIQUE ET EXPOSITIONS</h3>
                                 </div>
                                 <table class="table">
                                     <tr>
-                                        <th style="width:15% !important">Close contacts of the Patient <span class="mandatory">*</span></th>
+                                        <th style="width:15% !important">Contacts étroits du patient <span class="mandatory">*</span></th>
                                         <td colspan="3">
-                                            <textarea name="closeContacts" class="form-control" style="width:100%;min-height:100px;"></textarea>
+                                            <textarea name="closeContacts" class="form-control" style="width:100%;min-height:100px;" placeholder="Contacts étroits du patient" title="Contacts étroits du patient"></textarea>
                                             <span class="text-danger">
                                                 Add close contact names and phone numbers (household, family members, friends you have been in contact with in the last 14 days)
                                             </span>
@@ -654,9 +654,9 @@ foreach ($fResult as $fDetails) {
 
                                     </tr>
                                     <tr>
-                                        <th>Patient's Occupation</th>
+                                        <th>Occupation du patient</th>
                                         <td>
-                                            <input class="form-control" type="text" name="patientOccupation" id="patientOccupation" placeholder="Patient's Occupation" />
+                                            <input class="form-control" type="text" name="patientOccupation" id="patientOccupation" placeholder="Occupation du patient" title="Occupation du patient" />
                                         </td>
                                         <th></th>
                                         <td></td>
@@ -670,17 +670,17 @@ foreach ($fResult as $fDetails) {
                             <div class="box box-primary">
                                 <div class="box-body">
                                     <div class="box-header with-border">
-                                        <h3 class="box-title">Reserved for Laboratory Use </h3>
+                                        <h3 class="box-title">Réservé à une utilisation en laboratoire </h3>
                                     </div>
                                     <table class="table" style="width:100%">
                                         <tr>
-                                            <th><label for="">Sample Received Date </label></th>
+                                            <th><label for="">Date de réception de l'échantillon </label></th>
                                             <td>
-                                                <input type="text" class="form-control" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter sample receipt date" <?php echo (isset($labFieldDisabled) && trim($labFieldDisabled) != '') ? $labFieldDisabled : ''; ?> onchange="" style="width:100%;" />
+                                                <input type="text" class="form-control" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Veuillez saisir la date de réception de l'échantillon" <?php echo (isset($labFieldDisabled) && trim($labFieldDisabled) != '') ? $labFieldDisabled : ''; ?> onchange="" style="width:100%;" />
                                             </td>
-                                            <td class="lab-show"><label for="labId">Lab Name </label> </td>
+                                            <td class="lab-show"><label for="labId">Nom du laboratoire </label> </td>
                                             <td class="lab-show">
-                                                <select name="labId" id="labId" class="form-control" title="Lab Name" style="width:100%;">
+                                                <select name="labId" id="labId" class="form-control" title="Nom du laboratoire" style="width:100%;">
                                                     <option value=""> -- Select -- </option>
                                                     <?php foreach ($lResult as $labName) { ?>
                                                         <option value="<?php echo $labName['facility_id']; ?>" <?php echo ($covid19Info['lab_id'] == $labName['facility_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($labName['facility_name']); ?></option>
@@ -688,9 +688,9 @@ foreach ($fResult as $fDetails) {
                                                 </select>
                                             </td>
                                         <tr>
-                                            <th>Is Sample Rejected ?</th>
+                                            <th>L'échantillon est-il rejeté?</th>
                                             <td>
-                                                <select class="form-control" name="isSampleRejected" id="isSampleRejected">
+                                                <select class="form-control" name="isSampleRejected" id="isSampleRejected" title="L'échantillon est-il rejeté?">
                                                     <option value=''> -- Select -- </option>
                                                     <option value="yes"> Yes </option>
                                                     <option value="no"> No </option>
@@ -699,7 +699,7 @@ foreach ($fResult as $fDetails) {
 
                                             <th class="show-rejection" style="display:none;">Reason for Rejection</th>
                                             <td class="show-rejection" style="display:none;">
-                                                <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason">
+                                                <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason" title="Raison du rejet">
                                                     <option value=''> -- Select -- </option>
                                                     <?php echo $rejectionReason; ?>
                                                 </select>
@@ -707,7 +707,7 @@ foreach ($fResult as $fDetails) {
                                         </tr>
                                         <tr class="show-rejection" style="display:none;">
                                             <th>Rejection Date<span class="mandatory">*</span></th>
-                                            <td><input class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Select Rejection Date"/></td>
+                                            <td><input class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Date de rejet" title="Date de rejet"/></td>
                                             <td></td>
                                             <td></td>
                                         </tr>
@@ -716,18 +716,18 @@ foreach ($fResult as $fDetails) {
                                                 <table class="table table-bordered table-striped">
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-center">Test No.</th>
+                                                            <th class="text-center">Test non</th>
                                                             <th class="text-center">Name of the Testkit (or) Test Method used</th>
-                                                            <th class="text-center">Date of Testing</th>
-                                                            <th class="text-center">Test Result</th>
+                                                            <th class="text-center">Date du test</th>
+                                                            <th class="text-center">Résultat du test</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="testKitNameTable">
                                                         <tr>
                                                             <td class="text-center">1</td>
-                                                            <td><input type="text" name="testName[]" id="testName1" class="form-control test-name-table-input" placeholder="Test name" title="Please enter the test name for row 1s" /></td>
-                                                            <td><input type="text" name="testDate[]" id="testDate1" class="form-control test-name-table-input dateTime" placeholder="Tested on" title="Please enter the tested on for row 1" /></td>
-                                                            <td><select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult1" title="Please select the result for row 1">
+                                                            <td><input type="text" name="testName[]" id="testName1" class="form-control test-name-table-input" placeholder="Nom du test" title="Veuillez saisir le nom du test pour les lignes 1" /></td>
+                                                            <td><input type="text" name="testDate[]" id="testDate1" class="form-control test-name-table-input dateTime" placeholder="Testé sur" title="Veuillez saisir le test pour la ligne 1" /></td>
+                                                            <td><select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult1" title="Veuillez sélectionner le résultat pour la ligne 1">
                                                                     <option value=''> -- Select -- </option>
                                                                     <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
                                                                         <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option>
@@ -742,9 +742,9 @@ foreach ($fResult as $fDetails) {
                                                     </tbody>
                                                     <tfoot>
                                                         <tr>
-                                                            <th colspan="3" class="text-right">Final Result</th>
+                                                            <th colspan="3" class="text-right">Résultat final</th>
                                                             <td>
-                                                                <select class="form-control" name="result" id="result">
+                                                                <select class="form-control" name="result" id="result" title="Résultat final">
                                                                     <option value=''> -- Select -- </option>
                                                                     <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
                                                                         <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option>
@@ -758,22 +758,22 @@ foreach ($fResult as $fDetails) {
                                         </tr>
                                         <tr>
 
-                                            <th>Is Result Authorized ?</th>
+                                            <th>Le résultat est-il autorisé?</th>
                                             <td>
-                                                <select name="isResultAuthorized" id="isResultAuthorized" class="disabled-field form-control" title="Is Result authorized ?" style="width:100%">
+                                                <select name="isResultAuthorized" id="isResultAuthorized" class="disabled-field form-control" title="Le résultat est-il autorisé?" style="width:100%">
                                                     <option value="">-- Select --</option>
                                                     <option value='yes'> Yes </option>
                                                     <option value='no'> No </option>
                                                 </select>
                                             </td>
-                                            <th>Authorized By</th>
-                                            <td><input type="text" name="authorizedBy" id="authorizedBy" class="disabled-field form-control" placeholder="Authorized By" /></td>
+                                            <th>Autorisé par</th>
+                                            <td><input type="text" name="authorizedBy" id="authorizedBy" class="disabled-field form-control" placeholder="Autorisé par" title="Autorisé par"/></td>
 
                                         </tr>
                                         <tr>
 
-                                            <th>Authorized on</td>
-                                            <td><input type="text" name="authorizedOn" id="authorizedOn" class="disabled-field form-control date" placeholder="Authorized on" /></td>
+                                            <th>Autorisé le</td>
+                                            <td><input type="text" name="authorizedOn" id="authorizedOn" class="disabled-field form-control date" placeholder="Autorisé le" title="Autorisé le" /></td>
                                             <th></th>
                                             <td></td>
 
@@ -803,11 +803,11 @@ foreach ($fResult as $fDetails) {
                             <input type="hidden" name="saveNext" id="saveNext" />
                             <!-- <input type="hidden" name="pageURL" id="pageURL" value="<?php echo $_SERVER['PHP_SELF']; ?>" /> -->
                         <?php } ?>
-                        <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
-                        <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();$('#saveNext').val('next');return false;">Save and Next</a>
+                        <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Sauver</a>
+                        <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();$('#saveNext').val('next');return false;">Enregistrer et suivant</a>
                         <input type="hidden" name="formId" id="formId" value="<?php echo $arr['vl_form']; ?>" />
                         <input type="hidden" name="covid19SampleId" id="covid19SampleId" value="" />
-                        <a href="/covid-19/requests/covid-19-requests.php" class="btn btn-default"> Cancel</a>
+                        <a href="/covid-19/requests/covid-19-requests.php" class="btn btn-default"> Annuler</a>
                     </div>
                     <!-- /.box-footer -->
                 </form>
@@ -955,7 +955,7 @@ foreach ($fResult as $fDetails) {
     $(document).ready(function() {
 
         $('#facilityId').select2({
-            placeholder: "Select Clinic/Health Center"
+            placeholder: "Nom de l'installation"
         });
         // $('#district').select2({
         //     placeholder: "District"
@@ -1014,9 +1014,9 @@ foreach ($fResult as $fDetails) {
         f.setAttribute("style", "vertical-align:middle");
 
         b.innerHTML = tableRowId;
-        c.innerHTML = '<input type="text" name="testName[]" id="testName' + tableRowId + '" class="form-control test-name-table-input" placeholder="Test name" title="Please enter the test name for row ' + tableRowId + '"/>';
-        d.innerHTML = '<input type="text" name="testDate[]" id="testDate' + tableRowId + '" class="form-control test-name-table-input dateTime" placeholder="Tested on"  title="Please enter the tested on for row ' + tableRowId + '"/>';
-        e.innerHTML = '<select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult' + tableRowId + '" title="Please select the result for row ' + tableRowId + '"><option value=""> -- Select -- </option><?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?> <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option> <?php } ?> </select>';
+        c.innerHTML = '<input type="text" name="testName[]" id="testName' + tableRowId + '" class="form-control test-name-table-input" placeholder="Nom du test" title="Veuillez sélectionner le nom du test pour la ligne ' + tableRowId + '"/>';
+        d.innerHTML = '<input type="text" name="testDate[]" id="testDate' + tableRowId + '" class="form-control test-name-table-input dateTime" placeholder="Testé sur"  title="Veuillez sélectionner la date du test pour la ligne ' + tableRowId + '"/>';
+        e.innerHTML = '<select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult' + tableRowId + '" title="Veuillez sélectionner le résultat pour la ligne ' + tableRowId + '"><option value=""> -- Select -- </option><?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?> <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option> <?php } ?> </select>';
         f.innerHTML = '<a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;<a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>';
         $(a).fadeIn(800);
         $('.dateTime').datetimepicker({
