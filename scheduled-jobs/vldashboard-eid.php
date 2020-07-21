@@ -42,7 +42,7 @@ try {
                         INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
                         LEFT JOIN facility_type as ft ON ft.facility_type_id=f.facility_type 
                         LEFT JOIN facility_type as lft ON lft.facility_type_id=l_f.facility_type 
-                        LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection
+                        LEFT JOIN r_eid_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection
                         WHERE sample_code is not null AND sample_code !='' ";
 
         if ($instanceUpdateOn != "") {

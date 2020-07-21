@@ -1,16 +1,16 @@
 <?php
 defined('APPLICATION_ENV')
-    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? 
-                                  getenv('APPLICATION_ENV') : 
-                                  'production'));
+    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ?
+        getenv('APPLICATION_ENV') :
+        'production'));
 
-if(APPLICATION_ENV == 'production'){
-	require_once('/includes/config.production.php');
-}else{
-	require_once('/includes/config.development.php');
+if (APPLICATION_ENV == 'production') {
+    require_once('/includes/config.production.php');
+} else {
+    require_once('/includes/config.development.php');
 }
 
-define("BACKUP_PATH", "../db-backup");
+define("BACKUP_PATH", "/../db-backup");
 
 $dbUsername = $systemConfig['dbUser'];
 $dbPassword = $systemConfig['dbPassword'];
@@ -35,7 +35,7 @@ if (is_dir($folderPath)) {
         if ($oldFileName == 'index.php' || $oldFileName == "." || $oldFileName == ".." || $oldFileName == "") {
             continue;
         }
-        
+
         if (time() - filemtime($file) > (86400) * $days) {
             unlink($file);
         }
