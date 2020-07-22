@@ -6,7 +6,7 @@ include_once APPLICATION_PATH . '/includes/MysqliDb.php';
 include_once(APPLICATION_PATH . '/models/General.php');
 $general = new General($db);
 
-// echo "<pre>";var_dump($_POST);die;
+// echo "<pre>";print_r($_POST);die;
 
 
 $tableName = "form_covid19";
