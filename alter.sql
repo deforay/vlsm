@@ -2512,3 +2512,6 @@ CREATE TABLE `dash_covid19_form` (
 -- Version 4.0 -- Amit -- 17-July-2020
 
 -- Version 4.0.1 -- Amit -- 17-July-2020
+
+-- Thana 22-Jul-2020
+ALTER TABLE `r_covid19_symptoms` ADD `parent_symptom` INT NULL DEFAULT NULL AFTER `symptom_name`;

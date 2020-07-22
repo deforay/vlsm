@@ -495,6 +495,29 @@ foreach ($fResult as $fDetails) {
                                             </select>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <th colspan="4"style="width:15% !important">Symptômes <span class="mandatory">*</span> </th>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">
+                                            <table  id="symptomsTable" class="table table-bordered">
+                                                <?php $index = 0; foreach ($covid19Symptoms as $symptomId => $symptomName) { ?>
+                                                    <tr class="row<?php echo $index;?>">
+                                                        <th style="width:50%;"><?php echo $symptomName; ?></th>
+                                                        <td style="width:50%;">
+                                                            <input name="symptomId[]" type="hidden" value="<?php echo $symptomId; ?>">
+                                                            <select name="symptomDetected[]" class="form-control isRequired" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" style="width:100%" onchange="checkSubSymptoms(this,<?php echo $symptomId;?>,<?php echo $index;?>);">
+                                                                <option value="">-- Select --</option>
+                                                                <option value='yes'> Oui </option>
+                                                                <option value='no'> Non </option>
+                                                                <option value='unknown'> Inconnu </option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                <?php $index++; } ?>
+                                            </table>
+                                        </td>
+                                    </tr>
                                 </table>
 
                                 <div class="box-header with-border sectionHeader">
@@ -615,27 +638,6 @@ foreach ($fResult as $fDetails) {
                                         </td>
                                         <th style="width:15% !important"></th>
                                         <td style="width:35% !important;"></td>
-                                    </tr>
-                                    <tr>
-                                        <th style="width:15% !important">Symptômes présentés au cours des 14 derniers jours <span class="mandatory">*</span> </th>
-                                        <td colspan="3">
-                                            <table style="width:60%;" class="table table-bordered">
-                                                <?php foreach ($covid19Symptoms as $symptomId => $symptomName) { ?>
-                                                    <tr>
-                                                        <th style="width:50%;"><?php echo $symptomName; ?></th>
-                                                        <td>
-                                                            <input name="symptomId[]" type="hidden" value="<?php echo $symptomId; ?>">
-                                                            <select name="symptomDetected[]" class="form-control isRequired" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" style="width:100%">
-                                                                <option value="">-- Select --</option>
-                                                                <option value='yes'> Oui </option>
-                                                                <option value='no'> Non </option>
-                                                                <option value='unknown'> Inconnu </option>
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                <?php } ?>
-                                            </table>
-                                        </td>
                                     </tr>
                                 </table>
 
@@ -929,6 +931,22 @@ foreach ($fResult as $fDetails) {
             $("#facilityId").html("<?php echo $facility; ?>");
         }
         $.unblockUI();
+    }
+
+    function checkSubSymptoms(obj, parent, row){
+        if(obj.value == 'yes'){
+            $.post("getSymptomsByParentId.php", {
+                symptomParent: parent
+            },
+            function(data) {
+                if (data != "") {
+                    // $(".row"+row).append(data);
+                    $("#symptomsTable").find("tr:eq("+row+")").after(data);
+                }
+            });
+        } else{
+            $("#symptomsTable").find("tr:eq("+row+")").after("");
+        }
     }
 
 
