@@ -74,6 +74,7 @@ foreach ($fResult as $fDetails) {
     <!-- Main content -->
     <section class="content">
         <!-- SELECT2 EXAMPLE -->
+        <pre><?php print_r($covid19Info);?></pre>
         <div class="box box-default">
             <div class="box-header with-border">
 
@@ -98,7 +99,7 @@ foreach ($fResult as $fDetails) {
                                             <td><label for="sampleCode">N°EPID </label></td>
                                             <td>
                                                 <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"></span>
-                                                <input type="hidden" id="sampleCode" name="sampleCode" />
+                                                <input type="hidden" value="" id="sampleCode" name="sampleCode" />
                                             </td>
                                         <?php } else { ?>
                                             <td><label for="sampleCode">N°EPID </label><span class="mandatory">*</span></td>
