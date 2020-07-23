@@ -198,6 +198,16 @@ class Model_Covid19
         }
         return $response;
     }
+    
+    public function getCovid19SymptomsDRC()
+    {
+        $results = $this->db->rawQuery("SELECT * FROM r_covid19_symptoms WHERE `symptom_status` LIKE 'active' AND (parent_symptom IS NULL OR parent_symptom = 0)");
+        $response = array();
+        foreach ($results as $row) {
+            $response[$row['symptom_id']] = $row['symptom_name'];
+        }
+        return $response;
+    }
 
     public function getCovid19Comorbidities()
     {

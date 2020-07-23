@@ -139,6 +139,29 @@ try {
 		'last_modified_by'                    => $_SESSION['userId'],
 		'last_modified_datetime'              => $general->getDateTime()
 	);
+	if($_POST['formId'] == 3) {
+		$covid19Data['suspected_case_drc'] 			= isset($_POST['suspectedCase'])?$_POST['suspectedCase']:null;
+		$covid19Data['probable_case_drc'] 			= isset($_POST['probableCase'])?$_POST['probableCase']:null;
+		$covid19Data['confirme_case_drc'] 			= isset($_POST['confirmeCase'])?$_POST['confirmeCase']:null;
+		$covid19Data['contact_case_drc'] 			= isset($_POST['contactCase'])?$_POST['contactCase']:null;
+		$covid19Data['respiratory_rate_option_drc']	= isset($_POST['respiratoryRateSelect'])?$_POST['respiratoryRateSelect']:null;
+		$covid19Data['respiratory_rate_drc'] 		= (isset($_POST['respiratoryRate']) && $_POST['respiratoryRateSelect'] == 'yes')?$_POST['respiratoryRate']:null;
+		$covid19Data['oxygen_saturation_option_drc']= isset($_POST['oxygenSaturationSelect'])?$_POST['oxygenSaturationSelect']:null;
+		$covid19Data['oxygen_saturation_drc'] 		= (isset($_POST['oxygenSaturation']) && $_POST['oxygenSaturationSelect'] == 'yes')?$_POST['oxygenSaturation']:null;
+		$covid19Data['sick_days_drc'] 				= isset($_POST['sickDays'])?$_POST['sickDays']:null;
+		$covid19Data['onset_illness_date_drc'] 		= isset($_POST['onsetIllnessDate'])?$general->dateFormat($_POST['onsetIllnessDate']):null;
+		$covid19Data['medical_background_drc'] 		= isset($_POST['medicalBackground'])?$_POST['medicalBackground']:null;
+		if($_POST['medicalBackground'] == 'yes'){
+			foreach($_POST['medicalBg'] as $index=>$val){
+				$covid19Data[$index] = isset($val)?$val:null;
+			}
+		}
+		$covid19Data['conacted_14_days_drc'] 		= isset($_POST['conacted14Days'])?$_POST['conacted14Days']:null;
+		$covid19Data['smoke_drc'] 					= isset($_POST['smoke'])?$_POST['smoke']:null;
+		$covid19Data['profession_drc'] 				= isset($_POST['profession'])?$_POST['profession']:null;
+		$covid19Data['confirmation_lab_drc'] 		= isset($_POST['confirmationLab'])?$_POST['confirmationLab']:null;
+		$covid19Data['result_pscr_drc'] 			= isset($_POST['resultPcr'])?$general->dateFormat($_POST['resultPcr']):null;
+	}
 
 	// echo "<pre>";
 	// var_dump($covid19Data);die;
