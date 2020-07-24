@@ -190,7 +190,8 @@ require_once($fileArray[$arr['vl_form']]);
                 $('#sampleTestedDateTime,#result,.test-name-table-input').removeClass('isRequired');
                 $('#result').prop('disabled',true);
                 $('#sampleRejectionReason').prop('disabled',false);
-            }else if(this.value == 'no'){
+            // }else if(this.value == 'no'){
+            }else {
                 $('#rejectionDate').val('');
                 $('.show-rejection').hide();
                 $('.test-name-table-input').prop('disabled',false);

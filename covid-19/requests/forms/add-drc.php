@@ -181,10 +181,20 @@ foreach ($fResult as $fDetails) {
                                         <td>
                                             <select class="form-control isRequired" name="patientGender" id="patientGender">
                                                 <option value=''> -- Select -- </option>
-                                                <option value='male'> Male </option>
-                                                <option value='female'> Female </option>
+                                                <option value='male'> Homme </option>
+                                                <option value='female'> Femme </option>
                                                 <option value='other'> Other </option>
-
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="isPatientPregnant">Enceinte</label></th>
+                                        <td>
+                                            <select class="form-control" name="isPatientPregnant" id="isPatientPregnant">
+                                                <option value=''> -- Select -- </option>
+                                                <option value='yes'> Enceinte </option>
+                                                <option value='no'> Pas Enceinte </option>
+                                                <option value='unknown'> Inconnue </option>
                                             </select>
                                         </td>
                                     </tr>
@@ -239,87 +249,10 @@ foreach ($fResult as $fDetails) {
 
                                 <div class="box-header with-border sectionHeader">
                                     <h3 class="box-title">
-                                        Définition de cas
-                                    </h3>
-                                </div>
-                                <table class="table">
-                                    <tr>
-                                        <th style="width:10% !important;"><label for="suspectedCase">Cas suspect </label></th>
-                                        <td style="width:50% !important;">
-                                            <select class="form-control" id="suspectedCase" name="suspectedCase" title="Cas suspect de covdid 19">
-                                                <option value="">--Select--</option>
-                                                <option value="Fièvre d'accès brutal (Inferieur ou égale à 38°C, vérifié à la salle d'urgence, la consultation externe, ou l'hôpital) ET (cochez une ou deux des cases suivantes)">Fièvre d'accès brutal (Inferieur ou égale à 38°C, vérifié à la salle d'urgence, la consultation externe, ou l'hôpital) ET (cochez une ou deux des cases suivantes)</option>
-                                                <option value="Toux">Toux</option>
-                                                <option value="Rhume">Rhume</option>
-                                                <option value="Mal de gorge">Mal de gorge</option>
-                                                <option value="Difficulté respiratoire">Difficulté respiratoire</option>
-                                                <option value="Notion de séjour ou voyage dans les zones a épidémie a COVID-19 dans les 14 jours précédant les symptômes ci-dessous">Notion de séjour ou voyage dans les zones a épidémie a COVID-19 dans les 14 jours précédant les symptômes ci-dessous</option>
-                                                <option value="IRA d'intensité variable (simple a sévère) ayant été en contact étroite avec cas probable ou un cas confirmé de la maladie a COVID-19">IRA d'intensité variable (simple a sévère) ayant été en contact étroite avec cas probable ou un cas confirmé de la maladie a COVID-19</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th style="width:10% !important;"><label for="probableCase">Cas probable </label></th>
-                                        <td style="width:50% !important;">
-                                            <select class="form-control" id="probableCase" name="probableCase" title="Cas probable de covid 19">
-                                                <option value="">--Select--</option>
-                                                <option value="Tout cas suspects dont le résultat de laboratoire pour le diagnostic de COVID-19 n'est pas concluant (indéterminé)">Tout cas suspects dont le résultat de laboratoire pour le diagnostic de COVID-19 n'est pas concluant (indéterminé)</option>
-                                                <option value="Tout décès dans un tableau d'IRA pour lequel il n'a pas été possible d'obtenir des échantillons biologiques pour confirmation au">Tout décès dans un tableau d'IRA pour lequel il n'a pas été possible d'obtenir des échantillons biologiques pour confirmation au</option>
-                                                <option value="Laboratoire mais dont les investigations ont révélé un lien épidémiologique avec un cas confirmé ou probable ">Laboratoire mais dont les investigations ont révélé un lien épidémiologique avec un cas confirmé ou probable </option>
-                                                <option value="Notion de séjour ou voyage dans les 14 jours précédant le décès dans les zones a épidémie de la maladie a COVID-19">Notion de séjour ou voyage dans les 14 jours précédant le décès dans les zones a épidémie de la maladie a COVID-19</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th style="width:10% !important;"><label for="confirmeCase">Cas confirme </label></th>
-                                        <td style="width:50% !important;">
-                                            <select class="form-control" id="confirmeCase" name="confirmeCase" title="Cas confirme de covid 19">
-                                                <option value="">--Select--</option>
-                                                <option value="Toute personne avec une confirmation en laboratoire de l'infection au COVID-19, quelles que soient les signes et symptômes cliniques">Toute personne avec une confirmation en laboratoire de l'infection au COVID-19, quelles que soient les signes et symptômes cliniques</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th style="width:10% !important;"><label for="contactCase">Non cas contact </label></th>
-                                        <td style="width:50% !important;">
-                                            <select class="form-control" id="contactCase" name="contactCase" title="Non cas contact">
-                                                <option value="">--Select--</option>
-                                                <option value="Tout cas suspects avec deux résultats de laboratoire négatifs au COVID-19 a au moins 48 heures d'intervalle">Tout cas suspects avec deux résultats de laboratoire négatifs au COVID-19 a au moins 48 heures d'intervalle</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                </table>
-
-                                <div class="box-header with-border sectionHeader">
-                                    <h3 class="box-title">
                                         Signes vitaux du patient 
                                     </h3>
                                 </div>
                                 <table class="table">
-                                    <tr>
-                                        <th style="width: 15% !important;"><label for="respiratoryRateSelect">Fréquence respiratoire </label></th>
-                                        <td style="width:35% !important;">
-                                            <select class="form-control" id="respiratoryRateSelect" name="respiratoryRateSelect" title="Fréquence respiratoire">
-                                                <option value="">--Select--</option>
-                                                <option value="yes">Oui</option>
-                                                <option value="unknown">Inconnu</option>
-                                            </select>
-                                            <div style=" margin-top: 15px !important;display: none; " class="respiratory-rate">
-                                                <input type="text" class="form-control" name="respiratoryRate" id="respiratoryRate" style=" border: none;border-bottom: 1px solid;width: 20%;height: 18px; "> /  Minute (Comptez pendant une minute entière)
-                                            </div>
-                                        </td>
-                                        <th style="width: 15% !important;"><label for="oxygenSaturationSelect">Saturation en oxygène </label></th>
-                                        <td style="width:35% !important;">
-                                            <select class="form-control" id="oxygenSaturationSelect" name="oxygenSaturationSelect" title="Saturation en oxygène">
-                                                <option value="">--Select--</option>
-                                                <option value="yes">Oui</option>
-                                                <option value="unknown">Inconnu</option>
-                                            </select>
-                                            <div style=" margin-top: 15px !important;display: none; " class="oxygen-saturation">
-                                                <input type="text" class="form-control" name="oxygenSaturation" id="oxygenSaturation" style=" border: none;border-bottom: 1px solid;width: 20%;height: 18px; "> / %
-                                            </div>
-                                        </td>
-                                    </tr>
                                     <tr>
                                         <th style="width: 15%;"><label for="specimenType"> Type(s) d' échantillon(s) dans le tube (cochez au moins une des cases suivants) <span class="mandatory">*</span></label></th>
                                         <td style="width: 35%;">
@@ -336,163 +269,6 @@ foreach ($fResult as $fDetails) {
                                         <th style="width:15% !important"><label for="specimenType">Date de prélèvement de l'échantillon <span class="mandatory">*</span></label></th>
                                         <td style="width:35% !important;">
                                             <input class="form-control isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Date de prélèvement de l'échantillon" title="Date de prélèvement de l'échantillon" onchange="sampleCodeGeneration();" />
-                                        </td>
-                                    </tr>
-                                </table>
-                                
-                                <div class="box-header with-border sectionHeader">
-                                    <h3 class="box-title">
-                                        Histoire Clinique du patient
-                                    </h3>
-                                </div>
-                                <table class="table">
-                                    <tr>
-                                        <th style="width: 15% !important;"><label for="sickDays">Depuis combien de jours êtes-vous malade? </label></th>
-                                        <td style="width:35% !important;">
-                                                <input type="text" placeholder="Depuis combien de jours êtes-vous malade" class="form-control" title="Depuis combien de jours êtes-vous malade?" name="sickDays" id="sickDays">
-                                        </td>
-                                        <th style="width: 15% !important;"><label for="onsetIllnessDate">Date de début de la maladie </label></th>
-                                        <td style="width:35% !important;">
-                                            <div style=" display: inline-flex; margin-top: 15px !important; ">
-                                                <input type="text" class="form-control date" placeholder="e.g 09-Jan-1992" name="onsetIllnessDate" id="onsetIllnessDate">
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    
-                                    <tr>
-                                        <th style="width: 15% !important;"><label for="medicalBackground">Antécédents Médicaux </label></th>
-                                        <td style="width:35% !important;">
-                                            <select class="form-control" id="medicalBackground" name="medicalBackground" title="Antécédents Médicaux">
-                                                <option value="">--Select--</option>
-                                                <option value="yes">Oui</option>
-                                                <option value="no">Non</option>
-                                            </select>
-                                        </td>
-                                        <th colspan="2" class="medical-background-info" style="display: none;">Si Oui, Cochez la ou les cases cidessous</th>
-                                    </tr>
-                                    <tr class="medical-background-yes" style="display: none;">
-                                        <th style="width: 15% !important;"><label for="heartDiseaseMbg">Maladie cardiaque (Cardiopathie) </label></th>
-                                        <td style="width:35% !important;">
-                                            <select class="form-control" id="heartDiseaseMbg" name="medicalBg['heart_disease_mbg_drc']" title="Maladie cardiaque">
-                                                <option value="">--Select--</option>
-                                                <option value="yes">Oui</option>
-                                                <option value="no">Non</option>
-                                                <option value="unknown">Inconnu</option>
-                                            </select>
-                                        </td>
-                                        <th style="width: 15% !important;"><label for="dyspneaChronicRespiratoryMbg">Difficulté /Dyspnée Respiratoire chronique </label></th>
-                                        <td style="width:35% !important;">
-                                            <select class="form-control" id="dyspneaChronicRespiratoryMbg" name="medicalBg['dyspnea_chronic_respiratory_mbg_drc']" title="Difficulté /Dyspnée Respiratoire chronique">
-                                                <option value="">--Select--</option>
-                                                <option value="yes">Oui</option>
-                                                <option value="no">Non</option>
-                                                <option value="unknown">Inconnu</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    
-                                    <tr class="medical-background-yes" style="display: none;">
-                                        <th style="width: 15% !important;"><label for="recurrentChestPainMbg">Douleur récurrentes du thorax </label></th>
-                                        <td style="width:35% !important;">
-                                            <select class="form-control" id="recurrentChestPainMbg" name="medicalBg['recurrent_chest_pain_mbg_drc']" title="Douleur récurrentes du thorax">
-                                                <option value="">--Select--</option>
-                                                <option value="yes">Oui</option>
-                                                <option value="no">Non</option>
-                                                <option value="unknown">Inconnu</option>
-                                            </select>
-                                        </td>
-                                        <th style="width: 15% !important;"><label for="asthmaMbg">Asthme Asthma </label></th>
-                                        <td style="width:35% !important;">
-                                            <select class="form-control" id="asthmaMbg" name="medicalBg['asthma_mbg_drc']" title="Asthme Asthma">
-                                                <option value="">--Select--</option>
-                                                <option value="yes">Oui</option>
-                                                <option value="no">Non</option>
-                                                <option value="unknown">Inconnu</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    
-                                    <tr class="medical-background-yes" style="display: none;">
-                                        <th style="width: 15% !important;"><label for="cancerMbg">Cancer</label></th>
-                                        <td style="width:35% !important;">
-                                            <select class="form-control" id="cancerMbg" name="medicalBg['cancer_mbg_drc']" title="Cancer">
-                                                <option value="">--Select--</option>
-                                                <option value="yes">Oui</option>
-                                                <option value="no">Non</option>
-                                                <option value="unknown">Inconnu</option>
-                                            </select>
-                                        </td>
-                                        <th style="width: 15% !important;"><label for="chronicCoughMbg">Toux Chronique (inférieur ou égal à 3 mois sur 2 années consécutives) </label></th>
-                                        <td style="width:35% !important;">
-                                            <select class="form-control" id="chronicCoughMbg" name="medicalBg['chronic_cough_mbg_drc']" title="Toux Chronique">
-                                                <option value="">--Select--</option>
-                                                <option value="yes">Oui</option>
-                                                <option value="no">Non</option>
-                                                <option value="unknown">Inconnu</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    
-                                    <tr class="medical-background-yes" style="display: none;">
-                                        <th style="width: 15% !important;"><label for="activeTuberculosisMbg">Tuberculose active</label></th>
-                                        <td style="width:35% !important;">
-                                            <select class="form-control" id="activeTuberculosisMbg" name="medicalBg['active_tuberculosis_mbg_drc']" title="Tuberculose active">
-                                                <option value="">--Select--</option>
-                                                <option value="yes">Oui</option>
-                                                <option value="no">Non</option>
-                                                <option value="unknown">Inconnu</option>
-                                            </select>
-                                        </td>
-                                        <th style="width: 15% !important;"><label for="ancientTuberculosisMbg">Tuberculose ancienne </label></th>
-                                        <td style="width:35% !important;">
-                                            <select class="form-control" id="ancientTuberculosisMbg" name="medicalBg['ancient_tuberculosis_mbg_drc']" title="Tuberculose ancienne">
-                                                <option value="">--Select--</option>
-                                                <option value="yes">Oui</option>
-                                                <option value="no">Non</option>
-                                                <option value="unknown">Inconnu</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    
-                                    <tr class="medical-background-yes" style="display: none;">
-                                        <th style="width: 15% !important;"><label for="hospitalizedMbg">Avez-vous été hospitalisé durant les 12 derniers mois? Have you been hospitalized in the past 12 months?</label></th>
-                                        <td style="width:35% !important;">
-                                            <select class="form-control" id="hospitalizedMbg" name="medicalBg['hospitalized_mbg_drc']" title="Avez-vous été hospitalisé durant les 12 derniers mois? Have you been hospitalized in the past 12 months?">
-                                                <option value="">--Select--</option>
-                                                <option value="yes">Oui</option>
-                                                <option value="no">Non</option>
-                                                <option value="unknown">Inconnu</option>
-                                            </select>
-                                        </td>
-                                        <th style="width: 15% !important;"><label for="liveChildrensMbg">Habitez-vous avec les enfants ? </label></th>
-                                        <td style="width:35% !important;">
-                                            <select class="form-control" id="liveChildrensMbg" name="medicalBg['live_childrens_mbg_drc']" title="Habitez-vous avec les enfants ?">
-                                                <option value="">--Select--</option>
-                                                <option value="yes">Oui</option>
-                                                <option value="no">Non</option>
-                                                <option value="unknown">Inconnu</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    
-                                    <tr class="medical-background-yes" style="display: none;">
-                                        <th style="width: 15% !important;"><label for="takeCraeOfChildrensMbg">Prenez-vous soins des enfants?</label></th>
-                                        <td style="width:35% !important;">
-                                            <select class="form-control" id="takeCraeOfChildrensMbg" name="medicalBg['take_crae_childrens_mbg_drc']" title="Prenez-vous soins des enfants?">
-                                                <option value="">--Select--</option>
-                                                <option value="yes">Oui</option>
-                                                <option value="no">Non</option>
-                                                <option value="unknown">Inconnu</option>
-                                            </select>
-                                        </td>
-                                        <th style="width: 15% !important;"><label for="past3WeeksMbg">Avez-vous eu des contacts étroits avec toute personne une maladie similaire a la vôtre durant ces 3 derniers semaines? </label></th>
-                                        <td style="width:35% !important;">
-                                            <select class="form-control" id="past3WeeksMbg" name="medicalBg['past3_weeks_mbg_drc']" title="Avez-vous eu des contacts étroits avec toute personne une maladie similaire a la vôtre durant ces 3 derniers semaines?">
-                                                <option value="">--Select--</option>
-                                                <option value="yes">Oui</option>
-                                                <option value="no">Non</option>
-                                                <option value="unknown">Inconnu</option>
-                                            </select>
                                         </td>
                                     </tr>
                                     <tr>
@@ -547,42 +323,6 @@ foreach ($fResult as $fDetails) {
                                         <td style="width:35% !important;">
                                             <input type="text" class="form-control date" id="returnDate" name="returnDate" placeholder="e.g 09-Jan-1992" title="Date de retour"/>
                                         </td>
-                                        <th style="width: 15% !important;"><label for="conacted14Days">Avez-vous été en contact avec un cas confirmé de COVID-19 au cours  de ces 14 derniers jours?</label></th>
-                                        <td style="width:35% !important;">
-                                            <select class="form-control" id="conacted14Days" name="conacted14Days" title="Avez-vous été en contact avec un cas confirmé de COVID-19 au cours  de ces 14 derniers jours?">
-                                                <option value="">--Select--</option>
-                                                <option value="yes">Oui</option>
-                                                <option value="no">Non</option>
-                                                <option value="unknown">Inconnu</option>
-                                            </select>
-                                        </td>                                        
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2"><h5 class="box-title">Laissez cette question ci-dessous pour les adultes</h5></td>
-                                    </tr>
-                                    <tr>
-                                        <th style="width: 15% !important;"><label for="smoke">Fumez-vous?</label></th>
-                                        <td style="width:35% !important;">
-                                            <select class="form-control" id="smoke" name="smoke" title="Fumez-vous?">
-                                                <option value="">--Select--</option>
-                                                <option value="yes">Oui</option>
-                                                <option value="no">Non</option>
-                                                <option value="unknown">Inconnu</option>
-                                            </select>
-                                        </td>
-                                        <th style="width: 15% !important;"><label for="profession">Profession</label></th>
-                                        <td style="width:35% !important;">
-                                            <select class="form-control" id="profession" name="profession" title="Profession">
-                                                <option value="">--Select--</option>
-                                                <option value="faller">Abatteur</option>
-                                                <option value="laboratory-staff">Personnel de laboratoire</option>
-                                                <option value="personal health">Personnel de santé</option>
-                                                <option value="traditional-healer">Guérisseur traditionnel</option>
-                                                <option value="veterinary">Vétérinaire</option>
-                                                <option value="butcher">Boucher</option>
-                                                <option value="other">Autre (précisez)</option>
-                                            </select>
-                                        </td>
                                     </tr>
                                 </table>
 
@@ -615,6 +355,10 @@ foreach ($fResult as $fDetails) {
                                         <td style="width:35% !important;">
                                             <input type="text" class="form-control date" id="resultPcr" name="resultPcr" placeholder="e.g 09-Jan-1992" title="Date de Result PCR"/>
                                         </td>
+                                        <th style="width: 15% !important;"><label for="numberOfDaysSick">Depuis combien de jours êtes-vous malade?</label></th>
+                                        <td style="width:35% !important;">
+                                            <input type="text" class="form-control" id="numberOfDaysSick" name="numberOfDaysSick" placeholder="Depuis combien de jours êtes-vous malade?" title="Date de Result PCR"/>
+                                        </td>
                                     </tr>
                                 </table>
                                 <div class="box-header with-border sectionHeader">
@@ -632,12 +376,71 @@ foreach ($fResult as $fDetails) {
                                         </td>
                                     </tr>
                                     <tr>
+                                        <th style="width:15% !important"><label for="medicalHistory"></label>Antécédents Médicaux</th>
+                                        <td style="width:35% !important;">
+                                            <select name="medicalHistory" id="medicalHistory" class="form-control" title="Antécédents Médicaux">
+                                                <option value="">--Select--</option>
+                                                <option value="yes">Oui</option>
+                                                <option value="no">Non</option>
+                                                <option value="unknown">Inconnu</option>
+                                            </select>
+                                        </td>
+                                        <th style="width:15% !important"><label for="recentHospitalization"></label>Avez-vous été hospitalisé durant les 12 derniers mois ? Have you been hospitalized in the past 12 months ? </th>
+                                        <td style="width:35% !important;">
+                                            <select name="recentHospitalization" id="recentHospitalization" class="form-control" title="Avez-vous été hospitalisé durant les 12 derniers mois ? Have you been hospitalized in the past 12 months ? ">
+                                                <option value="">--Select--</option>
+                                                <option value="yes">Oui</option>
+                                                <option value="no">Non</option>
+                                                <option value="unknown">Inconnu</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <th style="width:15% !important"><label for="patientLivesWithChildren"></label>Habitez-vous avec les enfants ?</th>
+                                        <td style="width:35% !important;">
+                                            <select name="patientLivesWithChildren" id="patientLivesWithChildren" class="form-control" title="Habitez-vous avec les enfants ?">
+                                                <option value="">--Select--</option>
+                                                <option value="yes">Oui</option>
+                                                <option value="no">Non</option>
+                                                <option value="unknown">Inconnu</option>
+                                            </select>
+                                        </td>
+                                        <th style="width:15% !important"><label for="patientCaresForChildren"></label>prenez-vous soins des enfants ?</th>
+                                        <td style="width:35% !important;">
+                                            <select name="patientCaresForChildren" id="patientCaresForChildren" class="form-control" title="prenez-vous soins des enfants ?">
+                                                <option value="">--Select--</option>
+                                                <option value="yes">Oui</option>
+                                                <option value="no">Non</option>
+                                                <option value="unknown">Inconnu</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <th style="width:15% !important">Fièvre / température (&deg;C) <span class="mandatory">*</span> </th>
                                         <td style="width:35% !important;">
                                             <input class="form-control isRequired" type="number" name="feverTemp" id="feverTemp" placeholder="Fièvre / température (en &deg;Celcius)" title="Fièvre / température (en &deg;Celcius)"/>
                                         </td>
-                                        <th style="width:15% !important"></th>
-                                        <td style="width:35% !important;"></td>
+                                        <th style="width:15% !important"><label for="temperatureMeasurementMethod">Température</label></th>
+                                        <td style="width:35% !important;">
+                                            <select name="temperatureMeasurementMethod" id="temperatureMeasurementMethod" class="form-control" title="Température">
+                                                <option value="">--Select--</option>
+                                                <option value="auxillary">Axillaire</option>
+                                                <option value="oral">Orale</option>
+                                                <option value="rectal">Rectale</option>
+                                                <option value="unknown">Inconnu</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="width:15% !important"><label for="respiratoryRate"> Fréquence Respiratoire</label></th>
+                                        <td style="width:35% !important;">
+                                            <input class="form-control" type="number" name="respiratoryRate" id="respiratoryRate" placeholder="Fréquence Respiratoire" title="Fréquence Respiratoire"/>
+                                        </td>
+                                        <th style="width:15% !important"><label for="oxygenSaturation"> Saturation en oxygène</label></th>
+                                        <td style="width:35% !important;">
+                                            <input class="form-control" type="number" name="oxygenSaturation" id="oxygenSaturation" placeholder="Saturation en oxygène" title="Saturation en oxygène"/>
+                                        </td>
                                     </tr>
                                 </table>
 
@@ -650,7 +453,7 @@ foreach ($fResult as $fDetails) {
                                         <td colspan="3">
                                             <textarea name="closeContacts" class="form-control" style="width:100%;min-height:100px;" placeholder="Contacts étroits du patient" title="Contacts étroits du patient"></textarea>
                                             <span class="text-danger">
-                                                Add close contact names and phone numbers (household, family members, friends you have been in contact with in the last 14 days)
+                                                Ajoutez les noms et numéros de téléphone des contacts proches (foyer, membres de la famille, amis avec lesquels vous avez été en contact au cours des 14 derniers jours)
                                             </span>
                                         </td>
 
@@ -680,6 +483,16 @@ foreach ($fResult as $fDetails) {
                                             <td>
                                                 <input type="text" class="form-control" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Veuillez saisir la date de réception de l'échantillon" <?php echo (isset($labFieldDisabled) && trim($labFieldDisabled) != '') ? $labFieldDisabled : ''; ?> onchange="" style="width:100%;" />
                                             </td>
+                                            <th><label for="sampleCondition">Condition de l'échantillon</label></th>
+                                            <td>
+                                                <select class="form-control" name="sampleCondition" id="sampleCondition" title="Condition de l'échantillon">
+                                                    <option value=''> -- Select -- </option>
+                                                    <option value="adequate"> Adéquat </option>
+                                                    <option value="not-adequate"> Non Adéquat </option>
+                                                    <option value="autres"> Autres </option>
+                                                </select>
+                                            </td>
+                                        <tr>
                                             <td class="lab-show"><label for="labId">Nom du laboratoire </label> </td>
                                             <td class="lab-show">
                                                 <select name="labId" id="labId" class="form-control" title="Nom du laboratoire" style="width:100%;">
@@ -689,16 +502,17 @@ foreach ($fResult as $fDetails) {
                                                     <?php } ?>
                                                 </select>
                                             </td>
-                                        <tr>
                                             <th>L'échantillon est-il rejeté?</th>
                                             <td>
                                                 <select class="form-control" name="isSampleRejected" id="isSampleRejected" title="L'échantillon est-il rejeté?">
-                                                    <option value=''> -- Select -- </option>
-                                                    <option value="yes"> Yes </option>
-                                                    <option value="no"> No </option>
+                                                    <option value="">--Select--</option>
+                                                    <option value="yes">Oui</option>
+                                                    <option value="no">Non</option>
                                                 </select>
                                             </td>
 
+                                        </tr>
+                                        <tr class="show-rejection" style="display:none;">
                                             <th class="show-rejection" style="display:none;">Reason for Rejection</th>
                                             <td class="show-rejection" style="display:none;">
                                                 <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason" title="Raison du rejet">
@@ -706,12 +520,8 @@ foreach ($fResult as $fDetails) {
                                                     <?php echo $rejectionReason; ?>
                                                 </select>
                                             </td>
-                                        </tr>
-                                        <tr class="show-rejection" style="display:none;">
                                             <th>Rejection Date<span class="mandatory">*</span></th>
                                             <td><input class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Date de rejet" title="Date de rejet"/></td>
-                                            <td></td>
-                                            <td></td>
                                         </tr>
                                         <tr>
                                             <td colspan="4">
