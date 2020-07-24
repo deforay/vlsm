@@ -11,7 +11,7 @@ if(count($sampleResult) > 0){
         echo '<tr>
                 <th style="width:50%;">'.ucwords($sampleRow['symptom_name']).'</th>
                 <td style="width:50%;">
-                    <select name="symptomDetected[]" class="form-control" title="Veuillez choisir la valeur pour '. $symptomName['symptom_name'].'" style="width:100%">
+                    <select name="symptomDetected[]" class="form-control" title="Veuillez choisir la valeur pour '. $sampleRow['symptom_name'].'" style="width:100%">
                         <option value="">-- Select --</option>
                         <option value="yes"> Oui </option>
                         <option value="no"> Non </option>

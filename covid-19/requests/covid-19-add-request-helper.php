@@ -6,7 +6,7 @@ include_once APPLICATION_PATH . '/includes/MysqliDb.php';
 include_once(APPLICATION_PATH . '/models/General.php');
 $general = new General($db);
 
-// echo "<pre>";print_r($_POST);die;
+echo "<pre>";print_r($_POST);die;
 
 
 $tableName = "form_covid19";
@@ -96,6 +96,9 @@ try {
 		'patient_surname'                     => isset($_POST['lastName']) ? $_POST['lastName'] : null,
 		'patient_dob'                         => isset($_POST['patientDob']) ? $general->dateFormat($_POST['patientDob']) : null,
 		'patient_gender'                      => isset($_POST['patientGender']) ? $_POST['patientGender'] : null,
+		
+		'is_patient_pregnant'                 => isset($_POST['patientGender']) ? $_POST['patientGender'] : null,
+		
 		'patient_age'                         => isset($_POST['patientAge']) ? $_POST['patientAge'] : null,
 		'patient_phone_number'                => isset($_POST['patientPhoneNumber']) ? $_POST['patientPhoneNumber'] : null,
 		'patient_address'                     => isset($_POST['patientAddress']) ? $_POST['patientAddress'] : null,
@@ -103,27 +106,44 @@ try {
 		'patient_district'                    => isset($_POST['patientDistrict']) ? $_POST['patientDistrict'] : null,
 		'patient_occupation'                  => isset($_POST['patientOccupation']) ? $_POST['patientOccupation'] : null,
 		'patient_nationality'                 => isset($_POST['patientNationality']) ? $_POST['patientNationality'] : null,
-		'flight_airline'                 	   => isset($_POST['airline']) ? $_POST['airline'] : null,
-		'flight_seat_no'                 	   => isset($_POST['seatNo']) ? $_POST['seatNo'] : null,
-		'flight_arrival_datetime'              => isset($_POST['arrivalDateTime']) ? $_POST['arrivalDateTime'] : null,
-		'flight_airport_of_departure'          => isset($_POST['airportOfDeparture']) ? $_POST['airportOfDeparture'] : null,
-		'flight_transit'          			   => isset($_POST['transit']) ? $_POST['transit'] : null,
-		'reason_of_visit'          			   => isset($_POST['reasonOfVisit']) ? $_POST['reasonOfVisit'] : null,
+		'flight_airline'                 	  => isset($_POST['airline']) ? $_POST['airline'] : null,
+		'flight_seat_no'                 	  => isset($_POST['seatNo']) ? $_POST['seatNo'] : null,
+		'flight_arrival_datetime'             => isset($_POST['arrivalDateTime']) ? $_POST['arrivalDateTime'] : null,
+		'flight_airport_of_departure'         => isset($_POST['airportOfDeparture']) ? $_POST['airportOfDeparture'] : null,
+		'flight_transit'          			  => isset($_POST['transit']) ? $_POST['transit'] : null,
+		'reason_of_visit'          			  => isset($_POST['reasonOfVisit']) ? $_POST['reasonOfVisit'] : null,
 		'is_sample_collected'                 => isset($_POST['isSampleCollected']) ? $_POST['isSampleCollected'] : null,
 		'reason_for_covid19_test'             => isset($_POST['reasonForCovid19Test']) ? $_POST['reasonForCovid19Test'] : null,
 		'specimen_type'                       => isset($_POST['specimenType']) ? $_POST['specimenType'] : null,
 		'sample_collection_date'              => isset($_POST['sampleCollectionDate']) ? $_POST['sampleCollectionDate'] : null,
 		'is_sample_post_mortem'               => isset($_POST['isSamplePostMortem']) ? $_POST['isSamplePostMortem'] : null,
 		'priority_status'                     => isset($_POST['priorityStatus']) ? $_POST['priorityStatus'] : null,
+		
+		'number_of_days_sick'                 => isset($_POST['priorityStatus']) ? $_POST['priorityStatus'] : null,
+		
 		'date_of_symptom_onset'               => isset($_POST['dateOfSymptomOnset']) ? $general->dateFormat($_POST['dateOfSymptomOnset']) : null,
 		'date_of_initial_consultation'        => isset($_POST['dateOfInitialConsultation']) ? $general->dateFormat($_POST['dateOfInitialConsultation']) : null,
 		'fever_temp'        				  => isset($_POST['feverTemp']) ? $_POST['feverTemp'] : null,
+		
+		'medical_history'        			  => isset($_POST['dateOfInitialConsultation']) ? $general->dateFormat($_POST['dateOfInitialConsultation']) : null,
+		'recent_hospitalization'   			  => isset($_POST['dateOfInitialConsultation']) ? $general->dateFormat($_POST['dateOfInitialConsultation']) : null,
+		'patient_lives_with_children'		  => isset($_POST['dateOfInitialConsultation']) ? $general->dateFormat($_POST['dateOfInitialConsultation']) : null,
+		'patient_cares_for_children'		  => isset($_POST['dateOfInitialConsultation']) ? $general->dateFormat($_POST['dateOfInitialConsultation']) : null,
+		
+		
+		'temperature_measurement_method' 	  => isset($_POST['feverTemp']) ? $_POST['feverTemp'] : null,
+		'respiratory_rate' 	  				  => isset($_POST['feverTemp']) ? $_POST['feverTemp'] : null,
+		'oxygen_saturation'	  				  => isset($_POST['feverTemp']) ? $_POST['feverTemp'] : null,
+		
 		'close_contacts'        			  => isset($_POST['closeContacts']) ? $_POST['closeContacts'] : null,
-		'contact_with_confirmed_case'          => isset($_POST['contactWithConfirmedCase']) ? $_POST['contactWithConfirmedCase'] : null,
+		'contact_with_confirmed_case'         => isset($_POST['contactWithConfirmedCase']) ? $_POST['contactWithConfirmedCase'] : null,
 		'has_recent_travel_history'           => isset($_POST['hasRecentTravelHistory']) ? $_POST['hasRecentTravelHistory'] : null,
 		'travel_country_names'                => isset($_POST['countryName']) ? $_POST['countryName'] : null,
 		'travel_return_date'                  => isset($_POST['returnDate']) ? $general->dateFormat($_POST['returnDate']) : null,
 		'sample_received_at_vl_lab_datetime'  => isset($_POST['sampleReceivedDate']) ? $_POST['sampleReceivedDate'] : null,
+		
+		'sample_condition'  				  => isset($_POST['sampleReceivedDate']) ? $_POST['sampleReceivedDate'] : null,
+		
 		'is_sample_rejected'                  => isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
 		'result'                              => isset($_POST['result']) ? $_POST['result'] : null,
 		'is_result_authorised'                => isset($_POST['isResultAuthorized']) ? $_POST['isResultAuthorized'] : null,
@@ -139,30 +159,6 @@ try {
 		'last_modified_by'                    => $_SESSION['userId'],
 		'last_modified_datetime'              => $general->getDateTime()
 	);
-	if($_POST['formId'] == 3) {
-		$covid19Data['suspected_case_drc'] 			= isset($_POST['suspectedCase'])?$_POST['suspectedCase']:null;
-		$covid19Data['probable_case_drc'] 			= isset($_POST['probableCase'])?$_POST['probableCase']:null;
-		$covid19Data['confirme_case_drc'] 			= isset($_POST['confirmeCase'])?$_POST['confirmeCase']:null;
-		$covid19Data['contact_case_drc'] 			= isset($_POST['contactCase'])?$_POST['contactCase']:null;
-		$covid19Data['respiratory_rate_option_drc']	= isset($_POST['respiratoryRateSelect'])?$_POST['respiratoryRateSelect']:null;
-		$covid19Data['respiratory_rate_drc'] 		= (isset($_POST['respiratoryRate']) && $_POST['respiratoryRateSelect'] == 'yes')?$_POST['respiratoryRate']:null;
-		$covid19Data['oxygen_saturation_option_drc']= isset($_POST['oxygenSaturationSelect'])?$_POST['oxygenSaturationSelect']:null;
-		$covid19Data['oxygen_saturation_drc'] 		= (isset($_POST['oxygenSaturation']) && $_POST['oxygenSaturationSelect'] == 'yes')?$_POST['oxygenSaturation']:null;
-		$covid19Data['sick_days_drc'] 				= isset($_POST['sickDays'])?$_POST['sickDays']:null;
-		$covid19Data['onset_illness_date_drc'] 		= isset($_POST['onsetIllnessDate'])?$general->dateFormat($_POST['onsetIllnessDate']):null;
-		$covid19Data['medical_background_drc'] 		= isset($_POST['medicalBackground'])?$_POST['medicalBackground']:null;
-		if($_POST['medicalBackground'] == 'yes'){
-			foreach($_POST['medicalBg'] as $index=>$val){
-				$covid19Data[$index] = isset($val)?$val:null;
-			}
-		}
-		$covid19Data['conacted_14_days_drc'] 		= isset($_POST['conacted14Days'])?$_POST['conacted14Days']:null;
-		$covid19Data['smoke_drc'] 					= isset($_POST['smoke'])?$_POST['smoke']:null;
-		$covid19Data['profession_drc'] 				= isset($_POST['profession'])?$_POST['profession']:null;
-		$covid19Data['confirmation_lab_drc'] 		= isset($_POST['confirmationLab'])?$_POST['confirmationLab']:null;
-		$covid19Data['result_pscr_drc'] 			= isset($_POST['resultPcr'])?$general->dateFormat($_POST['resultPcr']):null;
-	}
-
 	// echo "<pre>";
 	// var_dump($covid19Data);die;
 
