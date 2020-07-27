@@ -775,7 +775,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 		$.blockUI();
 		<?php
 		$path = '';
-		$path = '/result-pdf/vlRequestSearchResultPdf.php';
+		$path = '/vl/results/pdf/vlRequestSearchResultPdf.php';
 		?>
 		$.post("<?php echo $path; ?>", {
 				source: 'print',
@@ -799,7 +799,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 		$.blockUI();
 		<?php
 		$path = '';
-		$path = '/result-pdf/vlRequestSearchResultPdf.php';
+		$path = '/vl/results/pdf/vlRequestSearchResultPdf.php';
 		?>
 		if (newData == null) {
 			var rowsLength = selectedRows.length;

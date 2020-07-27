@@ -524,7 +524,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 	function convertSearchResultToPdf(id) {
 		<?php
 			$path = '';
-			$path = '/result-pdf/vlRequestSearchResultPdf.php'; 
+			$path = '/vl/results/pdf/vlRequestSearchResultPdf.php'; 
 		?>
 		$.post("<?php echo $path; ?>", {
 				source: 'print',

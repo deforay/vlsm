@@ -365,28 +365,7 @@ if ($lastUrl1 != '' || $lastUrl2 != '') {
     document.cookie = "gender=" + $("#gender").val();
     document.cookie = "status=" + $("#status").val();
     $.unblockUI();
-  }
-
-  function convertSearchResultToPdf(id, newData) {
-    $.blockUI();
-    <?php
-    $path = '';
-    $path = '/result-pdf/vlRequestSearchResultPdf.php';
-    ?>
-    $.post("<?php echo $path; ?>", {
-        source: 'print',
-        id: id,
-        newData: newData
-      },
-      function(data) {
-        if (data == "" || data == null || data == undefined) {
-          alert('Unable to generate download');
-        } else {
-          window.open('/uploads/' + data, '_blank');
-        }
-      });
-    $.unblockUI();
-  }
+  }ß
 
   function exportAllVlTestResult() {
     $.blockUI();

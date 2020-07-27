@@ -102,7 +102,7 @@ unset($_SESSION['controllertrack']);
         $.blockUI();
         <?php
         $path = '';
-        $path = '/result-pdf/vlRequestSearchResultPdf.php';
+        $path = '/vl/results/pdf/vlRequestSearchResultPdf.php';
         ?>
         $.post("<?php echo $path; ?>", {
                 source: 'print',

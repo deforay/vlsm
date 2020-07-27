@@ -238,7 +238,7 @@ $batchResult = $db->rawQuery($batchQuery);
             <input type="hidden" id="toName" name="toName" />
             <input type="hidden" id="toEmail" name="toEmail" />
             <input type="hidden" id="reportEmail" name="reportEmail" />
-            <a href="../request-mail/testRequestEmailConfig.php" class="btn btn-default"> Cancel</a>&nbsp;
+            <a href="/vl/request-mail/testRequestEmailConfig.php" class="btn btn-default"> Cancel</a>&nbsp;
             <a class="btn btn-primary" id="requestSubmit" href="javascript:void(0);" onclick="validateNow();return false;">Next <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
           </div>
           <!-- /.box-footer -->

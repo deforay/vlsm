@@ -210,16 +210,16 @@ if ($sarr['user_type'] == 'remoteuser') {
       var downloadURL = '#';
       if (country == 'drc') {
         $.unblockUI();
-        window.open('../uploads/vl-drc-form.pdf', '_blank');
+        window.open('/uploads/vl-drc-form.pdf', '_blank');
       } else if (country == 'zambia') {
         $.unblockUI();
-        window.open('../uploads/vl-zambia-form.pdf', '_blank');
+        window.open('/uploads/vl-zambia-form.pdf', '_blank');
       } else if (country == 'rwanda') {
         $.unblockUI();
-        window.open('../uploads/vl-rwanda-form.pdf', '_blank');
+        window.open('/uploads/vl-rwanda-form.pdf', '_blank');
       } else if (country == 'south-sudan') {
         $.unblockUI();
-        window.open('../uploads/vl-south-sudan-form.pdf', '_blank');
+        window.open('/uploads/vl-south-sudan-form.pdf', '_blank');
       }
     }
   </script>

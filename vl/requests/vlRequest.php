@@ -560,7 +560,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 	//	  if(data == "" || data == null || data == undefined){
 	//	    alert('Unable to generate download');
 	//	  }else{
-	//	    window.open('../uploads/barcode/'+data,'_blank');
+	//	    window.open('/uploads/barcode/'+data,'_blank');
 	//	  }
 	//    });
 	//  }
