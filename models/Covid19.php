@@ -189,6 +189,16 @@ class Model_Covid19
         }
         return $response;
     }
+    
+    public function getCovid19ReasonsForTestingDRC()
+    {
+        $results = $this->db->rawQuery("SELECT * FROM r_covid19_test_reasons WHERE `test_reason_status` LIKE 'active' AND (parent_reason IS NULL OR parent_reason = 0)");
+        $response = array();
+        foreach ($results as $row) {
+            $response[$row['test_reason_id']] = $row['test_reason_name'];
+        }
+        return $response;
+    }
     public function getCovid19Symptoms()
     {
         $results = $this->db->rawQuery("SELECT * FROM r_covid19_symptoms WHERE `symptom_status` LIKE 'active'");
