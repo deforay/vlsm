@@ -23,6 +23,10 @@ $sampleJson = $eidModel->generateEIDSampleCode($provinceCode, $sampleCollectionD
 $sampleData = json_decode($sampleJson, true);
 
 
+$sampleDate = explode(" ", $_POST['sampleCollectionDate']);
+$_POST['sampleCollectionDate'] = $general->dateFormat($sampleDate[0]) . " " . $sampleDate[1];
+
+
 $eidData = array();
 $eidData = array(
     'vlsm_country_id' => $_POST['countryId'],
