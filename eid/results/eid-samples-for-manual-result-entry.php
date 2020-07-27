@@ -29,13 +29,13 @@ $primaryKey = "eid_id";
 * you want to insert a non-database field (for example a counter or static image)
 */
 $sampleCode = 'sample_code';
-$aColumns = array('vl.sample_code', 'vl.remote_sample_code', 'b.batch_code', 'vl.child_id', 'vl.child_name','vl.mother_id','vl.mother_name', 'f.facility_name', 's.sample_name', 'vl.result', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
-$orderColumns = array('vl.sample_code', 'vl.remote_sample_code', 'b.batch_code', 'vl.child_id', 'vl.child_name','vl.mother_id','vl.mother_name', 'f.facility_name', 's.sample_name', 'vl.result', 'vl.last_modified_datetime', 'ts.status_name');
+$aColumns = array('vl.sample_code', 'vl.remote_sample_code', 'b.batch_code', 'vl.child_id', 'vl.child_name','vl.mother_id','vl.mother_name', 'f.facility_name', 'vl.result', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
+$orderColumns = array('vl.sample_code', 'vl.remote_sample_code', 'b.batch_code', 'vl.child_id', 'vl.child_name','vl.mother_id','vl.mother_name', 'f.facility_name', 'vl.result', 'vl.last_modified_datetime', 'ts.status_name');
 if ($sarr['user_type'] == 'remoteuser') {
      $sampleCode = 'remote_sample_code';
 } else if ($sarr['user_type'] == 'standalone') {
-     $aColumns = array('vl.sample_code', 'b.batch_code', 'vl.child_id', 'vl.child_name','vl.mother_id','vl.mother_name', 'f.facility_name', 's.sample_name', 'vl.result', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
-     $orderColumns = array('vl.sample_code', 'b.batch_code', 'vl.child_id', 'vl.child_name','vl.mother_id','vl.mother_name', 'f.facility_name', 's.sample_name', 'vl.result', 'vl.last_modified_datetime', 'ts.status_name');
+     $aColumns = array('vl.sample_code', 'b.batch_code', 'vl.child_id', 'vl.child_name','vl.mother_id','vl.mother_name', 'f.facility_name', 'vl.result', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
+     $orderColumns = array('vl.sample_code', 'b.batch_code', 'vl.child_id', 'vl.child_name','vl.mother_id','vl.mother_name', 'f.facility_name', 'vl.result', 'vl.last_modified_datetime', 'ts.status_name');
 }
 if (isset($_POST['vlPrint']) && $_POST['vlPrint'] == 'print') {
      array_unshift($orderColumns, "vl.eid_id");
@@ -323,7 +323,7 @@ foreach ($rResult as $aRow) {
      $row = array();
      if (isset($_POST['vlPrint']) && $_POST['vlPrint'] == 'print') {
           $row[] = '<input type="checkbox" name="chk[]" class="checkRows" id="chk' . $aRow['eid_id'] . '"  value="' . $aRow['eid_id'] . '" onclick="checkedRow(this);"  />';
-          $print = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertResultToPdf(' . $aRow['eid_id'] . ',\'\');"><i class="fa fa-print"> Print</i></a>';
+          $print = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Print result" onclick="convertResultToPdf(' . $aRow['eid_id'] . ',\'\');"><i class="fa fa-print"> Print</i></a>';
      } else {
           //$row[] = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['eid_id']) . '\',900,520);"><i class="fa fa-pencil-square-o"></i> Enter Result</a>
           //         <a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertSearchResultToPdf('.$aRow['eid_id'].');"><i class="fa fa-file-text"> Result PDF</i></a>';
