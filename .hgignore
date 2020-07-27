@@ -1,7 +1,7 @@
 syntax: regexp
 ^.idea
-^uploads/(?!index.php)
-^temporary/(?!index.php)
+^uploads/(?!.htaccess)
+^temporary/(?!.htaccess)
 ^instrument-interfacing/files/roche/new/(?!index.php)
 ^instrument-interfacing/files/roche/imported/(?!index.php)
 
@@ -19,6 +19,5 @@ Thumbs.db.orig
 .gitignore
 config.production.php
 config.development.php
-vldashboard-sync.php
 
 
