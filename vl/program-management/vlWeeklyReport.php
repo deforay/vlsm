@@ -498,7 +498,7 @@ $facilityResult = $db->rawQuery($facilityQuery);
         } else {
           $.unblockUI();
           window.open(
-            '../uploads/' + data,
+            '/uploads/' + data,
             '_blank' // <- This is what makes it open in a new window.
           );
 

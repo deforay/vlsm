@@ -516,7 +516,7 @@ foreach ($rejectionTypeResult as $type) {
   //	  if(data == "" || data == null || data == undefined){
   //	    alert('Unable to generate download');
   //	  }else{
-  //	    window.open('../uploads/barcode/'+data,'_blank');
+  //	    window.open('/uploads/barcode/'+data,'_blank');
   //	  }
   //    });
   //  }
