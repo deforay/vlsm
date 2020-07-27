@@ -22,6 +22,10 @@ $sampleJson = $vlModel->generateVLSampleID($provinceCode, $sampleCollectionDate,
 $sampleData = json_decode($sampleJson, true);
 
 
+$sampleDate = explode(" ", $_POST['sampleCollectionDate']);
+$_POST['sampleCollectionDate'] = $general->dateFormat($sampleDate[0]) . " " . $sampleDate[1];
+
+
 $vlData = array();
 $vlData = array(
     'vlsm_country_id' => $_POST['countryId'],

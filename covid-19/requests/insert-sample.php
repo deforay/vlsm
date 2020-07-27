@@ -21,7 +21,9 @@ try {
     $sampleJson = $covid19Model->generateCovid19SampleCode($provinceCode, $sampleCollectionDate, null, $provinceId);
     $sampleData = json_decode($sampleJson, true);
 
-
+    $sampleDate = explode(" ", $_POST['sampleCollectionDate']);
+    $_POST['sampleCollectionDate'] = $general->dateFormat($sampleDate[0]) . " " . $sampleDate[1];
+    
     $covid19Data = array();
     $covid19Data = array(
         'vlsm_country_id' => $_POST['countryId'],

@@ -83,11 +83,10 @@ try {
                 }
 
                 $db->insert('eid_imported_controls', $data);
-
             } else {
 
                 $data = array(
-                    
+
                     //'sample_received_at_vl_lab_datetime' => $rResult[0]['sample_received_at_vl_lab_datetime'],
                     //'sample_tested_datetime'=>$rResult[0]['sample_tested_datetime'],
                     //'result_dispatched_datetime' => $rResult[0]['result_dispatched_datetime'],
@@ -139,7 +138,7 @@ try {
                     if ($bvlResult) {
                         $data['sample_batch_id'] = $bvlResult[0]['batch_id'];
                     } else {
-                        $batchResult = $db->insert('batch_details', array('test_type' => 'eid','batch_code' => $rResult[0]['batch_code'], 'batch_code_key' => $rResult[0]['batch_code_key'], 'sent_mail' => 'no', 'request_created_datetime' => $general->getDateTime()));
+                        $batchResult = $db->insert('batch_details', array('test_type' => 'eid', 'batch_code' => $rResult[0]['batch_code'], 'batch_code_key' => $rResult[0]['batch_code_key'], 'sent_mail' => 'no', 'request_created_datetime' => $general->getDateTime()));
                         $data['sample_batch_id'] = $db->getInsertId();
                     }
 
@@ -176,7 +175,7 @@ try {
     if ($accResult) {
         for ($i = 0; $i < count($accResult); $i++) {
             $data = array(
-                
+
                 //'sample_received_at_vl_lab_datetime' => $accResult[$i]['sample_received_at_vl_lab_datetime'],
                 //'sample_tested_datetime'=>$accResult[$i]['sample_tested_datetime'],
                 //'result_dispatched_datetime' => $accResult[$i]['result_dispatched_datetime'],
@@ -244,11 +243,11 @@ try {
         $general->resultImportStats($numberOfResults, $fileName, $importedBy);
     }
 
-    
-    if (!$stResult) {
-        $result = "importedStatistics.php";
-    }
-    echo $result;
+    //if (!$stResult) {
+    //    echo "importedStatistics.php";
+    //}
+
+    echo "importedStatistics.php";
 } catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());

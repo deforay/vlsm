@@ -102,7 +102,7 @@ try {
                     'approver_comments' => $comments,
                     'lot_number' => $rResult[0]['lot_number'],
                     'lot_expiration_date' => $rResult[0]['lot_expiration_date'],
-                    'result' => $rResult[0]['result'], 
+                    'result' => $rResult[0]['result'],
                     'sample_tested_datetime' => $rResult[0]['sample_tested_datetime'],
                     'lab_id' => $rResult[0]['lab_id'],
                     'import_machine_file_name' => $rResult[0]['import_machine_file_name'],
@@ -152,8 +152,8 @@ try {
 
                     $query = "SELECT covid19_id from form_covid19 where sample_code='" . $sampleVal . "'";
                     $vlResult = $db->rawQuery($query);
-                    
-                    
+
+
 
                     $data['sample_code'] = $rResult[0]['sample_code'];
 
@@ -164,9 +164,9 @@ try {
                             $data['result'] = null;  // CANNOT PUT FINAL RESULT FOR POSITIVE
                             $data['result_status'] = 6; // CANNOT ACCEPT IT AUTOMATICALLY
                             //var_dump($data);die;
-                        }                        
+                        }
                         $db = $db->where('sample_code', $rResult[0]['sample_code']);
-                        
+
                         $result = $db->update($tableName1, $data);
                         $covid19Obj->insertCovid19Tests($vlResult[0]['covid19_id'], $rResult[0]['lot_number'], $rResult[0]['lab_id'], $rResult[0]['sample_tested_datetime'], $rResult[0]['result']);
                     } else {
@@ -174,7 +174,7 @@ try {
                         if ($data['result'] == 'positive') {
                             $data['result'] = null;  // CANNOT PUT FINAL RESULT FOR POSITIVE
                             $data['result_status'] = 6; // CANNOT ACCEPT IT AUTOMATICALLY
-                        }                          
+                        }
                         $data['sample_code'] = $rResult[0]['sample_code'];
                         $data['vlsm_country_id'] = $arr['vl_form'];
                         $data['vlsm_instance_id'] = $instanceResult[0]['vlsm_instance_id'];
@@ -244,7 +244,7 @@ try {
                 $data['result'] = null;  // CANNOT PUT FINAL RESULT FOR POSITIVE
                 $data['result_status'] = 6; // CANNOT ACCEPT IT AUTOMATICALLY
                 //var_dump($data);die;
-            }              
+            }
             $db = $db->where('sample_code', $accResult[$i]['sample_code']);
             $result = $db->update($tableName1, $data);
 
@@ -271,10 +271,11 @@ try {
         $general->resultImportStats($numberOfResults, $fileName, $importedBy);
     }
 
-    if (!$stResult) {
-        $result = "importedStatistics.php";
-    }
-    echo $result;
+    //if (!$stResult) {
+    //    echo "importedStatistics.php";
+    //}
+
+    echo "importedStatistics.php";
 } catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());
