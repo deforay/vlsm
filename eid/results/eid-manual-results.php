@@ -367,45 +367,26 @@ if ($lastUrl1 != '' || $lastUrl2 != '') {
     $.unblockUI();
   }
 
-  // function convertResultToPdf(id, newData) {
-  //   <?php
-  //   $path = '';
-  //   $path = '/result-pdf/vlRequestSearchResultPdf.php';
-  //   ?>
-  //   $.post("<?php echo $path; ?>", {
-  //       source: 'print',
-  //       id: id,
-  //       newData: newData
-  //     },
-  //     function(data) {
-  //       if (data == "" || data == null || data == undefined) {
-  //         alert('Unable to generate download');
-  //       } else {
-  //         window.open('/uploads/' + data, '_blank');
-  //       }
-  //     });
-  // }
-
-  // function convertSearchResultToPdf(id, newData) {
-  //   $.blockUI();
-  //   <?php
-  //   $path = '';
-  //   $path = '/result-pdf/vlRequestSearchResultPdf.php';
-  //   ?>
-  //   $.post("<?php echo $path; ?>", {
-  //       source: 'print',
-  //       id: id,
-  //       newData: newData
-  //     },
-  //     function(data) {
-  //       if (data == "" || data == null || data == undefined) {
-  //         alert('Unable to generate download');
-  //       } else {
-  //         window.open('/uploads/' + data, '_blank');
-  //       }
-  //     });
-  //   $.unblockUI();
-  // }
+  function convertSearchResultToPdf(id, newData) {
+    $.blockUI();
+    <?php
+    $path = '';
+    $path = '/result-pdf/vlRequestSearchResultPdf.php';
+    ?>
+    $.post("<?php echo $path; ?>", {
+        source: 'print',
+        id: id,
+        newData: newData
+      },
+      function(data) {
+        if (data == "" || data == null || data == undefined) {
+          alert('Unable to generate download');
+        } else {
+          window.open('/uploads/' + data, '_blank');
+        }
+      });
+    $.unblockUI();
+  }
 
   function exportAllVlTestResult() {
     $.blockUI();

@@ -463,36 +463,6 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 		oTable.fnDraw();
 	}
 
-	function convertPdf(id) {
-		$.post("/result-pdf/vlRequestPdf.php", {
-				id: id,
-				format: "html"
-			},
-			function(data) {
-				if (data == "" || data == null || data == undefined) {
-					alert('Unable to generate download');
-				} else {
-					window.open('../uploads/' + data, '_blank');
-				}
-
-			});
-	}
-
-	function convertZmbPdf(id) {
-		$.post("/includes/vlRequestZmbPdf.php", {
-				id: id,
-				format: "html"
-			},
-			function(data) {
-				if (data == "" || data == null || data == undefined) {
-					alert('Unable to generate download');
-				} else {
-					window.open('../uploads/' + data, '_blank');
-				}
-
-			});
-	}
-
 	function toggleTest(obj) {
 		if ($(obj).is(':checked')) {
 			if ($.inArray(obj.value, selectedTests) == -1) {

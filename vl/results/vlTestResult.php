@@ -347,7 +347,7 @@ if ($lastUrl1 != '' || $lastUrl2 != '') {
         ],
       <?php } ?> "bProcessing": true,
       "bServerSide": true,
-      "sAjaxSource": "getVlTestResultDetails.php",
+      "sAjaxSource": "/vl/results/getVlTestResultDetails.php",
       "fnServerData": function(sSource, aoData, fnCallback) {
         aoData.push({
           "name": "batchCode",
@@ -399,25 +399,6 @@ if ($lastUrl1 != '' || $lastUrl2 != '') {
     document.cookie = "gender=" + $("#gender").val();
     document.cookie = "status=" + $("#status").val();
     $.unblockUI();
-  }
-
-  function convertResultToPdf(id, newData) {
-    <?php
-    $path = '';
-    $path = '/result-pdf/vlRequestSearchResultPdf.php';
-    ?>
-    $.post("<?php echo $path; ?>", {
-        source: 'print',
-        id: id,
-        newData: newData
-      },
-      function(data) {
-        if (data == "" || data == null || data == undefined) {
-          alert('Unable to generate download');
-        } else {
-          window.open('../uploads/' + data, '_blank');
-        }
-      });
   }
 
   function convertSearchResultToPdf(id, newData) {

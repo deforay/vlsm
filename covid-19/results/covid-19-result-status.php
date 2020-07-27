@@ -336,22 +336,6 @@ foreach ($rejectionTypeResult as $type) {
     $.unblockUI();
   }
 
-  function convertPdf(id) {
-    $.post("/result-pdf/vlRequestPdf.php", {
-        id: id,
-        format: "html"
-      },
-      function(data) {
-        if (data == "" || data == null || data == undefined) {
-          alert('Unable to generate download');
-        } else {
-          window.open('../uploads/' + data, '_blank');
-        }
-
-      });
-  }
-
-
   function toggleTest(obj) {
     if ($(obj).is(':checked')) {
       if ($.inArray(obj.value, selectedTests) == -1) {

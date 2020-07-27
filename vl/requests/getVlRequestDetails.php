@@ -328,34 +328,26 @@ foreach ($rResult as $aRow) {
      $row[] = ucwords($aRow['status_name']);
      //$printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="printBarcode(\''.base64_encode($aRow['vl_sample_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
      //$enterResult='<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '\',900,520);"> Result</a>';
-     if ($aRow['vlsm_country_id'] == 2) {
-          if ($vlRequest) {
-               $edit = '<a href="editVlRequest.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
-          }
-          $pdf = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="View" onclick="convertZmbPdf(' . $aRow['vl_sample_id'] . ');"><i class="fa fa-file-text"> PDF</i></a>';
-          if ($vlView) {
-               $view = '<a href="viewVlRequestZm.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
-          }
-     } else {
-          if ($vlRequest) {
-               $edit = '<a href="editVlRequest.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
-          }
-          $pdf = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="View" onclick="convertPdf(' . $aRow['vl_sample_id'] . ');"><i class="fa fa-file-text"> PDF</i></a>';
-          if ($vlView) {
-               $view = '<a href="viewVlRequest.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
-          }
 
-          if (isset($gconfig['bar_code_printing']) && $gconfig['bar_code_printing'] != "off") {
-               $fac = ucwords($aRow['facility_name']) . " | " . $aRow['sample_collection_date'];
-               $barcode = '<br><a href="javascript:void(0)" onclick="printBarcodeLabel(\'' . $aRow[$sampleCode] . '\',\'' . $fac . '\')" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Barcode"><i class="fa fa-barcode"> </i> Barcode </a>';
-          }
+     if ($vlRequest) {
+          $edit = '<a href="editVlRequest.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
      }
+
+     if ($vlView) {
+          $view = '<a href="viewVlRequest.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
+     }
+
+     if (isset($gconfig['bar_code_printing']) && $gconfig['bar_code_printing'] != "off") {
+          $fac = ucwords($aRow['facility_name']) . " | " . $aRow['sample_collection_date'];
+          $barcode = '<br><a href="javascript:void(0)" onclick="printBarcodeLabel(\'' . $aRow[$sampleCode] . '\',\'' . $fac . '\')" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Barcode"><i class="fa fa-barcode"> </i> Barcode </a>';
+     }
+
      if ($vlView) {
           $row[] = $edit . '&nbsp;' . $barcode; //.$pdf.$view;
      } else if ($vlRequest || $editVlRequestZm) {
-          $row[] = $edit; //.$pdf;
+          $row[] = $edit;
      } else if ($vlView) {
-          $row[] = ""; //$pdf.$view;
+          $row[] = "";
      }
 
      $output['aaData'][] = $row;

@@ -321,14 +321,7 @@ $output = array(
 
 foreach ($rResult as $aRow) {
      $row = array();
-     if (isset($_POST['vlPrint']) && $_POST['vlPrint'] == 'print') {
-          $row[] = '<input type="checkbox" name="chk[]" class="checkRows" id="chk' . $aRow['covid19_id'] . '"  value="' . $aRow['covid19_id'] . '" onclick="checkedRow(this);"  />';
-          $print = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertResultToPdf(' . $aRow['covid19_id'] . ',\'\');"><i class="fa fa-print"> Print</i></a>';
-     } else {
-          //$row[] = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['covid19_id']) . '\',900,520);"><i class="fa fa-pencil-square-o"></i> Enter Result</a>
-          //         <a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertSearchResultToPdf('.$aRow['covid19_id'].');"><i class="fa fa-file-text"> Result PDF</i></a>';
-          $print = '<a href="covid-19-update-result.php?id=' . base64_encode($aRow['covid19_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Enter Result</a>';
-     }
+     $print = '<a href="covid-19-update-result.php?id=' . base64_encode($aRow['covid19_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Enter Result</a>';
 
 
 
@@ -339,7 +332,7 @@ foreach ($rResult as $aRow) {
      $row[] = $aRow['batch_code'];
      $row[] = ($aRow['facility_name']);
      $row[] = $aRow['patient_id'];
-     $row[] = $aRow['patient_name']." ". $aRow['patient_surname'] ;
+     $row[] = $aRow['patient_name'] . " " . $aRow['patient_surname'];
      $row[] = $covid19Results[$aRow['result']];
 
      if (isset($aRow['last_modified_datetime']) && trim($aRow['last_modified_datetime']) != '' && $aRow['last_modified_datetime'] != '0000-00-00 00:00:00') {

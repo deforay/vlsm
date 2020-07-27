@@ -368,23 +368,6 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 		oTable.fnDraw();
 	}
 
-	function convertPdf(id) {
-		$.post("/covid-19/result-pdf/covid19ResultPdf.php", {
-				id: id,
-				format: "html"
-			},
-			function(data) {
-				if (data == "" || data == null || data == undefined) {
-					alert('Unable to generate download');
-				} else {
-					window.open('/uploads/' + data, '_blank');
-				}
-
-			});
-	}
-
-
-
 	function toggleAllVisible() {
 		//alert(tabStatus);
 		$(".checkTests").each(function() {
