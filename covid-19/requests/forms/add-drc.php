@@ -24,7 +24,7 @@ $covid19Obj = new Model_Covid19($db);
 
 $covid19Results = $covid19Obj->getCovid19Results();
 $specimenTypeResult = $covid19Obj->getCovid19SampleTypes();
-$covid19ReasonsForTesting = $covid19Obj->getCovid19ReasonsForTesting();
+$covid19ReasonsForTesting = $covid19Obj->getCovid19ReasonsForTestingDRC();
 $covid19Symptoms = $covid19Obj->getCovid19SymptomsDRC();
 $covid19Comorbidities = $covid19Obj->getCovid19Comorbidities();
 
@@ -283,6 +283,52 @@ foreach ($fResult as $fDetails) {
                                                         <td style="width:50%;">
                                                             <input name="symptomId[]" type="hidden" value="<?php echo $symptomId; ?>">
                                                             <select name="symptomDetected[]" class="form-control isRequired" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" style="width:100%" onchange="checkSubSymptoms(this,<?php echo $symptomId;?>,<?php echo $index;?>);">
+                                                                <option value="">-- Select --</option>
+                                                                <option value='yes'> Oui </option>
+                                                                <option value='no'> Non </option>
+                                                                <option value='unknown'> Inconnu </option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                <?php $index++; } ?>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="4"style="width:15% !important">Antécédents Médicaux <span class="mandatory">*</span> </th>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">
+                                            <table  id="symptomsTable" class="table table-bordered">
+                                                <?php $index = 0; foreach ($covid19Comorbidities as $comorbiditiesId => $comorbiditiesName) { ?>
+                                                    <tr class="row<?php echo $index;?>">
+                                                        <th style="width:50%;"><?php echo $comorbiditiesName; ?></th>
+                                                        <td style="width:50%;">
+                                                            <input name="comorbiditiesId[]" type="hidden" value="<?php echo $comorbiditiesId; ?>">
+                                                            <select name="comorbiditiesDetected[]" class="form-control isRequired" title="Antécédents Médicaux <?php echo $comorbiditiesName; ?>" style="width:100%">
+                                                                <option value="">-- Select --</option>
+                                                                <option value='yes'> Oui </option>
+                                                                <option value='no'> Non </option>
+                                                                <option value='unknown'> Inconnu </option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                <?php $index++; } ?>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="4"style="width:15% !important">Définition de cas <span class="mandatory">*</span> </th>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">
+                                            <table  id="responseTable" class="table table-bordered">
+                                                <?php $index = 0; foreach ($covid19ReasonsForTesting as $reasonId => $responseName) { ?>
+                                                    <tr class="row<?php echo $index;?>">
+                                                        <th style="width:50%;"><?php echo $responseName; ?></th>
+                                                        <td style="width:50%;">
+                                                            <input name="responseId[]" type="hidden" value="<?php echo $reasonId; ?>">
+                                                            <select name="responseDetected[]" class="form-control isRequired" title="Définition de cas <?php echo $responseName; ?>" style="width:100%" onchange="checkSubResponse(this,<?php echo $reasonId;?>,<?php echo $index;?>);">
                                                                 <option value="">-- Select --</option>
                                                                 <option value='yes'> Oui </option>
                                                                 <option value='no'> Non </option>
@@ -755,7 +801,23 @@ foreach ($fResult as $fDetails) {
                 }
             });
         } else{
-            $("#symptomsTable").find("tr:eq("+row+")").after("");
+            $('.symptomRow'+parent).remove();
+        }
+    }
+    
+    function checkSubResponse(obj, parent, row){
+        if(obj.value == 'yes'){
+            $.post("getResponseByParentId.php", {
+                responseParent: parent
+            },
+            function(data) {
+                if (data != "") {
+                    // $(".row"+row).append(data);
+                    $("#responseTable").find("tr:eq("+row+")").after(data);
+                }
+            });
+        } else{
+            $('.responseRow'+parent).remove();
         }
     }
 
