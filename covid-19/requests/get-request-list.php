@@ -315,7 +315,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                if($editRequest){
                     $edit='<a href="covid-19-edit-request.php?id=' . base64_encode($aRow['covid19_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
                }
-               $pdf = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="View" onclick="convertPdf('.$aRow['covid19_id'].');"><i class="fa fa-file-text"> PDF</i></a>';
+               
                if($viewRequest){
                     $view = '<a href="covid-19-view-request.php?id=' . base64_encode($aRow['covid19_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
                }
@@ -325,9 +325,9 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                     $barcode='<br><a href="javascript:void(0)" onclick="printBarcodeLabel(\''.$aRow[$sampleCode].'\',\''.$fac.'\')" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Barcode"><i class="fa fa-barcode"> </i> Barcode </a>';
                }
                if($editRequest){
-                    $row[] = $edit.$barcode;//.$pdf;
+                    $row[] = $edit.$barcode;
                }else if($viewRequest){
-                    $row[] = $view.$barcode;//.$pdf;
+                    $row[] = $view.$barcode;
                }
                // echo '<pre>';print_r($row);die;
                $output['aaData'][] = $row;

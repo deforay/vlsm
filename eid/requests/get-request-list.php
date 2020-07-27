@@ -320,7 +320,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                if($editRequest){
                     $edit='<a href="eid-edit-request.php?id=' . base64_encode($aRow['eid_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
                }
-               $pdf = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="View" onclick="convertPdf('.$aRow['eid_id'].');"><i class="fa fa-file-text"> PDF</i></a>';
+               
                if($viewRequest){
                     $view = '<a href="eid-view-request.php?id=' . base64_encode($aRow['eid_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
                }
@@ -332,9 +332,9 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
 
                
                if($editRequest){
-                    $row[] = $edit.$barcode;//.$pdf;
+                    $row[] = $edit.$barcode;
                }else if($viewRequest){
-                    $row[] = $view.$barcode;//.$pdf;
+                    $row[] = $view.$barcode;
                }
 
                $output['aaData'][] = $row;
