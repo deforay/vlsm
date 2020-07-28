@@ -1,7 +1,7 @@
 <?php
 session_start();
 ob_start();
-require_once('../../startup.php');  
+#require_once('../../startup.php');  
 include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 include_once(APPLICATION_PATH.'/models/General.php');
 $general=new General($db);

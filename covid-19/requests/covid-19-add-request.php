@@ -1,7 +1,7 @@
 <?php
 ob_start();
 $title = "COVID-19 | Add New Request";
-require_once('../../startup.php');
+#require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 include_once(APPLICATION_PATH . '/models/General.php');
 include_once(APPLICATION_PATH . '/models/Covid19.php');

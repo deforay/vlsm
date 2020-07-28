@@ -1,7 +1,7 @@
 <?php
 ob_start();
 $title = "VL | Add New Request";
-require_once('../../startup.php');
+#require_once('../../startup.php');
 include_once APPLICATION_PATH . '/header.php';
 include_once(APPLICATION_PATH . '/models/General.php');
 $labFieldDisabled = '';
@@ -280,7 +280,7 @@ require_once($fileArray[$arr['vl_form']]);
     function checkSampleNameValidation(tableName, fieldName, id, fnct, alrt) {
         if ($.trim($("#" + id).val()) != '') {
             $.blockUI();
-            $.post("/includes/checkSampleDuplicate.php", {
+            $.post("/vl/requests/checkSampleDuplicate.php", {
                     tableName: tableName,
                     fieldName: fieldName,
                     value: $("#" + id).val(),

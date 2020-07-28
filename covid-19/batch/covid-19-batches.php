@@ -1,7 +1,7 @@
 <?php
 ob_start();
 $title = "Covid-19 | Batches";
-require_once('../../startup.php');
+#require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 include_once(APPLICATION_PATH . '/models/General.php');
 ?>

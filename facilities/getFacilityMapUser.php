@@ -1,5 +1,6 @@
 <?php
-require_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+#require_once('../startup.php');  
+include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 $fType = ($_POST['fType']==1)?4:1;
 $vlfmQuery="SELECT GROUP_CONCAT(DISTINCT vlfm.user_id SEPARATOR ',') as userId FROM vl_user_facility_map as vlfm join facility_details as fd ON fd.facility_id=vlfm.facility_id where facility_type = ".$fType;
 $vlfmResult = $db->rawQuery($vlfmQuery);

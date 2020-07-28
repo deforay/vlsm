@@ -1,7 +1,7 @@
 <?php
 session_start();
 ob_start();
-require_once('../../../startup.php');
+#require_once('../../../startup.php');
 
 use setasign\Fpdi\Tcpdf\Fpdi;
 

@@ -1,7 +1,7 @@
 <?php
 ob_start();
 session_start();
-require_once('../startup.php');
+#require_once('../startup.php');
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 //global config
 $configQuery = "SELECT * from global_config";
@@ -37,15 +37,14 @@ if (isset($_POST['cName']) && !empty($_POST['cName'])) {
     $pdQuery = "SELECT * from province_details"; // where province_name='" . $provinceName . "'";
     $pdResult = $db->query($pdQuery);
     $state = $option;
-    foreach($pdResult as $pdRow){
+    foreach ($pdResult as $pdRow) {
       $selected = '';
-      if($facilityInfo[0]['facility_state'] == $pdRow['province_name'] ){
+      if ($facilityInfo[0]['facility_state'] == $pdRow['province_name']) {
         $selected = "selected='selected'";
-      }  
+      }
       $state .= "<option data-code='" . $pdRow['province_code'] . "' data-province-id='" . $pdRow['province_id'] . "' data-name='" . $pdRow['province_name'] . "' value='" . $pdRow['province_name'] . "##" . $pdRow['province_code'] . "' $selected>" . ucwords($pdRow['province_name']) . "</option>";
-      
     }
-    
+
     $district = '';
     if ($facilityInfo[0]['facility_district'] != '') {
       $district .= $option;

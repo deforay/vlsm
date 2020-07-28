@@ -1,7 +1,8 @@
 <?php
 ob_start();
 $title = "Edit Specimen Referral Manifest";
-require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+#require_once('../startup.php'); 
+include_once(APPLICATION_PATH.'/header.php');
 $id=base64_decode($_GET['id']);
 $pQuery = "Select * from package_details where package_id=".$id;
 $pResult = $db->rawQuery($pQuery);

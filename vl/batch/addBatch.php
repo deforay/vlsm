@@ -1,7 +1,7 @@
 <?php
 ob_start();
 $title = "VL | Add New Batch";
-require_once('../../startup.php');
+#require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 //global config
 $configQuery = "SELECT `value` FROM global_config WHERE name ='vl_form'";

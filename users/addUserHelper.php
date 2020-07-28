@@ -3,12 +3,13 @@ ob_start();
 session_start();
 include_once '../startup.php';
 include_once APPLICATION_PATH . '/includes/MysqliDb.php';
-include_once(APPLICATION_PATH.'/models/General.php');
-include_once APPLICATION_PATH .'/includes/ImageResize.php';
+include_once(APPLICATION_PATH . '/models/General.php');
+include_once APPLICATION_PATH . '/includes/ImageResize.php';
 
 
 $general = new General($db);
-//require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+//#require_once('../startup.php'); 
+include_once(APPLICATION_PATH . '/header.php');
 $tableName = "user_details";
 $tableName2 = "vl_user_facility_map";
 try {
@@ -28,7 +29,7 @@ try {
                 $resizeObj->saveImage($signatureImagePath, 100);
                 $data['user_signature'] = $imageName;
             }
-        }        
+        }
 
         $password = sha1($_POST['password'] . $systemConfig['passwordSalt']);
         $idOne = $general->generateRandomString(8);
@@ -70,13 +71,12 @@ try {
 
     //Add event log
     $eventType = 'user-add';
-    $action = ucwords($_SESSION['userName']).' added user '. $_POST['userName'];
+    $action = ucwords($_SESSION['userName']) . ' added user ' . $_POST['userName'];
     $resource = 'user';
 
-    $general->activityLog($eventType,$action,$resource);
+    $general->activityLog($eventType, $action, $resource);
 
     header("location:users.php");
-
 } catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());

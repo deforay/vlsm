@@ -1,6 +1,7 @@
 <?php
 session_start();
-require_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+#require_once('../startup.php');  
+include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 $tableName="roles";
 $primaryKey="role_id";
 
@@ -138,4 +139,3 @@ $primaryKey="role_id";
         }
         
         echo json_encode($output);
-?>

@@ -1,6 +1,6 @@
 <?php
 $title = "EID | Sample Rejection Report";
-require_once('../../startup.php'); 
+#require_once('../../startup.php'); 
 include_once(APPLICATION_PATH.'/header.php');
 include_once(APPLICATION_PATH.'/models/General.php');
 include_once(APPLICATION_PATH.'/models/Facilities.php');

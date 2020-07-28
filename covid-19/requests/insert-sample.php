@@ -2,7 +2,7 @@
 ob_start();
 session_start();
 
-include_once('../../startup.php');
+#require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 include_once(APPLICATION_PATH . '/models/General.php');
 include_once(APPLICATION_PATH . '/models/Covid19.php');
