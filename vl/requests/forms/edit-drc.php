@@ -172,13 +172,15 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                       </td>
                     <?php } ?>
 
+                    <td><label for="serialNo">Recency ID</label></td>
+                    <td><input type="text" class="form-control" id="serialNo" name="serialNo" placeholder="Recency ID" title="Please enter recency id" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no']; ?>" /></td>
+
                     <td style=" display:<?php echo ($sCode == '') ? 'none' : ''; ?>"><label for="">Date de réception de léchantillon <span class="mandatory">*</span></label></td>
                     <td style=" display:<?php echo ($sCode == '') ? 'none' : ''; ?>">
                       <input type="text" class="form-control dateTime isRequired" id="sampleReceivedDate<?php echo ($sCode == '') ? 'Lab' : ''; ?>" name="sampleReceivedDate<?php echo ($sCode == '') ? 'Lab' : ''; ?>" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="checkSampleReceviedDate();" value="<?php echo ($vlQueryInfo[0]['sample_received_at_vl_lab_datetime'] != '' && $vlQueryInfo[0]['sample_received_at_vl_lab_datetime'] != NULL) ? $vlQueryInfo[0]['sample_received_at_vl_lab_datetime'] : date('d-M-Y H:i:s'); ?>" style="width:100%;" />
                     </td>
 
-                    <td><label for="serialNo">Recency ID</label></td>
-                    <td><input type="text" class="form-control" id="serialNo" name="serialNo" placeholder="Recency ID" title="Please enter recency id" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no']; ?>" /></td>
+                    
                   </tr>
                   <tr>
                     <td><label for="province">Province </label><span class="mandatory">*</span></td>
