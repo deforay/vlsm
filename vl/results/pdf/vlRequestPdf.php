@@ -4,7 +4,7 @@ ob_start();
 require_once('../startup.php');
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 include_once(APPLICATION_PATH . '/models/General.php');
-include_once(APPLICATION_PATH . '/includes/tcpdf/tcpdf.php');
+include_once(APPLICATION_PATH . '/vendor/autoload.php');
 
 //header and footer
 class MYPDF extends TCPDF

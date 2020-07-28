@@ -3,132 +3,145 @@
 
 
 
+use setasign\Fpdi\Tcpdf\Fpdi;
 
 
-
-class MYPDFANG extends TCPDF {
+class MYPDFANG extends TCPDF
+{
     //Page header
-    public function setHeading($logo,$text,$lab) {
-         $this->logo = $logo;
-         //$this->text = $text;
-         //$this->lab = $lab;
+    public function setHeading($logo, $text, $lab)
+    {
+        $this->logo = $logo;
+        //$this->text = $text;
+        //$this->lab = $lab;
     }
     //Page header
-    public function Header() {
-         // Logo
-         //$image_file = K_PATH_IMAGES.'logo_example.jpg';
-         //$this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
-         // Set font
-         if(trim($this->logo)!=''){
-              if (file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo)) {
-                   $image_file = UPLOAD_PATH . DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo;
-                   $this->Image($image_file,95, 3, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
-              }
-         }
-         //$this->SetFont('helvetica', 'B', 7);
-         //$this->writeHTMLCell(30,0,16,28,$this->text, 0, 0, 0, true, 'A', true);
-         $this->SetFont('helvetica', '', 7);
-         $this->writeHTMLCell(0,0,10,18,'República de Angola', 0, 0, 0, true, 'C', true);
-         $this->SetFont('helvetica', '', 7);
-         $this->writeHTMLCell(0,0,10,22,'Ministério da Saúde', 0, 0, 0, true, 'C', true);
-         $this->SetFont('helvetica', '', 7);
-         $this->writeHTMLCell(0,0,10,26,'Instituto Nacional de Luta contra a SIDA', 0, 0, 0, true, 'C', true);
-         $this->SetFont('helvetica', 'B', 8);
-         $this->writeHTMLCell(0,0,10,30,'RELATÓRIO DE RESULTADOS DE QUANTIFICAÇÃO DE CARGA VIRAL DE VIH', 0, 0, 0, true, 'C', true);
-         //if(trim($this->lab)!= ''){
-         // $this->SetFont('helvetica', '', 9);
-         //$this->writeHTMLCell(0,0,10,26,strtoupper($this->lab), 0, 0, 0, true, 'C', true);
-         //}
-         $this->writeHTMLCell(0,0,15,36,'<hr>', 0, 0, 0, true, 'C', true);
+    public function Header()
+    {
+        // Logo
+        //$image_file = K_PATH_IMAGES.'logo_example.jpg';
+        //$this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        // Set font
+        if (trim($this->logo) != '') {
+            if (file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'logo' . DIRECTORY_SEPARATOR . $this->logo)) {
+                $image_file = UPLOAD_PATH . DIRECTORY_SEPARATOR . 'logo' . DIRECTORY_SEPARATOR . $this->logo;
+                $this->Image($image_file, 95, 3, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
+            }
+        }
+        //$this->SetFont('helvetica', 'B', 7);
+        //$this->writeHTMLCell(30,0,16,28,$this->text, 0, 0, 0, true, 'A', true);
+        $this->SetFont('helvetica', '', 7);
+        $this->writeHTMLCell(0, 0, 10, 18, 'República de Angola', 0, 0, 0, true, 'C', true);
+        $this->SetFont('helvetica', '', 7);
+        $this->writeHTMLCell(0, 0, 10, 22, 'Ministério da Saúde', 0, 0, 0, true, 'C', true);
+        $this->SetFont('helvetica', '', 7);
+        $this->writeHTMLCell(0, 0, 10, 26, 'Instituto Nacional de Luta contra a SIDA', 0, 0, 0, true, 'C', true);
+        $this->SetFont('helvetica', 'B', 8);
+        $this->writeHTMLCell(0, 0, 10, 30, 'RELATÓRIO DE RESULTADOS DE QUANTIFICAÇÃO DE CARGA VIRAL DE VIH', 0, 0, 0, true, 'C', true);
+        //if(trim($this->lab)!= ''){
+        // $this->SetFont('helvetica', '', 9);
+        //$this->writeHTMLCell(0,0,10,26,strtoupper($this->lab), 0, 0, 0, true, 'C', true);
+        //}
+        $this->writeHTMLCell(0, 0, 15, 36, '<hr>', 0, 0, 0, true, 'C', true);
     }
 
     // Page footer
-    public function Footer() {
-         // Position at 15 mm from bottom
-         $this->SetY(-15);
-         // Set font
-         $this->SetFont('helvetica', '', 8);
-         // Page number
-         $this->Cell(0, 10, 'Page'.$_SESSION['aliasPage'].'/'.$_SESSION['nbPages'], 0, false, 'C', 0, '', 0,false, 'T', 'M');
+    public function Footer()
+    {
+        // Position at 15 mm from bottom
+        $this->SetY(-15);
+        // Set font
+        $this->SetFont('helvetica', '', 8);
+        // Page number
+        $this->Cell(0, 10, 'Page' . $_SESSION['aliasPage'] . '/' . $_SESSION['nbPages'], 0, false, 'C', 0, '', 0, false, 'T', 'M');
     }
 }
 
 
 
-class PDF_RotateANG extends FPDI {
-
+class PDF_RotateANG extends FPDI
+{
     var $angle = 0;
 
-    function Rotate($angle, $x = -1, $y = -1) {
-         if ($x == -1)
-         $x = $this->x;
-         if ($y == -1)
-         $y = $this->y;
-         if ($this->angle != 0)
-         $this->_out('Q');
-         $this->angle = $angle;
-         if ($angle != 0) {
-              $angle*=M_PI / 180;
-              $c = cos($angle);
-              $s = sin($angle);
-              $cx = $x * $this->k;
-              $cy = ($this->h - $y) * $this->k;
-              $this->_out(sprintf('q %.5F %.5F %.5F %.5F %.2F %.2F cm 1 0 0 1 %.2F %.2F cm', $c, $s, -$s, $c, $cx, $cy, -$cx, -$cy));
-         }
+
+    function Rotate($angle, $x = -1, $y = -1)
+    {
+        if ($x == -1)
+            $x = $this->x;
+        if ($y == -1)
+            $y = $this->y;
+        if ($this->angle != 0)
+            $this->_out('Q');
+        $this->angle = $angle;
+        if ($angle != 0) {
+            $angle *= M_PI / 180;
+            $c = cos($angle);
+            $s = sin($angle);
+            $cx = $x * $this->k;
+            $cy = ($this->h - $y) * $this->k;
+            $this->_out(sprintf('q %.5F %.5F %.5F %.5F %.2F %.2F cm 1 0 0 1 %.2F %.2F cm', $c, $s, -$s, $c, $cx, $cy, -$cx, -$cy));
+        }
     }
 
-    function _endpage() {
-         if ($this->angle != 0) {
-              $this->angle = 0;
-              $this->_out('Q');
-         }
-         parent::_endpage();
+    function _endpage()
+    {
+        if ($this->angle != 0) {
+            $this->angle = 0;
+            $this->_out('Q');
+        }
+        parent::_endpage();
     }
 }
 
-class WatermarkANG extends PDF_RotateANG {
+class WatermarkANG extends PDF_RotateANG
+{
 
     var $_tplIdx;
 
-    function Header() {
-         global $fullPathToFile;
+    function Header()
+    {
+        global $fullPathToFile;
 
-         //Put the watermark
-         $this->SetFont('helvetica', 'B', 50);
-         $this->SetTextColor(148,162,204);
-         $this->RotatedText(67,119,'DRAFT',45);
+        //Put the watermark
+        $this->SetFont('helvetica', 'B', 50);
+        $this->SetTextColor(148, 162, 204);
+        $this->RotatedText(67, 119, 'DRAFT', 45);
 
-         if (is_null($this->_tplIdx)) {
-              // THIS IS WHERE YOU GET THE NUMBER OF PAGES
-              $this->numPages = $this->setSourceFile($fullPathToFile);
-              $this->_tplIdx = $this->importPage(1);
-         }
-         $this->useTemplate($this->_tplIdx, 0, 0, 200);
+        if (is_null($this->_tplIdx)) {
+            // THIS IS WHERE YOU GET THE NUMBER OF PAGES
+            $this->numPages = $this->setSourceFile($fullPathToFile);
+            $this->_tplIdx = $this->importPage(1);
+        }
+        $this->useTemplate($this->_tplIdx, 0, 0, 200);
     }
 
-    function RotatedText($x, $y, $txt, $angle) {
-         //Text rotated around its origin
-         $this->Rotate($angle, $x, $y);
-         $this->Text($x, $y, $txt);
-         $this->Rotate(0);
-         //$this->SetAlpha(0.7);
+    function RotatedText($x, $y, $txt, $angle)
+    {
+        //Text rotated around its origin
+        $this->Rotate($angle, $x, $y);
+        $this->Text($x, $y, $txt);
+        $this->Rotate(0);
+        //$this->SetAlpha(0.7);
     }
 }
-class Pdf_concatANG extends FPDI {
+class Pdf_concatANG extends FPDI
+{
     var $files = array();
-    function setFiles($files) {
-         $this->files = $files;
+    function setFiles($files)
+    {
+        $this->files = $files;
     }
-    function concat() {
-         foreach($this->files AS $file) {
-              $pagecount = $this->setSourceFile($file);
-              for ($i = 1; $i <= $pagecount; $i++) {
-                   $tplidx = $this->ImportPage($i);
-                   $s = $this->getTemplatesize($tplidx);
-                   $this->AddPage('P', array($s['w'], $s['h']));
-                   $this->useTemplate($tplidx);
-              }
-         }
+    function concat()
+    {
+        foreach ($this->files as $file) {
+            $pagecount = $this->setSourceFile($file);
+            for ($i = 1; $i <= $pagecount; $i++) {
+                $tplidx = $this->ImportPage($i);
+                $s = $this->getTemplatesize($tplidx);
+                $this->AddPage('P', array($s['w'], $s['h']));
+                $this->useTemplate($tplidx);
+            }
+        }
     }
 }
 
@@ -459,7 +472,7 @@ if (sizeof($requestResult) > 0) {
             $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
         }
 
-        $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">'.$general->humanDateFormat($result['result_approved_datetime']).'</td>';
+        $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $general->humanDateFormat($result['result_approved_datetime']) . '</td>';
         $html .= '</tr>';
 
         $html .= '<tr>';

@@ -1,14 +1,15 @@
 <?php
 session_start();
 ob_start();
+
+use setasign\Fpdi\Tcpdf\Fpdi;
+
 require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 include_once(APPLICATION_PATH . '/models/General.php');
 include_once(APPLICATION_PATH . '/models/Covid19.php');
 include_once(APPLICATION_PATH . '/models/Users.php');
-include_once(APPLICATION_PATH . '/includes/tcpdf/tcpdf.php');
-include_once(APPLICATION_PATH . '/includes/fpdi/fpdi.php');
-include_once(APPLICATION_PATH . '/includes/fpdf/fpdf.php');
+include_once(APPLICATION_PATH . '/vendor/autoload.php');
 
 $tableName1 = "activity_log";
 $tableName2 = "form_covid19";

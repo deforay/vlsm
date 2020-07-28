@@ -1,6 +1,9 @@
 {
     "require": {
         "phpoffice/phpspreadsheet": "^1.5",
-        "league/csv": "^9.0"
+        "league/csv": "^9.0",
+        "setasign/fpdi": "^2.3",
+        "tecnickcom/tcpdf": "^6.3",
+        "phpmailer/phpmailer": "^6.1"
     }
 }
