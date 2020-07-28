@@ -107,7 +107,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                 <form class="form-horizontal" method="post" name="editCovid19RequestForm" id="editCovid19RequestForm" autocomplete="off" action="covid-19-edit-request-helper.php">
                     <div class="box-body">
                         <div class="box box-default">
-                            <div class="box-body">
+                            <div class="box-body disabledForm">
                                 <div class="box-header with-border sectionHeader">
                                     <h3 class="box-title">INFORMATIONS SUR LE SITE</h3>
                                 </div>
@@ -764,7 +764,6 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                     }
                 });
             //}
-            sampleCodeGeneration();
         } else if (pName == '') {
             provinceName = true;
             facilityName = true;
@@ -774,24 +773,6 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
             $("#district").html("<option value=''> -- Select -- </option>");
         }
         $.unblockUI();
-    }
-
-    function sampleCodeGeneration() {
-        var pName = $("#province").val();
-        var sDate = $("#sampleCollectionDate").val();
-        if (pName != '' && sDate != '') {
-            $.post("/covid-19/requests/generateSampleCode.php", {
-                    sDate: sDate,
-                    pName: pName
-                },
-                function(data) {
-                    var sCodeKey = JSON.parse(data);
-                    $("#sampleCode").val(sCodeKey.sampleCode);
-                    $("#sampleCodeInText").html(sCodeKey.sampleCodeInText);
-                    $("#sampleCodeFormat").val(sCodeKey.sampleCodeFormat);
-                    $("#sampleCodeKey").val(sCodeKey.sampleCodeKey);
-                });
-        }
     }
 
     function getfacilityDistrictwise(obj) {
@@ -896,6 +877,15 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                 $("#motherViralLoadText").val('');
             }
         });
+        <?php if(isset($covid19Info['result']) && $covid19Info['result'] != ""){ ?>
+            $("#updateCovid19ConfirmatoryRequestForm :input").prop("disabled", true);
+            $('.submit-btn').remove();
+        <?php }else{?>
+        $('.disabledForm input, .disabledForm select , .disabledForm textarea, .test-name-table-input').attr('disabled', true);
+        $('.test-name-table-input').prop('disabled',true);
+        insRow();
+        <?php }?>
+
         $('#isResultAuthorized').change(function(e){
             checkIsResultAuthorized();
         });
