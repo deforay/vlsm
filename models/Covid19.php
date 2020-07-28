@@ -306,4 +306,30 @@ class Model_Covid19
 
         return $response;
     }
+
+    public function getCovid19ReasonsForTestingByFormId($formId)
+    {
+        if (empty($formId)) {
+            return null;
+        }
+
+        $response = array();
+
+        // Using this in sync requests/results
+        if (is_array($formId)) {
+            $results = $this->db->rawQuery("SELECT * FROM covid19_reasons_for_testing WHERE `covid19_id` IN (" . implode(",", $formId) . ")");
+
+            foreach ($results as $row) {
+                $response[$row['covid19_id']][$row['reasons_id']] = $row['reasons_detected'];
+            }
+        } else {
+            $results = $this->db->rawQuery("SELECT * FROM covid19_reasons_for_testing WHERE `covid19_id` = $formId");
+
+            foreach ($results as $row) {
+                $response[$row['reasons_id']] = $row['reasons_detected'];
+            }
+        }
+
+        return $response;
+    }
 }
