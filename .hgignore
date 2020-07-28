@@ -19,5 +19,6 @@ Thumbs.db.orig
 .gitignore
 config.production.php
 config.development.php
+index-new.php
 
 
