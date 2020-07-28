@@ -1,8 +1,9 @@
 <?php
 ob_start();
 require_once('../../startup.php');
+
 include_once(APPLICATION_PATH . '/header.php');
-include_once(APPLICATION_PATH . '/includes/tcpdf/tcpdf.php');
+include_once(APPLICATION_PATH.'/vendor/autoload.php');
 include_once(APPLICATION_PATH . '/models/General.php');
 $general = new General($db);
 $tableName = "form_covid19";

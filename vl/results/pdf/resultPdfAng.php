@@ -3,6 +3,7 @@
 // This file is included in vlRequestSearchResultPdf.php
 
 
+use setasign\Fpdi\Tcpdf\Fpdi;
 
 class MYPDFANG extends TCPDF {
      //Page header

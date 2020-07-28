@@ -4,7 +4,6 @@ session_start();
 
 require_once(__DIR__ . "/../startup.php");
 include_once(APPLICATION_PATH . "/includes/MysqliDb.php");
-include_once(APPLICATION_PATH . "/includes/tcpdf/tcpdf.php");
 include_once(APPLICATION_PATH . '/models/General.php');
 include_once(APPLICATION_PATH . "/vendor/autoload.php");
 
@@ -139,9 +138,9 @@ if (trim($id) != '') {
         // add a page
         $pdf->AddPage();
         $tbl = '';
-        $packageCodeBarCode = $pdf->serializeTCPDFtagParameters(array($result[0]['package_code'], 'C39', '', '', 0,8, 0.25, array('border' => false, 'align' => 'L', 'padding' => 0, 'fgcolor' => array(0, 0, 0), 'bgcolor' => array(255, 255, 255), 'text' => false, 'font' => 'helvetica', 'fontsize' => 8, 'stretchtext' => 2), 'N'));        
+        $packageCodeBarCode = $pdf->serializeTCPDFtagParameters(array($result[0]['package_code'], 'C39', '', '', 0, 8, 0.25, array('border' => false, 'align' => 'L', 'padding' => 0, 'fgcolor' => array(0, 0, 0), 'bgcolor' => array(255, 255, 255), 'text' => false, 'font' => 'helvetica', 'fontsize' => 8, 'stretchtext' => 2), 'N'));
         //$tbl .= '<h1> ' . $result[0]['package_code'] . '<tcpdf method="write1DBarcode" params="' . $packageCodeBarCode . '" /> </h1>';
-        $tbl .= '<span style="font-size:1.7em;"> ' . $result[0]['package_code'] .' <tcpdf method="write1DBarcode" params="' . $packageCodeBarCode . '" /> </span>';
+        $tbl .= '<span style="font-size:1.7em;"> ' . $result[0]['package_code'] . ' <tcpdf method="write1DBarcode" params="' . $packageCodeBarCode . '" /> </span>';
         $tbl .= '<table style="width:100%;border:1px solid #333;">
             
                 <tr nobr="true">
@@ -178,7 +177,7 @@ if (trim($id) != '') {
             $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . $sampleCounter . '.</td>';
             $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . $sample['remote_sample_code'] . '</td>';
             // $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . ucwords($sample['facility_district']) . '</td>';
-            $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . ucwords($sample['clinic_name']) .', '.$sample['facility_district']. '</td>';
+            $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . ucwords($sample['clinic_name']) . ', ' . $sample['facility_district'] . '</td>';
             $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . ucwords($sample['child_name']) . '</td>';
             $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . $sample['child_id'] . '</td>';
             $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . $patientDOB . '</td>';
@@ -202,7 +201,7 @@ if (trim($id) != '') {
         $tbl .= '</table>';
         //$tbl.='<br/><br/><b style="text-align:left;">Printed On:  </b>'.date('d/m/Y H:i:s');
         $pdf->writeHTMLCell('', '', 11, $pdf->getY(), $tbl, 0, 1, 0, true, 'C', true);
-        $filename = trim($bResult[0]['package_code']) .'-'. date('Y-m-d'). '-Manifest.pdf';
+        $filename = trim($bResult[0]['package_code']) . '-' . date('Y-m-d') . '-Manifest.pdf';
         $pdf->Output(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'package_barcode' . DIRECTORY_SEPARATOR . $filename, "F");
         echo $filename;
     }
