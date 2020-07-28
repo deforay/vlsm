@@ -8,7 +8,6 @@ $general = new General($db);
 
 // echo "<pre>";print_r($_POST);die;
 
-
 $tableName = "form_covid19";
 $tableName1 = "activity_log";
 $testTableName = 'covid19_tests';
@@ -96,9 +95,7 @@ try {
 		'patient_surname'                     => isset($_POST['lastName']) ? $_POST['lastName'] : null,
 		'patient_dob'                         => isset($_POST['patientDob']) ? $general->dateFormat($_POST['patientDob']) : null,
 		'patient_gender'                      => isset($_POST['patientGender']) ? $_POST['patientGender'] : null,
-		
 		'is_patient_pregnant'                 => isset($_POST['isPatientPregnant']) ? $_POST['isPatientPregnant'] : null,
-		
 		'patient_age'                         => isset($_POST['patientAge']) ? $_POST['patientAge'] : null,
 		'patient_phone_number'                => isset($_POST['patientPhoneNumber']) ? $_POST['patientPhoneNumber'] : null,
 		'patient_address'                     => isset($_POST['patientAddress']) ? $_POST['patientAddress'] : null,
@@ -118,32 +115,24 @@ try {
 		'sample_collection_date'              => isset($_POST['sampleCollectionDate']) ? $_POST['sampleCollectionDate'] : null,
 		'is_sample_post_mortem'               => isset($_POST['isSamplePostMortem']) ? $_POST['isSamplePostMortem'] : null,
 		'priority_status'                     => isset($_POST['priorityStatus']) ? $_POST['priorityStatus'] : null,
-		
 		'number_of_days_sick'                 => isset($_POST['numberOfDaysSick']) ? $_POST['numberOfDaysSick'] : null,
-		
 		'date_of_symptom_onset'               => isset($_POST['dateOfSymptomOnset']) ? $general->dateFormat($_POST['dateOfSymptomOnset']) : null,
 		'date_of_initial_consultation'        => isset($_POST['dateOfInitialConsultation']) ? $general->dateFormat($_POST['dateOfInitialConsultation']) : null,
 		'fever_temp'        				  => isset($_POST['feverTemp']) ? $_POST['feverTemp'] : null,
-		
-		'medical_history'        			  => isset($_POST['medicalHistory']) ? $general->dateFormat($_POST['medicalHistory']) : null,
-		'recent_hospitalization'   			  => isset($_POST['recentHospitalization']) ? $general->dateFormat($_POST['recentHospitalization']) : null,
-		'patient_lives_with_children'		  => isset($_POST['patientLivesWithChildren']) ? $general->dateFormat($_POST['patientLivesWithChildren']) : null,
-		'patient_cares_for_children'		  => isset($_POST['patientCaresForChildren']) ? $general->dateFormat($_POST['patientCaresForChildren']) : null,
-		
-		
+		'medical_history'        			  => isset($_POST['medicalHistory']) ? $_POST['medicalHistory'] : null,
+		'recent_hospitalization'   			  => isset($_POST['recentHospitalization']) ? $_POST['recentHospitalization'] : null,
+		'patient_lives_with_children'		  => isset($_POST['patientLivesWithChildren']) ? $_POST['patientLivesWithChildren'] : null,
+		'patient_cares_for_children'		  => isset($_POST['patientCaresForChildren']) ? $_POST['patientCaresForChildren'] : null,
 		'temperature_measurement_method' 	  => isset($_POST['temperatureMeasurementMethod']) ? $_POST['temperatureMeasurementMethod'] : null,
 		'respiratory_rate' 	  				  => isset($_POST['respiratoryRate']) ? $_POST['respiratoryRate'] : null,
 		'oxygen_saturation'	  				  => isset($_POST['oxygenSaturation']) ? $_POST['oxygenSaturation'] : null,
-		
 		'close_contacts'        			  => isset($_POST['closeContacts']) ? $_POST['closeContacts'] : null,
 		'contact_with_confirmed_case'         => isset($_POST['contactWithConfirmedCase']) ? $_POST['contactWithConfirmedCase'] : null,
 		'has_recent_travel_history'           => isset($_POST['hasRecentTravelHistory']) ? $_POST['hasRecentTravelHistory'] : null,
 		'travel_country_names'                => isset($_POST['countryName']) ? $_POST['countryName'] : null,
 		'travel_return_date'                  => isset($_POST['returnDate']) ? $general->dateFormat($_POST['returnDate']) : null,
 		'sample_received_at_vl_lab_datetime'  => isset($_POST['sampleReceivedDate']) ? $_POST['sampleReceivedDate'] : null,
-		
 		'sample_condition'  				  => isset($_POST['sampleCondition']) ? $_POST['sampleCondition'] : null,
-		
 		'is_sample_rejected'                  => isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
 		'result'                              => isset($_POST['result']) ? $_POST['result'] : null,
 		'is_result_authorised'                => isset($_POST['isResultAuthorized']) ? $_POST['isResultAuthorized'] : null,
@@ -227,7 +216,7 @@ try {
 		$db->delete($testTableName);
 		$covid19Data['sample_tested_datetime'] = null;
 	}
-
+	$id = 0;
 	if (isset($_POST['covid19SampleId']) && $_POST['covid19SampleId'] != '') {
 		// echo "<pre>"; print_r($covid19Data);die;
 		$db = $db->where('covid19_id', $_POST['covid19SampleId']);

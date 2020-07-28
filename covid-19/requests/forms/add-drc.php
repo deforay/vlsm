@@ -299,8 +299,8 @@ foreach ($fResult as $fDetails) {
                                                     <tr class="row<?php echo $index;?>">
                                                         <th style="width:50%;"><?php echo $comorbiditiesName; ?></th>
                                                         <td style="width:50%;">
-                                                            <input name="comorbiditiesId[]" type="hidden" value="<?php echo $comorbiditiesId; ?>">
-                                                            <select name="comorbiditiesDetected[]" class="form-control isRequired" title="Antécédents Médicaux <?php echo $comorbiditiesName; ?>" style="width:100%">
+                                                            <input name="comorbidityId[]" type="hidden" value="<?php echo $comorbiditiesId; ?>">
+                                                            <select name="comorbidityDetected[]" class="form-control isRequired" title="Antécédents Médicaux <?php echo $comorbiditiesName; ?>" style="width:100%">
                                                                 <option value="">-- Select --</option>
                                                                 <option value='yes'> Oui </option>
                                                                 <option value='no'> Non </option>

@@ -764,6 +764,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                     }
                 });
             //}
+            sampleCodeGeneration();
         } else if (pName == '') {
             provinceName = true;
             facilityName = true;
@@ -773,6 +774,24 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
             $("#district").html("<option value=''> -- Select -- </option>");
         }
         $.unblockUI();
+    }
+
+    function sampleCodeGeneration() {
+        var pName = $("#province").val();
+        var sDate = $("#sampleCollectionDate").val();
+        if (pName != '' && sDate != '') {
+            $.post("/covid-19/requests/generateSampleCode.php", {
+                    sDate: sDate,
+                    pName: pName
+                },
+                function(data) {
+                    var sCodeKey = JSON.parse(data);
+                    $("#sampleCode").val(sCodeKey.sampleCode);
+                    $("#sampleCodeInText").html(sCodeKey.sampleCodeInText);
+                    $("#sampleCodeFormat").val(sCodeKey.sampleCodeFormat);
+                    $("#sampleCodeKey").val(sCodeKey.sampleCodeKey);
+                });
+        }
     }
 
     function getfacilityDistrictwise(obj) {
