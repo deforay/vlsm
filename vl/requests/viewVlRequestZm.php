@@ -107,7 +107,7 @@ $general->activityLog($eventType, $action, $resource);
                   <div class="col-xs-3 col-md-3">
                     <div class="form-group">
                       <label for="serialNo">Serial No</label>
-                      <input type="text" class="form-control serialNo" value="<?php echo $vlQueryInfo[0]['serial_no']; ?>" />
+                      <input type="text" class="form-control serialNo" value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" />
                     </div>
                   </div>
                 </div>
@@ -303,7 +303,7 @@ $general->activityLog($eventType, $action, $resource);
                   </tr>
                   <tr>
                     <td><label for="serialNo">Serial No.</label></td>
-                    <td><input type="text" class="form-control " placeholder="Enter Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no']; ?>" /></td>
+                    <td><input type="text" class="form-control " placeholder="Enter Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" /></td>
                   </tr>
                 </table>
               </div>

@@ -235,7 +235,6 @@ try {
 
     $vldata = array(
         'vlsm_instance_id' => $instanceId,
-        //'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL ,
         'sample_reordered' => (isset($_POST['sampleReordered']) && $_POST['sampleReordered'] != '') ? $_POST['sampleReordered'] : 'no',
         //'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
         'facility_id' => (isset($_POST['fName']) && $_POST['fName'] != '') ? $_POST['fName'] : NULL,
@@ -294,7 +293,6 @@ try {
     } else {
         if ($_POST['sampleCodeCol'] != '') {
             $vldata['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') ? $_POST['sampleCodeCol'] : NULL;
-            $vldata['serial_no'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') ? $_POST['sampleCodeCol'] : NULL;
         } else {
             //Since Sample Code does not exist, today is the date
             //sample is being registered at the lab.
@@ -325,11 +323,9 @@ try {
                 $maxId = '001';
             }
             if ($arr['sample_code'] == 'auto') {
-                $vldata['serial_no'] = $auto . $maxId;
                 $vldata['sample_code'] = $auto . $maxId;
                 $vldata['sample_code_key'] = $maxId;
             } else if ($arr['sample_code'] == 'YY' || $arr['sample_code'] == 'MMYY') {
-                $vldata['serial_no'] = $prefix . $mnthYr . $maxId;
                 $vldata['sample_code'] = $prefix . $mnthYr . $maxId;
                 $vldata['sample_code_format'] = $prefix . $mnthYr;
                 $vldata['sample_code_key'] =  $maxId;

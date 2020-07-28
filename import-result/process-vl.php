@@ -168,7 +168,7 @@ try {
                     $vlResult = $db->rawQuery($query);
                     $data['result_status'] = $status[$i];
 
-                    $data['serial_no'] = $rResult[0]['sample_code'];
+                    $data['sample_code'] = $rResult[0]['sample_code'];
                     if (count($vlResult) > 0) {
                         $data['vlsm_country_id'] = $arr['vl_form'];
                         $data['data_sync'] = 0;

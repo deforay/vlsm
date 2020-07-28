@@ -245,7 +245,7 @@ try {
         'vlsm_country_id' => 3,
         //'sample_code_title'=>(isset($_POST['sampleCodeTitle']) && $_POST['sampleCodeTitle']!='' ? $_POST['sampleCodeTitle'] :  'auto'),
 
-        // 'sample_code_key'=>(isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='' ? $_POST['sampleCodeKey'] :  NULL),
+        'serial_no'=>(isset($_POST['serialNo']) && $_POST['serialNo']!='' ? $_POST['serialNo'] :  NULL),
         'facility_id' => $_POST['clinicName'],
         'province_id' => (isset($_POST['provinceId']) && !empty($_POST['provinceId'])) ? $_POST['provinceId'] :  NULL,
         'request_clinician_name' => $_POST['clinicianName'],
@@ -277,7 +277,6 @@ try {
         //'sample_code'=>$_POST['sampleCode'],
         //'lab_code'=>$_POST['labNo'],
         'lab_id' => (isset($_POST['labId']) && $_POST['labId'] != '' ? $_POST['labId'] :  NULL),
-        //'serial_no'=>$_POST['sampleCode'],
         'sample_tested_datetime' => $_POST['dateOfCompletionOfViralLoad'],
         'vl_test_platform' => $testingPlatform,
         'result_value_log' => (isset($_POST['vlLog'])) ? $_POST['vlLog'] : NULL,
@@ -323,7 +322,6 @@ try {
             $vldata['remote_sample'] = 'yes';
         } else {
             $vldata['sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] :  NULL;
-            $vldata['serial_no'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] :  NULL;
             $vldata['sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey'] != '') ? $_POST['sampleCodeKey'] :  NULL;
             $vldata['sample_registered_at_lab'] = $general->getDateTime();
         }

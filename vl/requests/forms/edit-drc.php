@@ -166,9 +166,9 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                         <input type="hidden" id="sampleCode" name="sampleCode" value="<?php echo (isset($sCode) && $sCode != '') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" />
                       </td>
                     <?php } else { ?>
-                      <td><label for="sampleCode">Échantillon id </label><span class="mandatory">*</span></td>
+                      <td><label for="sampleCode">Échantillon ID </label><span class="mandatory">*</span></td>
                       <td>
-                        <input type="text" class="form-control isRequired" readonly id="sampleCode" name="sampleCode" placeholder="Échantillon id" title="Please enter échantillon id" value="<?php echo (isset($sCode) && $sCode != '') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" style="width:100%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode; ?>',this.id,'<?php echo "vl_sample_id##" . $vlQueryInfo[0]["vl_sample_id"]; ?>','The échantillon id that you entered already exists. Please try another échantillon id',null)" />
+                        <input type="text" class="form-control isRequired" readonly id="sampleCode" name="sampleCode" placeholder="Échantillon ID" title="Please enter échantillon id" value="<?php echo (isset($sCode) && $sCode != '') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" style="width:100%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode; ?>',this.id,'<?php echo "vl_sample_id##" . $vlQueryInfo[0]["vl_sample_id"]; ?>','The échantillon id that you entered already exists. Please try another échantillon id',null)" />
                       </td>
                     <?php } ?>
 
@@ -177,8 +177,8 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                       <input type="text" class="form-control dateTime isRequired" id="sampleReceivedDate<?php echo ($sCode == '') ? 'Lab' : ''; ?>" name="sampleReceivedDate<?php echo ($sCode == '') ? 'Lab' : ''; ?>" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="checkSampleReceviedDate();" value="<?php echo ($vlQueryInfo[0]['sample_received_at_vl_lab_datetime'] != '' && $vlQueryInfo[0]['sample_received_at_vl_lab_datetime'] != NULL) ? $vlQueryInfo[0]['sample_received_at_vl_lab_datetime'] : date('d-M-Y H:i:s'); ?>" style="width:100%;" />
                     </td>
 
-                    <td></td>
-                    <td></td>
+                    <td><label for="serialNo">Recency ID</label></td>
+                    <td><input type="text" class="form-control" id="serialNo" name="serialNo" placeholder="Recency ID" title="Please enter recency id" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no']; ?>" /></td>
                   </tr>
                   <tr>
                     <td><label for="province">Province </label><span class="mandatory">*</span></td>

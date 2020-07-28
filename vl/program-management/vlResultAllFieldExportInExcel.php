@@ -72,7 +72,7 @@ include_once(APPLICATION_PATH.'/models/General.php');
   if($aRow['sample_received_at_vl_lab_datetime']=='0000-00-00 00:00:00'){
    $aRow['sample_received_at_vl_lab_datetime'] = '';
   }
-  $row[] = $aRow['serial_no'];
+  $row[] = $aRow['sample_code'];
   $row[] = $aRow['vlsm_instance_id'];
   $row[] = ucwords(str_replace("_"," ",$aRow['patient_gender']));
   $row[] = $aRow['patient_age_in_years'];

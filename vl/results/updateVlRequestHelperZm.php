@@ -32,7 +32,6 @@ try {
           $_POST['testingPlatform'] = $platForm[0];
      }
      $vldata = array(
-          'serial_no' => $_POST['serialNo'],
           'sample_code' => $_POST['serialNo'],
           'lab_code' => (isset($_POST['labNo']) && $_POST['labNo'] != '' ? $_POST['labNo'] :  NULL),
           'lab_id' => (isset($_POST['labId']) && $_POST['labId'] != '' ? $_POST['labId'] :  NULL),

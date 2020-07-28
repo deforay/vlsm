@@ -115,15 +115,15 @@ $sFormat = '';
                         <input type="hidden" id="sampleCode" name="sampleCode" />
                       </td>
                     <?php } else { ?>
-                      <td><label for="sampleCode">Échantillon id </label><span class="mandatory">*</span></td>
+                      <td><label for="sampleCode">Échantillon ID </label><span class="mandatory">*</span></td>
                       <td>
-                        <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" readonly placeholder="Échantillon id" title="Please enter échantillon id" style="width:100%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode; ?>',this.id,null,'The échantillon id that you entered already exists. Please try another échantillon id',null)" />
+                        <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" readonly placeholder="Échantillon ID" title="Please enter échantillon id" style="width:100%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode; ?>',this.id,null,'The échantillon id that you entered already exists. Please try another échantillon id',null)" />
                       </td>
                     <?php } ?>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
+                    <td><label for="serialNo">Recency ID</label></td>
+                    <td><input type="text" class="form-control" id="serialNo" name="serialNo" placeholder="Recency ID" title="Please enter recency id" style="width:100%;" /></td>
                   </tr>
                   <tr>
                     <td><label for="province">Province </label><span class="mandatory">*</span></td>

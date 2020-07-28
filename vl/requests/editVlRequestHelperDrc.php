@@ -218,6 +218,7 @@ try {
 
     $vldata = array(
         'facility_id' => $_POST['clinicName'],
+        'serial_no'=>(isset($_POST['serialNo']) && $_POST['serialNo']!='' ? $_POST['serialNo'] :  NULL),
         'request_clinician_name' => $_POST['clinicianName'],
         'request_clinician_phone_number' => $_POST['clinicanTelephone'],
         'facility_support_partner' => $_POST['supportPartner'],
@@ -240,7 +241,6 @@ try {
         'last_viral_load_date' => $_POST['lastViralLoadTestDate'],
         'sample_received_at_vl_lab_datetime' => $_POST['sampleReceivedDate'],
         //'sample_code'=>$_POST['sampleCode'],
-        //'serial_no'=>$_POST['sampleCode'],
         'lab_id' => (isset($_POST['labId']) && $_POST['labId'] != '' ? $_POST['labId'] :  NULL),
         'sample_tested_datetime' => $_POST['dateOfCompletionOfViralLoad'],
         'vl_test_platform' => $testingPlatform,
@@ -263,7 +263,6 @@ try {
     } else {
         if ($_POST['sampleCodeCol'] != '') {
             $vldata['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') ? $_POST['sampleCodeCol'] :  NULL;
-            $vldata['serial_no'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') ? $_POST['sampleCodeCol'] :  NULL;
         } else {
 
             //Since Sample Code does not exist, today is the date
@@ -294,11 +293,9 @@ try {
                 $maxId = '001';
             }
             if ($arr['sample_code'] == 'auto') {
-                $vldata['serial_no'] = $auto . $maxId;
                 $vldata['sample_code'] = $auto . $maxId;
                 $vldata['sample_code_key'] = $maxId;
             } else if ($arr['sample_code'] == 'YY' || $arr['sample_code'] == 'MMYY') {
-                $vldata['serial_no'] = $prefix . $mnthYr . $maxId;
                 $vldata['sample_code'] = $prefix . $mnthYr . $maxId;
                 $vldata['sample_code_format'] = $prefix . $mnthYr;
                 $vldata['sample_code_key'] =  $maxId;
