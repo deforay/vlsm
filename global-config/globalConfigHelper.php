@@ -198,7 +198,7 @@ try {
     //                     $zeros = substr("000", $strparam);
     //                     $maxId = $zeros . $maxId;
     //                     $sampleCode = $prefix . $dtYr . $maxId;
-    //                     $vlData = array('serial_no' => $sampleCode, 'sample_code_title' => $_POST['sample_code'], 'sample_code' => $sampleCode, 'sample_code_format' => $prefix . $dtYr, 'sample_code_key' => $maxId);
+    //                     $vlData = array('sample_code' => $sampleCode, 'sample_code_title' => $_POST['sample_code'], 'sample_code' => $sampleCode, 'sample_code_format' => $prefix . $dtYr, 'sample_code_key' => $maxId);
     //                     $db = $db->where('vl_sample_id', $sample['vl_sample_id']);
     //                     $id = $db->update('vl_request_form', $vlData);
     //                     $increment++;

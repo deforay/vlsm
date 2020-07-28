@@ -390,7 +390,7 @@ $batResult = $db->rawQuery($batQuery);
 																	<td>
 																		<select class="form-control" id="formField" name="formField" multiple="multiple" title="Please fields" style="width:220px;">
 																			<option value=""> -- Select -- </option>
-																			<option value="serial_no">Sample Code</option>
+																			<option value="sample_code">Sample Code</option>
 																			<option value="sample_collection_date">Sample Collection Date</option>
 																			<option value="sample_batch_id">Batch Code</option>
 																			<option value="patient_art_no">Unique ART No.</option>
