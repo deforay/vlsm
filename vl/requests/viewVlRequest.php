@@ -1,7 +1,8 @@
 <?php
 //print_r($result);die;
 ob_start();
-require_once('../../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+#require_once('../../startup.php'); 
+include_once(APPLICATION_PATH.'/header.php');
 
 include_once(APPLICATION_PATH.'/models/General.php');
 $general=new General($db);

@@ -1,8 +1,8 @@
 <?php
 ob_start();
-require_once('../startup.php');
+#require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-//include_once('startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+//#require_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 $id = base64_decode($_GET['id']);
 $sQuery = "SELECT * from import_config where config_id=$id";
 $sInfo = $db->query($sQuery);

@@ -1,6 +1,7 @@
 <?php
 session_start();
-require_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+#require_once('../startup.php');  
+include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 $tableName="user_details";
 $primaryKey="user_id";
 

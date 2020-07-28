@@ -1,1 +1,4 @@
 Options -Indexes
+
+php_value auto_prepend_file /var/www/vlsm/startup.php
+

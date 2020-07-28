@@ -1,20 +1,21 @@
 <?php
 session_start();
 ob_start();
-require_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-$tableName="other_config";
+#require_once('../startup.php');
+include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
+$tableName = "other_config";
 
 try {
     foreach ($_POST as $fieldName => $fieldValue) {
-        if(trim($fieldName)!= ''){
-           $data=array('value'=>$fieldValue);
-           $db=$db->where('name',$fieldName);
-           $db->update($tableName,$data);
+        if (trim($fieldName) != '') {
+            $data = array('value' => $fieldValue);
+            $db = $db->where('name', $fieldName);
+            $db->update($tableName, $data);
         }
     }
-    $_SESSION['alertMsg']="Global Config values updated successfully";
+    $_SESSION['alertMsg'] = "Global Config values updated successfully";
     header("location:testResultEmailConfig.php");
-}catch (Exception $exc) {
+} catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());
 }

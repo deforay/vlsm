@@ -2,7 +2,7 @@
 session_start();
 ob_start();
 
-require_once('../startup.php');  
+#require_once('../startup.php');  
 include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 
 $tableName="other_config";

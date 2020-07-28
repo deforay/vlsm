@@ -1,6 +1,6 @@
 <?php
 $title = "VL Quarterly Monitoring Report";
-require_once('../../startup.php'); 
+#require_once('../../startup.php'); 
 include_once(APPLICATION_PATH.'/header.php');
 $startYear=date("Y", strtotime("-2 month"));
 $startMonth = date('m', strtotime('-2 month'));

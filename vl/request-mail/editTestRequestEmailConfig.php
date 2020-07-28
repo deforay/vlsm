@@ -1,6 +1,6 @@
 <?php
 ob_start();
-require_once('../startup.php'); 
+#require_once('../startup.php'); 
 include_once(APPLICATION_PATH.'/header.php');
 $otherConfigQuery ="SELECT * from other_config WHERE type='request'";
 $otherConfigResult=$db->query($otherConfigQuery);

@@ -1,6 +1,6 @@
 <?php
 ob_start();
-require_once('../../startup.php');
+#require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 $tableName = "batch_details";
 try {
