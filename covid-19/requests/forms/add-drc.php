@@ -258,12 +258,7 @@ foreach ($fResult as $fDetails) {
                                         <td style="width: 35%;">
                                             <select class="form-control isRequired" id="specimenType" name="specimenType" title="Type(s) d' échantillon(s) dans le tube">
                                                 <option value="">--Select--</option>
-                                                <option value="oropharyngeal">Oropharyngée</option>
-                                                <option value="nasal-both">Nasale / Les Deux</option>
-                                                <option value="sputum">Expectorations</option>
-                                                <option value="alveolar-broncho-wash">Lavage broncho alvéolaire</option>
-                                                <option value="tracheal-aspiration">Aspiration trachéale</option>
-                                                <option value="serum">Sérum</option>
+                                                <?php echo $general->generateSelectOptions($specimenTypeResult); ?>
                                             </select>
                                         </td>
                                         <th style="width:15% !important"><label for="specimenType">Date de prélèvement de l'échantillon <span class="mandatory">*</span></label></th>
@@ -377,9 +372,9 @@ foreach ($fResult as $fDetails) {
                                 </div>
                                 <table class="table">
                                     <tr>
-                                        <th style="width:15% !important"><label for="sampleCondtion">Condition de l'échantillon</label></th>
+                                        <th style="width:15% !important"><label for="sampleCondition">Condition de l'échantillon</label></th>
                                         <td style="width:35% !important;">
-                                            <select class="form-control" id="smoke" name="smoke" title="Condition de l'échantillon">
+                                            <select class="form-control" id="sampleCondition" name="sampleCondition" title="Condition de l'échantillon">
                                                 <option value="">--Select--</option>
                                                 <option value="adequate">Adéquat</option>
                                                 <option value="not-adequate">Non Adéquat</option>
@@ -559,14 +554,14 @@ foreach ($fResult as $fDetails) {
 
                                         </tr>
                                         <tr class="show-rejection" style="display:none;">
-                                            <th class="show-rejection" style="display:none;">Reason for Rejection</th>
+                                            <th class="show-rejection" style="display:none;">Raison du rejet</th>
                                             <td class="show-rejection" style="display:none;">
                                                 <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason" title="Raison du rejet">
                                                     <option value=''> -- Select -- </option>
                                                     <?php echo $rejectionReason; ?>
                                                 </select>
                                             </td>
-                                            <th>Rejection Date<span class="mandatory">*</span></th>
+                                            <th>Date de rejet<span class="mandatory">*</span></th>
                                             <td><input class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Date de rejet" title="Date de rejet"/></td>
                                         </tr>
                                         <tr>
@@ -575,7 +570,7 @@ foreach ($fResult as $fDetails) {
                                                     <thead>
                                                         <tr>
                                                             <th class="text-center">Test non</th>
-                                                            <th class="text-center">Name of the Testkit (or) Test Method used</th>
+                                                            <th class="text-center">Nom du Testkit (ou) Méthode de test utilisée</th>
                                                             <th class="text-center">Date du test</th>
                                                             <th class="text-center">Résultat du test</th>
                                                         </tr>
@@ -620,8 +615,8 @@ foreach ($fResult as $fDetails) {
                                             <td>
                                                 <select name="isResultAuthorized" id="isResultAuthorized" class="disabled-field form-control" title="Le résultat est-il autorisé?" style="width:100%">
                                                     <option value="">-- Select --</option>
-                                                    <option value='yes'> Yes </option>
-                                                    <option value='no'> No </option>
+                                                    <option value='yes'> Oui </option>
+                                                    <option value='no'> Non </option>
                                                 </select>
                                             </td>
                                             <th>Autorisé par</th>
@@ -636,17 +631,6 @@ foreach ($fResult as $fDetails) {
                                             <td></td>
 
                                         </tr>
-                                        <tr>
-                                            <!-- <td style="width:25%;"><label for="">Sample Test Date </label></td>
-                                            <td style="width:25%;">
-                                                <input type="text" class="form-control dateTime" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Sample Tested Date and Time" <?php echo (isset($labFieldDisabled) && trim($labFieldDisabled)) ? $labFieldDisabled : ''; ?> onchange="" style="width:100%;" />
-                                            </td> -->
-
-
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-
                                     </table>
                                 </div>
                             </div>

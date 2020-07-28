@@ -1,7 +1,7 @@
 <?php
 session_start();
 ob_start();
-#require_once('../../startup.php');
+require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 include_once(APPLICATION_PATH . '/models/General.php');
 $general = new General($db);
@@ -87,7 +87,7 @@ try {
 		$id = $db->delete($testTableName);
 		$covid19Data['sample_tested_datetime'] = null;
 	}
-	// echo '<pre>'; print_r($_POST);die;
+	// echo '<pre>'; print_r($covid19Data);die;
 	//var_dump($covid19Data);die;
 	$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 	$id = $db->update($tableName, $covid19Data);
