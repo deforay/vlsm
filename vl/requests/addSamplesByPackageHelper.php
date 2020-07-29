@@ -28,7 +28,7 @@ foreach($sampleResult as $sampleRow){
 
         $sampleJson = $vlObj->generateVLSampleID($provinceCode, $general->humanDateFormat($sampleRow['sample_collection_date']));
         $sampleData = json_decode($sampleJson, true);
-        $vldata['serial_no'] = $sampleData['sampleCode'];
+        //$vldata['sample_code'] = $sampleData['sampleCode'];
         $vldata['sample_code'] = $sampleData['sampleCode'];
         $vldata['sample_code_format'] = $sampleData['sampleCodeFormat'];
         $vldata['sample_code_key'] = $sampleData['sampleCodeKey'];

@@ -146,7 +146,6 @@ try {
 
      $vldata = array(
           //'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
-          //'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
           'facility_id' => (isset($_POST['clinicName']) && trim($_POST['clinicName']) != '') ? $_POST['clinicName'] : NULL,
           //'ward'=>(isset($_POST['wardData']) && $_POST['wardData']!='' ? $_POST['wardData'] :  NULL),
           'patient_art_no' => (isset($_POST['patientARTNo']) && trim($_POST['patientARTNo']) != '') ? $_POST['patientARTNo'] : NULL,
@@ -217,7 +216,6 @@ try {
      } else {
           if ($_POST['sampleCodeCol'] != '') {
                $vldata['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') ? $_POST['sampleCodeCol'] : NULL;
-               $vldata['serial_no'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') ? $_POST['sampleCodeCol'] : NULL;
           } else {
                //Since Sample Code does not exist, today is the date
                //sample is being registered at the lab.
@@ -228,7 +226,6 @@ try {
                $vlObj = new Model_Vl($db);
                $sampleJson = $vlObj->generateVLSampleID($province[1], $_POST['collectionDate'], 'png');
                $sampleData = json_decode($sampleJson, true);
-               $vldata['serial_no'] = $sampleData['sampleCode'];
                $vldata['sample_code'] = $sampleData['sampleCode'];
                $vldata['sample_code_format'] = $sampleData['sampleCodeFormat'];
                $vldata['sample_code_key'] = $sampleData['sampleCodeKey'];

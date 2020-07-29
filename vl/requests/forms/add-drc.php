@@ -115,13 +115,13 @@ $sFormat = '';
                         <input type="hidden" id="sampleCode" name="sampleCode" />
                       </td>
                     <?php } else { ?>
-                      <td><label for="sampleCode">Échantillon id </label><span class="mandatory">*</span></td>
+                      <td><label for="sampleCode">Échantillon ID </label><span class="mandatory">*</span></td>
                       <td>
-                        <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Échantillon id" title="Please enter échantillon id" style="width:100%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode; ?>',this.id,null,'The échantillon id that you entered already exists. Please try another échantillon id',null)" />
+                        <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" readonly placeholder="Échantillon ID" title="Please enter échantillon id" style="width:100%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode; ?>',this.id,null,'The échantillon id that you entered already exists. Please try another échantillon id',null)" />
                       </td>
                     <?php } ?>
-                    <td></td>
-                    <td></td>
+                    <td><label for="serialNo">Recency ID</label></td>
+                    <td><input type="text" class="form-control" id="serialNo" name="serialNo" placeholder="Recency ID" title="Please enter recency id" style="width:100%;" /></td>
                     <td></td>
                     <td></td>
                   </tr>
@@ -161,7 +161,7 @@ $sFormat = '';
                         <option value=""> -- Sélectionner -- </option>
                         <?php
                         foreach ($implementingPartnerList as $implementingPartner) {
-                          ?>
+                        ?>
                           <option value="<?php echo base64_encode($implementingPartner['i_partner_id']); ?>"><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
                         <?php } ?>
                       </select>
@@ -178,7 +178,7 @@ $sFormat = '';
                         <option value=""> -- Sélectionner -- </option>
                         <?php
                         foreach ($fundingSourceList as $fundingSource) {
-                          ?>
+                        ?>
                           <option value="<?php echo base64_encode($fundingSource['funding_source_id']); ?>"><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
                         <?php } ?>
                       </select>
@@ -271,7 +271,7 @@ $sFormat = '';
                         <?php foreach ($aResult as $arv) { ?>
                           <option value="<?php echo $arv['art_code']; ?>"><?php echo $arv['art_code']; ?></option>
                         <?php }
-                      if ($sarr['user_type'] != 'vluser') {  ?>
+                        if ($sarr['user_type'] != 'vluser') {  ?>
                           <option value="other">Autre</option>
                         <?php } ?>
                       </select>
@@ -319,7 +319,7 @@ $sFormat = '';
                         <option value=""> -- Sélectionner -- </option>
                         <?php
                         foreach ($testReason as $tReason) {
-                          ?>
+                        ?>
                           <option value="<?php echo $tReason['test_reason_id']; ?>"><?php echo ucwords($tReason['test_reason_name']); ?></option>
                         <?php } ?>
                         <option value="other">Autre</option>
@@ -495,7 +495,7 @@ $sFormat = '';
                           <?php foreach ($rejectionResult as $rjctReason) { ?>
                             <option value="<?php echo $rjctReason['rejection_reason_id']; ?>"><?php echo ucwords($rjctReason['rejection_reason_name']); ?></option>
                           <?php }
-                        if ($sarr['user_type'] != 'vluser') {  ?>
+                          if ($sarr['user_type'] != 'vluser') {  ?>
                             <option value="other">Autre</option>
                           <?php } ?>
                         </select>
@@ -621,17 +621,17 @@ $sFormat = '';
     }
     if ($.trim(pName) != '') {
       //if (provinceName) {
-        $.post("/includes/getFacilityForClinic.php", {
-            pName: pName
-          },
-          function(data) {
-            if (data != "") {
-              details = data.split("###");
-              $("#clinicName").html(details[0]);
-              $("#district").html(details[1]);
-              $("#clinicianName").val(details[2]);
-            }
-          });
+      $.post("/includes/getFacilityForClinic.php", {
+          pName: pName
+        },
+        function(data) {
+          if (data != "") {
+            details = data.split("###");
+            $("#clinicName").html(details[0]);
+            $("#district").html(details[1]);
+            $("#clinicianName").val(details[2]);
+          }
+        });
       //}
       sampleCodeGeneration();
     } else if (pName == '') {

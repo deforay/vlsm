@@ -87,7 +87,6 @@ try {
      }
      $vldata = array(
           'test_urgency' => (isset($_POST['urgency']) && $_POST['urgency'] != '' ? $_POST['urgency'] :  NULL),
-          //'serial_no'=>(isset($_POST['serialNo']) && $_POST['serialNo']!='' ? $_POST['serialNo'] :  NULL),
           //'sample_code'=>(isset($_POST['serialNo']) && $_POST['serialNo']!='' ? $_POST['serialNo'] :  NULL),
           'facility_id' => (isset($_POST['clinicName']) && $_POST['clinicName'] != '' ? $_POST['clinicName'] :  NULL),
           'request_clinician_name' => (isset($_POST['clinicianName']) && $_POST['clinicianName'] != '' ? $_POST['clinicianName'] :  NULL),
@@ -134,7 +133,6 @@ try {
           $vldata['remote_sample_code'] = (isset($_POST['serialNo']) && $_POST['serialNo'] != '') ? $_POST['serialNo'] :  NULL;
      } else if ($_POST['sampleCodeCol'] != '') {
           $vldata['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') ? $_POST['sampleCodeCol'] :  NULL;
-          $vldata['serial_no'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') ? $_POST['sampleCodeCol'] :  NULL;
      }
 
 
