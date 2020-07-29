@@ -19,7 +19,7 @@ foreach($sampleResult as $sampleRow){
 
     if (isset($sampleRow['province_id']) && !empty($sampleRow['province_id'])) {
         $provinceQuery = "SELECT * FROM province_details WHERE province_id = " . $sampleRow['province_id'];
-        $provinceResult = $db->rawQueryOne($stateQuery);
+        $provinceResult = $db->rawQueryOne($provinceQuery);
         $provinceCode = $provinceResult['province_code'];
     }
 
