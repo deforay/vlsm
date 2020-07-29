@@ -327,9 +327,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             </table>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <th colspan="4"style="width:15% !important">Antécédents Médicaux <span class="mandatory">*</span> </th>
-                                    </tr>
+                                    
                                     <tr>
                                         <td colspan="4">
                                             <table  id="symptomsTable" class="table table-bordered">
@@ -338,7 +336,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                         <th style="width:50%;"><?php echo $comorbiditiesName; ?></th>
                                                         <td style="width:50%;">
                                                             <input name="comorbidityId[]" type="hidden" value="<?php echo $comorbiditiesId; ?>">
-                                                            <select name="comorbidityDetected[]" class="form-control isRequired" title="Antécédents Médicaux <?php echo $comorbiditiesName; ?>" style="width:100%">
+                                                            <select name="comorbidityDetected[]" class="form-control isRequired" title="<?php echo $comorbiditiesName; ?>" style="width:100%">
                                                                 <option value="">-- Select --</option>
                                                                 <option value='yes' <?php echo (isset($covid19SelectedComorbidities[$comorbiditiesId]) && $covid19SelectedComorbidities[$comorbiditiesId] == 'yes') ? "selected='selected'" : ""; ?>> Oui </option>
                                                                 <option value='no' <?php echo (isset($covid19SelectedComorbidities[$comorbiditiesId]) && $covid19SelectedComorbidities[$comorbiditiesId] == 'no') ? "selected='selected'" : ""; ?>> Non </option>
@@ -432,7 +430,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                     <tr>
                                         <th style="width: 15% !important;"><label for="resultPcr">Date de Result PCR</label></th>
                                         <td style="width:35% !important;">
-                                            <input type="text" value="<?php echo $covid19Info['number_of_days_sick'];?>" class="form-control date" id="resultPcr" name="resultPcr" placeholder="e.g 09-Jan-1992" title="Date de Result PCR"/>
+                                            <input type="text" class="form-control date" id="resultPcr" name="resultPcr" placeholder="e.g 09-Jan-1992" title="Date de Result PCR"/>
                                         </td>
                                         <th style="width: 15% !important;"><label for="numberOfDaysSick">Depuis combien de jours êtes-vous malade?</label></th>
                                         <td style="width:35% !important;">

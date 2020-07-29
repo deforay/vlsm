@@ -289,9 +289,7 @@ foreach ($fResult as $fDetails) {
                                             </table>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <th colspan="4"style="width:15% !important">Antécédents Médicaux <span class="mandatory">*</span> </th>
-                                    </tr>
+                                    
                                     <tr>
                                         <td colspan="4">
                                             <table  id="symptomsTable" class="table table-bordered">
@@ -300,7 +298,7 @@ foreach ($fResult as $fDetails) {
                                                         <th style="width:50%;"><?php echo $comorbiditiesName; ?></th>
                                                         <td style="width:50%;">
                                                             <input name="comorbidityId[]" type="hidden" value="<?php echo $comorbiditiesId; ?>">
-                                                            <select name="comorbidityDetected[]" class="form-control isRequired" title="Antécédents Médicaux <?php echo $comorbiditiesName; ?>" style="width:100%">
+                                                            <select name="comorbidityDetected[]" class="form-control isRequired" title="<?php echo $comorbiditiesName; ?>" style="width:100%">
                                                                 <option value="">-- Select --</option>
                                                                 <option value='yes'> Oui </option>
                                                                 <option value='no'> Non </option>
