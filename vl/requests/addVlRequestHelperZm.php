@@ -107,7 +107,6 @@ try {
           'sample_code_format' => (isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat'] != '' ? $_POST['sampleCodeFormat'] :  NULL),
           //'sample_code_key'=>(isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='' ? $_POST['sampleCodeKey'] :  NULL),
           'vlsm_country_id' => '2',
-          //'serial_no'=>(isset($_POST['serialNo']) && $_POST['serialNo']!='' ? $_POST['serialNo'] :  NULL),
           //'sample_code'=>(isset($_POST['serialNo']) && $_POST['serialNo']!='' ? $_POST['serialNo'] :  NULL),
           'facility_id' => (isset($_POST['clinicName']) && $_POST['clinicName'] != '' ? $_POST['clinicName'] :  NULL),
           'request_clinician_name' => (isset($_POST['clinicianName']) && $_POST['clinicianName'] != '' ? $_POST['clinicianName'] :  NULL),
@@ -178,7 +177,6 @@ try {
                $vldata['remote_sample'] = 'yes';
           } else {
                $vldata['sample_code'] = (isset($_POST['serialNo']) && $_POST['serialNo'] != '') ? $_POST['serialNo'] :  NULL;
-               $vldata['serial_no'] = (isset($_POST['serialNo']) && $_POST['serialNo'] != '') ? $_POST['serialNo'] :  NULL;
                $vldata['sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey'] != '') ? $_POST['sampleCodeKey'] :  NULL;
           }
           $id = $db->insert($tableName, $vldata);

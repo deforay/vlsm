@@ -45,7 +45,6 @@ if ($systemConfig['user_type'] == 'remoteuser') {
     $vlData['result_status'] = 9;
 } else {
     $vlData['sample_code'] = $sampleData['sampleCode'];
-    $vlData['serial_no'] = $sampleData['sampleCode'];
     $vlData['sample_code_format'] = $sampleData['sampleCodeFormat'];
     $vlData['sample_code_key'] = $sampleData['sampleCodeKey'];
     $vlData['remote_sample'] = 'no';

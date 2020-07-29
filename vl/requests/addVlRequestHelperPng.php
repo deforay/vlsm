@@ -129,7 +129,6 @@ try {
      }
      $vldata = array(
           //'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
-          //'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='')? $_POST['sampleCode'] :  NULL,
           //'sample_code_format'=>(isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat']!='')? $_POST['sampleCodeFormat'] :  NULL,
           //'sample_code_key'=>(isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='')? $_POST['sampleCodeKey'] :  NULL,
           'vlsm_instance_id' => $instanceId,
@@ -212,7 +211,6 @@ try {
                $vldata['remote_sample'] = 'yes';
           } else {
                $vldata['sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] : NULL;
-               $vldata['serial_no'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] : NULL;
                $vldata['sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey'] != '') ? $_POST['sampleCodeKey'] : NULL;
           }
           $vldata['sample_code_format'] = (isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat'] != '') ? $_POST['sampleCodeFormat'] : NULL;
