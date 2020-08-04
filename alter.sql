@@ -2442,3 +2442,5 @@ UPDATE `vl_request_form` SET serial_no = null;
 -- Version 4.0.3 -- Amit -- 28-July-2020
 
 INSERT INTO `system_config` (`display_name`, `name`, `value`) VALUES ('Version', 'version', '4.0.3');
+-- Thana 04-Aug-2020
+ALTER TABLE `form_covid19` ADD `test_number` INT(11) NULL DEFAULT NULL AFTER `sample_code`;
