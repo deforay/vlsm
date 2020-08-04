@@ -120,29 +120,45 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             <?php
                                             if ($covid19Info['sample_code'] != '') {
                                             ?>
-                                                <td colspan="4"> <label for="sampleSuggest" class="text-danger">&nbsp;&nbsp;&nbsp;Veuillez noter que cet exemple distant a déjà été importé avec VLSM N°EPID </td>
-                                                <td colspan="2" align="left"> <?php echo $covid19Info['sample_code']; ?></label> </td>
+                                                <td> <label for="sampleSuggest" class="text-danger">&nbsp;&nbsp;&nbsp;Veuillez noter que cet exemple distant a déjà été importé avec VLSM N°EPID </td>
+                                                <td align="left"> <?php echo $covid19Info['sample_code']; ?></label> </td>
                                             <?php
                                             } else {
                                             ?>
-                                                <td colspan="4"> <label for="sampleSuggest">N°EPID (peut changer lors de la soumission du formulaire)</label></td>
-                                                <td colspan="2" align="left"> <?php echo $sampleSuggestion; ?></td>
+                                                <td> <label for="sampleSuggest">N°EPID (peut changer lors de la soumission du formulaire)</label></td>
+                                                <td align="left"> <?php echo $sampleSuggestion; ?></td>
                                             <?php } ?>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
                                         </tr>
                                     <?php } ?>
                                     <tr>
                                         <?php if ($sarr['user_type'] == 'remoteuser') { ?>
                                             <td><label for="sampleCode">N°EPID </label> </td>
-                                            <td colspan="5">
+                                            <td>
                                                 <span id="sampleCodeInText" style="width:30%;border-bottom:1px solid #333;"><?php echo ($sCode != '') ? $sCode : $covid19Info[$sampleCode]; ?></span>
                                                 <input type="hidden" class="<?php echo $sampleClass; ?>" id="sampleCode" name="sampleCode" value="<?php echo ($sCode != '') ? $sCode : $covid19Info[$sampleCode]; ?>" />
                                             </td>
                                         <?php } else { ?>
                                             <td><label for="sampleCode">N°EPID </label><span class="mandatory">*</span> </td>
-                                            <td colspan="5">
-                                                <input type="text" readonly value="<?php echo ($sCode != '') ? $sCode : $covid19Info[$sampleCode]; ?>" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="N°EPID" title="N°EPID" style="width:30%;" onchange="" />
+                                            <td>
+                                                <input type="text" readonly value="<?php echo ($sCode != '') ? $sCode : $covid19Info[$sampleCode]; ?>" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="N°EPID" title="N°EPID" style="width:100%;" onchange="" />
                                             </td>
                                         <?php } ?>
+                                        <th><label for="testNumber">Prélévement <span class="mandatory">*</span></label></th>
+                                        <td>
+                                            <select class="form-control isRequired" name="testNumber" id="testNumber" title="Prélévement" style="width:100%;">
+                                                <option value="">--Select--</option>
+                                                <?php foreach(range(1,5) as $element){
+                                                    $selected = (isset($covid19Info['test_number']) && $covid19Info['test_number'] == $element)?"selected='selected'":"";
+                                                    echo '<option value="'.$element.'" '.$selected.'>'.$element.'</option>';
+                                                }?>
+                                            </select>
+                                        </td>
+                                        <td></td>
+                                        <td></td>
                                     </tr>
                                     <tr>
                                         <td><label for="province">Province </label><span class="mandatory">*</span></td>
