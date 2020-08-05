@@ -147,7 +147,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                 <input type="text" readonly value="<?php echo ($sCode != '') ? $sCode : $covid19Info[$sampleCode]; ?>" class="form-control" id="sampleCode" name="sampleCode" placeholder="N°EPID" title="N°EPID" style="width:100%;" onchange="" />
                                             </td>
                                         <?php } ?>
-                                        <th><label for="testNumber">Prélévement <span class="mandatory">*</span></label></th>
+                                        <th><label for="testNumber">Prélévement</label></th>
                                         <td>
                                             <select class="form-control" name="testNumber" id="testNumber" title="Prélévement" style="width:100%;">
                                                 <option value="">--Select--</option>

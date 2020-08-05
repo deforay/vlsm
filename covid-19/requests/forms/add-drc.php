@@ -106,9 +106,9 @@ foreach ($fResult as $fDetails) {
                                                 <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" readonly="readonly" placeholder="N°EPID" title="N°EPID" style="width:100%;" onchange="checkSampleNameValidation('form_covid19','<?php echo $sampleCode; ?>',this.id,null,'The sample id that you entered already exists. Please try another sample id',null)" />
                                             </td>
                                         <?php } ?>
-                                        <th><label for="testNumber">Prélévement <span class="mandatory">*</span></label></th>
+                                        <th><label for="testNumber">Prélévement</label></th>
                                         <td>
-                                            <select class="form-control isRequired" name="testNumber" id="testNumber" title="Prélévement" style="width:100%;">
+                                            <select class="form-control" name="testNumber" id="testNumber" title="Prélévement" style="width:100%;">
                                                 <option value="">--Select--</option>
                                                 <?php foreach(range(1,5) as $element){
                                                     echo '<option value="'.$element.'">'.$element.'</option>';
