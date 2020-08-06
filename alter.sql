@@ -1446,7 +1446,7 @@ ALTER TABLE `vl_facility_map` CHANGE `facility_map_id` `facility_map_id` INT(11)
 
 -- Amit 17 March 2018
 
-ALTER TABLE `s_vlsm_instance` ADD `vl_last_dash_sync` DATETIME NULL AFTER `instance_mac_address`;
+ALTER TABLE `s_vlsm_instance` ADD `last_dash_sync` DATETIME NULL AFTER `instance_mac_address`;
 
 
 
@@ -2434,11 +2434,11 @@ ALTER TABLE `r_covid19_test_reasons` ADD `parent_reason` INT(11) NULL DEFAULT NU
 -- Version 4.0.2 -- Amit -- 27-July-2020
 
 
--- Amit 28-Jul-2020
-ALTER TABLE `vl_request_form` ADD `remote_sample_code_format` VARCHAR(255) NULL DEFAULT NULL AFTER `remote_sample_code_key`;
-UPDATE `vl_request_form` SET serial_no = null;
+  -- Amit 28-Jul-2020
+  ALTER TABLE `vl_request_form` ADD `remote_sample_code_format` VARCHAR(255) NULL DEFAULT NULL AFTER `remote_sample_code_key`;
+  UPDATE `vl_request_form` SET serial_no = null;
 
 
--- Version 4.0.3 -- Amit -- 28-July-2020
+  -- Version 4.0.3 -- Amit -- 28-July-2020
 
-INSERT INTO `system_config` (`display_name`, `name`, `value`) VALUES ('Version', 'version', '4.0.3');
+  INSERT INTO `system_config` (`display_name`, `name`, `value`) VALUES ('Version', 'version', '4.0.3');

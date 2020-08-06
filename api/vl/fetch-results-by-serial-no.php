@@ -6,9 +6,22 @@ include_once(APPLICATION_PATH . "/includes/MysqliDb.php");
 include_once(APPLICATION_PATH . '/models/General.php');
 include_once(APPLICATION_PATH . "/vendor/autoload.php");
 
+
+session_unset(); // no need of session in json response
 $general = new General($db);
 
 $serialNo = isset($_POST['s']) && !empty($_POST['s']) ? $_POST['s'] : null;
+$apiKey = isset($_POST['x-api-key']) && !empty($_POST['x-api-key']) ? $_POST['x-api-key'] : null;
+
+if (!$apiKey) {
+    $response = array(
+        'status' => 'failed',
+        'data' => 'API Key invalid',
+        'timestamp' => $general->getDateTime()
+    );
+    echo json_encode($response);
+    exit(0);
+}
 
 if (!$serialNo) {
     $response = array(
@@ -107,67 +120,41 @@ try {
         $DashVL_Abs = $VLAnalysisResult;
     }
 
-    $row['serial_no']            = $aRow['serial_no'];
-    $row['sample_code']          = $aRow['sample_code'];
-    $row['vlsm_instance_id']     = $aRow['vlsm_instance_id'];
-    $row['patient_gender']       = $aRow['patient_gender'];
-    $row['patient_age_in_years'] = $aRow['patient_age_in_years'];
-    $row['facility_name']        = ($aRow['facility_name']);
-    $row['facility_code']        = ($aRow['facility_code']);
-    $row['facility_state']       = ($aRow['facility_state']);
-    $row['facility_district']    = ($aRow['facility_district']);
-    $row['facility_mobile_numbers'] = ($aRow['facility_mobile_numbers']);
-    $row['address']              = ($aRow['address']);
-    $row['facility_hub_name']    = ($aRow['facility_hub_name']);
-    $row['contact_person']       = ($aRow['contact_person']);
-    $row['report_email']         = ($aRow['report_email']);
-    $row['country']              = ($aRow['country']);
-    $row['longitude']            = ($aRow['longitude']);
-    $row['latitude']             = ($aRow['latitude']);
-    $row['facility_status']      = ($aRow['facility_status']);
-    $row['facility_type_name']   = ($aRow['facility_type_name']);
-    $row['sample_name']          = $aRow['sample_name'];
-    $row['sample_type_status']   = $aRow['sample_type_status'];
-    $row['sample_collection_date']                  = $aRow['sample_collection_date'];
-    $row['labName'] = ($aRow['labName']);
-    $row['labCode'] = ($aRow['labCode']);
-    $row['labState'] = ($aRow['labState']);
-    $row['labDistrict'] = ($aRow['labDistrict']);
-    $row['labPhone'] = $aRow['labPhone'];
-    $row['labAddress'] = $aRow['labAddress'];
-    $row['labHub'] = $aRow['labHub'];
-    $row['labContactPerson'] = ($aRow['labContactPerson']);
-    $row['labReportMail'] = ($aRow['labReportMail']);
-    $row['labCountry'] = ($aRow['labCountry']);
-    $row['labLongitude'] = ($aRow['labLongitude']);
-    $row['labLatitude'] = ($aRow['labLatitude']);
-    $row['labFacilityStatus'] = ($aRow['labFacilityStatus']);
-    $row['labFacilityTypeName'] = ($aRow['labFacilityTypeName']);
-    $row['sample_tested_datetime'] = $aRow['sample_tested_datetime'];
-    $row['result_value_log'] = $aRow['result_value_log'];
-    $row['result_value_absolute'] = $aRow['result_value_absolute'];
-    $row['result_value_text'] = $aRow['result_value_text'];
-    $row['result_value_absolute_decimal'] = $aRow['result_value_absolute_decimal'];
-    $row['result'] = $aRow['result'];
-    $row['test_reason_name'] = ($aRow['test_reason_name']);
-    $row['test_reason_status'] = ($aRow['test_reason_status']);
-    $row['status_name'] = ($aRow['status_name']);
+    
+    $row['sample_code']                         = $aRow['sample_code'];
+    $row['collection_facility_name']            = ($aRow['facility_name']);
+    $row['testing_lab_name']                    = ($aRow['labName']);
+    $row['sample_type']                         = $aRow['sample_name'];
+    $row['sample_collection_date']              = $aRow['sample_collection_date'];
     $row['sample_received_at_vl_lab_datetime']  = $aRow['sample_received_at_vl_lab_datetime'];
-    $row['line_of_treatment'] = $aRow['line_of_treatment'];
-    $row['is_sample_rejected'] = $aRow['is_sample_rejected'];
-    $row['rejection_reason_name'] = $aRow['rejection_reason_name'];
-    $row['rejection_reason_status'] = $aRow['rejection_reason_status'];
-    $row['is_patient_pregnant'] = (isset($aRow['is_patient_pregnant']) && $aRow['is_patient_pregnant'] != null && $aRow['is_patient_pregnant'] != '') ? $aRow['is_patient_pregnant'] : 'unreported';
-    $row['is_patient_breastfeeding'] = (isset($aRow['is_patient_breastfeeding']) && $aRow['is_patient_breastfeeding'] != null && $aRow['is_patient_breastfeeding'] != '') ? $aRow['is_patient_breastfeeding'] : 'unreported';
-    $row['patient_art_no'] = $aRow['patient_art_no'];
-    $row['date_of_initiation_of_current_regimen'] = $aRow['date_of_initiation_of_current_regimen'];
-    $row['arv_adherance_percentage'] = $aRow['arv_adherance_percentage'];
-    $row['is_adherance_poor'] = $aRow['is_adherance_poor'];
-    $row['result_approved_datetime'] = $aRow['result_approved_datetime'];
-    //$row['DashVL_Abs'] = $DashVL_Abs;
-    $row['vl_analysis'] = $DashVL_AnalysisResult;
-    $row['current_regimen'] = $aRow['current_regimen'];
-    $row['sample_registered_at_lab'] = $aRow['sample_registered_at_lab'];
+    $row['sample_registered_at_lab']            = $aRow['sample_registered_at_lab'];
+    $row['sample_tested_datetime']              = $aRow['sample_tested_datetime'];
+    $row['is_sample_rejected']                  = $aRow['is_sample_rejected'];
+    $row['rejection_reason']                    = $aRow['rejection_reason_name'];
+    $row['result']                              = $aRow['result'];
+    $row['result_approved_datetime']            = $aRow['result_approved_datetime'];
+
+    //$row['serial_no']                           = $aRow['serial_no'];
+    //$row['vlsm_instance_id']                    = $aRow['vlsm_instance_id'];
+    //$row['patient_gender']       = $aRow['patient_gender'];
+    //$row['patient_age_in_years'] = $aRow['patient_age_in_years'];
+    //$row['result_value_log']                    = $aRow['result_value_log'];
+    //$row['result_value_absolute']               = $aRow['result_value_absolute'];
+    // $row['result_value_text'] = $aRow['result_value_text'];
+    // $row['result_value_absolute_decimal'] = $aRow['result_value_absolute_decimal'];
+
+
+
+    //$row['is_patient_pregnant'] = (isset($aRow['is_patient_pregnant']) && $aRow['is_patient_pregnant'] != null && $aRow['is_patient_pregnant'] != '') ? $aRow['is_patient_pregnant'] : 'unreported';
+    //$row['is_patient_breastfeeding'] = (isset($aRow['is_patient_breastfeeding']) && $aRow['is_patient_breastfeeding'] != null && $aRow['is_patient_breastfeeding'] != '') ? $aRow['is_patient_breastfeeding'] : 'unreported';
+    //$row['patient_art_no'] = $aRow['patient_art_no'];
+    //$row['date_of_initiation_of_current_regimen'] = $aRow['date_of_initiation_of_current_regimen'];
+    //$row['arv_adherance_percentage'] = $aRow['arv_adherance_percentage'];
+    //$row['is_adherance_poor'] = $aRow['is_adherance_poor'];
+
+    //$row['vl_analysis'] = $DashVL_AnalysisResult;
+    //$row['current_regimen'] = $aRow['current_regimen'];
+
 
 
 
