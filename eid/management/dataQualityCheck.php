@@ -235,10 +235,15 @@ foreach ($rResult as $aRow) {
           $aRow['sample_collection_date'] = '';
      }
 
+     if($aRow['remote_sample']=='yes'){
+          $decrypt = 'remote_sample_code';
+          
+      }else{
+          $decrypt = 'sample_code';
+      }
 
-     $patientFname = ucwords($general->crypto('decrypt', $aRow['child_name'], ''));
-     $patientMname = ucwords($general->crypto('decrypt', $aRow['patient_middle_name'], ''));
-     $patientLname = ucwords($general->crypto('decrypt', $aRow['patient_last_name'], ''));
+     $patientFname = ucwords($general->crypto('decrypt', $aRow['child_name'], $aRow[$decrypt]));
+
      $row = array();
      $row[] = $aRow['sample_code'];
      if ($sarr['user_type'] != 'standalone') {
@@ -246,7 +251,7 @@ foreach ($rResult as $aRow) {
      }
      $row[] = $aRow['sample_collection_date'];
      $row[] = $aRow['batch_code'];
-     $row[] = ucwords($patientFname . " " . $patientMname . " " . $patientLname);
+     $row[] = ucwords($patientFname);
      $row[] = ucwords($aRow['facility_name']);
      $row[] = ucwords($aRow['facility_state']);
      $row[] = ucwords($aRow['facility_district']);
