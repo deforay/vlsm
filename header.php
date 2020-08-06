@@ -736,6 +736,9 @@ $formConfigResult = $db->query($formConfigQuery);
 								<?php }
 								if (isset($_SESSION['privileges']) && in_array("covid-19-sample-rejection-report.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu covid19SampleRejectionReport"><a href="/covid-19/management/covid-19-sample-rejection-report.php"><i class="fa fa-circle-o"></i> Sample Rejection Report</a></li>
+								<?php }
+								if (isset($_SESSION['privileges']) && in_array("covid-19-clinic-report.php", $_SESSION['privileges'])) { ?>
+									<li class="allMenu covid19ClinicReportMenu"><a href="/covid-19/management/covid-19-clinic-report.php"><i class="fa fa-circle-o"></i> Clinic Report</a></li>
 								<?php } ?>
 							</ul>
 						</li>
