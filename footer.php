@@ -418,6 +418,10 @@
 		$(".allMenu").removeClass('active');
 		$(".covid19ProgramMenu").addClass('active');
 		$(".covid19SampleRejectionReport").addClass('active');
+	} else if (splitsUrl == 'covid-19-clinic-report.php') {
+		$(".allMenu").removeClass('active');
+		$(".covid19ProgramMenu").addClass('active');
+		$(".covid19ClinicReportMenu").addClass('active');
 	} else {
 		$(".allMenu").removeClass('active');
 		$(".dashboardMenu").addClass('active');
