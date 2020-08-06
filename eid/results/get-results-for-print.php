@@ -405,9 +405,14 @@ foreach ($rResult as $aRow) {
         $print = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="resultPDF(' . $aRow['eid_id'] . ',\'\');"><i class="fa fa-print"> Print</i></a>';
     }
 
-    $patientFname = $general->crypto('decrypt', $aRow['child_name'], $aRow['child_id']);
-    $patientMname = $general->crypto('decrypt', $aRow['patient_middle_name'], $aRow['child_id']);
-    $patientLname = $general->crypto('decrypt', $aRow['patient_last_name'], $aRow['child_id']);
+    if($aRow['remote_sample']=='yes'){
+        $decrypt = 'remote_sample_code';
+        
+    }else{
+        $decrypt = 'sample_code';
+    }
+
+    $patientFname = ucwords($general->crypto('decrypt', $aRow['child_name'], $aRow[$decrypt]));
 
     $row[] = $aRow['sample_code'];
     if ($sarr['user_type'] != 'standalone') {
@@ -415,7 +420,7 @@ foreach ($rResult as $aRow) {
     }
     $row[] = $aRow['batch_code'];
     $row[] = $aRow['child_id'];
-    $row[] = ucwords($patientFname . " " . $patientMname . " " . $patientLname);
+    $row[] = ucwords($patientFname);
     $row[] = ucwords($aRow['facility_name']);
     $row[] = $eidResults[$aRow['result']];
 

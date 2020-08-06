@@ -46,7 +46,7 @@ $batResult = $db->rawQuery($batQuery);
 							<div class="widget-content">
 								<div class="bs-example bs-example-tabs">
 									<ul id="myTab" class="nav nav-tabs">
-										<li class="active"><a href="#highViralLoadReport" data-toggle="tab">High Viral Load Report</a></li>
+										<li class="active"><a href="#highViralLoadReport" data-toggle="tab">Positivity Report</a></li>
 										<li><a href="#sampleRjtReport" data-toggle="tab">Sample Rejection Report</a></li>
 										<li><a href="#notAvailReport" data-toggle="tab">Results Not Available Report</a></li>
 										<li><a href="#incompleteFormReport" data-toggle="tab">Data Quality Check</a></li>
@@ -153,13 +153,13 @@ $batResult = $db->rawQuery($batQuery);
 															<th>Remote Sample <br />Code</th>
 														<?php } ?>
 														<th>Facility Name</th>
-														<th>Patient ART no.</th>
-														<th>Patient's Name</th>
-														<th>Patient Phone no.</th>
+														<th>Child's ID</th>
+														<th>Child's Name</th>
+														<th>Caretaker Phone No.</th>
 														<th>Sample Collection Date</th>
 														<th>Sample Tested Date</th>
-														<th>Viral Load Lab</th>
-														<th>Viral Load (cp/ml)</th>
+														<th>Testing Lab</th>
+														<th>Result</th>
 														<th>Status</th>
 													</tr>
 												</thead>
@@ -261,8 +261,8 @@ $batResult = $db->rawQuery($batQuery);
 															<th>Remote Sample <br />Code</th>
 														<?php } ?>
 														<th>Facility Name</th>
-														<th>Patient ART no.</th>
-														<th>Patient Name</th>
+														<th>Child's ID</th>
+														<th>Child's Name</th>
 														<th>Sample Collection Date</th>
 														<th>VL Lab Name</th>
 														<th>Rejection Reason</th>
@@ -366,8 +366,8 @@ $batResult = $db->rawQuery($batQuery);
 															<th>Remote Sample <br />Code</th>
 														<?php } ?>
 														<th>Facility Name</th>
-														<th>Patient ART no.</th>
-														<th>Patient Name</th>
+														<th>Child's ID</th>
+														<th>Child's Name</th>
 														<th>Sample Collection Date</th>
 														<th>VL Lab Name</th>
 													</tr>
@@ -394,7 +394,7 @@ $batResult = $db->rawQuery($batQuery);
 															<option value="sample_collection_date">Sample Collection Date</option>
 															<option value="sample_batch_id">Batch Code</option>
 															<option value="patient_art_no">Unique ART No.</option>
-															<option value="patient_first_name">Patient Name</option>
+															<option value="patient_first_name">Child's Name</option>
 															<option value="facility_id">Facility Name</option>
 															<option value="facility_state">Province</option>
 															<option value="facility_district">County</option>
@@ -421,7 +421,7 @@ $batResult = $db->rawQuery($batQuery);
 														<?php } ?>
 														<th>Sample Collection Date</th>
 														<th>Batch Code</th>
-														<th>Patient's Name</th>
+														<th>Child's Name</th>
 														<th>Facility Name</th>
 														<th>Province/State</th>
 														<th>District/County</th>
@@ -877,7 +877,7 @@ $batResult = $db->rawQuery($batQuery);
 			var markAsComplete = true;
 		}
 		$.blockUI();
-		$.post("/vl/program-management/vlHighViralLoadResultExportInExcel.php", {
+		$.post("/eid/management/eidClinicResultExportInExcel.php", {
 				Sample_Test_Date: $("#hvlSampleTestDate").val(),
 				Batch_Code: $("#hvlBatchCode  option:selected").text(),
 				Sample_Type: $("#hvlSampleType  option:selected").text(),
@@ -900,7 +900,7 @@ $batResult = $db->rawQuery($batQuery);
 
 	function exportRejectedResultInexcel() {
 		$.blockUI();
-		$.post("/vl/program-management/vlRejectedResultExportInExcel.php", {
+		$.post("/eid/management/eidRejectedResultExportInExcel.php", {
 				Sample_Test_Date: $("#rjtSampleTestDate").val(),
 				Batch_Code: $("#rjtBatchCode  option:selected").text(),
 				Sample_Type: $("#rjtSampleType  option:selected").text(),
@@ -922,7 +922,7 @@ $batResult = $db->rawQuery($batQuery);
 
 	function exportNotAvailableResultInexcel() {
 		$.blockUI();
-		$.post("/vl/program-management/vlNotAvailableResultExportInExcel.php", {
+		$.post("/eid/management/eidNotAvailableResultExportInExcel.php", {
 				Sample_Test_Date: $("#noResultSampleTestDate").val(),
 				Batch_Code: $("#noResultBatchCode  option:selected").text(),
 				Sample_Type: $("#noResultSampleType  option:selected").text(),
@@ -944,7 +944,7 @@ $batResult = $db->rawQuery($batQuery);
 
 	function exportDataQualityInexcel() {
 		$.blockUI();
-		$.post("/vl/program-management/vlDataQualityExportInExcel.php", {
+		$.post("/eid/management/eidDataQualityExportInExcel.php", {
 				Sample_Collection_Date: $("#sampleCollectionDate").val(),
 				Field_Name: $("#formField  option:selected").text()
 			},
