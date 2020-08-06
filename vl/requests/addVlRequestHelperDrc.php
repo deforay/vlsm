@@ -250,7 +250,7 @@ try {
         'province_id' => (isset($_POST['provinceId']) && !empty($_POST['provinceId'])) ? $_POST['provinceId'] :  NULL,
         'request_clinician_name' => $_POST['clinicianName'],
         'request_clinician_phone_number' => $_POST['clinicanTelephone'],
-        'facility_support_partner' => $_POST['supportPartner'],
+        'facility_support_partner' => $_POST['implementingPartner'],
         'patient_dob' => $_POST['dob'],
         'patient_age_in_years' => $_POST['ageInYears'],
         'patient_age_in_months' => $_POST['ageInMonths'],
