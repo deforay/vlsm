@@ -2455,4 +2455,3 @@ UPDATE `global_config` SET `display_name` = 'Do you want to show emoticons on th
 UPDATE `system_config` SET `value` = '4.0.4' WHERE `system_config`.`name` = 'version';
 -- Version 4.0.4 -- Amit -- 06-Aug-2020
 
-
