@@ -387,20 +387,20 @@ foreach ($fResult as $fDetails) {
                                             </select>
                                         </td>
                                         
-                                        <th style="width:15% !important"><label for="confirmationLab">Méthode de confirmation en labo</label></th>
+                                        <!-- <th style="width:15% !important"><label for="confirmationLab">Méthode de confirmation en labo</label></th>
                                         <td style="width:35% !important;">
                                             <select class="form-control" id="confirmationLab" name="confirmationLab" title="Méthode de confirmation en labo">
                                                 <option value="">--Select--</option>
                                                 <option value="PCR/RT-PCR">PCR/RT-PCR</option>
-                                                <option value="RdRp-SARS CoV-2">RdRp-SARS CoV-2</option>
+                                                <option value="RdRp-SARS Cov-2">RdRp-SARS Cov-2</option>
                                             </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
+                                        </td> -->
                                         <th style="width: 15% !important;"><label for="resultPcr">Date de Result PCR</label></th>
                                         <td style="width:35% !important;">
                                             <input type="text" class="form-control date" id="resultPcr" name="resultPcr" placeholder="e.g 09-Jan-1992" title="Date de Result PCR"/>
                                         </td>
+                                    </tr>
+                                    <tr>
                                         <th style="width: 15% !important;"><label for="numberOfDaysSick">Depuis combien de jours êtes-vous malade?</label></th>
                                         <td style="width:35% !important;">
                                             <input type="text" class="form-control" id="numberOfDaysSick" name="numberOfDaysSick" placeholder="Depuis combien de jours êtes-vous malade?" title="Date de Result PCR"/>
@@ -583,8 +583,18 @@ foreach ($fResult as $fDetails) {
                                                     <tbody id="testKitNameTable">
                                                         <tr>
                                                             <td class="text-center">1</td>
-                                                            <td><input type="text" name="testName[]" id="testName1" class="form-control test-name-table-input" placeholder="Nom du test" title="Veuillez saisir le nom du test pour les lignes 1" /></td>
-                                                            <td><input type="text" name="testDate[]" id="testDate1" class="form-control test-name-table-input dateTime" placeholder="Testé sur" title="Veuillez saisir le test pour la ligne 1" /></td>
+                                                            <td>
+                                                                <select onchange="changeDRCTestName(this.value,1)" class="form-control test-name-table-input" id="testName1" name="testName[]" title="Veuillez saisir le nom du test pour les lignes 1">
+                                                                    <option value="">--Select--</option>
+                                                                    <option value="PCR/RT-PCR">PCR/RT-PCR</option>
+                                                                    <option value="RdRp-SARS Cov-2">RdRp-SARS Cov-2</option>
+                                                                    <option value="other">Others</option>
+                                                                </select>
+                                                                <input type="text" name="testNameOther[]" id="testNameOther1" class="form-control testInputOther1" title="Veuillez saisir le nom du test pour les lignes 1" placeholder="Entrez le nom du test 1" style="display: none;margin-top: 10px;"/>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" name="testDate[]" id="testDate1" class="form-control test-name-table-input dateTime" placeholder="Testé sur" title="Veuillez saisir le test pour la ligne 1" />
+                                                            </td>
                                                             <td><select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult1" title="Veuillez sélectionner le résultat pour la ligne 1">
                                                                     <option value=''> -- Select -- </option>
                                                                     <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
@@ -893,7 +903,7 @@ foreach ($fResult as $fDetails) {
         f.setAttribute("style", "vertical-align:middle");
 
         b.innerHTML = tableRowId;
-        c.innerHTML = '<input type="text" name="testName[]" id="testName' + tableRowId + '" class="form-control test-name-table-input" placeholder="Nom du test" title="Veuillez sélectionner le nom du test pour la ligne ' + tableRowId + '"/>';
+        c.innerHTML = '<select onchange="changeDRCTestName(this.value,' + tableRowId + ')" class="form-control test-name-table-input" id="testName' + tableRowId + '" name="testName[]" title="Veuillez saisir le nom du test pour les lignes ' + tableRowId + '"> <option value="">--Select--</option> <option value="PCR/RT-PCR">PCR/RT-PCR</option> <option value="RdRp-SARS Cov-2">RdRp-SARS Cov-2</option> <option value="other">Others</option> </select> <input type="text" name="testName[]" id="testName' + tableRowId + '" class="form-control testInputOther' + tableRowId + ' test-name-table-input" placeholder="Entrez le nom du test ' + tableRowId + '" title="Veuillez saisir le nom du test pour les lignes ' + tableRowId + '" style="display: none;"/>';
         d.innerHTML = '<input type="text" name="testDate[]" id="testDate' + tableRowId + '" class="form-control test-name-table-input dateTime" placeholder="Testé sur"  title="Veuillez sélectionner la date du test pour la ligne ' + tableRowId + '"/>';
         e.innerHTML = '<select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult' + tableRowId + '" title="Veuillez sélectionner le résultat pour la ligne ' + tableRowId + '"><option value=""> -- Select -- </option><?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?> <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option> <?php } ?> </select>';
         f.innerHTML = '<a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;<a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>';
@@ -965,4 +975,14 @@ foreach ($fResult as $fDetails) {
             $('#authorizedBy,#authorizedOn').addClass('isRequired');
         }
     }
+    
+    function changeDRCTestName(val,id){
+        if(val == 'other'){
+            $('.testInputOther'+id).show();
+        } else{
+            $('.testInputOther'+id).hide();
+        }
+    }
+
+    
 </script>

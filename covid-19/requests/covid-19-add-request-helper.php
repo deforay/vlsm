@@ -203,7 +203,7 @@ try {
 				}
 				$covid19TestData = array(
 					'covid19_id'			=> $_POST['covid19SampleId'],
-					'test_name'				=> $testKitName,
+					'test_name'				=> ($testKitName == 'other')?$_POST['testNameOther'][$testKey]:$testKitName,
 					'facility_id'           => isset($_POST['labId']) ? $_POST['labId'] : null,
 					'sample_tested_datetime'=> date('Y-m-d H:i:s', strtotime($_POST['testDate'][$testKey])),
 					'result'				=> $_POST['testResult'][$testKey],
