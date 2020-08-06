@@ -154,7 +154,7 @@ $sFormat = '';
                     <td>
                       <input type="text" class="form-control checkNum" id="clinicanTelephone" name="clinicanTelephone" placeholder="Téléphone" title="Please enter téléphone" style="width:100%;" />
                     </td>
-                    <td><label for="supportPartner">Partnaire d'appui </label></td>
+                    <td><label for="implementingPartner">Partnaire d'appui </label></td>
                     <td>
                       <!-- <input type="text" class="form-control" id="supportPartner" name="supportPartner" placeholder="Partenaire dappui" title="Please enter partenaire dappui" style="width:100%;"/> -->
                       <select class="form-control" name="implementingPartner" id="implementingPartner" title="Please choose partenaire de mise en œuvre" style="width:100%;">
