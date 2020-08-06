@@ -362,6 +362,10 @@
 		$(".allMenu").removeClass('active');
 		$(".eidProgramMenu").addClass('active');
 		$(".eidPrintResults").addClass('active');
+	} else if (splitsUrl == 'eid-clinic-report.php') {
+		$(".allMenu").removeClass('active');
+		$(".eidProgramMenu").addClass('active');
+		$(".eidClinicReport").addClass('active');
 	} else if (splitsUrl == 'eid-sample-rejection-report.php') {
 		$(".allMenu").removeClass('active');
 		$(".eidProgramMenu").addClass('active');

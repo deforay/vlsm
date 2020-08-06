@@ -2445,7 +2445,7 @@ INSERT INTO `system_config` (`display_name`, `name`, `value`) VALUES ('Version',
 -- Thana 04-Aug-2020
 ALTER TABLE `form_covid19` ADD `test_number` INT(11) NULL DEFAULT NULL AFTER `sample_code`;
 -- Thana 05-Aug-2020
-INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '28', 'eid-poitive-report.php', 'Eid Positive Report');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '28', 'eid-clinic-report.php', 'Eid Clinic Reports');
 
 -- Amit 06 Aug 2020
 UPDATE `global_config` SET `display_name` = 'Do you want to show emoticons on the result pdf?' WHERE `global_config`.`name` = 'show_smiley';

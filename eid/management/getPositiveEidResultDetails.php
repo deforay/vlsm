@@ -28,13 +28,13 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
          * you want to insert a non-database field (for example a counter or static image)
         */
         $sampleCode = 'sample_code';
-        $aColumns = array('vl.sample_code','vl.remote_sample_code','f.facility_name','vl.patient_first_name','vl.patient_art_no','vl.patient_mobile_number',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')","DATE_FORMAT(vl.sample_tested_datetime,'%d-%b-%Y')",'fd.facility_name','vl.result');
-        $orderColumns = array('vl.sample_code','vl.remote_sample_code','f.facility_name','vl.patient_art_no','vl.patient_first_name','vl.patient_mobile_number','vl.sample_collection_date','vl.sample_tested_datetime','fd.facility_name','vl.result');
+        $aColumns = array('vl.sample_code','vl.remote_sample_code','f.facility_name','vl.patient_first_name','vl.child_id','vl.caretaker_phone_number',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')","DATE_FORMAT(vl.sample_tested_datetime,'%d-%b-%Y')",'fd.facility_name','vl.result');
+        $orderColumns = array('vl.sample_code','vl.remote_sample_code','f.facility_name','vl.child_id','vl.patient_first_name','vl.caretaker_phone_number','vl.sample_collection_date','vl.sample_tested_datetime','fd.facility_name','vl.result');
         if($sarr['user_type']=='remoteuser'){
             $sampleCode = 'remote_sample_code';
        }else if($sarr['user_type']=='standalone') {
-        $aColumns = array('vl.sample_code','f.facility_name','vl.patient_first_name','vl.patient_art_no','vl.patient_mobile_number',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')","DATE_FORMAT(vl.sample_tested_datetime,'%d-%b-%Y')",'fd.facility_name','vl.result');
-        $orderColumns = array('vl.sample_code','f.facility_name','vl.patient_art_no','vl.patient_first_name','vl.patient_mobile_number','vl.sample_collection_date','vl.sample_tested_datetime','fd.facility_name','vl.result');
+        $aColumns = array('vl.sample_code','f.facility_name','vl.patient_first_name','vl.child_id','vl.caretaker_phone_number',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')","DATE_FORMAT(vl.sample_tested_datetime,'%d-%b-%Y')",'fd.facility_name','vl.result');
+        $orderColumns = array('vl.sample_code','f.facility_name','vl.child_id','vl.patient_first_name','vl.caretaker_phone_number','vl.sample_collection_date','vl.sample_tested_datetime','fd.facility_name','vl.result');
        }
         
         /* Indexed column (used for fast and accurate table cardinality) */
@@ -233,9 +233,9 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
                     $row[] = $aRow['remote_sample_code'];
             }
             $row[] = ucwords($aRow['facility_name']);
-            $row[] = $aRow['patient_art_no'];
+            $row[] = $aRow['child_id'];
             $row[] = ucwords($patientFname." ".$patientMname." ".$patientLname);
-            $row[] = $aRow['patient_mobile_number'];
+            $row[] = $aRow['caretaker_phone_number'];
             $row[] = $aRow['sample_collection_date'];
             $row[] = $aRow['sample_tested_datetime'];
             $row[] = $aRow['labName'];
