@@ -630,8 +630,8 @@ $formConfigResult = $db->query($formConfigQuery);
 								if (isset($_SESSION['privileges']) && in_array("eid-sample-rejection-report.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu eidSampleRejectionReport"><a href="/eid/management/eid-sample-rejection-report.php"><i class="fa fa-circle-o"></i> Sample Rejection Report</a></li>
 								<?php } 
-								if (isset($_SESSION['privileges']) && in_array("eid-poitive-report.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu eidSampleRejectionReport"><a href="/eid/management/eid-poitive-report.php"><i class="fa fa-circle-o"></i> Poitive Report</a></li>
+								if (isset($_SESSION['privileges']) && in_array("eid-clinic-report.php", $_SESSION['privileges'])) { ?>
+									<li class="allMenu eidClinicReport"><a href="/eid/management/eid-clinic-report.php"><i class="fa fa-circle-o"></i> Clinic Report</a></li>
 								<?php } ?>
 							</ul>
 						</li>

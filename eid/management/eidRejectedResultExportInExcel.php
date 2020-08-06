@@ -17,15 +17,15 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
 }
 
 
-if(isset($_SESSION['highViralResult']) && trim($_SESSION['highViralResult'])!=""){
-     $rResult = $db->rawQuery($_SESSION['highViralResult']);
+if(isset($_SESSION['rejectedViralLoadResult']) && trim($_SESSION['rejectedViralLoadResult'])!=""){
+     $rResult = $db->rawQuery($_SESSION['rejectedViralLoadResult']);
 
      $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
      $output = array();
      $sheet = $excel->getActiveSheet();
-     $headings = array('Sample Code','Remote Sample Code',"Facility Name","Patient's Name","Patient ART no.","Patient phone no.","Sample Collection Date","Sample Tested Date","Lab Name","Vl value in cp/ml");
+     $headings = array('Sample Code','Remote Sample Code',"Facility Name","Child Id.","Child's Name","Sample Collection Date","Lab Name","Rejection Reason");
      if($sarr['user_type']=='standalone') {
-     $headings = array('Sample Code',"Facility Name","Patient's Name","Patient ART no.","Patient phone no.","Sample Collection Date","Sample Tested Date","Lab Name","Vl value in cp/ml");
+     $headings = array('Sample Code',"Facility Name","Child Id.","Child's Name","Sample Collection Date","Lab Name","Rejection Reason");
      }
 
      $colNo = 1;
@@ -59,20 +59,8 @@ if(isset($_SESSION['highViralResult']) && trim($_SESSION['highViralResult'])!=""
 
      $sheet->mergeCells('A1:AE1');
      $nameValue = '';
-
-     $filters = array(
-          'hvlSampleTestDate' => 'Sample Test Date',
-          'hvlBatchCode' => 'Batch Code',
-          'hvlSampleType' => 'Sample Type',
-          'hvlFacilityName' => 'Facility Name',
-          'hvlContactStatus' => 'Contact Status',
-          'hvlGender' => 'Gender',
-          'hvlPatientPregnant' => 'Is Patient Pregnant',
-          'hvlPatientBreastfeeding' => 'Is Patient Breastfeeding'
-     );
-
      foreach($_POST as $key=>$value){
-          if(trim($value)!='' && trim($value)!='-- Select --' && trim($key)!='markAsComplete'){
+          if(trim($value)!='' && trim($value)!='-- Select --'){
                $nameValue .= str_replace("_"," ",$key)." : ".$value."&nbsp;&nbsp;";
           }
      }
@@ -82,66 +70,37 @@ if(isset($_SESSION['highViralResult']) && trim($_SESSION['highViralResult'])!=""
           $sheet->getCellByColumnAndRow($colNo, 3)->setValueExplicit(html_entity_decode($value), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
           $colNo++;
      }
-     $sheet->getStyle('A3:A3')->applyFromArray($styleArray);
-     $sheet->getStyle('B3:B3')->applyFromArray($styleArray);
-     $sheet->getStyle('C3:C3')->applyFromArray($styleArray);
-     $sheet->getStyle('D3:D3')->applyFromArray($styleArray);
-     $sheet->getStyle('E3:E3')->applyFromArray($styleArray);
-     $sheet->getStyle('F3:F3')->applyFromArray($styleArray);
-     $sheet->getStyle('G3:G3')->applyFromArray($styleArray);
-     $sheet->getStyle('H3:H3')->applyFromArray($styleArray);
-     $sheet->getStyle('I3:I3')->applyFromArray($styleArray);
-     if($sarr['user_type']!='standalone') {
-        $sheet->getStyle('J3:J3')->applyFromArray($styleArray);
-     }
+     $sheet->getStyle('A3:H3')->applyFromArray($styleArray);
 
-     $vlSampleId = array();
      foreach ($rResult as $aRow) {
           $row = array();
           //sample collecion date
-          $sampleCollectionDate = '';$sampleTestDate = '';
+          $sampleCollectionDate = '';
           if($aRow['sample_collection_date']!= NULL && trim($aRow['sample_collection_date'])!='' && $aRow['sample_collection_date']!='0000-00-00 00:00:00'){
                $expStr = explode(" ",$aRow['sample_collection_date']);
                $sampleCollectionDate =  date("d-m-Y", strtotime($expStr[0]));
           }
-          if($aRow['sample_tested_datetime']!= NULL && trim($aRow['sample_tested_datetime'])!='' && $aRow['sample_tested_datetime']!='0000-00-00 00:00:00'){
-               $expStr = explode(" ",$aRow['sample_tested_datetime']);
-               $sampleTestDate =  date("d-m-Y", strtotime($expStr[0]));
-          }
 
-          if($aRow['patient_first_name']!=''){
-               $patientFname = ucwords($general->crypto('decrypt',$aRow['patient_first_name'],$aRow['patient_art_no']));
-          }else{
-               $patientFname = '';
-          }
-          if($aRow['patient_middle_name']!=''){
-               $patientMname = ucwords($general->crypto('decrypt',$aRow['patient_middle_name'],$aRow['patient_art_no']));
-          }else{
-               $patientMname = '';
-          }
-          if($aRow['patient_last_name']!=''){
-               $patientLname = ucwords($general->crypto('decrypt',$aRow['patient_last_name'],$aRow['patient_art_no']));
-          }else{
-               $patientLname = '';
-          }
+          if($aRow['remote_sample']=='yes'){
+               $decrypt = 'remote_sample_code';
+               
+           }else{
+               $decrypt = 'sample_code';
+           }
+
+           $patientFname = ucwords($general->crypto('decrypt', $aRow['child_name'], $aRow[$decrypt]));
+
           $row[] = $aRow['sample_code'];
           if($sarr['user_type']!='standalone'){
            $row[] = $aRow['remote_sample_code'];
             }
           $row[] = ucwords($aRow['facility_name']);
-          $row[] = ucwords($patientFname." ".$patientMname." ".$patientLname);
-          $row[] = $aRow['patient_art_no'];
-          $row[] = $aRow['patient_mobile_number'];
+          $row[] = $aRow['child_id'];
+          $row[] = ucwords($patientFname);
           $row[] = $sampleCollectionDate;
-          $row[] = $sampleTestDate;
           $row[] = $aRow['labName'];
-          $row[] = $aRow['result'];
-          $vlSampleId[] = $aRow['vl_sample_id'];
+          $row[] = $aRow['rejection_reason_name'];
           $output[] = $row;
-     }
-     if($_POST['markAsComplete']=='true'){
-          $vlId = implode(",",$vlSampleId);
-          $db->rawQuery("UPDATE vl_request_form SET contact_complete_status = 'yes' WHERE vl_sample_id IN (".$vlId.")");
      }
 
      $start = (count($output))+2;
@@ -159,8 +118,9 @@ if(isset($_SESSION['highViralResult']) && trim($_SESSION['highViralResult'])!=""
           }
      }
      $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
-     $filename = 'VLSM-High-Viral-Load-Report' . date('d-M-Y-H-i-s') . '.xlsx';
+     $filename = 'VLSM-Rejected-Data-report' . date('d-M-Y-H-i-s') . '.xlsx';
      $writer->save(TEMP_PATH . DIRECTORY_SEPARATOR . $filename);
      echo $filename;
 
 }
+?>
