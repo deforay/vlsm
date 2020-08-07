@@ -194,7 +194,7 @@
 	str = $(location).attr('pathname');
 	splitsUrl = str.substr(str.lastIndexOf('/') + 1);
 	splitsUrlCheck = str.split("/", 4);
-	// console.log(splitsUrl);
+	console.log(splitsUrl);
 	if (splitsUrl == 'users.php' || splitsUrl == 'addUser.php' || splitsUrl == 'editUser.php') {
 		$(".manage").addClass('active');
 		$(".allMenu").removeClass('active');
@@ -370,14 +370,10 @@
 		$(".allMenu").removeClass('active');
 		$(".eidProgramMenu").addClass('active');
 		$(".eidSampleRejectionReport").addClass('active');
-	}else if (splitsUrl == 'covid-19-requests.php') {
+	}else if (splitsUrl == 'covid-19-requests.php' || splitsUrl == 'covid-19-add-request.php' || splitsUrl == 'covid-19-edit-request.php') {
 		$(".allMenu").removeClass('active');
 		$(".covid19Request").addClass('active');
 		$(".covid19RequestMenu").addClass('active');
-	} else if (splitsUrl == 'covid-19-add-request.php') {
-		$(".allMenu").removeClass('active');
-		$(".covid19Request").addClass('active');
-		$(".addCovid19RequestMenu").addClass('active');
 	} else if (splitsUrl == 'covid-19-batches.php' || splitsUrl == 'covid-19-add-batch.php' || splitsUrl == 'covid-19-edit-batch.php' || splitsUrl == 'covid-19-add-batch-position.php' || splitsUrl == 'covid-19-edit-batch-position.php') {
 		$(".allMenu").removeClass('active');
 		$(".covid19Request").addClass('active');

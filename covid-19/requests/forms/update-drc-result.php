@@ -619,7 +619,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                         <tr>
                                                             <th class="text-center">Test non</th>
                                                             <th class="text-center">Nom du Testkit (ou) Méthode de test utilisée</th>
-                                                            <th class="text-center">Date du test</th>
+                                                            <th class="text-center">Date de l'analyse</th>
                                                             <th class="text-center">Résultat du test</th>
                                                         </tr>
                                                     </thead>
