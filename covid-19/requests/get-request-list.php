@@ -306,7 +306,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                
                $row[] = ucwords($aRow['facility_state']);
                $row[] = ucwords($aRow['facility_district']);
-               $row[] = $aRow['result'];
+               $row[] = ucwords($aRow['result']);
                $row[] = $aRow['last_modified_datetime'];
                $row[] = ucwords($aRow['status_name']);
                //$printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="printBarcode(\''.base64_encode($aRow['covid19_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';

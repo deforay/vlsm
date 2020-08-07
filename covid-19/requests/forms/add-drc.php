@@ -373,41 +373,6 @@ foreach ($fResult as $fDetails) {
                                 </table>
 
                                 <div class="box-header with-border sectionHeader">
-                                    <h3 class="box-title">Résultats de laboratoire</h3>
-                                </div>
-                                <table class="table">
-                                    <tr>
-                                        <th style="width:15% !important"><label for="sampleCondition">Condition de l'échantillon</label></th>
-                                        <td style="width:35% !important;">
-                                            <select class="form-control" id="sampleCondition" name="sampleCondition" title="Condition de l'échantillon">
-                                                <option value="">--Select--</option>
-                                                <option value="adequate">Adéquat</option>
-                                                <option value="not-adequate">Non Adéquat</option>
-                                                <option value="other">Autres</option>
-                                            </select>
-                                        </td>
-                                        
-                                        <!-- <th style="width:15% !important"><label for="confirmationLab">Méthode de confirmation en labo</label></th>
-                                        <td style="width:35% !important;">
-                                            <select class="form-control" id="confirmationLab" name="confirmationLab" title="Méthode de confirmation en labo">
-                                                <option value="">--Select--</option>
-                                                <option value="PCR/RT-PCR">PCR/RT-PCR</option>
-                                                <option value="RdRp-SARS Cov-2">RdRp-SARS Cov-2</option>
-                                            </select>
-                                        </td> -->
-                                        <th style="width: 15% !important;"><label for="resultPcr">Date de Result PCR</label></th>
-                                        <td style="width:35% !important;">
-                                            <input type="text" class="form-control date" id="resultPcr" name="resultPcr" placeholder="e.g 09-Jan-1992" title="Date de Result PCR"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th style="width: 15% !important;"><label for="numberOfDaysSick">Depuis combien de jours êtes-vous malade?</label></th>
-                                        <td style="width:35% !important;">
-                                            <input type="text" class="form-control" id="numberOfDaysSick" name="numberOfDaysSick" placeholder="Depuis combien de jours êtes-vous malade?" title="Date de Result PCR"/>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <div class="box-header with-border sectionHeader">
                                     <h3 class="box-title">SIGNES ET SYMPTÔMES CLINIQUES</h3>
                                 </div>
                                 <table class="table">
@@ -570,13 +535,25 @@ foreach ($fResult as $fDetails) {
                                             <td><input class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Date de rejet" title="Date de rejet"/></td>
                                         </tr>
                                         <tr>
+                                            <!-- <th style="width: 15% !important;"><label for="resultPcr">Date de Result PCR</label></th>
+                                            <td style="width:35% !important;">
+                                                <input type="text" class="form-control date" id="resultPcr" name="resultPcr" placeholder="e.g 09-Jan-1992" title="Date de Result PCR"/>
+                                            </td> -->
+                                            <th style="width: 15% !important;"><label for="numberOfDaysSick">Depuis combien de jours êtes-vous malade?</label></th>
+                                            <td style="width:35% !important;">
+                                                <input type="text" class="form-control" id="numberOfDaysSick" name="numberOfDaysSick" placeholder="Depuis combien de jours êtes-vous malade?" title="Date de Result PCR"/>
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
                                             <td colspan="4">
                                                 <table class="table table-bordered table-striped">
                                                     <thead>
                                                         <tr>
                                                             <th class="text-center">Test non</th>
                                                             <th class="text-center">Nom du Testkit (ou) Méthode de test utilisée</th>
-                                                            <th class="text-center">Date du test</th>
+                                                            <th class="text-center">Date de l'analyse</th>
                                                             <th class="text-center">Résultat du test</th>
                                                         </tr>
                                                     </thead>
@@ -622,6 +599,27 @@ foreach ($fResult as $fDetails) {
                                                         </tr>
                                                     </tfoot>
                                                 </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="other-diseases" style="display: none;"><label for="otherDiseases">Autres maladies<span class="mandatory">*</span></label></th>
+                                            <td colspan="3" class="other-diseases" style="display: none;">
+                                                <select name="otherDiseases" id="otherDiseases" class="form-control" title="Autres maladies">
+                                                    <option value="">--Select--</option>
+                                                    <optgroup label="Coronavirus">
+                                                        <option value="E-Sars-CoV">E-Sars-CoV</option>
+                                                        <option value="N-Sars-Cov">N-Sars-Cov</option>
+                                                        <option value="Other respiratory pathogens">Autres Pathogens Respiratories</option>
+                                                        <option value="Other Coronavirus">Autres Coronavirus</option>
+                                                    </optgroup>
+                                                    <optgroup label="Influenza">
+                                                        <option value="A/H1N1pdm09">A/H1N1pdm09</option>
+                                                        <option value="A/H3N2">A/H3N2</option>
+                                                        <option value="A/H5N1">A/H5N1</option>
+                                                        <option value="B/Yan">B/Yan</option>
+                                                        <option value="B/Vic">B/Vic</option>
+                                                    </optgroup>
+                                                </select>
                                             </td>
                                         </tr>
                                         <tr>
@@ -880,12 +878,21 @@ foreach ($fResult as $fDetails) {
                 $('.oxygen-saturation').css('display','none');
             }
         });
+        $('#result').change(function(e){
+            if(this.value == 'positive'){
+                $('.other-diseases').hide();
+                $('#otherDiseases').removeClass('isRequired');
+            } else {
+                $('.other-diseases').show();
+                $('#otherDiseases').addClass('isRequired');
+            }
+        });
         <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
         $('.test-result,#result').change(function(e){
             checkPostive();
         });
         <?php }?>
-
+        checkPostive();
     });
 
     function insRow() {
@@ -903,8 +910,8 @@ foreach ($fResult as $fDetails) {
         f.setAttribute("style", "vertical-align:middle");
 
         b.innerHTML = tableRowId;
-        c.innerHTML = '<select onchange="changeDRCTestName(this.value,' + tableRowId + ')" class="form-control test-name-table-input" id="testName' + tableRowId + '" name="testName[]" title="Veuillez saisir le nom du test pour les lignes ' + tableRowId + '"> <option value="">--Select--</option> <option value="PCR/RT-PCR">PCR/RT-PCR</option> <option value="RdRp-SARS Cov-2">RdRp-SARS Cov-2</option> <option value="other">Others</option> </select> <input type="text" name="testName[]" id="testName' + tableRowId + '" class="form-control testInputOther' + tableRowId + ' test-name-table-input" placeholder="Entrez le nom du test ' + tableRowId + '" title="Veuillez saisir le nom du test pour les lignes ' + tableRowId + '" style="display: none;"/>';
-        d.innerHTML = '<input type="text" name="testDate[]" id="testDate' + tableRowId + '" class="form-control test-name-table-input dateTime" placeholder="Testé sur"  title="Veuillez sélectionner la date du test pour la ligne ' + tableRowId + '"/>';
+        c.innerHTML = '<select onchange="changeDRCTestName(this.value,' + tableRowId + ')" class="form-control test-name-table-input" id="testName' + tableRowId + '" name="testName[]" title="Veuillez saisir le nom du test pour les lignes ' + tableRowId + '"> <option value="">--Select--</option> <option value="PCR/RT-PCR">PCR/RT-PCR</option> <option value="RdRp-SARS Cov-2">RdRp-SARS Cov-2</option> <option value="other">Others</option> </select> <input type="text" name="testName[]" id="testName' + tableRowId + '" class="form-control testInputOther' + tableRowId + ' test-name-table-input" placeholder="Entrez le nom du test ' + tableRowId + '" title="Veuillez saisir le nom du test pour les lignes ' + tableRowId + '" style="display: none;margin-top: 10px;"/>';
+        d.innerHTML = '<input type="text" name="testDate[]" id="testDate' + tableRowId + '" class="form-control test-name-table-input dateTime" placeholder="Testé sur"  title="Veuillez sélectionner la Date de l analyse pour la ligne ' + tableRowId + '"/>';
         e.innerHTML = '<select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult' + tableRowId + '" title="Veuillez sélectionner le résultat pour la ligne ' + tableRowId + '"><option value=""> -- Select -- </option><?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?> <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option> <?php } ?> </select>';
         f.innerHTML = '<a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;<a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>';
         $(a).fadeIn(800);
