@@ -42,7 +42,7 @@ if (sizeof($requestResult) > 0) {
         }
         // create new PDF document
         $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->setHeading($arr['logo'], $arr['header'], $result['labName'], $title = 'EARLY INFANT DIAGNOSIS PATIENT REPORT');
+        $pdf->setHeading($arr['logo'], $arr['header'], $result['labName'], $title = 'COVID 19 PATIENT REPORT');
         // set document information
         $pdf->SetCreator('VLSM');
         $pdf->SetTitle('Covid-19 Patient Report');
@@ -425,7 +425,8 @@ if (sizeof($requestResult) > 0) {
             $pdf->writeHTML($html);
             $pdf->lastPage();
             $filename = $pathFront . DIRECTORY_SEPARATOR . 'p' . $page . '.pdf';
-            $pdf->Output($filename, "F");
+            // $pdf->Output($filename, "F");
+            $pdf->Output($_SESSION['rVal'].'p.pdf', 'I');
             if ($draftTextShow) {
                 //Watermark section
                 $watermark = new Watermark();
@@ -469,5 +470,5 @@ if (sizeof($requestResult) > 0) {
         unset($_SESSION['rVal']);
     }
 }
-
-echo $resultFilename;
+exit;
+// echo $resultFilename;

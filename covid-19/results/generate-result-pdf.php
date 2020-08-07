@@ -47,7 +47,7 @@ if (isset($_POST['newData']) && $_POST['newData'] != '') {
 	$query = $_SESSION['covid19PrintQuery'];
 	$allQuery = $_SESSION['covid19PrintSearchResultQuery'];
 }
-if (isset($_POST['id']) && trim($_POST['id']) != '') {
+if (isset($_GET['id']) && trim($_GET['id']) != '') {
 
 	$searchQuery = "SELECT vl.*,f.*,l.facility_name as labName,
                   l.facility_logo as facilityLogo,
@@ -64,11 +64,11 @@ if (isset($_POST['id']) && trim($_POST['id']) != '') {
                   LEFT JOIN r_covid19_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection 
                   LEFT JOIN r_implementation_partners as rip ON rip.i_partner_id=vl.implementing_partner
 				  LEFT JOIN r_funding_sources as rfs ON rfs.funding_source_id=vl.funding_source 
-                  WHERE vl.covid19_id IN(" . $_POST['id'] . ")";
+                  WHERE vl.covid19_id IN(" . $_GET['id'] . ")";
 } else {
 	$searchQuery = $allQuery;
 }
-//echo($searchQuery);die;
+// echo($searchQuery);die;
 $requestResult = $db->query($searchQuery);
 /* Test Results */
 
@@ -103,14 +103,20 @@ class MYPDF extends TCPDF
 				}
 			}
 			$this->SetFont('helvetica', 'B', 16);
-			$this->writeHTMLCell(0, 0, 10, 18, $this->text, 0, 0, 0, true, 'C', true);
+			$this->writeHTMLCell(0, 0, 10, 03, $this->text, 0, 0, 0, true, 'C', true);
 			if (trim($this->lab) != '') {
 				$this->SetFont('helvetica', '', 10);
-				$this->writeHTMLCell(0, 0, 10, 25, strtoupper($this->lab), 0, 0, 0, true, 'C', true);
+				$this->writeHTMLCell(0, 0, 10, 10, strtoupper($this->lab), 0, 0, 0, true, 'C', true);
 			}
-			$this->SetFont('helvetica', '', 12);
-			$this->writeHTMLCell(0, 0, 10, 30, 'COVID-19 TEST - PATIENT REPORT', 0, 0, 0, true, 'C', true);
-			$this->writeHTMLCell(0, 0, 15, 38, '<hr>', 0, 0, 0, true, 'C', true);
+			$this->SetFont('helvetica', 'b', 10);
+			$this->writeHTMLCell(0, 0, 10, 18, 'Département de Virologie', 0, 0, 0, true, 'C', true);
+			$this->SetFont('helvetica', 'u', 10);
+			$this->writeHTMLCell(0, 0, 10, 25, 'Laboratoire National de Reference pour la Grippe et les Virus Respiratoires', 0, 0, 0, true, 'C', true);
+			$this->SetFont('helvetica', 'b', 12);
+			$this->writeHTMLCell(0, 0, 10, 33, 'RESULTATS DE LABORATOIRE DES ECHANTIONS RESPIRATOIRES', 0, 0, 0, true, 'C', true);
+			$this->SetFont('helvetica', 'u', 10);
+			$this->writeHTMLCell(0, 0, 10, 40, 'TESTES AU COVID-19 PAR RT-PCR en temps réel N°', 0, 0, 0, true, 'C', true);
+			$this->writeHTMLCell(0, 0, 15, 48, '<hr>', 0, 0, 0, true, 'C', true);
 		} else {
 			if (trim($this->logo) != '') {
 				if (file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "facility-logo" . DIRECTORY_SEPARATOR . $this->labFacilityId . DIRECTORY_SEPARATOR . $this->logo)) {
