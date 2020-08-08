@@ -627,8 +627,11 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                                         </select>
                                                                         <?php $show =  (isset($covid19TestInfo[$indexKey]['test_name']) && $covid19TestInfo[$indexKey]['test_name'] == 'other')?"block":"none";
                                                                         $value = '';
-                                                                        if($covid19TestInfo[$indexKey]['test_name'] == 'other'){
+                                                                        if($covid19TestInfo[$indexKey]['test_name'] != 'PCR/RT-PCR' && $covid19TestInfo[$indexKey]['test_name'] != 'RdRp-SARS Cov-2' && $covid19TestInfo[$indexKey]['test_name'] != 'other'){
                                                                             $value = 'value="'.$covid19TestInfo[$indexKey]['test_name'].'"';
+                                                                            $show =  "block";
+                                                                        } else{
+                                                                            $show =  "none";
                                                                         } ?>
                                                                         <input <?php echo $value;?> type="text" name="testNameOther[]"  id="testNameOther<?php echo ($indexKey + 1); ?>" class="form-control testInputOther<?php echo ($indexKey + 1); ?>" title="Veuillez saisir le nom du test pour les lignes <?php echo ($indexKey + 1); ?>" placeholder="Entrez le nom du test <?php echo ($indexKey + 1); ?>" style="display: <?php echo $show;?>;margin-top: 10px;"/>
                                                                     </td>
