@@ -757,7 +757,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                         <input type="hidden" name="oldStatus" id="oldStatus" value="<?php echo $covid19Info['result_status']; ?>" />
                         <input type="hidden" name="provinceCode" id="provinceCode" />
                         <input type="hidden" name="provinceId" id="provinceId" />
-                        <a href="/covid-19/requests/covid-19-requests.php" class="btn btn-default"> Cancel</a>
+                        <a href="/covid-19/results/covid-19-manual-results.php" class="btn btn-default"> Cancel</a>
                     </div>
                     <!-- /.box-footer -->
                 </form>
@@ -936,13 +936,6 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                 $('#otherDiseases').addClass('isRequired');
             }
         });
-
-        <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
-        $('.test-result,#result').change(function(e){
-            checkPostive();
-        });
-        <?php }?>
-        checkPostive();
         
         checkIsResultAuthorized();
 
@@ -1049,27 +1042,6 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         $('#deletedRow').val(deletedRow);
     }
 
-    function checkPostive(){
-        var itemLength = document.getElementsByName("testResult[]");
-        for (i = 0; i < itemLength.length; i++) {
-            
-            if(itemLength[i].value == 'positive'){
-                $('#result,.disabled-field').val('');
-                $('#result,.disabled-field').prop('disabled',true);
-                $('#result,.disabled-field').addClass('disabled');
-                $('#result,.disabled-field').removeClass('isRequired');
-                return false;
-            }else{
-                $('#result,.disabled-field').prop('disabled',false);
-                $('#result,.disabled-field').removeClass('disabled');
-                $('#result,.disabled-field').addClass('isRequired');
-            }
-            if(itemLength[i].value != ''){
-                $('#labId').addClass('isRequired');
-            }
-        }
-    }
-    
     function checkIsResultAuthorized(){
         if($('#isResultAuthorized').val() == 'yes'){
             $('#authorizedBy,#authorizedOn').prop('disabled',false);

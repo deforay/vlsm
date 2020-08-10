@@ -950,8 +950,8 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         $('.test-result,#result').change(function(e){
             checkPostive();
         });
-        <?php }?>
         checkPostive();
+        <?php }?>
         
         checkIsResultAuthorized();
 
