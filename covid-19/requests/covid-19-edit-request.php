@@ -268,7 +268,6 @@ require_once($fileArray[$arr['vl_form']]);
 			$('#sampleTestedDateTime,#result,.test-name-table-input').addClass('isRequired');
 			$('#result').prop('disabled', false);
 			$('#sampleRejectionReason').prop('disabled', true);
-            checkPostive();
 		}
 	}
 

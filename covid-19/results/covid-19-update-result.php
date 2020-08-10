@@ -230,7 +230,6 @@ if ($arr['vl_form'] == 1) {
 			$('#sampleTestedDateTime,#result,.test-name-table-input').addClass('isRequired');
 			$('#result').prop('disabled', false);
 			$('#sampleRejectionReason').prop('disabled', true);
-			checkPostive();
 		}
 	}
 </script>
