@@ -269,6 +269,9 @@ require_once($fileArray[$arr['vl_form']]);
 			$('#result').prop('disabled', false);
 			$('#sampleRejectionReason').prop('disabled', true);
 		}
+        <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
+            checkPostive();
+        <?php }?>
 	}
 
 
