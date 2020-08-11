@@ -2,6 +2,66 @@
 
 // imported in vlRequestSearchResultPdf.php
 
+class DRC_PDF extends MYPDF
+{
+  //Page header
+  public function Header()
+  {
+    // Logo
+    //$image_file = K_PATH_IMAGES.'logo_example.jpg';
+    //$this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+    // Set font
+    if ($this->htitle != '') {
+      if (trim($this->logo) != '') {
+        if (file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'logo' . DIRECTORY_SEPARATOR . $this->logo)) {
+          $image_file = UPLOAD_PATH . DIRECTORY_SEPARATOR . 'logo' . DIRECTORY_SEPARATOR . $this->logo;
+          $this->Image($image_file, 95, 5, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        }
+      }
+      $this->SetFont('helvetica', 'B', 8);
+      $this->writeHTMLCell(0, 0, 10, 22, $this->text, 0, 0, 0, true, 'C', true);
+      if (trim($this->lab) != '') {
+        $this->SetFont('helvetica', '', 9);
+        $this->writeHTMLCell(0, 0, 10, 26, strtoupper($this->lab), 0, 0, 0, true, 'C', true);
+      }
+      $this->SetFont('helvetica', '', 14);
+      $this->writeHTMLCell(0, 0, 10, 30, 'VIRAL LOAD PATIENT REPORT', 0, 0, 0, true, 'C', true);
+
+      $this->writeHTMLCell(0, 0, 15, 38, '<hr>', 0, 0, 0, true, 'C', true);
+    } else {
+      if (trim($this->logo) != '') {
+        if (file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "facility-logo" . DIRECTORY_SEPARATOR . $this->labFacilityId . DIRECTORY_SEPARATOR . $this->logo)) {
+          $image_file = UPLOAD_PATH . DIRECTORY_SEPARATOR . 'facility-logo' . DIRECTORY_SEPARATOR . $this->labFacilityId . DIRECTORY_SEPARATOR . $this->logo;
+          $this->Image($image_file, 16, 13, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        } else if (file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'logo' . DIRECTORY_SEPARATOR . $this->logo)) {
+          $image_file = UPLOAD_PATH . DIRECTORY_SEPARATOR . 'logo' . DIRECTORY_SEPARATOR . $this->logo;
+          $this->Image($image_file, 20, 13, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        }
+      }
+      if (file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'logo' . DIRECTORY_SEPARATOR . 'drc-logo.png')) {
+        $image_file = UPLOAD_PATH . DIRECTORY_SEPARATOR . 'logo' . DIRECTORY_SEPARATOR . 'drc-logo.png';
+        $this->Image($image_file, 180, 13, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
+      }
+
+      $this->SetFont('helvetica', '', 15);
+      $this->writeHTMLCell(0, 0, 14, 9, 'MINISTERE DE LA SANTE PUBLIQUE', 0, 0, 0, true, 'C', true);
+
+      $this->SetFont('helvetica', '', 10);
+      $this->writeHTMLCell(0, 0, 10, 17, strtoupper('DÉPARTEMENT DE BIOLOGIE MOLÉCULAIRE'), 0, 0, 0, true, 'C', true);
+
+      if (isset($this->text) && !empty($this->text)) {
+        $this->SetFont('helvetica', '', 10);
+        $this->writeHTMLCell(0, 0, 10, 23, strtoupper($this->text), 0, 0, 0, true, 'C', true);
+      }
+
+      $this->SetFont('helvetica', '', 12);
+      $this->writeHTMLCell(0, 0, 10, 28, 'RESULTATS CHARGE VIRALE', 0, 0, 0, true, 'C', true);
+      $this->writeHTMLCell(0, 0, 15, 36, '<hr>', 0, 0, 0, true, 'C', true);
+    }
+  }
+}
+
+
 $resultFilename = '';
 if (sizeof($requestResult) > 0) {
   $_SESSION['rVal'] = $general->generateRandomString(6);
@@ -27,7 +87,7 @@ if (sizeof($requestResult) > 0) {
       }
     }
     // create new PDF document
-    $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+    $pdf = new DRC_PDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
     if (file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "facility-logo" . DIRECTORY_SEPARATOR . $result['lab_id'] . DIRECTORY_SEPARATOR . $result['facilityLogo'])) {
       $logoPrintInPdf = $result['facilityLogo'];
     } else {
