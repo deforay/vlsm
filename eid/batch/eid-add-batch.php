@@ -3,7 +3,7 @@ ob_start();
 $title = "EID | Add Batch";
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-include_once(APPLICATION_PATH.'/models/General.php');
+include_once(APPLICATION_PATH . '/models/General.php');
 
 //global config
 $configQuery = "SELECT `value` FROM global_config WHERE name ='vl_form'";
@@ -109,7 +109,7 @@ foreach ($importConfigResult as $machine) {
                             <?php
                             foreach ($importConfigResult as $machine) {
                                 $labelOrder = $machinesLabelOrder[$machine['config_id']];
-                                ?>
+                            ?>
                                 <option value="<?php echo $machine['config_id']; ?>" data-no-of-samples="<?php echo $machine['max_no_of_samples_in_a_batch']; ?>"><?php echo ucwords($machine['machine_name']); ?></option>
                             <?php } ?>
                         </select>
@@ -120,11 +120,11 @@ foreach ($importConfigResult as $machine) {
                             <!--<option value="">-- Select --</option>-->
                             <?php
                             foreach ($fResult as $name) {
-                                ?>
+                            ?>
                                 <option value="<?php echo $name['facility_id']; ?>"><?php echo ucwords($name['facility_name'] . "-" . $name['facility_code']); ?></option>
                             <?php
-                        }
-                        ?>
+                            }
+                            ?>
                         </select>
                     </td>
                 </tr>

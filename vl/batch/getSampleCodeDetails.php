@@ -12,7 +12,7 @@ $gender = $_POST['gender'];
 $pregnant = $_POST['pregnant'];
 $breastfeeding = $_POST['breastfeeding'];
 //global config
-$configQuery = "SELECT `value` FROM global_config WHERE name ='vl_form'";
+$configQuery = "SELECT `value` FROM `global_config` WHERE `name` ='vl_form'";
 $configResult = $db->query($configQuery);
 $country = $configResult[0]['value'];
 if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != '') {
@@ -76,7 +76,8 @@ if (isset($_POST['sampleReceivedAtLab']) && trim($_POST['sampleReceivedAtLab']) 
 	}
 }
 //$query = $query." ORDER BY f.facility_name ASC";
-$query = $query . " ORDER BY vl.last_modified_datetime ASC";
+//$query = $query . " ORDER BY vl.last_modified_datetime ASC";
+$query = $query . " ORDER BY vl.sample_code ASC";
 // echo $query;die;
 $result = $db->rawQuery($query);
 ?>

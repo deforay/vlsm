@@ -20,7 +20,7 @@ $sResult = $db->rawQuery($sQuery);
 
 $start_date = date('Y-m-d');
 $end_date = date('Y-m-d');
-$batchQuery = 'select MAX(batch_code_key) FROM batch_details as bd where DATE(bd.request_created_datetime) >= "' . $start_date . '" AND DATE(bd.request_created_datetime) <= "' . $end_date . '"';
+$batchQuery = 'SELECT MAX(batch_code_key) FROM batch_details as bd where DATE(bd.request_created_datetime) >= "' . $start_date . '" AND DATE(bd.request_created_datetime) <= "' . $end_date . '"';
 $batchResult = $db->query($batchQuery);
 
 if ($batchResult[0]['MAX(batch_code_key)'] != '' && $batchResult[0]['MAX(batch_code_key)'] != NULL) {

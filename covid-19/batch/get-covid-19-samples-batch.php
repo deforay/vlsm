@@ -1,7 +1,7 @@
 <?php
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
-include_once(APPLICATION_PATH.'/models/General.php');
+include_once(APPLICATION_PATH . '/models/General.php');
 $general = new General($db);
 $start_date = '';
 $end_date = '';
@@ -57,7 +57,8 @@ if (isset($_POST['sampleReceivedAtLab']) && trim($_POST['sampleReceivedAtLab']) 
     }
 }
 //$query = $query." ORDER BY f.facility_name ASC";
-$query = $query . " ORDER BY vl.last_modified_datetime ASC";
+//$query = $query . " ORDER BY vl.last_modified_datetime ASC";
+$query = $query . " ORDER BY vl.sample_code ASC";
 // echo $query;die;
 $result = $db->rawQuery($query);
 ?>
@@ -71,11 +72,11 @@ $result = $db->rawQuery($query);
                 <select id="sampleCode" name="sampleCode[]" multiple="multiple" class="search">
                     <?php
                     foreach ($result as $sample) {
-                        ?>
+                    ?>
                         <option value="<?php echo $sample['covid19_id']; ?>"><?php echo ucwords($sample['sample_code']) . " - " . ucwords($sample['facility_name']); ?></option>
                     <?php
-                }
-                ?>
+                    }
+                    ?>
                 </select>
             </div>
         </div>

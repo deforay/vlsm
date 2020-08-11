@@ -103,7 +103,7 @@ class MYPDF extends TCPDF
         $this->writeHTMLCell(0, 0, 10, 26, strtoupper($this->lab), 0, 0, 0, true, 'C', true);
       }
       $this->SetFont('helvetica', '', 14);
-      $this->writeHTMLCell(0, 0, 10, 30, 'VIRAL LOAD PATIENT REPORT', 0, 0, 0, true, 'C', true);
+      $this->writeHTMLCell(0, 0, 10, 30, 'HIV VIRAL LOAD PATIENT REPORT', 0, 0, 0, true, 'C', true);
 
       $this->writeHTMLCell(0, 0, 15, 38, '<hr>', 0, 0, 0, true, 'C', true);
     } else {
@@ -121,13 +121,8 @@ class MYPDF extends TCPDF
         $this->Image($image_file, 180, 13, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
       }
 
-      // $this->SetFont('helvetica', 'B', 7);
-      // $this->writeHTMLCell(30,0,16,28,$this->text, 0, 0, 0, true, 'A', true);(this two lines comment out for drc)
-      //$this->SetFont('helvetica', '', 14);
-      //$this->writeHTMLCell(0, 0, 10, 9, 'MINISTERE DE LA SANTE PUBLIQUE', 0, 0, 0, true, 'C', true);
       if ($this->text != '') {
         $this->SetFont('helvetica', '', 16);
-        //        $this->writeHTMLCell(0,0,10,16,'PROGRAMME NATIONAL DE LUTTE CONTRE LE SIDA ET IST', 0, 0, 0, true, 'C', true);
         $this->writeHTMLCell(0, 0, 10, 12, strtoupper($this->text), 0, 0, 0, true, 'C', true);
         $thirdHeading = '21';
         $fourthHeading = '28';
