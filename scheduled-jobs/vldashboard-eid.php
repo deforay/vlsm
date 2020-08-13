@@ -50,14 +50,18 @@ try {
         }
 
         $sQuery .= " ORDER BY vl.last_modified_datetime ASC ";
-
+        // $sQuery .= " LIMIT 200";
         // echo $sQuery;die;
         $rResult = $db->rawQuery($sQuery);
         $output = array();
         foreach ($rResult as $key=>$aRow) {
             $row = array();
-            foreach($aRow as $index=>$value){                
-                $row[$index] = $value;
+            foreach($aRow as $index=>$value){ 
+                if($index == 'sample_code' && $aRow['remote_sample_code'] != ""){
+                    $row['sample_code'] = $aRow['remote_sample_code'] .'-'. $aRow['sample_code'];             
+                } else{
+                    $row[$index] = $value;
+                }
             }
             $output[] = $row;
         }
@@ -102,10 +106,9 @@ try {
         curl_setopt_array($ch, $options);
         $result = curl_exec($ch);
         curl_close($ch);
-        /* echo "<pre>";
-        print_r($result);die; */
         
         $deResult = json_decode($result, true);
+        // echo "<pre>";print_r($deResult);die;
         if (isset($deResult['status']) && trim($deResult['status']) == 'success') {
             $data = array(
                 'eid_last_dash_sync' => $general->getDateTime()
