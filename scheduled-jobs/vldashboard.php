@@ -59,7 +59,7 @@ try {
 
         // echo $sQuery;die;
 
-        //$sQuery .= " LIMIT 1000";
+        // $sQuery .= " LIMIT 1000";
 
         $rResult = $db->rawQuery($sQuery);
 
@@ -100,8 +100,11 @@ try {
                 $DashVL_AnalysisResult = 'Not Suppressed';
                 $DashVL_Abs = $VLAnalysisResult;
             }
-
-            $row['sample_code']          = $aRow['sample_code'];
+            if($aRow['remote_sample_code'] != ""){
+                $row['sample_code']      = $aRow['remote_sample_code'] .'-'. $aRow['sample_code'];
+            } else{
+                $row['sample_code']      = $aRow['sample_code'];
+            }
             $row['vlsm_instance_id']     = $aRow['vlsm_instance_id'];
             $row['patient_gender']       = $aRow['patient_gender'];
             $row['patient_age_in_years'] = $aRow['patient_age_in_years'];
