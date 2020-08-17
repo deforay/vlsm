@@ -42,7 +42,7 @@ if (sizeof($requestResult) > 0) {
         }
         // create new PDF document
         $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->setHeading($arr['logo'], $arr['header'], $result['labName'], $title = 'COVID 19 PATIENT REPORT',3);
+        $pdf->setHeading($arr['logo'], $arr['header'], $result['labName'], $title = 'COVID 19 PATIENT REPORT', 3);
         // set document information
         $pdf->SetCreator('VLSM');
         $pdf->SetTitle('Covid-19 Rapport du patient');
