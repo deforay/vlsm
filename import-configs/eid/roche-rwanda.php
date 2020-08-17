@@ -53,9 +53,9 @@ try {
         $batchCodeVal = "E";
         $resultCol = "G";
 
-        
+
         $flagCol = 10;
-        
+
 
         $lotNumberCol = 12;
         $reviewByCol = '';
@@ -71,19 +71,19 @@ try {
 
         $infoFromFile = array();
         $testDateRow = "";
-        
+
 
         $row = 1;
 
         foreach ($sheetData as $rowIndex => $rowData) {
 
             if ($rowIndex < $skipTillRow)
-              continue;
+                continue;
 
 
             $num = count($rowData);
             $row++;
-            
+
             $sampleCode = "";
             $batchCode = "";
             $sampleType = "";

@@ -21,21 +21,21 @@ try {
 
 
         $sQuery = "SELECT vl.*,
-                    ts.*,f.facility_name,l_f.facility_name as labName,
-                    f.facility_code,f.facility_state,f.facility_district,
-                    f.facility_mobile_numbers,f.address,f.facility_hub_name,
-                    f.contact_person,f.report_email,f.country,f.longitude,
-                    f.latitude,f.facility_type,f.status as facility_status,
-                    ft.facility_type_name,lft.facility_type_name as labFacilityTypeName,
-                    l_f.facility_name as labName,l_f.facility_code as labCode,
-                    l_f.facility_state as labState,l_f.facility_district as labDistrict,
-                    l_f.facility_mobile_numbers as labPhone,l_f.address as labAddress,
-                    l_f.facility_hub_name as labHub,l_f.contact_person as labContactPerson,
-                    l_f.report_email as labReportMail,l_f.country as labCountry,
-                    l_f.longitude as labLongitude,l_f.latitude as labLatitude,
-                    l_f.facility_type as labFacilityType,
-                    l_f.status as labFacilityStatus,
-                    rsrr.rejection_reason_status 
+                        ts.*,f.facility_name,l_f.facility_name as labName,
+                        f.facility_code,f.facility_state,f.facility_district,
+                        f.facility_mobile_numbers,f.address,f.facility_hub_name,
+                        f.contact_person,f.report_email,f.country,f.longitude,
+                        f.latitude,f.facility_type,f.status as facility_status,
+                        ft.facility_type_name,lft.facility_type_name as labFacilityTypeName,
+                        l_f.facility_name as labName,l_f.facility_code as labCode,
+                        l_f.facility_state as labState,l_f.facility_district as labDistrict,
+                        l_f.facility_mobile_numbers as labPhone,l_f.address as labAddress,
+                        l_f.facility_hub_name as labHub,l_f.contact_person as labContactPerson,
+                        l_f.report_email as labReportMail,l_f.country as labCountry,
+                        l_f.longitude as labLongitude,l_f.latitude as labLatitude,
+                        l_f.facility_type as labFacilityType,
+                        l_f.status as labFacilityStatus,
+                        rsrr.rejection_reason_status 
                         FROM form_covid19 as vl 
                         LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
                         LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id 
@@ -50,20 +50,15 @@ try {
         }
 
         $sQuery .= " ORDER BY vl.last_modified_datetime ASC";
-        $sQuery .= " LIMIT 240";
+        // $sQuery .= " LIMIT 240";
         // echo $sQuery;die;
         $rResult = $db->rawQuery($sQuery);
         $output = array();
-        foreach ($rResult as $key=>$aRow) {
-            $row = array();
-            foreach($aRow as $index=>$value){   
-                if($index == 'sample_code' && $aRow['remote_sample_code'] != ""){
-                    $row['sample_code'] = $aRow['remote_sample_code'] .'-'. $aRow['sample_code'];             
-                } else{
-                    $row[$index] = $value;
-                }
+        foreach ($rResult as $key => $aRow) {
+            if (!empty($aRow['remote_sample_code'])) {
+                $aRow['sample_code'] = $aRow['remote_sample_code'] . '-' . $aRow['sample_code'];
             }
-            $output[] = $row;
+            $output[] = $aRow;
         }
 
         $currentDate = $general->getDateTime();
@@ -71,42 +66,42 @@ try {
             'data' => $output,
             'datetime' => $currentDate
         );
-        
-        $filename = 'export-eid-result-' . $currentDate . '.json';
+
+        $filename = 'export-covid19-result-' . $currentDate . '.json';
         $fp = fopen(__DIR__ . "/../temporary" . DIRECTORY_SEPARATOR . $filename, 'w');
         fwrite($fp, json_encode($payload));
-        fclose($fp);        
-        
-        
+        fclose($fp);
+
+
         //global config
         $configQuery = "SELECT `value` FROM global_config WHERE name ='vldashboard_url'";
         $configResult = $db->query($configQuery);
         $vldashboardUrl = trim($configResult[0]['value']);
         $vldashboardUrl = rtrim($vldashboardUrl, "/");
-        
-        
+
+
         //$vldashboardUrl = "http://vldashboard";
 
         $apiUrl = $vldashboardUrl . "/api/vlsm-covid";
         //error_log($apiUrl);
         //$apiUrl.="?key_identity=XXX&key_credential=YYY";
-        
-        
+
+
         $data = [];
         $data['covid19File'] = new CURLFile(__DIR__ . "/../temporary" . DIRECTORY_SEPARATOR . $filename, 'application/json', $filename);
-        
+
         $options = [
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POSTFIELDS => $data,
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_HTTPHEADER => ['Content-Type: multipart/form-data']
         ];
-        
+
         $ch = curl_init($apiUrl);
         curl_setopt_array($ch, $options);
         $result = curl_exec($ch);
         curl_close($ch);
-        
+
         $deResult = json_decode($result, true);
         /* echo "<pre>";
         print_r($deResult);die; */

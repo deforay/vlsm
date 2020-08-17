@@ -54,16 +54,11 @@ try {
         // echo $sQuery;die;
         $rResult = $db->rawQuery($sQuery);
         $output = array();
-        foreach ($rResult as $key=>$aRow) {
-            $row = array();
-            foreach($aRow as $index=>$value){ 
-                if($index == 'sample_code' && $aRow['remote_sample_code'] != ""){
-                    $row['sample_code'] = $aRow['remote_sample_code'] .'-'. $aRow['sample_code'];             
-                } else{
-                    $row[$index] = $value;
-                }
+        foreach ($rResult as $key => $aRow) {
+            if (!empty($aRow['remote_sample_code'])) {
+                $aRow['sample_code'] = $aRow['remote_sample_code'] . '-' . $aRow['sample_code'];
             }
-            $output[] = $row;
+            $output[] = $aRow;
         }
 
         $currentDate = $general->getDateTime();
@@ -71,42 +66,42 @@ try {
             'data' => $output,
             'datetime' => $currentDate
         );
-        
+
         $filename = 'export-eid-result-' . $currentDate . '.json';
         $fp = fopen(__DIR__ . "/../temporary" . DIRECTORY_SEPARATOR . $filename, 'w');
         fwrite($fp, json_encode($payload));
-        fclose($fp);        
-        
-        
+        fclose($fp);
+
+
         //global config
         $configQuery = "SELECT `value` FROM global_config WHERE name ='vldashboard_url'";
         $configResult = $db->query($configQuery);
         $vldashboardUrl = trim($configResult[0]['value']);
         $vldashboardUrl = rtrim($vldashboardUrl, "/");
-        
-        
+
+
         //$vldashboardUrl = "http://vldashboard";
 
         $apiUrl = $vldashboardUrl . "/api/vlsm-eid";
         //error_log($apiUrl);
         //$apiUrl.="?key_identity=XXX&key_credential=YYY";
-        
-        
+
+
         $data = [];
         $data['eidFile'] = new CURLFile(__DIR__ . "/../temporary" . DIRECTORY_SEPARATOR . $filename, 'application/json', $filename);
-        
+
         $options = [
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POSTFIELDS => $data,
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_HTTPHEADER => ['Content-Type: multipart/form-data']
         ];
-        
+
         $ch = curl_init($apiUrl);
         curl_setopt_array($ch, $options);
         $result = curl_exec($ch);
         curl_close($ch);
-        
+
         $deResult = json_decode($result, true);
         // echo "<pre>";print_r($deResult);die;
         if (isset($deResult['status']) && trim($deResult['status']) == 'success') {
