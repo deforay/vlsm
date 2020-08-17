@@ -47,7 +47,7 @@ if (isset($_POST['newData']) && $_POST['newData'] != '') {
 	$query = $_SESSION['covid19PrintQuery'];
 	$allQuery = $_SESSION['covid19PrintSearchResultQuery'];
 }
-if (isset($_GET['id']) && trim($_GET['id']) != '') {
+if (isset($_POST['id']) && trim($_POST['id']) != '') {
 
 	$searchQuery = "SELECT vl.*,f.*,l.facility_name as labName,
                   l.facility_logo as facilityLogo,
@@ -64,7 +64,7 @@ if (isset($_GET['id']) && trim($_GET['id']) != '') {
                   LEFT JOIN r_covid19_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection 
                   LEFT JOIN r_implementation_partners as rip ON rip.i_partner_id=vl.implementing_partner
 				  LEFT JOIN r_funding_sources as rfs ON rfs.funding_source_id=vl.funding_source 
-                  WHERE vl.covid19_id IN(" . $_GET['id'] . ")";
+                  WHERE vl.covid19_id IN(" . $_POST['id'] . ")";
 } else {
 	$searchQuery = $allQuery;
 }
@@ -80,14 +80,14 @@ class MYPDF extends TCPDF
 {
 
 	//Page header
-	public function setHeading($logo, $text, $lab, $title = null, $labFacilityId = null,$formId = "")
+	public function setHeading($logo, $text, $lab, $title = null, $labFacilityId = null, $formId = null)
 	{
 		$this->logo = $logo;
 		$this->text = $text;
 		$this->lab = $lab;
 		$this->htitle = $title;
-		$this->formId = $formId;
 		$this->labFacilityId = $labFacilityId;
+		$this->formId = $formId;
 	}
 	//Page header
 	public function Header()
