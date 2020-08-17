@@ -426,7 +426,6 @@ if (sizeof($requestResult) > 0) {
             $pdf->lastPage();
             $filename = $pathFront . DIRECTORY_SEPARATOR . 'p' . $page . '.pdf';
             $pdf->Output($filename, "F");
-            // $pdf->Output($_SESSION['rVal'].'p.pdf', 'I');
             if ($draftTextShow) {
                 //Watermark section
                 $watermark = new Watermark();
@@ -470,5 +469,4 @@ if (sizeof($requestResult) > 0) {
         unset($_SESSION['rVal']);
     }
 }
-// exit;
 echo $resultFilename;
