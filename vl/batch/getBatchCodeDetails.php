@@ -1,7 +1,7 @@
 <?php
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
-include_once(APPLICATION_PATH.'/models/General.php');
+include_once(APPLICATION_PATH . '/models/General.php');
 $tableName = "batch_details";
 $primaryKey = "batch_id";
 $configQuery = "SELECT `value` FROM global_config WHERE name ='vl_form'";
@@ -17,7 +17,7 @@ if (isset($_POST['type']) && $_POST['type'] == 'vl') {
     $refPrimaryColumn = "eid_id";
     $editFileName = 'eid-edit-batch.php';
     $editPositionFileName = 'eid-edit-batch-position.php';
-}else if (isset($_POST['type']) && $_POST['type'] == 'covid19') {
+} else if (isset($_POST['type']) && $_POST['type'] == 'covid19') {
     $refTable = "form_covid19";
     $refPrimaryColumn = "covid19_id";
     $editFileName = 'covid-19-edit-batch.php';
@@ -57,7 +57,7 @@ if (isset($_POST['iSortCol_0'])) {
         if ($_POST['bSortable_' . intval($_POST['iSortCol_' . $i])] == "true") {
 
             $sOrder .= $orderColumns[intval($_POST['iSortCol_' . $i])] . "
-				 	" . ($_POST['sSortDir_' . $i]) . ", ";
+				" . ($_POST['sSortDir_' . $i]) . ", ";
         }
     }
     $sOrder = substr_replace($sOrder, "", -2);
@@ -110,7 +110,7 @@ for ($i = 0; $i < count($aColumns); $i++) {
          * Get data to display
         */
 
-$sQuery = "select b.request_created_datetime ,b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from $refTable vl right join batch_details b on vl.sample_batch_id = b.batch_id";
+$sQuery = "SELECT b.request_created_datetime ,b.batch_code, b.batch_id,count(vl.sample_code) as sample_code FROM $refTable vl right join batch_details b on vl.sample_batch_id = b.batch_id";
 if (isset($sWhere) && $sWhere != "") {
     $sWhere = ' where ' . $sWhere;
     $sWhere = $sWhere . 'AND vl.vlsm_country_id ="' . $configResult[0]['value'] . '"';
@@ -133,11 +133,11 @@ $rResult = $db->rawQuery($sQuery);
 // print_r($rResult);
 /* Data set length after filtering */
 
-$aResultFilterTotal = $db->rawQuery("select b.request_created_datetime, b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from $refTable vl right join batch_details b on vl.sample_batch_id = b.batch_id  $sWhere group by b.batch_id order by $sOrder");
+$aResultFilterTotal = $db->rawQuery("SELECT b.request_created_datetime, b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from $refTable vl right join batch_details b on vl.sample_batch_id = b.batch_id  $sWhere group by b.batch_id order by $sOrder");
 $iFilteredTotal = count($aResultFilterTotal);
 
 /* Total data set length */
-$aResultTotal =  $db->rawQuery("select b.request_created_datetime, b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from $refTable vl right join batch_details b on vl.sample_batch_id = b.batch_id where vl.vlsm_country_id ='" . $configResult[0]['value'] . "' group by b.batch_id");
+$aResultTotal =  $db->rawQuery("SELECT b.request_created_datetime, b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from $refTable vl right join batch_details b on vl.sample_batch_id = b.batch_id where vl.vlsm_country_id ='" . $configResult[0]['value'] . "' group by b.batch_id");
 // $aResultTotal = $countResult->fetch_row();
 //print_r($aResultTotal);
 $iTotal = count($aResultTotal);
@@ -179,9 +179,9 @@ foreach ($rResult as $aRow) {
     $noOfSampleLastDateTested = $db->rawQuery($noOfSampleLastDateTested);
 
     $row = array();
-    $printBarcode = '<a href="/vl/batch/generateBarcode.php?id=' . base64_encode($aRow['batch_id']) . '&type='.$_POST['type'].'" target="_blank" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Print bar code"><i class="fa fa-barcode"> Print Barcode</i></a>';
+    $printBarcode = '<a href="/vl/batch/generateBarcode.php?id=' . base64_encode($aRow['batch_id']) . '&type=' . $_POST['type'] . '" target="_blank" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Print bar code"><i class="fa fa-barcode"> Print Barcode</i></a>';
     $printQrcode = '<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Print qr code" onclick="generateQRcode(\'' . base64_encode($aRow['batch_id']) . '\');"><i class="fa fa-qrcode"> Print QR code</i></a>';
-    $editPosition = '<a href="'.$editPositionFileName.'?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;margin-top:6px;" title="Edit Position"><i class="fa fa-sort-numeric-desc"> Edit Position</i></a>';
+    $editPosition = '<a href="' . $editPositionFileName . '?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;margin-top:6px;" title="Edit Position"><i class="fa fa-sort-numeric-desc"> Edit Position</i></a>';
 
     $deleteBatch = '';
     if ($aRow['sample_code'] == 0 || $noOfSampleHaveResultCount[0]['no_of_sample_have_result'] == 0) {
@@ -208,7 +208,7 @@ foreach ($rResult as $aRow) {
         $row[] = $printQrcode;
     } else {
         if ($batch) {
-            $row[] = '<a href="'.$editFileName.'?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>&nbsp;' . $printBarcode . '&nbsp;' . $editPosition . '&nbsp;' . $deleteBatch;
+            $row[] = '<a href="' . $editFileName . '?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>&nbsp;' . $printBarcode . '&nbsp;' . $editPosition . '&nbsp;' . $deleteBatch;
         }
     }
     $output['aaData'][] = $row;
