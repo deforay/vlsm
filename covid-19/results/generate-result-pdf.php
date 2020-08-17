@@ -103,13 +103,13 @@ class MYPDF extends TCPDF
 					$this->Image($image_file, 95, 5, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
 				}
 			}
-			$this->SetFont('helvetica', 'B', 16);
-			$this->writeHTMLCell(0, 0, 10, 03, $this->text, 0, 0, 0, true, 'C', true);
-			if (trim($this->lab) != '') {
-				$this->SetFont('helvetica', '', 10);
-				$this->writeHTMLCell(0, 0, 10, 10, strtoupper($this->lab), 0, 0, 0, true, 'C', true);
-			}
 			if ($this->formId == 3) {
+				$this->SetFont('helvetica', 'B', 16);
+				$this->writeHTMLCell(0, 0, 10, 03, $this->text, 0, 0, 0, true, 'C', true);
+				if (trim($this->lab) != '') {
+					$this->SetFont('helvetica', '', 10);
+					$this->writeHTMLCell(0, 0, 10, 10, strtoupper($this->lab), 0, 0, 0, true, 'C', true);
+				}
 				$this->SetFont('helvetica', 'b', 10);
 				$this->writeHTMLCell(0, 0, 10, 18, 'Département de Virologie', 0, 0, 0, true, 'C', true);
 				$this->SetFont('helvetica', 'u', 10);
@@ -120,6 +120,12 @@ class MYPDF extends TCPDF
 				$this->writeHTMLCell(0, 0, 10, 40, 'TESTES AU COVID-19 PAR RT-PCR en temps réel N°', 0, 0, 0, true, 'C', true);
 				$this->writeHTMLCell(0, 0, 15, 48, '<hr>', 0, 0, 0, true, 'C', true);
 			} else{
+				$this->SetFont('helvetica', 'B', 16);
+				$this->writeHTMLCell(0, 0, 10, 18, $this->text, 0, 0, 0, true, 'C', true);
+				if (trim($this->lab) != '') {
+					$this->SetFont('helvetica', '', 10);
+					$this->writeHTMLCell(0, 0, 10, 25, strtoupper($this->lab), 0, 0, 0, true, 'C', true);
+				}
 				$this->SetFont('helvetica', '', 12);
 				$this->writeHTMLCell(0, 0, 10, 30, 'COVID-19 TEST - PATIENT REPORT', 0, 0, 0, true, 'C', true);
 				$this->writeHTMLCell(0, 0, 15, 38, '<hr>', 0, 0, 0, true, 'C', true);
