@@ -2477,3 +2477,8 @@ ALTER TABLE `eid_form` ADD `tested_by` VARCHAR(255) NULL DEFAULT NULL AFTER `res
 -- ALTER TABLE `form_covid19` ADD `final_result_entered_by` VARCHAR(255) NULL DEFAULT NULL AFTER `result`;
 ALTER TABLE `covid19_tests` ADD `tested_by` VARCHAR(255) NULL DEFAULT NULL AFTER `test_name`;
 
+CREATE TABLE `covid19_reasons_for_testing` (
+  `covid19_id` int NOT NULL,
+  `reasons_id` int DEFAULT NULL,
+  `reasons_detected` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
