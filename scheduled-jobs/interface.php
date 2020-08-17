@@ -4,6 +4,7 @@ require_once(__DIR__ . "/../startup.php");
 
 require_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 require_once(APPLICATION_PATH . '/models/General.php');
+require_once(APPLICATION_PATH . '/models/Users.php');
 
 if (!isset($interfaceConfig['enabled']) || $interfaceConfig['enabled'] === false) {
     error_log('Interfacing is not enabled. Please enable it in configuration.');
@@ -11,6 +12,8 @@ if (!isset($interfaceConfig['enabled']) || $interfaceConfig['enabled'] === false
 }
 
 $vlsmDb  = $db; // assigning to another variable to avoid confusion
+
+$usersModel = new Model_Users($vlsmDb);
 
 $interfacedb = new MysqliDb(
     $interfaceConfig['dbHost'],
@@ -83,7 +86,7 @@ if (count($interfaceInfo) > 0) {
                         $vlResultArray = explode("(", $vlResult);
                         $exponentArray = explode("E", $vlResultArray[0]);
                         $multiplier = pow(10, $exponentArray[1]);
-                        $vlResult = round($exponentArray[0] * $multiplier , 2);
+                        $vlResult = round($exponentArray[0] * $multiplier, 2);
                         $absDecimalVal = (float) trim($vlResult);
                         $logVal = round(log10($absDecimalVal), 2);
                     }
@@ -110,8 +113,11 @@ if (count($interfaceInfo) > 0) {
                 }
             }
 
+            $userId = $usersModel->addUserIfNotExists($result['tested_by']);
+
             $data = array(
-                'result_approved_by' => $result['tested_by'],
+                'tested_by' => $userId,
+                'result_approved_by' => $userId,
                 'result_approved_datetime' => $result['authorised_date_time'],
                 'sample_tested_datetime' => $result['result_accepted_date_time'],
                 'result_value_log' => $logVal,
@@ -147,18 +153,18 @@ if (count($interfaceInfo) > 0) {
                 $txtVal = null;
                 //set result in result fields
                 if (trim($result['results']) != "") {
-                    
-                    if(strpos(strtolower($result['results']), 'not detected') !== false) {
+
+                    if (strpos(strtolower($result['results']), 'not detected') !== false) {
                         $eidResult = 'negative';
                     } else if ((strpos(strtolower($result['results']), 'detected') !== false) || (strpos(strtolower($result['results']), 'passed') !== false)) {
                         $eidResult = 'positive';
-                    } else{
+                    } else {
                         $eidResult = 'indeterminate';
                     }
-
                 }
 
                 $data = array(
+                    'tested_by' => $result['tested_by'],
                     'result_approved_by' => $result['tested_by'],
                     'result_approved_datetime' => $result['authorised_date_time'],
                     'sample_tested_datetime' => $result['result_accepted_date_time'],

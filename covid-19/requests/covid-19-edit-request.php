@@ -91,13 +91,13 @@ if ($arr['covid19_sample_code'] == 'auto' || $arr['covid19_sample_code'] == 'aut
 }
 
 
-if(isset($covid19Info['sample_collection_date']) && trim($covid19Info['sample_collection_date'])!='' && $covid19Info['sample_collection_date']!='0000-00-00 00:00:00'){
+if (isset($covid19Info['sample_collection_date']) && trim($covid19Info['sample_collection_date']) != '' && $covid19Info['sample_collection_date'] != '0000-00-00 00:00:00') {
     $sampleCollectionDate = $covid19Info['sample_collection_date'];
-    $expStr=explode(" ",$covid19Info['sample_collection_date']);
-    $covid19Info['sample_collection_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-}else{
+    $expStr = explode(" ", $covid19Info['sample_collection_date']);
+    $covid19Info['sample_collection_date'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
+} else {
     $sampleCollectionDate = '';
-    $covid19Info['sample_collection_date']='';
+    $covid19Info['sample_collection_date'] = '';
 }
 
 
@@ -112,7 +112,11 @@ $fileArray = array(
     8 => 'forms/edit-angola.php',
 );
 
-require_once($fileArray[$arr['vl_form']]);
+if (file_exists($fileArray[$arr['vl_form']])) {
+    require_once($fileArray[$arr['vl_form']]);
+} else {
+    require_once('forms/edit-who.php');
+}
 
 ?>
 
@@ -188,7 +192,7 @@ require_once($fileArray[$arr['vl_form']]);
         }).click(function() {
             $('.ui-datepicker-calendar').show();
         });
-        
+
         $('#sampleCollectionDate').datetimepicker({
             changeMonth: true,
             changeYear: true,
@@ -200,7 +204,7 @@ require_once($fileArray[$arr['vl_form']]);
                     $('.ui-datepicker-calendar').show();
                 });
             },
-            onSelect:function(e){
+            onSelect: function(e) {
                 $('#sampleReceivedDate').val('');
                 $('#sampleReceivedDate').datetimepicker('option', 'minDate', e);
             },
@@ -220,7 +224,7 @@ require_once($fileArray[$arr['vl_form']]);
                     $('.ui-datepicker-calendar').show();
                 });
             },
-            onSelect:function(e){
+            onSelect: function(e) {
                 $('#sampleTestedDateTime').val('');
                 $('#sampleTestedDateTime').datetimepicker('option', 'minDate', e);
             },
@@ -233,46 +237,48 @@ require_once($fileArray[$arr['vl_form']]);
         //$('.dateTime').mask('99-aaa-9999 99:99');
 
         $('#isSampleRejected').change(function(e) {
-			changeReject(this.value);
-		});
-        $('#hasRecentTravelHistory').change(function(e){
+            changeReject(this.value);
+        });
+        $('#hasRecentTravelHistory').change(function(e) {
             changeHistory(this.value);
         });
-		changeReject($('#isSampleRejected').val());
+        changeReject($('#isSampleRejected').val());
         changeHistory($('#hasRecentTravelHistory').val());
     });
-    function changeHistory(val){
-        if(val == 'no' || val == 'unknown'){
+
+    function changeHistory(val) {
+        if (val == 'no' || val == 'unknown') {
             $('.historyfield').hide();
             $('#countryName,#returnDate').removeClass('isRequired');
-        }else if(val == 'yes'){
+        } else if (val == 'yes') {
             $('.historyfield').show();
             $('#countryName,#returnDate').addClass('isRequired');
         }
     }
-    function changeReject(val){
-		if (val == 'yes') {
+
+    function changeReject(val) {
+        if (val == 'yes') {
             $('.show-rejection').show();
-            $('.test-name-table-input').prop('disabled',true);
+            $('.test-name-table-input').prop('disabled', true);
             $('.test-name-table').addClass('disabled');
-			$('#sampleRejectionReason,#rejectionDate').addClass('isRequired');
-			$('#sampleTestedDateTime,#result,.test-name-table-input').removeClass('isRequired');
-			$('#result').prop('disabled', true);
-			$('#sampleRejectionReason').prop('disabled', false);
-		} else if (val == 'no') {
+            $('#sampleRejectionReason,#rejectionDate').addClass('isRequired');
+            $('#sampleTestedDateTime,#result,.test-name-table-input').removeClass('isRequired');
+            $('#result').prop('disabled', true);
+            $('#sampleRejectionReason').prop('disabled', false);
+        } else if (val == 'no') {
             $('#rejectionDate').val('');
             $('.show-rejection').hide();
-            $('.test-name-table-input').prop('disabled',false);
+            $('.test-name-table-input').prop('disabled', false);
             $('.test-name-table').removeClass('disabled');
-			$('#sampleRejectionReason,#rejectionDate').removeClass('isRequired');
-			$('#sampleTestedDateTime,#result,.test-name-table-input').addClass('isRequired');
-			$('#result').prop('disabled', false);
-			$('#sampleRejectionReason').prop('disabled', true);
-		}
-        <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
+            $('#sampleRejectionReason,#rejectionDate').removeClass('isRequired');
+            $('#sampleTestedDateTime,#result,.test-name-table-input').addClass('isRequired');
+            $('#result').prop('disabled', false);
+            $('#sampleRejectionReason').prop('disabled', true);
+        }
+        <?php if (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes') { ?>
             checkPostive();
-        <?php }?>
-	}
+        <?php } ?>
+    }
 
 
     function calculateAgeInYears() {
