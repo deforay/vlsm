@@ -182,13 +182,19 @@ if (sizeof($requestResult) > 0) {
                 $html .= '<td colspan="3">';
                     $html .= '<table style="padding:2px;">';
                         $html .= '<tr>';
-                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SOURCE OF FUNDING</td>';
+                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">PATIENT NAME</td>';
+                            // $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SOURCE OF FUNDING</td>';
                             $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">HEALTH FACILITY</td>';
                             $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">HEALTH FACILITY CODE</td>';
                             $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">PROVINCE/STATE</td>';
+
                         $html .= '</tr>';
                         $html .= '<tr>';
-                            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['funding_source_name']) . '</td>';
+                            $patientFname = ucwords($general->crypto('decrypt', $result['patient_name'], $result['patient_id']));
+                            $patientLname = ucwords($general->crypto('decrypt', $result['patient_surname'], $result['patient_id']));
+
+                            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $patientFname.' '.$patientLname . '</td>';
+                            // $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['funding_source_name']) . '</td>';
                             $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['facility_name']) . '</td>';
                             $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['facility_code']) . '</td>';
                             $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['facility_state']) . '</td>';
@@ -204,16 +210,13 @@ if (sizeof($requestResult) > 0) {
                             $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">DISTRICT/COUNTRY</td>';
                             $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">PATIENT ID</td>';
                             $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">PHYSICAL ADDRESS</td>';
-                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">PATIENT NAME</td>';
+                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">PHONE</td>';
                         $html .= '</tr>';
-                        $html .= '<tr>';
-                            $patientFname = ucwords($general->crypto('decrypt', $result['patient_name'], $result['patient_id']));
-                            $patientLname = ucwords($general->crypto('decrypt', $result['patient_surname'], $result['patient_id']));
-
+                        $html .= '<tr>';                            
                             $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['facility_district']) . '</td>';
                             $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['patient_id'] . '</td>';
                             $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['patient_address'] . '</td>';
-                            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $patientFname.' '.$patientLname . '</td>';
+                            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['patient_phone_number'] . '</td>';
                         $html .= '</tr>';
                     $html .= '</table>';
                 $html .= '</td>';
@@ -223,32 +226,21 @@ if (sizeof($requestResult) > 0) {
                 $html .= '<td colspan="3">';
                     $html .= '<table style="padding:8px 2px 2px 2px;">';
                         $html .= '<tr>';
-                            
-                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">PHONE</td>';
                             $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">BIRTH DATE/AGE</td>';
                             $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">GENDER</td>';
                             $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
+                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
                         $html .= '</tr>';
                         $html .= '<tr>';
-                            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['patient_phone_number'] . '</td>';
                             $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $general->humanDateFormat($result['patient_dob']).'/'. $age . '</td>';
                             $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords(str_replace("_", " ", $result['patient_gender'])) . '</td>';
-                            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
+                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
                         $html .= '</tr>';
                     $html .= '</table>';
                 $html .= '</td>';
             $html .= '</tr>';
 
-            $html .= '<tr>';
-                $html .= '<td colspan="3">';
-                    $html .= '<table style="padding:8px 2px 2px 2px;">';
-                        $html .= '<tr>';
-                        $html .= '</tr>';
-                        $html .= '<tr>';
-                        $html .= '</tr>';
-                    $html .= '</table>';
-                $html .= '</td>';
-            $html .= '</tr>';
 
             $html .= '<tr>';
                 $html .= '<td colspan="3" style="line-height:2px;border-bottom:1px solid #d3d3d3;"></td>';
