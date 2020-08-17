@@ -80,12 +80,13 @@ class MYPDF extends TCPDF
 {
 
 	//Page header
-	public function setHeading($logo, $text, $lab, $title = null, $labFacilityId = null)
+	public function setHeading($logo, $text, $lab, $title = null, $labFacilityId = null,$formId = "")
 	{
 		$this->logo = $logo;
 		$this->text = $text;
 		$this->lab = $lab;
 		$this->htitle = $title;
+		$this->formId = $formId;
 		$this->labFacilityId = $labFacilityId;
 	}
 	//Page header
@@ -108,15 +109,19 @@ class MYPDF extends TCPDF
 				$this->SetFont('helvetica', '', 10);
 				$this->writeHTMLCell(0, 0, 10, 10, strtoupper($this->lab), 0, 0, 0, true, 'C', true);
 			}
-			$this->SetFont('helvetica', 'b', 10);
-			$this->writeHTMLCell(0, 0, 10, 18, 'Département de Virologie', 0, 0, 0, true, 'C', true);
-			$this->SetFont('helvetica', 'u', 10);
-			$this->writeHTMLCell(0, 0, 10, 25, 'Laboratoire National de Reference pour la Grippe et les Virus Respiratoires', 0, 0, 0, true, 'C', true);
-			$this->SetFont('helvetica', 'b', 12);
-			$this->writeHTMLCell(0, 0, 10, 33, 'RESULTATS DE LABORATOIRE DES ECHANTIONS RESPIRATOIRES', 0, 0, 0, true, 'C', true);
-			$this->SetFont('helvetica', 'u', 10);
-			$this->writeHTMLCell(0, 0, 10, 40, 'TESTES AU COVID-19 PAR RT-PCR en temps réel N°', 0, 0, 0, true, 'C', true);
-			$this->writeHTMLCell(0, 0, 15, 48, '<hr>', 0, 0, 0, true, 'C', true);
+			if ($this->formId == 3) {
+				$this->SetFont('helvetica', 'b', 10);
+				$this->writeHTMLCell(0, 0, 10, 18, 'Département de Virologie', 0, 0, 0, true, 'C', true);
+				$this->SetFont('helvetica', 'u', 10);
+				$this->writeHTMLCell(0, 0, 10, 25, 'Laboratoire National de Reference pour la Grippe et les Virus Respiratoires', 0, 0, 0, true, 'C', true);
+				$this->SetFont('helvetica', 'b', 12);
+				$this->writeHTMLCell(0, 0, 10, 33, 'RESULTATS DE LABORATOIRE DES ECHANTIONS RESPIRATOIRES', 0, 0, 0, true, 'C', true);
+				$this->SetFont('helvetica', 'u', 10);
+				$this->writeHTMLCell(0, 0, 10, 40, 'TESTES AU COVID-19 PAR RT-PCR en temps réel N°', 0, 0, 0, true, 'C', true);
+				$this->writeHTMLCell(0, 0, 15, 48, '<hr>', 0, 0, 0, true, 'C', true);
+			} else{
+				$this->writeHTMLCell(0, 0, 15, 35, '<hr>', 0, 0, 0, true, 'C', true);
+			}
 		} else {
 			if (trim($this->logo) != '') {
 				if (file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "facility-logo" . DIRECTORY_SEPARATOR . $this->labFacilityId . DIRECTORY_SEPARATOR . $this->logo)) {
