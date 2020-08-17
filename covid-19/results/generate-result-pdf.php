@@ -120,7 +120,9 @@ class MYPDF extends TCPDF
 				$this->writeHTMLCell(0, 0, 10, 40, 'TESTES AU COVID-19 PAR RT-PCR en temps réel N°', 0, 0, 0, true, 'C', true);
 				$this->writeHTMLCell(0, 0, 15, 48, '<hr>', 0, 0, 0, true, 'C', true);
 			} else{
-				$this->writeHTMLCell(0, 0, 15, 35, '<hr>', 0, 0, 0, true, 'C', true);
+				$this->SetFont('helvetica', '', 12);
+				$this->writeHTMLCell(0, 0, 10, 30, 'COVID-19 TEST - PATIENT REPORT', 0, 0, 0, true, 'C', true);
+				$this->writeHTMLCell(0, 0, 15, 38, '<hr>', 0, 0, 0, true, 'C', true);
 			}
 		} else {
 			if (trim($this->logo) != '') {
