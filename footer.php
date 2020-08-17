@@ -194,7 +194,7 @@
 	str = $(location).attr('pathname');
 	splitsUrl = str.substr(str.lastIndexOf('/') + 1);
 	splitsUrlCheck = str.split("/", 4);
-	console.log(splitsUrl);
+	// console.log(splitsUrl);
 	if (splitsUrl == 'users.php' || splitsUrl == 'addUser.php' || splitsUrl == 'editUser.php') {
 		$(".manage").addClass('active');
 		$(".allMenu").removeClass('active');

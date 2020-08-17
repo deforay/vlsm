@@ -64,23 +64,20 @@ try {
         $rResult = $db->rawQuery($sQuery);
 
 
-        $suppressedResults = array(
-            'Target not Detected',
-            'TND',
-        );
         $output = array();
 
         foreach ($rResult as $aRow) {
             $row = array();
 
             $VLAnalysisResult = $aRow['result_value_absolute'];
-
             if ($aRow['result_value_text'] == 'Target not Detected' || $aRow['result_value_text'] == 'Target Not Detected' || strtolower($aRow['result_value_text']) == 'tnd') {
                 $VLAnalysisResult = 20;
             } else if ($aRow['result_value_text'] == '< 20' || $aRow['result_value_text'] == '<20') {
                 $VLAnalysisResult = 20;
             } else if ($aRow['result_value_text'] == '< 40' || $aRow['result_value_text'] == '<40') {
                 $VLAnalysisResult = 40;
+            } else if ($aRow['result_value_text'] == 'Nivel de detecÁao baixo' || $aRow['result_value_text'] == 'NÌvel de detecÁ„o baixo') {
+                $VLAnalysisResult = 20;
             } else if ($aRow['result_value_text'] == 'Suppressed') {
                 $VLAnalysisResult = 500;
             } else if ($aRow['result_value_text'] == 'Not Suppressed') {
@@ -93,7 +90,7 @@ try {
                 $VLAnalysisResult = "";
             }
 
-            if (empty($VLAnalysisResult)) {
+            if ($VLAnalysisResult == null || $VLAnalysisResult == 'NULL' || $VLAnalysisResult == '') {
                 $DashVL_Abs = 0;
                 $DashVL_AnalysisResult = '';
             } else if ($VLAnalysisResult < 1000) {
@@ -103,9 +100,9 @@ try {
                 $DashVL_AnalysisResult = 'Not Suppressed';
                 $DashVL_Abs = $VLAnalysisResult;
             }
-            if (!empty($aRow['remote_sample_code'])) {
-                $row['sample_code']      = $aRow['remote_sample_code'] . '-' . $aRow['sample_code'];
-            } else {
+            if($aRow['remote_sample_code'] != ""){
+                $row['sample_code']      = $aRow['remote_sample_code'] .'-'. $aRow['sample_code'];
+            } else{
                 $row['sample_code']      = $aRow['sample_code'];
             }
             $row['vlsm_instance_id']     = $aRow['vlsm_instance_id'];
@@ -167,7 +164,6 @@ try {
             $row['DashVL_AnalysisResult'] = $DashVL_AnalysisResult;
             $row['current_regimen'] = $aRow['current_regimen'];
             $row['sample_registered_at_lab'] = $aRow['sample_registered_at_lab'];
-
             $output[] = $row;
         }
 
@@ -181,7 +177,7 @@ try {
         $filename = 'export-vl-result-' . $currentDate . '.json';
         $fp = fopen(__DIR__ . "/../temporary" . DIRECTORY_SEPARATOR . $filename, 'w');
         fwrite($fp, json_encode($payload));
-        fclose($fp);
+        fclose($fp);        
 
 
         //global config
@@ -215,7 +211,7 @@ try {
 
         //var_dump($result);
         $deResult = json_decode($result, true);
-
+        
         if (isset($deResult['status']) && trim($deResult['status']) == 'success') {
             $data = array(
                 'vl_last_dash_sync' => $general->getDateTime()
