@@ -1,5 +1,4 @@
 <?php
-
 // this file is included in covid-19/results/generate-result-pdf.php
 $covid19Results = $general->getCovid19Results();
 

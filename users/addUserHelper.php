@@ -5,7 +5,7 @@ include_once '../startup.php';
 include_once APPLICATION_PATH . '/includes/MysqliDb.php';
 include_once(APPLICATION_PATH . '/models/General.php');
 include_once APPLICATION_PATH . '/includes/ImageResize.php';
-include_once(APPLICATION_PATH . "/vendor/autoload.php");
+
 
 $general = new General($db);
 //#require_once('../startup.php'); 
@@ -68,35 +68,6 @@ try {
 
         $_SESSION['alertMsg'] = "User details added successfully";
     }
-
-    /* echo "<pre>";print_r($signatureImagePath);die;
-    $userType = $general->getSystemConfig('user_type');
-    if(isset($systemConfig['remoteURL']) && $systemConfig['remoteURL'] != "" && $userType == 'vluser'){
-        $fp = fopen($signatureImagePath, 'w');
-        fwrite($fp, json_encode($payload));
-        fclose($fp); 
-
-        $apiUrl = $systemConfig['remoteURL'] . "/api/save-user-profile.php";
-        $data = [];
-        $data['post'] = $_POST;
-        $data['userProfileFile'] = new CURLFile($signatureImagePath, 'application/json', $imageName);
-
-        $options = [
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POSTFIELDS => $data,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_HTTPHEADER => ['Content-Type: multipart/form-data']
-        ];
-
-        $ch = curl_init($apiUrl);
-        curl_setopt_array($ch, $options);
-        $result = curl_exec($ch);
-        curl_close($ch);
-        $deResult = json_decode($result, true);
-
-        echo "<pre>";
-        print_r($deResult);die;
-    } */
 
     //Add event log
     $eventType = 'user-add';
