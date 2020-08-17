@@ -261,7 +261,7 @@ $batchResult = $db->rawQuery($batchQuery);
   var startDate = "";
   var endDate = "";
   $(document).ready(function() {
-    document.getElementById('message').value = "Hi, \nPFA the Covid-19 Test results. \nThanks";
+    document.getElementById('message').value = "Hi, \n Please find the the Covid-19 Test results attached. \nThanks";
     $('#facility').select2({
       placeholder: "Select Facility"
     });

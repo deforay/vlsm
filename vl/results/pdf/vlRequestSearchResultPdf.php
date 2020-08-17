@@ -8,7 +8,7 @@ use setasign\Fpdi\Tcpdf\Fpdi;
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 include_once(APPLICATION_PATH . '/models/General.php');
 include_once(APPLICATION_PATH . '/models/Users.php');
-include_once(APPLICATION_PATH.'/vendor/autoload.php');
+include_once(APPLICATION_PATH . '/vendor/autoload.php');
 
 $tableName1 = "activity_log";
 $tableName2 = "vl_request_form";
@@ -47,7 +47,12 @@ if (isset($_POST['newData']) && $_POST['newData'] != '') {
 }
 if (isset($_POST['id']) && trim($_POST['id']) != '') {
   //if(isset($_POST['resultMail'])){
-  $searchQuery = "SELECT vl.*,f.*,imp.i_partner_name,rst.*,vltr.test_reason_name,l.facility_name as labName,
+  $searchQuery = "SELECT vl.*,
+                  f.*,
+                  imp.i_partner_name,
+                  rst.*,
+                  vltr.test_reason_name,
+                  l.facility_name as labName,
                   l.facility_logo as facilityLogo,
                   rsrr.rejection_reason_name 
                   FROM vl_request_form as vl 
@@ -132,7 +137,7 @@ class MYPDF extends TCPDF
         $thirdHeading = '14';
         $fourthHeading = '23';
         $hrLine = '30';
-        $marginTop = '9'; 
+        $marginTop = '9';
       }
       if (trim($this->lab) != '') {
         $this->SetFont('helvetica', '', 10);
@@ -152,7 +157,8 @@ class MYPDF extends TCPDF
     // Set font
     $this->SetFont('helvetica', '', 8);
     // Page number
-    $this->Cell(0, 10, 'Page' . $_SESSION['aliasPage'] . '/' . $_SESSION['nbPages'], 0, false, 'C', 0, '', 0, false, 'T', 'M');
+    //$this->Cell(0, 10, 'Page' . $_SESSION['aliasPage'] . '/' . $_SESSION['nbPages'], 0, false, 'C', 0, '', 0, false, 'T', 'M');
+    $this->Cell(0, 10, 'Page 1 of 1' , 0, false, 'C', 0, '', 0, false, 'T', 'M');
   }
 }
 
