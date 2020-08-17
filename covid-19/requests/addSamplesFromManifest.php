@@ -43,7 +43,7 @@ $batResult = $db->rawQuery($batQuery);
 								<input type="hidden" id="sampleId" name="sampleId" />
 							</td>
 							<td>
-								<button class="btn btn-primary btn-sm pull-right" style="margin-right:5px;" onclick="getSampleCode('sampleManifestCode');return false;"><span>Submit</span></button>
+								<button class="btn btn-primary btn-sm pull-right" style="margin-right:5px;" onclick="getSampleCode();return false;"><span>Submit</span></button>
 							</td>
 						</tr>
 						<tr>

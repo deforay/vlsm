@@ -230,6 +230,7 @@ class General
             $garr[$globalConfigResult[$i]['name']] = $globalConfigResult[$i]['value'];
         }
 
+        // if no name was specified, we will send the full dataset
         if ($name == null) {
             return $garr;
         } else {
@@ -405,6 +406,12 @@ class General
         return $response;
     }
 
+    public function startsWith($string, $startString) 
+    { 
+        $len = strlen($startString); 
+        return (substr($string, 0, $len) === $startString); 
+    }     
+
     public function generateSelectOptions($optionList, $selectedOptions = array())
     {
 
@@ -414,12 +421,25 @@ class General
             if (!empty($selectedOptions)) {
                 if (is_array($selectedOptions) && in_array($optId, $selectedOptions)) {
                     $selectedText = "selected='selected'";
-                }else if($optId == $selectedOptions ){
+                } else if ($optId == $selectedOptions) {
                     $selectedText = "selected='selected'";
                 }
             }
             $response .= "<option value='$optId' $selectedText>$optName</option>";
         }
         return $response;
+    }
+
+    public function getLastModifiedDateTime($tableName, $modifiedDateTimeColName = 'updated_datetime')
+    {
+        $query = "SELECT $modifiedDateTimeColName FROM $tableName ORDER BY $modifiedDateTimeColName DESC LIMIT 1";
+
+        $result = $this->db->rawQueryOne($query);
+
+        if (isset($result[$modifiedDateTimeColName]) && $result[$modifiedDateTimeColName] != '' && $result[$modifiedDateTimeColName] != NULL && !$this->startsWith($result[$modifiedDateTimeColName],'0000-00-00')) {
+            return $result[$modifiedDateTimeColName];
+        } else {
+            return null;
+        }
     }
 }

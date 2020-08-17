@@ -156,11 +156,11 @@ if (isset($sLimit) && isset($sOffset)) {
 }
 $rResult = $db->rawQuery($sQuery);
 /* Data set length after filtering */
-$aResultFilterTotal = $db->rawQuery("SELECT vl.eid_id,vl.facility_id,vl.patient_first_name,vl.result,f.facility_name,f.facility_code,vl.patient_art_no,s.sample_name,b.batch_code,vl.sample_batch_id,ts.status_name FROM eid_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_eid_sample_type as s ON s.sample_id=vl.specimen_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere");
+$aResultFilterTotal = $db->rawQuery("SELECT vl.eid_id,vl.facility_id,vl.child_name,vl.result,f.facility_name,f.facility_code,vl.child_id,s.sample_name,b.batch_code,vl.sample_batch_id,ts.status_name FROM eid_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_eid_sample_type as s ON s.sample_id=vl.specimen_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere");
 $iFilteredTotal = count($aResultFilterTotal);
 
 /* Total data set length */
-$aResultTotal =  $db->rawQuery("select COUNT(eid_id) as total FROM eid_form as vl where vlsm_country_id='" . $gconfig['vl_form'] . "'" . $sFilter);
+$aResultTotal =  $db->rawQuery("SELECT COUNT(eid_id) as total FROM eid_form as vl where vlsm_country_id='" . $gconfig['vl_form'] . "'" . $sFilter);
 $iTotal = $aResultTotal[0]['total'];
 
 /*
