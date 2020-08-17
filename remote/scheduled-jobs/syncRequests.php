@@ -66,7 +66,7 @@ $apiResult = json_decode($curl_response, true);
 
 /*
  ****************************************************************
-  VIRAL LOAD TEST REQUESTS
+ * VIRAL LOAD TEST REQUESTS
  ****************************************************************
  */
 if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) {
@@ -389,15 +389,15 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
             if (isset($testResults) && !empty($testResults)) {
                 foreach ($testResults as $testValue) {
                     $covid19TestData = array(
-                        'covid19_id'			=> $id,
-                        'test_name'				=> $testValue['test_name'],
+                        'covid19_id'            => $id,
+                        'test_name'                => $testValue['test_name'],
                         'facility_id'           => $testValue['facility_id'],
                         'sample_tested_datetime' => $testValue['sample_tested_datetime'],
-                        'result'				=> $testValue['result'],
+                        'result'                => $testValue['result'],
                     );
                     $db->insert("covid19_tests", $covid19TestData);
                 }
-            }            
+            }
             //}
         }
     }

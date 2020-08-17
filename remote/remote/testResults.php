@@ -100,9 +100,9 @@ if (count($data['result']) > 0) {
             error_log("INSIDE REMOTE");
             $sQuery = "SELECT vl_sample_id,sample_code,remote_sample_code,remote_sample_code_key FROM vl_request_form WHERE remote_sample_code='" . $lab['remote_sample_code'] . "'";
         } else if (isset($lab['sample_code']) && $lab['sample_code'] != '') {
-            error_log("INSIDE LOCAL");
+            //error_log("INSIDE LOCAL");
             $sQuery = "SELECT vl_sample_id,sample_code,remote_sample_code,remote_sample_code_key FROM vl_request_form WHERE sample_code='" . $lab['sample_code'] . "' AND facility_id = " . $lab['facility_id'];
-            error_log($sQuery);
+            //error_log($sQuery);
         }
 
         try{

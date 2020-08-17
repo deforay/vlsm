@@ -28,13 +28,13 @@ foreach ($sampleResult as $sampleRow) {
 
         $sampleJson = $eidObj->generateEIDSampleCode($provinceCode, $general->humanDateFormat($sampleRow['sample_collection_date']));
         $sampleData = json_decode($sampleJson, true);
-        
+
         $eidData['sample_code'] = $sampleData['sampleCode'];
         $eidData['sample_code_format'] = $sampleData['sampleCodeFormat'];
         $eidData['sample_code_key'] = $sampleData['sampleCodeKey'];
         $eidData['result_status'] = 6;
-        $eidData['last_modified_by']= $_SESSION['userId'];
-        $eidData['last_modified_datetime']= $general->getDateTime();        
+        $eidData['last_modified_by'] = $_SESSION['userId'];
+        $eidData['last_modified_datetime'] = $general->getDateTime();
 
         $db = $db->where('eid_id', $sampleRow['eid_id']);
         $id = $db->update('eid_form', $eidData);

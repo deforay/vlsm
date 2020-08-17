@@ -1,4 +1,9 @@
 <?php
+
+if (!isset($_SESSION['userId'])) {
+	header("location:/login.php");
+}
+
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 /* Crosss Login Block Start */
 $crossLoginQuery = "SELECT login_id,password,user_name FROM user_details WHERE user_id = '" . $_SESSION['userId'] . "'";
@@ -52,9 +57,7 @@ if (isset($global['instance_type']) && $global['instance_type'] != '') {
 	// $hideRequest = "display:none;";
 	//}
 }
-if (!isset($_SESSION['userId'])) {
-	header("location:/login.php");
-}
+
 
 $link = $_SERVER['PHP_SELF'];
 $link_array = explode('/', $link);
