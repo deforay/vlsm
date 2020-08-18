@@ -50,6 +50,46 @@ if ($data['Key'] == 'vlsm-get-remote') {
         }
         $response['eidSampleTypes'] = $general->fetchDataFromTable('r_eid_sample_type', $condition);
     }
+    
+    if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) {
+
+        $condition = null;
+        if (isset($data['covid19RejectionReasonsLastModified']) && !empty($data['covid19RejectionReasonsLastModified'])) {
+            $condition = "updated_datetime > '" . $data['covid19RejectionReasonsLastModified'] . "'";
+        }
+        $response['covid19RejectionReasons'] = $general->fetchDataFromTable('r_covid19_sample_rejection_reasons', $condition);
+
+
+        $condition = null;
+        if (isset($data['covid19SampleTypesLastModified']) && !empty($data['covid19SampleTypesLastModified'])) {
+            $condition = "updated_datetime > '" . $data['covid19SampleTypesLastModified'] . "'";
+        }
+        $response['covid19SampleTypes'] = $general->fetchDataFromTable('r_covid19_sample_type', $condition);
+        
+        $condition = null;
+        if (isset($data['covid19ComorbiditiesLastModified']) && !empty($data['covid19ComorbiditiesLastModified'])) {
+            $condition = "updated_datetime > '" . $data['covid19ComorbiditiesLastModified'] . "'";
+        }
+        $response['covid19Comorbidities'] = $general->fetchDataFromTable('r_covid19_comorbidities', $condition);
+        
+        $condition = null;
+        if (isset($data['covid19ResultsLastModified']) && !empty($data['covid19ResultsLastModified'])) {
+            $condition = "updated_datetime > '" . $data['covid19ResultsLastModified'] . "'";
+        }
+        $response['covid19Results'] = $general->fetchDataFromTable('r_covid19_results', $condition);
+        
+        $condition = null;
+        if (isset($data['covid19SymptomsLastModified']) && !empty($data['covid19SymptomsLastModified'])) {
+            $condition = "updated_datetime > '" . $data['covid19SymptomsLastModified'] . "'";
+        }
+        $response['covid19Symptoms'] = $general->fetchDataFromTable('r_covid19_symptoms', $condition);
+        
+        $condition = null;
+        if (isset($data['covid19ReasonForTestingLastModified']) && !empty($data['covid19ReasonForTestingLastModified'])) {
+            $condition = "updated_datetime > '" . $data['covid19ReasonForTestingLastModified'] . "'";
+        }
+        $response['covid19ReasonForTesting'] = $general->fetchDataFromTable('r_covid19_test_reasons', $condition);
+    }
 
 
     $condition = null;
