@@ -86,6 +86,22 @@ try {
 			}
 		}
         $_SESSION['alertMsg']="User details updated successfully";
+
+        $userType = $general->getSystemConfig('user_type');
+        if(isset($systemConfig['remoteURL']) && $systemConfig['remoteURL'] != "" && $userType == 'vluser'){
+            $apiUrl = $systemConfig['remoteURL'] . "/api/user/save-user-profile.php";
+            $post = array('post' => json_encode($_POST), 'sign'=> (isset($signatureImagePath) && $signatureImagePath != "")?curl_file_create($signatureImagePath):null, 'x-api-key' => $general->generateRandomString(18));
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL,$apiUrl);
+            curl_setopt($ch, CURLOPT_POST,1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+            $result = curl_exec($ch);
+            curl_close($ch);
+
+            $deResult = json_decode($result, true);
+            // echo "<pre>";print_r($deResult);die;
+        }
     }
 
 
