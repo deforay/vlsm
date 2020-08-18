@@ -62,7 +62,7 @@ $curl_response = curl_exec($ch);
 //close connection
 curl_close($ch);
 $result = json_decode($curl_response, true);
-
+// echo "<pre>";print_r($result);die;
 //update or insert sample type
 if (!empty($result['vlSampleTypes']) && count($result['vlSampleTypes']) > 0) {
     // making all local rows inactive 
@@ -177,6 +177,141 @@ if (!empty($result['eidRejectionReasons']) && count($result['eidRejectionReasons
         } else {
             $rejectResultData['rejection_reason_id'] = $reason['rejection_reason_id'];
             $db->insert('r_eid_sample_rejection_reasons', $rejectResultData);
+            $lastId = $db->getInsertId();
+        }
+    }
+}
+
+/* for covid19 module common tables updates 
+Covid19 Rejection Reasons Updates*/
+if(!empty($result['covid19RejectionReasons']) && sizeof($result['covid19RejectionReasons']) > 0){
+    foreach ($result['covid19RejectionReasons'] as $reason) {
+        $c19RejectionReasonQuery = "SELECT rejection_reason_id FROM r_covid19_sample_rejection_reasons WHERE rejection_reason_id=" . $reason['rejection_reason_id'];
+        $c19RejectionReasonResult = $db->query($c19RejectionReasonQuery);
+        $c19RejectionReasonData = array(
+            'rejection_reason_name'     => $reason['rejection_reason_name'],
+            'rejection_type'            => $reason['rejection_type'],
+            'rejection_reason_status'   => $reason['rejection_reason_status'],
+            'rejection_reason_code'     => $reason['rejection_reason_code'],
+            'updated_datetime'          => $reason['updated_datetime'],
+            'data_sync'                 => 1
+        );
+        $lastId = 0;
+        if ($c19RejectionReasonResult) {
+            $db = $db->where('rejection_reason_id', $reason['rejection_reason_id']);
+            $lastId = $db->update('r_covid19_sample_rejection_reasons', $c19RejectionReasonData);
+        } else {
+            $c19RejectionReasonData['rejection_reason_id'] = $reason['rejection_reason_id'];
+            $db->insert('r_covid19_sample_rejection_reasons', $c19RejectionReasonData);
+            $lastId = $db->getInsertId();
+        }
+    }
+}
+/* Covid19 Sample Types Updates */
+if(!empty($result['covid19SampleTypes']) && sizeof($result['covid19SampleTypes']) > 0){
+    foreach ($result['covid19SampleTypes'] as $sampleType) {
+        $c19SampleTypeQuery = "SELECT sample_id FROM r_covid19_sample_type WHERE sample_id=" . $sampleType['sample_id'];
+        $c19SampleTypeResult = $db->query($c19SampleTypeQuery);
+        $c19SampleTypeData = array(
+            'sample_name'       => $sampleType['sample_name'],
+            'status'            => $sampleType['status'],
+            'updated_datetime'  => $sampleType['updated_datetime'],
+            'data_sync'         => 1
+        );
+        $lastId = 0;
+        if ($c19SampleTypeResult) {
+            $db = $db->where('sample_id', $sampleType['sample_id']);
+            $lastId = $db->update('r_covid19_sample_type', $c19SampleTypeData);
+        } else {
+            $c19SampleTypeData['sample_id'] = $sampleType['sample_id'];
+            $db->insert('r_covid19_sample_type', $c19SampleTypeData);
+            $lastId = $db->getInsertId();
+        }
+    }
+}
+/* Covid19 Comorbidities Updates */
+if(!empty($result['covid19Comorbidities']) && sizeof($result['covid19Comorbidities']) > 0){
+    foreach ($result['covid19Comorbidities'] as $comorbidities) {
+        $c19ComorbiditiesQuery = "SELECT comorbidity_id FROM r_covid19_comorbidities WHERE comorbidity_id=" . $comorbidities['comorbidity_id'];
+        $c19ComorbiditiesResult = $db->query($c19ComorbiditiesQuery);
+        $c19ComorbiditiesData = array(
+            'comorbidity_name'      => $comorbidities['comorbidity_name'],
+            'comorbidity_status'    => $comorbidities['comorbidity_status'],
+            'updated_datetime'      => $comorbidities['updated_datetime'],
+        );
+        $lastId = 0;
+        if ($c19ComorbiditiesResult) {
+            $db = $db->where('comorbidity_id', $comorbidities['comorbidity_id']);
+            $lastId = $db->update('r_covid19_comorbidities', $c19ComorbiditiesData);
+        } else {
+            $c19ComorbiditiesData['comorbidity_id'] = $comorbidities['comorbidity_id'];
+            $db->insert('r_covid19_comorbidities', $c19ComorbiditiesData);
+            $lastId = $db->getInsertId();
+        }
+    }
+}
+/* Covid19 Results Updates */
+if(!empty($result['covid19Results']) && sizeof($result['covid19Results']) > 0){
+    foreach ($result['covid19Results'] as $results) {
+        $c19ResultsQuery = "SELECT result_id FROM r_covid19_results WHERE result_id='" . $results['result_id'] ."'";
+        $c19ResultsResult = $db->query($c19ResultsQuery);
+        $c19ResultsData = array(
+            'result'            => $results['result'],
+            'status'            => $results['status'],
+            'updated_datetime'  => $results['updated_datetime'],
+            'data_sync'         => 1
+        );
+        $lastId = 0;
+        if ($c19ResultsResult) {
+            $db = $db->where('result_id', $results['result_id']);
+            $lastId = $db->update('r_covid19_results', $c19ResultsData);
+        } else {
+            $c19ResultsData['result_id'] = $results['result_id'];
+            $db->insert('r_covid19_results', $c19ResultsData);
+            $lastId = $db->getInsertId();
+        }
+    }
+}
+/* Covid19 Symptoms Updates */
+if(!empty($result['covid19Symptoms']) && sizeof($result['covid19Symptoms']) > 0){
+    foreach ($result['covid19Symptoms'] as $symptoms) {
+        $c19SymptomsQuery = "SELECT symptom_id FROM r_covid19_symptoms WHERE symptom_id=" . $symptoms['symptom_id'];
+        $c19SymptomsResult = $db->query($c19SymptomsQuery);
+        $c19SymptomsData = array(
+            'symptom_name'      => $symptoms['symptom_name'],
+            'parent_symptom'    => $symptoms['parent_symptom'],
+            'symptom_status'    => $symptoms['symptom_status'],
+            'updated_datetime'  => $symptoms['updated_datetime'],
+        );
+        $lastId = 0;
+        if ($c19SymptomsResult) {
+            $db = $db->where('symptom_id', $symptoms['symptom_id']);
+            $lastId = $db->update('r_covid19_symptoms', $c19SymptomsData);
+        } else {
+            $c19SymptomsData['symptom_id'] = $symptoms['symptom_id'];
+            $db->insert('r_covid19_symptoms', $c19SymptomsData);
+            $lastId = $db->getInsertId();
+        }
+    }
+}
+/* Covid19 ReasonForTesting Updates */
+if(!empty($result['covid19ReasonForTesting']) && sizeof($result['covid19ReasonForTesting']) > 0){
+    foreach ($result['covid19ReasonForTesting'] as $reasonForTesting) {
+        $c19ReasonForTestingQuery = "SELECT test_reason_id FROM r_covid19_test_reasons WHERE test_reason_id=" . $reasonForTesting['test_reason_id'];
+        $c19ReasonForTestingResult = $db->query($c19ReasonForTestingQuery);
+        $c19ReasonForTestingData = array(
+            'test_reason_name'      => $reasonForTesting['test_reason_name'],
+            'parent_reason'         => $reasonForTesting['parent_reason'],
+            'test_reason_status'    => $reasonForTesting['test_reason_status'],
+            'updated_datetime'      => $reasonForTesting['updated_datetime']
+        );
+        $lastId = 0;
+        if ($c19ReasonForTestingResult) {
+            $db = $db->where('test_reason_id', $reasonForTesting['test_reason_id']);
+            $lastId = $db->update('r_covid19_test_reasons', $c19ReasonForTestingData);
+        } else {
+            $c19ReasonForTestingData['test_reason_id'] = $reasonForTesting['test_reason_id'];
+            $db->insert('r_covid19_test_reasons', $c19ReasonForTestingData);
             $lastId = $db->getInsertId();
         }
     }
