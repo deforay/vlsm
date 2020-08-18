@@ -31,11 +31,13 @@ $systemConfig['modules']['covid19'] = true;
 
 ```apache
 <VirtualHost *:80>
-   DocumentRoot "C:\wamp\www\vlsm"
+   DocumentRoot "/path/to/vlsm"
    ServerName vlsm
    AddDefaultCharset UTF-8
 
-   <Directory "C:\wamp\www\vlsm">
+   php_value auto_prepend_file /path/to/vlsm/startup.php
+
+   <Directory "/path/to/vlsm">
        Options Indexes MultiViews FollowSymLinks
        AllowOverride All
        Order allow,deny

@@ -13,6 +13,11 @@ $general = new General($db);
 $serialNo = isset($_POST['s']) && !empty($_POST['s']) ? $_POST['s'] : null;
 $apiKey = isset($_POST['x-api-key']) && !empty($_POST['x-api-key']) ? $_POST['x-api-key'] : null;
 
+$data = json_decode(file_get_contents('php://input'), true);
+
+
+
+
 if (!$apiKey) {
     $response = array(
         'status' => 'failed',
@@ -88,38 +93,6 @@ try {
 
     $row = array();
 
-    $VLAnalysisResult = $aRow['result_value_absolute'];
-    if ($aRow['result_value_text'] == 'Target not Detected' || $aRow['result_value_text'] == 'Target Not Detected' || strtolower($aRow['result_value_text']) == 'tnd') {
-        $VLAnalysisResult = 20;
-    } else if ($aRow['result_value_text'] == '< 20' || $aRow['result_value_text'] == '<20') {
-        $VLAnalysisResult = 20;
-    } else if ($aRow['result_value_text'] == '< 40' || $aRow['result_value_text'] == '<40') {
-        $VLAnalysisResult = 40;
-    } else if ($aRow['result_value_text'] == 'Nivel de detecÁao baixo' || $aRow['result_value_text'] == 'NÌvel de detecÁ„o baixo') {
-        $VLAnalysisResult = 20;
-    } else if ($aRow['result_value_text'] == 'Suppressed') {
-        $VLAnalysisResult = 500;
-    } else if ($aRow['result_value_text'] == 'Not Suppressed') {
-        $VLAnalysisResult = 1500;
-    } else if ($aRow['result_value_text'] == 'Negative' || $aRow['result_value_text'] == 'NEGAT') {
-        $VLAnalysisResult = 20;
-    } else if ($aRow['result_value_text'] == 'Positive') {
-        $VLAnalysisResult = 1500;
-    } else if ($aRow['result_value_text'] == 'Indeterminado') {
-        $VLAnalysisResult = "";
-    }
-
-    if ($VLAnalysisResult == null || $VLAnalysisResult == 'NULL' || $VLAnalysisResult == '') {
-        $DashVL_Abs = 0;
-        $DashVL_AnalysisResult = '';
-    } else if ($VLAnalysisResult < 1000) {
-        $DashVL_AnalysisResult = 'Suppressed';
-        $DashVL_Abs = $VLAnalysisResult;
-    } else if ($VLAnalysisResult >= 1000) {
-        $DashVL_AnalysisResult = 'Not Suppressed';
-        $DashVL_Abs = $VLAnalysisResult;
-    }
-
     
     $row['sample_code']                         = $aRow['sample_code'];
     $row['collection_facility_name']            = ($aRow['facility_name']);
@@ -133,28 +106,6 @@ try {
     $row['rejection_reason']                    = $aRow['rejection_reason_name'];
     $row['result']                              = $aRow['result'];
     $row['result_approved_datetime']            = $aRow['result_approved_datetime'];
-
-    //$row['serial_no']                           = $aRow['serial_no'];
-    //$row['vlsm_instance_id']                    = $aRow['vlsm_instance_id'];
-    //$row['patient_gender']       = $aRow['patient_gender'];
-    //$row['patient_age_in_years'] = $aRow['patient_age_in_years'];
-    //$row['result_value_log']                    = $aRow['result_value_log'];
-    //$row['result_value_absolute']               = $aRow['result_value_absolute'];
-    // $row['result_value_text'] = $aRow['result_value_text'];
-    // $row['result_value_absolute_decimal'] = $aRow['result_value_absolute_decimal'];
-
-
-
-    //$row['is_patient_pregnant'] = (isset($aRow['is_patient_pregnant']) && $aRow['is_patient_pregnant'] != null && $aRow['is_patient_pregnant'] != '') ? $aRow['is_patient_pregnant'] : 'unreported';
-    //$row['is_patient_breastfeeding'] = (isset($aRow['is_patient_breastfeeding']) && $aRow['is_patient_breastfeeding'] != null && $aRow['is_patient_breastfeeding'] != '') ? $aRow['is_patient_breastfeeding'] : 'unreported';
-    //$row['patient_art_no'] = $aRow['patient_art_no'];
-    //$row['date_of_initiation_of_current_regimen'] = $aRow['date_of_initiation_of_current_regimen'];
-    //$row['arv_adherance_percentage'] = $aRow['arv_adherance_percentage'];
-    //$row['is_adherance_poor'] = $aRow['is_adherance_poor'];
-
-    //$row['vl_analysis'] = $DashVL_AnalysisResult;
-    //$row['current_regimen'] = $aRow['current_regimen'];
-
 
 
 
