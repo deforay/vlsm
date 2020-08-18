@@ -4,7 +4,7 @@ try {
     $db = $db->where('imported_by', $_SESSION['userId']);
     $db->delete('temp_sample_import');
     //set session for controller track id in hold_sample_record table
-    $cQuery  = "select MAX(import_batch_tracking) FROM hold_sample_import";
+    $cQuery  = "SELECT MAX(import_batch_tracking) FROM hold_sample_import";
     $cResult = $db->query($cQuery);
     if ($cResult[0]['MAX(import_batch_tracking)'] != '') {
         $maxId = $cResult[0]['MAX(import_batch_tracking)'] + 1;
@@ -35,7 +35,7 @@ try {
         $objPHPExcel = \PhpOffice\PhpSpreadsheet\IOFactory::load(TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName);
         $sheetData   = $objPHPExcel->getActiveSheet();
 
-        $bquery    = "select MAX(batch_code_key) from batch_details";
+        $bquery    = "SELECT MAX(batch_code_key) FROM batch_details";
         $bvlResult = $db->rawQuery($bquery);
         if ($bvlResult[0]['MAX(batch_code_key)'] != '' && $bvlResult[0]['MAX(batch_code_key)'] != NULL) {
             $maxBatchCodeKey = $bvlResult[0]['MAX(batch_code_key)'] + 1;
@@ -94,17 +94,19 @@ try {
             if ($sampleCode == "")
                 continue;
 
-            /*$d=explode(" ",$row[$testingDateCol]);
-          //$testingDate=str_replace("/","-",$d[0],$checked);
-          //$testingDate = date("Y-m-d H:i:s", \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp($testingDate));
-          $dt=explode("/",$d[0]);
-          if(count($dt) > 1){
-            // Date time in the provided Roche Sample file is in this format : 2016/09/20 12:22:03
-            $testingDate = DateTime::createFromFormat('Y/m/d H:i:s', $row[$testingDateCol])->format('Y-m-d H:i');
-          }else{
-            // Date time in the provided Roche Sample file is in this format : 20-09-16 12:22
-            $testingDate = DateTime::createFromFormat('d-m-y H:i', $row[$testingDateCol])->format('Y-m-d H:i');
-          }  */
+            /*
+            $d=explode(" ",$row[$testingDateCol]);
+            $testingDate=str_replace("/","-",$d[0],$checked);
+            $testingDate = date("Y-m-d H:i:s", \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp($testingDate));
+            $dt=explode("/",$d[0]);
+            if(count($dt) > 1){
+                // Date time in the provided Roche Sample file is in this format : 2016/09/20 12:22:03
+                $testingDate = DateTime::createFromFormat('Y/m/d H:i:s', $row[$testingDateCol])->format('Y-m-d H:i');
+            }else{
+                // Date time in the provided Roche Sample file is in this format : 20-09-16 12:22
+                $testingDate = DateTime::createFromFormat('d-m-y H:i', $row[$testingDateCol])->format('Y-m-d H:i');
+            }  
+            */
 
 
             $testingDate = date('Y-m-d H:i', strtotime($row[$testingDateCol]));
