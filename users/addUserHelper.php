@@ -1,15 +1,15 @@
 <?php
 ob_start();
 session_start();
-include_once '../startup.php';
+#include_once '../startup.php';
 include_once APPLICATION_PATH . '/includes/MysqliDb.php';
 include_once(APPLICATION_PATH . '/models/General.php');
 include_once APPLICATION_PATH . '/includes/ImageResize.php';
-
+include_once(APPLICATION_PATH . "/vendor/autoload.php");
 
 $general = new General($db);
 //#require_once('../startup.php'); 
-include_once(APPLICATION_PATH . '/header.php');
+// include_once(APPLICATION_PATH . '/header.php');
 $tableName = "user_details";
 $tableName2 = "vl_user_facility_map";
 try {
@@ -67,6 +67,21 @@ try {
         }
 
         $_SESSION['alertMsg'] = "User details added successfully";
+    }
+    $userType = $general->getSystemConfig('user_type');
+    if(isset($systemConfig['remoteURL']) && $systemConfig['remoteURL'] != "" && $userType == 'vluser'){
+        $apiUrl = $systemConfig['remoteURL'] . "/api/user/save-user-profile.php";
+        $post = array('post' => json_encode($_POST), 'sign'=> (isset($signatureImagePath) && $signatureImagePath != "")?curl_file_create($signatureImagePath):null, 'x-api-key' => $general->generateRandomString(18));
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,$apiUrl);
+        curl_setopt($ch, CURLOPT_POST,1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        $result = curl_exec($ch);
+        curl_close($ch);
+
+        $deResult = json_decode($result, true);
+        // echo "<pre>";print_r($deResult);die;
     }
 
     //Add event log
