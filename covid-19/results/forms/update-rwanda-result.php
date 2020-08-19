@@ -140,26 +140,26 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         <?php } else { ?>
                                             <td><label for="sampleCode">Sample ID </label><span class="mandatory">*</span> </td>
                                             <td colspan="5">
-                                                <input type="text" readonly value="<?php echo ($sCode != '') ? $sCode : $covid19Info[$sampleCode]; ?>" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Sample ID" title="Please enter Sample ID" style="width:30%;" onchange="" />
+                                                <input type="text" readonly value="<?php echo ($sCode != '') ? $sCode : $covid19Info[$sampleCode]; ?>" class="form-control " id="sampleCode" name="sampleCode" placeholder="Sample ID" title="Please enter Sample ID" style="width:30%;" onchange="" />
                                             </td>
                                         <?php } ?>
                                     </tr>
                                     <tr>
                                         <td><label for="province">Province </label><span class="mandatory">*</span></td>
                                         <td>
-                                            <select class="form-control isRequired" name="province" id="province" title="Please choose province" onchange="getfacilityDetails(this);" style="width:100%;">
+                                            <select class="form-control " name="province" id="province" title="Please choose province" onchange="getfacilityDetails(this);" style="width:100%;">
                                                 <?php echo $province; ?>
                                             </select>
                                         </td>
                                         <td><label for="district">District </label><span class="mandatory">*</span></td>
                                         <td>
-                                            <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getfacilityDistrictwise(this);">
+                                            <select class="form-control " name="district" id="district" title="Please choose district" style="width:100%;" onchange="getfacilityDistrictwise(this);">
                                                 <option value=""> -- Select -- </option>
                                             </select>
                                         </td>
                                         <td><label for="facilityId">Health Facility </label><span class="mandatory">*</span></td>
                                         <td>
-                                            <select class="form-control isRequired " name="facilityId" id="facilityId" title="Please choose service provider" style="width:100%;" onchange="getfacilityProvinceDetails(this);">
+                                            <select class="form-control  " name="facilityId" id="facilityId" title="Please choose service provider" style="width:100%;" onchange="getfacilityProvinceDetails(this);">
                                                 <?php echo $facility; ?>
                                             </select>
                                         </td>
@@ -192,7 +192,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             <!-- <tr> -->
                                             <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
                                             <td>
-                                                <select name="labId" id="labId" class="form-control isRequired" title="Lab Name" style="width:100%;">
+                                                <select name="labId" id="labId" class="form-control " title="Lab Name" style="width:100%;">
                                                     <option value=""> -- Select -- </option>
                                                     <?php foreach ($lResult as $labName) { ?>
                                                         <option value="<?php echo $labName['facility_id']; ?>" <?php echo ($covid19Info['lab_id'] == $labName['facility_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($labName['facility_name']); ?></option>
@@ -212,7 +212,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                     <tr>
                                         <th style="width:15% !important"><label for="firstName">First Name <span class="mandatory">*</span> </label></th>
                                         <td style="width:35% !important">
-                                            <input type="text" class="form-control isRequired" id="firstName" name="firstName" placeholder="First Name" title="Please enter patient first name" style="width:100%;" value="<?php echo $covid19Info['patient_name']; ?>" />
+                                            <input type="text" class="form-control " id="firstName" name="firstName" placeholder="First Name" title="Please enter patient first name" style="width:100%;" value="<?php echo $covid19Info['patient_name']; ?>" />
                                         </td>
                                         <th style="width:15% !important"><label for="lastName">Last name </label></th>
                                         <td style="width:35% !important">
@@ -222,11 +222,11 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                     <tr>
                                         <th style="width:15% !important"><label for="patientId">Patient ID <span class="mandatory">*</span> </label></th>
                                         <td style="width:35% !important">
-                                            <input type="text" class="form-control isRequired" id="patientId" name="patientId" placeholder="Patient Identification" title="Please enter Patient ID" style="width:100%;" value="<?php echo $covid19Info['patient_id']; ?>" />
+                                            <input type="text" class="form-control " id="patientId" name="patientId" placeholder="Patient Identification" title="Please enter Patient ID" style="width:100%;" value="<?php echo $covid19Info['patient_id']; ?>" />
                                         </td>
                                         <th><label for="patientDob">Date of Birth <span class="mandatory">*</span> </label></th>
                                         <td>
-                                            <input type="text" class="form-control isRequired" id="patientDob" name="patientDob" placeholder="Date of Birth" title="Please enter Date of birth" style="width:100%;" onchange="calculateAgeInYears();" value="<?php echo $general->humanDateFormat($covid19Info['patient_dob']); ?>" />
+                                            <input type="text" class="form-control " id="patientDob" name="patientDob" placeholder="Date of Birth" title="Please enter Date of birth" style="width:100%;" onchange="calculateAgeInYears();" value="<?php echo $general->humanDateFormat($covid19Info['patient_dob']); ?>" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -234,7 +234,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         <td><input type="number" max="150" maxlength="3" oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="patientAge" name="patientAge" placeholder="Patient Age (in years)" title="Patient Age" style="width:100%;" value="<?php echo $covid19Info['patient_age']; ?>" /></td>
                                         <th><label for="patientGender">Gender <span class="mandatory">*</span> </label></th>
                                         <td>
-                                            <select class="form-control isRequired" name="patientGender" id="patientGender">
+                                            <select class="form-control " name="patientGender" id="patientGender">
                                                 <option value=''> -- Select -- </option>
                                                 <option value='male' <?php echo ($covid19Info['patient_gender'] == 'male') ? "selected='selected'" : ""; ?>> Male </option>
                                                 <option value='female' <?php echo ($covid19Info['patient_gender'] == 'female') ? "selected='selected'" : ""; ?>> Female </option>
@@ -299,7 +299,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                     <tr>
                                         <th style="width:15% !important">Date of Symptom Onset <span class="mandatory">*</span> </th>
                                         <td style="width:35% !important;">
-                                            <input class="form-control date isRequired" type="text" name="dateOfSymptomOnset" id="dateOfSymptomOnset" placeholder="Symptom Onset Date" value="<?php echo $general->humanDateFormat($covid19Info['date_of_symptom_onset']); ?> " />
+                                            <input class="form-control date " type="text" name="dateOfSymptomOnset" id="dateOfSymptomOnset" placeholder="Symptom Onset Date" value="<?php echo $general->humanDateFormat($covid19Info['date_of_symptom_onset']); ?> " />
                                         </td>
                                         <th style="width:15% !important">Date of Initial Consultation</th>
                                         <td style="width:35% !important;">
@@ -309,7 +309,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                     <tr>
                                         <th style="width:15% !important">Fever/Temperature (&deg;C) <span class="mandatory">*</span> </th>
                                         <td style="width:35% !important;">
-                                            <input class="form-control isRequired" type="number" value="<?php echo $covid19Info['fever_temp']; ?>" name="feverTemp" id="feverTemp" placeholder="Fever/Temperature (in &deg;Celcius)" />
+                                            <input class="form-control " type="number" value="<?php echo $covid19Info['fever_temp']; ?>" name="feverTemp" id="feverTemp" placeholder="Fever/Temperature (in &deg;Celcius)" />
                                         </td>
                                         <th style="width:15% !important"></th>
                                         <td style="width:35% !important;"></td>
@@ -323,7 +323,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                         <th style="width:50%;"><?php echo $symptomName; ?></th>
                                                         <td>
                                                             <input name="symptomId[]" type="hidden" value="<?php echo $symptomId; ?>">
-                                                            <select name="symptomDetected[]" class="form-control isRequired" title="Please choose value for <?php echo $symptomName; ?>" style="width:100%">
+                                                            <select name="symptomDetected[]" class="form-control" title="Please choose value for <?php echo $symptomName; ?>" style="width:100%">
                                                                 <option value="">-- Select --</option>
                                                                 <option value='yes' <?php echo (isset($covid19SelectedSymptoms[$symptomId]) && $covid19SelectedSymptoms[$symptomId] == 'yes') ? "selected='selected'" : ""; ?>> Yes </option>
                                                                 <option value='no' <?php echo (isset($covid19SelectedSymptoms[$symptomId]) && $covid19SelectedSymptoms[$symptomId] == 'no') ? "selected='selected'" : ""; ?>> No </option>
@@ -350,7 +350,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                         <th style="width:50%;"><?php echo $comName; ?></th>
                                                         <td>
                                                             <input name="comorbidityId[]" type="hidden" value="<?php echo $comId; ?>">
-                                                            <select name="comorbidityDetected[]" class="form-control isRequired" title="Please choose value for <?php echo $comName; ?>" style="width:100%">
+                                                            <select name="comorbidityDetected[]" class="form-control" title="Please choose value for <?php echo $comName; ?>" style="width:100%">
                                                                 <option value="">-- Select --</option>
                                                                 <option value='yes' <?php echo (isset($covid19SelectedComorbidities[$comId]) && $covid19SelectedComorbidities[$comId] == 'yes') ? "selected='selected'" : ""; ?>> Yes </option>
                                                                 <option value='no' <?php echo (isset($covid19SelectedComorbidities[$comId]) && $covid19SelectedComorbidities[$comId] == 'no') ? "selected='selected'" : ""; ?>> No </option>
@@ -406,7 +406,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                     <tr>
                                         <th style="width:15% !important">Lab Sample Collected? <span class="mandatory">*</span> </th>
                                         <td style="width:35% !important;">
-                                            <select name="isSampleCollected" id="isSampleCollected" class="form-control isRequired" title="Is Lab Sample collected ?" style="width:100%">
+                                            <select name="isSampleCollected" id="isSampleCollected" class="form-control " title="Is Lab Sample collected ?" style="width:100%">
                                                 <option value="">-- Select --</option>
                                                 <option value='yes' <?php echo ($covid19Info['is_sample_collected'] == 'yes') ? "selected='selected'" : ""; ?>> Yes </option>
                                                 <option value='no' <?php echo ($covid19Info['is_sample_collected'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
@@ -414,7 +414,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         </td>
                                         <th>Reason for Covid-19 Testing <span class="mandatory">*</span></th>
                                         <td>
-                                            <select name="reasonForCovid19Test" id="reasonForCovid19Test" class="form-control isRequired" title="Please choose specimen type" style="width:100%">
+                                            <select name="reasonForCovid19Test" id="reasonForCovid19Test" class="form-control " title="Please choose specimen type" style="width:100%">
                                                 <option value="">-- Select --</option>
                                                 <?php echo $general->generateSelectOptions($covid19ReasonsForTesting, $covid19Info['reason_for_covid19_test']); ?>
                                             </select>
@@ -423,11 +423,11 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                     <tr>
                                         <th style="width:15% !important">Sample Collection Date <span class="mandatory">*</span> </th>
                                         <td style="width:35% !important;">
-                                            <input class="form-control isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" value="<?php echo ($covid19Info['sample_collection_date']); ?>" />
+                                            <input class="form-control " type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" value="<?php echo ($covid19Info['sample_collection_date']); ?>" />
                                         </td>
                                         <th>Specimen Type <span class="mandatory">*</span></th>
                                         <td>
-                                            <select name="specimenType" id="specimenType" class="form-control isRequired" title="Please choose specimen type" style="width:100%">
+                                            <select name="specimenType" id="specimenType" class="form-control " title="Please choose specimen type" style="width:100%">
                                                 <option value="">-- Select --</option>
                                                 <?php echo $general->generateSelectOptions($specimenTypeResult, $covid19Info['specimen_type']); ?>
 
@@ -625,7 +625,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                         <input type="hidden" name="oldStatus" id="oldStatus" value="<?php echo $covid19Info['result_status']; ?>" />
                         <input type="hidden" name="provinceCode" id="provinceCode" />
                         <input type="hidden" name="provinceId" id="provinceId" />
-                        <a href="/covid-19/requests/covid-19-requests.php" class="btn btn-default"> Cancel</a>
+                        <a href="/covid-19/results/covid-19-manual-results.php" class="btn btn-default"> Cancel</a>
                     </div>
                     <!-- /.box-footer -->
                 </form>
@@ -786,12 +786,12 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
             checkIsResultAuthorized();
         });
         checkIsResultAuthorized();
-        <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
+        /* <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
         $('.test-result,#result').change(function(e){
             checkPostive();
         });
         checkPostive();
-        <?php }?>
+        <?php }?> */
     });
 
     function insRow() {
@@ -830,11 +830,11 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         });
         tableRowId++;
 
-        <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
+        /* <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
         $('.test-result,#result').change(function(e){
             checkPostive();
         });
-        <?php }?>
+        <?php }?> */
     }
 
     function removeAttributeRow(el) {
