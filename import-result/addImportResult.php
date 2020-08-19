@@ -1,6 +1,6 @@
 <?php
 ob_start();
-$title = "Import Test Results From File";
+$title = "Import " . strtoupper($type) . " Test Results From File";
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 include_once(APPLICATION_PATH . '/models/General.php');
@@ -21,7 +21,7 @@ $type = base64_decode($_GET['t']);
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
-    <h1><i class="fa fa-edit"></i> Import Test Results From File</h1>
+    <h1><i class="fa fa-edit"></i> Import <?= strtoupper($type); ?> Test Results From File</h1>
     <ol class="breadcrumb">
       <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
       <li class="active">Import Result</li>
@@ -89,7 +89,7 @@ $type = base64_decode($_GET['t']);
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label class="col-lg-4 control-label">Upload File <span class="mandatory">*</span></label>
+                          <label class="col-lg-4 control-label">Upload <?= strtoupper($type); ?> File <span class="mandatory">*</span></label>
                           <div class="col-lg-7">
                             <input type="file" class="isRequired" name="resultFile" id="resultFile" title="Please choose result file">
                             (Upload xls, xlsx, csv format)
