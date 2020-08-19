@@ -147,10 +147,17 @@ if (sizeof($requestResult) > 0) {
         if (!isset($result['child_gender']) || trim($result['child_gender']) == '') {
             $result['child_gender'] = 'not reported';
         }
-        $resultApprovedBy  = '';
+        $resultApprovedBy  = '';$userRes = array();
         if (isset($result['approvedBy']) && trim($result['approvedBy']) != '') {
             $resultApprovedBy = ucwords($result['approvedBy']);
+            $userRes = $users->getUserInfo($result['result_approved_by'], 'user_signature');
         }
+        $userSignaturePath = null;
+
+        if (!empty($userRes['user_signature'])) {
+            $userSignaturePath = UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature" . DIRECTORY_SEPARATOR . $userRes['user_signature'];
+        }
+
         $vlResult = '';
         $smileyContent = '';
         $showMessage = '';
@@ -302,7 +309,11 @@ if (sizeof($requestResult) > 0) {
         $html .= '<td colspan="3" style="line-height:16px;"></td>';
         $html .= '</tr>';
 
-
+        if (!empty($userSignaturePath) && file_exists($userSignaturePath) && !empty($resultApprovedBy)) {
+        $html .='<tr>';
+            $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;"><img src="' . $userSignaturePath . '" style="width:70px;margin-top:-20px;" /><br></td>';
+        $html .='</tr>';
+        }
         $html .= '<tr>';
         $html .= '<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Approuvé par&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">' . $resultApprovedBy . '</span></td>';
         $html .= '</tr>';

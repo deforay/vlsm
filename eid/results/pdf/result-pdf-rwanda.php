@@ -5,14 +5,6 @@ $eidResults = $general->getEidResults();
 
 $resultFilename = '';
 
-$userRes = $users->getUserInfo($_SESSION['userId'], 'user_signature');
-$userSignaturePath = null;
-
-if (!empty($userRes['user_signature'])) {
-    $userSignaturePath = UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature" . DIRECTORY_SEPARATOR . $userRes['user_signature'];
-}
-
-
 if (sizeof($requestResult) > 0) {
     $_SESSION['rVal'] = $general->generateRandomString(6);
     $pathFront = (UPLOAD_PATH . DIRECTORY_SEPARATOR .  $_SESSION['rVal']);
@@ -137,12 +129,18 @@ if (sizeof($requestResult) > 0) {
         if (!isset($result['child_gender']) || trim($result['child_gender']) == '') {
             $result['child_gender'] = 'not reported';
         }
+        $userRes = array();
         if (isset($result['approvedBy']) && trim($result['approvedBy']) != '') {
             $resultApprovedBy = ucwords($result['approvedBy']);
+            $userRes = $users->getUserInfo($result['result_approved_by'], 'user_signature');
         } else {
             $resultApprovedBy  = '';
         }
+        $userSignaturePath = null;
 
+        if (!empty($userRes['user_signature'])) {
+            $userSignaturePath = UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature" . DIRECTORY_SEPARATOR . $userRes['user_signature'];
+        }
         $vlResult = '';
         $smileyContent = '';
         $showMessage = '';

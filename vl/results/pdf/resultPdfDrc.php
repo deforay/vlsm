@@ -70,13 +70,7 @@ if (sizeof($requestResult) > 0) {
     mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']);
     $pathFront = realpath(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']);
   }
-
-  $userRes = $users->getUserInfo($_SESSION['userId'], 'user_signature');
-  $userSignaturePath = null;
-
-  if (!empty($userRes['user_signature'])) {
-  $userSignaturePath = UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature" . DIRECTORY_SEPARATOR . $userRes['user_signature'];
-  }
+  
   //$pathFront = $pathFront;
   $pages = array();
   $page = 1;
@@ -223,9 +217,15 @@ if (sizeof($requestResult) > 0) {
     if (!isset($result['patient_gender']) || trim($result['patient_gender']) == '') {
       $result['patient_gender'] = 'not reported';
     }
-    $resultApprovedBy  = '';
+    $resultApprovedBy  = '';$userRes = array();
     if (isset($result['approvedBy']) && trim($result['approvedBy']) != '') {
       $resultApprovedBy = ucwords($result['approvedBy']);
+      $userRes = $users->getUserInfo($result['result_approved_by'], 'user_signature');
+    }
+    $userSignaturePath = null;
+
+    if (!empty($userRes['user_signature'])) {
+    $userSignaturePath = UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature" . DIRECTORY_SEPARATOR . $userRes['user_signature'];
     }
     $vlResult = '';
     $smileyContent = '';
@@ -438,7 +438,7 @@ if (sizeof($requestResult) > 0) {
       $html .= '<td colspan="3" style="line-height:16px;"></td>';
       $html .= '</tr>';
     }
-    if (!empty($userSignaturePath) && file_exists($userSignaturePath)) {
+    if (!empty($userSignaturePath) && file_exists($userSignaturePath) && !empty($resultApprovedBy)) {
       $html .='<tr>';
           $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;vertical-align: bottom;"><img src="' . $userSignaturePath . '" style="width:70px;margin-top:-20px;" /><br></td>';
       $html .='</tr>';
