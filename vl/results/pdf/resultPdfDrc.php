@@ -70,6 +70,13 @@ if (sizeof($requestResult) > 0) {
     mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']);
     $pathFront = realpath(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']);
   }
+
+  $userRes = $users->getUserInfo($_SESSION['userId'], 'user_signature');
+  $userSignaturePath = null;
+
+  if (!empty($userRes['user_signature'])) {
+  $userSignaturePath = UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature" . DIRECTORY_SEPARATOR . $userRes['user_signature'];
+  }
   //$pathFront = $pathFront;
   $pages = array();
   $page = 1;
@@ -430,6 +437,11 @@ if (sizeof($requestResult) > 0) {
       $html .= '<tr>';
       $html .= '<td colspan="3" style="line-height:16px;"></td>';
       $html .= '</tr>';
+    }
+    if (!empty($userSignaturePath) && file_exists($userSignaturePath)) {
+      $html .='<tr>';
+          $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;vertical-align: bottom;"><img src="' . $userSignaturePath . '" style="width:70px;margin-top:-20px;" /><br></td>';
+      $html .='</tr>';
     }
     $html .= '<tr>';
     $html .= '<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Approuvé par&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">' . $resultApprovedBy . '</span></td>';
