@@ -59,10 +59,10 @@ try {
         $lotNumberCol = 12;
         $reviewByCol = '';
         $lotExpirationDateCol = 13;
-echo TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName;die;
+
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName);
 
-        var_dump($spreadsheet);die;
+
 
 
         if (strpos($mime_type, 'text/plain') !== false) {
@@ -74,7 +74,7 @@ echo TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $
             if (($handle = fopen(TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName, "r")) !== false) {
                 while (($sheetData = fgetcsv($handle, 10000, "\t")) !== false) {
 
-                    var_dump($sheetData);die;
+
                     $num = count($sheetData);
                     $row++;
                     if ($row < $skip) {
