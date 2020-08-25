@@ -7,6 +7,8 @@ include_once(APPLICATION_PATH . "/vendor/autoload.php");
 
 $general = new General($db);
 
+$lastUpdate = null;
+
 try {
     $instanceQuery = "SELECT * FROM s_vlsm_instance";
     $instanceResult = $db->query($instanceQuery);
@@ -42,17 +44,21 @@ try {
                         INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
                         LEFT JOIN facility_type as ft ON ft.facility_type_id=f.facility_type 
                         LEFT JOIN facility_type as lft ON lft.facility_type_id=l_f.facility_type 
-                        LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection
-                        WHERE sample_code is not null AND sample_code !=''";
+                        LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection";
 
         if ($instanceUpdateOn != "") {
-            $sQuery .= " AND DATE(vl.last_modified_datetime) >= $instanceUpdateOn";
+            $sQuery .= " WHERE DATE(vl.last_modified_datetime) >= $instanceUpdateOn";
         }
 
         $sQuery .= " ORDER BY vl.last_modified_datetime ASC";
-        // $sQuery .= " LIMIT 240";
-        // echo $sQuery;die;
+
+        $sQuery .= " LIMIT 2500";
+
         $rResult = $db->rawQuery($sQuery);
+
+        $lastUpdate = $rResult[count($rResult) - 1]['last_modified_datetime'];
+
+        
         $output = array();
         foreach ($rResult as $key => $aRow) {
             if (!empty($aRow['remote_sample_code'])) {
@@ -107,7 +113,7 @@ try {
         print_r($deResult);die; */
         if (isset($deResult['status']) && trim($deResult['status']) == 'success') {
             $data = array(
-                'covid19_last_dash_sync' => $general->getDateTime()
+                'covid19_last_dash_sync' => (!empty($lastUpdate) ? $lastUpdate : $general->getDateTime())
             );
             $db = $db->where('vlsm_instance_id', $vlsmInstanceId);
             $db->update('s_vlsm_instance', $data);

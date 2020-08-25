@@ -41,6 +41,7 @@ if (trim($sarr['lab_name']) == '') {
 $url = $systemConfig['remoteURL'] . '/remote/remote/getRequests.php';
 $data = array(
     'labName' => $sarr['lab_name'],
+    'module' => 'vl',
     "Key" => "vlsm-lab-data--",
 );
 //open connection
@@ -71,12 +72,38 @@ $apiResult = json_decode($curl_response, true);
  */
 if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) {
     $request = array();
-    $remoteSampleCodeList = array();
-    if (count($apiResult) > 0) {
+    //$remoteSampleCodeList = array();
+
+
+    if (!empty($apiResult) && is_array($apiResult) && count($apiResult) > 0) {
         $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='vl_request_form'";
         $allColResult = $db->rawQuery($allColumns);
         $columnList = array_map('current', $allColResult);
+
+        $removeKeys = array(
+            'vl_sample_id',
+            'sample_batch_id',
+            'result_value_log',
+            'result_value_absolute',
+            'result_value_absolute_decimal',
+            'result_value_text',
+            'result',
+            'sample_tested_datetime',
+            'sample_received_at_vl_lab_datetime',
+            'result_dispatched_datetime',
+            'is_sample_rejected',
+            'reason_for_sample_rejection',
+            'result_approved_by',
+            'request_created_datetime',
+            'request_created_by',
+            'last_modified_by',
+            'data_sync'
+        );
+
+        $columnList = array_diff($columnList, $removeKeys);
+
         foreach ($apiResult as $key => $remoteData) {
+            $request = array();
             foreach ($columnList as $colName) {
                 if (isset($remoteData[$colName])) {
                     $request[$colName] = $remoteData[$colName];
@@ -84,30 +111,9 @@ if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == t
                     $request[$colName] = null;
                 }
             }
-            $unwantedKeys = array(
-                'vl_sample_id',
-                'sample_batch_id',
-                'result_value_log',
-                'result_value_absolute',
-                'result_value_absolute_decimal',
-                'result_value_text',
-                'result',
-                'sample_tested_datetime',
-                'sample_received_at_vl_lab_datetime',
-                'result_dispatched_datetime',
-                'is_sample_rejected',
-                'reason_for_sample_rejection',
-                'result_approved_by',
-                'request_created_datetime',
-                'request_created_by',
-                'last_modified_by',
-                'data_sync'
-            );
-            foreach ($unwantedKeys as $removeKey) {
-                unset($request[$removeKey]);
-            }
 
-            $remoteSampleCodeList[] = $request['remote_sample_code'];
+
+            //$remoteSampleCodeList[] = $request['remote_sample_code'];
             $request['last_modified_datetime'] = $general->getDateTime();
 
             //check wheather sample code empty or not
@@ -156,6 +162,7 @@ if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] ==
     $url = $systemConfig['remoteURL'] . '/remote/remote/eid-test-requests.php';
     $data = array(
         'labName' => $sarr['lab_name'],
+        'module' => 'eid',
         "Key" => "vlsm-lab-data--",
     );
     //open connection
@@ -179,11 +186,31 @@ if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] ==
     curl_close($ch);
     $apiResult = json_decode($curl_response, true);
 
-    if (count($apiResult) > 0) {
+    if (!empty($apiResult) && is_array($apiResult) && count($apiResult) > 0) {
         $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='eid_form'";
         $allColResult = $db->rawQuery($allColumns);
         $columnList = array_map('current', $allColResult);
+
+        $removeKeys = array(
+            'eid_id',
+            'sample_batch_id',
+            'result',
+            'sample_tested_datetime',
+            'sample_received_at_vl_lab_datetime',
+            'result_dispatched_datetime',
+            'is_sample_rejected',
+            'reason_for_sample_rejection',
+            'result_approved_by',
+            'request_created_by',
+            'last_modified_by',
+            'request_created_datetime',
+            'data_sync'
+        );
+
+        $columnList = array_diff($columnList, $removeKeys);
+
         foreach ($apiResult as $key => $remoteData) {
+            $request = array();
             foreach ($columnList as $colName) {
                 if (isset($remoteData[$colName])) {
                     $request[$colName] = $remoteData[$colName];
@@ -191,26 +218,9 @@ if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] ==
                     $request[$colName] = null;
                 }
             }
-            $removeKeys = array(
-                'eid_id',
-                'sample_batch_id',
-                'result',
-                'sample_tested_datetime',
-                'sample_received_at_vl_lab_datetime',
-                'result_dispatched_datetime',
-                'is_sample_rejected',
-                'reason_for_sample_rejection',
-                'result_approved_by',
-                'request_created_by',
-                'last_modified_by',
-                'request_created_datetime',
-                'data_sync'
-            );
-            foreach ($removeKeys as $keys) {
-                unset($request[$keys]);
-            }
 
-            $remoteSampleCodeList[] = $request['remote_sample_code'];
+
+            //$remoteSampleCodeList[] = $request['remote_sample_code'];
             $request['last_modified_datetime'] = $general->getDateTime();
 
             //check whether sample code empty or not
@@ -258,6 +268,7 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
     $url = $systemConfig['remoteURL'] . '/remote/remote/covid-19-test-requests.php';
     $data = array(
         'labName' => $sarr['lab_name'],
+        'module' => 'covid19',
         "Key" => "vlsm-lab-data--",
     );
     //open connection
@@ -283,11 +294,30 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
 
     $apiResult = $apiData['result'];
 
-    if (count($apiResult) > 0) {
+    $removeKeys = array(
+        'covid19_id',
+        'sample_batch_id',
+        'result',
+        'sample_tested_datetime',
+        'sample_received_at_vl_lab_datetime',
+        'result_dispatched_datetime',
+        'is_sample_rejected',
+        'reason_for_sample_rejection',
+        'result_approved_by',
+        'request_created_by',
+        'last_modified_by',
+        'request_created_datetime',
+        'data_sync'
+    );
+
+    $columnList = array_diff($columnList, $removeKeys);
+
+    if (!empty($apiResult) && is_array($apiResult) && count($apiResult) > 0) {
         $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='form_covid19'";
         $allColResult = $db->rawQuery($allColumns);
         $columnList = array_map('current', $allColResult);
         foreach ($apiResult as $key => $remoteData) {
+            $request = array();
             foreach ($columnList as $colName) {
                 if (isset($remoteData[$colName])) {
                     $request[$colName] = $remoteData[$colName];
@@ -304,27 +334,7 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
             $testResults = (isset($apiData['testResults'][$request['covid19_id']]) && !empty($apiData['testResults'][$request['covid19_id']])) ? $apiData['testResults'][$request['covid19_id']] : array();
 
 
-
-            $removeKeys = array(
-                'covid19_id',
-                'sample_batch_id',
-                'result',
-                'sample_tested_datetime',
-                'sample_received_at_vl_lab_datetime',
-                'result_dispatched_datetime',
-                'is_sample_rejected',
-                'reason_for_sample_rejection',
-                'result_approved_by',
-                'request_created_by',
-                'last_modified_by',
-                'request_created_datetime',
-                'data_sync'
-            );
-            foreach ($removeKeys as $keys) {
-                unset($request[$keys]);
-            }
-
-            $remoteSampleCodeList[] = $request['remote_sample_code'];
+            //$remoteSampleCodeList[] = $request['remote_sample_code'];
             $request['last_modified_datetime'] = $general->getDateTime();
 
             //check whether sample code empty or not

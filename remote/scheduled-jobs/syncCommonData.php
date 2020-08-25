@@ -120,7 +120,7 @@ if (!empty($result['vlArtCodes']) && count($result['vlArtCodes']) > 0) {
 }
 
 //update or insert rejected reason
-if (!empty($result['vlRejectionReasons']) && count($result['vlRejectionReasonss']) > 0) {
+if (!empty($result['vlRejectionReasons']) && count($result['vlRejectionReasons']) > 0) {
 
     // making all local rows inactive 
     // this way any additional rows in local that are not on remote

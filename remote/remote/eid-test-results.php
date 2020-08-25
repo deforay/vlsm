@@ -5,6 +5,7 @@ $data = json_decode(file_get_contents('php://input'), true);
 require_once(dirname(__FILE__) . "/../../startup.php");
 require_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 require_once(APPLICATION_PATH . '/models/General.php');
+require_once(APPLICATION_PATH . '/models/Users.php');
 
 $cQuery = "SELECT * FROM global_config";
 $cResult = $db->query($cQuery);
@@ -15,6 +16,7 @@ for ($i = 0; $i < sizeof($cResult); $i++) {
 }
 
 $general = new General($db);
+$usersModel = new Model_Users($db);
 
 $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='eid_form'";
 $allColResult = $db->rawQuery($allColumns);
@@ -47,22 +49,7 @@ if (count($data['result']) > 0) {
 
         if (isset($remoteData['approved_by_name']) && $remoteData['approved_by_name'] != '') {
 
-            $userQuery = 'select user_id from user_details where user_name = "' . $remoteData['approved_by_name'] . '" or user_name = "' . strtolower($remoteData['approved_by_name']) . '"';
-            $userResult = $db->rawQuery($userQuery);
-            if (isset($userResult[0]['user_id'])) {
-                // NO NEED TO DO ANYTHING SINCE $lab['result_approved_by'] is already there
-                //$lab['result_approved_by'] = $userResult[0]['user_id'];
-            } else {
-                $userId = $general->generateUserID();
-                $userData = array(
-                    'user_id' => $userId,
-                    'user_name' => $remoteData['approved_by_name'],
-                    'role_id' => 4,
-                    'status' => 'inactive'
-                );
-                $db->insert('user_details', $userData);
-                $lab['result_approved_by'] = $userId;
-            }
+            $lab['result_approved_by'] = $usersModel->addUserIfNotExists($remoteData['approved_by_name']);
             // we dont need this now
             //unset($remoteData['approved_by_name']);
         }
