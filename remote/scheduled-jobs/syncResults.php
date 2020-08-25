@@ -124,12 +124,12 @@ if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == t
 if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) {
 
     $eidQuery = "SELECT vl.*, a.user_name as 'approved_by_name' 
-                 FROM `eid_form` AS vl 
-                 LEFT JOIN `user_details` AS a ON vl.result_approved_by = a.user_id 
-                 WHERE result_status NOT IN (9) 
-                 AND sample_code !='' 
-                 AND sample_code is not null 
-                 AND data_sync=0"; // AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
+                    FROM `eid_form` AS vl 
+                    LEFT JOIN `user_details` AS a ON vl.result_approved_by = a.user_id 
+                    WHERE result_status NOT IN (9) 
+                    AND sample_code !='' 
+                    AND sample_code is not null 
+                    AND data_sync=0"; // AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
 
     $vlLabResult = $db->rawQuery($eidQuery);
 
@@ -173,12 +173,12 @@ if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] ==
 if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) {
 
     $covid19Query = "SELECT c19.*, a.user_name as 'approved_by_name' 
-                 FROM `form_covid19` AS c19 
-                 LEFT JOIN `user_details` AS a ON c19.result_approved_by = a.user_id 
-                 WHERE result_status NOT IN (9) 
-                 AND sample_code !='' 
-                 AND sample_code is not null 
-                 AND data_sync=0"; // AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
+                    FROM `form_covid19` AS c19 
+                    LEFT JOIN `user_details` AS a ON c19.result_approved_by = a.user_id 
+                    WHERE result_status NOT IN (9) 
+                    AND sample_code !='' 
+                    AND sample_code is not null 
+                    AND data_sync=0"; // AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
 
     $c19LabResult = $db->rawQuery($covid19Query);
 

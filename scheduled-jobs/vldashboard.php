@@ -1,12 +1,14 @@
 <?php
 
+ini_set('memory_limit', -1);
+
 require_once(__DIR__ . "/../startup.php");
 include_once(APPLICATION_PATH . "/includes/MysqliDb.php");
 include_once(APPLICATION_PATH . '/models/General.php');
 include_once(APPLICATION_PATH . "/vendor/autoload.php");
 
 $general = new General($db);
-
+$lastUpdate = null;
 try {
     $instanceQuery = "SELECT * FROM s_vlsm_instance";
     $instanceResult = $db->query($instanceQuery);
@@ -47,22 +49,29 @@ try {
                         LEFT JOIN facility_type as lft ON lft.facility_type_id=l_f.facility_type 
                         LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection
                         
-                        WHERE sample_code is not null AND sample_code !='' ";
+                        WHERE sample_code is not null AND sample_code !='' 
+                        
+                        ";
 
         if ($instanceUpdateOn != "") {
-            $sQuery .= " AND DATE(vl.last_modified_datetime) >= $instanceUpdateOn";
+            $sQuery .= " WHERE DATE(vl.last_modified_datetime) >= '$instanceUpdateOn'";
         }
 
         $sQuery .= " ORDER BY vl.last_modified_datetime ASC ";
 
         //echo $instanceUpdateOn;
 
-        // echo $sQuery;die;
+        
 
-        // $sQuery .= " LIMIT 1000";
+        $sQuery .= " LIMIT 1000 ";
+
+        echo $sQuery;
 
         $rResult = $db->rawQuery($sQuery);
 
+        $lastUpdate = $rResult[count($rResult)-1]['last_modified_datetime'];
+
+        
 
         $output = array();
 
@@ -100,9 +109,12 @@ try {
                 $DashVL_AnalysisResult = 'Not Suppressed';
                 $DashVL_Abs = $VLAnalysisResult;
             }
-            if($aRow['remote_sample_code'] != ""){
-                $row['sample_code']      = $aRow['remote_sample_code'] .'-'. $aRow['sample_code'];
-            } else{
+            if (!empty($aRow['remote_sample_code'])) {
+                $row['sample_code']      = $aRow['remote_sample_code'];
+                if (!empty($aRow['sample_code'])) {
+                    $row['sample_code']      .= '-' . $aRow['sample_code'];
+                }
+            } else {
                 $row['sample_code']      = $aRow['sample_code'];
             }
             $row['vlsm_instance_id']     = $aRow['vlsm_instance_id'];
@@ -177,7 +189,7 @@ try {
         $filename = 'export-vl-result-' . $currentDate . '.json';
         $fp = fopen(__DIR__ . "/../temporary" . DIRECTORY_SEPARATOR . $filename, 'w');
         fwrite($fp, json_encode($payload));
-        fclose($fp);        
+        fclose($fp);
 
 
         //global config
@@ -211,10 +223,10 @@ try {
 
         //var_dump($result);
         $deResult = json_decode($result, true);
-        
+
         if (isset($deResult['status']) && trim($deResult['status']) == 'success') {
             $data = array(
-                'vl_last_dash_sync' => $general->getDateTime()
+                'vl_last_dash_sync' => (!empty($lastUpdate) ? $lastUpdate : $general->getDateTime())
             );
             // $data = array(
             //     'vl_last_dash_sync' => $rResult[count($rResult) -1]['last_modified_datetime']
