@@ -2482,3 +2482,9 @@ CREATE TABLE `covid19_reasons_for_testing` (
   `reasons_id` int DEFAULT NULL,
   `reasons_detected` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+-- Amit 26 August 2020
+
+ALTER TABLE `r_vl_test_reasons` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `test_reason_status`;
+ALTER TABLE `r_eid_test_reasons` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `test_reason_status`;

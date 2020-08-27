@@ -74,7 +74,7 @@ try {
         );
 
         $filename = 'export-covid19-result-' . $currentDate . '.json';
-        $fp = fopen(__DIR__ . "/../temporary" . DIRECTORY_SEPARATOR . $filename, 'w');
+        $fp = fopen(TEMP_PATH . DIRECTORY_SEPARATOR . $filename, 'w');
         fwrite($fp, json_encode($payload));
         fclose($fp);
 

@@ -74,7 +74,7 @@ try {
         );
 
         $filename = 'export-eid-result-' . $currentDate . '.json';
-        $fp = fopen(__DIR__ . "/../temporary" . DIRECTORY_SEPARATOR . $filename, 'w');
+        $fp = fopen(TEMP_PATH . DIRECTORY_SEPARATOR . $filename, 'w');
         fwrite($fp, json_encode($payload));
         fclose($fp);
 
@@ -94,7 +94,7 @@ try {
 
 
         $data = [];
-        $data['eidFile'] = new CURLFile(__DIR__ . "/../temporary" . DIRECTORY_SEPARATOR . $filename, 'application/json', $filename);
+        $data['eidFile'] = new CURLFile(TEMP_PATH . DIRECTORY_SEPARATOR . $filename, 'application/json', $filename);
 
         $options = [
             CURLOPT_RETURNTRANSFER => true,
@@ -117,7 +117,7 @@ try {
             $db = $db->where('vlsm_instance_id', $vlsmInstanceId);
             $db->update('s_vlsm_instance', $data);
         }
-        $general->removeDirectory(__DIR__ . "/../temporary" . DIRECTORY_SEPARATOR . $filename);
+        $general->removeDirectory(TEMP_PATH . DIRECTORY_SEPARATOR . $filename);
     }
 } catch (Exception $exc) {
     error_log($exc->getMessage());
