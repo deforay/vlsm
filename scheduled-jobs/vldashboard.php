@@ -1,6 +1,6 @@
 <?php
 
-ini_set('memory_limit', -1);
+// ini_set('memory_limit', -1);
 
 require_once(__DIR__ . "/../startup.php");
 include_once(APPLICATION_PATH . "/includes/MysqliDb.php");
@@ -49,12 +49,12 @@ try {
                         LEFT JOIN facility_type as lft ON lft.facility_type_id=l_f.facility_type 
                         LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection
                         
-                        WHERE sample_code is not null AND sample_code !='' 
+                        WHERE (sample_code is not null AND sample_code !='')
                         
                         ";
 
         if ($instanceUpdateOn != "") {
-            $sQuery .= " WHERE DATE(vl.last_modified_datetime) >= '$instanceUpdateOn'";
+            $sQuery .= " AND DATE(vl.last_modified_datetime) >= '$instanceUpdateOn'";
         }
 
         $sQuery .= " ORDER BY vl.last_modified_datetime ASC ";
@@ -65,7 +65,7 @@ try {
 
         $sQuery .= " LIMIT 1000 ";
 
-        echo $sQuery;
+        //echo $sQuery;
 
         $rResult = $db->rawQuery($sQuery);
 
@@ -207,6 +207,7 @@ try {
 
 
         $data = [];
+        $data['api-version'] = 'v1';
         $data['vlFile'] = new CURLFile(__DIR__ . "/../temporary" . DIRECTORY_SEPARATOR . $filename, 'application/json', $filename);
 
         $options = [

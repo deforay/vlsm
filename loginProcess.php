@@ -15,7 +15,7 @@ if ($systemInfo != false) {
     $systemLabId = $systemInfo['lab_name'];
 }
 
-$dashboardUrl = $general->getGlobalConfig('vldashboard_url');
+//$dashboardUrl = $general->getGlobalConfig('vldashboard_url');
 /* Crosss Login Block Start */
 $_SESSION['logged'] = false;
 if (isset($_GET['u']) && trim($_GET['u']) != "" && isset($_GET['t']) && trim($_GET['t']) != "" && $recencyConfig['crosslogin']) {
@@ -118,11 +118,11 @@ try {
             } else {
                 $_SESSION['system'] = null;
             }
-            if ($dashboardUrl != null && $dashboardUrl != '') {
-                $_SESSION['vldashboard_url'] = $dashboardUrl;
-            } else {
-                $_SESSION['vldashboard_url'] = null;
-            }
+            // if ($dashboardUrl != null && $dashboardUrl != '') {
+            //     $_SESSION['vldashboard_url'] = $dashboardUrl;
+            // } else {
+            //     $_SESSION['vldashboard_url'] = null;
+            // }
 
 
             header("location:" . $redirect);
