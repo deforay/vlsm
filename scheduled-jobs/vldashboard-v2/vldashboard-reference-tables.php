@@ -12,7 +12,7 @@ $general = new General($db);
 $data = array();
 
 // if forceSync is set as true, we will drop and create tables on VL Dashboard DB
-$data['forceSync'] = false; 
+$data['forceSync'] = false;
 
 
 
@@ -60,14 +60,19 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
 try {
 
     foreach ($referenceTables as $table) {
+        if ($data['forceSync']) {
+            $createResult = $db->rawQueryOne("SHOW CREATE TABLE `$table`");
+            $data[$table]['tableStructure'] = "SET FOREIGN_KEY_CHECKS=0;" . PHP_EOL;
+            $data[$table]['tableStructure'] .= "DROP TABLE IF EXISTS `$table`;" . PHP_EOL;
+            $data[$table]['tableStructure'] .= $createResult['Create Table'] . PHP_EOL;;
+            $data[$table]['tableStructure'] = "SET FOREIGN_KEY_CHECKS=1;" . PHP_EOL;
+        }
         $data[$table]['lastModifiedTime'] = $general->getLastModifiedDateTime($table);
         $data[$table]['tableData'] = $db->get($table);
     }
 
 
-    var_dump($data);
 
-    die;
 
 
 
@@ -77,7 +82,7 @@ try {
     fclose($fp);
 
 
-    
+
 
     $vldashboardUrl = $general->getGlobalConfig('vldashboard_url');
     $vldashboardUrl = rtrim($vldashboardUrl, "/");
