@@ -2488,3 +2488,8 @@ CREATE TABLE `covid19_reasons_for_testing` (
 
 ALTER TABLE `r_vl_test_reasons` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `test_reason_status`;
 ALTER TABLE `r_eid_test_reasons` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `test_reason_status`;
+
+
+
+UPDATE `system_config` SET `value` = '4.0.5' WHERE `system_config`.`name` = 'version';
+-- Version 4.0.5 -- Amit -- 28-Aug-2020
