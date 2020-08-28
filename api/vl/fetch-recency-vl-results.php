@@ -19,14 +19,11 @@ $general = new General($db);
 
 
 
-$sampleCode = !empty($_REQUEST['s']) ? filter_var($_REQUEST['s'], FILTER_SANITIZE_STRING) : null;
-$recencyId = !empty($_REQUEST['r']) ? explode(",",filter_var($_REQUEST['r'], FILTER_SANITIZE_STRING)) : null;
+$sampleCode = !empty($_REQUEST['s']) ? explode(",", filter_var($_REQUEST['s'], FILTER_SANITIZE_STRING)) : null;
+$recencyId = !empty($_REQUEST['r']) ? explode(",", filter_var($_REQUEST['r'], FILTER_SANITIZE_STRING)) : null;
 $apiKey = !empty($_REQUEST['x-api-key']) ? filter_var($_REQUEST['x-api-key'], FILTER_SANITIZE_STRING) : 'APIKEY';
 $from = !empty($_REQUEST['f']) ? filter_var($_REQUEST['f'], FILTER_SANITIZE_STRING) : null;
-$to = !empty($_REQUEST['t']) ? filter_var($_REQUEST['t'], FILTER_SANITIZE_STRING) : null;
-
-
-;
+$to = !empty($_REQUEST['t']) ? filter_var($_REQUEST['t'], FILTER_SANITIZE_STRING) : null;;
 
 if (!$apiKey) {
     $response = array(
@@ -80,23 +77,21 @@ try {
 
 
 
-    //$sQuery .= " LIMIT 1 ";
-
-
     if (!empty($recencyId)) {
-        $recencyId = implode("','",$recencyId);
+        $recencyId = implode("','", $recencyId);
         $sQuery .= " AND serial_no IN ('$recencyId') ";
     }
 
     if (!empty($sampleCode)) {
-        $sQuery .= " AND sample_code like '$sampleCode' ";
+        $sampleCode = implode("','", $sampleCode);
+        $sQuery .= " AND sample_code IN ('$sampleCode') ";
     }
 
     if (!empty($from) && !empty($to)) {
-        $sQuery .= " AND sample_collection_date between '$from' AND '$to' ";
+        $sQuery .= " AND DATE(sample_collection_date) between '$from' AND '$to' ";
     }
 
-    $sQuery .= " ORDER BY sample_collection_date ASC";
+    $sQuery .= " ORDER BY sample_collection_date ASC ";
 
     $rowData = $db->rawQuery($sQuery);
 

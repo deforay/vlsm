@@ -279,7 +279,7 @@ require_once($fileArray[$arr['vl_form']]);
 
     function checkSampleNameValidation(tableName, fieldName, id, fnct, alrt) {
         if ($.trim($("#" + id).val()) != '') {
-            $.blockUI();
+            //$.blockUI();
             $.post("/vl/requests/checkSampleDuplicate.php", {
                     tableName: tableName,
                     fieldName: fieldName,
@@ -301,7 +301,7 @@ require_once($fileArray[$arr['vl_form']]);
                         <?php } ?>
                     }
                 });
-            $.unblockUI();
+            //$.unblockUI();
         }
     }
 

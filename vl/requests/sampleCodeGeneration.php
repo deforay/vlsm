@@ -27,6 +27,4 @@ if (isset($_POST['sampleFrom'])) {
 }
 
 
-
-
 echo $vLModel->generateVLSampleID($province, $sampleCollectionDate, $sampleFrom);

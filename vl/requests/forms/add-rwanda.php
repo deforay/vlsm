@@ -311,11 +311,11 @@ $sFormat = '';
                                                                                 foreach ($aResult as $regimen) {
                                                                                      if ($heading['headings'] == $regimen['headings']) { ?>
                                                                                           <option value="<?php echo $regimen['art_code']; ?>"><?php echo $regimen['art_code']; ?></option>
-                                                                                     <?php }
-                                                                           } ?>
+                                                                                <?php }
+                                                                                } ?>
                                                                            </optgroup>
                                                                       <?php }
-                                                                 if ($sarr['user_type'] != 'vluser') {  ?>
+                                                                      if ($sarr['user_type'] != 'vluser') {  ?>
                                                                            <!-- <option value="other">Other</option> -->
                                                                       <?php } ?>
                                                                  </select>
@@ -456,20 +456,20 @@ $sFormat = '';
                                                                       </div>
                                                                  </div>
                                                                  <?php if (isset($recencyConfig['vlsync']) && $recencyConfig['vlsync'] == true) {  ?>
-                                                                 <div class="row">
-                                                                      <div class="col-md-6">
-                                                                           <div class="form-group">
-                                                                                <div class="col-lg-12">
-                                                                                     <label class="radio-inline">
-                                                                                          <input type="radio" class="" id="recencyTest" name="stViralTesting" value="recency" title="Please check viral load indication testing type" onclick="showTesting('recency')">
-                                                                                          <strong>Confirmation Test for Recency</strong>
-                                                                                     </label>
+                                                                      <div class="row">
+                                                                           <div class="col-md-6">
+                                                                                <div class="form-group">
+                                                                                     <div class="col-lg-12">
+                                                                                          <label class="radio-inline">
+                                                                                               <input type="radio" class="" id="recencyTest" name="stViralTesting" value="recency" title="Please check viral load indication testing type" onclick="showTesting('recency')">
+                                                                                               <strong>Confirmation Test for Recency</strong>
+                                                                                          </label>
+                                                                                     </div>
                                                                                 </div>
                                                                            </div>
                                                                       </div>
-                                                                 </div>
                                                                  <?php }  ?>
-                                                                 <hr>                                                    
+                                                                 <hr>
                                                                  <div class="row">
                                                                       <div class="col-md-4">
                                                                            <label for="reqClinician" class="col-lg-5 control-label">Request Clinician <?php echo ($sarr['user_type'] == 'remoteuser') ? "<span class='mandatory'>*</span>" : ''; ?></label>
@@ -583,13 +583,13 @@ $sFormat = '';
                                                                                                <optgroup label="<?php echo ucwords($type['rejection_type']); ?>">
                                                                                                     <?php foreach ($rejectionResult as $reject) {
                                                                                                          if ($type['rejection_type'] == $reject['rejection_type']) {
-                                                                                                              ?>
+                                                                                                    ?>
                                                                                                               <option value="<?php echo $reject['rejection_reason_id']; ?>"><?php echo ucwords($reject['rejection_reason_name']); ?></option>
-                                                                                                         <?php }
-                                                                                               } ?>
+                                                                                                    <?php }
+                                                                                                    } ?>
                                                                                                </optgroup>
                                                                                           <?php }
-                                                                                     if ($sarr['user_type'] != 'vluser') {  ?>
+                                                                                          if ($sarr['user_type'] != 'vluser') {  ?>
                                                                                                <option value="other">Other (Please Specify) </option>
                                                                                           <?php } ?>
                                                                                      </select>
@@ -675,18 +675,18 @@ $sFormat = '';
 <?php
 if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off") {
      if ($global['bar_code_printing'] == 'dymo-labelwriter-450') {
-          ?>
+?>
           <script src="/assets/js/DYMO.Label.Framework.js"></script>
           <script src="/configs/dymo-format.js"></script>
           <script src="/assets/js/dymo-print.js"></script>
      <?php
-} else if ($global['bar_code_printing'] == 'zebra-printer') {
+     } else if ($global['bar_code_printing'] == 'zebra-printer') {
      ?>
           <script src="/assets/js/zebra-browserprint.js.js"></script>
           <script src="/configs/zebra-format.js"></script>
           <script src="/assets/js/zebra-print.js"></script>
-     <?php
-}
+<?php
+     }
 }
 ?>
 <!-- BARCODESTUFF END -->
@@ -731,20 +731,20 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
           }
           if (pName != '') {
                //if (provinceName) {
-                    $.post("/includes/getFacilityForClinic.php", {
-                              pName: pName
-                         },
-                         function(data) {
-                              if (data != "") {
-                                   details = data.split("###");
-                                   $("#district").html(details[1]);
-                                   $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>");
-                                   $(".facilityDetails").hide();
-                                   $(".facilityEmails").html('');
-                                   $(".facilityMobileNumbers").html('');
-                                   $(".facilityContactPerson").html('');
-                              }
-                         });
+               $.post("/includes/getFacilityForClinic.php", {
+                         pName: pName
+                    },
+                    function(data) {
+                         if (data != "") {
+                              details = data.split("###");
+                              $("#district").html(details[1]);
+                              $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>");
+                              $(".facilityDetails").hide();
+                              $(".facilityEmails").html('');
+                              $(".facilityMobileNumbers").html('');
+                              $(".facilityContactPerson").html('');
+                         }
+                    });
                //}
                sampleCodeGeneration();
           } else if (pName == '') {
@@ -768,22 +768,11 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
                     },
                     function(data) {
                          var sCodeKey = JSON.parse(data);
-                         
-                         <?php if ($arr['sample_code'] == 'auto') { ?>
-                              pNameVal = pName.split("##");
-                              sCode = sCodeKey.auto;
-                              $("#sampleCode").val('<?php echo $rKey; ?>' + pNameVal[1] + sCode + sCodeKey.maxId);
-                              $("#sampleCodeInText").html('<?php echo $rKey; ?>' + pNameVal[1] + sCode + sCodeKey.maxId);
-                              $("#sampleCodeFormat").val('<?php echo $rKey; ?>' + pNameVal[1] + sCode);
-                              $("#sampleCodeKey").val(sCodeKey.maxId);
-                              checkSampleNameValidation('vl_request_form', '<?php echo $sampleCode; ?>', 'sampleCode', null, 'This sample number already exists.Try another number', null);
-                         <?php } else if ($arr['sample_code'] == 'YY' || $arr['sample_code'] == 'MMYY') { ?>
-                              $("#sampleCode").val('<?php echo $rKey . $prefix; ?>' + sCodeKey.mnthYr + sCodeKey.maxId);
-                              $("#sampleCodeInText").html('<?php echo $rKey . $prefix; ?>' + sCodeKey.mnthYr + sCodeKey.maxId);
-                              $("#sampleCodeFormat").val('<?php echo $rKey . $prefix; ?>' + sCodeKey.mnthYr);
-                              $("#sampleCodeKey").val(sCodeKey.maxId);
-                              checkSampleNameValidation('vl_request_form', '<?php echo $sampleCode; ?>', 'sampleCode', null, 'This sample number already exists.Try another number', null)
-                         <?php } ?>
+                         $("#sampleCode").val(sCodeKey.sampleCode);
+                         $("#sampleCodeInText").html(sCodeKey.sampleCode);
+                         $("#sampleCodeFormat").val(sCodeKey.sampleCodeFormat);
+                         $("#sampleCodeKey").val(sCodeKey.maxId);
+                         checkSampleNameValidation('vl_request_form', '<?php echo $sampleCode; ?>', 'sampleCode', null, 'This sample number already exists.Try another number', null)
                     });
           }
      }
