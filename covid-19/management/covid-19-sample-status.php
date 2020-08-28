@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 $title = "Covid-19 | Sample Status Report";
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');

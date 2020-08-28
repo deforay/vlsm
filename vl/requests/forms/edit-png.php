@@ -1,6 +1,6 @@
 <?php
 
-require_once(APPLICATION_PATH.'/models/Vl.php');
+require_once(APPLICATION_PATH . '/models/Vl.php');
 
 ob_start();
 //global config
@@ -17,15 +17,15 @@ if ($arr['sample_code'] == 'auto' || $arr['sample_code'] == 'alphanumeric') {
   $sampleClass = '';
   $maxLength = '';
   if ($arr['max_length'] != '' && $arr['sample_code'] == 'alphanumeric') {
-       $maxLength = $arr['max_length'];
-       $maxLength = "maxlength=" . $maxLength;
+    $maxLength = $arr['max_length'];
+    $maxLength = "maxlength=" . $maxLength;
   }
 } else {
   $sampleClass = 'checkNum';
   $maxLength = '';
   if ($arr['max_length'] != '') {
-       $maxLength = $arr['max_length'];
-       $maxLength = "maxlength=" . $maxLength;
+    $maxLength = $arr['max_length'];
+    $maxLength = "maxlength=" . $maxLength;
   }
 }
 
@@ -162,18 +162,18 @@ if (isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date']
 
 
 
-//suggest sample id when lab user add request sample
+//suggest a sample id when user adds request sample
 $sampleSuggestion = '';
 $sampleSuggestionDisplay = 'display:none;';
 if ($sarr['user_type'] == 'vluser' && $sCode != '') {
-     $vlObj = new Model_Vl($db);
-     $sampleCollectionDate = explode(" ",$sampleCollectionDate);
-     $sampleCollectionDate = $general->humanDateFormat($sampleCollectionDate[0]);
-     $sampleSuggestionJson = $vlObj->generateVLSampleID($stateResult[0]['province_code'],$sampleCollectionDate,'png');
-     $sampleCodeKeys = json_decode($sampleSuggestionJson, true);
-     $sampleSuggestion = $sampleCodeKeys['sampleCode'];
-     $sampleSuggestionDisplay = 'display:block;';
-}    
+  $vlObj = new Model_Vl($db);
+  $sampleCollectionDate = explode(" ", $sampleCollectionDate);
+  $sampleCollectionDate = $general->humanDateFormat($sampleCollectionDate[0]);
+  $sampleSuggestionJson = $vlObj->generateVLSampleID($stateResult[0]['province_code'], $sampleCollectionDate, 'png');
+  $sampleCodeKeys = json_decode($sampleSuggestionJson, true);
+  $sampleSuggestion = $sampleCodeKeys['sampleCode'];
+  $sampleSuggestionDisplay = 'display:block;';
+}
 
 
 ?>
@@ -244,11 +244,11 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                   <div class="col-xs-12 col-md-12 col-lg-12" style="<?php echo $sampleSuggestionDisplay; ?>">
                     <?php
                     if ($vlQueryInfo[0]['sample_code'] != '') {
-                      ?>
+                    ?>
                       <label for="sampleSuggest" class="text-danger">Please note that this Remote Sample has already been imported with VLSM Sample ID <?php echo $vlQueryInfo[0]['sample_code']; ?></label>
                     <?php
                     } else {
-                      ?>
+                    ?>
                       <label for="sampleSuggest">Sample ID (might change while submitting the form) - </label>
                       <?php echo $sampleSuggestion; ?>
                     <?php } ?>
@@ -262,7 +262,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                         <input type="hidden" class="" id="sampleCode" name="sampleCode" value="<?php echo ($sCode != '') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" />
                       <?php } else { ?>
                         <label for="sampleCode">Laboratory ID <span class="mandatory">*</span></label>
-                        <input type="text" class="form-control isRequired " id="sampleCode" name="sampleCode" <?php echo $maxLength; ?> placeholder="Enter Sample ID" title="Please enter sample id" value="<?php echo ($sCode != '') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" style="width:100%;" readonly="readonly" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode; ?>',this.id,'<?php echo "vl_sample_id##" . $vlQueryInfo[0]["vl_sample_id"]; ?>','This sample number already exists.Try another number',null)" />
+                        <input type="text" class="form-control isRequired " id="sampleCode" name="sampleCode" <?php echo $maxLength; ?> placeholder="Enter Sample ID" title="Please enter sample id" value="<?php echo ($sCode != '') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" style="width:100%;" readonly="readonly" />
                         <input type="hidden" name="sampleCodeCol" value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" />
                       <?php } ?>
 
@@ -310,7 +310,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                         <option value=""> -- Select -- </option>
                         <?php
                         foreach ($districtResult as $districtName) {
-                          ?>
+                        ?>
                           <option value="<?php echo $districtName['facility_district']; ?>" <?php echo ($facilityResult[0]['facility_district'] == $districtName['facility_district']) ? "selected='selected'" : "" ?>><?php echo ucwords($districtName['facility_district']); ?></option>
                         <?php
                         }
@@ -463,7 +463,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                         <option value=""> -- Select -- </option>
                         <?php
                         foreach ($aResult as $parentRow) {
-                          ?>
+                        ?>
                           <option value="<?php echo $parentRow['art_code']; ?>" <?php echo ($vlQueryInfo[0]['current_regimen'] == $parentRow['art_code']) ? "selected='selected'" : "" ?>><?php echo $parentRow['art_code']; ?></option>
                         <?php
                         }
@@ -596,7 +596,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                         <option value="">-- Select --</option>
                         <?php
                         foreach ($rejectionResult as $reject) {
-                          ?>
+                        ?>
                           <option value="<?php echo $reject['rejection_reason_id']; ?>" <?php echo ($vlQueryInfo[0]['reason_for_sample_rejection'] == $reject['rejection_reason_id']) ? "selected='selected'" : "" ?>><?php echo ucwords($reject['rejection_reason_name']); ?></option>
                         <?php
                         }
@@ -609,7 +609,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                         <option value=""> -- Select -- </option>
                         <?php
                         foreach ($lResult as $labName) {
-                          ?>
+                        ?>
                           <option value="<?php echo $labName['facility_id']; ?>" <?php echo ($vlQueryInfo[0]['lab_id'] == $labName['facility_id']) ? "selected='selected'" : "" ?>><?php echo ucwords($labName['facility_name']); ?></option>
                         <?php
                         }
@@ -626,7 +626,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                         <option value=""> -- Select -- </option>
                         <?php
                         foreach ($sResult as $name) {
-                          ?>
+                        ?>
                           <option value="<?php echo $name['sample_id']; ?>" <?php echo ($vlQueryInfo[0]['sample_type'] == $name['sample_id']) ? "selected='selected'" : "" ?>><?php echo ucwords($name['sample_name']); ?></option>
                         <?php
                         }
@@ -783,11 +783,11 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
           </div>
           <!-- /.box-body -->
           <div class="box-footer">
-            
+
             <input type="hidden" name="vlSampleId" id="vlSampleId" value="<?php echo $vlQueryInfo[0]['vl_sample_id']; ?>" />
             <input type="hidden" name="isRemoteSample" value="<?php echo $vlQueryInfo[0]['remote_sample']; ?>" />
             <input type="hidden" name="reasonForResultChangesHistory" id="reasonForResultChangesHistory" value="<?php echo $vlQueryInfo[0]['reason_for_vl_result_changes']; ?>" />
-            <input type="hidden" name="oldStatus" value="<?php echo $vlQueryInfo[0]['result_status']; ?>" />            
+            <input type="hidden" name="oldStatus" value="<?php echo $vlQueryInfo[0]['result_status']; ?>" />
             <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
             <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
           </div>
@@ -816,7 +816,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
       $('.ui-datepicker-calendar').show();
     });
     $('.date').mask('99-aaa-9999');
-    
+
     $('#collectionDate,#receivedDate,#testDate,#failedTestDate').mask('99-aaa-9999 99:99');
 
     $('#collectionDate,#receivedDate,#testDate,#failedTestDate').datetimepicker({

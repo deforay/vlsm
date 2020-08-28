@@ -56,56 +56,34 @@ class Model_Vl
 
         // If it is PNG form
         if ($globalConfig['vl_form'] == 5) {
-            if (empty($provinceId)) {
+            if (empty($provinceId) && !empty($provinceCode)) {
                 $provinceId = $general->getProvinceIDFromCode($provinceCode);
             }
 
-            $remotePrefix = $remotePrefix . "R"; // PNG format has an additional R in prefix
+            // PNG format has an additional R in prefix
+            $remotePrefix = $remotePrefix . "R";
 
-            $svlQuery = 'SELECT ' . $sampleCodeKeyCol . ' FROM vl_request_form as vl WHERE DATE(vl.sample_collection_date) >= "' . $start_date . '" AND DATE(vl.sample_collection_date) <= "' . $end_date . '" AND province_id=' . $provinceId . ' AND ' . $sampleCodeCol . ' IS NOT NULL AND ' . $sampleCodeCol . '!= "" ORDER BY ' . $sampleCodeKeyCol . ' DESC LIMIT 1';
-
-            $svlResult = $this->db->query($svlQuery);
-
-            if (isset($svlResult[0][$sampleCodeKeyCol]) && $svlResult[0][$sampleCodeKeyCol] != '' && $svlResult[0][$sampleCodeKeyCol] != null) {
-                $maxId = $svlResult[0][$sampleCodeKeyCol] + 1;
-                $strparam = strlen($maxId);
-                $zeros = (isset($globalConfig['sample_code']) && trim($globalConfig['sample_code']) == 'auto2') ? substr("0000", $strparam) : substr("000", $strparam);
-                $maxId = $zeros . $maxId;
-            } else {
-                $maxId = (isset($globalConfig['sample_code']) && trim($globalConfig['sample_code']) == 'auto2') ? '0001' : '001';
-            }
-            // $sCode = $remotePrefix . "R" . date('y') . $provinceCode . "VL" . $maxId;
-            // $j = 1;
-            // do {
-            //     $sQuery = "SELECT sample_code FROM vl_request_form as vl where sample_code='" . $sCode . "'";
-            //     $svlResult = $this->db->query($sQuery);
-            //     if (!$svlResult) {
-            //         $maxId;
-            //         break;
-            //     } else {
-            //         $x = $maxId + 1;
-            //         $strparam = strlen($x);
-            //         $zeros = (isset($globalConfig['sample_code']) && trim($globalConfig['sample_code']) == 'auto2') ? substr("0000", $strparam) : substr("000", $strparam);
-            //         $maxId = $zeros . $x;
-            //         $sCode = $remotePrefix . date('y') . $provinceCode . "VL" . $maxId;
-            //     }
-            // } while ($sCode);
-        } else {
-
-            $svlQuery = "SELECT $sampleCodeKeyCol FROM " . $this->table . " AS vl WHERE DATE(vl.sample_collection_date) >= '" . $start_date . "' AND DATE(vl.sample_collection_date) <= '" . $end_date . "' AND $sampleCodeCol !='' ORDER BY $sampleCodeKeyCol DESC LIMIT 1";
-
-            $svlResult = $this->db->query($svlQuery);
-            if (isset($svlResult[0][$sampleCodeKeyCol]) && $svlResult[0][$sampleCodeKeyCol] != '' && $svlResult[0][$sampleCodeKeyCol] != null) {
-                $maxId = $svlResult[0][$sampleCodeKeyCol] + 1;
-                $strparam = strlen($maxId);
-                $zeros = (isset($globalConfig['sample_code']) && trim($globalConfig['sample_code']) == 'auto2') ? substr("0000", $strparam) : substr("000", $strparam);
-                $maxId = $zeros . $maxId;
-            } else {
-                $maxId = (isset($globalConfig['sample_code']) && trim($globalConfig['sample_code']) == 'auto2') ? '0001' : '001';
+            if (!empty($provinceId)) {
+                $this->db->where('province_id', $provinceId);
             }
         }
 
+        $this->db->where('DATE(sample_collection_date)', array($start_date, $end_date), 'BETWEEN');
+        $this->db->where($sampleCodeCol, NULL, 'IS NOT');
+        $this->db->orderBy($sampleCodeKeyCol, "DESC");
+        $svlResult = $this->db->getOne($this->table, array($sampleCodeKeyCol));
 
+        //var_dump($svlResult);die;
+
+
+        if (isset($svlResult[$sampleCodeKeyCol]) && $svlResult[$sampleCodeKeyCol] != '' && $svlResult[$sampleCodeKeyCol] != null) {
+            $maxId = $svlResult[$sampleCodeKeyCol] + 1;
+            $strparam = strlen($maxId);
+            $zeros = (isset($globalConfig['sample_code']) && trim($globalConfig['sample_code']) == 'auto2') ? substr("0000", $strparam) : substr("000", $strparam);
+            $maxId = $zeros . $maxId;
+        } else {
+            $maxId = (isset($globalConfig['sample_code']) && trim($globalConfig['sample_code']) == 'auto2') ? '0001' : '001';
+        }
 
         //echo $svlQuery;die;
 

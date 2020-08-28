@@ -10,7 +10,7 @@ if ($sarr['user_type'] == 'remoteuser') {
   $sampleCodeKey = 'remote_sample_code_key';
   $sampleCode = 'remote_sample_code';
   //check user exist in user_facility_map table
-  $chkUserFcMapQry = "Select user_id from vl_user_facility_map where user_id='" . $_SESSION['userId'] . "'";
+  $chkUserFcMapQry = "SELECT user_id FROM vl_user_facility_map where user_id='" . $_SESSION['userId'] . "'";
   $chkUserFcMapResult = $db->query($chkUserFcMapQry);
   if ($chkUserFcMapResult) {
     $pdQuery = "SELECT * FROM province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='" . $_SESSION['userId'] . "'";
@@ -63,7 +63,7 @@ foreach ($fResult as $fDetails) {
                   <div class="col-xs-3 col-md-3">
                     <div class="form-group">
                       <label for="sampleCode">Laboratory ID <span class="mandatory">*</span></label>
-                      <input type="text" class="form-control sampleCode isRequired" id="sampleCode" name="sampleCode" placeholder="Enter Laboratory ID" title="Please enter laboratory ID" style="width:100%;"  onblur="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode; ?>',this.id,null,'This sample code already exists. Please try another Sample Code.',null)" />
+                      <input type="text" class="form-control sampleCode isRequired" id="sampleCode" name="sampleCode" placeholder="Enter Laboratory ID" title="Please enter laboratory ID" style="width:100%;" onblur="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode; ?>',this.id,null,'This sample code already exists. Please try another Sample Code.',null)" />
                     </div>
                   </div>
 
@@ -80,44 +80,44 @@ foreach ($fResult as $fDetails) {
                         </select>
                       </div>
                     </div>
-                
+
                   <?php } ?>
 
-              </div>
-              
-              <br />
-              <table class="table" style="width:100%">
-                <tr>
-                  <td colspan="6" style="font-size: 18px; font-weight: bold;">Section 1: Clinic Information</td>
-                </tr>
-                <tr>
-                  <td style="width:16%">
-                    <label for="province">Province <span class="mandatory">*</span></label>
-                  </td>
-                  <td style="width:20%">
-                    <select class="form-control isRequired" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);sampleCodeGeneration();">
-                      <?php echo $province; ?>
-                    </select>
-                  </td>
-                  <td style="width:10%">
-                    <label for="district">District <span class="mandatory">*</span></label>
-                  </td>
-                  <td style="width:20%">
-                    <select class="form-control isRequired" name="district" id="district" title="Please choose district" onchange="getfacilityDistrictwise(this);" style="width:100%;">
-                      <option value=""> -- Select -- </option>
-                    </select>
-                  </td>
-                  <td style="width:10%">
-                    <label for="clinicName">Clinic/Ward <span class="mandatory">*</span></label>
-                  </td>
-                  <td style="width:20%">
-                    <select class="form-control isRequired" id="clinicName" name="clinicName" title="Please select clinic/ward" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
-                      <?php echo $facility; ?>
-                    </select>
-                  </td>
-                </tr>
-                <tr>
-                  <!--<td style="width:10%">
+                </div>
+
+                <br />
+                <table class="table" style="width:100%">
+                  <tr>
+                    <td colspan="6" style="font-size: 18px; font-weight: bold;">Section 1: Clinic Information</td>
+                  </tr>
+                  <tr>
+                    <td style="width:16%">
+                      <label for="province">Province <span class="mandatory">*</span></label>
+                    </td>
+                    <td style="width:20%">
+                      <select class="form-control isRequired" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);sampleCodeGeneration();">
+                        <?php echo $province; ?>
+                      </select>
+                    </td>
+                    <td style="width:10%">
+                      <label for="district">District <span class="mandatory">*</span></label>
+                    </td>
+                    <td style="width:20%">
+                      <select class="form-control isRequired" name="district" id="district" title="Please choose district" onchange="getfacilityDistrictwise(this);" style="width:100%;">
+                        <option value=""> -- Select -- </option>
+                      </select>
+                    </td>
+                    <td style="width:10%">
+                      <label for="clinicName">Clinic/Ward <span class="mandatory">*</span></label>
+                    </td>
+                    <td style="width:20%">
+                      <select class="form-control isRequired" id="clinicName" name="clinicName" title="Please select clinic/ward" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
+                        <?php echo $facility; ?>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <!--<td style="width:10%">
                         <label for="facility">Clinic/Ward <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:20%">
@@ -128,448 +128,448 @@ foreach ($fResult as $fDetails) {
 			    <option value="anc">ANC</option>
 			  </select>
                         </td>-->
-                  <td style="width:16%">
-                    <label for="officerName">Requesting Medical Officer <span class="mandatory">*</span></label>
-                  </td>
-                  <td style="width:20%">
-                    <input type="text" class="form-control isRequired " name="officerName" id="officerName" placeholder="Officer Name" title="Enter Medical Officer Name" style="width:100%;">
-                  </td>
-                  <td style="width:10%">
-                    <label for="telephone">Telephone </label>
-                  </td>
-                  <td style="width:20%">
-                    <input type="text" class="form-control checkNum" name="telephone" id="telephone" placeholder="Telephone" title="Enter Telephone" style="width:100%;">
-                  </td>
-                  <td style="width:10%">
-                    <label for="clinicDate">Date </label>
-                  </td>
-                  <td style="width:20%">
-                    <input type="text" class="form-control date" name="clinicDate" id="clinicDate" placeholder="Date" title="Enter Date" style="width:100%;">
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="6" style="font-size: 18px; font-weight: bold;">Section 2: Patient Information</td>
-                </tr>
-                <tr>
-                  <td>
-                    <label for="patientARTNo">Patient ID <span class="mandatory">*</span></label></td>
-                  <td>
-                    <input type="text" class="form-control isRequired" placeholder="Enter Patient ID" name="patientARTNo" id="patientARTNo" title="Please enter Patient ID" style="width:100%;" />
-                  </td>
-                  
-                  <td> 
-                    <label for="gender">Gender &nbsp;&nbsp;</label>
-                          </td>
-                  <td colspan="1">
-                  <select class="form-control" name="gender" id="gender" title="Please choose patient gender" style="width:100%;" onchange="">
-                      <option value="">-- Select --</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                      <option value="not_recorded">Not Reported</option>
-                    </select>
-                  </td>
-                </tr>
+                    <td style="width:16%">
+                      <label for="officerName">Requesting Medical Officer <span class="mandatory">*</span></label>
+                    </td>
+                    <td style="width:20%">
+                      <input type="text" class="form-control isRequired " name="officerName" id="officerName" placeholder="Officer Name" title="Enter Medical Officer Name" style="width:100%;">
+                    </td>
+                    <td style="width:10%">
+                      <label for="telephone">Telephone </label>
+                    </td>
+                    <td style="width:20%">
+                      <input type="text" class="form-control checkNum" name="telephone" id="telephone" placeholder="Telephone" title="Enter Telephone" style="width:100%;">
+                    </td>
+                    <td style="width:10%">
+                      <label for="clinicDate">Date </label>
+                    </td>
+                    <td style="width:20%">
+                      <input type="text" class="form-control date" name="clinicDate" id="clinicDate" placeholder="Date" title="Enter Date" style="width:100%;">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="6" style="font-size: 18px; font-weight: bold;">Section 2: Patient Information</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <label for="patientARTNo">Patient ID <span class="mandatory">*</span></label></td>
+                    <td>
+                      <input type="text" class="form-control isRequired" placeholder="Enter Patient ID" name="patientARTNo" id="patientARTNo" title="Please enter Patient ID" style="width:100%;" />
+                    </td>
 
-                <tr>
-                  <td>
-                    <label for="patientPregnant">Patient Pregnant ?</label>
-                  </td>
-                  <td>
-                    <select class="form-control" name="patientPregnant" id="patientPregnant" title="Please choose if patient is pregnant" style="width:100%;" onchange="">
-                      <option value="">-- Select --</option>
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option>
-                      <option value="not_reported">Not Reported</option>
-                    </select>
-                  </td>
-                  <td >
-                    <label for="breastfeeding">Patient Breastfeeding ?</label>
-                  </td>
-                  <td>
-                    <select class="form-control" name="breastfeeding" id="breastfeeding" title="Please choose if patient is breastfeeding" onchange="" style="width:100%;">
-                      <option value=""> -- Select -- </option>
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option> 
-                      <option value="not_reported">Not Reported</option>                     
-                    </select>
-                  </td>
-                  <td></td>
-                  <td></td>
-                </tr>                
-                <tr>
-                  <td><label for="dob">Date Of Birth</label></td>
-                  <td>
-                    <input type="text" class="form-control date" placeholder="DOB" name="dob" id="dob" title="Please choose DOB" onchange="getAge();" style="width:100%;" />
-                  </td>
-                  <td><label for="ageInYears">If DOB unknown, Age in Years</label></td>
-                  <td>
-                    <input type="text" name="ageInYears" id="ageInYears" class="form-control checkNum" maxlength="2" placeholder="Age in Year" title="Enter age in years" />
-                  </td>
-                  <td><label for="ageInMonths">If Age < 1, Age in Months </label> </td> <td>
-                        <input type="text" name="ageInMonths" id="ageInMonths" class="form-control checkNum" maxlength="2" placeholder="Age in Month" title="Enter age in months" />
-                  </td>
+                    <td>
+                      <label for="gender">Gender &nbsp;&nbsp;</label>
+                    </td>
+                    <td colspan="1">
+                      <select class="form-control" name="gender" id="gender" title="Please choose patient gender" style="width:100%;" onchange="">
+                        <option value="">-- Select --</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="not_recorded">Not Reported</option>
+                      </select>
+                    </td>
+                  </tr>
 
-                </tr>
-                <tr>
-                  
-                </tr>
-                <tr>
-                  <td colspan="6" style="font-size: 18px; font-weight: bold;">Section 3: ART Information</td>
-                </tr>
-                <tr>
-                  <td style="width:8%">
-                    <label for="artLine">Line of Treatment </label>
-                  </td>
-                  <td style="width:10%">
-                    <label class="radio-inline">
-                      <input type="radio" class="" id="firstLine" name="artLine" value="1" title="Please check ART Line"> First Line
-                    </label><br>
-                    <label class="radio-inline">
-                      <input type="radio" class="" id="secondLine" name="artLine" value="2" title="Please check ART Line"> Second Line
-                    </label>
-                  </td>
-                  <td style="width:8%">
-                    <label for="cdCells">CD4(cells/ul) </label>
-                  </td>
-                  <td style="width:10%">
-                    <input type="text" class="form-control" name="cdCells" id="cdCells" placeholder="CD4 Cells" title="CD4 Cells" style="width:100%;">
-                  </td>
-                  <td style="width:8%">
-                    <label for="cdDate">CD4 Date </label>
-                  </td>
-                  <td>
-                    <input type="text" class="form-control date" name="cdDate" id="cdDate" placeholder="CD4 Date" title="Enter CD4 Date" style="width:100%;">
-                  </td>
-                </tr>
-                <tr>
-                  <td style="width:8%">
-                    <label for="currentRegimen">Current Regimen </label>
-                  </td>
-                  <td style="width:10%">
-                    <select class="form-control" id="currentRegimen" name="currentRegimen" title="Please choose ART Regimen" onchange="checkValue();" style="width: 100%;">
-                      <option value=""> -- Select -- </option>
-                      <?php
-                      foreach ($aResult as $parentRow) {
+                  <tr>
+                    <td>
+                      <label for="patientPregnant">Patient Pregnant ?</label>
+                    </td>
+                    <td>
+                      <select class="form-control" name="patientPregnant" id="patientPregnant" title="Please choose if patient is pregnant" style="width:100%;" onchange="">
+                        <option value="">-- Select --</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                        <option value="not_reported">Not Reported</option>
+                      </select>
+                    </td>
+                    <td>
+                      <label for="breastfeeding">Patient Breastfeeding ?</label>
+                    </td>
+                    <td>
+                      <select class="form-control" name="breastfeeding" id="breastfeeding" title="Please choose if patient is breastfeeding" onchange="" style="width:100%;">
+                        <option value=""> -- Select -- </option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                        <option value="not_reported">Not Reported</option>
+                      </select>
+                    </td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td><label for="dob">Date Of Birth</label></td>
+                    <td>
+                      <input type="text" class="form-control date" placeholder="DOB" name="dob" id="dob" title="Please choose DOB" onchange="getAge();" style="width:100%;" />
+                    </td>
+                    <td><label for="ageInYears">If DOB unknown, Age in Years</label></td>
+                    <td>
+                      <input type="text" name="ageInYears" id="ageInYears" class="form-control checkNum" maxlength="2" placeholder="Age in Year" title="Enter age in years" />
+                    </td>
+                    <td><label for="ageInMonths">If Age < 1, Age in Months </label> </td> <td>
+                          <input type="text" name="ageInMonths" id="ageInMonths" class="form-control checkNum" maxlength="2" placeholder="Age in Month" title="Enter age in months" />
+                    </td>
+
+                  </tr>
+                  <tr>
+
+                  </tr>
+                  <tr>
+                    <td colspan="6" style="font-size: 18px; font-weight: bold;">Section 3: ART Information</td>
+                  </tr>
+                  <tr>
+                    <td style="width:8%">
+                      <label for="artLine">Line of Treatment </label>
+                    </td>
+                    <td style="width:10%">
+                      <label class="radio-inline">
+                        <input type="radio" class="" id="firstLine" name="artLine" value="1" title="Please check ART Line"> First Line
+                      </label><br>
+                      <label class="radio-inline">
+                        <input type="radio" class="" id="secondLine" name="artLine" value="2" title="Please check ART Line"> Second Line
+                      </label>
+                    </td>
+                    <td style="width:8%">
+                      <label for="cdCells">CD4(cells/ul) </label>
+                    </td>
+                    <td style="width:10%">
+                      <input type="text" class="form-control" name="cdCells" id="cdCells" placeholder="CD4 Cells" title="CD4 Cells" style="width:100%;">
+                    </td>
+                    <td style="width:8%">
+                      <label for="cdDate">CD4 Date </label>
+                    </td>
+                    <td>
+                      <input type="text" class="form-control date" name="cdDate" id="cdDate" placeholder="CD4 Date" title="Enter CD4 Date" style="width:100%;">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="width:8%">
+                      <label for="currentRegimen">Current Regimen </label>
+                    </td>
+                    <td style="width:10%">
+                      <select class="form-control" id="currentRegimen" name="currentRegimen" title="Please choose ART Regimen" onchange="checkValue();" style="width: 100%;">
+                        <option value=""> -- Select -- </option>
+                        <?php
+                        foreach ($aResult as $parentRow) {
                         ?>
-                        <option value="<?php echo $parentRow['art_code']; ?>"><?php echo $parentRow['art_code']; ?></option>
-                      <?php
-                      }
-                      ?>
-                      <option value="other">Other</option>
-                    </select>
-                    <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="New Art Regimen" title="Please enter new ART regimen" style="display:none;width:100%;margin-top:1vh;">
-                  </td>
-                  <td>
-                    <label for="regStartDate">Current Regimen Start Date</label>
-                  </td>
-                  <td>
-                    <input type="text" class="form-control date" name="regStartDate" id="regStartDate" placeholder="Start Date" title="Enter Start Date" style="width:100%;">
-                  </td>
-                  <td colspan="2" class="clinicalStage"><label for="breastfeeding">WHO Clinical Stage</label>&nbsp;&nbsp;
-                    <label class="radio-inline">
-                      <input type="radio" id="clinicalOne" name="clinicalStage" value="one" title="WHO Clinical Statge">I
-                    </label>
-                    <label class="radio-inline">
-                      <input type="radio" id="clinicalTwo" name="clinicalStage" value="two" title="WHO Clinical Statge">II
-                    </label>
-                    <label class="radio-inline">
-                      <input type="radio" id="clinicalThree" name="clinicalStage" value="three" title="WHO Clinical Statge">III
-                    </label>
-                    <label class="radio-inline">
-                      <input type="radio" id="clinicalFour" name="clinicalStage" value="four" title="WHO Clinical Statge">IV
-                    </label>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="6" style="font-size: 18px; font-weight: bold;">Section 4: Reason For Testing</td>
-                </tr>
-                <tr>
-                  <td colspan="3" class="routine">
-                    <label for="routine">Routine</label><br />
-                    <label class="radio-inline">
-                      &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="routineOne" name="reasonForTest" value="First VL, routine monitoring (On ART for at least 6 months)" title="Please Check Routine">First VL, routine monitoring (On ART for at least 6 months)
-                    </label>
-                    <label class="radio-inline">
-                      <input type="radio" id="routineTwo" name="reasonForTest" value="Annual routine follow-up VL (Previous VL < 1000 cp/mL)" title="Please Check Routine">Annual routine follow-up VL (Previous VL < 1000 cp/mL) </label> </td> <td colspan="3" class="suspect">
-                        <label for="suspect">Suspected Treatment Failure</label><br />
-                        <label class="radio-inline">
-                          <input type="radio" id="suspectOne" name="reasonForTest" value="Suspected TF" title="Please Suspected TF">Suspected TF
-                        </label>
-                        <label class="radio-inline">
-                          <input type="radio" id="suspectTwo" name="reasonForTest" value="Follow-up VL after EAC (Previous VL >= 1000 cp/mL)" title="Please Suspected TF">Follow-up VL after EAC (Previous VL >= 1000 cp/mL)
-                        </label>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="3">
-                    <label for="defaulter">Defaulter/ LTFU/ Poor Adherer</label><br />
-                    <label class="radio-inline">
-                      <input type="radio" id="defaulter" name="reasonForTest" value="VL (after 3 months EAC)" title="Check Defaulter/ LTFU/ Poor Adherer">VL (after 3 months EAC)
-                    </label>&nbsp;&nbsp;
-                  </td>
-                  <td colspan="3">
-                    <label for="other">Other</label><br />
-                    <label class="radio-inline">
-                      <input type="radio" id="other" name="reasonForTest" value="Re-collection requested by lab" title="Please check Other">Re-collection requested by lab
-                    </label>
-                    <label for="reason">&nbsp;&nbsp;&nbsp;&nbsp;Reason</label>
-                    <label class="radio-inline">
-                      <input type="text" class="form-control" id="reason" name="reason" placeholder="Enter Reason" title="Enter Reason" style="width:100%;" readonly />
-                    </label>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="2" style="font-size: 18px; font-weight: bold;">Section 5: Specimen information </td>
-                  <td colspan="4" style="font-size: 18px; font-weight: bold;"> Type of sample to transport</td>
-                </tr>
-                <tr>
-                  <td>
-                    <label for="collectionDate">Collection date <span class="mandatory">*</span></label>
-                  </td>
-                  <td>
-                    <label class="radio-inline">
-                      <input type="text" class="form-control isRequired" name="collectionDate" id="collectionDate" placeholder="Sample Collection Date" title="Please enter sample collection date" onchange="sampleCodeGeneration();" style="width:100%;">
-                    </label>
-                  </td>
-                  <td colspan="4" class="typeOfSample">
-                    <label class="radio-inline">
-                      <input type="radio" id="dbs" name="typeOfSample" value="DBS" title="Check DBS">DBS
-                    </label>
-                    <label class="radio-inline" style="width:46%;">
-                      <input type="radio" id="wholeBlood" name="typeOfSample" value="Whole blood" title="Check Whole blood" style="margin-top:10px;">Whole Blood
-                      <input type="text" name="wholeBloodOne" id="wholeBloodOne" class="form-control" style="width: 20%;" />&nbsp; x &nbsp;<input type="text" name="wholeBloodTwo" id="wholeBloodTwo" class="form-control" style="width: 20%;" />&nbsp;vial(s)
-                    </label>
-                    <label class="radio-inline" style="width:42%;">
-                      <input type="radio" id="plasma" name="typeOfSample" value="Plasma" title="Check Plasma" style="margin-top:10px;">Plasma
-                      <input type="text" name="plasmaOne" id="plasmaOne" class="form-control" style="width: 20%;" />&nbsp;ml x &nbsp;<input type="text" name="plasmaTwo" id="plasmaTwo" class="form-control" style="width: 20%;" />&nbsp;vial(s)
-                    </label>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <label for="collectedBy">Specimen Collected by</label>
-                  </td>
-                  <td>
-                    <label class="radio-inline">
-                      <input type="text" class="form-control" name="collectedBy" id="collectedBy" placeholder="Collected By" title="Enter Collected By" style="width:100%;">
-                    </label>
-                  </td>
-                  <td colspan="4" class="processTime"><label for="processTime">For onsite plasma <br /> processing only</label>
-                    <label class="radio-inline" style="width: 15%;">
-                      <input type="text" name="processTime" id="processTime" class="form-control" style="width: 100%;" placeholder="Time" title="Processing Time" />
-                    </label>&nbsp;
-                    <label for="processTech">Processing Tech</label>
-                    <label class="radio-inline">
-                      <input type="text" name="processTech" id="processTech" class="form-control" style="width: 100%;" placeholder="Processing Tech" title="Processing Tech" />
-                    </label>
-                  </td>
-                </tr>
-                <?php if ($sarr['user_type'] != 'remoteuser') { ?>
-                  <tr>
-                    <td colspan="6" style="font-size: 18px; font-weight: bold;">CPHL Use Only </td>
-                  </tr>
-                  <tr>
-                    <td><label for="sampleQuality">Sample Quality</label></td>
+                          <option value="<?php echo $parentRow['art_code']; ?>"><?php echo $parentRow['art_code']; ?></option>
+                        <?php
+                        }
+                        ?>
+                        <option value="other">Other</option>
+                      </select>
+                      <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="New Art Regimen" title="Please enter new ART regimen" style="display:none;width:100%;margin-top:1vh;">
+                    </td>
                     <td>
+                      <label for="regStartDate">Current Regimen Start Date</label>
+                    </td>
+                    <td>
+                      <input type="text" class="form-control date" name="regStartDate" id="regStartDate" placeholder="Start Date" title="Enter Start Date" style="width:100%;">
+                    </td>
+                    <td colspan="2" class="clinicalStage"><label for="breastfeeding">WHO Clinical Stage</label>&nbsp;&nbsp;
                       <label class="radio-inline">
-                        <input type="radio" id="sampleQtyAccept" name="sampleQuality" value="no" title="Check Sample Quality">Accept
+                        <input type="radio" id="clinicalOne" name="clinicalStage" value="one" title="WHO Clinical Statge">I
                       </label>
                       <label class="radio-inline">
-                        <input type="radio" id="sampleQtyReject" name="sampleQuality" value="yes" title="Check Sample Quality">Reject
+                        <input type="radio" id="clinicalTwo" name="clinicalStage" value="two" title="WHO Clinical Statge">II
+                      </label>
+                      <label class="radio-inline">
+                        <input type="radio" id="clinicalThree" name="clinicalStage" value="three" title="WHO Clinical Statge">III
+                      </label>
+                      <label class="radio-inline">
+                        <input type="radio" id="clinicalFour" name="clinicalStage" value="four" title="WHO Clinical Statge">IV
                       </label>
                     </td>
-                    <td class="rejectionReason" style="display:none;"><label for="rejectionReason">Reason <span class="mandatory">*</span></label></td>
-                    <td class="rejectionReason" style="display:none;">
-                      <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason" style="width: 100%">
-                        <option value="">-- Select --</option>
-                        <?php
+                  </tr>
+                  <tr>
+                    <td colspan="6" style="font-size: 18px; font-weight: bold;">Section 4: Reason For Testing</td>
+                  </tr>
+                  <tr>
+                    <td colspan="3" class="routine">
+                      <label for="routine">Routine</label><br />
+                      <label class="radio-inline">
+                        &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="routineOne" name="reasonForTest" value="First VL, routine monitoring (On ART for at least 6 months)" title="Please Check Routine">First VL, routine monitoring (On ART for at least 6 months)
+                      </label>
+                      <label class="radio-inline">
+                        <input type="radio" id="routineTwo" name="reasonForTest" value="Annual routine follow-up VL (Previous VL < 1000 cp/mL)" title="Please Check Routine">Annual routine follow-up VL (Previous VL < 1000 cp/mL) </label> </td> <td colspan="3" class="suspect">
+                          <label for="suspect">Suspected Treatment Failure</label><br />
+                          <label class="radio-inline">
+                            <input type="radio" id="suspectOne" name="reasonForTest" value="Suspected TF" title="Please Suspected TF">Suspected TF
+                          </label>
+                          <label class="radio-inline">
+                            <input type="radio" id="suspectTwo" name="reasonForTest" value="Follow-up VL after EAC (Previous VL >= 1000 cp/mL)" title="Please Suspected TF">Follow-up VL after EAC (Previous VL >= 1000 cp/mL)
+                          </label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="3">
+                      <label for="defaulter">Defaulter/ LTFU/ Poor Adherer</label><br />
+                      <label class="radio-inline">
+                        <input type="radio" id="defaulter" name="reasonForTest" value="VL (after 3 months EAC)" title="Check Defaulter/ LTFU/ Poor Adherer">VL (after 3 months EAC)
+                      </label>&nbsp;&nbsp;
+                    </td>
+                    <td colspan="3">
+                      <label for="other">Other</label><br />
+                      <label class="radio-inline">
+                        <input type="radio" id="other" name="reasonForTest" value="Re-collection requested by lab" title="Please check Other">Re-collection requested by lab
+                      </label>
+                      <label for="reason">&nbsp;&nbsp;&nbsp;&nbsp;Reason</label>
+                      <label class="radio-inline">
+                        <input type="text" class="form-control" id="reason" name="reason" placeholder="Enter Reason" title="Enter Reason" style="width:100%;" readonly />
+                      </label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" style="font-size: 18px; font-weight: bold;">Section 5: Specimen information </td>
+                    <td colspan="4" style="font-size: 18px; font-weight: bold;"> Type of sample to transport</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <label for="collectionDate">Collection Date <span class="mandatory">*</span></label>
+                    </td>
+                    <td>
+                      <label class="radio-inline">
+                        <input type="text" class="form-control isRequired" name="collectionDate" id="collectionDate" placeholder="Sample Collection Date" title="Please enter the sample collection date" onchange="sampleCodeGeneration();" style="width:100%;">
+                      </label>
+                    </td>
+                    <td colspan="4" class="typeOfSample">
+                      <label class="radio-inline">
+                        <input type="radio" id="dbs" name="typeOfSample" value="DBS" title="Check DBS">DBS
+                      </label>
+                      <label class="radio-inline" style="width:46%;">
+                        <input type="radio" id="wholeBlood" name="typeOfSample" value="Whole blood" title="Check Whole blood" style="margin-top:10px;">Whole Blood
+                        <input type="text" name="wholeBloodOne" id="wholeBloodOne" class="form-control" style="width: 20%;" />&nbsp; x &nbsp;<input type="text" name="wholeBloodTwo" id="wholeBloodTwo" class="form-control" style="width: 20%;" />&nbsp;vial(s)
+                      </label>
+                      <label class="radio-inline" style="width:42%;">
+                        <input type="radio" id="plasma" name="typeOfSample" value="Plasma" title="Check Plasma" style="margin-top:10px;">Plasma
+                        <input type="text" name="plasmaOne" id="plasmaOne" class="form-control" style="width: 20%;" />&nbsp;ml x &nbsp;<input type="text" name="plasmaTwo" id="plasmaTwo" class="form-control" style="width: 20%;" />&nbsp;vial(s)
+                      </label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <label for="collectedBy">Specimen Collected by</label>
+                    </td>
+                    <td>
+                      <label class="radio-inline">
+                        <input type="text" class="form-control" name="collectedBy" id="collectedBy" placeholder="Collected By" title="Enter Collected By" style="width:100%;">
+                      </label>
+                    </td>
+                    <td colspan="4" class="processTime"><label for="processTime">For onsite plasma <br /> processing only</label>
+                      <label class="radio-inline" style="width: 15%;">
+                        <input type="text" name="processTime" id="processTime" class="form-control" style="width: 100%;" placeholder="Time" title="Processing Time" />
+                      </label>&nbsp;
+                      <label for="processTech">Processing Tech</label>
+                      <label class="radio-inline">
+                        <input type="text" name="processTech" id="processTech" class="form-control" style="width: 100%;" placeholder="Processing Tech" title="Processing Tech" />
+                      </label>
+                    </td>
+                  </tr>
+                  <?php if ($sarr['user_type'] != 'remoteuser') { ?>
+                    <tr>
+                      <td colspan="6" style="font-size: 18px; font-weight: bold;">CPHL Use Only </td>
+                    </tr>
+                    <tr>
+                      <td><label for="sampleQuality">Sample Quality</label></td>
+                      <td>
+                        <label class="radio-inline">
+                          <input type="radio" id="sampleQtyAccept" name="sampleQuality" value="no" title="Check Sample Quality">Accept
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio" id="sampleQtyReject" name="sampleQuality" value="yes" title="Check Sample Quality">Reject
+                        </label>
+                      </td>
+                      <td class="rejectionReason" style="display:none;"><label for="rejectionReason">Reason <span class="mandatory">*</span></label></td>
+                      <td class="rejectionReason" style="display:none;">
+                        <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason" style="width: 100%">
+                          <option value="">-- Select --</option>
+                          <?php
                           foreach ($rejectionResult as $reject) {
-                            ?>
-                          <option value="<?php echo $reject['rejection_reason_id']; ?>"><?php echo ucwords($reject['rejection_reason_name']); ?></option>
-                        <?php
+                          ?>
+                            <option value="<?php echo $reject['rejection_reason_id']; ?>"><?php echo ucwords($reject['rejection_reason_name']); ?></option>
+                          <?php
                           }
                           ?>
-                      </select>
-                      </label>
-                    </td>
-                    <td class="laboratoryId"><label for="laboratoryId">Laboratory Name</label></td>
-                    <td>
-                      <select name="laboratoryId" id="laboratoryId" class="form-control" title="Please choose lab name" style="width: 100%;">
-                        <option value=""> -- Select -- </option>
-                        <?php
+                        </select>
+                        </label>
+                      </td>
+                      <td class="laboratoryId"><label for="laboratoryId">Laboratory Name</label></td>
+                      <td>
+                        <select name="laboratoryId" id="laboratoryId" class="form-control" title="Please choose lab name" style="width: 100%;">
+                          <option value=""> -- Select -- </option>
+                          <?php
                           foreach ($lResult as $labName) {
-                            ?>
-                          <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
-                        <?php
+                          ?>
+                            <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
+                          <?php
                           }
                           ?>
-                      </select>
-                    </td>
-                    <td class="reasonequ"></td>
-                    <td class="reasonequ"></td>
-                  </tr>
-                  <tr>
-                    <td class="sampleType"><label for="sampleType">Sample Type Received</label></td>
-                    <td>
-                      <select name="sampleType" id="sampleType" class="form-control" title="Please choose Specimen type" style="width: 100%">
-                        <option value=""> -- Select -- </option>
-                        <?php
+                        </select>
+                      </td>
+                      <td class="reasonequ"></td>
+                      <td class="reasonequ"></td>
+                    </tr>
+                    <tr>
+                      <td class="sampleType"><label for="sampleType">Sample Type Received</label></td>
+                      <td>
+                        <select name="sampleType" id="sampleType" class="form-control" title="Please choose Specimen type" style="width: 100%">
+                          <option value=""> -- Select -- </option>
+                          <?php
                           foreach ($sResult as $name) {
-                            ?>
-                          <option value="<?php echo $name['sample_id']; ?>"><?php echo ucwords($name['sample_name']); ?></option>
-                        <?php
+                          ?>
+                            <option value="<?php echo $name['sample_id']; ?>"><?php echo ucwords($name['sample_name']); ?></option>
+                          <?php
                           }
                           ?>
-                      </select>
-                    </td>
-                    <td class="receivedDate"><label for="receivedDate">Date Received</label></td>
-                    <td>
-                      <input type="text" class="form-control" name="receivedDate" id="receivedDate" placeholder="Received Date" title="Enter Received Date" style="width:100%;">
-                    </td>
-                    <td class="techName"><label for="techName">Lab Tech. Name</label></td>
-                    <td>
-                      <input type="text" class="form-control" name="techName" id="techName" placeholder="Enter Lab Technician Name" title="Please enter lab technician name" style="width:100%;">
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class=""><label for="testDate">Test date</label></td>
-                    <td>
-                      <input type="text" class="form-control" name="testDate" id="testDate" placeholder="Test Date" title="Enter Testing Date" style="width:100%;">
-                    </td>
-                    <td class=""><label for="testingTech">Testing Platform</label></td>
-                    <td>
-                      <select name="testingTech" id="testingTech" class="form-control" title="Please choose VL Testing Platform" style="width: 100%">
-                        <option value="">-- Select --</option>
-                        <?php foreach ($importResult as $mName) { ?>
-                          <option value="<?php echo $mName['machine_name'] . '##' . $mName['lower_limit'] . '##' . $mName['higher_limit']; ?>"><?php echo $mName['machine_name']; ?></option>
-                        <?php
+                        </select>
+                      </td>
+                      <td class="receivedDate"><label for="receivedDate">Date Received</label></td>
+                      <td>
+                        <input type="text" class="form-control" name="receivedDate" id="receivedDate" placeholder="Received Date" title="Enter Received Date" style="width:100%;">
+                      </td>
+                      <td class="techName"><label for="techName">Lab Tech. Name</label></td>
+                      <td>
+                        <input type="text" class="form-control" name="techName" id="techName" placeholder="Enter Lab Technician Name" title="Please enter lab technician name" style="width:100%;">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class=""><label for="testDate">Test date</label></td>
+                      <td>
+                        <input type="text" class="form-control" name="testDate" id="testDate" placeholder="Test Date" title="Enter Testing Date" style="width:100%;">
+                      </td>
+                      <td class=""><label for="testingTech">Testing Platform</label></td>
+                      <td>
+                        <select name="testingTech" id="testingTech" class="form-control" title="Please choose VL Testing Platform" style="width: 100%">
+                          <option value="">-- Select --</option>
+                          <?php foreach ($importResult as $mName) { ?>
+                            <option value="<?php echo $mName['machine_name'] . '##' . $mName['lower_limit'] . '##' . $mName['higher_limit']; ?>"><?php echo $mName['machine_name']; ?></option>
+                          <?php
                           }
                           ?>
-                      </select>
-                    </td>
-                    <td class="vlResult"><label for="vlResult">VL result</label></td>
-                    <td class="vlResult">
-                      <input type="text" class="form-control" name="cphlvlResult" id="cphlvlResult" placeholder="VL Result" title="Enter VL Result" style="width:100%;">
-                    </td>
-                    <td class="vlresultequ" style="display:none;"></td>
-                    <td class="vlresultequ" style="display:none;"></td>
-                  </tr>
-                  <tr>
-                    <td class=""><label for="batchQuality">Batch quality</label></td>
-                    <td>
-                      <label class="radio-inline">
-                        <input type="radio" id="passed" name="batchQuality" value="passed" title="Batch Quality">Passed
-                      </label>
-                      <label class="radio-inline">
-                        <input type="radio" id="failed" name="batchQuality" value="failed" title="Batch Quality">Failed
-                      </label>
-                    </td>
-                    <td class=""><label for="testQuality">Sample test quality</label></td>
-                    <td>
-                      <label class="radio-inline">
-                        <input type="radio" id="passed" name="testQuality" value="passed" title="Test Quality">Passed
-                      </label>
-                      <label class="radio-inline">
-                        <input type="radio" id="failed" name="testQuality" value="invalid" title="Test Quality">Invalid
-                      </label>
-                    </td>
-                    <td class=""><label for="batchNo">Batch</label></td>
-                    <td>
-                      <select name="batchNo" id="batchNo" class="form-control" title="Please choose batch number" style="width:100%">
-                        <option value="">-- Select --</option>
-                        <?php foreach ($bResult as $bName) { ?>
-                          <option value="<?php echo $bName['batch_id']; ?>"><?php echo $bName['batch_code']; ?></option>
-                        <?php
+                        </select>
+                      </td>
+                      <td class="vlResult"><label for="vlResult">VL result</label></td>
+                      <td class="vlResult">
+                        <input type="text" class="form-control" name="cphlvlResult" id="cphlvlResult" placeholder="VL Result" title="Enter VL Result" style="width:100%;">
+                      </td>
+                      <td class="vlresultequ" style="display:none;"></td>
+                      <td class="vlresultequ" style="display:none;"></td>
+                    </tr>
+                    <tr>
+                      <td class=""><label for="batchQuality">Batch quality</label></td>
+                      <td>
+                        <label class="radio-inline">
+                          <input type="radio" id="passed" name="batchQuality" value="passed" title="Batch Quality">Passed
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio" id="failed" name="batchQuality" value="failed" title="Batch Quality">Failed
+                        </label>
+                      </td>
+                      <td class=""><label for="testQuality">Sample test quality</label></td>
+                      <td>
+                        <label class="radio-inline">
+                          <input type="radio" id="passed" name="testQuality" value="passed" title="Test Quality">Passed
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio" id="failed" name="testQuality" value="invalid" title="Test Quality">Invalid
+                        </label>
+                      </td>
+                      <td class=""><label for="batchNo">Batch</label></td>
+                      <td>
+                        <select name="batchNo" id="batchNo" class="form-control" title="Please choose batch number" style="width:100%">
+                          <option value="">-- Select --</option>
+                          <?php foreach ($bResult as $bName) { ?>
+                            <option value="<?php echo $bName['batch_id']; ?>"><?php echo $bName['batch_code']; ?></option>
+                          <?php
                           }
                           ?>
-                      </select>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th colspan="6" style="font-size: 18px; font-weight: bold;">For failed / invalid runs only</th>
-                  </tr>
-                  <tr>
-                    <td class=""><label for="failedTestDate">Repeat Test date</label></td>
-                    <td>
-                      <input type="text" class="form-control" name="failedTestDate" id="failedTestDate" placeholder="Test Date" title="Enter Testing Date" style="width:100%;">
-                    </td>
-                    <td class=""><label for="failedTestingTech">Testing Platform</label></td>
-                    <td>
-                      <select name="failedTestingTech" id="failedTestingTech" class="form-control" title="Please choose VL Testing Platform" style="width: 100%">
-                        <option value="">-- Select --</option>
-                        <?php foreach ($importResult as $mName) { ?>
-                          <option value="<?php echo $mName['machine_name'] . '##' . $mName['lower_limit'] . '##' . $mName['higher_limit']; ?>"><?php echo $mName['machine_name']; ?></option>
-                        <?php
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th colspan="6" style="font-size: 18px; font-weight: bold;">For failed / invalid runs only</th>
+                    </tr>
+                    <tr>
+                      <td class=""><label for="failedTestDate">Repeat Test date</label></td>
+                      <td>
+                        <input type="text" class="form-control" name="failedTestDate" id="failedTestDate" placeholder="Test Date" title="Enter Testing Date" style="width:100%;">
+                      </td>
+                      <td class=""><label for="failedTestingTech">Testing Platform</label></td>
+                      <td>
+                        <select name="failedTestingTech" id="failedTestingTech" class="form-control" title="Please choose VL Testing Platform" style="width: 100%">
+                          <option value="">-- Select --</option>
+                          <?php foreach ($importResult as $mName) { ?>
+                            <option value="<?php echo $mName['machine_name'] . '##' . $mName['lower_limit'] . '##' . $mName['higher_limit']; ?>"><?php echo $mName['machine_name']; ?></option>
+                          <?php
                           }
                           ?>
-                      </select>
-                    </td>
-                    <td class=""><label for="failedvlResult">VL result</label></td>
-                    <td>
-                      <input type="text" class="form-control" name="failedvlResult" id="failedvlResult" placeholder="VL Result" title="Enter VL Result" style="width:100%;">
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class=""><label for="batchQuality">Batch quality</label></td>
-                    <td>
-                      <label class="radio-inline">
-                        <input type="radio" id="passed" name="failedbatchQuality" value="passed" title="Batch Quality">Passed
-                      </label>
-                      <label class="radio-inline">
-                        <input type="radio" id="failed" name="failedbatchQuality" value="failed" title="Batch Quality">Failed
-                      </label>
-                    </td>
-                    <td class=""><label for="testQuality">Sample test quality</label></td>
-                    <td>
-                      <label class="radio-inline">
-                        <input type="radio" id="passed" name="failedtestQuality" value="passed" title="Test Quality">Passed
-                      </label>
-                      <label class="radio-inline">
-                        <input type="radio" id="failed" name="failedtestQuality" value="invalid" title="Test Quality">Invalid
-                      </label>
-                    </td>
-                    <td class=""><label for="failedbatchNo">Batch</label></td>
-                    <td>
-                      <select name="failedbatchNo" id="failedbatchNo" class="form-control" title="Please choose batch number" style="width: 100%">
-                        <option value="">-- Select --</option>
-                        <?php foreach ($bResult as $bName) { ?>
-                          <option value="<?php echo $bName['batch_id']; ?>"><?php echo $bName['batch_code']; ?></option>
-                        <?php
+                        </select>
+                      </td>
+                      <td class=""><label for="failedvlResult">VL result</label></td>
+                      <td>
+                        <input type="text" class="form-control" name="failedvlResult" id="failedvlResult" placeholder="VL Result" title="Enter VL Result" style="width:100%;">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class=""><label for="batchQuality">Batch quality</label></td>
+                      <td>
+                        <label class="radio-inline">
+                          <input type="radio" id="passed" name="failedbatchQuality" value="passed" title="Batch Quality">Passed
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio" id="failed" name="failedbatchQuality" value="failed" title="Batch Quality">Failed
+                        </label>
+                      </td>
+                      <td class=""><label for="testQuality">Sample test quality</label></td>
+                      <td>
+                        <label class="radio-inline">
+                          <input type="radio" id="passed" name="failedtestQuality" value="passed" title="Test Quality">Passed
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio" id="failed" name="failedtestQuality" value="invalid" title="Test Quality">Invalid
+                        </label>
+                      </td>
+                      <td class=""><label for="failedbatchNo">Batch</label></td>
+                      <td>
+                        <select name="failedbatchNo" id="failedbatchNo" class="form-control" title="Please choose batch number" style="width: 100%">
+                          <option value="">-- Select --</option>
+                          <?php foreach ($bResult as $bName) { ?>
+                            <option value="<?php echo $bName['batch_id']; ?>"><?php echo $bName['batch_code']; ?></option>
+                          <?php
                           }
                           ?>
-                      </select>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th colspan="6" style="font-size: 18px; font-weight: bold;">Final Result</th>
-                  </tr>
-                  <tr>
-                    <td class=""><label for="finalViralResult">Final Viral Load Result(copies/ml)</label></td>
-                    <td>
-                      <input type="text" class="form-control" name="finalViralResult" id="finalViralResult" placeholder="Viral Load Result" title="Enter Viral Result" style="width:100%;">
-                    </td>
-                    <td class=""><label for="testQuality">QC Tech Name</label></td>
-                    <td>
-                      <input type="text" class="form-control" name="qcTechName" id="qcTechName" placeholder="QC Tech Name" title="Enter QC Tech Name" style="width:100%;">
-                    </td>
-                    <td class=""><label for="finalViralResult">Report Date</label></td>
-                    <td>
-                      <input type="text" class="form-control date" name="reportDate" id="reportDate" placeholder="Report Date" title="Enter Report Date" style="width:100%;">
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class=""><label for="finalViralResult">QC Tech Signature</label></td>
-                    <td>
-                      <input type="text" class="form-control" name="qcTechSign" id="qcTechSign" placeholder="QC Tech Signature" title="Enter QC Tech Signature" style="width:100%;">
-                    </td>
-                    <td class=""><label for="testQuality">QC Date</label></td>
-                    <td colspan="5">
-                      <input type="text" class="form-control date" name="qcDate" id="qcDate" placeholder="QC Date" title="Enter QC Date" style="width:40%;">
-                    </td>
-                  </tr>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th colspan="6" style="font-size: 18px; font-weight: bold;">Final Result</th>
+                    </tr>
+                    <tr>
+                      <td class=""><label for="finalViralResult">Final Viral Load Result(copies/ml)</label></td>
+                      <td>
+                        <input type="text" class="form-control" name="finalViralResult" id="finalViralResult" placeholder="Viral Load Result" title="Enter Viral Result" style="width:100%;">
+                      </td>
+                      <td class=""><label for="testQuality">QC Tech Name</label></td>
+                      <td>
+                        <input type="text" class="form-control" name="qcTechName" id="qcTechName" placeholder="QC Tech Name" title="Enter QC Tech Name" style="width:100%;">
+                      </td>
+                      <td class=""><label for="finalViralResult">Report Date</label></td>
+                      <td>
+                        <input type="text" class="form-control date" name="reportDate" id="reportDate" placeholder="Report Date" title="Enter Report Date" style="width:100%;">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class=""><label for="finalViralResult">QC Tech Signature</label></td>
+                      <td>
+                        <input type="text" class="form-control" name="qcTechSign" id="qcTechSign" placeholder="QC Tech Signature" title="Enter QC Tech Signature" style="width:100%;">
+                      </td>
+                      <td class=""><label for="testQuality">QC Date</label></td>
+                      <td colspan="5">
+                        <input type="text" class="form-control date" name="qcDate" id="qcDate" placeholder="QC Date" title="Enter QC Date" style="width:40%;">
+                      </td>
+                    </tr>
 
-                <?php } ?>
-              </table>
+                  <?php } ?>
+                </table>
               </div>
             </div>
           </div>
@@ -797,26 +797,11 @@ foreach ($fResult as $fDetails) {
         },
         function(data) {
           var sCodeKey = JSON.parse(data);
-          <?php if ($arr['sample_code'] == 'auto2') { ?>
-            $("#sampleCode").val('<?php echo $rKey; ?>R' + (new Date().getFullYear() + '').slice(-2) + provinceCode + 'VL' + sCodeKey.maxId);
-            $("#sampleCodeFormat").val('<?php echo $rKey; ?>' + provinceCode + sCodeKey.auto);
-            $("#sampleCodeKey").val(sCodeKey.maxId);
-            $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
-            checkSampleNameValidation('vl_request_form', '<?php echo $sampleCode; ?>', 'sampleCode', null, 'The laboratory ID that you entered already exists. Please try another ID', null);
-          <?php } else if ($arr['sample_code'] == 'auto') { ?>
-            pNameVal = pName.split("##");
-            $("#sampleCode").val('<?php echo $rKey; ?>' + pNameVal[1] + sCodeKey.auto + sCodeKey.maxId);
-            $("#sampleCodeFormat").val('<?php echo $rKey; ?>' + pNameVal[1] + sCodeKey.auto);
-            $("#sampleCodeKey").val(sCodeKey.maxId);
-            $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
-            checkSampleNameValidation('vl_request_form', '<?php echo $sampleCode; ?>', 'sampleCode', null, 'The laboratory ID that you entered already exists. Please try another ID', null);
-          <?php } else { ?>
-            $("#sampleCode").val('<?php echo $rKey . $prefix; ?>' + sCodeKey.mnthYr + sCodeKey.maxId);
-            $("#sampleCodeFormat").val('<?php echo $rKey . $prefix; ?>' + sCodeKey.mnthYr);
-            $("#sampleCodeKey").val(sCodeKey.maxId);
-            $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
-            checkSampleNameValidation('vl_request_form', '<?php echo $sampleCode; ?>', 'sampleCode', null, 'The laboratory ID that you entered already exists. Please try another ID', null)
-          <?php } ?>
+          $("#sampleCode").val(sCodeKey.sampleCode);
+          $("#sampleCodeFormat").val(sCodeKey.sampleCodeFormat);
+          $("#sampleCodeKey").val(sCodeKey.maxId);
+          $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
+          checkSampleNameValidation('vl_request_form', '<?php echo $sampleCode; ?>', 'sampleCode', null, 'The laboratory ID that you entered already exists. Please try another ID', null)
         });
     }
   }

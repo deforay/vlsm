@@ -656,23 +656,11 @@ $sFormat = '';
         },
         function(data) {
           var sCodeKey = JSON.parse(data);
-          <?php if ($arr['sample_code'] == 'auto') { ?>
-            pNameVal = pName.split("##");
-            sCode = sCodeKey.auto;
-            $("#sampleCode").val('<?php echo $rKey; ?>' + pNameVal[1] + sCode + sCodeKey.maxId);
-            $("#sampleCodeInText").html('<?php echo $rKey; ?>' + pNameVal[1] + sCode + sCodeKey.maxId);
-            //$("#sampleCodeValue").html('exemple de code:'+'<?php echo $rKey; ?>'+pNameVal[1]+sCode+sCodeKey.maxId).css('display','block');
-            $("#sampleCodeFormat").val('<?php echo $rKey; ?>' + pNameVal[1] + sCode);
-            $("#sampleCodeKey").val(sCodeKey.maxId);
-            checkSampleNameValidation('vl_request_form', '<?php echo $sampleCode; ?>', 'sampleCode', null, 'The sample number that you entered already exists. Please try another number', null);
-          <?php } else if ($arr['sample_code'] == 'YY' || $arr['sample_code'] == 'MMYY') { ?>
-            $("#sampleCode").val('<?php echo $rKey . $prefix; ?>' + sCodeKey.mnthYr + sCodeKey.maxId);
-            $("#sampleCodeInText").html('<?php echo $rKey . $prefix; ?>' + sCodeKey.mnthYr + sCodeKey.maxId);
-            //$("#sampleCodeValue").html('exemple de code:'+'<?php echo $rKey . $prefix; ?>'+sCodeKey.mnthYr+sCodeKey.maxId).css('display','block');
-            $("#sampleCodeFormat").val('<?php echo $rKey . $prefix; ?>' + sCodeKey.mnthYr);
-            $("#sampleCodeKey").val(sCodeKey.maxId);
-            checkSampleNameValidation('vl_request_form', '<?php echo $sampleCode; ?>', 'sampleCode', null, 'The sample number that you entered already exists. Please try another number', null)
-          <?php } ?>
+          $("#sampleCode").val(sCodeKey.sampleCode);
+          $("#sampleCodeInText").html(sCodeKey.sampleCode);
+          $("#sampleCodeFormat").val(sCodeKey.sampleCodeFormat);
+          $("#sampleCodeKey").val(sCodeKey.maxId);
+          checkSampleNameValidation('vl_request_form', '<?php echo $sampleCode; ?>', 'sampleCode', null, 'This sample number already exists.Try another number', null)
         });
     }
   }
