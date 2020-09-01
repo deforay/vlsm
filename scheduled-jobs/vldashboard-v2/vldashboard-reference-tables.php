@@ -73,7 +73,7 @@ try {
 
 
 
-
+    $currentDate = $general->getDateTime();
 
 
     $filename = 'reference-data-' . $currentDate . '.json';
@@ -94,7 +94,7 @@ try {
     $data = [];
     $data['api-version'] = 'v2';
     $data['referenceFile'] = new CURLFile(TEMP_PATH . DIRECTORY_SEPARATOR . $filename, 'application/json', $filename);
-
+    // echo "<pre>";print_r($data);die;
     $options = [
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_POSTFIELDS => $data,
@@ -104,10 +104,11 @@ try {
 
     $ch = curl_init($apiUrl);
     curl_setopt_array($ch, $options);
-    $response = curl_exec($ch);
+    $result = curl_exec($ch);
     curl_close($ch);
 
-    $response = json_decode($response, true);
+    $response = json_decode($result, true);
+    // echo "<pre>";print_r($response);die;
 } catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());
