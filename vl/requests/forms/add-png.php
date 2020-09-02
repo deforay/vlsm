@@ -63,7 +63,7 @@ foreach ($fResult as $fDetails) {
                   <div class="col-xs-3 col-md-3">
                     <div class="form-group">
                       <label for="sampleCode">Laboratory ID <span class="mandatory">*</span></label>
-                      <input type="text" class="form-control sampleCode isRequired" id="sampleCode" name="sampleCode" placeholder="Enter Laboratory ID" title="Please enter laboratory ID" style="width:100%;" onblur="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode; ?>',this.id,null,'This sample code already exists. Please try another Sample Code.',null)" />
+                      <input type="text" class="form-control sampleCode isRequired" id="sampleCode" name="sampleCode" placeholder="Enter Laboratory ID" title="Please enter laboratory ID" style="width:100%;" onblur="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode; ?>',this.id,null,'This sample code already exists. Please try another Sample Code.',null)" readonly="readonly" />
                     </div>
                   </div>
 
@@ -600,6 +600,8 @@ foreach ($fResult as $fDetails) {
 <script>
   provinceName = true;
   facilityName = true;
+  var sampleCodeGenerationEvent = null;
+  var facilityListEvent = null;
   $(document).ready(function() {
     $('.date').datepicker({
       changeMonth: true,
@@ -784,11 +786,16 @@ foreach ($fResult as $fDetails) {
   }
 
   function sampleCodeGeneration() {
+    if (sampleCodeGenerationEvent) {
+      sampleCodeGenerationEvent.abort();
+    }
+
     var pName = $("#province").val();
     var sDate = $("#collectionDate").val();
     if (pName != '' && sDate != '') {
+      // $.blockUI();
       var provinceCode = ($("#province").find(":selected").attr("data-code") == null || $("#province").find(":selected").attr("data-code") == '') ? $("#province").find(":selected").attr("data-name") : $("#province").find(":selected").attr("data-code");
-      $.post("/vl/requests/sampleCodeGeneration.php", {
+      sampleCodeGenerationEvent = $.post("/vl/requests/sampleCodeGeneration.php", {
           sDate: sDate,
           autoTyp: 'auto2',
           provinceCode: provinceCode,
@@ -802,6 +809,7 @@ foreach ($fResult as $fDetails) {
           $("#sampleCodeKey").val(sCodeKey.maxId);
           $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
           checkSampleNameValidation('vl_request_form', '<?php echo $sampleCode; ?>', 'sampleCode', null, 'The laboratory ID that you entered already exists. Please try another ID', null)
+          // $.unblockUI();
         });
     }
   }

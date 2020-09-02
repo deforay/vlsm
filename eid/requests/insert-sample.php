@@ -12,7 +12,7 @@ include_once(APPLICATION_PATH . '/models/Eid.php');
 $general = new General($db);
 $eidModel = new Model_Eid($db);
 
-//$globalConfig = $general->getGlobalConfig();
+$globalConfig = $general->getGlobalConfig();
 $systemConfig = $general->getSystemConfig();
 
 $i;
@@ -20,6 +20,19 @@ $i;
 $provinceCode = (isset($_POST['provinceCode']) && !empty($_POST['provinceCode'])) ? $_POST['provinceCode'] : null;
 $provinceId = (isset($_POST['provinceId']) && !empty($_POST['provinceId'])) ? $_POST['provinceId'] : null;
 $sampleCollectionDate = (isset($_POST['sampleCollectionDate']) && !empty($_POST['sampleCollectionDate'])) ? $_POST['sampleCollectionDate'] : null;
+
+
+if(empty($sampleCollectionDate)){
+    echo 0; exit();
+}
+
+// PNG FORM CANNOT HAVE PROVINCE EMPTY
+if ($globalConfig['vl_form'] == 5) {
+    if(empty($provinceId)){
+        echo 0; exit();
+    }
+}
+
 
 $sampleJson = $eidModel->generateEIDSampleCode($provinceCode, $sampleCollectionDate, null, $provinceId);
 $sampleData = json_decode($sampleJson, true);
@@ -33,6 +46,7 @@ $eidData = array();
 $eidData = array(
     'vlsm_country_id' => $_POST['countryId'],
     'sample_collection_date' => $_POST['sampleCollectionDate'],
+    'province_id' => $provinceId,
     'vlsm_instance_id' => $_SESSION['instanceId'],
     'request_created_by' => $_SESSION['userId'],
     'request_created_datetime' => $general->getDateTime(),

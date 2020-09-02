@@ -131,7 +131,7 @@ foreach ($fResult as $fDetails) {
                                                 <option value=""> -- Select -- </option>
                                                 <?php
                                                 foreach ($implementingPartnerList as $implementingPartner) {
-                                                    ?>
+                                                ?>
                                                     <option value="<?php echo ($implementingPartner['i_partner_id']); ?>"><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
                                                 <?php } ?>
                                             </select>
@@ -142,7 +142,7 @@ foreach ($fResult as $fDetails) {
                                                 <option value=""> -- Select -- </option>
                                                 <?php
                                                 foreach ($fundingSourceList as $fundingSource) {
-                                                    ?>
+                                                ?>
                                                     <option value="<?php echo ($fundingSource['funding_source_id']); ?>"><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
                                                 <?php } ?>
                                             </select>
@@ -302,16 +302,14 @@ foreach ($fResult as $fDetails) {
                                             <select class="form-control" name="pcrTestReason" id="pcrTestReason">
                                                 <option value=''> -- Select -- </option>
                                                 <option value="Confirmation of positive first EID PCR test result" /> Confirmation of positive first EID PCR test result </option>
-                                                <option value="Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months"> Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months </option> 
-                                                <option value="Positive HIV rapid test result at 9 months or later"> Positive HIV rapid test result at 9 months or later </option>
+                                                <option value="Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months"> Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months </option> <option value="Positive HIV rapid test result at 9 months or later"> Positive HIV rapid test result at 9 months or later </option>
                                                 <option value="1st Test Positive"> 1st Test Positive </option>
                                                 <option value="DBS Invalid"> DBS Invalid </option>
                                                 <option value="Indeterminate"> Indeterminate </option>
                                                 <option value="Infant Still breastfeeding"> Infant Still breastfeeding </option>
-                                                <option value="Infact <2 months post cessation of breastfeeding"> Infact <2 months post cessation of breastfeeding </option>
-                                                <option value="Infants less than 6 weeks"> Infants less than 6 weeks </option>
+                                                <option value="Infact <2 months post cessation of breastfeeding"> Infact <2 months post cessation of breastfeeding </option> <option value="Infants less than 6 weeks"> Infants less than 6 weeks </option>
                                                 <option value="Inadequate feeding history"> Inadequate feeding history </option>
-                                                
+
                                                 <option value="Other"> Other </option>
                                             </select>
                                         </td>
@@ -433,11 +431,12 @@ foreach ($fResult as $fDetails) {
 
 
 <script type="text/javascript">
-    changeProvince = true;
-    changeFacility = true;
-    provinceName = true;
-    facilityName = true;
-    machineName = true;
+    let changeProvince = true;
+    let changeFacility = true;
+    let provinceName = true;
+    let facilityName = true;
+    let machineName = true;
+    let sampleCodeGenerationEvent = null
 
     function getfacilityDetails(obj) {
 
@@ -473,27 +472,58 @@ foreach ($fResult as $fDetails) {
         $.unblockUI();
     }
 
+
     function sampleCodeGeneration() {
-        var pName = $("#province").find(":selected").attr("data-code");
+        if (sampleCodeGenerationEvent) {
+            sampleCodeGenerationEvent.abort();
+        }
+
+        var pName = $("#province").val();
         var sDate = $("#sampleCollectionDate").val();
         if (pName != '' && sDate != '') {
-            $.post("/eid/requests/generateSampleCode.php", {
+            // $.blockUI();
+            var provinceCode = ($("#province").find(":selected").attr("data-code") == null || $("#province").find(":selected").attr("data-code") == '') ? $("#province").find(":selected").attr("data-name") : $("#province").find(":selected").attr("data-code");
+            sampleCodeGenerationEvent = $.post("/eid/requests/generateSampleCode.php", {
                     sDate: sDate,
-                    pName: pName,
                     autoTyp: 'auto2',
-                    //provinceCode: $("#province").find(":selected").attr("data-code"),
-                    sampleFrom: 'png'
+                    provinceCode: provinceCode,
+                    'sampleFrom': 'png',
+                    'provinceId': $("#province").find(":selected").attr("data-province-id")
                 },
                 function(data) {
                     var sCodeKey = JSON.parse(data);
                     $("#sampleCode").val(sCodeKey.sampleCode);
-                    $("#sampleCodeInText").html(sCodeKey.sampleCodeInText);
                     $("#sampleCodeFormat").val(sCodeKey.sampleCodeFormat);
-                    $("#sampleCodeKey").val(sCodeKey.sampleCodeKey);
+                    $("#sampleCodeKey").val(sCodeKey.maxId);
                     $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
+                    checkSampleNameValidation('vl_request_form', '<?php echo $sampleCode; ?>', 'sampleCode', null, 'The laboratory ID that you entered already exists. Please try another ID', null)
+                    // $.unblockUI();
                 });
         }
     }
+    // function sampleCodeGeneration() {
+    //     var pName = $("#province").find(":selected").attr("data-code");
+    //     var sDate = $("#sampleCollectionDate").val();
+
+    //     if (pName != '' && sDate != '') {
+    //         provinceCode
+    //         $.post("/eid/requests/generateSampleCode.php", {
+    //                 sDate: sDate,
+    //                 pName: pName,
+    //                 autoTyp: 'auto2',
+    //                 //provinceCode: $("#province").find(":selected").attr("data-code"),
+    //                 sampleFrom: 'png'
+    //             },
+    //             function(data) {
+    //                 var sCodeKey = JSON.parse(data);
+    //                 $("#sampleCode").val(sCodeKey.sampleCode);
+    //                 $("#sampleCodeInText").html(sCodeKey.sampleCodeInText);
+    //                 $("#sampleCodeFormat").val(sCodeKey.sampleCodeFormat);
+    //                 $("#sampleCodeKey").val(sCodeKey.sampleCodeKey);
+    //                 $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
+    //             });
+    //     }
+    // }
 
     function getfacilityDistrictwise(obj) {
         $.blockUI();
@@ -556,11 +586,11 @@ foreach ($fResult as $fDetails) {
             //$.blockUI();
             <?php
             if (isset($arr['eid_sample_code'])) {
-                ?>
+            ?>
                 insertSampleCode('addEIDRequestForm', 'eidSampleId', 'sampleCode', 'sampleCodeKey', 'sampleCodeFormat', $("#formId").val(), 'sampleCollectionDate', provinceCode);
             <?php
             } else {
-                ?>
+            ?>
                 document.getElementById('addEIDRequestForm').submit();
             <?php
             } ?>

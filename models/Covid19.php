@@ -19,14 +19,16 @@ class Model_Covid19
         $this->db = $db;
     }
 
-    public function generateCovid19SampleCode($provinceCode, $sampleCollectionDate, $sampleFrom = null, $provinceId = '')
+    public function generateCovid19SampleCode($provinceCode, $sampleCollectionDate, $sampleFrom = null, $provinceId = '', $maxCodeKeyVal = null)
     {
 
         $general = new General($this->db);
 
         $globalConfig = $general->getGlobalConfig();
         $systemConfig = $general->getSystemConfig();
-        
+        $sampleID = '';
+
+
         $remotePrefix = '';
         $sampleCodeKeyCol = 'sample_code_key';
         $sampleCodeCol = 'sample_code';
@@ -42,94 +44,85 @@ class Model_Covid19
         $start_date = $sampleColDateArray[0] . '-01-01';
         $end_date = $sampleColDateArray[0] . '-12-31';
         $mnthYr = $samColDate[0];
-        // Checking if covid19_sample_code is empty then we set by default 'MMYY'
-        $globalConfig['covid19_sample_code'] = isset($globalConfig['covid19_sample_code']) ? $globalConfig['covid19_sample_code'] : 'MMYY';
+        // Checking if sample code format is empty then we set by default 'MMYY'
+        $sampleCodeFormat = isset($globalConfig['covid19_sample_code']) ? $globalConfig['covid19_sample_code'] : 'MMYY';
+        $prefixFromConfig = isset($globalConfig['covid19_sample_code_prefix']) ? $globalConfig['covid19_sample_code_prefix'] : '';
 
-        if ($globalConfig['covid19_sample_code'] == 'MMYY') {
+        if ($sampleCodeFormat == 'MMYY') {
             $mnthYr = $sampleColDateArray[1] . $samColDate;
-        } else if ($globalConfig['covid19_sample_code'] == 'YY') {
+        } else if ($sampleCodeFormat == 'YY') {
             $mnthYr = $samColDate;
         }
 
         $autoFormatedString = $samColDate . $sampleColDateArray[1] . $sampleColDateArray[2];
-        // If it is PNG form then we check province-wise
-        if ($globalConfig['vl_form'] == 5) {
-            if (empty($provinceId)) {
-                $provinceId = $general->getProvinceIDFromCode($provinceCode);
+
+
+        if ($maxCodeKeyVal == null) {
+            // If it is PNG form
+            if ($globalConfig['vl_form'] == 5) {
+
+                if (empty($provinceId) && !empty($provinceCode)) {
+                    $provinceId = $general->getProvinceIDFromCode($provinceCode);
+                }
+
+                if (!empty($provinceId)) {
+                    $this->db->where('province_id', $provinceId);
+                }
             }
-            $remotePrefix = $remotePrefix . "R"; // PNG format has an additional R in prefix
-            $svlQuery = 'SELECT ' . $sampleCodeKeyCol . ' FROM form_covid19 as c19 WHERE DATE(c19.sample_collection_date) >= "' . $start_date . '" AND DATE(c19.sample_collection_date) <= "' . $end_date . '" AND province_id=' . $provinceId . ' ORDER BY ' . $sampleCodeKeyCol . ' DESC LIMIT 1';
 
-            $svlResult = $this->db->rawQueryOne($svlQuery);
+            $this->db->where('DATE(sample_collection_date)', array($start_date, $end_date), 'BETWEEN');
+            $this->db->where($sampleCodeCol, NULL, 'IS NOT');
+            $this->db->orderBy($sampleCodeKeyCol, "DESC");
+            $svlResult = $this->db->getOne($this->table, array($sampleCodeKeyCol));
 
-            //var_dump($svlResult);
-
-            if (isset($svlResult[$sampleCodeKeyCol]) && $svlResult[$sampleCodeKeyCol] != '' && $svlResult[$sampleCodeKeyCol] != null) {
-                $maxId = $svlResult[$sampleCodeKeyCol] + 1;
-                $strparam = strlen($maxId);
-                $zeros = (isset($globalConfig['covid19_sample_code']) && trim($globalConfig['covid19_sample_code']) == 'auto2') ? substr("0000", $strparam) : substr("000", $strparam);
-                $maxId = $zeros . $maxId;
-
-                //echo $maxId;die;
-            } else {
-                $maxId = (isset($globalConfig['covid19_sample_code']) && trim($globalConfig['covid19_sample_code']) == 'auto2') ? '0001' : '001';
-            }
-            // $sampleCode = $remotePrefix . "R" . date('y') . $provinceCode . "C19" . $maxId;
-            // $j = 1;
-            // do {
-            //     $sQuery = "SELECT sample_code FROM form_covid19 AS c19 WHERE sample_code='" . $sampleCode . "'";
-            //     $svlResult = $this->db->query($sQuery);
-            //     if (!$svlResult) {
-            //         $maxId;
-            //         break;
-            //     } else {
-            //         $x = $maxId + 1;
-            //         $strparam = strlen($x);
-            //         $zeros = (isset($globalConfig['sample_code']) && trim($globalConfig['sample_code']) == 'auto2') ? substr("0000", $strparam) : substr("000", $strparam);
-            //         $maxId = $zeros . $x;
-            //         $sampleCode = $remotePrefix . "R" . date('y') . $provinceCode . "C19" . $maxId;
-            //     }
-            // } while ($sampleCode);
-        } else {
-            $svlQuery = 'SELECT ' . $sampleCodeKeyCol . ' FROM form_covid19 as c19 WHERE DATE(c19.sample_collection_date) >= "' . $start_date . '" AND DATE(c19.sample_collection_date) <= "' . $end_date . '" AND ' . $sampleCodeCol . '!="" ORDER BY ' . $sampleCodeKeyCol . ' DESC LIMIT 1';
-
-            $svlResult = $this->db->query($svlQuery);
-            if (isset($svlResult[0][$sampleCodeKeyCol]) && $svlResult[0][$sampleCodeKeyCol] != '' && $svlResult[0][$sampleCodeKeyCol] != null) {
-                $maxId = $svlResult[0][$sampleCodeKeyCol] + 1;
-                $strparam = strlen($maxId);
-                $zeros = (isset($globalConfig['covid19_sample_code']) && trim($globalConfig['covid19_sample_code']) == 'auto2') ? substr("0000", $strparam) : substr("000", $strparam);
-                $maxId = $zeros . $maxId;
-            } else {
-                $maxId = (isset($globalConfig['covid19_sample_code']) && trim($globalConfig['covid19_sample_code']) == 'auto2') ? '0001' : '001';
-            }
+            $maxCodeKeyVal = $svlResult[$sampleCodeKeyCol];
         }
 
+
+        if (!empty($maxCodeKeyVal)) {
+            $maxId = $maxCodeKeyVal + 1;
+            $strparam = strlen($maxId);
+            $zeros = (isset($sampleCodeFormat) && trim($sampleCodeFormat) == 'auto2') ? substr("0000", $strparam) : substr("000", $strparam);
+            $maxId = $zeros . $maxId;
+        } else {
+            $maxId = (isset($sampleCodeFormat) && trim($sampleCodeFormat) == 'auto2') ? '0001' : '001';
+        }
+
+        //error_log($maxCodeKeyVal);
 
         $sCodeKey = (array('maxId' => $maxId, 'mnthYr' => $mnthYr, 'auto' => $autoFormatedString));
 
 
-        //$autoFormatedString = $sCodeKey['autoFormatedString'];
-        if ($globalConfig['covid19_sample_code'] == 'auto') {
+
+        if ($globalConfig['vl_form'] == 5) {
+            // PNG format has an additional R in prefix
+            $remotePrefix = $remotePrefix . "R";
+            //$sampleCodeFormat = 'auto2';
+        }
+
+
+        if ($sampleCodeFormat == 'auto') {
+            //$pNameVal = explode("##", $provinceCode);
             $sCodeKey['sampleCode'] = ($remotePrefix . $provinceCode . $autoFormatedString . $sCodeKey['maxId']);
             $sCodeKey['sampleCodeInText'] = ($remotePrefix . $provinceCode . $autoFormatedString . $sCodeKey['maxId']);
             $sCodeKey['sampleCodeFormat'] = ($remotePrefix . $provinceCode . $autoFormatedString);
             $sCodeKey['sampleCodeKey'] = ($sCodeKey['maxId']);
-        } else if ($globalConfig['covid19_sample_code'] == 'auto2') {
+        } else if ($sampleCodeFormat == 'auto2') {
             $sCodeKey['sampleCode'] = $remotePrefix . date('y', strtotime($sampleCollectionDate)) . $provinceCode . 'C19' . $sCodeKey['maxId'];
             $sCodeKey['sampleCodeInText'] = $remotePrefix . date('y', strtotime($sampleCollectionDate)) . $provinceCode . 'C19' . $sCodeKey['maxId'];
             $sCodeKey['sampleCodeFormat'] = $remotePrefix . $provinceCode . $autoFormatedString;
             $sCodeKey['sampleCodeKey'] = $sCodeKey['maxId'];
-        } else if ($globalConfig['covid19_sample_code'] == 'YY' || $globalConfig['covid19_sample_code'] == 'MMYY') {
-            $sCodeKey['sampleCode'] = $remotePrefix . $globalConfig['covid19_sample_code_prefix'] . $sCodeKey['mnthYr'] . $sCodeKey['maxId'];
-            $sCodeKey['sampleCodeInText'] = $remotePrefix . $globalConfig['covid19_sample_code_prefix'] . $sCodeKey['mnthYr'] . $sCodeKey['maxId'];
-            $sCodeKey['sampleCodeFormat'] = $remotePrefix . $globalConfig['covid19_sample_code_prefix'] . $sCodeKey['mnthYr'];
+        } else if ($sampleCodeFormat == 'YY' || $sampleCodeFormat == 'MMYY') {
+            $sCodeKey['sampleCode'] = $remotePrefix . $prefixFromConfig . $sCodeKey['mnthYr'] . $sCodeKey['maxId'];
+            $sCodeKey['sampleCodeInText'] = $remotePrefix . $prefixFromConfig . $sCodeKey['mnthYr'] . $sCodeKey['maxId'];
+            $sCodeKey['sampleCodeFormat'] = $remotePrefix . $prefixFromConfig . $sCodeKey['mnthYr'];
             $sCodeKey['sampleCodeKey'] = ($sCodeKey['maxId']);
         }
 
-        $checkQuery = "SELECT sample_code FROM " . $this->table . " where sample_code='" . $sCodeKey['sampleCode'] . "'";
+        $checkQuery = "SELECT $sampleCodeCol, $sampleCodeKeyCol FROM " . $this->table . " where $sampleCodeCol='" . $sCodeKey['sampleCode'] . "'";
         $checkResult = $this->db->rawQueryOne($checkQuery);
         if ($checkResult !== null) {
-            $this->generateCovid19SampleCode($provinceCode, $sampleCollectionDate, $sampleFrom, $provinceId);
+            return $this->generateCovid19SampleCode($provinceCode, $sampleCollectionDate, $sampleFrom, $provinceId, $checkResult[$sampleCodeKeyCol]);
         }
 
         return json_encode($sCodeKey);
@@ -189,7 +182,7 @@ class Model_Covid19
         }
         return $response;
     }
-    
+
     public function getCovid19ReasonsForTestingDRC()
     {
         $results = $this->db->rawQuery("SELECT * FROM r_covid19_test_reasons WHERE `test_reason_status` LIKE 'active' AND (parent_reason IS NULL OR parent_reason = 0)");
@@ -208,7 +201,7 @@ class Model_Covid19
         }
         return $response;
     }
-    
+
     public function getCovid19SymptomsDRC()
     {
         $results = $this->db->rawQuery("SELECT * FROM r_covid19_symptoms WHERE `symptom_status` LIKE 'active' AND (parent_symptom IS NULL OR parent_symptom = 0)");

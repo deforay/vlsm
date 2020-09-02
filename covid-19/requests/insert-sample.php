@@ -11,7 +11,8 @@ include_once(APPLICATION_PATH . '/models/Covid19.php');
 // echo "<pre>";print_r($_POST);
 $general = new General($db);
 $covid19Model = new Model_Covid19($db);
-//$globalConfig = $general->getGlobalConfig();
+
+$globalConfig = $general->getGlobalConfig();
 $systemConfig = $general->getSystemConfig();
 
 $i;
@@ -20,17 +21,32 @@ try {
     $provinceId = (isset($_POST['provinceId']) && !empty($_POST['provinceId'])) ? $_POST['provinceId'] : null;
     $sampleCollectionDate = (isset($_POST['sampleCollectionDate']) && !empty($_POST['sampleCollectionDate'])) ? $_POST['sampleCollectionDate'] : null;
 
+
+
+    if (empty($sampleCollectionDate)) {
+        echo 0;
+        exit();
+    }
+
+    // PNG FORM CANNOT HAVE PROVINCE EMPTY
+    if ($globalConfig['vl_form'] == 5) {
+        if (empty($provinceId)) {
+            echo 0;
+            exit();
+        }
+    }
     $sampleJson = $covid19Model->generateCovid19SampleCode($provinceCode, $sampleCollectionDate, null, $provinceId);
     $sampleData = json_decode($sampleJson, true);
 
     $sampleDate = explode(" ", $_POST['sampleCollectionDate']);
     $_POST['sampleCollectionDate'] = $general->dateFormat($sampleDate[0]) . " " . $sampleDate[1];
-    
+
     $covid19Data = array();
     $covid19Data = array(
         'vlsm_country_id' => $_POST['countryId'],
         'sample_collection_date' => $_POST['sampleCollectionDate'],
         'vlsm_instance_id' => $_SESSION['instanceId'],
+        'province_id' => $provinceId,
         'request_created_by' => $_SESSION['userId'],
         'request_created_datetime' => $general->getDateTime(),
         'last_modified_by' => $_SESSION['userId'],
@@ -59,7 +75,6 @@ try {
     } else {
         echo 0;
     }
-}
-catch(Exception $e) {
-    echo 'Message: ' .$e->getMessage();
+} catch (Exception $e) {
+    echo 'Message: ' . $e->getMessage();
 }

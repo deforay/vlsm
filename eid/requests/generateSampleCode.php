@@ -1,12 +1,12 @@
 <?php
 ob_start();
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+  session_start();
 }
 include_once '../../startup.php';
 include_once APPLICATION_PATH . '/includes/MysqliDb.php';
-include_once(APPLICATION_PATH.'/models/Eid.php');
-include_once(APPLICATION_PATH.'/models/General.php');
+include_once(APPLICATION_PATH . '/models/Eid.php');
+include_once(APPLICATION_PATH . '/models/General.php');
 $eidModel = new Model_Eid($db);
 
 
@@ -32,4 +32,4 @@ if (isset($_POST['sampleFrom'])) {
 }
 
 
-echo $eidModel->generateEIDSampleCode($province, $sampleCollectionDate,$sampleFrom);
+echo $eidModel->generateEIDSampleCode($province, $sampleCollectionDate, $sampleFrom);
