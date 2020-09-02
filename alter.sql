@@ -2510,3 +2510,13 @@ ALTER TABLE `r_eid_test_reasons` ADD `updated_datetime` DATETIME NULL DEFAULT NU
 
 UPDATE `system_config` SET `value` = '4.0.5' WHERE `system_config`.`name` = 'version';
 -- Version 4.0.5 -- Amit -- 28-Aug-2020
+
+
+-- Amit 02-Sep-2020
+
+ALTER TABLE `vl_request_form` ADD INDEX( `sample_code_key`);
+ALTER TABLE `vl_request_form` ADD INDEX( `remote_sample_code_key`);
+ALTER TABLE `eid_form` ADD INDEX( `sample_code_key`);
+ALTER TABLE `eid_form` ADD INDEX( `remote_sample_code_key`);
+ALTER TABLE `form_covid19` ADD INDEX( `sample_code_key`);
+ALTER TABLE `form_covid19` ADD INDEX( `remote_sample_code_key`);

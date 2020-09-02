@@ -20,7 +20,7 @@ class Model_Vl
         $this->db = $db;
     }
 
-    public function generateVLSampleID($provinceCode, $sampleCollectionDate, $sampleFrom = null, $provinceId = '')
+    public function generateVLSampleID($provinceCode, $sampleCollectionDate, $sampleFrom = null, $provinceId = '', $maxCodeKeyVal = null)
     {
 
         $general = new General($this->db);
@@ -45,75 +45,83 @@ class Model_Vl
         $start_date = $sampleColDateArray[0] . '-01-01';
         $end_date = $sampleColDateArray[0] . '-12-31';
         $mnthYr = $samColDate[0];
+        // Checking if sample code format is empty then we set by default 'MMYY'
+        $sampleCodeFormat = isset($globalConfig['sample_code']) ? $globalConfig['sample_code'] : 'MMYY';
+        $prefixFromConfig = isset($globalConfig['sample_code_prefix']) ? $globalConfig['sample_code_prefix'] : '';
 
-        if ($globalConfig['sample_code'] == 'MMYY') {
+        if ($sampleCodeFormat == 'MMYY') {
             $mnthYr = $sampleColDateArray[1] . $samColDate;
-        } else if ($globalConfig['sample_code'] == 'YY') {
+        } else if ($sampleCodeFormat == 'YY') {
             $mnthYr = $samColDate;
         }
 
-        $auto = $samColDate . $sampleColDateArray[1] . $sampleColDateArray[2];
+        $autoFormatedString = $samColDate . $sampleColDateArray[1] . $sampleColDateArray[2];
 
-        // If it is PNG form
-        if ($globalConfig['vl_form'] == 5) {
-            if (empty($provinceId) && !empty($provinceCode)) {
-                $provinceId = $general->getProvinceIDFromCode($provinceCode);
+
+        if ($maxCodeKeyVal == null) {
+            // If it is PNG form
+            if ($globalConfig['vl_form'] == 5) {
+
+                if (empty($provinceId) && !empty($provinceCode)) {
+                    $provinceId = $general->getProvinceIDFromCode($provinceCode);
+                }
+
+                if (!empty($provinceId)) {
+                    $this->db->where('province_id', $provinceId);
+                }
             }
 
-            // PNG format has an additional R in prefix
-            $remotePrefix = $remotePrefix . "R";
+            $this->db->where('DATE(sample_collection_date)', array($start_date, $end_date), 'BETWEEN');
+            $this->db->where($sampleCodeCol, NULL, 'IS NOT');
+            $this->db->orderBy($sampleCodeKeyCol, "DESC");
+            $svlResult = $this->db->getOne($this->table, array($sampleCodeKeyCol));
 
-            if (!empty($provinceId)) {
-                $this->db->where('province_id', $provinceId);
-            }
+            $maxCodeKeyVal = $svlResult[$sampleCodeKeyCol];
         }
 
-        $this->db->where('DATE(sample_collection_date)', array($start_date, $end_date), 'BETWEEN');
-        $this->db->where($sampleCodeCol, NULL, 'IS NOT');
-        $this->db->orderBy($sampleCodeKeyCol, "DESC");
-        $svlResult = $this->db->getOne($this->table, array($sampleCodeKeyCol));
 
-        //var_dump($svlResult);die;
-
-
-        if (isset($svlResult[$sampleCodeKeyCol]) && $svlResult[$sampleCodeKeyCol] != '' && $svlResult[$sampleCodeKeyCol] != null) {
-            $maxId = $svlResult[$sampleCodeKeyCol] + 1;
+        if (!empty($maxCodeKeyVal)) {
+            $maxId = $maxCodeKeyVal + 1;
             $strparam = strlen($maxId);
-            $zeros = (isset($globalConfig['sample_code']) && trim($globalConfig['sample_code']) == 'auto2') ? substr("0000", $strparam) : substr("000", $strparam);
+            $zeros = (isset($sampleCodeFormat) && trim($sampleCodeFormat) == 'auto2') ? substr("0000", $strparam) : substr("000", $strparam);
             $maxId = $zeros . $maxId;
         } else {
-            $maxId = (isset($globalConfig['sample_code']) && trim($globalConfig['sample_code']) == 'auto2') ? '0001' : '001';
+            $maxId = (isset($sampleCodeFormat) && trim($sampleCodeFormat) == 'auto2') ? '0001' : '001';
         }
 
-        //echo $svlQuery;die;
+        //error_log($maxCodeKeyVal);
 
-        $sCodeKey = (array('maxId' => $maxId, 'mnthYr' => $mnthYr, 'auto' => $auto));
+        $sCodeKey = (array('maxId' => $maxId, 'mnthYr' => $mnthYr, 'auto' => $autoFormatedString));
 
-        $sCode = $sCodeKey['auto'];
-        if ($globalConfig['sample_code'] == 'auto') {
+
+        if ($globalConfig['vl_form'] == 5) {
+            // PNG format has an additional R in prefix
+            $remotePrefix = $remotePrefix . "R";
+        }
+
+        if ($sampleCodeFormat == 'auto') {
             //$pNameVal = explode("##", $provinceCode);
-            $sCodeKey['sampleCode'] = ($remotePrefix . $provinceCode . $sCode . $sCodeKey['maxId']);
-            $sCodeKey['sampleCodeInText'] = ($remotePrefix . $provinceCode . $sCode . $sCodeKey['maxId']);
-            $sCodeKey['sampleCodeFormat'] = ($remotePrefix . $provinceCode . $sCode);
+            $sCodeKey['sampleCode'] = ($remotePrefix . $provinceCode . $autoFormatedString . $sCodeKey['maxId']);
+            $sCodeKey['sampleCodeInText'] = ($remotePrefix . $provinceCode . $autoFormatedString . $sCodeKey['maxId']);
+            $sCodeKey['sampleCodeFormat'] = ($remotePrefix . $provinceCode . $autoFormatedString);
             $sCodeKey['sampleCodeKey'] = ($sCodeKey['maxId']);
-        } else if ($globalConfig['sample_code'] == 'auto2') {
-            $sCodeKey['sampleCode'] = $remotePrefix . date('y', strtotime($sampleCollectionDate)) . $provinceCode . 'VL' . $sCodeKey['maxId'];
-            $sCodeKey['sampleCodeInText'] = $remotePrefix . date('y', strtotime($sampleCollectionDate)) . $provinceCode . 'VL' . $sCodeKey['maxId'];
-            $sCodeKey['sampleCodeFormat'] = $remotePrefix . $provinceCode . $sCode;
+        } else if ($sampleCodeFormat == 'auto2') {
+            $sCodeKey['sampleCode'] = $remotePrefix . date('y', strtotime($sampleCollectionDate)) . $provinceCode . 'EID' . $sCodeKey['maxId'];
+            $sCodeKey['sampleCodeInText'] = $remotePrefix . date('y', strtotime($sampleCollectionDate)) . $provinceCode . 'EID' . $sCodeKey['maxId'];
+            $sCodeKey['sampleCodeFormat'] = $remotePrefix . $provinceCode . $autoFormatedString;
             $sCodeKey['sampleCodeKey'] = $sCodeKey['maxId'];
-        } else if ($globalConfig['sample_code'] == 'YY' || $globalConfig['sample_code'] == 'MMYY') {
-            $sCodeKey['sampleCode'] = $remotePrefix . $globalConfig['sample_code_prefix'] . $sCodeKey['mnthYr'] . $sCodeKey['maxId'];
-            $sCodeKey['sampleCodeInText'] = $remotePrefix . $globalConfig['sample_code_prefix'] . $sCodeKey['mnthYr'] . $sCodeKey['maxId'];
-            $sCodeKey['sampleCodeFormat'] = $remotePrefix . $globalConfig['sample_code_prefix'] . $sCodeKey['mnthYr'];
+        } else if ($sampleCodeFormat == 'YY' || $sampleCodeFormat == 'MMYY') {
+            $sCodeKey['sampleCode'] = $remotePrefix . $prefixFromConfig . $sCodeKey['mnthYr'] . $sCodeKey['maxId'];
+            $sCodeKey['sampleCodeInText'] = $remotePrefix . $prefixFromConfig . $sCodeKey['mnthYr'] . $sCodeKey['maxId'];
+            $sCodeKey['sampleCodeFormat'] = $remotePrefix . $prefixFromConfig . $sCodeKey['mnthYr'];
             $sCodeKey['sampleCodeKey'] = ($sCodeKey['maxId']);
         }
 
-        $checkQuery = "SELECT sample_code FROM " . $this->table . " where sample_code='" . $sCodeKey['sampleCode'] . "'";
+        $checkQuery = "SELECT $sampleCodeCol, $sampleCodeKeyCol FROM " . $this->table . " where $sampleCodeCol='" . $sCodeKey['sampleCode'] . "'";
         $checkResult = $this->db->rawQueryOne($checkQuery);
         if ($checkResult !== null) {
-            $this->generateVLSampleID($provinceCode, $sampleCollectionDate, $sampleFrom, $provinceId);
+            return $this->generateVLSampleID($provinceCode, $sampleCollectionDate, $sampleFrom, $provinceId, $checkResult[$sampleCodeKeyCol]);
         }
-
         return json_encode($sCodeKey);
     }
 }
