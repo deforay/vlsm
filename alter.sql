@@ -2490,6 +2490,23 @@ ALTER TABLE `r_vl_test_reasons` ADD `updated_datetime` DATETIME NULL DEFAULT NUL
 ALTER TABLE `r_eid_test_reasons` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `test_reason_status`;
 
 
+-- UPDATE facility_details set updated_datetime = CURRENT_TIMESTAMP;
+-- UPDATE r_vl_sample_type set updated_datetime = CURRENT_TIMESTAMP;
+-- UPDATE r_vl_test_reasons set updated_datetime = CURRENT_TIMESTAMP;
+-- UPDATE r_art_code_details set updated_datetime = CURRENT_TIMESTAMP;
+-- UPDATE r_art_code_details set updated_datetime = CURRENT_TIMESTAMP;
+-- UPDATE r_sample_rejection_reasons set updated_datetime = CURRENT_TIMESTAMP;
+-- UPDATE r_eid_sample_type set updated_datetime = CURRENT_TIMESTAMP;
+-- UPDATE r_eid_sample_rejection_reasons set updated_datetime = CURRENT_TIMESTAMP;
+-- UPDATE r_covid19_sample_type set updated_datetime = CURRENT_TIMESTAMP;
+-- UPDATE r_covid19_sample_rejection_reasons set updated_datetime = CURRENT_TIMESTAMP;
+-- UPDATE r_covid19_comorbidities set updated_datetime = CURRENT_TIMESTAMP;
+-- UPDATE r_covid19_results set updated_datetime = CURRENT_TIMESTAMP;
+-- UPDATE r_covid19_symptoms set updated_datetime = CURRENT_TIMESTAMP;
+-- UPDATE r_covid19_test_reasons set updated_datetime = CURRENT_TIMESTAMP;
+-- UPDATE r_vl_test_reasons set updated_datetime = CURRENT_TIMESTAMP;
+-- UPDATE r_eid_test_reasons set updated_datetime = CURRENT_TIMESTAMP;
+
 
 UPDATE `system_config` SET `value` = '4.0.5' WHERE `system_config`.`name` = 'version';
 -- Version 4.0.5 -- Amit -- 28-Aug-2020
