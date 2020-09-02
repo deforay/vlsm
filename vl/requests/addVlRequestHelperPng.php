@@ -200,8 +200,8 @@ try {
           'data_sync' => 0
      );
 
-     $vldata['patient_first_name'] = $general->crypto('encrypt', $_POST['patientFname'], $vldata['patient_art_no']);
-     $vldata['patient_last_name'] = $general->crypto('encrypt', $_POST['surName'], $vldata['patient_art_no']);
+     //$vldata['patient_first_name'] = $general->crypto('encrypt', $_POST['patientFname'], $vldata['patient_art_no']);
+     //$vldata['patient_last_name'] = $general->crypto('encrypt', $_POST['surName'], $vldata['patient_art_no']);
 
      if (isset($_POST['vlSampleId']) && $_POST['vlSampleId'] != '') {
           $db = $db->where('vl_sample_id', $_POST['vlSampleId']);

@@ -234,12 +234,12 @@ try {
           }
      }
 
-     if (isset($_POST['patientFname']) && !empty($_POST['patientFname'])) {
-          $vldata['patient_first_name'] = $general->crypto('encrypt', $_POST['patientFname'], $vldata['patient_art_no']);
-     }
-     if (isset($_POST['surName']) && !empty($_POST['surName'])) {
-          $vldata['patient_last_name'] = $general->crypto('encrypt', $_POST['surName'], $vldata['patient_art_no']);
-     }
+     // if (isset($_POST['patientFname']) && !empty($_POST['patientFname'])) {
+     //      $vldata['patient_first_name'] = $general->crypto('encrypt', $_POST['patientFname'], $vldata['patient_art_no']);
+     // }
+     // if (isset($_POST['surName']) && !empty($_POST['surName'])) {
+     //      $vldata['patient_last_name'] = $general->crypto('encrypt', $_POST['surName'], $vldata['patient_art_no']);
+     // }
 
 
 

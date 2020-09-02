@@ -15,8 +15,6 @@ $data = array();
 $data['forceSync'] = false;
 
 
-
-
 $referenceTables = array(
     'facility_details'
 );

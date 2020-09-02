@@ -33,11 +33,13 @@ $systemConfig['modules']['covid19'] = true;
 <VirtualHost *:80>
    DocumentRoot "/path/to/vlsm"
    ServerName vlsm
+   
    AddDefaultCharset UTF-8
 
-   php_value auto_prepend_file /path/to/vlsm/startup.php
-
    <Directory "/path/to/vlsm">
+       php_value auto_prepend_file /path/to/vlsm/startup.php
+
+       AddDefaultCharset UTF-8
        Options Indexes MultiViews FollowSymLinks
        AllowOverride All
        Order allow,deny
