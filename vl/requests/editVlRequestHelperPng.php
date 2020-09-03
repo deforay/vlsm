@@ -141,10 +141,10 @@ try {
      } else if ($sarr['user_type'] == 'vluser' && $_POST['oldStatus'] == 9) {
           $_POST['status'] = 6;
      }
-     if ($_POST['status'] == '') {
+     
+     if (empty($_POST['status'])) {
           $_POST['status']  = $_POST['oldStatus'];
      }
-
 
      $vldata = array(
           //'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
@@ -234,17 +234,11 @@ try {
           }
      }
 
-     // if (isset($_POST['patientFname']) && !empty($_POST['patientFname'])) {
-     //      $vldata['patient_first_name'] = $general->crypto('encrypt', $_POST['patientFname'], $vldata['patient_art_no']);
-     // }
-     // if (isset($_POST['surName']) && !empty($_POST['surName'])) {
-     //      $vldata['patient_last_name'] = $general->crypto('encrypt', $_POST['surName'], $vldata['patient_art_no']);
-     // }
-
 
 
      $db = $db->where('vl_sample_id', $_POST['vlSampleId']);
      $id = $db->update($tableName, $vldata);
+
 
      $_SESSION['alertMsg'] = "VL request updated successfully";
      //Add event log
