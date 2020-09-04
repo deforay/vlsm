@@ -76,7 +76,13 @@ unset($_SESSION['controllertrack']);
                     <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:30px;width: 75%;">
                         <tr>
                             <td>
-                            <a href="/vl/results/vlPrintResult.php" class="btn btn-success btn-sm">Continue </a>
+                                <?php
+                                if (isset($tsResult[0]['totalCount']) && $tsResult[0]['totalCount'] > 0) { ?>
+                                    <input type="button" onclick="convertSearchResultToPdf();return false;" value="Print all results" class="btn btn-success btn-sm">&nbsp;&nbsp;
+                                    <a href="/vl/results/vlPrintResult.php" class="btn btn-success btn-sm">Continue without printing results</a>
+                                <?php } else { ?>
+                                    <a href="/vl/results/vlPrintResult.php" class="btn btn-success btn-sm">Continue </a>
+                                <?php } ?>
                             </td>
                         </tr>
 
