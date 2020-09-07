@@ -45,7 +45,7 @@ if ($lastUrl1 != '' || $lastUrl2 != '') {
   <section class="content-header">
     <h1><i class="fa fa-edit"></i> Enter VL Result</h1>
     <ol class="breadcrumb">
-      <li><a href="../dashboard/index.php"><i class="fa fa-dashboard"></i> Home </a></li>
+      <li><a href="/dashboard/index.php"><i class="fa fa-dashboard"></i> Home </a></li>
       <li class="active">Enter VL Result</li>
     </ol>
   </section>

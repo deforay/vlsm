@@ -1,6 +1,6 @@
 <?php
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+  session_start();
 }
 ob_start();
 #require_once('../../../startup.php');
@@ -164,7 +164,7 @@ class MYPDF extends TCPDF
     $this->SetFont('helvetica', '', 8);
     // Page number
     //$this->Cell(0, 10, 'Page' . $_SESSION['aliasPage'] . '/' . $_SESSION['nbPages'], 0, false, 'C', 0, '', 0, false, 'T', 'M');
-    $this->Cell(0, 10, 'Page 1 of 1' , 0, false, 'C', 0, '', 0, false, 'T', 'M');
+    $this->Cell(0, 10, 'Page 1 of 1', 0, false, 'C', 0, '', 0, false, 'T', 'M');
   }
 }
 

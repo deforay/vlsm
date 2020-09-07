@@ -5,21 +5,19 @@ if (!isset($_SESSION['userId'])) {
 }
 
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
+include_once(APPLICATION_PATH . '/models/General.php');
+
+$general = new General($db);
+
 /* Crosss Login Block Start */
-$crossLoginQuery = "SELECT login_id,password,user_name FROM user_details WHERE user_id = '" . $_SESSION['userId'] . "'";
+$crossLoginQuery = "SELECT `login_id`,`password`,`user_name` FROM `user_details` WHERE user_id = '" . $_SESSION['userId'] . "'";
 $crossLoginResult = $db->rawQueryOne($crossLoginQuery);
 /* Crosss Login Block End */
-$gQuery = "SELECT * FROM global_config";
-$gResult = $db->query($gQuery);
-$global = array();
-//system config
-$systemConfigQuery = "SELECT * from system_config";
-$systemConfigResult = $db->query($systemConfigQuery);
-$sarr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
-	$sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
-}
+
+$global = $general->getGlobalConfig();
+$sarr = $general->getSystemConfig();
+
+
 $skin = "skin-blue";
 
 $logoName = "<img src='/assets/img/flask.png' style='margin-top:-5px;max-width:22px;'> <span style=''>VLSM</span>";
@@ -38,10 +36,6 @@ if (isset($systemConfig['instanceName']) && !empty($systemConfig['instanceName']
 	$systemType = $systemConfig['instanceName'];
 }
 
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($gResult); $i++) {
-	$global[$gResult[$i]['name']] = $gResult[$i]['value'];
-}
 if (isset($global['default_time_zone']) && $global['default_time_zone'] != '') {
 	date_default_timezone_set($global['default_time_zone']);
 } else {
@@ -53,9 +47,6 @@ if (isset($global['instance_type']) && $global['instance_type'] != '') {
 	if ($global['instance_type'] == 'Clinic/Lab') {
 		$hideResult = "display:none;";
 	}
-	//else if($global['instance_type']=='Viral Load Lab'){
-	// $hideRequest = "display:none;";
-	//}
 }
 
 
@@ -66,7 +57,8 @@ $currentFileName = end($link_array);
 
 // These files don't need privileges check
 $skipPrivilegeCheckFiles = array(
-	'error.php',
+	'401.php',
+	'404.php',
 	'editProfile.php',
 	'vlExportField.php'
 );
@@ -92,7 +84,7 @@ $currentFileName = isset($sharedPrivileges[$currentFileName]) ? $sharedPrivilege
 
 if (!in_array($currentFileName, $skipPrivilegeCheckFiles)) {
 	if (isset($_SESSION['privileges']) && !in_array($currentFileName, $_SESSION['privileges'])) {
-		header("location:/error/error.php");
+		header("location:/error/401.php");
 	}
 }
 // if(isset($_SERVER['HTTP_REFERER'])){
@@ -632,7 +624,7 @@ $formConfigResult = $db->query($formConfigQuery);
 								<?php }
 								if (isset($_SESSION['privileges']) && in_array("eid-sample-rejection-report.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu eidSampleRejectionReport"><a href="/eid/management/eid-sample-rejection-report.php"><i class="fa fa-circle-o"></i> Sample Rejection Report</a></li>
-								<?php } 
+								<?php }
 								if (isset($_SESSION['privileges']) && in_array("eid-clinic-report.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu eidClinicReport"><a href="/eid/management/eid-clinic-report.php"><i class="fa fa-circle-o"></i> Clinic Report</a></li>
 								<?php } ?>
@@ -665,7 +657,8 @@ $formConfigResult = $db->query($formConfigQuery);
 									<li class="allMenu addSamplesFromManifestCovid19Menu">
 										<a href="/covid-19/requests/addSamplesFromManifest.php"><i class="fa fa-circle-o"></i> Add Samples from Manifest</a>
 									</li>
-								<?php } if (isset($_SESSION['privileges']) && in_array("can-record-confirmatory-tests.php", $_SESSION['privileges']) && ($sarr['user_type'] != 'remoteuser')) { ?>
+								<?php }
+								if (isset($_SESSION['privileges']) && in_array("can-record-confirmatory-tests.php", $_SESSION['privileges']) && ($sarr['user_type'] != 'remoteuser')) { ?>
 									<li class="allMenu canRecordConfirmatoryTestsCovid19Menu">
 										<a href="/covid-19/requests/can-record-confirmatory-tests.php"><i class="fa fa-circle-o"></i> Record Confirmatory Tests</a>
 									</li>

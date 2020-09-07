@@ -39,7 +39,7 @@ if (isset($_GET['u']) && trim($_GET['u']) != "" && isset($_GET['t']) && trim($_G
     }
 } else {
     if (!$recencyConfig['crosslogin'] && !isset($_POST['username']) && trim($_POST['username']) == "") {
-        $_SESSION['alertMsg'] = "Cross login not activated in VLSM!";
+        $_SESSION['alertMsg'] = "Sorry! Recency cross-login has not been activated. Please contact system administrator.";
     }
 }
 /* Crosss Login Block End */
@@ -86,7 +86,7 @@ try {
             $_SESSION['roleId'] = $admin[0]['role_id'];
             $_SESSION['email'] = $admin[0]['email'];
 
-            $redirect = 'error/error.php';
+            $redirect = '/error/401.php';
             //set role and privileges
             $priQuery = "SELECT p.privilege_name,rp.privilege_id FROM roles_privileges_map as rp INNER JOIN privileges as p ON p.privilege_id=rp.privilege_id  where rp.role_id='" . $admin[0]['role_id'] . "'";
             $priInfo = $db->query($priQuery);
@@ -130,7 +130,7 @@ try {
             header("location:" . $redirect);
         } else {
             header("location:/login.php");
-            $_SESSION['alertMsg'] = "Please check login credential";
+            $_SESSION['alertMsg'] = "Please check your login credentials";
         }
     } else {
         header("location:/login.php");

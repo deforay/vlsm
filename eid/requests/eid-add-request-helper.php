@@ -1,7 +1,7 @@
 <?php
 ob_start();
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+  session_start();
 }
 include_once '../../startup.php';
 include_once APPLICATION_PATH . '/includes/MysqliDb.php';
@@ -79,7 +79,7 @@ try {
     $_POST['motherTreatmentInitiationDate'] = $general->dateFormat($motherTreatmentInitiationDate[0]) . " " . $motherTreatmentInitiationDate[1];
   } else {
     $_POST['motherTreatmentInitiationDate'] = NULL;
-  }  
+  }
 
   if (isset($_POST['previousPCRTestDate']) && trim($_POST['previousPCRTestDate']) != "") {
     $previousPCRTestDate = explode(" ", $_POST['previousPCRTestDate']);
@@ -111,14 +111,14 @@ try {
 
   $status = 6;
   if ($sarr['user_type'] == 'remoteuser') {
-       $status = 9;
+    $status = 9;
   }
 
 
   if (isset($_POST['isSampleRejected']) && $_POST['isSampleRejected'] == 'yes') {
     $_POST['result'] = null;
     $status = 4;
-  }  
+  }
 
 
 
@@ -213,14 +213,11 @@ try {
   } else {
     $_SESSION['alertMsg'] = "Please try again later";
   }
-  if(isset($_POST['saveNext']) && $_POST['saveNext'] == 'next'){
+  if (isset($_POST['saveNext']) && $_POST['saveNext'] == 'next') {
     header("location:/eid/requests/eid-add-request.php");
-  }else{
+  } else {
     header("location:/eid/requests/eid-requests.php");
   }
-  
-
-
 } catch (Exception $exc) {
   error_log($exc->getMessage());
   error_log($exc->getTraceAsString());

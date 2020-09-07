@@ -1,16 +1,14 @@
 <footer class="main-footer">
-	<a href="http://taskforce.org/">Funded by TaskForce</a>
+	<a href="#">Funded by PEPFAR</a>
 	<span class="pull-right">&nbsp;&nbsp;v <?php echo VERSION; ?></span>
 	<?php if (isset($_SESSION['userName']) && isset($_SESSION['system']) && $_SESSION['system'] == 'vluser') { ?>
 		<small class="pull-right"><a href="javascript:forceRemoteSync();" class="text-muted">Force VLSTS sync</a>&nbsp;&nbsp;</small>
 	<?php } ?>
 </footer>
 </div>
-<!-- ./wrapper -->
 
-<!-- jQuery UI 1.11.4 -->
 <!--<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>-->
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+
 <script type="text/javascript" src="/assets/js/jquery-ui-timepicker-addon.js"></script>
 <script type="text/javascript" src="/assets/js/js.cookie.js"></script>
 <script src="/assets/js/select2.js"></script>
