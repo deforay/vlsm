@@ -45,3 +45,6 @@ defined('APPLICATION_ENV')
     || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ?
         getenv('APPLICATION_ENV') :
         'production'));
+
+require_once(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'vendor/autoload.php');
+require_once(APPLICATION_PATH . "/configs/config." . APPLICATION_ENV . ".php");

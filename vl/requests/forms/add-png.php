@@ -40,7 +40,7 @@ foreach ($fResult as $fDetails) {
   <section class="content-header">
     <h1><i class="fa fa-edit"></i> VIRAL LOAD LABORATORY REQUEST FORM </h1>
     <ol class="breadcrumb">
-      <li><a href="../dashboard/index.php"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="/dashboard/index.php"><i class="fa fa-dashboard"></i> Home</a></li>
       <li class="active">Add VL Request</li>
     </ol>
   </section>

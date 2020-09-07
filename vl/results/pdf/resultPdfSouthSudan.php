@@ -56,7 +56,7 @@ if (sizeof($requestResult) > 0) {
           $pdf->setHeading($arr['logo'], $arr['header'], $result['labName'], $title = 'HIV VIRAL LOAD PATIENT REPORT');
           // set document information
           $pdf->SetCreator('VLSM');
-          $pdf->SetTitle('Viral Load Patient Report');
+          $pdf->SetTitle('HIV Viral Load Patient Report');
           //$pdf->SetSubject('TCPDF Tutorial');
           //$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
