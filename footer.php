@@ -1,8 +1,8 @@
 <footer class="main-footer">
-	<a href="#">Funded by PEPFAR</a>
-	<span class="pull-right">&nbsp;&nbsp;v <?php echo VERSION; ?></span>
+	<small>This project is supported by the U.S. President’s Emergency Plan for AIDS Relief (PEPFAR) through the U.S. Centers for Disease Control and Prevention (CDC).</small>
+	<small class="pull-right" style="font-weight:bold;">&nbsp;&nbsp;<?php echo VERSION; ?></small>
 	<?php if (isset($_SESSION['userName']) && isset($_SESSION['system']) && $_SESSION['system'] == 'vluser') { ?>
-		<small class="pull-right"><a href="javascript:forceRemoteSync();" class="text-muted">Force VLSTS sync</a>&nbsp;&nbsp;</small>
+		<small class="pull-right"><a href="javascript:forceRemoteSync();" class="text-muted">Force Remote sync</a>&nbsp;&nbsp;</small>
 	<?php } ?>
 </footer>
 </div>

@@ -2,8 +2,7 @@ syntax: regexp
 ^.idea
 ^uploads/(?!.htaccess)
 ^temporary/(?!.htaccess)
-^instrument-interfacing/files/roche/new/(?!index.php)
-^instrument-interfacing/files/roche/imported/(?!index.php)
+^interop/dhis2/examples/(?!index.php)
 
 
 syntax: glob
