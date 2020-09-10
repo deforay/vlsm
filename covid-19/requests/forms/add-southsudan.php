@@ -3,6 +3,9 @@
 
 ob_start();
 
+
+
+
 //Funding source list
 $fundingSourceQry = "SELECT * FROM r_funding_sources WHERE funding_source_status='active' ORDER BY funding_source_name ASC";
 $fundingSourceList = $db->query($fundingSourceQry);
@@ -19,7 +22,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 
 // Getting the list of Provinces, Districts and Facilities
 
-$covid19Obj = new Model_Covid19($db);
+$covid19Obj = new \Vlsm\Models\Covid19($db);
 
 
 $covid19Results = $covid19Obj->getCovid19Results();
@@ -313,9 +316,9 @@ foreach ($fResult as $fDetails) {
                                             <td class="lab-show"><label for="labId">Lab Name </label> </td>
                                             <td class="lab-show">
                                                 <select name="labId" id="labId" class="form-control" title="Lab Name" style="width:100%;">
-                                                    <option value=""> -- Select -- </option>
+                                                    <option value=''> -- Select -- </option>
                                                     <?php foreach ($lResult as $labName) { ?>
-                                                        <option value="<?php echo $labName['facility_id']; ?>" <?php echo ($covid19Info['lab_id'] == $labName['facility_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($labName['facility_name']); ?></option>
+                                                        <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
                                                     <?php } ?>
                                                 </select>
                                             </td>
@@ -615,6 +618,7 @@ foreach ($fResult as $fDetails) {
     });
 
     let testCounter = 1;
+
     function addTestRow() {
         testCounter++;
         let rowString = `<tr>

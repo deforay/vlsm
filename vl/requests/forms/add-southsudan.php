@@ -712,7 +712,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 }
 ?>
 <!-- BARCODESTUFF END -->
-<script type="text/javascript" src="../assets/js/moment.min.js"></script>
+<script type="text/javascript" src="/assets/js/moment.min.js"></script>
 <script>
      provinceName = true;
      facilityName = true;

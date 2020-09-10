@@ -1,5 +1,8 @@
 <?php
 
+
+namespace Vlsm\Interop;
+
 class Dhis2
 {
 	private $dhis2url = "";

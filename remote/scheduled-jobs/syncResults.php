@@ -187,7 +187,7 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
         $forms[] = $row['covid19_id'];
     }
 
-    $covid19Obj = new Model_Covid19($db);
+    $covid19Obj = new \Vlsm\Models\Covid19($db);
     $symptoms = $covid19Obj->getCovid19SymptomsByFormId($forms);
     $comorbidities = $covid19Obj->getCovid19ComorbiditiesByFormId($forms);
     $testResults = $covid19Obj->getCovid19TestsByFormId($forms);

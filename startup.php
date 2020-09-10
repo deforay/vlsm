@@ -46,5 +46,13 @@ defined('APPLICATION_ENV')
         getenv('APPLICATION_ENV') :
         'production'));
 
-require_once(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'vendor/autoload.php');
+
+set_include_path(implode(PATH_SEPARATOR, array(
+    realpath(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'vendor'),
+    realpath(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'models'),
+    get_include_path()
+)));
+
+
+require_once('autoload.php');
 require_once(APPLICATION_PATH . "/configs/config." . APPLICATION_ENV . ".php");

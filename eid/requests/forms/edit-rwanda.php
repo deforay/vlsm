@@ -61,7 +61,7 @@ $sampleSuggestion = '';
 $sampleSuggestionDisplay = 'display:none;';
 $sCode = isset($_GET['c']) ? $_GET['c'] : null;
 if ($sarr['user_type'] == 'vluser' && !empty($sCode)) {
-    $vlObj = new Model_Eid($db);
+    $vlObj = new \Vlsm\Models\Eid($db);
     $sampleCollectionDate = explode(" ", $sampleCollectionDate);
     $sampleCollectionDate = $general->humanDateFormat($sampleCollectionDate[0]);
     $sampleSuggestionJson = $vlObj->generateEIDSampleCode($stateResult[0]['province_code'], $sampleCollectionDate, 'png');

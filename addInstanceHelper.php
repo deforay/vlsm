@@ -5,7 +5,7 @@ include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 include_once(APPLICATION_PATH.'/models/General.php');
 include_once(APPLICATION_PATH.'/includes/ImageResize.php');
 
-$general=new General($db);
+$general=new \Vlsm\Models\General($db);
 $tableName="s_vlsm_instance";
 $globalTable="global_config";
 function getMacLinux() {

@@ -8,7 +8,7 @@ include_once(APPLICATION_PATH . '/header.php');
 
 include_once(APPLICATION_PATH . '/models/General.php');
 
-$general = new General($db); // passing $db which is coming from MysqliDb.php
+$general = new \Vlsm\Models\General($db); // passing $db which is coming from MysqliDb.php
 
 $tsQuery = "SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);

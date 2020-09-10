@@ -4,7 +4,7 @@ $title = "Import " . strtoupper($type) . " Test Results From File";
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 include_once(APPLICATION_PATH . '/models/General.php');
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 $query = "SELECT config_id,machine_name,import_machine_file_name FROM import_config WHERE status='active'";
 $iResult = $db->rawQuery($query);
 

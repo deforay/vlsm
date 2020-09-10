@@ -1,6 +1,6 @@
 <?php
-require_once(dirname(__FILE__) . "/../startup.php");
-include_once(APPLICATION_PATH . '/models/General.php');
+
+namespace Vlsm\Models;
 
 
 /**
@@ -9,7 +9,7 @@ include_once(APPLICATION_PATH . '/models/General.php');
  * @author Amit
  */
 
-class Model_Vl
+class Vl
 {
 
     protected $db = null;
@@ -24,7 +24,7 @@ class Model_Vl
     public function generateVLSampleID($provinceCode, $sampleCollectionDate, $sampleFrom = null, $provinceId = '', $maxCodeKeyVal = null)
     {
 
-        $general = new General($this->db);
+        $general = new \Vlsm\Models\General($this->db);
         $globalConfig = $general->getGlobalConfig();
         $systemConfig = $general->getSystemConfig();
         $sampleID = '';

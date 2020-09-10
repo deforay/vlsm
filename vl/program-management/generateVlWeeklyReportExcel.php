@@ -8,7 +8,7 @@ include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 include_once(APPLICATION_PATH.'/models/General.php');
 include_once(APPLICATION_PATH.'/vendor/autoload.php');
 
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 $configQuery = "SELECT * from global_config where name='vl_form'";
 $configResult = $db->query($configQuery);
 $country = $configResult[0]['value'];

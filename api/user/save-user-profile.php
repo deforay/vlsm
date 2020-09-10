@@ -8,7 +8,7 @@ include_once APPLICATION_PATH . '/includes/ImageResize.php';
 include_once(APPLICATION_PATH . "/vendor/autoload.php");
 
 session_unset(); // no need of session in json response
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 
 $apiKey = isset($_POST['x-api-key']) && !empty($_POST['x-api-key']) ? $_POST['x-api-key'] : null;
 

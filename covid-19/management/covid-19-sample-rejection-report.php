@@ -7,7 +7,7 @@ include_once(APPLICATION_PATH.'/models/Facilities.php');
 $tsQuery="SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
 
-$facilitiesDb = new Facilities($db);
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
 $facilityList = $facilitiesDb->getAllFacilities('grouped');
 $lResult = $facilityList['labs'];
 $cResult = $facilityList['facilities'];

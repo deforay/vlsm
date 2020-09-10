@@ -7,7 +7,7 @@ if (session_status() == PHP_SESSION_NONE) {
 include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 require '/includes/mail/PHPMailerAutoload.php';
 include_once(APPLICATION_PATH.'/models/General.php');
-$general=new General($db);
+$general=new \Vlsm\Models\General($db);
 $tableName="vl_request_form";
 //get other config details
 $geQuery="SELECT * FROM other_config WHERE type = 'request'";

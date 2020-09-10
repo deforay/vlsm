@@ -5,6 +5,7 @@ $title = "COVID-19 | Add New Request";
 include_once(APPLICATION_PATH . '/header.php');
 include_once(APPLICATION_PATH . '/models/General.php');
 include_once(APPLICATION_PATH . '/models/Covid19.php');
+include_once(APPLICATION_PATH . '/models/Facilities.php');
 ?>
 <style>
     .ui_tpicker_second_label,
@@ -37,12 +38,12 @@ if ($sarr['user_type'] == 'remoteuser') {
     $vlfmResult = $db->rawQuery($vlfmQuery);
 }
 
-$general = new General($db);
-//$covid19Obj = new Model_Covid19($db);
+$general = new \Vlsm\Models\General($db);
+//$covid19Obj = new \Vlsm\Models\Covid19($db);
+// $facilitiesDb = new \Vlsm\Models\Facilities($db);
 
-
-
-
+// var_dump($facilitiesDb->getTestingLabs());
+// die;
 $rejectionTypeQuery = "SELECT DISTINCT rejection_type FROM r_covid19_sample_rejection_reasons WHERE rejection_reason_status ='active'";
 $rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
 
@@ -142,7 +143,7 @@ if (file_exists($fileArray[$arr['vl_form']])) {
                 yearRange: <?= (date('Y') - 100); ?> + ":" + "<?= date('Y'); ?>"
             }).click(function() {
                 $('.ui-datepicker-calendar').show();
-            }); 
+            });
         });
 
 

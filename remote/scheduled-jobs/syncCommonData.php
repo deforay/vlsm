@@ -11,7 +11,7 @@ if (!isset($systemConfig['remoteURL']) || $systemConfig['remoteURL'] == '') {
 
 $systemConfig['remoteURL'] = rtrim($systemConfig['remoteURL'], "/");
 
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 $globalConfigQuery = "SELECT * FROM system_config";
 $configResult = $db->query($globalConfigQuery);
 

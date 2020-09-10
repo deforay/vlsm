@@ -7,7 +7,7 @@ ob_start();
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 include_once(APPLICATION_PATH . '/models/General.php');
 include_once(APPLICATION_PATH . '/vendor/autoload.php');
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 
 //system config
 $systemConfigQuery = "SELECT * FROM system_config";

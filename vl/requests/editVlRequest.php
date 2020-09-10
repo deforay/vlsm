@@ -12,7 +12,7 @@ $labFieldDisabled = '';
 if ($sarr['user_type'] == 'remoteuser') {
      $labFieldDisabled = 'disabled="disabled"';
 }
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 $id = base64_decode($_GET['id']);
 $sCode = '';
 if (isset($_GET['c'])) {

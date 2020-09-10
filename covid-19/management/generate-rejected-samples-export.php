@@ -9,7 +9,7 @@ include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 include_once(APPLICATION_PATH.'/models/General.php');
 include_once(APPLICATION_PATH.'/vendor/autoload.php');
 
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 
 $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
 $output = array();
@@ -60,7 +60,7 @@ foreach ($headings as $field => $value) {
     $colNo++;
 }
 $sheet->getStyle('A3:E3')->applyFromArray($styleArray);
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 $configFormQuery = "SELECT * FROM global_config WHERE name ='vl_form'";
 $configFormResult = $db->rawQuery($configFormQuery);
 //date

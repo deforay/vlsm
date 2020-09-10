@@ -4,7 +4,7 @@ $title = "Enter VL Result";
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 include_once(APPLICATION_PATH . '/models/General.php');
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 $id = base64_decode($_GET['id']);
 $configQuery = "SELECT * from global_config";
 $configResult = $db->query($configQuery);

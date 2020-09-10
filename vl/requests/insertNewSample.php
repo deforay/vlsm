@@ -4,8 +4,8 @@ include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 include_once(APPLICATION_PATH . '/models/General.php');
 include_once(APPLICATION_PATH . '/models/Vl.php');
 
-$general = new General($db);
-$vlModel = new Model_Vl($db);
+$general = new \Vlsm\Models\General($db);
+$vlModel = new \Vlsm\Models\Vl($db);
 
 
 $globalConfig = $general->getGlobalConfig();

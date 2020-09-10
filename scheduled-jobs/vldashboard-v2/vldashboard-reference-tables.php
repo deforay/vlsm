@@ -7,7 +7,7 @@ include_once(APPLICATION_PATH . "/includes/MysqliDb.php");
 include_once(APPLICATION_PATH . '/models/General.php');
 include_once(APPLICATION_PATH . "/vendor/autoload.php");
 
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 
 $data = array();
 

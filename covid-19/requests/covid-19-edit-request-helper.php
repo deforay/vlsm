@@ -8,7 +8,7 @@ include_once '../../startup.php';
 include_once APPLICATION_PATH . '/includes/MysqliDb.php';
 include_once(APPLICATION_PATH . '/models/General.php');
 include_once(APPLICATION_PATH . '/models/Covid19.php');
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 
 // echo "<pre>";print_r($_POST);die;
 
@@ -173,7 +173,7 @@ try {
 		if (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') {
 			//$covid19Data['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') ? $_POST['sampleCodeCol'] : NULL;
 		} else {
-			$covid19Model = new Model_Covid19($db);
+			$covid19Model = new \Vlsm\Models\Covid19($db);
 
 			$sampleCodeKeysJson = $covid19Model->generateCovid19SampleCode($_POST['provinceCode'], $_POST['sampleCollectionDate']);
 			$sampleCodeKeys = json_decode($sampleCodeKeysJson, true);

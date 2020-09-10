@@ -4,7 +4,7 @@ ob_start();
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 include_once(APPLICATION_PATH . '/vendor/autoload.php');
 include_once(APPLICATION_PATH . '/models/General.php');
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 //get other config details
 $geQuery = "SELECT * FROM other_config WHERE type = 'request'";
 $geResult = $db->rawQuery($geQuery);

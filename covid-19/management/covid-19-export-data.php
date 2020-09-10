@@ -30,7 +30,7 @@ $implementingPartnerQry = "SELECT * FROM r_implementation_partners WHERE i_partn
 $implementingPartnerList = $db->query($implementingPartnerQry);
 
 
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 $covid19Results = $general->getCovid19Results();
 if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda')){
 	$reportType = 'generate-export-rwanda.php';

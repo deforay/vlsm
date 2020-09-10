@@ -6,7 +6,7 @@ include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 include_once(APPLICATION_PATH . '/models/General.php');
 
 
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 if (!isset($systemConfig['remoteURL']) || $systemConfig['remoteURL'] == '') {
     echo "Please check your Remote URL";
     die;

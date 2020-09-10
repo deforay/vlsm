@@ -14,8 +14,8 @@ include_once(APPLICATION_PATH . '/vendor/autoload.php');
 
 $tableName1 = "activity_log";
 $tableName2 = "eid_form";
-$general = new General($db);
-$users = new Model_Users($db);
+$general = new \Vlsm\Models\General($db);
+$users = new \Vlsm\Models\Users($db);
 
 $configQuery = "SELECT * from global_config";
 $configResult = $db->query($configQuery);

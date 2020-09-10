@@ -14,7 +14,7 @@ $implementingPartnerQry = "SELECT * FROM r_implementation_partners WHERE i_partn
 $implementingPartnerList = $db->query($implementingPartnerQry);
 
 
-$covid19Obj = new Model_Covid19($db);
+$covid19Obj = new \Vlsm\Models\Covid19($db);
 
 
 $covid19Results = $covid19Obj->getCovid19Results();
@@ -73,7 +73,7 @@ $sampleSuggestion = '';
 $sampleSuggestionDisplay = 'display:none;';
 $sCode = (isset($_GET['c']) && $_GET['c'] != '') ? $_GET['c'] : '';
 if ($sarr['user_type'] == 'vluser' && $sCode != '') {
-    $vlObj = new Model_Covid19($db);
+    $vlObj = new \Vlsm\Models\Covid19($db);
     $sampleCollectionDate = explode(" ", $sampleCollectionDate);
     $sampleCollectionDate = $general->humanDateFormat($sampleCollectionDate[0]);
     $sampleSuggestionJson = $vlObj->generateCovid19SampleCode($stateResult[0]['province_code'], $sampleCollectionDate, 'png');

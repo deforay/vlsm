@@ -6,8 +6,8 @@ include_once(APPLICATION_PATH . '/models/General.php');
 require_once(APPLICATION_PATH . '/models/Covid19.php');
 
 
-$general = new General($db);
-$covid19Obj = new Model_Covid19($db);
+$general = new \Vlsm\Models\General($db);
+$covid19Obj = new \Vlsm\Models\Covid19($db);
 
 
 $sampleQuery = "SELECT covid19_id, sample_collection_date, sample_package_code, province_id, sample_code FROM form_covid19 where covid19_id IN (" . $_POST['sampleId'] . ") ORDER BY covid19_id";

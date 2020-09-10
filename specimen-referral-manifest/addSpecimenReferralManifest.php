@@ -9,7 +9,7 @@ $title = "Add New Specimen Referral Manifest";
 include_once '../startup.php';
 include_once APPLICATION_PATH . '/header.php';
 include_once(APPLICATION_PATH . '/models/General.php');
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 $packageNo = strtoupper($module) . date('ymd') .  $general->generateRandomString(6);
 ?>
 <link href="/assets/css/multi-select.css" rel="stylesheet" />

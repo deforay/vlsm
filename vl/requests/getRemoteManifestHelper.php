@@ -2,7 +2,7 @@
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 include_once(APPLICATION_PATH . '/models/General.php');
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 $sampleData = array();
 $sampleQuery = 'SELECT vl_sample_id FROM vl_request_form where sample_code IS NULL AND sample_package_code LIKE "' . $_POST['samplePackageCode'] . '"';
 $sampleResult = $db->query($sampleQuery);

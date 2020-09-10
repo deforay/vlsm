@@ -8,7 +8,7 @@ include_once(APPLICATION_PATH . '/models/General.php');
 $labId = $data['labName'];
 
 
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 $dataSyncInterval = $general->getGlobalConfig('data_sync_interval');
 $dataSyncInterval = (isset($dataSyncInterval) && !empty($dataSyncInterval)) ? $dataSyncInterval : 30;
 

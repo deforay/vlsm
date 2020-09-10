@@ -4,7 +4,7 @@ ob_start();
 include_once(APPLICATION_PATH . '/header.php');
 
 include_once(APPLICATION_PATH . '/models/General.php');
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 $tableName1 = "activity_log";
 $id = base64_decode($_GET['id']);
 $vlQuery = "SELECT * from vl_request_form where vl_sample_id=$id";

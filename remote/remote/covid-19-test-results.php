@@ -15,8 +15,8 @@ for ($i = 0; $i < sizeof($cResult); $i++) {
     $arr[$cResult[$i]['name']] = $cResult[$i]['value'];
 }
 
-$general = new General($db);
-$usersModel = new Model_Users($db);
+$general = new \Vlsm\Models\General($db);
+$usersModel = new \Vlsm\Models\Users($db);
 
 $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='form_covid19'";
 $allColResult = $db->rawQuery($allColumns);

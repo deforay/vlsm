@@ -8,7 +8,7 @@ include_once '../../startup.php';
 include_once APPLICATION_PATH . '/includes/MysqliDb.php';
 include_once(APPLICATION_PATH . '/models/General.php');
 include_once(APPLICATION_PATH . '/models/Eid.php');
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 
 // echo "<pre>";
 // var_dump($_POST);
@@ -194,7 +194,7 @@ try {
     if ($_POST['sampleCodeCol'] != '') {
       //$eidData['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') ? $_POST['sampleCodeCol'] : NULL;
     } else {
-      $eidModel = new Model_Eid($db);
+      $eidModel = new \Vlsm\Models\Eid($db);
 
 
 

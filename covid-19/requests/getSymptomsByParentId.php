@@ -2,7 +2,7 @@
 require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 include_once(APPLICATION_PATH.'/models/General.php');
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 $sampleData = array();
 $sampleQuery = 'SELECT * FROM r_covid19_symptoms where parent_symptom = "'. $_POST['symptomParent'].'"';
 $sampleResult = $db->query($sampleQuery);
