@@ -1,5 +1,7 @@
 <?php
 
+session_unset(); // no need of session in json response
+
 // PURPOSE : Fetch Results using serial_no field which is used to
 // store the recency id from third party apps (for eg. in DRC)
 
@@ -12,37 +14,44 @@ include_once(APPLICATION_PATH . "/includes/MysqliDb.php");
 include_once(APPLICATION_PATH . '/models/General.php');
 include_once(APPLICATION_PATH . "/vendor/autoload.php");
 
-
-session_unset(); // no need of session in json response
 $general = new General($db);
 
 
+// The request has to send an Authorization Bearer token 
 
+// This is hardcoded for now. We will make this dynamic later
+$expectedBearerToken = 'FR4kewpuHaRBAm8aUmCWt4xF7QkktV36';
+$auth = $general->getHeader('Authorization');
 
-$sampleCode = !empty($_REQUEST['s']) ? explode(",", filter_var($_REQUEST['s'], FILTER_SANITIZE_STRING)) : null;
-$recencyId = !empty($_REQUEST['r']) ? explode(",", filter_var($_REQUEST['r'], FILTER_SANITIZE_STRING)) : null;
-$apiKey = !empty($_REQUEST['x-api-key']) ? filter_var($_REQUEST['x-api-key'], FILTER_SANITIZE_STRING) : 'APIKEY';
-$from = !empty($_REQUEST['f']) ? filter_var($_REQUEST['f'], FILTER_SANITIZE_STRING) : null;
-$to = !empty($_REQUEST['t']) ? filter_var($_REQUEST['t'], FILTER_SANITIZE_STRING) : null;;
-
-if (!$apiKey) {
+// If Auth header is empty or if it does not match the expected string
+// then do not proceed.
+if (empty($auth) || !preg_match("/\b$expectedBearerToken\b/", $auth)) {
     $response = array(
         'status' => 'failed',
         'timestamp' => time(),
-        'error' => 'API Key invalid',
+        'error' => 'Bearer Token Invalid',
         'data' => array()
     );
+    http_response_code(401);
     echo json_encode($response);
     exit(0);
 }
+
+
+$sampleCode = !empty($_POST['s']) ? explode(",", filter_var($_POST['s'], FILTER_SANITIZE_STRING)) : null;
+$recencyId = !empty($_POST['r']) ? explode(",", filter_var($_POST['r'], FILTER_SANITIZE_STRING)) : null;
+$from = !empty($_POST['f']) ? filter_var($_POST['f'], FILTER_SANITIZE_STRING) : null;
+$to = !empty($_POST['t']) ? filter_var($_POST['t'], FILTER_SANITIZE_STRING) : null;;
+
 
 if (!$sampleCode && !$recencyId && (!$from || !$to)) {
     $response = array(
         'status' => 'failed',
         'timestamp' => time(),
-        'error' => 'Mandatory request params missing in request. Expected Recency IDs or Date Range',
+        'error' => 'Mandatory request params missing in request. Expected Recency ID(s) or a Date Range',
         'data' => array()
     );
+    http_response_code(400);
     echo json_encode($response);
     exit(0);
 }
@@ -88,13 +97,14 @@ try {
     }
 
     if (!empty($from) && !empty($to)) {
-        $sQuery .= " AND DATE(sample_collection_date) between '$from' AND '$to' ";
+        $sQuery .= " AND DATE(last_modified_datetime) between '$from' AND '$to' ";
     }
 
-    $sQuery .= " ORDER BY sample_collection_date ASC ";
+    $sQuery .= " ORDER BY last_modified_datetime ASC ";
 
     $rowData = $db->rawQuery($sQuery);
 
+    // No data found
     if (!$rowData) {
         $response = array(
             'status' => 'failed',
@@ -103,6 +113,7 @@ try {
             'data' => $rowData
 
         );
+        http_response_code(200);
         echo json_encode($response);
         exit(0);
     }
@@ -113,6 +124,7 @@ try {
         'data' => $rowData
     );
 
+    http_response_code(200);
     echo json_encode($payload);
     exit(0);
 } catch (Exception $exc) {
