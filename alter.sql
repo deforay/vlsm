@@ -2520,3 +2520,9 @@ ALTER TABLE `eid_form` ADD INDEX( `sample_code_key`);
 ALTER TABLE `eid_form` ADD INDEX( `remote_sample_code_key`);
 ALTER TABLE `form_covid19` ADD INDEX( `sample_code_key`);
 ALTER TABLE `form_covid19` ADD INDEX( `remote_sample_code_key`);
+
+
+-- Thana 10-Sept-2020
+
+ALTER TABLE `form_covid19` ADD `type_of_test_requested` VARCHAR(255) NULL DEFAULT NULL AFTER `reason_for_covid19_test`;
+ALTER TABLE `form_covid19` ADD `patient_city` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_district`;
