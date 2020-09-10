@@ -2,7 +2,7 @@
 ob_start();
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-include_once(APPLICATION_PATH . '/models/General.php');
+//include_once(APPLICATION_PATH . '/models/General.php');
 $labFieldDisabled = '';
 
 // if($sarr['user_type']=='vluser'){

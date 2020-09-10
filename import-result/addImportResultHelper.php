@@ -5,8 +5,8 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 #require_once('../startup.php');  
 include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-include_once(APPLICATION_PATH.'/vendor/autoload.php');
-include_once(APPLICATION_PATH.'/models/General.php');
+//include_once(APPLICATION_PATH.'/vendor/autoload.php');
+//include_once(APPLICATION_PATH.'/models/General.php');
 $confFileName = base64_decode($_POST['machineName']);
 $globalConfigQuery = "SELECT * FROM global_config";
 $configResult = $db->query($globalConfigQuery);

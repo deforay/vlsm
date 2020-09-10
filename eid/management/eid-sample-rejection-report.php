@@ -2,12 +2,12 @@
 $title = "EID | Sample Rejection Report";
 #require_once('../../startup.php'); 
 include_once(APPLICATION_PATH.'/header.php');
-include_once(APPLICATION_PATH.'/models/General.php');
-include_once(APPLICATION_PATH.'/models/Facilities.php');
+//include_once(APPLICATION_PATH.'/models/General.php');
+//include_once(APPLICATION_PATH.'/models/Facilities.php');
 $tsQuery="SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
 
-$facilitiesDb = new Models\Facilities($db);
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
 $facilityList = $facilitiesDb->getAllFacilities('grouped');
 $lResult = $facilityList['labs'];
 $cResult = $facilityList['facilities'];

@@ -3,7 +3,7 @@ ob_start();
 $title = "Add Sample List";
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-include_once(APPLICATION_PATH . '/models/General.php');
+//include_once(APPLICATION_PATH . '/models/General.php');
 $general = new \Vlsm\Models\General($db);
 
 

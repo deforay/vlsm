@@ -4,8 +4,8 @@ $data = json_decode(file_get_contents('php://input'), true);
 
 require_once(dirname(__FILE__) . "/../../startup.php");
 require_once(APPLICATION_PATH . '/includes/MysqliDb.php');
-require_once(APPLICATION_PATH . '/models/General.php');
-require_once(APPLICATION_PATH . '/models/Users.php');
+//require_once(APPLICATION_PATH . '/models/General.php');
+//require_once(APPLICATION_PATH . '/models/Users.php');
 
 $cQuery = "SELECT * FROM global_config";
 $cResult = $db->query($cQuery);

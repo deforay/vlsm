@@ -2,7 +2,7 @@
 ob_start();
 #require_once('../../startup.php');
 require_once(APPLICATION_PATH . '/includes/MysqliDb.php');
-require_once(APPLICATION_PATH . '/models/Vl.php');
+//require_once(APPLICATION_PATH . '/models/Vl.php');
 
 $vLModel = new \Vlsm\Models\Vl($db);
 

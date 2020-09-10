@@ -1,31 +1,31 @@
 <?php
 ob_start();
 #require_once('../startup.php'); 
-include_once(APPLICATION_PATH.'/header.php');
-$query="SELECT * FROM roles where status='active'";
+include_once(APPLICATION_PATH . '/header.php');
+$query = "SELECT * FROM roles where status='active'";
 $result = $db->rawQuery($query);
 $fResult = array();
 $display = 'display:none';
-if($sarr['user_type']=='remoteuser'){
+if ($sarr['user_type'] == 'remoteuser') {
      //get all facility list with lab,clinic
-     $fQuery="SELECT facility_name,facility_id FROM facility_details";
+     $fQuery = "SELECT facility_name,facility_id FROM facility_details";
      $fResult = $db->rawQuery($fQuery);
      $display = 'display:block';
 }
 //province Stratt
 $rKey = '';
-$pdQuery="SELECT * from province_details";
-$pdResult=$db->query($pdQuery);
+$pdQuery = "SELECT * from province_details";
+$pdResult = $db->query($pdQuery);
 $province = '';
-$province.="<option value=''> -- Select -- </option>";
-foreach($pdResult as $provinceName){
-     $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
+$province .= "<option value=''> -- Select -- </option>";
+foreach ($pdResult as $provinceName) {
+     $province .= "<option value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
 
 // $facility = '';
 // $facility.="<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>";
 //province end
-$fQuery="SELECT * FROM facility_type where facility_type_id IN(1,4)";
+$fQuery = "SELECT * FROM facility_type where facility_type_id IN(1,4)";
 $ftResult = $db->rawQuery($fQuery);
 
 ?>
@@ -51,7 +51,7 @@ $ftResult = $db->rawQuery($fQuery);
                <!-- /.box-header -->
                <div class="box-body">
                     <!-- form start -->
-                    <form class="form-horizontal" method='post'  name='userForm' id='userForm' autocomplete="off" action="addUserHelper.php"  enctype="multipart/form-data">
+                    <form class="form-horizontal" method='post' name='userForm' id='userForm' autocomplete="off" action="addUserHelper.php" enctype="multipart/form-data">
                          <div class="box-body">
                               <div class="row">
                                    <div class="col-md-6">
@@ -76,7 +76,7 @@ $ftResult = $db->rawQuery($fQuery);
                                         <div class="form-group">
                                              <label for="phoneNo" class="col-lg-4 control-label">Phone Number </label>
                                              <div class="col-lg-7">
-                                                  <input type="text" class="form-control" id="phoneNo" name="phoneNo" placeholder="Phone Number" title="Please enter phone number"/>
+                                                  <input type="text" class="form-control" id="phoneNo" name="phoneNo" placeholder="Phone Number" title="Please enter phone number" />
                                              </div>
                                         </div>
                                    </div>
@@ -88,9 +88,9 @@ $ftResult = $db->rawQuery($fQuery);
                                                        <option value=""> -- Select -- </option>
                                                        <?php
                                                        foreach ($result as $row) {
-                                                            ?>
+                                                       ?>
                                                             <option value="<?php echo $row['role_id']; ?>"><?php echo $row['role_name']; ?></option>
-                                                            <?php
+                                                       <?php
                                                        }
                                                        ?>
                                                   </select>
@@ -102,126 +102,126 @@ $ftResult = $db->rawQuery($fQuery);
                               <div class="row">
 
 
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="" class="col-lg-4 control-label">Signature <br>(Used to embed in Result PDF)</label>
-                                        <div class="col-lg-8">
-                                        <div class="fileinput fileinput-new userSignature" data-provides="fileinput">
-                                        <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width:200px; height:150px;">
-                                            
-                                            <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=No image">
-                                            
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="" class="col-lg-4 control-label">Signature <br>(Used to embed in Result PDF)</label>
+                                             <div class="col-lg-8">
+                                                  <div class="fileinput fileinput-new userSignature" data-provides="fileinput">
+                                                       <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width:200px; height:150px;">
+
+                                                            <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=No image">
+
+                                                       </div>
+                                                       <div>
+                                                            <span class="btn btn-default btn-file"><span class="fileinput-new">Select Signature Image</span><span class="fileinput-exists">Change</span>
+                                                                 <input type="file" id="userSignature" name="userSignature" title="Please select user signature" onchange="">
+                                                            </span>
+
+                                                            <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                                       </div>
+                                                  </div>
+                                                  <div class="box-body">
+                                                       Image Size : <code>100px x 100px</code>
+                                                  </div>
+                                             </div>
                                         </div>
-                                        <div>
-                                            <span class="btn btn-default btn-file"><span class="fileinput-new">Select Signature Image</span><span class="fileinput-exists">Change</span>
-                                            <input type="file" id="userSignature" name="userSignature" title="Please select user signature" onchange="">
-                                            </span>
-                                            
-                                            <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
-                                        </div>
-                                        </div>
-                                        <div class="box-body">
-                                            Image Size : <code>100px x 100px</code>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    </div>                              
+                                   </div>
                                    <div class="col-md-6">
                                         <div class="form-group">
                                              <label for="loginId" class="col-lg-4 control-label">Login ID <span class="mandatory">*</span></label>
                                              <div class="col-lg-7">
-                                                  <input type="text" class="form-control isRequired" id="loginId" name="loginId" placeholder="Login Id" title="Please enter login id" onblur="checkNameValidation('user_details','login_id',this,null,'This login id that you entered already exists.Try another login id',null)"/>
+                                                  <input type="text" class="form-control isRequired" id="loginId" name="loginId" placeholder="Login Id" title="Please enter login id" onblur="checkNameValidation('user_details','login_id',this,null,'This login id that you entered already exists.Try another login id',null)" />
                                              </div>
                                         </div>
                                    </div>
-                                   
+
                               </div>
                               <div class="row">
-                              
-                                    <div class="col-md-6">
+
+                                   <div class="col-md-6">
                                         <div class="form-group">
                                              <label for="password" class="col-lg-4 control-label">Password <span class="mandatory">*</span></label>
                                              <div class="col-lg-7">
-                                                  <input type="password" class="form-control ppwd isRequired" id="confirmPassword" name="password" placeholder="Password" title="Please enter the password"/>
+                                                  <input type="password" class="form-control ppwd isRequired" id="confirmPassword" name="password" placeholder="Password" title="Please enter the password" />
                                                   <code>Password must be at least 8 characters long and must include AT LEAST one number, one alphabet. You can also use special characters.</code>
                                              </div>
                                         </div>
-                                    </div>                              
-                                    <div class="col-md-6">
+                                   </div>
+                                   <div class="col-md-6">
                                         <div class="form-group">
                                              <label for="confirmPassword" class="col-lg-4 control-label">Confirm Password <span class="mandatory">*</span></label>
                                              <div class="col-lg-7">
                                                   <input type="password" class="form-control cpwd isRequired confirmPassword" id="confirmPassword" name="password" placeholder="Confirm Password" title="" />
                                              </div>
                                         </div>
-                                    </div>
-                                   
-                                    
-                                    
+                                   </div>
+
+
+
                               </div>
 
-                              <div class="row" style=<?php echo $display;?>>
-                                <div class="col-md-12">
-                                    <a href="javascript:void(0);" id="showFilter" class="btn btn-primary">Show Advanced Filter</a>
-                                    <a href="javascript:void(0);" style="display:none;" id="hideFilter" class="btn btn-danger">Hide Advanced Filter</a>
-                                </div>
-                                <div id="facilityFilter" style="display:none;">
-                                    <h4 style="padding:36px 0px 0px 14px;"> Filter Facilities by Province & Districts</h4>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="province" style=""  class="col-lg-4 control-label">Province </label>
-                                            <div class="col-lg-7">
-                                                <select class="form-control " name="province" id="province" title="Please choose province" style="width:100%;" onchange="getProvinceDistricts();">
-                                                    <?php echo $province;?>
-                                                </select>
-                                            </div>
+                              <div class="row" style=<?php echo $display; ?>>
+                                   <div class="col-md-12">
+                                        <a href="javascript:void(0);" id="showFilter" class="btn btn-primary">Show Advanced Filter</a>
+                                        <a href="javascript:void(0);" style="display:none;" id="hideFilter" class="btn btn-danger">Hide Advanced Filter</a>
+                                   </div>
+                                   <div id="facilityFilter" style="display:none;">
+                                        <h4 style="padding:36px 0px 0px 14px;"> Filter Facilities by Province & Districts</h4>
+                                        <div class="col-md-4">
+                                             <div class="form-group">
+                                                  <label for="province" style="" class="col-lg-4 control-label">Province </label>
+                                                  <div class="col-lg-7">
+                                                       <select class="form-control " name="province" id="province" title="Please choose province" style="width:100%;" onchange="getProvinceDistricts();">
+                                                            <?php echo $province; ?>
+                                                       </select>
+                                                  </div>
+                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="province" style=""  class="col-lg-4 control-label">District </label>
-                                            <div class="col-lg-7">
-                                                <select class="form-control " name="district" id="district" title="Please choose district" style="width:100%;" onchange="getFacilities();">
-                                                    <option value=""> -- Select -- </option>
-                                                </select>
-                                            </div>
+                                        <div class="col-md-4">
+                                             <div class="form-group">
+                                                  <label for="province" style="" class="col-lg-4 control-label">District </label>
+                                                  <div class="col-lg-7">
+                                                       <select class="form-control " name="district" id="district" title="Please choose district" style="width:100%;" onchange="getFacilities();">
+                                                            <option value=""> -- Select -- </option>
+                                                       </select>
+                                                  </div>
+                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="province" style=""  class="col-lg-4 control-label">Facility Type </label>
-                                            <div class="col-lg-7">
-                                                <select class="form-control" id="facilityType" name="facilityType" title="Please select facility type" onchange = "getFacility()">
-                                                    <option value=""> -- Select -- </option>
-                                                    <?php
-                                                    foreach($ftResult as $type){
-                                                    ?>
-                                                    <option value="<?php echo $type['facility_type_id'];?>"><?php echo ucwords($type['facility_type_name']);?></option>
-                                                    <?php
-                                                    }
-                                                    ?>
-                                                </select>
-                                            </div>
+                                        <div class="col-md-4">
+                                             <div class="form-group">
+                                                  <label for="province" style="" class="col-lg-4 control-label">Facility Type </label>
+                                                  <div class="col-lg-7">
+                                                       <select class="form-control" id="facilityType" name="facilityType" title="Please select facility type" onchange="getFacility()">
+                                                            <option value=""> -- Select -- </option>
+                                                            <?php
+                                                            foreach ($ftResult as $type) {
+                                                            ?>
+                                                                 <option value="<?php echo $type['facility_type_id']; ?>"><?php echo ucwords($type['facility_type_name']); ?></option>
+                                                            <?php
+                                                            }
+                                                            ?>
+                                                       </select>
+                                                  </div>
+                                             </div>
                                         </div>
-                                    </div>
-                                </div>
+                                   </div>
                               </div>
 
-                              <div class="row" style= "margin: 15px;<?php echo $display;?>" >
+                              <div class="row" style="margin: 15px;<?php echo $display; ?>">
                                    <h4 style=" "> Facility User Map Details</h4>
                                    <div class="col-md-5">
                                         <!-- <div class="col-lg-5"> -->
 
                                         <select name="facilityMap[]" id="search" class="form-control" size="8" multiple="multiple">
                                              <?php
-                                             if($fResult>0){
-                                                  foreach($fResult as $fName){
+                                             if ($fResult > 0) {
+                                                  foreach ($fResult as $fName) {
                                              ?>
-                                             <option value="<?php echo $fName['facility_id'];?>"><?php echo ucwords($fName['facility_name']);?></option>
+                                                       <option value="<?php echo $fName['facility_id']; ?>"><?php echo ucwords($fName['facility_name']); ?></option>
                                              <?php
                                                   }
                                              }
-                                        ?>
+                                             ?>
                                         </select>
                                    </div>
 
@@ -240,7 +240,7 @@ $ftResult = $db->rawQuery($fQuery);
                          </div>
                          <!-- /.box-body -->
                          <div class="box-footer">
-                              <input type="hidden" name="selectedFacility" id="selectedFacility"/>
+                              <input type="hidden" name="selectedFacility" id="selectedFacility" />
                               <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
                               <a href="users.php" class="btn btn-default"> Cancel</a>
                          </div>
@@ -258,121 +258,138 @@ $ftResult = $db->rawQuery($fQuery);
 <script type="text/javascript" src="/assets/js/multiselect.min.js"></script>
 <script type="text/javascript" src="/assets/js/jasny-bootstrap.js"></script>
 <script type="text/javascript">
+     provinceName = true;
+     facilityName = true;
 
-provinceName = true;
-facilityName = true;
+     jQuery(document).ready(function($) {
+          $('#search').multiselect({
+               search: {
+                    left: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+                    right: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+               },
+               fireSearch: function(value) {
+                    return value.length > 3;
+               }
+          });
+          $("#showFilter").click(function() {
+               $("#showFilter").hide();
+               $("#facilityFilter,#hideFilter").fadeIn();
+          });
 
-jQuery(document).ready(function($) {
-     $('#search').multiselect({
-          search: {
-               left: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
-               right: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
-          },
-          fireSearch: function(value) {
-               return value.length > 3;
-          }
+          $("#hideFilter").click(function() {
+               $("#facilityFilter,#hideFilter").hide();
+               $("#showFilter").fadeIn();
+          });
      });
-        $("#showFilter").click(function(){
-        $("#showFilter").hide();
-        $("#facilityFilter,#hideFilter").fadeIn();
-        });
 
-        $("#hideFilter").click(function(){
-            $("#facilityFilter,#hideFilter").hide();
-            $("#showFilter").fadeIn();
-        }); 
-});
-function validateNow(){
-     var selVal = [];
-     $('#search_to option').each(function(i, selected){
-          selVal[i] = $(selected).val();
-     });
-     $("#selectedFacility").val(selVal);
+     function validateNow() {
+          var selVal = [];
+          $('#search_to option').each(function(i, selected) {
+               selVal[i] = $(selected).val();
+          });
+          $("#selectedFacility").val(selVal);
 
-     flag = deforayValidator.init({
-          formId: 'userForm'
-     });
-     if(flag){
-          pwdflag = checkPasswordLength();
-          if(pwdflag){
-               $.blockUI();
-               document.getElementById('userForm').submit();
+          flag = deforayValidator.init({
+               formId: 'userForm'
+          });
+          if (flag) {
+               pwdflag = checkPasswordLength();
+               if (pwdflag) {
+                    $.blockUI();
+                    document.getElementById('userForm').submit();
+               }
           }
      }
-}
 
-function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback){
-     var removeDots=obj.value.replace(/\,/g,"");
-     //str=obj.value;
-     removeDots = removeDots.replace(/\s{2,}/g,' ');
-     $.post("/includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
-     function(data){
-          if(data==='1'){
-               alert(alrt);
-               document.getElementById(obj.id).value="";
-          }
-     });
-}
-
-function checkPasswordLength(){
-     var pwd = $('#confirmPassword').val();
-     var regex = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9!@#\$%\^\&*\)\(+=. _-]+){8,}$/;
-     if(regex.test(pwd) == false){
-          alert('Password must be at least 8 characters long and must include AT LEAST one number, one alphabet and may have special characters.');
-          $('.ppwd').focus();
-     }
-     return regex.test(pwd);
-}
-
-function getProvinceDistricts(){
-     $.blockUI();
-     var pName = $("#province").val();
-     if(pName!=''){
-               $.post("/includes/getFacilityForClinic.php", { pName : pName,fType:$("#facilityType").val(),comingFromUser:'yes'},
-               function(data){
-                    if(data != ""){
-                         details = data.split("###");
-                         $("#district").html(details[1]);
-                         $("#search").html(details[0]);
+     function checkNameValidation(tableName, fieldName, obj, fnct, alrt, callback) {
+          var removeDots = obj.value.replace(/\,/g, "");
+          //str=obj.value;
+          removeDots = removeDots.replace(/\s{2,}/g, ' ');
+          $.post("/includes/checkDuplicate.php", {
+                    tableName: tableName,
+                    fieldName: fieldName,
+                    value: removeDots.trim(),
+                    fnct: fnct,
+                    format: "html"
+               },
+               function(data) {
+                    if (data === '1') {
+                         alert(alrt);
+                         document.getElementById(obj.id).value = "";
                     }
                });
      }
-     $.unblockUI();
-}
-function getFacilities(){
-     $.blockUI();
-     var dName = $("#district").val();
-     if(dName!=''){
-          $.post("/includes/getFacilityForClinic.php", {dName:dName,fType:$("#facilityType").val(),comingFromUser:'yes'},
-          function(data){
-               if(data != ""){
-                    details = data.split("###");
-                    $("#search").html(details[0]);
-               }
-          });
-     }
-     $.unblockUI();
-}
 
-function getFacility()
-{
-    $.blockUI();
-    var pName = $("#province").val();
-    var dName = $("#district").val();
-    var fType = $("#facilityType").val();
-    if(dName!=''){
-        getFacilities();
-    }else if(pName!=''){
-        getProvinceDistricts();
-    }else if(fType!=''){
-        $.post("/includes/getFacilityForClinic.php", { fType:fType,comingFromUser:'yes'},
-        function(data){
-            $("#search").html(data);
-        });
-    }
-    $.unblockUI();
-}
+     function checkPasswordLength() {
+          var pwd = $('#confirmPassword').val();
+          var regex = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9!@#\$%\^\&*\)\(+=. _-]+){8,}$/;
+          if (regex.test(pwd) == false) {
+               alert('Password must be at least 8 characters long and must include AT LEAST one number, one alphabet and may have special characters.');
+               $('.ppwd').focus();
+          }
+          return regex.test(pwd);
+     }
+
+     function getProvinceDistricts() {
+          $.blockUI();
+          var pName = $("#province").val();
+          if (pName != '') {
+               $.post("/includes/getFacilityForClinic.php", {
+                         pName: pName,
+                         fType: $("#facilityType").val(),
+                         comingFromUser: 'yes'
+                    },
+                    function(data) {
+                         if (data != "") {
+                              details = data.split("###");
+                              $("#district").html(details[1]);
+                              $("#search").html(details[0]);
+                         }
+                    });
+          }
+          $.unblockUI();
+     }
+
+     function getFacilities() {
+          $.blockUI();
+          var dName = $("#district").val();
+          if (dName != '') {
+               $.post("/includes/getFacilityForClinic.php", {
+                         dName: dName,
+                         fType: $("#facilityType").val(),
+                         comingFromUser: 'yes'
+                    },
+                    function(data) {
+                         if (data != "") {
+                              details = data.split("###");
+                              $("#search").html(details[0]);
+                         }
+                    });
+          }
+          $.unblockUI();
+     }
+
+     function getFacility() {
+          $.blockUI();
+          var pName = $("#province").val();
+          var dName = $("#district").val();
+          var fType = $("#facilityType").val();
+          if (dName != '') {
+               getFacilities();
+          } else if (pName != '') {
+               getProvinceDistricts();
+          } else if (fType != '') {
+               $.post("/includes/getFacilityForClinic.php", {
+                         fType: fType,
+                         comingFromUser: 'yes'
+                    },
+                    function(data) {
+                         $("#search").html(data);
+                    });
+          }
+          $.unblockUI();
+     }
 </script>
 <?php
-include(APPLICATION_PATH.'/footer.php');
+include(APPLICATION_PATH . '/footer.php');
 ?>

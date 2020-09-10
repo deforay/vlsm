@@ -3,9 +3,9 @@ ob_start();
 $title = "COVID-19 | Add New Request";
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-include_once(APPLICATION_PATH . '/models/General.php');
-include_once(APPLICATION_PATH . '/models/Covid19.php');
-include_once(APPLICATION_PATH . '/models/Facilities.php');
+//include_once(APPLICATION_PATH . '/models/General.php');
+//include_once(APPLICATION_PATH . '/models/Covid19.php');
+//require_once(APPLICATION_PATH . '/models/Facilities.php');
 ?>
 <style>
     .ui_tpicker_second_label,
