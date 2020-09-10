@@ -87,9 +87,9 @@ $fileArray = array(
     8 => 'forms/add-angola.php',
 );
 
-if(file_exists($fileArray[$arr['vl_form']])){
+if (file_exists($fileArray[$arr['vl_form']])) {
     require_once($fileArray[$arr['vl_form']]);
-}else{
+} else {
     require_once('forms/add-who.php');
 }
 
@@ -127,21 +127,24 @@ if(file_exists($fileArray[$arr['vl_form']])){
         });
 
 
-        $('.dateTime').datetimepicker({
-            changeMonth: true,
-            changeYear: true,
-            dateFormat: 'dd-M-yy',
-            timeFormat: "HH:mm",
-            maxDate: "Today",
-            onChangeMonthYear: function(year, month, widget) {
-                setTimeout(function() {
-                    $('.ui-datepicker-calendar').show();
-                });
-            },
-            yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-        }).click(function() {
-            $('.ui-datepicker-calendar').show();
+        $(document).on('focus', ".dateTime", function() {
+            $(this).datetimepicker({
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: 'dd-M-yy',
+                timeFormat: "HH:mm",
+                maxDate: "Today",
+                onChangeMonthYear: function(year, month, widget) {
+                    setTimeout(function() {
+                        $('.ui-datepicker-calendar').show();
+                    });
+                },
+                yearRange: <?= (date('Y') - 100); ?> + ":" + "<?= date('Y'); ?>"
+            }).click(function() {
+                $('.ui-datepicker-calendar').show();
+            }); 
         });
+
 
         $('#sampleCollectionDate').datetimepicker({
             changeMonth: true,
@@ -154,7 +157,7 @@ if(file_exists($fileArray[$arr['vl_form']])){
                     $('.ui-datepicker-calendar').show();
                 });
             },
-            onSelect:function(e){
+            onSelect: function(e) {
                 $('#sampleReceivedDate').val('');
                 $('#sampleReceivedDate').datetimepicker('option', 'minDate', e);
             },
@@ -174,7 +177,7 @@ if(file_exists($fileArray[$arr['vl_form']])){
                     $('.ui-datepicker-calendar').show();
                 });
             },
-            onSelect:function(e){
+            onSelect: function(e) {
                 $('#sampleTestedDateTime').val('');
                 $('#sampleTestedDateTime').datetimepicker('option', 'minDate', e);
             },
@@ -186,33 +189,33 @@ if(file_exists($fileArray[$arr['vl_form']])){
         $('.date').mask('99-aaa-9999');
         $('.dateTime').mask('99-aaa-9999 99:99');
 
-        $('#isSampleRejected').change(function(e){
-            if(this.value == 'yes'){
+        $('#isSampleRejected').change(function(e) {
+            if (this.value == 'yes') {
                 $('.show-rejection').show();
-                $('.test-name-table-input').prop('disabled',true);
-			    $('.test-name-table').addClass('disabled');
+                $('.test-name-table-input').prop('disabled', true);
+                $('.test-name-table').addClass('disabled');
                 $('#sampleRejectionReason,#rejectionDate').addClass('isRequired');
                 $('#sampleTestedDateTime,#result,.test-name-table-input').removeClass('isRequired');
-                $('#result').prop('disabled',true);
-                $('#sampleRejectionReason').prop('disabled',false);
-            // }else if(this.value == 'no'){
-            }else {
+                $('#result').prop('disabled', true);
+                $('#sampleRejectionReason').prop('disabled', false);
+                // }else if(this.value == 'no'){
+            } else {
                 $('#rejectionDate').val('');
                 $('.show-rejection').hide();
-                $('.test-name-table-input').prop('disabled',false);
-			    $('.test-name-table').removeClass('disabled');
+                $('.test-name-table-input').prop('disabled', false);
+                $('.test-name-table').removeClass('disabled');
                 $('#sampleRejectionReason,#rejectionDate').removeClass('isRequired');
                 $('#sampleTestedDateTime,#result,.test-name-table-input').addClass('isRequired');
-                $('#result').prop('disabled',false);
-                $('#sampleRejectionReason').prop('disabled',true);
+                $('#result').prop('disabled', false);
+                $('#sampleRejectionReason').prop('disabled', true);
                 checkPostive();
             }
         });
-        $('#hasRecentTravelHistory').change(function(e){
-            if(this.value == 'no' || this.value == 'unknown'){
+        $('#hasRecentTravelHistory').change(function(e) {
+            if (this.value == 'no' || this.value == 'unknown') {
                 $('.historyfield').hide();
                 $('#countryName,#returnDate').removeClass('isRequired');
-            }else if(this.value == 'yes'){
+            } else if (this.value == 'yes') {
                 $('.historyfield').show();
                 $('#countryName,#returnDate').addClass('isRequired');
             }

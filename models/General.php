@@ -412,10 +412,13 @@ class General
         return (substr($string, 0, $len) === $startString);
     }
 
-    public function generateSelectOptions($optionList, $selectedOptions = array())
+    public function generateSelectOptions($optionList, $selectedOptions = array(), $emptySelectText = false)
     {
 
         $response = "";
+        if($emptySelectText !== false){
+            $response .= '<option value="">'.$emptySelectText.'</option>';
+        }
         foreach ($optionList as $optId => $optName) {
             $selectedText = '';
             if (!empty($selectedOptions)) {
