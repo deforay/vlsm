@@ -2526,3 +2526,8 @@ ALTER TABLE `form_covid19` ADD INDEX( `remote_sample_code_key`);
 
 ALTER TABLE `form_covid19` ADD `type_of_test_requested` VARCHAR(255) NULL DEFAULT NULL AFTER `reason_for_covid19_test`;
 ALTER TABLE `form_covid19` ADD `patient_city` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_district`;
+
+
+UPDATE `system_config` SET `value` = '4.1.0' WHERE `system_config`.`name` = 'version';
+-- Version 4.1.0 -- Amit -- 28-Aug-2020
+
