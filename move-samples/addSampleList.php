@@ -4,7 +4,7 @@ $title = "Add Sample List";
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 include_once(APPLICATION_PATH . '/models/General.php');
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 
 
 //get lab facility details

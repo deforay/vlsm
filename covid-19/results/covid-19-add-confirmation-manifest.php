@@ -7,7 +7,7 @@ include_once(APPLICATION_PATH . '/models/General.php');
 
 $module = 'C19';
 
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 $packageNo = strtoupper($module) . date('ymd') .  $general->generateRandomString(6);
 ?>
 <link href="/assets/css/multi-select.css" rel="stylesheet" />

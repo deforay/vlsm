@@ -7,7 +7,7 @@ if (session_status() == PHP_SESSION_NONE) {
 include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 include_once(APPLICATION_PATH.'/includes/mail/PHPMailerAutoload.php');
 include_once(APPLICATION_PATH.'/models/General.php');
-$general=new General($db);
+$general=new \Vlsm\Models\General($db);
 $tableName="form_covid19";
 $configSyncQuery ="SELECT `value` FROM global_config where name='sync_path'";
 $configSyncResult = $db->rawQuery($configSyncQuery);

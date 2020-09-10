@@ -22,7 +22,7 @@ $tQuery = "SELECT `module` FROM `temp_sample_import` WHERE `imported_by` ='" . $
 $tResult = $db->rawQueryOne($tQuery);
 $module = $tResult['module'];
 
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 
 if ($module == 'vl') {
   include_once(APPLICATION_PATH . '/import-result/import-stats-vl.php');

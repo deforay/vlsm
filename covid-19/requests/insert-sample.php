@@ -9,8 +9,8 @@ include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 include_once(APPLICATION_PATH . '/models/General.php');
 include_once(APPLICATION_PATH . '/models/Covid19.php');
 // echo "<pre>";print_r($_POST);
-$general = new General($db);
-$covid19Model = new Model_Covid19($db);
+$general = new \Vlsm\Models\General($db);
+$covid19Model = new \Vlsm\Models\Covid19($db);
 
 $globalConfig = $general->getGlobalConfig();
 $systemConfig = $general->getSystemConfig();

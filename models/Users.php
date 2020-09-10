@@ -1,10 +1,6 @@
 <?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
 
-require_once(dirname(__FILE__) . "/../startup.php");
-require_once(APPLICATION_PATH . '/models/General.php');
+namespace Vlsm\Models;
 
 /**
  * General functions
@@ -12,7 +8,7 @@ require_once(APPLICATION_PATH . '/models/General.php');
  * @author Amit
  */
 
-class Model_Users
+class Users
 {
 
     protected $db = null;
@@ -39,7 +35,7 @@ class Model_Users
         $result = $this->db->rawQueryOne($uQuery);
 
         if ($result == null) {
-            $general = new General($this->db);
+            $general = new \Vlsm\Models\General($this->db);
             $userId = $general->generateUserID();
             $userData = array(
                 'user_id' => $userId,

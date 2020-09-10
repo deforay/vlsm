@@ -3,7 +3,7 @@ ob_start();
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 include_once(APPLICATION_PATH.'/models/General.php');
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 $tableName = "form_covid19";
 try {
     $id = explode(",", $_POST['id']);

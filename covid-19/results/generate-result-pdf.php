@@ -15,9 +15,9 @@ include_once(APPLICATION_PATH . '/vendor/autoload.php');
 
 $tableName1 = "activity_log";
 $tableName2 = "form_covid19";
-$general = new General($db);
-$users = new Model_Users($db);
-$covid19Obj = new Model_Covid19($db);
+$general = new \Vlsm\Models\General($db);
+$users = new \Vlsm\Models\Users($db);
+$covid19Obj = new \Vlsm\Models\Covid19($db);
 
 $configQuery = "SELECT * from global_config";
 $configResult = $db->query($configQuery);

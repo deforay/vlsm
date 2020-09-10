@@ -4,7 +4,7 @@ ob_start();
 require_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 require_once(APPLICATION_PATH . '/models/Vl.php');
 
-$vLModel = new Model_Vl($db);
+$vLModel = new \Vlsm\Models\Vl($db);
 
 $sampleCollectionDate = $province = '';
 

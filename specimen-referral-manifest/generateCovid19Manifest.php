@@ -9,7 +9,7 @@ include_once(APPLICATION_PATH . "/includes/MysqliDb.php");
 include_once(APPLICATION_PATH . '/models/General.php');
 include_once(APPLICATION_PATH . "/vendor/autoload.php");
 
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 $id = base64_decode($_POST['id']);
 if (isset($_POST['frmSrc']) && trim($_POST['frmSrc']) == 'pk2') {
     $id = $_POST['ids'];

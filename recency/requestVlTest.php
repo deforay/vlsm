@@ -22,7 +22,7 @@ try {
     include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
     include_once(APPLICATION_PATH . '/models/General.php');
 
-    $general = new General($db);
+    $general = new \Vlsm\Models\General($db);
 
     // Takes raw data from the request
     $json = file_get_contents('php://input');

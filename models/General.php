@@ -6,6 +6,8 @@
  * @author Amit
  */
 
+namespace Vlsm\Models;
+
 class General
 {
 
@@ -107,30 +109,9 @@ class General
         }
     }
 
-    public function getDbDateFormat($date)
-    {
-
-        if ($date == null || $date == "" || $date == "0000-00-00" || substr($date, 0, strlen("0000-00-00")) === "0000-00-00") {
-            return "";
-        } else {
-
-            $dateTimeArray = explode(' ', $date);
-
-            $dateArray = explode('-', $dateTimeArray[0]);
-
-            $newDate = new Zend_date(array('year' => $dateArray[0], 'month' => $dateArray[1], 'day' => $dateArray[2]));
-
-            if (isset($dateTimeArray[1]) && $dateTimeArray[1] != '') {
-                $newDate .= " " . $dateTimeArray[1];
-            }
-
-            return $newDate;
-        }
-    }
-
     public static function getDateTime()
     {
-        $date = new DateTime(date('Y-m-d H:i:s'));
+        $date = new \DateTime(date('Y-m-d H:i:s'));
         return $date->format('Y-m-d H:i:s');
     }
 

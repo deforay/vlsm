@@ -4,7 +4,7 @@ include(dirname(__FILE__) . "/../../startup.php");
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 include_once(APPLICATION_PATH . '/models/General.php');
 
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 
 $data = json_decode(file_get_contents('php://input'), true);
 if ($data['Key'] == 'vlsm-get-remote') {

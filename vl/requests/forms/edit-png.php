@@ -166,7 +166,7 @@ if (isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date']
 $sampleSuggestion = '';
 $sampleSuggestionDisplay = 'display:none;';
 if ($sarr['user_type'] == 'vluser' && $sCode != '') {
-  $vlObj = new Model_Vl($db);
+  $vlObj = new \Vlsm\Models\Vl($db);
   $sampleCollectionDate = explode(" ", $sampleCollectionDate);
   $sampleCollectionDate = $general->humanDateFormat($sampleCollectionDate[0]);
   $sampleSuggestionJson = $vlObj->generateVLSampleID($stateResult[0]['province_code'], $sampleCollectionDate, 'png');

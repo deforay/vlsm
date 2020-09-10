@@ -4,7 +4,7 @@ ob_start();
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 include_once(APPLICATION_PATH . '/models/General.php');
 
-$general = new General($db); // passing $db which is coming from MysqliDb.php
+$general = new \Vlsm\Models\General($db); // passing $db which is coming from MysqliDb.php
 
 $configFormQuery = "SELECT * FROM global_config WHERE name ='vl_form'";
 $configFormResult = $db->rawQuery($configFormQuery);

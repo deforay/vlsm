@@ -7,7 +7,7 @@ ob_start();
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 include_once(APPLICATION_PATH . '/models/General.php');
 include_once(APPLICATION_PATH . '/models/Vl.php');
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 $tableName = "vl_request_form";
 $tableName1 = "activity_log";
 $vlTestReasonTable = "r_vl_test_reasons";
@@ -225,7 +225,7 @@ try {
                $province = $_POST['province'];
                $province = explode("##", $province);
 
-               $vlObj = new Model_Vl($db);
+               $vlObj = new \Vlsm\Models\Vl($db);
                $sampleJson = $vlObj->generateVLSampleID($province[1], $_POST['collectionDate'], 'png');
                $sampleData = json_decode($sampleJson, true);
                $vldata['sample_code'] = $sampleData['sampleCode'];

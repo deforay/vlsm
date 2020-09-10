@@ -15,7 +15,7 @@ if ($sarr['user_type'] == 'remoteuser') {
     $vlfmQuery = "SELECT GROUP_CONCAT(DISTINCT vlfm.facility_id SEPARATOR ',') as facilityId FROM vl_user_facility_map as vlfm where vlfm.user_id='" . $_SESSION['userId'] . "'";
     $vlfmResult = $db->rawQuery($vlfmQuery);
 }
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 
 //global config
 $arr = $general->getGlobalConfig();

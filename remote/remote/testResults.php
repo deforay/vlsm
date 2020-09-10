@@ -15,8 +15,8 @@ for ($i = 0; $i < sizeof($cResult); $i++) {
     $arr[$cResult[$i]['name']] = $cResult[$i]['value'];
 }
 
-$general = new General($db);
-$usersModel = new Model_Users($db);
+$general = new \Vlsm\Models\General($db);
+$usersModel = new \Vlsm\Models\Users($db);
 
 function var_error_log($object = null)
 {

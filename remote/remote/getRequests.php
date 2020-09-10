@@ -11,7 +11,7 @@ if (empty($labId)) {
   exit(0);
 }
 
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 $dataSyncInterval = $general->getGlobalConfig('data_sync_interval');
 $dataSyncInterval = !empty($dataSyncInterval) ? $dataSyncInterval : 30;
 

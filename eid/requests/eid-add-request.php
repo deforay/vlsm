@@ -31,7 +31,7 @@ if ($sarr['user_type'] == 'remoteuser') {
     $vlfmResult = $db->rawQuery($vlfmQuery);
 }
 
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 
 
 

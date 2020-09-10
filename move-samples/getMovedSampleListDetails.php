@@ -8,7 +8,7 @@ include_once(APPLICATION_PATH.'/models/General.php');
 $tableName="move_samples";
 $primaryKey="move_sample_id";
 
-$general=new General($db);
+$general=new \Vlsm\Models\General($db);
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */

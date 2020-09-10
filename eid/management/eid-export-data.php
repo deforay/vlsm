@@ -30,7 +30,7 @@ $implementingPartnerQry = "SELECT * FROM r_implementation_partners WHERE i_partn
 $implementingPartnerList = $db->query($implementingPartnerQry);
 
 
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 $eidResults = $general->getEidResults();
 
 

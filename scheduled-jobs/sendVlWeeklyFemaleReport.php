@@ -12,7 +12,7 @@ include_once(APPLICATION_PATH."/vendor/autoload.php");
 
 
 
-$general=new General($db);
+$general=new \Vlsm\Models\General($db);
 
 $query ="SELECT * from s_vlsm_instance";
 $qResult=$db->query($query);

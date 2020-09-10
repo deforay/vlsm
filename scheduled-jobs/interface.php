@@ -13,7 +13,7 @@ if (!isset($interfaceConfig['enabled']) || $interfaceConfig['enabled'] === false
 
 $vlsmDb  = $db; // assigning to another variable to avoid confusion
 
-$usersModel = new Model_Users($vlsmDb);
+$usersModel = new \Vlsm\Models\Users($vlsmDb);
 
 $interfacedb = new MysqliDb(
     $interfaceConfig['dbHost'],
@@ -25,7 +25,7 @@ $interfacedb = new MysqliDb(
 
 
 
-//$general = new General($vlsmDb);
+//$general = new \Vlsm\Models\General($vlsmDb);
 
 //$lowVlResults = $general->getLowVLResultTextFromImportConfigs();
 
@@ -198,7 +198,7 @@ if (count($interfaceInfo) > 0) {
 
     if ($numberOfResults > 0) {
         $importedBy = isset($_SESSION['userId']) ? $_SESSION['userId'] : 'AUTO';
-        $general = new General($vlsmDb);
+        $general = new \Vlsm\Models\General($vlsmDb);
         $general->resultImportStats($numberOfResults, 'interface', $importedBy);
     }
 }

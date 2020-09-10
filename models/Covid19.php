@@ -1,6 +1,6 @@
 <?php
-require_once(dirname(__FILE__) . "/../startup.php");
-include_once(APPLICATION_PATH . '/models/General.php');
+
+namespace Vlsm\Models;
 
 /**
  * General functions
@@ -8,7 +8,7 @@ include_once(APPLICATION_PATH . '/models/General.php');
  * @author Amit
  */
 
-class Model_Covid19
+class Covid19
 {
 
     protected $db = null;
@@ -23,7 +23,7 @@ class Model_Covid19
     public function generateCovid19SampleCode($provinceCode, $sampleCollectionDate, $sampleFrom = null, $provinceId = '', $maxCodeKeyVal = null)
     {
 
-        $general = new General($this->db);
+        $general = new \Vlsm\Models\General($this->db);
 
         $globalConfig = $general->getGlobalConfig();
         $systemConfig = $general->getSystemConfig();
@@ -166,7 +166,7 @@ class Model_Covid19
 
     public function getCovid19Results()
     {
-        $results = $this->db->rawQuery("SELECT * FROM r_covid19_results where status='active' ORDER BY result_id DESC");
+        $results = $this->db->rawQuery("SELECT result_id,result FROM r_covid19_results where status='active' ORDER BY result_id DESC");
         $response = array();
         foreach ($results as $row) {
             $response[$row['result_id']] = $row['result'];
@@ -176,7 +176,7 @@ class Model_Covid19
 
     public function getCovid19ReasonsForTesting()
     {
-        $results = $this->db->rawQuery("SELECT * FROM r_covid19_test_reasons WHERE `test_reason_status` LIKE 'active'");
+        $results = $this->db->rawQuery("SELECT test_reason_id,test_reason_name FROM r_covid19_test_reasons WHERE `test_reason_status` LIKE 'active'");
         $response = array();
         foreach ($results as $row) {
             $response[$row['test_reason_id']] = $row['test_reason_name'];
@@ -186,7 +186,7 @@ class Model_Covid19
 
     public function getCovid19ReasonsForTestingDRC()
     {
-        $results = $this->db->rawQuery("SELECT * FROM r_covid19_test_reasons WHERE `test_reason_status` LIKE 'active' AND (parent_reason IS NULL OR parent_reason = 0)");
+        $results = $this->db->rawQuery("SELECT test_reason_id,test_reason_name FROM r_covid19_test_reasons WHERE `test_reason_status` LIKE 'active' AND (parent_reason IS NULL OR parent_reason = 0)");
         $response = array();
         foreach ($results as $row) {
             $response[$row['test_reason_id']] = $row['test_reason_name'];
@@ -195,7 +195,7 @@ class Model_Covid19
     }
     public function getCovid19Symptoms()
     {
-        $results = $this->db->rawQuery("SELECT * FROM r_covid19_symptoms WHERE `symptom_status` LIKE 'active'");
+        $results = $this->db->rawQuery("SELECT symptom_id,symptom_name FROM r_covid19_symptoms WHERE `symptom_status` LIKE 'active'");
         $response = array();
         foreach ($results as $row) {
             $response[$row['symptom_id']] = $row['symptom_name'];
@@ -205,7 +205,7 @@ class Model_Covid19
 
     public function getCovid19SymptomsDRC()
     {
-        $results = $this->db->rawQuery("SELECT * FROM r_covid19_symptoms WHERE `symptom_status` LIKE 'active' AND (parent_symptom IS NULL OR parent_symptom = 0)");
+        $results = $this->db->rawQuery("SELECT symptom_id,symptom_name FROM r_covid19_symptoms WHERE `symptom_status` LIKE 'active' AND (parent_symptom IS NULL OR parent_symptom = 0)");
         $response = array();
         foreach ($results as $row) {
             $response[$row['symptom_id']] = $row['symptom_name'];
@@ -215,7 +215,7 @@ class Model_Covid19
 
     public function getCovid19Comorbidities()
     {
-        $results = $this->db->rawQuery("SELECT * FROM r_covid19_comorbidities WHERE `comorbidity_status` LIKE 'active'");
+        $results = $this->db->rawQuery("SELECT comorbidity_id,comorbidity_name FROM r_covid19_comorbidities WHERE `comorbidity_status` LIKE 'active'");
         $response = array();
         foreach ($results as $row) {
             $response[$row['comorbidity_id']] = $row['comorbidity_name'];

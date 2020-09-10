@@ -7,7 +7,7 @@ if (!isset($_SESSION['userId'])) {
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 include_once(APPLICATION_PATH . '/models/General.php');
 
-$general = new General($db);
+$general = new \Vlsm\Models\General($db);
 
 /* Crosss Login Block Start */
 $crossLoginQuery = "SELECT `login_id`,`password`,`user_name` FROM `user_details` WHERE user_id = '" . $_SESSION['userId'] . "'";
