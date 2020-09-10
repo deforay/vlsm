@@ -406,11 +406,11 @@ class General
         return $response;
     }
 
-    public function startsWith($string, $startString) 
-    { 
-        $len = strlen($startString); 
-        return (substr($string, 0, $len) === $startString); 
-    }     
+    public function startsWith($string, $startString)
+    {
+        $len = strlen($startString);
+        return (substr($string, 0, $len) === $startString);
+    }
 
     public function generateSelectOptions($optionList, $selectedOptions = array())
     {
@@ -436,10 +436,20 @@ class General
 
         $result = $this->db->rawQueryOne($query);
 
-        if (isset($result[$modifiedDateTimeColName]) && $result[$modifiedDateTimeColName] != '' && $result[$modifiedDateTimeColName] != NULL && !$this->startsWith($result[$modifiedDateTimeColName],'0000-00-00')) {
+        if (isset($result[$modifiedDateTimeColName]) && $result[$modifiedDateTimeColName] != '' && $result[$modifiedDateTimeColName] != NULL && !$this->startsWith($result[$modifiedDateTimeColName], '0000-00-00')) {
             return $result[$modifiedDateTimeColName];
         } else {
             return null;
+        }
+    }
+
+    public function getHeader($key)
+    {
+        $headers = apache_request_headers();
+        foreach ($headers as $header => $value) {
+            if (strtolower($key) == strtolower($header)) {
+                return $value;
+            }
         }
     }
 }
