@@ -8,7 +8,7 @@ $module = ($module == 'covid19') ? 'C19' : $module;
 $title = "Add New Specimen Referral Manifest";
 include_once '../startup.php';
 include_once APPLICATION_PATH . '/header.php';
-include_once(APPLICATION_PATH . '/models/General.php');
+//include_once(APPLICATION_PATH . '/models/General.php');
 $general = new \Vlsm\Models\General($db);
 $packageNo = strtoupper($module) . date('ymd') .  $general->generateRandomString(6);
 ?>

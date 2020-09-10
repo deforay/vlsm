@@ -11,7 +11,7 @@ ini_set('memory_limit', -1);
 header('Content-Type: application/json');
 
 include_once(APPLICATION_PATH . "/includes/MysqliDb.php");
-include_once(APPLICATION_PATH . '/models/General.php');
+//include_once(APPLICATION_PATH . '/models/General.php');
 include_once(APPLICATION_PATH . "/vendor/autoload.php");
 
 $general = new \Vlsm\Models\General($db);

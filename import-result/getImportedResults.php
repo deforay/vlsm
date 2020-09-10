@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
-include_once(APPLICATION_PATH . '/models/General.php');
+//include_once(APPLICATION_PATH . '/models/General.php');
 $general = new \Vlsm\Models\General($db);
 $tableName = "temp_sample_import";
 $primaryKey = "temp_sample_id";

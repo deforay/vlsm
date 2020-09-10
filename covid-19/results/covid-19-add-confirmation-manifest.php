@@ -3,7 +3,7 @@ ob_start();
 $title = "Covid-19 | Add Batch";
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-include_once(APPLICATION_PATH . '/models/General.php');
+//include_once(APPLICATION_PATH . '/models/General.php');
 
 $module = 'C19';
 

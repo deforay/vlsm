@@ -5,8 +5,8 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 include_once '../../startup.php';
 include_once APPLICATION_PATH . '/includes/MysqliDb.php';
-include_once(APPLICATION_PATH . '/models/Eid.php');
-include_once(APPLICATION_PATH . '/models/General.php');
+//include_once(APPLICATION_PATH . '/models/Eid.php');
+//include_once(APPLICATION_PATH . '/models/General.php');
 $eidModel = new \Vlsm\Models\Eid($db);
 
 

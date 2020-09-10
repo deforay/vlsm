@@ -4,7 +4,7 @@ ob_start();
 #require_once('../../startup.php'); 
 include_once(APPLICATION_PATH.'/header.php');
 
-include_once(APPLICATION_PATH.'/models/General.php');
+//include_once(APPLICATION_PATH.'/models/General.php');
 $general=new \Vlsm\Models\General($db);
 $tableName1="activity_log";
 $id=base64_decode($_GET['id']);
