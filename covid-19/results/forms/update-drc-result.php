@@ -619,7 +619,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                                 <tr>
                                                                     <td class="text-center"><?php echo ($indexKey + 1); ?><input type="hidden" name="testId[]" value="<?php echo base64_encode($covid19TestInfo[$indexKey]['test_id']); ?>"></td>
                                                                     <td>
-                                                                        <select onchange="changeDRCTestName(this.value,<?php echo ($indexKey + 1); ?>)" class="form-control test-name-table-input isRequired" id="testName<?php echo ($indexKey + 1); ?>" name="testName[]" title="Veuillez saisir le nom du test pour les lignes <?php echo ($indexKey + 1); ?>">
+                                                                        <select onchange="otherCovidTestName(this.value,<?php echo ($indexKey + 1); ?>)" class="form-control test-name-table-input isRequired" id="testName<?php echo ($indexKey + 1); ?>" name="testName[]" title="Veuillez saisir le nom du test pour les lignes <?php echo ($indexKey + 1); ?>">
                                                                             <option value="">--Select--</option>
                                                                             <option value="PCR/RT-PCR" <?php echo (isset($covid19TestInfo[$indexKey]['test_name']) && $covid19TestInfo[$indexKey]['test_name'] == 'PCR/RT-PCR')?"selected='selected'":"";?>>PCR/RT-PCR</option>
                                                                             <option value="RdRp-SARS Cov-2" <?php echo (isset($covid19TestInfo[$indexKey]['test_name']) && $covid19TestInfo[$indexKey]['test_name'] == 'RdRp-SARS Cov-2')?"selected='selected'":"";?>>RdRp-SARS Cov-2</option>
@@ -653,7 +653,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                             <tr>
                                                                 <td class="text-center">1</td>
                                                                 <td>
-                                                                    <select onchange="changeDRCTestName(this.value,1)" class="form-control test-name-table-input isRequired" id="testName1" name="testName[]" title="Veuillez saisir le nom du test pour les lignes 1">
+                                                                    <select onchange="otherCovidTestName(this.value,1)" class="form-control test-name-table-input isRequired" id="testName1" name="testName[]" title="Veuillez saisir le nom du test pour les lignes 1">
                                                                         <option value="">--Select--</option>
                                                                         <option value="PCR/RT-PCR">PCR/RT-PCR</option>
                                                                         <option value="RdRp-SARS Cov-2">RdRp-SARS Cov-2</option>
@@ -998,7 +998,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         f.setAttribute("style", "vertical-align:middle");
 
         b.innerHTML = tableRowId;
-        c.innerHTML = '<select onchange="changeDRCTestName(this.value,' + tableRowId + ')" class="form-control test-name-table-input" id="testName' + tableRowId + '" name="testName[]" title="Veuillez saisir le nom du test pour les lignes ' + tableRowId + '"> <option value="">--Select--</option> <option value="PCR/RT-PCR">PCR/RT-PCR</option> <option value="RdRp-SARS Cov-2">RdRp-SARS Cov-2</option> <option value="other">Others</option> </select> <input type="text" name="testNameOther[]" id="testNameOther' + tableRowId + '" class="form-control testInputOther' + tableRowId + ' " placeholder="Entrez le nom du test ' + tableRowId + '" title="Veuillez saisir le nom du test pour les lignes ' + tableRowId + '" style="display: none;margin-top: 10px;"/>';
+        c.innerHTML = '<select onchange="otherCovidTestName(this.value,' + tableRowId + ')" class="form-control test-name-table-input" id="testName' + tableRowId + '" name="testName[]" title="Veuillez saisir le nom du test pour les lignes ' + tableRowId + '"> <option value="">--Select--</option> <option value="PCR/RT-PCR">PCR/RT-PCR</option> <option value="RdRp-SARS Cov-2">RdRp-SARS Cov-2</option> <option value="other">Others</option> </select> <input type="text" name="testNameOther[]" id="testNameOther' + tableRowId + '" class="form-control testInputOther' + tableRowId + ' " placeholder="Entrez le nom du test ' + tableRowId + '" title="Veuillez saisir le nom du test pour les lignes ' + tableRowId + '" style="display: none;margin-top: 10px;"/>';
         d.innerHTML = '<input type="text" name="testDate[]" id="testDate' + tableRowId + '" class="form-control test-name-table-input dateTime" placeholder="Testé sur"  title="Veuillez sélectionner la Date de l analyse pour la ligne ' + tableRowId + '"/>';
         e.innerHTML = '<select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult' + tableRowId + '" title="Veuillez sélectionner le résultat pour la ligne ' + tableRowId + '"><option value=""> -- Select -- </option><?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?> <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option> <?php } ?> </select>';
         f.innerHTML = '<a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;<a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>';
@@ -1021,7 +1021,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         tableRowId++;
 
         /* <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
-        $('.test-result,#result').change(function(e){
+        $(document).change('.test-result, #result', function(e) {
             checkPostive();
         });
         <?php }?> */
@@ -1055,7 +1055,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         }
     }
 
-    function changeDRCTestName(val,id){
+    function otherCovidTestName(val,id){
         if(val == 'other'){
             $('.testInputOther'+id).show();
         } else{

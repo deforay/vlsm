@@ -103,7 +103,7 @@ foreach ($fResult as $fDetails) {
                                         <?php } else { ?>
                                             <td><label for="sampleCode">Sample ID </label><span class="mandatory">*</span></td>
                                             <td>
-                                                <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" readonly="readonly" placeholder="Sample ID" title="Please enter sample id" style="width:100%;" onchange="checkSampleNameValidation('form_covid19','<?php echo $sampleCode; ?>',this.id,null,'The sample id that you entered already exists. Please try another sample id',null)" />
+                                                <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" readonly="readonly" placeholder="Sample ID" title="Please enter sample code" style="width:100%;" onchange="checkSampleNameValidation('form_covid19','<?php echo $sampleCode; ?>',this.id,null,'The sample id that you entered already exists. Please try another sample id',null)" />
                                             </td>
                                         <?php } ?>
                                         <td></td>
@@ -173,18 +173,18 @@ foreach ($fResult as $fDetails) {
 
 
                                 <div class="box-header with-border sectionHeader">
-                                    <h3 class="box-title">CASE INFORMATION</h3>
+                                    <h3 class="box-title">CASE DETAILS/DEMOGRAPHICS</h3>
                                 </div>
                                 <table class="table" style="width:100%">
 
                                     <tr>
                                         <th style="width:15% !important"><label for="firstName">First Name <span class="mandatory">*</span> </label></th>
                                         <td style="width:35% !important">
-                                            <input type="text" class="form-control isRequired" id="firstName" name="firstName" placeholder="First Name" title="Please enter Case first name" style="width:100%;" onchange="" />
+                                            <input type="text" class="form-control isRequired" id="firstName" name="firstName" placeholder="First Name" title="Please enter First name" style="width:100%;" onchange="" />
                                         </td>
                                         <th style="width:15% !important"><label for="lastName">Last name </label></th>
                                         <td style="width:35% !important">
-                                            <input type="text" class="form-control " id="lastName" name="lastName" placeholder="Last name" title="Please enter Case last name" style="width:100%;" onchange="" />
+                                            <input type="text" class="form-control " id="lastName" name="lastName" placeholder="Last name" title="Please enter Last name" style="width:100%;" onchange="" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -198,7 +198,7 @@ foreach ($fResult as $fDetails) {
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th>Case Age (years)</th>
+                                        <th>Age (years)</th>
                                         <td><input type="number" max="150" maxlength="3" oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="patientAge" name="patientAge" placeholder="Case Age (in years)" title="Case Age" style="width:100%;" onchange="" /></td>
                                         <th><label for="patientGender">Gender <span class="mandatory">*</span> </label></th>
                                         <td>
@@ -213,150 +213,30 @@ foreach ($fResult as $fDetails) {
                                     </tr>
                                     <tr>
                                         <th>Phone number</th>
-                                        <td><input type="text" class="form-control " id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Case Phone Number" title="Case Phone Number" style="width:100%;" onchange="" /></td>
+                                        <td><input type="text" class="form-control " id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Phone Number" title="Case Phone Number" style="width:100%;" onchange="" /></td>
 
-                                        <th>Case address</th>
-                                        <td><textarea class="form-control " id="patientAddress" name="patientAddress" placeholder="Case Address" title="Case Address" style="width:100%;" onchange=""></textarea></td>
-                                    </tr>
-                                                                        
-                                    <tr>
-                                        <th>Case Province</th>
-                                        <td><input type="text" class="form-control " id="patientProvince" name="patientProvince" placeholder="Case Province" title="Please enter the Case province" style="width:100%;" /></td>
-
-                                        <th>Case District</th>
-                                        <td><input class="form-control" id="patientDistrict" name="patientDistrict" placeholder="Case District" title="Please enter the Case district" style="width:100%;"></td>
+                                        <th>Address</th>
+                                        <td><textarea class="form-control " id="patientAddress" name="patientAddress" placeholder="Address" title="Case Address" style="width:100%;" onchange=""></textarea></td>
                                     </tr>
 
                                     <tr>
-                                        <th>Case City/Village</th>
+                                        <th>Province</th>
+                                        <td><input type="text" class="form-control " id="patientProvince" name="patientProvince" placeholder="Province" title="Please enter the Case Province" style="width:100%;" /></td>
+
+                                        <th>District</th>
+                                        <td><input class="form-control" id="patientDistrict" name="patientDistrict" placeholder="District" title="Please enter the Case District" style="width:100%;"></td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>City/Village</th>
                                         <td><input class="form-control" id="patientCity" name="patientCity" placeholder="Case City/Village" title="Please enter the Case City/Village" style="width:100%;"></td>
-    
-                                        <th>Country of Residence</th>
-                                        <td><input type="text" class="form-control" id="patientNationality" name="patientNationality" placeholder="Country of Residence" title="Please enter transit" style="width:100%;" /></td>
-                                    </tr> 
-                                    <tr>
-                                        <td colspan="4"><h4>Flight Details</h4></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Airline</th>
-                                        <td><input type="text" class="form-control " id="airline" name="airline" placeholder="Airline" title="Please enter the airline" style="width:100%;" /></td>
 
-                                        <th>Seat Number</th>
-                                        <td><input type="text" class="form-control " id="seatNo" name="seatNo" placeholder="Seat Number" title="Please enter the seat number" style="width:100%;" /></td>
-                                    </tr>                                    
-                                    <tr>
-                                        <th>Arrival Date and Time</th>
-                                        <td><input type="text" class="form-control dateTime" id="arrivalDateTime" name="arrivalDateTime" placeholder="Arrival Date and Time" title="Please enter the arrival date and time" style="width:100%;" /></td>
-
-                                        <th>Airport of Departure</th>
-                                        <td><input type="text" class="form-control " id="airportOfDeparture" name="airportOfDeparture" placeholder="Airport of Departure" title="Please enter the airport of departure" style="width:100%;" /></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Transit</th>
-                                        <td><input type="text" class="form-control" id="transit" name="transit" placeholder="Transit" title="Please enter transit" style="width:100%;" /></td>
-                                        <th>Reason of Visit (if applicable)</th>
-                                        <td><input type="text" class="form-control" id="reasonOfVisit" name="reasonOfVisit" placeholder="Reason of Visit" title="Please enter reason of visit" style="width:100%;" /></td>
-
-                                    </tr> 
-                                </table>
-
-                                <div class="box-header with-border sectionHeader">
-                                    <h3 class="box-title">CLINICAL SIGNS AND SYMPTOMS</h3>
-                                </div>
-                                <table class="table">
-                                    <tr>
-                                        <th style="width:15% !important">Date of Symptom Onset <span class="mandatory">*</span> </th>
-                                        <td style="width:35% !important;">
-                                            <input class="form-control date isRequired" type="text" name="dateOfSymptomOnset" id="dateOfSymptomOnset" placeholder="Symptom Onset Date" />
-                                        </td>
-                                        <th style="width:15% !important">Date of Initial Consultation</th>
-                                        <td style="width:35% !important;">
-                                            <input class="form-control date" type="text" name="dateOfInitialConsultation" id="dateOfInitialConsultation" placeholder="Date of Initial Consultation" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th style="width:15% !important">Fever/Temperature (&deg;C) <span class="mandatory">*</span> </th>
-                                        <td style="width:35% !important;">
-                                            <input class="form-control isRequired" type="number" name="feverTemp" id="feverTemp" placeholder="Fever/Temperature (in &deg;Celcius)" />
-                                        </td>
-                                        <th style="width:15% !important"></th>
-                                        <td style="width:35% !important;"></td>
-                                    </tr>
-                                    <tr>
-                                        <th style="width:15% !important">Symptoms Presented in last 14 days <span class="mandatory">*</span> </th>
-                                        <td colspan="3">
-                                            <table style="width:60%;" class="table table-bordered">
-                                                <?php foreach ($covid19Symptoms as $symptomId => $symptomName) { ?>
-                                                    <tr>
-                                                        <th style="width:50%;"><?php echo $symptomName; ?></th>
-                                                        <td>
-                                                            <input name="symptomId[]" type="hidden" value="<?php echo $symptomId; ?>">
-                                                            <select name="symptomDetected[]" class="form-control isRequired" title="Please choose value for <?php echo $symptomName; ?>" style="width:100%">
-                                                                <option value="">-- Select --</option>
-                                                                <option value='yes'> Yes </option>
-                                                                <option value='no'> No </option>
-                                                                <option value='unknown'> Unknown </option>
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                <?php } ?>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </table>
-
-                                <div class="box-header with-border sectionHeader">
-                                    <h3 class="box-title">OTHER CO-MORBIDITIES</h3>
-                                </div>
-                                <table class="table">
-                                    <tr>
-                                        <th style="width:15% !important">Co-morbidities <span class="mandatory">*</span> </th>
-                                        <td colspan="3">
-                                            <table style="width:60%;" class="table table-bordered">
-                                                <?php foreach ($covid19Comorbidities as $comId => $comName) { ?>
-                                                    <tr>
-                                                        <th style="width:50%;"><?php echo $comName; ?></th>
-                                                        <td>
-                                                            <input name="comorbidityId[]" type="hidden" value="<?php echo $comId; ?>">
-                                                            <select name="comorbidityDetected[]" class="form-control isRequired" title="Please choose value for <?php echo $comName; ?>" style="width:100%">
-                                                                <option value="">-- Select --</option>
-                                                                <option value='yes'> Yes </option>
-                                                                <option value='no'> No </option>
-                                                                <option value='unknown'> Unknown </option>
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                <?php } ?>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </table>
-
-                                <div class="box-header with-border sectionHeader">
-                                    <h3 class="box-title">EPIDEMIOLOGICAL RISK FACTORS AND EXPOSURES</h3>
-                                </div>
-                                <table class="table">
-                                    <tr>
-                                        <th style="width:15% !important">Close contacts of the Case <span class="mandatory">*</span></th>
-                                        <td colspan="3">
-                                            <textarea name="closeContacts" class="form-control" style="width:100%;min-height:100px;"></textarea>
-                                            <span class="text-danger">
-                                                Add close contact names and phone numbers (household, family members, friends you have been in contact with in the last 14 days)
-                                            </span>
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <th>Case Occupation</th>
-                                        <td>
-                                            <input class="form-control" type="text" name="patientOccupation" id="patientOccupation" placeholder="Patient's Occupation" />
-                                        </td>
-                                        <th></th>
-                                        <td></td>
-
+                                        <th>Nationality</th>
+                                        <td><input type="text" class="form-control" id="patientNationality" name="patientNationality" placeholder="Nationality" title="Please enter the case nationality" style="width:100%;" /></td>
                                     </tr>
 
                                 </table>
+
                                 <div class="box-header with-border sectionHeader">
                                     <h3 class="box-title">SPECIMEN INFORMATION</h3>
                                 </div>
@@ -365,60 +245,57 @@ foreach ($fResult as $fDetails) {
                                         <td colspan=4>
                                             <ul>
                                                 <li>All specimens collected should be regarded as potentially infectious and you <u>MUST CONTACT</u> the reference laboratory before sending samples.</li>
-                                                <li>All samples must be sent in accordance with category B transport requirements.</li>
+                                                <li>All samples must be sent in accordance with Category B transport requirements.</li>
                                             </ul>
 
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th style="width:15% !important">Lab Sample Collected? <span class="mandatory">*</span> </th>
-                                        <td style="width:35% !important;">
-                                            <select name="isSampleCollected" id="isSampleCollected" class="form-control isRequired" title="Is Lab Sample collected ?" style="width:100%">
-                                                <option value="">-- Select --</option>
-                                                <option value='yes'> Yes </option>
-                                                <option value='no'> No </option>
-                                            </select>
-                                        </td>
                                         <th>Type of Test Request</th>
                                         <td>
                                             <select name="testTypeRequested" id="testTypeRequested" class="form-control" title="Please choose type of test request" style="width:100%">
-                                                <option value="">-- Select --</option>
-                                                <?php echo $general->generateSelectOptions($covid19ReasonsForTesting); ?>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>Reason for Covid-19 Testing <span class="mandatory">*</span></th>
-                                        <td>
-                                            <select name="reasonForCovid19Test" id="reasonForCovid19Test" class="form-control isRequired" title="Please choose specimen type" style="width:100%">
                                                 <option value="">-- Select --</option>
                                                 <option value="PCR">PCR</option>
                                                 <option value="GeneXpert">GeneXpert</option>
                                                 <option value="RDT">RDT</option>
                                                 <option value="ELISA">ELISA</option>
                                             </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>Specimen Type <span class="mandatory">*</span></th>
-                                        <td>
-                                            <select name="specimenType" id="specimenType" class="form-control isRequired" title="Please choose specimen type" style="width:100%">
-                                                <option value="">-- Select --</option>
-                                                <?php echo $general->generateSelectOptions($specimenTypeResult); ?>
                                             </select>
                                         </td>
+                                        <th>Reason for Test Request <span class="mandatory">*</span></th>
+                                        <td>
+                                            <select name="reasonForCovid19Test" id="reasonForCovid19Test" class="form-control isRequired" title="Please choose reason for testing" style="width:100%">
+                                                <?= $general->generateSelectOptions($covid19ReasonsForTesting, null, '-- Select --'); ?>
+                                            </select>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
                                         <th style="width:15% !important">Sample Collection Date <span class="mandatory">*</span> </th>
                                         <td style="width:35% !important;">
                                             <input class="form-control isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" onchange="sampleCodeGeneration();" />
                                         </td>
+                                        <th>Specimen Type <span class="mandatory">*</span></th>
+                                        <td>
+                                            <select name="specimenType" id="specimenType" class="form-control isRequired" title="Please choose specimen type" style="width:100%">
+                                                <?php echo $general->generateSelectOptions($specimenTypeResult, null, '-- Select --'); ?>
+                                            </select>
+                                        </td>
                                     </tr>
-
-
+                                    <tr>
+                                        <th><label for="testNumber">Test Number</label></th>
+                                        <td>
+                                            <select class="form-control" name="testNumber" id="testNumber" title="Prélévement" style="width:100%;">
+                                                <option value="">--Select--</option>
+                                                <?php foreach (range(1, 5) as $element) {
+                                                    echo '<option value="' . $element . '">' . $element . '</option>';
+                                                } ?>
+                                            </select>
+                                        </td>
+                                        <th></th>
+                                        <td></td>
+                                    </tr>
                                 </table>
-
-
-
-
                             </div>
                         </div>
                         <?php if ($sarr['user_type'] != 'remoteuser') { ?>
@@ -462,7 +339,7 @@ foreach ($fResult as $fDetails) {
                                         </tr>
                                         <tr class="show-rejection" style="display:none;">
                                             <th>Rejection Date<span class="mandatory">*</span></th>
-                                            <td><input class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Select Rejection Date"/></td>
+                                            <td><input class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Select Rejection Date" /></td>
                                             <td></td>
                                             <td></td>
                                         </tr>
@@ -480,18 +357,26 @@ foreach ($fResult as $fDetails) {
                                                     <tbody id="testKitNameTable">
                                                         <tr>
                                                             <td class="text-center">1</td>
-                                                            <td><input type="text" name="testName[]" id="testName1" class="form-control test-name-table-input" placeholder="Test name" title="Please enter the test name for row 1s" /></td>
+                                                            <td>
+                                                                <select onchange="otherCovidTestName(this.value,1)" class="form-control test-name-table-input" id="testName1" name="testName[]" title="Please enter the name of the Testkit (or) Test Method used">
+                                                                    <option value="">--Select--</option>
+                                                                    <option value="PCR">PCR</option>
+                                                                    <option value="GeneXpert">GeneXpert</option>
+                                                                    <option value="RDT">RDT</option>
+                                                                    <option value="ELISA">ELISA</option>
+                                                                    <option value="other">Others</option>
+                                                                </select>
+                                                                <input type="text" name="testNameOther[]" id="testNameOther1" class="form-control testInputOther1" title="Please enter the name of the Testkit (or) Test Method used" placeholder="Please enter the name of the Testkit (or) Test Method used" style="display: none;margin-top: 10px;" />
+                                                            </td>
                                                             <td><input type="text" name="testDate[]" id="testDate1" class="form-control test-name-table-input dateTime" placeholder="Tested on" title="Please enter the tested on for row 1" /></td>
-                                                            <td><select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult1" title="Please select the result for row 1">
-                                                                    <option value=''> -- Select -- </option>
-                                                                    <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
-                                                                        <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option>
-                                                                    <?php } ?>
+                                                            <td>
+                                                                <select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult1" title="Please select the result for row 1">
+                                                                    <?= $general->generateSelectOptions($covid19Results, null, '-- Select --'); ?>
                                                                 </select>
                                                             </td>
                                                             <td style="vertical-align:middle;text-align: center;">
-                                                                <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;
-                                                                <a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
+                                                                <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="addTestRow();"><i class="fa fa-plus"></i></a>&nbsp;
+                                                                <a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeTestRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -718,102 +603,98 @@ foreach ($fResult as $fDetails) {
         // $('#province').select2({
         //     placeholder: "Province"
         // });
-        $('#isResultAuthorized').change(function(e){
+        $('#isResultAuthorized').change(function(e) {
             checkIsResultAuthorized();
         });
-        <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
-        $('.test-result,#result').change(function(e){
-            checkPostive();
-        });
-        <?php }?>
+        <?php if (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes') { ?>
+            $(document).change('.test-result, #result', function(e) {
+                checkPostive();
+            });
+        <?php } ?>
 
     });
 
-    function insRow() {
-        rl = document.getElementById("testKitNameTable").rows.length;
-        tableRowId = (rl + 1);
-        var a = document.getElementById("testKitNameTable").insertRow(rl);
-        a.setAttribute("style", "display:none");
-        var b = a.insertCell(0);
-        var c = a.insertCell(1);
-        var d = a.insertCell(2);
-        var e = a.insertCell(3);
-        var f = a.insertCell(4);
-        f.setAttribute("align", "center");
-        b.setAttribute("align", "center");
-        f.setAttribute("style", "vertical-align:middle");
+    let testCounter = 1;
+    function addTestRow() {
+        testCounter++;
+        let rowString = `<tr>
+                    <td class="text-center">${testCounter}</td>
+                    <td>
+                    <select onchange="otherCovidTestName(this.value,${testCounter})" class="form-control test-name-table-input" id="testName${testCounter}" name="testName[]" title="Please enter the name of the Testkit (or) Test Method used">
+                    <option value="">--Select--</option>
+                    <option value="PCR">PCR</option>
+                    <option value="GeneXpert">GeneXpert</option>
+                    <option value="RDT">RDT</option>
+                    <option value="ELISA">ELISA</option>
+                    <option value="other">Others</option>
+                </select>
+                <input type="text" name="testNameOther[]" id="testNameOther${testCounter}" class="form-control testInputOther' + testCounter + '" title="Please enter the name of the Testkit (or) Test Method used" placeholder="Please enter the name of the Testkit (or) Test Method used" style="display: none;margin-top: 10px;" />
+            </td>
+            <td><input type="text" name="testDate[]" id="testDate${testCounter}" class="form-control test-name-table-input dateTime" placeholder="Tested on" title="Please enter the tested on for row ${testCounter}" /></td>
+            <td>
+                <select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult${testCounter}" title="Please select the result"><?= $general->generateSelectOptions($covid19Results, null, '-- Select --'); ?></select>
+            </td>
+            <td style="vertical-align:middle;text-align: center;">
+                <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="addTestRow(this);"><i class="fa fa-plus"></i></a>&nbsp;
+                <a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeTestRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
+            </td>
+        </tr>`;
 
-        b.innerHTML = tableRowId;
-        c.innerHTML = '<input type="text" name="testName[]" id="testName' + tableRowId + '" class="form-control test-name-table-input" placeholder="Test name" title="Please enter the test name for row ' + tableRowId + '"/>';
-        d.innerHTML = '<input type="text" name="testDate[]" id="testDate' + tableRowId + '" class="form-control test-name-table-input dateTime" placeholder="Tested on"  title="Please enter the tested on for row ' + tableRowId + '"/>';
-        e.innerHTML = '<select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult' + tableRowId + '" title="Please select the result for row ' + tableRowId + '"><option value=""> -- Select -- </option><?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?> <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option> <?php } ?> </select>';
-        f.innerHTML = '<a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;<a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>';
-        $(a).fadeIn(800);
-        $('.dateTime').datetimepicker({
-            changeMonth: true,
-            changeYear: true,
-            dateFormat: 'dd-M-yy',
-            timeFormat: "HH:mm",
-            maxDate: "Today",
-            onChangeMonthYear: function(year, month, widget) {
-                setTimeout(function() {
-                    $('.ui-datepicker-calendar').show();
-                });
-            },
-            yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-        }).click(function() {
-            $('.ui-datepicker-calendar').show();
-        });
-        tableRowId++;
-        <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
-        $('.test-result,#result').change(function(e){
-            checkPostive();
-        });
-        <?php }?>
+        $("#testKitNameTable").append(rowString);
+
     }
 
-    function removeAttributeRow(el) {
+    function removeTestRow(el) {
         $(el).fadeOut("slow", function() {
             el.parentNode.removeChild(el);
             rl = document.getElementById("testKitNameTable").rows.length;
             if (rl == 0) {
-                insRow();
+                testCounter = 0;
+                addTestRow();
             }
         });
     }
 
-    function checkPostive(){
+    function checkPostive() {
         var itemLength = document.getElementsByName("testResult[]");
         for (i = 0; i < itemLength.length; i++) {
-            
-            if(itemLength[i].value == 'positive'){
+
+            if (itemLength[i].value == 'positive') {
                 $('#result,.disabled-field').val('');
-                $('#result,.disabled-field').prop('disabled',true);
+                $('#result,.disabled-field').prop('disabled', true);
                 $('#result,.disabled-field').addClass('disabled');
                 $('#result,.disabled-field').removeClass('isRequired');
                 return false;
-            }else{
-                $('#result,.disabled-field').prop('disabled',false);
+            } else {
+                $('#result,.disabled-field').prop('disabled', false);
                 $('#result,.disabled-field').removeClass('disabled');
                 $('#result,.disabled-field').addClass('isRequired');
             }
-            if(itemLength[i].value != ''){
+            if (itemLength[i].value != '') {
                 $('#labId').addClass('isRequired');
             }
         }
     }
 
-    function checkIsResultAuthorized(){
-        if($('#isResultAuthorized').val() == 'no'){
+    function checkIsResultAuthorized() {
+        if ($('#isResultAuthorized').val() == 'no') {
             $('#authorizedBy,#authorizedOn').val('');
-            $('#authorizedBy,#authorizedOn').prop('disabled',true);
+            $('#authorizedBy,#authorizedOn').prop('disabled', true);
             $('#authorizedBy,#authorizedOn').addClass('disabled');
             $('#authorizedBy,#authorizedOn').removeClass('isRequired');
             return false;
-        }else{
-            $('#authorizedBy,#authorizedOn').prop('disabled',false);
+        } else {
+            $('#authorizedBy,#authorizedOn').prop('disabled', false);
             $('#authorizedBy,#authorizedOn').removeClass('disabled');
             $('#authorizedBy,#authorizedOn').addClass('isRequired');
+        }
+    }
+
+    function otherCovidTestName(val, id) {
+        if (val == 'other') {
+            $('.testInputOther' + id).show();
+        } else {
+            $('.testInputOther' + id).hide();
         }
     }
 </script>
