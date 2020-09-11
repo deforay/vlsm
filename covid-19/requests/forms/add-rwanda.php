@@ -676,6 +676,9 @@ foreach ($fResult as $fDetails) {
 
 
     function validateNow() {
+        if($('#isResultAuthorized').val() != "yes"){
+            $('#authorizedBy,#authorizedOn').removeClass('isRequired');
+        }
         flag = deforayValidator.init({
             formId: 'addCovid19RequestForm'
         });

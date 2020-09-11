@@ -826,6 +826,9 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
     }
 
     function validateNow() {
+        if($('#isResultAuthorized').val() != "yes"){
+            $('#authorizedBy,#authorizedOn').removeClass('isRequired');
+        }
         $("#provinceCode").val($("#province").find(":selected").attr("data-code"));
         $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
         flag = deforayValidator.init({

@@ -369,7 +369,7 @@ foreach ($fResult as $fDetails) {
                                                                     <option value="ELISA">ELISA</option>
                                                                     <option value="other">Others</option>
                                                                 </select>
-                                                                <input type="text" name="testNameOther[]" id="testNameOther1" class="form-control testInputOther1" title="Please enter the name of the Testkit (or) Test Method used" placeholder="Please enter the name of the Testkit (or) Test Method used" style="display: none;margin-top: 10px;" />
+                                                                <input type="text" name="testNameOther[]" id="testNameOther1" class="form-control testNameOther1" title="Please enter the name of the Testkit (or) Test Method used" placeholder="Please enter the name of the Testkit (or) Test Method used" style="display: none;margin-top: 10px;" />
                                                             </td>
                                                             <td><input type="text" name="testDate[]" id="testDate1" class="form-control test-name-table-input dateTime" placeholder="Tested on" title="Please enter the tested on for row 1" /></td>
                                                             <td>
@@ -421,17 +421,6 @@ foreach ($fResult as $fDetails) {
                                             <td></td>
 
                                         </tr>
-                                        <tr>
-                                            <!-- <td style="width:25%;"><label for="">Sample Test Date </label></td>
-                                            <td style="width:25%;">
-                                                <input type="text" class="form-control dateTime" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Sample Tested Date and Time" <?php echo (isset($labFieldDisabled) && trim($labFieldDisabled)) ? $labFieldDisabled : ''; ?> onchange="" style="width:100%;" />
-                                            </td> -->
-
-
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-
                                     </table>
                                 </div>
                             </div>
@@ -576,6 +565,9 @@ foreach ($fResult as $fDetails) {
 
 
     function validateNow() {
+        if($('#isResultAuthorized').val() != "yes"){
+            $('#authorizedBy,#authorizedOn').removeClass('isRequired');
+        }
         flag = deforayValidator.init({
             formId: 'addCovid19RequestForm'
         });
@@ -594,18 +586,11 @@ foreach ($fResult as $fDetails) {
         }
     }
 
-
     $(document).ready(function() {
 
         $('#facilityId').select2({
             placeholder: "Select Clinic/Health Center"
         });
-        // $('#district').select2({
-        //     placeholder: "District"
-        // });
-        // $('#province').select2({
-        //     placeholder: "Province"
-        // });
         $('#isResultAuthorized').change(function(e) {
             checkIsResultAuthorized();
         });
@@ -632,7 +617,7 @@ foreach ($fResult as $fDetails) {
                     <option value="ELISA">ELISA</option>
                     <option value="other">Others</option>
                 </select>
-                <input type="text" name="testNameOther[]" id="testNameOther${testCounter}" class="form-control testInputOther' + testCounter + '" title="Please enter the name of the Testkit (or) Test Method used" placeholder="Please enter the name of the Testkit (or) Test Method used" style="display: none;margin-top: 10px;" />
+                <input type="text" name="testNameOther[]" id="testNameOther${testCounter}" class="form-control testNameOther${testCounter}" title="Please enter the name of the Testkit (or) Test Method used" placeholder="Please enter the name of the Testkit (or) Test Method used" style="display: none;margin-top: 10px;" />
             </td>
             <td><input type="text" name="testDate[]" id="testDate${testCounter}" class="form-control test-name-table-input dateTime" placeholder="Tested on" title="Please enter the tested on for row ${testCounter}" /></td>
             <td>
@@ -696,9 +681,9 @@ foreach ($fResult as $fDetails) {
 
     function otherCovidTestName(val, id) {
         if (val == 'other') {
-            $('.testInputOther' + id).show();
+            $('.testNameOther' + id).show();
         } else {
-            $('.testInputOther' + id).hide();
+            $('.testNameOther' + id).hide();
         }
     }
 </script>

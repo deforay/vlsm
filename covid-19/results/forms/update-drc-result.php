@@ -927,7 +927,6 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
             checkIsResultAuthorized();
         });
         $('#result').change(function(e){
-            // alert(this.value);
             if(this.value == 'positive'){
                 $('.other-diseases').hide();
                 $('#otherDiseases').removeClass('isRequired');
@@ -984,25 +983,32 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         }
     }
 
-    function insRow() {
-        rl = document.getElementById("testKitNameTable").rows.length;
-        var a = document.getElementById("testKitNameTable").insertRow(rl);
-        a.setAttribute("style", "display:none");
-        var b = a.insertCell(0);
-        var c = a.insertCell(1);
-        var d = a.insertCell(2);
-        var e = a.insertCell(3);
-        var f = a.insertCell(4);
-        f.setAttribute("align", "center");
-        b.setAttribute("align", "center");
-        f.setAttribute("style", "vertical-align:middle");
+    function addTestRow() {
+        let rowString = `<tr>
+                    <td class="text-center">${testCounter}</td>
+                    <td>
+                    <select onchange="otherCovidTestName(this.value,${testCounter})" class="form-control test-name-table-input" id="testName${testCounter}" name="testName[]" title="Please enter the name of the Testkit (or) Test Method used">
+                    <option value="">--Select--</option>
+                    <option value="PCR">PCR</option>
+                    <option value="GeneXpert">GeneXpert</option>
+                    <option value="RDT">RDT</option>
+                    <option value="ELISA">ELISA</option>
+                    <option value="other">Others</option>
+                </select>
+                <input type="text" name="testNameOther[]" id="testNameOther${testCounter}" class="form-control testInputOther' + testCounter + '" title="Please enter the name of the Testkit (or) Test Method used" placeholder="Please enter the name of the Testkit (or) Test Method used" style="display: none;margin-top: 10px;" />
+            </td>
+            <td><input type="text" name="testDate[]" id="testDate${testCounter}" class="form-control test-name-table-input dateTime" placeholder="Tested on" title="Please enter the tested on for row ${testCounter}" /></td>
+            <td>
+                <select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult${testCounter}" title="Please select the result"><?= $general->generateSelectOptions($covid19Results, null, '-- Select --'); ?></select>
+            </td>
+            <td style="vertical-align:middle;text-align: center;">
+                <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="addTestRow(this);"><i class="fa fa-plus"></i></a>&nbsp;
+                <a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeTestRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
+            </td>
+        </tr>`;
 
-        b.innerHTML = tableRowId;
-        c.innerHTML = '<select onchange="otherCovidTestName(this.value,' + tableRowId + ')" class="form-control test-name-table-input" id="testName' + tableRowId + '" name="testName[]" title="Veuillez saisir le nom du test pour les lignes ' + tableRowId + '"> <option value="">--Select--</option> <option value="PCR/RT-PCR">PCR/RT-PCR</option> <option value="RdRp-SARS Cov-2">RdRp-SARS Cov-2</option> <option value="other">Others</option> </select> <input type="text" name="testNameOther[]" id="testNameOther' + tableRowId + '" class="form-control testInputOther' + tableRowId + ' " placeholder="Entrez le nom du test ' + tableRowId + '" title="Veuillez saisir le nom du test pour les lignes ' + tableRowId + '" style="display: none;margin-top: 10px;"/>';
-        d.innerHTML = '<input type="text" name="testDate[]" id="testDate' + tableRowId + '" class="form-control test-name-table-input dateTime" placeholder="Testé sur"  title="Veuillez sélectionner la Date de l analyse pour la ligne ' + tableRowId + '"/>';
-        e.innerHTML = '<select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult' + tableRowId + '" title="Veuillez sélectionner le résultat pour la ligne ' + tableRowId + '"><option value=""> -- Select -- </option><?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?> <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option> <?php } ?> </select>';
-        f.innerHTML = '<a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;<a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>';
-        $(a).fadeIn(800);
+        $("#testKitNameTable").append(rowString);
+        
         $('.dateTime').datetimepicker({
             changeMonth: true,
             changeYear: true,
@@ -1018,21 +1024,16 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         }).click(function() {
             $('.ui-datepicker-calendar').show();
         });
-        tableRowId++;
 
-        /* <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
-        $(document).change('.test-result, #result', function(e) {
-            checkPostive();
-        });
-        <?php }?> */
     }
 
-    function removeAttributeRow(el) {
+    function removeTestRow(el) {
         $(el).fadeOut("slow", function() {
             el.parentNode.removeChild(el);
             rl = document.getElementById("testKitNameTable").rows.length;
             if (rl == 0) {
-                insRow();
+                testCounter = 0;
+                addTestRow();
             }
         });
     }
