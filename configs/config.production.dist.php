@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . '/../system/system.php');
+require_once(APPLICATION_PATH . '/system/system.php');
 
 
 $systemConfig = array();
@@ -21,7 +21,7 @@ $systemConfig['dbUser']     = '';
 $systemConfig['dbPassword'] = '';
 $systemConfig['dbName']     = '';
 $systemConfig['dbPort']     = 3306;
-$systemConfig['passwordSalt']= 'PUT-A-RANDOM-STRING-HERE';
+$systemConfig['passwordSalt'] = 'PUT-A-RANDOM-STRING-HERE';
 
 //Please use only GMAIL ID AND PASSWORD
 $systemConfig['adminEmailUserName'] = '';

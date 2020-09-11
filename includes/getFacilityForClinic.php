@@ -1,10 +1,10 @@
 <?php
 ob_start();
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+  session_start();
 }
 #require_once('../startup.php');
-include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
+
 //global config
 $configQuery = "SELECT * from global_config";
 $configResult = $db->query($configQuery);

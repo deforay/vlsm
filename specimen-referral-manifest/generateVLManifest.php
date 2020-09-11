@@ -5,9 +5,9 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 require_once(__DIR__ . "/../startup.php");
-include_once(APPLICATION_PATH . "/includes/MysqliDb.php");
-//include_once(APPLICATION_PATH . '/models/General.php');
-include_once(APPLICATION_PATH . "/vendor/autoload.php");
+
+
+
 
 $general = new \Vlsm\Models\General($db);
 $id = base64_decode($_POST['id']);

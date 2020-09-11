@@ -1,7 +1,7 @@
 <?php
 ob_start();
 #require_once('../startup.php');
-include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
+
 $fType = "SELECT * FROM facility_type";
 $fTypeResult = $db->rawQuery($fType);
 ?>

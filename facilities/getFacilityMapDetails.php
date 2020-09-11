@@ -3,7 +3,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 #require_once('../startup.php');  
-include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+
 $tableName="vl_facility_map";
 $primaryKey="facility_map_id";
 //system config

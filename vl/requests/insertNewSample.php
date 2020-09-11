@@ -1,8 +1,6 @@
 <?php
 include_once '../../startup.php';
-include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
-//include_once(APPLICATION_PATH . '/models/General.php');
-//include_once(APPLICATION_PATH . '/models/Vl.php');
+
 
 $general = new \Vlsm\Models\General($db);
 $vlModel = new \Vlsm\Models\Vl($db);

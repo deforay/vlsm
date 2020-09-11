@@ -6,7 +6,7 @@ if (isset($_SESSION['adminUserId'])) {
     header("location:/edit-config/index.php");
 }
 #require_once('../../startup.php');  
-include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
+
 $path = '..//assets/img/remote-bg.jpg';
 ?>
 <!DOCTYPE html>

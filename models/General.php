@@ -181,13 +181,16 @@ class General
         if ($this->db == null) {
             return false;
         }
-
-
+        
         $pQuery = "SELECT * FROM province_details WHERE province_code like '$code'";
-
-
         $pResult = $this->db->rawQueryOne($pQuery);
-        return $pResult['province_id'];
+
+        if($pQuery){
+            return $pResult['province_id'];
+        }else{
+            return null;
+        }
+        
     }
 
     // get data from the global_config table from database

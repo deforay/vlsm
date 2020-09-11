@@ -5,8 +5,8 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 ob_start();
 
-include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-//include_once(APPLICATION_PATH.'/models/General.php');
+
+
 $general=new \Vlsm\Models\General($db);
 
 

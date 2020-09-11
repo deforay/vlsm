@@ -1,6 +1,5 @@
 <?php
 
-//require_once(APPLICATION_PATH . '/models/Vl.php');
 
 ob_start();
 //global config

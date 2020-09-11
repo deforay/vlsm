@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 #require_once('../startup.php');
-include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
+
 $tableName = $_POST['tableName'];
 $fieldName = $_POST['fieldName'];
 $value = trim($_POST['value']);

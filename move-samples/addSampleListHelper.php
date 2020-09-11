@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 ob_start();
 #require_once('../startup.php');  
-include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+
 $tableName="move_samples";
 $tableName2="move_samples_map";
 

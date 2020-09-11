@@ -1,14 +1,16 @@
 <?php
 
-class ImageResize {
+class ImageResize
+{
 
     private $image;
     private $width;
     private $height;
     private $imageResized;
 
-    public function __construct($fileName) {
-         // *** Open up the file
+    public function __construct($fileName)
+    {
+        // *** Open up the file
         $this->image = $this->openImage($fileName);
 
         // *** Get width and height
@@ -16,7 +18,8 @@ class ImageResize {
         $this->height = imagesy($this->image);
     }
 
-    private function openImage($file) {
+    private function openImage($file)
+    {
         // *** Get extension
         $extension = strtolower(strrchr($file, '.'));
 
@@ -38,10 +41,11 @@ class ImageResize {
         return $img;
     }
 
-    public function resizeImage($newWidth, $newHeight,$fileName, $option="exact") {
+    public function resizeImage($newWidth, $newHeight, $fileName, $option = "exact")
+    {
         // *** Get optimal width and height - based on $option
         // *** Open up the file
-        
+
         $optionArray = $this->getDimensions($newWidth, $newHeight, $option);
 
         $optimalWidth = $optionArray['optimalWidth'];
@@ -55,10 +59,10 @@ class ImageResize {
             imagealphablending($this->imageResized, false);
         }
         imagecopyresampled($this->imageResized, $this->image, 0, 0, 0, 0, $optimalWidth, $optimalHeight, $this->width, $this->height);
-
     }
-    
-    private function getDimensions($newWidth, $newHeight, $option) {
+
+    private function getDimensions($newWidth, $newHeight, $option)
+    {
         switch ($option) {
             case 'exact':
                 $optimalWidth = $newWidth;
@@ -85,8 +89,9 @@ class ImageResize {
         }
         return array('optimalWidth' => $optimalWidth, 'optimalHeight' => $optimalHeight);
     }
-    
-    private function getSizeByAuto($newWidth, $newHeight) {
+
+    private function getSizeByAuto($newWidth, $newHeight)
+    {
         if ($this->height < $this->width) {
             // *** Image to be resized is wider (landscape)
             $optimalWidth = $newWidth;
@@ -111,22 +116,25 @@ class ImageResize {
         }
         return array('optimalWidth' => $optimalWidth, 'optimalHeight' => $optimalHeight);
     }
-    
-    private function getSizeByFixedWidth($newWidth) {
+
+    private function getSizeByFixedWidth($newWidth)
+    {
         $ratio = $this->height / $this->width;
         $newHeight = $newWidth * $ratio;
         return $newHeight;
     }
-    
-    private function getSizeByFixedHeight($newHeight) {
+
+    private function getSizeByFixedHeight($newHeight)
+    {
         $ratio = $this->width / $this->height;
         $newWidth = $newHeight * $ratio;
         return $newWidth;
     }
-    
+
     ## --------------------------------------------------------
 
-    public function saveImage($savePath, $imageQuality="100") {
+    public function saveImage($savePath, $imageQuality = "100")
+    {
         // *** Get extension
         $extension = strrchr($savePath, '.');
         $extension = strtolower($extension);
@@ -157,7 +165,7 @@ class ImageResize {
                 }
                 break;
 
-            // ... etc
+                // ... etc
 
             default:
                 // *** No extension - No save.
@@ -166,5 +174,4 @@ class ImageResize {
 
         imagedestroy($this->imageResized);
     }
-    
 }

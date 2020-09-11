@@ -4,10 +4,8 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 #include_once '../startup.php';
-include_once APPLICATION_PATH . '/includes/MysqliDb.php';
-//include_once(APPLICATION_PATH . '/models/General.php');
+
 include_once APPLICATION_PATH . '/includes/ImageResize.php';
-include_once(APPLICATION_PATH . "/vendor/autoload.php");
 
 $general = new \Vlsm\Models\General($db);
 //#require_once('../startup.php'); 
@@ -71,13 +69,13 @@ try {
         $_SESSION['alertMsg'] = "User details added successfully";
     }
     $userType = $general->getSystemConfig('user_type');
-    if(isset($systemConfig['remoteURL']) && $systemConfig['remoteURL'] != "" && $userType == 'vluser'){
+    if (isset($systemConfig['remoteURL']) && $systemConfig['remoteURL'] != "" && $userType == 'vluser') {
         $apiUrl = $systemConfig['remoteURL'] . "/api/user/save-user-profile.php";
-        $post = array('post' => json_encode($_POST), 'sign'=> (isset($signatureImagePath) && $signatureImagePath != "")?curl_file_create($signatureImagePath):null, 'x-api-key' => $general->generateRandomString(18));
+        $post = array('post' => json_encode($_POST), 'sign' => (isset($signatureImagePath) && $signatureImagePath != "") ? curl_file_create($signatureImagePath) : null, 'x-api-key' => $general->generateRandomString(18));
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL,$apiUrl);
-        curl_setopt($ch, CURLOPT_POST,1);
+        curl_setopt($ch, CURLOPT_URL, $apiUrl);
+        curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
         $result = curl_exec($ch);
         curl_close($ch);

@@ -77,7 +77,11 @@ class Vl
             $this->db->orderBy($sampleCodeKeyCol, "DESC");
             $svlResult = $this->db->getOne($this->table, array($sampleCodeKeyCol));
 
-            $maxCodeKeyVal = $svlResult[$sampleCodeKeyCol];
+            if ($svlResult) {
+                $maxCodeKeyVal = $svlResult[$sampleCodeKeyCol];
+            } else {
+                $maxCodeKeyVal = null;
+            }
         }
 
 

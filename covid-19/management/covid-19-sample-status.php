@@ -1,14 +1,12 @@
 <?php
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+  session_start();
 }
 $title = "Covid-19 | Sample Status Report";
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 
-//include_once(APPLICATION_PATH . '/models/General.php');
-
-$general = new \Vlsm\Models\General($db); // passing $db which is coming from MysqliDb.php
+$general = new \Vlsm\Models\General($db); // passing $db which is coming from startup.php
 
 $tsQuery = "SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
@@ -55,11 +53,11 @@ $batResult = $db->rawQuery($batQuery);
                   <option value=""> -- Select -- </option>
                   <?php
                   foreach ($batResult as $code) {
-                    ?>
+                  ?>
                     <option value="<?php echo $code['batch_code']; ?>"><?php echo $code['batch_code']; ?></option>
                   <?php
-                }
-                ?>
+                  }
+                  ?>
                 </select>
               </td>
             </tr>
@@ -72,11 +70,11 @@ $batResult = $db->rawQuery($batQuery);
                   <option value=""> -- Select -- </option>
                   <?php
                   foreach ($fResult as $name) {
-                    ?>
+                  ?>
                     <option value="<?php echo $name['facility_id']; ?>"><?php echo ucwords($name['facility_name'] . "-" . $name['facility_code']); ?></option>
                   <?php
-                }
-                ?>
+                  }
+                  ?>
                 </select>
               </td>
 

@@ -2,17 +2,16 @@
 
 header('Content-Type: application/json');
 // require_once('../startup.php');
-include_once(APPLICATION_PATH . "/includes/MysqliDb.php");
-//include_once(APPLICATION_PATH . '/models/General.php');
+
 include_once APPLICATION_PATH . '/includes/ImageResize.php';
-include_once(APPLICATION_PATH . "/vendor/autoload.php");
+
 
 session_unset(); // no need of session in json response
 $general = new \Vlsm\Models\General($db);
 
 $apiKey = isset($_POST['x-api-key']) && !empty($_POST['x-api-key']) ? $_POST['x-api-key'] : null;
 
-if(!$_POST['post']){
+if (!$_POST['post']) {
     $response = array(
         'status' => 'failed',
         'data' => 'Missing post data',
@@ -20,7 +19,7 @@ if(!$_POST['post']){
     );
     echo json_encode($response);
     exit(0);
-} else{
+} else {
     $post = json_decode($_POST['post']);
 }
 $userId = base64_decode($post->userId);
@@ -41,12 +40,12 @@ if (!$apiKey) {
 try {
     $tableName = "user_details";
     $tableName2 = "vl_user_facility_map";
-    $userQuery = "SELECT * from user_details where (user_id='" . $userId . "' OR email = '". $post->email ."')";
+    $userQuery = "SELECT * from user_details where (user_id='" . $userId . "' OR email = '" . $post->email . "')";
     $aRow = $db->rawQuery($userQuery);
 
     if (isset($_FILES['sign']['name']) && $_FILES['sign']['name'] != "") {
         if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature") && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature")) {
-            mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature",0777);
+            mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature", 0777);
         }
         $extension = strtolower(pathinfo(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_FILES['sign']['name'], PATHINFO_EXTENSION));
         $string = $general->generateRandomString(10) . ".";
@@ -78,13 +77,13 @@ try {
         'status' => 'active',
         'user_signature' => $imageName
     );
-    
-    if((!isset($userId) || $userId == '') || $aRow){
+
+    if ((!isset($userId) || $userId == '') || $aRow) {
         $id = $db->insert($tableName, $data);
-    } else{
+    } else {
         $userId = $aRow['user_id'];
-        $db->update($tableName,$data);
-        $db=$db->where('user_id',$userId);
+        $db->update($tableName, $data);
+        $db = $db->where('user_id', $userId);
         $delId = $db->delete($tableName2);
     }
     if ($id > 0 && trim($post->selectedFacility) != '') {

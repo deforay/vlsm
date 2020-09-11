@@ -1,9 +1,7 @@
 <?php
 
 #require_once('../../startup.php');
-include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
-//include_once(APPLICATION_PATH . '/models/General.php');
-//require_once(APPLICATION_PATH . '/models/Covid19.php');
+
 
 
 $general = new \Vlsm\Models\General($db);

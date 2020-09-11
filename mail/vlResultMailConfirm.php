@@ -2,8 +2,8 @@
 ob_start();
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-include_once(APPLICATION_PATH . '/vendor/autoload.php');
-//include_once(APPLICATION_PATH . '/models/General.php');
+
+
 $general = new \Vlsm\Models\General($db);
 $tableName = "vl_request_form";
 //get other config values

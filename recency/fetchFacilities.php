@@ -19,7 +19,7 @@ if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
 }
 
 #require_once('../startup.php'); 
-include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+
 
 //$facilityQuery ="SELECT facility_id,facility_name,facility_type from facility_details";
 // Doing this temporarily because the other_id holds the recency facilities id

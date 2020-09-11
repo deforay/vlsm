@@ -1,7 +1,6 @@
 <?php
 ob_start();
 
-//require_once(APPLICATION_PATH . '/models/Vl.php');
 
 if ($arr['sample_code'] == 'auto' || $arr['sample_code'] == 'alphanumeric') {
      $sampleClass = '';

@@ -6,7 +6,7 @@ if (isset($_SESSION['userId'])) {
   header("location:dashboard/index.php");
 }
 #require_once('../startup.php');
-include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
+
 $globalConfigQuery = "SELECT * from global_config where name='logo'";
 $configResult = $db->query($globalConfigQuery);
 //system config

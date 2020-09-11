@@ -2,7 +2,6 @@
 
 // this file is included in /import-result/procesImportedResults.php
 
-//include_once(APPLICATION_PATH . '/models/Covid19.php');
 
 $tableName = "temp_sample_import";
 $tableName1 = "form_covid19";

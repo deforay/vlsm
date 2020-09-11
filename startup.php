@@ -13,7 +13,7 @@ if (php_sapi_name() !== 'cli') {
     $doc_root = preg_replace("!${_SERVER['SCRIPT_NAME']}$!", '', $_SERVER['SCRIPT_FILENAME']);
 
     // server protocol
-    $protocol = empty($_SERVER['HTTPS']) ? 'http' : 'https';
+    $protocol = (!empty($_SERVER['HTTPS'])  && $_SERVER['HTTPS'] === 'on') ? 'https' : 'http';
 
     // domain name
     $domain = $_SERVER['SERVER_NAME'];
@@ -33,13 +33,13 @@ if (php_sapi_name() !== 'cli') {
 }
 
 defined('APPLICATION_PATH')
-    || define('APPLICATION_PATH', realpath(dirname(__FILE__)));
+    || define('APPLICATION_PATH', __DIR__);
 
 defined('UPLOAD_PATH')
-    || define('UPLOAD_PATH', realpath(dirname(__FILE__) . '/uploads'));
+    || define('UPLOAD_PATH', APPLICATION_PATH . DIRECTORY_SEPARATOR . 'uploads');
 
 defined('TEMP_PATH')
-    || define('TEMP_PATH', realpath(dirname(__FILE__) . '/temporary'));
+    || define('TEMP_PATH', APPLICATION_PATH . DIRECTORY_SEPARATOR . 'temporary');
 
 defined('APPLICATION_ENV')
     || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ?
@@ -56,3 +56,6 @@ set_include_path(implode(PATH_SEPARATOR, array(
 
 require_once('autoload.php');
 require_once(APPLICATION_PATH . "/configs/config." . APPLICATION_ENV . ".php");
+
+// Let us create database object
+$db = new MysqliDb($systemConfig['dbHost'], $systemConfig['dbUser'], $systemConfig['dbPassword'], $systemConfig['dbName'], $systemConfig['dbPort']);

@@ -1,8 +1,8 @@
 <?php
 ob_start();
 #require_once('../../startup.php');  
-include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-//include_once(APPLICATION_PATH.'/models/General.php');
+
+
 $general = new \Vlsm\Models\General($db);
 $packageTable = "covid19_positive_confirmation_manifest";
 try {

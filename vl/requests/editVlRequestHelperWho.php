@@ -4,8 +4,8 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 ob_start();
 #require_once('../../startup.php');
-include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
-//include_once(APPLICATION_PATH . '/models/General.php');
+
+
 $general = new \Vlsm\Models\General($db);
 $tableName = "vl_request_form";
 $tableName1 = "activity_log";

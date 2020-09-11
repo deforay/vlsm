@@ -1,36 +1,37 @@
 <?php
 ob_start();
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+   session_start();
 }
 #require_once('../../startup.php');  
-include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-include_once(APPLICATION_PATH.'/includes/mail/PHPMailerAutoload.php');
-//include_once(APPLICATION_PATH.'/models/General.php');
-$general=new \Vlsm\Models\General($db);
-$tableName="form_covid19";
-$configSyncQuery ="SELECT `value` FROM global_config where name='sync_path'";
+
+include_once(APPLICATION_PATH . '/includes/mail/PHPMailerAutoload.php');
+
+$general = new \Vlsm\Models\General($db);
+$tableName = "form_covid19";
+$configSyncQuery = "SELECT `value` FROM global_config where `name`='sync_path'";
 $configSyncResult = $db->rawQuery($configSyncQuery);
 //get vl result mail sent list
-$resultmailSentQuery ="SELECT result_mail_datetime FROM form_covid19 where MONTH(result_mail_datetime) = MONTH(CURRENT_DATE())";
+$resultmailSentQuery = "SELECT result_mail_datetime FROM form_covid19 where MONTH(result_mail_datetime) = MONTH(CURRENT_DATE())";
 $resultmailSentResult = $db->rawQuery($resultmailSentQuery);
-$sourcecode = sprintf("%02d",(count($resultmailSentResult)+1));
+$sourcecode = sprintf("%02d", (count($resultmailSentResult) + 1));
 //get instance facility code
 $sequencenumber = '';
-$instancefacilityCodeQuery ="SELECT instance_facility_code FROM s_vlsm_instance";
+$instancefacilityCodeQuery = "SELECT instance_facility_code FROM s_vlsm_instance";
 $instancefacilityCodeResult = $db->rawQuery($instancefacilityCodeQuery);
-$instancefacilityCode = (isset($instancefacilityCodeResult[0]['instance_facility_code']) && trim($instancefacilityCodeResult[0]['instance_facility_code'])!= '')? '/'.$instancefacilityCodeResult[0]['instance_facility_code']:'';
-$year = date("Y");$month = strtolower(date("M"));
-$sequencenumber = 'Ref : vlsm/results/'.$year.'/'.$month.$instancefacilityCode.'/'.$sourcecode;
+$instancefacilityCode = (isset($instancefacilityCodeResult[0]['instance_facility_code']) && trim($instancefacilityCodeResult[0]['instance_facility_code']) != '') ? '/' . $instancefacilityCodeResult[0]['instance_facility_code'] : '';
+$year = date("Y");
+$month = strtolower(date("M"));
+$sequencenumber = 'Ref : vlsm/results/' . $year . '/' . $month . $instancefacilityCode . '/' . $sourcecode;
 //get other config values
-$geQuery="SELECT * FROM other_config WHERE type = 'result'";
+$geQuery = "SELECT * FROM other_config WHERE type = 'result'";
 $geResult = $db->rawQuery($geQuery);
 $mailconf = array();
-foreach($geResult as $row){
+foreach ($geResult as $row) {
    $mailconf[$row['name']] = $row['value'];
 }
-if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
-   if(isset($mailconf['rs_field']) && trim($mailconf['rs_field'])!= ''){
+if (isset($_POST['toEmail']) && trim($_POST['toEmail']) != '') {
+   if (isset($mailconf['rs_field']) && trim($mailconf['rs_field']) != '') {
       //Create a new PHPMailer instance
       $mail = new PHPMailer();
       //Tell PHPMailer to use SMTP
@@ -50,44 +51,44 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
       $mail->SMTPSecure = 'tls';
       //Whether to use SMTP authentication
       $mail->SMTPAuth = true;
-      $mail->SMTPKeepAlive = true; 
+      $mail->SMTPKeepAlive = true;
       //Username to use for SMTP authentication - use full email address for gmail
       $mail->Username = $mailconf['rs_email'];
       //Password to use for SMTP authentication
       $mail->Password = $mailconf['rs_password'];
       //Set who the message is to be sent from
       $mail->setFrom($mailconf['rs_email']);
-            
-      $subject="";
-      if(isset($_POST['subject']) && trim($_POST['subject'])!=""){
-           $subject=$_POST['subject'];
+
+      $subject = "";
+      if (isset($_POST['subject']) && trim($_POST['subject']) != "") {
+         $subject = $_POST['subject'];
       }
       $mail->Subject = $subject;
       //Set To EmailId(s)
-      if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= ''){
-          $xplodAddress = explode(",",$_POST['toEmail']);
-          for($to=0;$to<count($xplodAddress);$to++){
-             $mail->addAddress($xplodAddress[$to]);
-          }
+      if (isset($_POST['toEmail']) && trim($_POST['toEmail']) != '') {
+         $xplodAddress = explode(",", $_POST['toEmail']);
+         for ($to = 0; $to < count($xplodAddress); $to++) {
+            $mail->addAddress($xplodAddress[$to]);
+         }
       }
       //Set CC EmailId(s)
-      if(isset($_POST['reportEmail']) && trim($_POST['reportEmail'])!= ''){
-          $xplodCc = explode(",",$_POST['reportEmail']);
-          for($cc=0;$cc<count($xplodCc);$cc++){
-             $mail->AddCC($xplodCc[$cc]);
-          }
+      if (isset($_POST['reportEmail']) && trim($_POST['reportEmail']) != '') {
+         $xplodCc = explode(",", $_POST['reportEmail']);
+         for ($cc = 0; $cc < count($xplodCc); $cc++) {
+            $mail->AddCC($xplodCc[$cc]);
+         }
       }
       //Pdf file attach
-      $pathFront=realpath(UPLOAD_PATH);
-      $file_to_attach = $pathFront. DIRECTORY_SEPARATOR .$_POST['pdfFile1'];
+      $pathFront = realpath(UPLOAD_PATH);
+      $file_to_attach = $pathFront . DIRECTORY_SEPARATOR . $_POST['pdfFile1'];
       $mail->AddAttachment($file_to_attach);
-      $result_file_to_attach = $pathFront. DIRECTORY_SEPARATOR .$_POST['pdfFile2'];
+      $result_file_to_attach = $pathFront . DIRECTORY_SEPARATOR . $_POST['pdfFile2'];
       $mail->AddAttachment($result_file_to_attach);
-      $message='';
-      if(isset($_POST['message']) && trim($_POST['message'])!=""){
-        $message =ucfirst(nl2br($_POST['message']));
+      $message = '';
+      if (isset($_POST['message']) && trim($_POST['message']) != "") {
+         $message = ucfirst(nl2br($_POST['message']));
       }
-      $message = $sequencenumber.'<br><br>'.$message;
+      $message = $sequencenumber . '<br><br>' . $message;
       $mail->msgHTML($message);
       $mail->SMTPOptions = array(
          'ssl' => array(
@@ -96,35 +97,35 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
             'allow_self_signed' => true
          )
       );
-      if($mail->send()){
-           //update result mail sent flag
-           $_POST['sample'] = explode(',',$_POST['sample']);
-           for($s=0;$s<count($_POST['sample']);$s++){
-               $sampleQuery="SELECT covid19_id FROM form_covid19 as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.covid19_id = '".$_POST['sample'][$s]."'";
-               $sampleResult = $db->rawQuery($sampleQuery);
-               $db=$db->where('covid19_id',$sampleResult[0]['covid19_id']);
-               $db->update($tableName,array('is_result_mail_sent'=>'yes','result_mail_datetime'=>$general->getDateTime())); 
+      if ($mail->send()) {
+         //update result mail sent flag
+         $_POST['sample'] = explode(',', $_POST['sample']);
+         for ($s = 0; $s < count($_POST['sample']); $s++) {
+            $sampleQuery = "SELECT covid19_id FROM form_covid19 as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.covid19_id = '" . $_POST['sample'][$s] . "'";
+            $sampleResult = $db->rawQuery($sampleQuery);
+            $db = $db->where('covid19_id', $sampleResult[0]['covid19_id']);
+            $db->update($tableName, array('is_result_mail_sent' => 'yes', 'result_mail_datetime' => $general->getDateTime()));
+         }
+         //put file in sync path
+         if (file_exists($configSyncResult[0]['value']) && $_POST['storeFile'] == 'yes') {
+            if (!file_exists($configSyncResult[0]['value'] . DIRECTORY_SEPARATOR . "result-email") && !is_dir($configSyncResult[0]['value'] . DIRECTORY_SEPARATOR . "result-email")) {
+               mkdir($configSyncResult[0]['value'] . DIRECTORY_SEPARATOR . "result-email");
             }
-            //put file in sync path
-            if(file_exists($configSyncResult[0]['value']) && $_POST['storeFile']=='yes'){
-               if(!file_exists($configSyncResult[0]['value'] . DIRECTORY_SEPARATOR . "result-email") && !is_dir($configSyncResult[0]['value'] . DIRECTORY_SEPARATOR . "result-email")) {
-                     mkdir($configSyncResult[0]['value'] . DIRECTORY_SEPARATOR . "result-email");
-               }
-               copy($pathFront. DIRECTORY_SEPARATOR. $_POST['pdfFile1'], $configSyncResult[0]['value']. DIRECTORY_SEPARATOR ."result-email" . DIRECTORY_SEPARATOR . $_POST['pdfFile1']);
-               copy($pathFront. DIRECTORY_SEPARATOR. $_POST['pdfFile2'], $configSyncResult[0]['value']. DIRECTORY_SEPARATOR ."result-email" . DIRECTORY_SEPARATOR . $_POST['pdfFile2']);
-            }
-           $_SESSION['alertMsg']='Email sent successfully';
-           header('location:/covid-19/mail/mail-covid-19-results.php');
-      }else{
-           $_SESSION['alertMsg']='Unable to send mail. Please try later.';
-           error_log("Mailer Error: " . $mail->ErrorInfo);
-           header('location:/covid-19/mail/mail-covid-19-results.php');
+            copy($pathFront . DIRECTORY_SEPARATOR . $_POST['pdfFile1'], $configSyncResult[0]['value'] . DIRECTORY_SEPARATOR . "result-email" . DIRECTORY_SEPARATOR . $_POST['pdfFile1']);
+            copy($pathFront . DIRECTORY_SEPARATOR . $_POST['pdfFile2'], $configSyncResult[0]['value'] . DIRECTORY_SEPARATOR . "result-email" . DIRECTORY_SEPARATOR . $_POST['pdfFile2']);
+         }
+         $_SESSION['alertMsg'] = 'Email sent successfully';
+         header('location:/covid-19/mail/mail-covid-19-results.php');
+      } else {
+         $_SESSION['alertMsg'] = 'Unable to send mail. Please try later.';
+         error_log("Mailer Error: " . $mail->ErrorInfo);
+         header('location:/covid-19/mail/mail-covid-19-results.php');
       }
-   }else{
-      $_SESSION['alertMsg']='Unable to send mail. Please try later.';
+   } else {
+      $_SESSION['alertMsg'] = 'Unable to send mail. Please try later.';
       header('location:/covid-19/mail/mail-covid-19-results.php');
    }
-}else{
-   $_SESSION['alertMsg']='Unable to send mail. Please try later.';
-  header('location:/covid-19/mail/mail-covid-19-results.php');
+} else {
+   $_SESSION['alertMsg'] = 'Unable to send mail. Please try later.';
+   header('location:/covid-19/mail/mail-covid-19-results.php');
 }

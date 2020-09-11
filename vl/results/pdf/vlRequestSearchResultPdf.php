@@ -7,10 +7,10 @@ ob_start();
 
 use setasign\Fpdi\Tcpdf\Fpdi;
 
-include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
-//include_once(APPLICATION_PATH . '/models/General.php');
+
+
 include_once(APPLICATION_PATH . '/models/Users.php');
-include_once(APPLICATION_PATH . '/vendor/autoload.php');
+
 
 $tableName1 = "activity_log";
 $tableName2 = "vl_request_form";

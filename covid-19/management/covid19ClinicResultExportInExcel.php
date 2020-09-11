@@ -1,12 +1,10 @@
 <?php
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+     session_start();
 }
 ob_start();
 #require_once('../../startup.php');  
-include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
-//include_once(APPLICATION_PATH . '/models/General.php');
-include_once(APPLICATION_PATH . '/vendor/autoload.php');
+
 $general = new \Vlsm\Models\General($db);
 
 //system config
@@ -17,7 +15,6 @@ $sarr = array();
 for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
      $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
 }
-
 
 if (isset($_SESSION['highViralResult']) && trim($_SESSION['highViralResult']) != "") {
      error_log($_SESSION['highViralResult']);
