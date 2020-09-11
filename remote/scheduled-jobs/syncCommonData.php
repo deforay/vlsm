@@ -1,8 +1,8 @@
 <?php
 //update common table from remote to lab db
 require_once(dirname(__FILE__) . "/../../startup.php");
-require_once(APPLICATION_PATH . '/includes/MysqliDb.php');
-//require_once(APPLICATION_PATH . '/models/General.php');
+
+
 
 if (!isset($systemConfig['remoteURL']) || $systemConfig['remoteURL'] == '') {
     echo "Please check if the Remote URL is set." . PHP_EOL;

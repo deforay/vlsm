@@ -1,6 +1,6 @@
 <?php
 #require_once('../../startup.php');  
-include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+
 $tableName="facility_details";
 $primaryKey="facility_id";
 

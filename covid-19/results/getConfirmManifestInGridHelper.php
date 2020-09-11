@@ -1,7 +1,7 @@
 <?php
 #require_once('../../startup.php');
-include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
-//include_once(APPLICATION_PATH.'/models/General.php');
+
+
 //system config
 $systemConfigQuery = "SELECT * from system_config";
 $systemConfigResult = $db->query($systemConfigQuery);

@@ -2,7 +2,7 @@
 $title = "Facilities";
 #require_once('../startup.php'); 
 include_once(APPLICATION_PATH . '/header.php');
-//include_once(APPLICATION_PATH . '/models/General.php');
+
 // if($sarr['user_type']=='vluser'){
 //   include('../remote/pullDataFromRemote.php');
 // }

@@ -2,9 +2,8 @@
 //this file is get the data from remote db
 $data = json_decode(file_get_contents('php://input'), true);
 include(dirname(__FILE__) . "/../../startup.php"); 
-include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-//include_once(APPLICATION_PATH.'/models/General.php');
-//include_once(APPLICATION_PATH . '/models/Covid19.php');
+
+
 
 $labId = $data['labName'];
 

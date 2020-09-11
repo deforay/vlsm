@@ -75,8 +75,11 @@ class Eid
             $this->db->where($sampleCodeCol, NULL, 'IS NOT');
             $this->db->orderBy($sampleCodeKeyCol, "DESC");
             $svlResult = $this->db->getOne($this->table, array($sampleCodeKeyCol));
-
-            $maxCodeKeyVal = $svlResult[$sampleCodeKeyCol];
+            if ($svlResult) {
+                $maxCodeKeyVal = $svlResult[$sampleCodeKeyCol];
+            } else {
+                $maxCodeKeyVal = null;
+            }
         }
 
 
@@ -93,7 +96,7 @@ class Eid
 
         $sCodeKey = (array('maxId' => $maxId, 'mnthYr' => $mnthYr, 'auto' => $autoFormatedString));
 
-    
+
 
         if ($globalConfig['vl_form'] == 5) {
             // PNG format has an additional R in prefix
@@ -101,7 +104,7 @@ class Eid
             //$sampleCodeFormat = 'auto2';
         }
 
-    
+
         if ($sampleCodeFormat == 'auto') {
             //$pNameVal = explode("##", $provinceCode);
             $sCodeKey['sampleCode'] = ($remotePrefix . $provinceCode . $autoFormatedString . $sCodeKey['maxId']);

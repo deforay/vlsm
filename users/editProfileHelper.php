@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 #require_once('../startup.php');
-include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
+
 // Define path to guzzle directory
 require_once(APPLICATION_PATH.'/vendor/guzzle/autoload.php');
 

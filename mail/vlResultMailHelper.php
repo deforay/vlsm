@@ -4,9 +4,9 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 #require_once('../startup.php');  
-include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+
 require '/includes/mail/PHPMailerAutoload.php';
-//include_once(APPLICATION_PATH.'/models/General.php');
+
 $general=new \Vlsm\Models\General($db);
 $tableName="vl_request_form";
 $configSyncQuery ="SELECT `value` FROM global_config where name='sync_path'";

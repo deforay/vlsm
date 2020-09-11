@@ -2,8 +2,8 @@
 
 require_once(__DIR__ . "/../startup.php");
 
-require_once(APPLICATION_PATH . '/includes/MysqliDb.php');
-//require_once(APPLICATION_PATH . '/models/General.php');
+
+
 //require_once(APPLICATION_PATH . '/models/Users.php');
 
 if (!isset($interfaceConfig['enabled']) || $interfaceConfig['enabled'] === false) {

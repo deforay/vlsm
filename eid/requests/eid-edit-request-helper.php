@@ -5,9 +5,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 include_once '../../startup.php';
-include_once APPLICATION_PATH . '/includes/MysqliDb.php';
-//include_once(APPLICATION_PATH . '/models/General.php');
-//include_once(APPLICATION_PATH . '/models/Eid.php');
+
 $general = new \Vlsm\Models\General($db);
 
 // echo "<pre>";

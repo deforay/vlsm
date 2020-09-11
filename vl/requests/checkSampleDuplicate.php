@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 #require_once('../../startup.php');
-include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
+
 //system config
 $systemConfigQuery = "SELECT * FROM system_config";
 $systemConfigResult = $db->query($systemConfigQuery);

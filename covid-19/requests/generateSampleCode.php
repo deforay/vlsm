@@ -1,15 +1,10 @@
 <?php
 ob_start();
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+  session_start();
 }
-include_once '../../startup.php';
-include_once APPLICATION_PATH . '/includes/MysqliDb.php';
-include_once(APPLICATION_PATH.'/models/Covid19.php');
-//include_once(APPLICATION_PATH.'/models/General.php');
-$eidModel = new \Vlsm\Models\Covid19($db);
 
-
+$c19Model = new \Vlsm\Models\Covid19($db);
 
 $sampleCollectionDate = $province = '';
 
@@ -32,4 +27,4 @@ if (isset($_POST['sampleFrom'])) {
 }
 
 
-echo $eidModel->generateCovid19SampleCode($province, $sampleCollectionDate,$sampleFrom);
+echo $c19Model->generateCovid19SampleCode($province, $sampleCollectionDate, $sampleFrom);

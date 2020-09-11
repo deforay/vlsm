@@ -1,6 +1,6 @@
 <?php
 #require_once('../../startup.php');
-include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
+
 $sQuery = "SELECT * FROM r_vl_sample_type";
 $sResult = $db->rawQuery($sQuery);
 $fQuery = "SELECT * FROM facility_details where status='active'";

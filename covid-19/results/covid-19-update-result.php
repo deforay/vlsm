@@ -3,8 +3,6 @@ ob_start();
 $title = "Enter Covid-19 Result";
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-//include_once(APPLICATION_PATH . '/models/General.php');
-//require_once(APPLICATION_PATH . '/models/Covid19.php');
 
 $general = new \Vlsm\Models\General($db);
 $id = base64_decode($_GET['id']);

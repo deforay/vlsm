@@ -1,6 +1,6 @@
 <?php
 #require_once('../startup.php');  
-include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+
 
 
 if(!isset($_SESSION['userId'])){
