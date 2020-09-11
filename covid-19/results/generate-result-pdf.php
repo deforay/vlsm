@@ -56,7 +56,8 @@ if (isset($_POST['id']) && trim($_POST['id']) != '') {
                   rsrr.rejection_reason_name ,
                   u_d.user_name as reviewedBy,
                   a_u_d.user_name as approvedBy,
-				  rfs.funding_source_name
+				  rfs.funding_source_name,
+				  rst.sample_name
                   FROM form_covid19 as vl
                   LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id
                   LEFT JOIN facility_details as l ON l.facility_id=vl.lab_id 
@@ -65,6 +66,7 @@ if (isset($_POST['id']) && trim($_POST['id']) != '') {
                   LEFT JOIN r_covid19_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection 
                   LEFT JOIN r_implementation_partners as rip ON rip.i_partner_id=vl.implementing_partner
 				  LEFT JOIN r_funding_sources as rfs ON rfs.funding_source_id=vl.funding_source 
+				  LEFT JOIN r_covid19_sample_type as rst ON rst.sample_id=vl.specimen_type 
                   WHERE vl.covid19_id IN(" . $_POST['id'] . ")";
 } else {
 	$searchQuery = $allQuery;
