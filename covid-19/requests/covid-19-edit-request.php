@@ -67,7 +67,7 @@ $covid19Info = $db->rawQueryOne($covid19Query);
 $covid19TestQuery = "SELECT * from covid19_tests where covid19_id=$id ORDER BY test_id ASC";
 $covid19TestInfo = $db->rawQuery($covid19TestQuery);
 
-//echo "<pre>"; var_dump($covid19Info);die;
+// echo "<pre>"; var_dump($covid19Info);die;
 
 $specimenTypeResult = $general->fetchDataFromTable('r_covid19_sample_type', "status = 'active'");
 
