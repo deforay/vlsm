@@ -386,7 +386,7 @@
 		$(".addSamplesFromManifestCovid19Menu").addClass('active');
 	} else if (splitsUrl == 'can-record-confirmatory-tests.php' && splitsUrlCheck[1] == "covid-19") {
 		$(".allMenu").removeClass('active');
-		$(".covid19Request").addClass('active');
+		$(".covid19Results").addClass('active');
 		$(".canRecordConfirmatoryTestsCovid19Menu").addClass('active');
 	} else if (splitsUrl == 'covid-19-manual-results.php' || splitsUrl == 'covid-19-update-result.php') {
 		$(".allMenu").removeClass('active');

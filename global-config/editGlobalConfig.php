@@ -550,6 +550,16 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 															<option value='no' <?php echo ($arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
 														</select>
 													</div>
+												<?php }
+												if (isset($arr['covid19_tests_table_in_results_pdf']) && $arr['covid19_tests_table_in_results_pdf'] != '') { ?>
+													<label for="covid19TestsTableInResultsPdf" class="col-lg-2 control-label">Covid19 Tests method in Results Pdf<span class="mandatory ">*</span></label>
+													<div class="col-lg-2">
+														<select name="covid19TestsTableInResultsPdf" id="covid19TestsTableInResultsPdf" class="form-control isRequired" title="Please select covid19 Tests method in Results Pdf" style="width:100%">
+															<option value="">-- Select --</option>
+															<option value='yes' <?php echo ($arr['covid19_tests_table_in_results_pdf'] == 'yes') ? "selected='selected'" : ""; ?>> Yes </option>
+															<option value='no' <?php echo ($arr['covid19_tests_table_in_results_pdf'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
+														</select>
+													</div>
 												<?php } ?>
 											</div>
 										</div>

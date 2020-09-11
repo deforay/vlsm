@@ -657,12 +657,7 @@ $formConfigResult = $db->query($formConfigQuery);
 									<li class="allMenu addSamplesFromManifestCovid19Menu">
 										<a href="/covid-19/requests/addSamplesFromManifest.php"><i class="fa fa-circle-o"></i> Add Samples from Manifest</a>
 									</li>
-								<?php }
-								if (isset($_SESSION['privileges']) && in_array("can-record-confirmatory-tests.php", $_SESSION['privileges']) && ($sarr['user_type'] != 'remoteuser')) { ?>
-									<li class="allMenu canRecordConfirmatoryTestsCovid19Menu">
-										<a href="/covid-19/requests/can-record-confirmatory-tests.php"><i class="fa fa-circle-o"></i> Record Confirmatory Tests</a>
-									</li>
-								<?php } ?>
+								<?php }?>
 								<li class="allMenu covid19BatchCodeMenu">
 									<a href="/covid-19/batch/covid-19-batches.php"><i class="fa fa-circle-o"></i> Manage Batch</a>
 								</li>
@@ -699,6 +694,9 @@ $formConfigResult = $db->query($formConfigQuery);
 								if (isset($_SESSION['privileges']) && in_array("covid-19-confirmation-manifest.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu covid19ResultsConfirmationMenu"><a href="/covid-19/results/covid-19-confirmation-manifest.php"><i class="fa fa-circle-o"></i> Confirmation Manifest</a></li>
 								<?php }
+								if (isset($_SESSION['privileges']) && in_array("can-record-confirmatory-tests.php", $_SESSION['privileges']) && ($sarr['user_type'] != 'remoteuser')) { ?>
+									<li class="allMenu canRecordConfirmatoryTestsCovid19Menu"><a href="/covid-19/results/can-record-confirmatory-tests.php"><i class="fa fa-circle-o"></i> Record Confirmatory Tests</a></li>
+								<?php } 
 								if (isset($_SESSION['privileges']) && in_array("covid-19-result-status.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu covid19ResultStatus"><a href="/covid-19/results/covid-19-result-status.php"><i class="fa fa-circle-o"></i> Manage Results Status</a></li>
 								<?php }
