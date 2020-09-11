@@ -164,6 +164,11 @@ try {
         $db = $db->where('name', 'covid19_positive_confirmatory_tests_required_by_central_lab');
         $db->update('global_config', $data);
     }
+    if (isset($_POST['covid19TestsTableInResultsPdf']) && trim($_POST['covid19TestsTableInResultsPdf']) != "") {
+        $data = array('value' => trim($_POST['covid19TestsTableInResultsPdf']));
+        $db = $db->where('name', 'covid19_tests_table_in_results_pdf');
+        $db->update('global_config', $data);
+    }
 
 
 
