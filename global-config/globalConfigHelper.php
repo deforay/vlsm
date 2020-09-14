@@ -28,7 +28,14 @@ try {
         unlink(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $_POST['removedLogoImage']);
         $data = array('value' => '');
         $db = $db->where('name', 'logo');
-        $db->update($tableName, $data);
+        $id = $db->update($tableName, $data);
+        if($id){
+            $db = $db->where('name', 'logo');
+            $db->update($tableName, array(
+                "updated_on" => $general->getDateTime(),
+                "updated_by" => $_SESSION['userId']
+            ));
+        }
         $_SESSION['alertMsg'] = "Logo deleted successfully";
     }
 
@@ -83,13 +90,27 @@ try {
             $resizeObj->saveImage(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $imageName, 100);
             $data = array('value' => $imageName);
             $db = $db->where('name', 'logo');
-            $db->update($tableName, $data);
+            $id = $db->update($tableName, $data);
+            if($id){
+                $db = $db->where('name', 'logo');
+                $db->update($tableName, array(
+                    "updated_on" => $general->getDateTime(),
+                    "updated_by" => $_SESSION['userId']
+                ));
+            }
         }
     }
     if (!isset($_POST['r_mandatory_fields'])) {
         $data = array('value' => null);
         $db = $db->where('name', 'r_mandatory_fields');
-        $db->update($tableName, $data);
+        $id = $db->update($tableName, $data);
+        if($id){
+            $db = $db->where('name', 'logo');
+            $db->update($tableName, array(
+                "updated_on" => $general->getDateTime(),
+                "updated_by" => $_SESSION['userId']
+            ));
+        }
     }
 
     foreach ($_POST as $fieldName => $fieldValue) {
@@ -99,7 +120,14 @@ try {
             }
             $data = array('value' => $fieldValue);
             $db = $db->where('name', $fieldName);
-            $db->update($tableName, $data);
+            $id = $db->update($tableName, $data);
+            if($id){
+                $db = $db->where('name', 'logo');
+                $db->update($tableName, array(
+                    "updated_on" => $general->getDateTime(),
+                    "updated_by" => $_SESSION['userId']
+                ));
+            }
             //Generate syn sub folder
             if ($fieldName == 'sync_path' && trim($fieldValue) != '') {
                 //root folder creation
@@ -157,20 +185,39 @@ try {
     if (isset($_POST['covid19ReportType']) && trim($_POST['covid19ReportType']) != "") {
         $data = array('value' => trim($_POST['covid19ReportType']));
         $db = $db->where('name', 'covid19_report_type');
-        $db->update('global_config', $data);
+        $id = $db->update($tableName, $data);
+        if($id){
+            $db = $db->where('name', 'logo');
+            $db->update($tableName, array(
+                "updated_on" => $general->getDateTime(),
+                "updated_by" => $_SESSION['userId']
+            ));
+        }
     }
     if (isset($_POST['covid19PositiveConfirmatoryTestsRequiredByCentralLab']) && trim($_POST['covid19PositiveConfirmatoryTestsRequiredByCentralLab']) != "") {
         $data = array('value' => trim($_POST['covid19PositiveConfirmatoryTestsRequiredByCentralLab']));
         $db = $db->where('name', 'covid19_positive_confirmatory_tests_required_by_central_lab');
-        $db->update('global_config', $data);
+        $id = $db->update($tableName, $data);
+        if($id){
+            $db = $db->where('name', 'logo');
+            $db->update($tableName, array(
+                "updated_on" => $general->getDateTime(),
+                "updated_by" => $_SESSION['userId']
+            ));
+        }
     }
     if (isset($_POST['covid19TestsTableInResultsPdf']) && trim($_POST['covid19TestsTableInResultsPdf']) != "") {
         $data = array('value' => trim($_POST['covid19TestsTableInResultsPdf']));
         $db = $db->where('name', 'covid19_tests_table_in_results_pdf');
-        $db->update('global_config', $data);
+        $id = $db->update($tableName, $data);
+        if($id){
+            $db = $db->where('name', 'logo');
+            $db->update($tableName, array(
+                "updated_on" => $general->getDateTime(),
+                "updated_by" => $_SESSION['userId']
+            ));
+        }
     }
-
-
 
     //update all sample code in database
     // if (isset($_POST['sample_code_prefix']) && trim($_POST['sample_code_prefix']) != '' && ($_POST['vl_form'] == 7 || $_POST['vl_form'] == 3 || $_POST['vl_form'] == 4)) {
@@ -215,7 +262,7 @@ try {
     //     }
     // }
     $_SESSION['alertMsg'] = "Global Config values updated successfully";
-
+    
     //Add event log
     $eventType = 'general-config-update';
     $action = ucwords($_SESSION['userName']) . ' updated general config';

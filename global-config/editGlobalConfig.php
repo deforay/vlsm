@@ -300,229 +300,228 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 
 							</div>
 						</div>
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h3 class="panel-title">Viral Load Settings</h3>
-							</div>
-							<div class="panel-body">
-
-								<div class="row">
-									<div class="col-md-12">
-										<div class="form-group">
-											<label for="show_date" class="col-lg-2 control-label">Date For Patient ART NO. </label>
-											<div class="col-lg-10">
-												<br>
-												<input type="radio" class="" id="show_full_date_yes" name="show_date" value="yes" <?php echo ($arr['show_date'] == 'yes') ? 'checked' : ''; ?>>&nbsp;&nbsp;Full Date&nbsp;&nbsp;
-												<input type="radio" class="" id="show_full_date_no" name="show_date" value="no" <?php echo ($arr['show_date'] == 'no' || $arr['show_date'] == '') ? 'checked' : ''; ?>>&nbsp;&nbsp;Month and Year
-											</div>
-										</div>
-									</div>
+						<?php if($systemConfig['modules']['vl']){ ?>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h3 class="panel-title">Viral Load Settings</h3>
 								</div>
-								<!--<div class="row">
-                  <div class="col-md-7">
-                    <div class="form-group">
-                      <label for="auto_approval" class="col-lg-4 control-label">Auto Approval </label>
-                      <div class="col-lg-8">
-                        <input type="radio" class="" id="auto_approval_yes" name="auto_approval" value="yes" < ?php echo($arr['auto_approval'] == 'yes')?'checked':''; ?>>&nbsp;&nbsp;Yes&nbsp;&nbsp;
-                        <input type="radio" class="" id="auto_approval_no" name="auto_approval" value="no" < ?php echo($arr['auto_approval'] == 'no' || $arr['auto_approval'] == '')?'checked':''; ?>>&nbsp;&nbsp;No
-                      </div>
-                    </div>
-                   </div>
-                </div>-->
-								<div class="row">
-									<div class="col-md-12">
-										<div class="form-group">
-											<label for="viral_load_threshold_limit" class="col-lg-2 control-label">Viral Load Threshold Limit<span class="mandatory">*</span></label>
-											<div class="col-lg-10">
-												<div class="input-group" style="max-width:200px;">
-													<input type="text" class="form-control checkNum isNumeric isRequired" id="viral_load_threshold_limit" name="viral_load_threshold_limit" placeholder="Viral Load Threshold Limit" title="Please enter VL threshold limit" value="<?php echo $arr['viral_load_threshold_limit']; ?>" />
-													<span class="input-group-addon">cp/ml</span>
+								<div class="panel-body">
+
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for="show_date" class="col-lg-2 control-label">Date For Patient ART NO. </label>
+												<div class="col-lg-10">
+													<br>
+													<input type="radio" class="" id="show_full_date_yes" name="show_date" value="yes" <?php echo ($arr['show_date'] == 'yes') ? 'checked' : ''; ?>>&nbsp;&nbsp;Full Date&nbsp;&nbsp;
+													<input type="radio" class="" id="show_full_date_no" name="show_date" value="no" <?php echo ($arr['show_date'] == 'no' || $arr['show_date'] == '') ? 'checked' : ''; ?>>&nbsp;&nbsp;Month and Year
 												</div>
-
 											</div>
 										</div>
 									</div>
-								</div>
-
-								<div class="row">
-									<div class="col-md-12" style="">
-										<div class="form-group">
-											<label for="auto_approval" class="col-lg-2 control-label">Sample Code<br>Format <span class="mandatory">*</span> </label>
-											<div class="col-lg-10">
-												<?php
-												$sPrefixMMYY = '';
-												$sPrefixYY = '';
-												$sPrefixMMYYDisplay = 'disabled="disabled"';
-												$sPrefixYYDisplay = 'disabled="disabled"';
-												if ($arr['sample_code'] == 'MMYY') {
-													$sPrefixMMYY = $arr['sample_code_prefix'];
-													$sPrefixMMYYDisplay = '';
-												} else if ($arr['sample_code'] == 'YY') {
-													$sPrefixYY = $arr['sample_code_prefix'];
-													$sPrefixYYDisplay = '';
-												}
-												?>
-												<input type="radio" title="Please select the Viral Load Sample Code Format" class="isRequired" id="auto_generate_yy" name="sample_code" value="YY" <?php echo ($arr['sample_code'] == 'YY') ? 'checked' : ''; ?> onclick="makeReadonly('prefixMMYY','prefixYY')">&nbsp;<input <?php echo $sPrefixYYDisplay; ?> type="text" class="boxWidth prefixYY" id="prefixYY" name="sample_code_prefix" title="Enter Prefix" value="<?php echo $sPrefixYY; ?>" /> YY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-												<input type="radio" title="Please select the Viral Load Sample Code Format" class="isRequired" id="auto_generate_mmyy" name="sample_code" value="MMYY" <?php echo ($arr['sample_code'] == 'MMYY') ? 'checked' : ''; ?> onclick="makeReadonly('prefixYY','prefixMMYY')">&nbsp;<input <?php echo $sPrefixMMYYDisplay; ?> type="text" class="boxWidth prefixMMYY" id="prefixMMYY" name="sample_code_prefix" title="Enter Prefix" value="<?php echo $sPrefixMMYY; ?>" /> MMYY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-												<input type="radio" title="Please select the Viral Load Sample Code Format" class="isRequired" id="auto_generate" name="sample_code" value="auto" <?php echo ($arr['sample_code'] == 'auto') ? 'checked' : ''; ?>><span id="auto1"><?php echo ($arr['vl_form'] == 5) ? ' Auto 1' : ' Auto'; ?> </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-												<input type="radio" title="Please select the Viral Load Sample Code Format" class="isRequired" id="auto_generate2" name="sample_code" value="auto2" <?php echo ($arr['sample_code'] == 'auto2') ? 'checked' : ''; ?> style="display:<?php echo ($arr['vl_form'] == 5) ? '' : 'none'; ?>"><span id="auto2" style="display:<?php echo ($arr['vl_form'] == 5) ? '' : 'none'; ?>"> Auto 2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-												<input type="radio" title="Please select the Viral Load Sample Code Format" class="isRequired" id="numeric" name="sample_code" value="numeric" <?php echo ($arr['sample_code'] == 'numeric') ? 'checked' : ''; ?>> Numeric&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-												<input type="radio" title="Please select the Viral Load Sample Code Format" class="isRequired" id="alpha_numeric" name="sample_code" value="alphanumeric" <?php echo ($arr['sample_code'] == 'alphanumeric') ? 'checked' : ''; ?>> Alpha Numeric
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<div id="auto-sample-eg" class="row" style="display:<?php echo ($arr['sample_code'] == 'auto' || $arr['sample_code'] == 'auto2' || 'MMYY' || 'YY') ? 'block' : 'none'; ?>;">
-									<div class="col-md-12" style="text-align:center;">
-										<code id="auto-sample-code" class="autoSample" style="display:<?php echo ($arr['sample_code'] == 'auto') ? 'block' : 'none'; ?>;">
-											eg. Province Code+Year+Month+Date+Increment Counter
-										</code>
-										<code id="auto-sample-code2" class="autoSample" style="display:<?php echo ($arr['sample_code'] == 'auto2') ? 'block' : 'none'; ?>;">
-											eg. R+Year+Province Code+VL+Increment Counter (R18NCDVL0001)
-										</code>
-										<code id="auto-sample-code-MMYY" class="autoSample" style="display:<?php echo ($arr['sample_code'] == 'MMYY') ? 'block' : 'none'; ?>;">
-											eg. Prefix+Month+Year+Increment Counter (VL0517999)
-										</code>
-										<code id="auto-sample-code-YY" class="autoSample" style="display:<?php echo ($arr['sample_code'] == 'YY') ? 'block' : 'none'; ?>;">
-											eg. Prefix+Year+Increment Counter (VL17999)
-										</code>
-									</div>
-								</div><br />
-								<div class="row">
-									<div class="col-md-12">
-										<div class="form-group">
-											<label for="min_length" class="col-lg-2 control-label">Minimum Sample Code Length <span class="mandatory " style="display:<?php echo ($arr['sample_code'] == 'auto') ? 'none' : 'block'; ?>">*</span></label>
-											<div class="col-lg-10">
-												<input type="text" class="form-control checkNum isNumeric <?php echo ($arr['sample_code'] == 'auto' || 'MMYY' || 'YY') ? '' : 'isRequired'; ?>" id="min_length" name="min_length" <?php echo ($arr['sample_code'] == 'auto' || 'MMYY' || 'YY') ? 'readonly' : ''; ?> placeholder="Min" title="Please enter sample code min length" value="<?php echo ($arr['sample_code'] == 'auto') ? '' : $arr['min_length']; ?>" style="max-width:60px;" />
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-12">
-										<div class="form-group">
-											<label for="min_length" class="col-lg-2 control-label">Maximum Sample Code Length <span class="mandatory " style="display:<?php echo ($arr['sample_code'] == 'auto') ? 'none' : 'block'; ?>">*</span></label>
-											<div class="col-lg-10">
-												<input type="text" class="form-control checkNum isNumeric <?php echo ($arr['sample_code'] == 'auto' || 'MMYY' || 'YY') ? '' : 'isRequired'; ?>" id="max_length" name="max_length" <?php echo ($arr['sample_code'] == 'auto' || 'MMYY' || 'YY') ? 'readonly' : ''; ?> placeholder="Max" title="Please enter sample code max length" value="<?php echo ($arr['sample_code'] == 'auto') ? '' : $arr['max_length']; ?>" style="max-width:60px;" />
-											</div>
-										</div>
-									</div>
-								</div>
-
-							</div>
+									<!--<div class="row">
+					<div class="col-md-7">
+						<div class="form-group">
+						<label for="auto_approval" class="col-lg-4 control-label">Auto Approval </label>
+						<div class="col-lg-8">
+							<input type="radio" class="" id="auto_approval_yes" name="auto_approval" value="yes" < ?php echo($arr['auto_approval'] == 'yes')?'checked':''; ?>>&nbsp;&nbsp;Yes&nbsp;&nbsp;
+							<input type="radio" class="" id="auto_approval_no" name="auto_approval" value="no" < ?php echo($arr['auto_approval'] == 'no' || $arr['auto_approval'] == '')?'checked':''; ?>>&nbsp;&nbsp;No
 						</div>
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h3 class="panel-title">EID Settings</h3>
-							</div>
-							<div class="panel-body">
-
-								<div class="row">
-									<div class="col-md-12">
-										<div class="form-group">
-											<label for="eid_positive" class="col-lg-2 control-label">EID Positive <span class="mandatory">*</span></label>
-											<div class="col-lg-10">
-												<input type="text" class="form-control" id="eid_positive" name="eid_positive" placeholder="EID Positive" title="Please enter EID Positive" value="<?php echo (isset($arr['eid_positive']) && !empty($arr['eid_positive']) ? $arr['eid_positive'] : 'Positive'); ?>" style="max-width:200px;" />
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<div class="row">
-									<div class="col-md-12">
-										<div class="form-group">
-											<label for="eid_negative" class="col-lg-2 control-label">EID Negative <span class="mandatory">*</span></label>
-											<div class="col-lg-10">
-												<input type="text" class="form-control" id="eid_negative" name="eid_negative" placeholder="EID Negative" title="Please enter EID Negative" value="<?php echo (isset($arr['eid_negative']) && !empty($arr['eid_negative']) ? $arr['eid_negative'] : 'Negative'); ?>" style="max-width:200px;" />
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<div class="row">
-									<div class="col-md-12">
-										<div class="form-group">
-											<label for="eid_indeterminate" class="col-lg-2 control-label">EID Indeterminate <span class="mandatory">*</span></label>
-											<div class="col-lg-10">
-												<input type="text" class="form-control" id="eid_indeterminate" name="eid_indeterminate" placeholder="EID Indeterminate" title="Please enter EID Indeterminate" value="<?php echo (isset($arr['eid_indeterminate']) && !empty($arr['eid_indeterminate']) ? $arr['eid_indeterminate'] : 'Indeterminate'); ?>" style="max-width:200px;" />
-											</div>
-										</div>
-									</div>
-								</div>
-
-
-
-
-
-								<div class="row">
-									<div class="col-md-12" style="">
-										<div class="form-group">
-											<label for="eid_sample_code" class="col-lg-2 control-label">Sample Code<br>Format <span class="mandatory">*</span> </label>
-											<div class="col-lg-10">
-												<?php
-												$sPrefixMMYY = 'EID';
-												$sPrefixYY = '';
-												$sPrefixMMYYDisplay = 'disabled="disabled"';
-												$sPrefixYYDisplay = 'disabled="disabled"';
-												if ($arr['eid_sample_code'] == 'MMYY') {
-													$sPrefixMMYY = $arr['eid_sample_code_prefix'];
-													$sPrefixMMYYDisplay = '';
-												} else if ($arr['eid_sample_code'] == 'YY') {
-													$sPrefixYY = $arr['eid_sample_code_prefix'];
-													$sPrefixYYDisplay = '';
-												}
-												?>
-												<input type="radio" class="isRequired" title="Please select the EID Sample Code Format" id="eid_auto_generate_yy" name="eid_sample_code" value="YY" <?php echo ($arr['eid_sample_code'] == 'YY') ? 'checked' : ''; ?> onclick="makeReadonly('prefixMMYY','prefixYY')">&nbsp;<input <?php echo $sPrefixYYDisplay; ?> type="text" class="eid_boxWidth eid_prefixYY" id="eid_prefixYY" name="eid_sample_code_prefix" title="Enter Prefix" value="<?php echo $sPrefixYY; ?>" /> YY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-												<input type="radio" class="isRequired" title="Please select the EID Sample Code Format" id="eid_auto_generate_mmyy" name="eid_sample_code" value="MMYY" <?php echo ($arr['eid_sample_code'] == 'MMYY') ? 'checked' : ''; ?> onclick="makeReadonly('prefixYY','prefixMMYY')">&nbsp;<input <?php echo $sPrefixMMYYDisplay; ?> type="text" class="eid_boxWidth eid_prefixMMYY" id="eid_prefixMMYY" name="eid_sample_code_prefix" title="Enter Prefix" value="<?php echo $sPrefixMMYY; ?>" /> MMYY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-												<input type="radio" class="isRequired" title="Please select the EID Sample Code Format" id="eid_auto_generate" name="eid_sample_code" value="auto" <?php echo ($arr['eid_sample_code'] == 'auto') ? 'checked' : ''; ?>><span id="eid_auto1"><?php echo ($arr['vl_form'] == 5) ? ' Auto 1' : ' Auto'; ?> </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-												<input type="radio" class="isRequired" title="Please select the EID Sample Code Format" id="eid_auto_generate2" name="eid_sample_code" value="auto2" <?php echo ($arr['eid_sample_code'] == 'auto2') ? 'checked' : ''; ?> style="display:<?php echo ($arr['vl_form'] == 5) ? '' : 'none'; ?>"><span id="eid_auto2" style="display:<?php echo ($arr['vl_form'] == 5) ? '' : 'none'; ?>"> Auto 2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-												<input type="radio" class="isRequired" title="Please select the EID Sample Code Format" id="eid_numeric" name="eid_sample_code" value="numeric" <?php echo ($arr['eid_sample_code'] == 'numeric') ? 'checked' : ''; ?>> Numeric&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-												<input type="radio" class="isRequired" title="Please select the EID Sample Code Format" id="eid_alpha_numeric" name="eid_sample_code" value="alphanumeric" <?php echo ($arr['eid_sample_code'] == 'alphanumeric') ? 'checked' : ''; ?>> Alpha Numeric
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<div id="eid_auto-sample-eg" class="row" style="display:<?php echo ($arr['eid_sample_code'] == 'auto' || $arr['eid_sample_code'] == 'auto2' || 'MMYY' || 'YY') ? 'block' : 'none'; ?>;">
-									<div class="col-md-12" style="text-align:center;">
-										<code id="eid_auto-sample-code" class="eid_autoSample" style="display:<?php echo ($arr['eid_sample_code'] == 'auto') ? 'block' : 'none'; ?>;">
-											eg. Province Code+Year+Month+Date+Increment Counter
-										</code>
-										<code id="eid_auto-sample-code2" class="eid_autoSample" style="display:<?php echo ($arr['eid_sample_code'] == 'auto2') ? 'block' : 'none'; ?>;">
-											eg. R+Year+Province Code+EID+Increment Counter (R18NCDEID0001)
-										</code>
-										<code id="eid_auto-sample-code-MMYY" class="eid_autoSample" style="display:<?php echo ($arr['eid_sample_code'] == 'MMYY') ? 'block' : 'none'; ?>;">
-											eg. Prefix+Month+Year+Increment Counter (EID0517999)
-										</code>
-										<code id="eid_auto-sample-code-YY" class="eid_autoSample" style="display:<?php echo ($arr['eid_sample_code'] == 'YY') ? 'block' : 'none'; ?>;">
-											eg. Prefix+Year+Increment Counter (EID17999)
-										</code>
-									</div>
-								</div><br />
-								<div class="row">
-									<div class="col-md-12">
-										<div class="form-group">
-											<label for="eid_min_length" class="col-lg-2 control-label">Minimum Sample Code Length <span class="mandatory " style="display:<?php echo ($arr['eid_sample_code'] == 'auto') ? 'none' : 'block'; ?>">*</span></label>
-											<div class="col-lg-10">
-												<input type="text" class="form-control checkNum isNumeric <?php echo ($arr['eid_sample_code'] == 'auto' || 'MMYY' || 'YY') ? '' : 'isRequired'; ?>" id="eid_min_length" name="eid_min_length" <?php echo ($arr['eid_sample_code'] == 'auto' || 'MMYY' || 'YY') ? 'readonly' : ''; ?> placeholder="Min" title="Please enter sample code min length" value="<?php echo ($arr['eid_sample_code'] == 'auto') ? '' : $arr['min_length']; ?>" style="max-width:60px;" />
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-12">
-										<div class="form-group">
-											<label for="eid_max_length" class="col-lg-2 control-label">Maximum Sample Code Length <span class="mandatory " style="display:<?php echo ($arr['eid_sample_code'] == 'auto') ? 'none' : 'block'; ?>">*</span></label>
-											<div class="col-lg-10">
-												<input type="text" class="form-control checkNum isNumeric <?php echo ($arr['sample_code'] == 'auto' || 'MMYY' || 'YY') ? '' : 'isRequired'; ?>" id="eid_max_length" name="eid_max_length" <?php echo ($arr['eid_sample_code'] == 'auto' || 'MMYY' || 'YY') ? 'readonly' : ''; ?> placeholder="Max" title="Please enter sample code max length" value="<?php echo ($arr['eid_sample_code'] == 'auto') ? '' : $arr['max_length']; ?>" style="max-width:60px;" />
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
 						</div>
-						<?php if ((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] != '') || (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] != '')) { ?>
+					</div>
+					</div>-->
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for="viral_load_threshold_limit" class="col-lg-2 control-label">Viral Load Threshold Limit<span class="mandatory">*</span></label>
+												<div class="col-lg-10">
+													<div class="input-group" style="max-width:200px;">
+														<input type="text" class="form-control checkNum isNumeric isRequired" id="viral_load_threshold_limit" name="viral_load_threshold_limit" placeholder="Viral Load Threshold Limit" title="Please enter VL threshold limit" value="<?php echo $arr['viral_load_threshold_limit']; ?>" />
+														<span class="input-group-addon">cp/ml</span>
+													</div>
+
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-12" style="">
+											<div class="form-group">
+												<label for="auto_approval" class="col-lg-2 control-label">Sample Code<br>Format <span class="mandatory">*</span> </label>
+												<div class="col-lg-10">
+													<?php
+													$sPrefixMMYY = '';
+													$sPrefixYY = '';
+													$sPrefixMMYYDisplay = 'disabled="disabled"';
+													$sPrefixYYDisplay = 'disabled="disabled"';
+													if ($arr['sample_code'] == 'MMYY') {
+														$sPrefixMMYY = $arr['sample_code_prefix'];
+														$sPrefixMMYYDisplay = '';
+													} else if ($arr['sample_code'] == 'YY') {
+														$sPrefixYY = $arr['sample_code_prefix'];
+														$sPrefixYYDisplay = '';
+													}
+													?>
+													<input type="radio" title="Please select the Viral Load Sample Code Format" class="isRequired" id="auto_generate_yy" name="sample_code" value="YY" <?php echo ($arr['sample_code'] == 'YY') ? 'checked' : ''; ?> onclick="makeReadonly('prefixMMYY','prefixYY')">&nbsp;<input <?php echo $sPrefixYYDisplay; ?> type="text" class="boxWidth prefixYY" id="prefixYY" name="sample_code_prefix" title="Enter Prefix" value="<?php echo $sPrefixYY; ?>" /> YY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<input type="radio" title="Please select the Viral Load Sample Code Format" class="isRequired" id="auto_generate_mmyy" name="sample_code" value="MMYY" <?php echo ($arr['sample_code'] == 'MMYY') ? 'checked' : ''; ?> onclick="makeReadonly('prefixYY','prefixMMYY')">&nbsp;<input <?php echo $sPrefixMMYYDisplay; ?> type="text" class="boxWidth prefixMMYY" id="prefixMMYY" name="sample_code_prefix" title="Enter Prefix" value="<?php echo $sPrefixMMYY; ?>" /> MMYY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<input type="radio" title="Please select the Viral Load Sample Code Format" class="isRequired" id="auto_generate" name="sample_code" value="auto" <?php echo ($arr['sample_code'] == 'auto') ? 'checked' : ''; ?>><span id="auto1"><?php echo ($arr['vl_form'] == 5) ? ' Auto 1' : ' Auto'; ?> </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<input type="radio" title="Please select the Viral Load Sample Code Format" class="isRequired" id="auto_generate2" name="sample_code" value="auto2" <?php echo ($arr['sample_code'] == 'auto2') ? 'checked' : ''; ?> style="display:<?php echo ($arr['vl_form'] == 5) ? '' : 'none'; ?>"><span id="auto2" style="display:<?php echo ($arr['vl_form'] == 5) ? '' : 'none'; ?>"> Auto 2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+													<input type="radio" title="Please select the Viral Load Sample Code Format" class="isRequired" id="numeric" name="sample_code" value="numeric" <?php echo ($arr['sample_code'] == 'numeric') ? 'checked' : ''; ?>> Numeric&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<input type="radio" title="Please select the Viral Load Sample Code Format" class="isRequired" id="alpha_numeric" name="sample_code" value="alphanumeric" <?php echo ($arr['sample_code'] == 'alphanumeric') ? 'checked' : ''; ?>> Alpha Numeric
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div id="auto-sample-eg" class="row" style="display:<?php echo ($arr['sample_code'] == 'auto' || $arr['sample_code'] == 'auto2' || 'MMYY' || 'YY') ? 'block' : 'none'; ?>;">
+										<div class="col-md-12" style="text-align:center;">
+											<code id="auto-sample-code" class="autoSample" style="display:<?php echo ($arr['sample_code'] == 'auto') ? 'block' : 'none'; ?>;">
+												eg. Province Code+Year+Month+Date+Increment Counter
+											</code>
+											<code id="auto-sample-code2" class="autoSample" style="display:<?php echo ($arr['sample_code'] == 'auto2') ? 'block' : 'none'; ?>;">
+												eg. R+Year+Province Code+VL+Increment Counter (R18NCDVL0001)
+											</code>
+											<code id="auto-sample-code-MMYY" class="autoSample" style="display:<?php echo ($arr['sample_code'] == 'MMYY') ? 'block' : 'none'; ?>;">
+												eg. Prefix+Month+Year+Increment Counter (VL0517999)
+											</code>
+											<code id="auto-sample-code-YY" class="autoSample" style="display:<?php echo ($arr['sample_code'] == 'YY') ? 'block' : 'none'; ?>;">
+												eg. Prefix+Year+Increment Counter (VL17999)
+											</code>
+										</div>
+									</div><br />
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for="min_length" class="col-lg-2 control-label">Minimum Sample Code Length <span class="mandatory " style="display:<?php echo ($arr['sample_code'] == 'auto') ? 'none' : 'block'; ?>">*</span></label>
+												<div class="col-lg-10">
+													<input type="text" class="form-control checkNum isNumeric <?php echo ($arr['sample_code'] == 'auto' || 'MMYY' || 'YY') ? '' : 'isRequired'; ?>" id="min_length" name="min_length" <?php echo ($arr['sample_code'] == 'auto' || 'MMYY' || 'YY') ? 'readonly' : ''; ?> placeholder="Min" title="Please enter sample code min length" value="<?php echo ($arr['sample_code'] == 'auto') ? '' : $arr['min_length']; ?>" style="max-width:60px;" />
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for="min_length" class="col-lg-2 control-label">Maximum Sample Code Length <span class="mandatory " style="display:<?php echo ($arr['sample_code'] == 'auto') ? 'none' : 'block'; ?>">*</span></label>
+												<div class="col-lg-10">
+													<input type="text" class="form-control checkNum isNumeric <?php echo ($arr['sample_code'] == 'auto' || 'MMYY' || 'YY') ? '' : 'isRequired'; ?>" id="max_length" name="max_length" <?php echo ($arr['sample_code'] == 'auto' || 'MMYY' || 'YY') ? 'readonly' : ''; ?> placeholder="Max" title="Please enter sample code max length" value="<?php echo ($arr['sample_code'] == 'auto') ? '' : $arr['max_length']; ?>" style="max-width:60px;" />
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						<?php } 
+						if($systemConfig['modules']['eid']){ ?>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h3 class="panel-title">EID Settings</h3>
+								</div>
+								<div class="panel-body">
+
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for="eid_positive" class="col-lg-2 control-label">EID Positive <span class="mandatory">*</span></label>
+												<div class="col-lg-10">
+													<input type="text" class="form-control" id="eid_positive" name="eid_positive" placeholder="EID Positive" title="Please enter EID Positive" value="<?php echo (isset($arr['eid_positive']) && !empty($arr['eid_positive']) ? $arr['eid_positive'] : 'Positive'); ?>" style="max-width:200px;" />
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for="eid_negative" class="col-lg-2 control-label">EID Negative <span class="mandatory">*</span></label>
+												<div class="col-lg-10">
+													<input type="text" class="form-control" id="eid_negative" name="eid_negative" placeholder="EID Negative" title="Please enter EID Negative" value="<?php echo (isset($arr['eid_negative']) && !empty($arr['eid_negative']) ? $arr['eid_negative'] : 'Negative'); ?>" style="max-width:200px;" />
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for="eid_indeterminate" class="col-lg-2 control-label">EID Indeterminate <span class="mandatory">*</span></label>
+												<div class="col-lg-10">
+													<input type="text" class="form-control" id="eid_indeterminate" name="eid_indeterminate" placeholder="EID Indeterminate" title="Please enter EID Indeterminate" value="<?php echo (isset($arr['eid_indeterminate']) && !empty($arr['eid_indeterminate']) ? $arr['eid_indeterminate'] : 'Indeterminate'); ?>" style="max-width:200px;" />
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-12" style="">
+											<div class="form-group">
+												<label for="eid_sample_code" class="col-lg-2 control-label">Sample Code<br>Format <span class="mandatory">*</span> </label>
+												<div class="col-lg-10">
+													<?php
+													$sPrefixMMYY = 'EID';
+													$sPrefixYY = '';
+													$sPrefixMMYYDisplay = 'disabled="disabled"';
+													$sPrefixYYDisplay = 'disabled="disabled"';
+													if ($arr['eid_sample_code'] == 'MMYY') {
+														$sPrefixMMYY = $arr['eid_sample_code_prefix'];
+														$sPrefixMMYYDisplay = '';
+													} else if ($arr['eid_sample_code'] == 'YY') {
+														$sPrefixYY = $arr['eid_sample_code_prefix'];
+														$sPrefixYYDisplay = '';
+													}
+													?>
+													<input type="radio" class="isRequired" title="Please select the EID Sample Code Format" id="eid_auto_generate_yy" name="eid_sample_code" value="YY" <?php echo ($arr['eid_sample_code'] == 'YY') ? 'checked' : ''; ?> onclick="makeReadonly('prefixMMYY','prefixYY')">&nbsp;<input <?php echo $sPrefixYYDisplay; ?> type="text" class="eid_boxWidth eid_prefixYY" id="eid_prefixYY" name="eid_sample_code_prefix" title="Enter Prefix" value="<?php echo $sPrefixYY; ?>" /> YY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<input type="radio" class="isRequired" title="Please select the EID Sample Code Format" id="eid_auto_generate_mmyy" name="eid_sample_code" value="MMYY" <?php echo ($arr['eid_sample_code'] == 'MMYY') ? 'checked' : ''; ?> onclick="makeReadonly('prefixYY','prefixMMYY')">&nbsp;<input <?php echo $sPrefixMMYYDisplay; ?> type="text" class="eid_boxWidth eid_prefixMMYY" id="eid_prefixMMYY" name="eid_sample_code_prefix" title="Enter Prefix" value="<?php echo $sPrefixMMYY; ?>" /> MMYY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<input type="radio" class="isRequired" title="Please select the EID Sample Code Format" id="eid_auto_generate" name="eid_sample_code" value="auto" <?php echo ($arr['eid_sample_code'] == 'auto') ? 'checked' : ''; ?>><span id="eid_auto1"><?php echo ($arr['vl_form'] == 5) ? ' Auto 1' : ' Auto'; ?> </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<input type="radio" class="isRequired" title="Please select the EID Sample Code Format" id="eid_auto_generate2" name="eid_sample_code" value="auto2" <?php echo ($arr['eid_sample_code'] == 'auto2') ? 'checked' : ''; ?> style="display:<?php echo ($arr['vl_form'] == 5) ? '' : 'none'; ?>"><span id="eid_auto2" style="display:<?php echo ($arr['vl_form'] == 5) ? '' : 'none'; ?>"> Auto 2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+													<input type="radio" class="isRequired" title="Please select the EID Sample Code Format" id="eid_numeric" name="eid_sample_code" value="numeric" <?php echo ($arr['eid_sample_code'] == 'numeric') ? 'checked' : ''; ?>> Numeric&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<input type="radio" class="isRequired" title="Please select the EID Sample Code Format" id="eid_alpha_numeric" name="eid_sample_code" value="alphanumeric" <?php echo ($arr['eid_sample_code'] == 'alphanumeric') ? 'checked' : ''; ?>> Alpha Numeric
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div id="eid_auto-sample-eg" class="row" style="display:<?php echo ($arr['eid_sample_code'] == 'auto' || $arr['eid_sample_code'] == 'auto2' || 'MMYY' || 'YY') ? 'block' : 'none'; ?>;">
+										<div class="col-md-12" style="text-align:center;">
+											<code id="eid_auto-sample-code" class="eid_autoSample" style="display:<?php echo ($arr['eid_sample_code'] == 'auto') ? 'block' : 'none'; ?>;">
+												eg. Province Code+Year+Month+Date+Increment Counter
+											</code>
+											<code id="eid_auto-sample-code2" class="eid_autoSample" style="display:<?php echo ($arr['eid_sample_code'] == 'auto2') ? 'block' : 'none'; ?>;">
+												eg. R+Year+Province Code+EID+Increment Counter (R18NCDEID0001)
+											</code>
+											<code id="eid_auto-sample-code-MMYY" class="eid_autoSample" style="display:<?php echo ($arr['eid_sample_code'] == 'MMYY') ? 'block' : 'none'; ?>;">
+												eg. Prefix+Month+Year+Increment Counter (EID0517999)
+											</code>
+											<code id="eid_auto-sample-code-YY" class="eid_autoSample" style="display:<?php echo ($arr['eid_sample_code'] == 'YY') ? 'block' : 'none'; ?>;">
+												eg. Prefix+Year+Increment Counter (EID17999)
+											</code>
+										</div>
+									</div><br />
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for="eid_min_length" class="col-lg-2 control-label">Minimum Sample Code Length <span class="mandatory " style="display:<?php echo ($arr['eid_sample_code'] == 'auto') ? 'none' : 'block'; ?>">*</span></label>
+												<div class="col-lg-10">
+													<input type="text" class="form-control checkNum isNumeric <?php echo ($arr['eid_sample_code'] == 'auto' || 'MMYY' || 'YY') ? '' : 'isRequired'; ?>" id="eid_min_length" name="eid_min_length" <?php echo ($arr['eid_sample_code'] == 'auto' || 'MMYY' || 'YY') ? 'readonly' : ''; ?> placeholder="Min" title="Please enter sample code min length" value="<?php echo ($arr['eid_sample_code'] == 'auto') ? '' : $arr['min_length']; ?>" style="max-width:60px;" />
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for="eid_max_length" class="col-lg-2 control-label">Maximum Sample Code Length <span class="mandatory " style="display:<?php echo ($arr['eid_sample_code'] == 'auto') ? 'none' : 'block'; ?>">*</span></label>
+												<div class="col-lg-10">
+													<input type="text" class="form-control checkNum isNumeric <?php echo ($arr['sample_code'] == 'auto' || 'MMYY' || 'YY') ? '' : 'isRequired'; ?>" id="eid_max_length" name="eid_max_length" <?php echo ($arr['eid_sample_code'] == 'auto' || 'MMYY' || 'YY') ? 'readonly' : ''; ?> placeholder="Max" title="Please enter sample code max length" value="<?php echo ($arr['eid_sample_code'] == 'auto') ? '' : $arr['max_length']; ?>" style="max-width:60px;" />
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						<?php }
+						if ($systemConfig['modules']['covid19']) { ?>
 							<div class="panel panel-default">
 								<div class="panel-heading">
 									<h3 class="panel-title">Covid-19 Settings</h3>
@@ -533,8 +532,8 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 											<div class="form-group">
 												<?php if (isset($arr['covid19_report_type']) && $arr['covid19_report_type'] != '') { ?>
 													<label for="covid19ReportType" class="col-lg-2 control-label">Covid19 Report Type<span class="mandatory ">*</span></label>
-													<div class="col-lg-2">
-														<select name="covid19ReportType" id="covid19ReportType" class="form-control isRequired" title="Please select covid19 report type" style="width:100%">
+													<div class="col-lg-4">
+														<select name="covid19ReportType" id="covid19ReportType" class="form-control isRequired" title="Please select covid19 report type">
 															<option value="">-- Select --</option>
 															<option value='rwanda' <?php echo ($arr['covid19_report_type'] == 'rwanda') ? "selected='selected'" : ""; ?>> Rawanda </option>
 															<option value='who' <?php echo ($arr['covid19_report_type'] == 'who') ? "selected='selected'" : ""; ?>> Who </option>
@@ -543,24 +542,54 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 												<?php }
 												if (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] != '') { ?>
 													<label for="covid19PositiveConfirmatoryTestsRequiredByCentralLab" class="col-lg-2 control-label">Covid19 Positive Confirmatory Tests Required By CentralLab<span class="mandatory ">*</span></label>
-													<div class="col-lg-2">
-														<select name="covid19PositiveConfirmatoryTestsRequiredByCentralLab" id="covid19PositiveConfirmatoryTestsRequiredByCentralLab" class="form-control isRequired" title="Please select covid19 report type" style="width:100%">
+													<div class="col-lg-4">
+														<select name="covid19PositiveConfirmatoryTestsRequiredByCentralLab" id="covid19PositiveConfirmatoryTestsRequiredByCentralLab" class="form-control isRequired" title="Please select covid19 report type">
 															<option value="">-- Select --</option>
 															<option value='yes' <?php echo ($arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes') ? "selected='selected'" : ""; ?>> Yes </option>
 															<option value='no' <?php echo ($arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
 														</select>
 													</div>
-												<?php }
-												if (isset($arr['covid19_tests_table_in_results_pdf']) && $arr['covid19_tests_table_in_results_pdf'] != '') { ?>
+												<?php } ?>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<?php if (isset($arr['covid19_tests_table_in_results_pdf']) && $arr['covid19_tests_table_in_results_pdf'] != '') { ?>
 													<label for="covid19TestsTableInResultsPdf" class="col-lg-2 control-label">Covid19 Tests method in Results Pdf<span class="mandatory ">*</span></label>
-													<div class="col-lg-2">
-														<select name="covid19TestsTableInResultsPdf" id="covid19TestsTableInResultsPdf" class="form-control isRequired" title="Please select covid19 Tests method in Results Pdf" style="width:100%">
+													<div class="col-lg-4">
+														<select name="covid19TestsTableInResultsPdf" id="covid19TestsTableInResultsPdf" class="form-control isRequired" title="Please select covid19 Tests method in Results Pdf">
 															<option value="">-- Select --</option>
 															<option value='yes' <?php echo ($arr['covid19_tests_table_in_results_pdf'] == 'yes') ? "selected='selected'" : ""; ?>> Yes </option>
 															<option value='no' <?php echo ($arr['covid19_tests_table_in_results_pdf'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
 														</select>
 													</div>
+												<?php }
+												if (isset($arr['covid19_sample_code_prefix']) && $arr['covid19_sample_code_prefix'] != '') { ?>
+													<label for="covid19SampleCodePrefix" class="col-lg-2 control-label">Covid-19 Sample Code Prefix<span class="mandatory ">*</span></label>
+													<div class="col-lg-4">
+														<input value="<?php echo $arr['covid19_sample_code_prefix']; ?>" id="covid19SampleCodePrefix" name="covid19SampleCodePrefix" type="text" class="form-control" placeholder="Sample code prefix" title="Please enter sample code prefix" />
+													</div>
 												<?php } ?>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<?php if (isset($arr['covid19_negative']) && $arr['covid19_negative'] != '') { ?>
+													<label for="covid19Negative" class="col-lg-2 control-label">Covid-19 Negative<span class="mandatory ">*</span></label>
+													<div class="col-lg-4">
+														<input value="<?php echo $arr['covid19_negative']; ?>" name="covid19Negative" id="covid19Negative" type="text" class="form-control" placeholder="Sample code prefix" title="Please enter sample code prefix" />
+													</div>
+												<?php }
+												if (isset($arr['covid19_positive']) && $arr['covid19_positive'] != '') { ?>
+													<label for="covid19Positive" class="col-lg-2 control-label">Covid-19 Positive<span class="mandatory ">*</span></label>
+													<div class="col-lg-4">
+														<input value="<?php echo $arr['covid19_positive']; ?>" id="covid19Positive" name="covid19Positive" type="text" class="form-control" placeholder="Sample code prefix" title="Please enter sample code prefix" />
+													</div>
+												<?php }?>
 											</div>
 										</div>
 									</div>

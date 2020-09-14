@@ -94,6 +94,10 @@ if (isset($sWhere) && $sWhere != "") {
     $sQuery = $sQuery . " WHERE status = 'active' ";
 }
 
+if(isset($_POST['category']) && $_POST['category']){
+    $sQuery = $sQuery . 'AND category like "'.$_POST['category'].'"';
+}
+
 if (isset($sOrder) && $sOrder != "") {
     $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
     $sQuery = $sQuery . ' order by ' . $sOrder;
@@ -108,8 +112,8 @@ $rResult = $db->rawQuery($sQuery);
 // print_r($rResult);
 /* Data set length after filtering */
 
-$aResultFilterTotal = $db->rawQuery("SELECT * FROM global_config $sWhere order by $sOrder");
-$iFilteredTotal = count($aResultFilterTotal);
+// $aResultFilterTotal = $db->rawQuery("SELECT * FROM global_config $sWhere order by $sOrder");
+$iFilteredTotal = count($rResult);
 
 /* Total data set length */
 $aResultTotal =  $db->rawQuery("SELECT * FROM global_config");
