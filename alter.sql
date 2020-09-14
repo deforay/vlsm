@@ -2531,3 +2531,5 @@ ALTER TABLE `form_covid19` ADD `patient_city` VARCHAR(255) NULL DEFAULT NULL AFT
 UPDATE `system_config` SET `value` = '4.1.0' WHERE `system_config`.`name` = 'version';
 -- Version 4.1.0 -- Amit -- 28-Aug-2020
 
+-- Thana 14-Sep-2020
+ALTER TABLE `global_config` ADD `category` VARCHAR(255) NULL DEFAULT NULL AFTER `value`, ADD `remote_sync_needed` VARCHAR(50) NULL DEFAULT NULL AFTER `category`, ADD `updated_on` DATETIME NULL DEFAULT NULL AFTER `remote_sync_needed`, ADD `updated_by` TEXT NULL DEFAULT NULL AFTER `updated_on`;
