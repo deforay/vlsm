@@ -9,7 +9,6 @@ use setasign\Fpdi\Tcpdf\Fpdi;
 #require_once('../../startup.php');
 
 
-include_once(APPLICATION_PATH . '/models/Users.php');
 
 
 $tableName1 = "activity_log";
@@ -27,7 +26,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
 if (isset($arr['default_time_zone']) && $arr['default_time_zone'] != '') {
   date_default_timezone_set($arr['default_time_zone']);
 } else {
-  date_default_timezone_set("Europe/London");
+  date_default_timezone_set(!empty(date_default_timezone_get()) ?  date_default_timezone_get() : "UTC"); 
 }
 //set mField Array
 $mFieldArray = array();

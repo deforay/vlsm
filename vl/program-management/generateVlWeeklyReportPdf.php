@@ -24,7 +24,7 @@ $country = $arr['vl_form'];
 if(isset($arr['default_time_zone']) && $arr['default_time_zone']!=''){
   date_default_timezone_set($arr['default_time_zone']);
 }else{
-  date_default_timezone_set("Europe/London");
+  date_default_timezone_set(!empty(date_default_timezone_get()) ?  date_default_timezone_get() : "UTC"); 
 }
 if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
    $s_t_date = explode("to", $_POST['reportedDate']);
