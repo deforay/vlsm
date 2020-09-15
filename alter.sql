@@ -2404,7 +2404,7 @@ CREATE TABLE `covid19_positive_confirmation_manifest` (
  `module` varchar(255) DEFAULT NULL,
  `request_created_datetime` datetime DEFAULT NULL,
  PRIMARY KEY (`manifest_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Thanaseelan 09 Jun, 2020
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '30', 'generate-confirmation-manifest.php', 'Generate Positive Confirmation Manifest');
@@ -2481,7 +2481,7 @@ CREATE TABLE `covid19_reasons_for_testing` (
   `covid19_id` int NOT NULL,
   `reasons_id` int DEFAULT NULL,
   `reasons_detected` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 -- Amit 26 August 2020
@@ -2533,3 +2533,25 @@ UPDATE `system_config` SET `value` = '4.1.0' WHERE `system_config`.`name` = 'ver
 
 -- Thana 14-Sep-2020
 ALTER TABLE `global_config` ADD `category` VARCHAR(255) NULL DEFAULT NULL AFTER `value`, ADD `remote_sync_needed` VARCHAR(50) NULL DEFAULT NULL AFTER `category`, ADD `updated_on` DATETIME NULL DEFAULT NULL AFTER `remote_sync_needed`, ADD `updated_by` TEXT NULL DEFAULT NULL AFTER `updated_on`;
+
+-- Amit 15 Sep 2020
+
+CREATE TABLE `global_config_temp` (
+  `name` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `category` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
+  `remote_sync_needed` varchar(50) CHARACTER SET latin1 DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `global_config_temp` (`name`, `category`, `remote_sync_needed`) VALUES
+('auto_approval', 'general', 'no'), ('barcode_format', 'general', 'yes'), ('bar_code_printing', 'general', 'no'), ('covid19_indeterminate', 'covid19', 'yes'), ('covid19_max_length', 'covid19', 'yes'),
+('covid19_min_length', 'covid19', 'yes'), ('covid19_negative', 'covid19', 'yes'), ('covid19_positive', 'covid19', 'yes'),
+('covid19_positive_confirmatory_tests_required_by_central_lab', 'covid19', 'yes'), ('covid19_report_type', 'covid19', 'yes'), ('covid19_sample_code', 'covid19', 'yes'), ('covid19_sample_code_prefix', 'covid19', 'yes'), ('covid19_tests_table_in_results_pdf', 'covid19', 'yes'), ('data_sync_interval', 'general', 'yes'), ('default_time_zone', 'general', 'no'), ('edit_profile', 'general', 'yes'), ('eid_indeterminate', 'eid', 'yes'), ('eid_max_length', 'eid', 'yes'), ('eid_min_length', 'eid', 'yes'), ('eid_negative', 'eid', 'yes'), ('eid_positive', 'eid', 'yes'), ('eid_sample_code', 'eid', 'yes'), ('eid_sample_code_prefix', 'eid', 'yes'), ('enable_qr_mechanism', 'general', 'yes'), ('header', 'general', 'no'), ('h_vl_msg', 'vl', 'yes'), ('import_non_matching_sample', 'general', 'no'), ('instance_type', 'general', 'no'),
+('logo', 'general', 'no'), ('low_vl_text_results', 'vl', 'yes'), ('l_vl_msg', 'vl', 'yes'), ('manager_email', 'general', 'no'), ('max_length', 'vl', 'yes'), ('min_length', 'vl', 'yes'), ('patient_name_pdf', 'general', 'yes'), ('r_mandatory_fields', 'vl', 'yes'), ('sample_code', 'vl', 'yes'), ('sample_code_prefix', 'general', 'yes'), ('show_date', 'vl', 'yes'), ('show_smiley', 'general', 'yes'), ('sync_path', 'general', 'no'), ('testing_status', 'vl', 'yes'), ('user_review_approve', 'general', 'no'), ('viral_load_threshold_limit', 'vl', 'yes'), ('vldashboard_url', 'general', 'yes'), ('vl_form', 'general', 'yes');
+
+UPDATE global_config INNER JOIN global_config_temp
+    ON global_config_temp.name = global_config.name
+SET global_config.category = global_config_temp.category, global_config.remote_sync_needed = global_config_temp.remote_sync_needed;
+
+DROP TABLE global_config_temp;
+
+

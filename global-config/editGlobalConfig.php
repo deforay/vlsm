@@ -699,9 +699,9 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 								<div class="row">
 									<div class="col-md-7" style="height:38px;">
 										<div class="form-group" style="height:38px;">
-											<label for="sync_path" class="col-lg-4 control-label">VL Dashboard URL</label>
+											<label for="sync_path" class="col-lg-4 control-label">Dashboard URL</label>
 											<div class="col-lg-8">
-												<input type="text" class="form-control" id="vldashboard_url" name="vldashboard_url" placeholder="Enter the full VL Dashboard URL here" title="Please enter vldashboard url" value="<?php echo $arr['vldashboard_url']; ?>" />
+												<input type="text" class="form-control" id="vldashboard_url" name="vldashboard_url" placeholder="https://dashboard.example.org" title="Please enter dashboard URL" value="<?php echo $arr['vldashboard_url']; ?>" />
 											</div>
 										</div>
 									</div>

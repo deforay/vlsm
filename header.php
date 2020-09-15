@@ -39,7 +39,7 @@ if (isset($systemConfig['instanceName']) && !empty($systemConfig['instanceName']
 if (isset($global['default_time_zone']) && $global['default_time_zone'] != '') {
 	date_default_timezone_set($global['default_time_zone']);
 } else {
-	date_default_timezone_set("Europe/London");
+	date_default_timezone_set(!empty(date_default_timezone_get()) ?  date_default_timezone_get() : "UTC");
 }
 $hideResult = '';
 $hideRequest = '';
