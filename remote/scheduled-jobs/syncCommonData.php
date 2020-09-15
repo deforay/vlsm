@@ -16,10 +16,12 @@ $globalConfigQuery = "SELECT * FROM system_config";
 $configResult = $db->query($globalConfigQuery);
 
 
+$globalConfigLastModified = $general->getLastModifiedDateTime('global_config', 'updated_on');
 $provinceLastModified = $general->getLastModifiedDateTime('province_details');
 $facilityLastModified = $general->getLastModifiedDateTime('facility_details');
 
 $data = array(
+    'globalConfigLastModified' => $globalConfigLastModified,
     'provinceLastModified' => $provinceLastModified,
     'facilityLastModified' => $facilityLastModified,
     "Key" => "vlsm-get-remote",
@@ -63,6 +65,7 @@ $curl_response = curl_exec($ch);
 curl_close($ch);
 $result = json_decode($curl_response, true);
 // echo "<pre>";print_r($result);die;
+
 //update or insert sample type
 if (!empty($result['vlSampleTypes']) && count($result['vlSampleTypes']) > 0) {
     // making all local rows inactive 
@@ -312,6 +315,34 @@ if(!empty($result['covid19ReasonForTesting']) && sizeof($result['covid19ReasonFo
         } else {
             $c19ReasonForTestingData['test_reason_id'] = $reasonForTesting['test_reason_id'];
             $db->insert('r_covid19_test_reasons', $c19ReasonForTestingData);
+            $lastId = $db->getInsertId();
+        }
+    }
+}
+
+//update or insert global config
+if (!empty($result['globalConfig']) && count($result['globalConfig']) > 0) {
+
+    foreach ($result['globalConfig'] as $config) {
+        $configQuery = "SELECT name FROM global_config WHERE name=" . $config['name'];
+        $configLocalResult = $db->query($configQuery);
+        $configData = array(
+            'display_name'          => $config['display_name'],
+            'name'                  => $config['name'],
+            'value'                 => $config['value'],
+            'category'              => $config['category'],
+            'remote_sync_needed'    => $config['remote_sync_needed'],
+            'updated_on'            => $config['updated_on'],
+            'updated_by'            => $config['updated_by'],
+            'status'                => $config['status']
+        );
+        $lastId = 0;
+        if ($configLocalResult) {
+            $configData['updated_on'] = $general->getDateTime();
+            $db = $db->where('name', $config['name']);
+            $lastId = $db->update('global_config', $configData);
+        } else {
+            $db->insert('global_config', $configData);
             $lastId = $db->getInsertId();
         }
     }
