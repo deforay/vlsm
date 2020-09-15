@@ -66,16 +66,17 @@ $skipPrivilegeCheckFiles = array(
 // on the left put intermediate/inner file, on the right put the file
 // which has entry in privileges table.
 $sharedPrivileges = array(
-	'eid-add-batch-position.php'  => 'eid-add-batch.php',
-	'eid-edit-batch-position.php' => 'eid-edit-batch.php',
-	'eid-update-result.php'       => 'eid-manual-results.php',
-	'covid-19-add-batch-position.php'  => 'covid-19-add-batch.php',
-	'mail-covid-19-results.php'  => 'covid-19-print-results.php',
+	'eid-add-batch-position.php'  		=> 'eid-add-batch.php',
+	'eid-edit-batch-position.php' 		=> 'eid-edit-batch.php',
+	'eid-update-result.php'       		=> 'eid-manual-results.php',
+	'covid-19-add-batch-position.php'	=> 'covid-19-add-batch.php',
+	'mail-covid-19-results.php'  		=> 'covid-19-print-results.php',
 	'covid-19-result-mail-confirm.php'  => 'covid-19-print-results.php',
-	'covid-19-edit-batch-position.php' => 'covid-19-edit-batch.php',
-	'covid-19-update-result.php'       => 'covid-19-manual-results.php',
-	'imported-results.php'        => 'addImportResult.php',
-	'importedStatistics.php'      => 'addImportResult.php',
+	'covid-19-edit-batch-position.php' 	=> 'covid-19-edit-batch.php',
+	'covid-19-update-result.php'       	=> 'covid-19-manual-results.php',
+	'imported-results.php'        		=> 'addImportResult.php',
+	'importedStatistics.php'      		=> 'addImportResult.php',
+	'covid-19-bulk-import-request.php'	=> 'covid-19-add-request.php',
 );
 
 // Does the current file share privileges with another privilege ?
