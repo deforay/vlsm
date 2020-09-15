@@ -553,6 +553,68 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 											</div>
 										</div>
 									</div>
+
+									<div class="row">
+										<div class="col-md-12" style="">
+											<div class="form-group">
+												<label for="covid19_sample_code" class="col-lg-2 control-label">Sample Code<br>Format <span class="mandatory">*</span> </label>
+												<div class="col-lg-10">
+													<?php
+													$sPrefixMMYY = 'C19';
+													$sPrefixYY = '';
+													$sPrefixMMYYDisplay = 'disabled="disabled"';
+													$sPrefixYYDisplay = 'disabled="disabled"';
+													if ($arr['covid19_sample_code'] == 'MMYY') {
+														$sPrefixMMYY = $arr['covid19_sample_code_prefix'];
+														$sPrefixMMYYDisplay = '';
+													} else if ($arr['covid19_sample_code'] == 'YY') {
+														$sPrefixYY = $arr['covid19_sample_code_prefix'];
+														$sPrefixYYDisplay = '';
+													}
+													?>
+													<input type="radio" class="isRequired" title="Please select the Covid19 Sample Code Format" id="covid19_auto_generate_yy" name="covid19_sample_code" value="YY" <?php echo ($arr['covid19_sample_code'] == 'YY') ? 'checked' : ''; ?> onclick="makeReadonly('prefixMMYY','prefixYY')">&nbsp;<input <?php echo $sPrefixYYDisplay; ?> type="text" class="covid19_boxWidth covid19_prefixYY" id="covid19_prefixYY" name="covid19_sample_code_prefix" title="Enter Prefix" value="<?php echo $sPrefixYY; ?>" /> YY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<input type="radio" class="isRequired" title="Please select the Covid19 Sample Code Format" id="covid19_auto_generate_mmyy" name="covid19_sample_code" value="MMYY" <?php echo ($arr['covid19_sample_code'] == 'MMYY') ? 'checked' : ''; ?> onclick="makeReadonly('prefixYY','prefixMMYY')">&nbsp;<input <?php echo $sPrefixMMYYDisplay; ?> type="text" class="covid19_boxWidth covid19_prefixMMYY" id="covid19_prefixMMYY" name="covid19_sample_code_prefix" title="Enter Prefix" value="<?php echo $sPrefixMMYY; ?>" /> MMYY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<input type="radio" class="isRequired" title="Please select the Covid19 Sample Code Format" id="covid19_auto_generate" name="covid19_sample_code" value="auto" <?php echo ($arr['covid19_sample_code'] == 'auto') ? 'checked' : ''; ?>><span id="covid19_auto1"><?php echo ($arr['vl_form'] == 5) ? ' Auto 1' : ' Auto'; ?> </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<input type="radio" class="isRequired" title="Please select the Covid19 Sample Code Format" id="covid19_auto_generate2" name="covid19_sample_code" value="auto2" <?php echo ($arr['covid19_sample_code'] == 'auto2') ? 'checked' : ''; ?> style="display:<?php echo ($arr['vl_form'] == 5) ? '' : 'none'; ?>"><span id="covid19_auto2" style="display:<?php echo ($arr['vl_form'] == 5) ? '' : 'none'; ?>"> Auto 2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+													<input type="radio" class="isRequired" title="Please select the Covid19 Sample Code Format" id="covid19_numeric" name="covid19_sample_code" value="numeric" <?php echo ($arr['covid19_sample_code'] == 'numeric') ? 'checked' : ''; ?>> Numeric&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<input type="radio" class="isRequired" title="Please select the Covid19 Sample Code Format" id="covid19_alpha_numeric" name="covid19_sample_code" value="alphanumeric" <?php echo ($arr['covid19_sample_code'] == 'alphanumeric') ? 'checked' : ''; ?>> Alpha Numeric
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									<div id="covid19_auto-sample-eg" class="row" style="display:<?php echo ($arr['covid19_sample_code'] == 'auto' || $arr['covid19_sample_code'] == 'auto2' || 'MMYY' || 'YY') ? 'block' : 'none'; ?>;">
+										<div class="col-md-12" style="text-align:center;">
+											<code id="covid19_auto-sample-code" class="covid19_autoSample" style="display:<?php echo ($arr['covid19_sample_code'] == 'auto') ? 'block' : 'none'; ?>;">
+												eg. Province Code+Year+Month+Date+Increment Counter
+											</code>
+											<code id="covid19_auto-sample-code2" class="covid19_autoSample" style="display:<?php echo ($arr['covid19_sample_code'] == 'auto2') ? 'block' : 'none'; ?>;">
+												eg. R+Year+Province Code+covid19+Increment Counter (R18NCDC190001)
+											</code>
+											<code id="covid19_auto-sample-code-MMYY" class="covid19_autoSample" style="display:<?php echo ($arr['covid19_sample_code'] == 'MMYY') ? 'block' : 'none'; ?>;">
+												eg. Prefix+Month+Year+Increment Counter (C190517999)
+											</code>
+											<code id="covid19_auto-sample-code-YY" class="covid19_autoSample" style="display:<?php echo ($arr['covid19_sample_code'] == 'YY') ? 'block' : 'none'; ?>;">
+												eg. Prefix+Year+Increment Counter (C1917999)
+											</code>
+										</div>
+									</div><br />
+
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for="covid19_min_length" class="col-lg-2 control-label">Minimum Sample Code Length <span class="mandatory " style="display:<?php echo ($arr['covid19_sample_code'] == 'auto') ? 'none' : 'block'; ?>">*</span></label>
+												<div class="col-lg-4">
+													<input type="text" class="form-control checkNum isNumeric <?php echo ($arr['covid19_sample_code'] == 'auto' || 'MMYY' || 'YY') ? '' : 'isRequired'; ?>" id="covid19_min_length" name="covid19_min_length" <?php echo ($arr['covid19_sample_code'] == 'auto' || 'MMYY' || 'YY') ? 'readonly' : ''; ?> placeholder="Min" title="Please enter sample code min length" value="<?php echo ($arr['covid19_sample_code'] == 'auto') ? '' : $arr['min_length']; ?>" />
+												</div>
+												<label for="covid19_max_length" class="col-lg-2 control-label">Maximum Sample Code Length <span class="mandatory " style="display:<?php echo ($arr['covid19_sample_code'] == 'auto') ? 'none' : 'block'; ?>">*</span></label>
+												<div class="col-lg-4">
+													<input type="text" class="form-control checkNum isNumeric <?php echo ($arr['sample_code'] == 'auto' || 'MMYY' || 'YY') ? '' : 'isRequired'; ?>" id="covid19_max_length" name="covid19_max_length" <?php echo ($arr['covid19_sample_code'] == 'auto' || 'MMYY' || 'YY') ? 'readonly' : ''; ?> placeholder="Max" title="Please enter sample code max length" value="<?php echo ($arr['covid19_sample_code'] == 'auto') ? '' : $arr['max_length']; ?>" />
+												</div>
+											</div>
+										</div>
+									</div>
+
 									<div class="row">
 										<div class="col-md-12">
 											<div class="form-group">
@@ -566,25 +628,19 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 														</select>
 													</div>
 												<?php }
-												if (isset($arr['covid19_sample_code_prefix']) && $arr['covid19_sample_code_prefix'] != '') { ?>
-													<label for="covid19SampleCodePrefix" class="col-lg-2 control-label">Covid-19 Sample Code Prefix<span class="mandatory ">*</span></label>
+												if (isset($arr['covid19_negative']) && $arr['covid19_negative'] != '') { ?>
+													<label for="covid19Negative" class="col-lg-2 control-label">Covid-19 Negative<span class="mandatory ">*</span></label>
 													<div class="col-lg-4">
-														<input value="<?php echo $arr['covid19_sample_code_prefix']; ?>" id="covid19SampleCodePrefix" name="covid19SampleCodePrefix" type="text" class="form-control" placeholder="Sample code prefix" title="Please enter sample code prefix" />
+														<input value="<?php echo $arr['covid19_negative']; ?>" name="covid19Negative" id="covid19Negative" type="text" class="form-control" placeholder="Sample code prefix" title="Please enter sample code prefix" />
 													</div>
-												<?php } ?>
+												<?php }?>
 											</div>
 										</div>
 									</div>
 									<div class="row">
 										<div class="col-md-12">
 											<div class="form-group">
-												<?php if (isset($arr['covid19_negative']) && $arr['covid19_negative'] != '') { ?>
-													<label for="covid19Negative" class="col-lg-2 control-label">Covid-19 Negative<span class="mandatory ">*</span></label>
-													<div class="col-lg-4">
-														<input value="<?php echo $arr['covid19_negative']; ?>" name="covid19Negative" id="covid19Negative" type="text" class="form-control" placeholder="Sample code prefix" title="Please enter sample code prefix" />
-													</div>
-												<?php }
-												if (isset($arr['covid19_positive']) && $arr['covid19_positive'] != '') { ?>
+												<?php if (isset($arr['covid19_positive']) && $arr['covid19_positive'] != '') { ?>
 													<label for="covid19Positive" class="col-lg-2 control-label">Covid-19 Positive<span class="mandatory ">*</span></label>
 													<div class="col-lg-4">
 														<input value="<?php echo $arr['covid19_positive']; ?>" id="covid19Positive" name="covid19Positive" type="text" class="form-control" placeholder="Sample code prefix" title="Please enter sample code prefix" />
@@ -961,6 +1017,61 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 			$('#eid_max_length').addClass('isRequired');
 			$('#eid_max_length').prop('readonly', false);
 			$('.eid_boxWidth').removeClass('isRequired').attr('disabled', true).val('');
+		}
+	});
+	
+	$("input:radio[name=covid19_sample_code]").click(function() {
+		if (this.value == 'MMYY' || this.value == 'YY') {
+			$('#covid19_auto-sample-eg').show();
+			$('.covid19_autoSample').hide();
+			if (this.value == 'MMYY') {
+				$('#covid19_auto-sample-code-MMYY').show();
+			} else {
+				$('#covid19_auto-sample-code-YY').show();
+			}
+			$('#covid19_min_length').val('');
+			$('.covid19_minlth').hide();
+			$('#covid19_min_length').removeClass('isRequired');
+			$('#covid19_min_length').prop('readonly', true);
+			$('#covid19_max_length').val('');
+			$('.covid19_maxlth').hide();
+			$('#covid19_max_length').removeClass('isRequired');
+			$('#covid19_max_length').prop('readonly', true);
+		} else if (this.value == 'auto') {
+			$('.covid19_autoSample').hide();
+			$('#covid19_auto-sample-eg').show();
+			$('#covid19_auto-sample-code').show();
+			$('#covid19_min_length').val('');
+			$('.covid19_minlth').hide();
+			$('#covid19_min_length').removeClass('isRequired');
+			$('#min_length').prop('readonly', true);
+			$('#covid19_max_length').val('');
+			$('.covid19_maxlth').hide();
+			$('#covid19_max_length').removeClass('isRequired');
+			$('#covid19_max_length').prop('readonly', true);
+			$('.covid19_boxWidth').removeClass('isRequired').attr('disabled', true).val('');
+		} else if (this.value == 'auto2') {
+			$('.covid19_autoSample').hide();
+			$('#covid19_auto-sample-eg').show();
+			$('#covid19_auto-sample-code2').show();
+			$('#covid19_min_length').val('');
+			$('.covid19_minlth').hide();
+			$('#covid19_min_length').removeClass('isRequired');
+			$('#covid19_min_length').prop('readonly', true);
+			$('#covid19_max_length').val('');
+			$('.covid19_maxlth').hide();
+			$('#covid19_max_length').removeClass('isRequired');
+			$('#covid19_max_length').prop('readonly', true);
+			$('.covid19_boxWidth').removeClass('isRequired').attr('disabled', true).val('');
+		} else {
+			$('#covid19_auto-sample-eg').hide();
+			$('.covid19_minlth').show();
+			$('#covid19_min_length').addClass('isRequired');
+			$('#covid19_min_length').prop('readonly', false);
+			$('.covid19_maxlth').show();
+			$('#covid19_max_length').addClass('isRequired');
+			$('#covid19_max_length').prop('readonly', false);
+			$('.covid19_boxWidth').removeClass('isRequired').attr('disabled', true).val('');
 		}
 	});
 
