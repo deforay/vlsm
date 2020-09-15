@@ -2,23 +2,15 @@
 
 // this file is included in /import-result/procesImportedResults.php
 
-$tableName = "temp_sample_import";
-$tableName1 = "vl_request_form";
-$tableName2 = "hold_sample_import";
 $fileName = null;
 $importedBy = $_SESSION['userId'];
 
-
 try {
     $numberOfResults = 0;
-    $cSampleQuery = "SELECT * FROM global_config";
-    $cSampleResult = $db->query($cSampleQuery);
-    $arr = array();
+
+    $arr = $general->getGlobalConfig();
     $printSampleCode = array();
-    // now we create an associative array so that we can easily create view variables
-    for ($i = 0; $i < sizeof($cSampleResult); $i++) {
-        $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
-    }
+    
     $importNonMatching = (isset($arr['import_non_matching_sample']) && $arr['import_non_matching_sample'] == 'no') ? false : true;
     $instanceQuery = "SELECT * FROM s_vlsm_instance";
     $instanceResult = $db->query($instanceQuery);
@@ -28,7 +20,7 @@ try {
     $rejectedReasonId = explode(",", $_POST['rejectReasonId']);
     if ($_POST['value'] != '') {
         for ($i = 0; $i < count($id); $i++) {
-            $sQuery = "SELECT * FROM temp_sample_import where imported_by ='$importedBy' AND temp_sample_id='" . $id[$i] . "'";
+            $sQuery = "SELECT * FROM temp_sample_import WHERE imported_by ='$importedBy' AND temp_sample_id='" . $id[$i] . "'";
             $rResult = $db->rawQuery($sQuery);
             $fileName = $rResult[0]['import_machine_file_name'];
 
@@ -78,7 +70,7 @@ try {
                 }
                 $data['status'] = $status[$i];
 
-                $bquery = "select * from batch_details where batch_code='" . $rResult[0]['batch_code'] . "'";
+                $bquery = "SELECT * FROM batch_details WHERE batch_code='" . $rResult[0]['batch_code'] . "'";
                 $bvlResult = $db->rawQuery($bquery);
                 if ($bvlResult) {
                     $data['batch_id'] = $bvlResult[0]['batch_id'];
@@ -123,7 +115,7 @@ try {
                     //$data['last_modified_datetime']=$general->getDateTime();
                     $data['status'] = $status[$i];
                     $data['import_batch_tracking'] = $_SESSION['controllertrack'];
-                    $result = $db->insert($tableName2, $data);
+                    $result = $db->insert('hold_sample_import', $data);
                 } else {
                     $data['request_created_by'] = $rResult[0]['result_reviewed_by'];
                     $data['request_created_datetime'] = $general->getDateTime();
@@ -155,7 +147,7 @@ try {
                         }
                     }
                     //get bacth code
-                    $bquery = "select * from batch_details where batch_code='" . $rResult[0]['batch_code'] . "'";
+                    $bquery = "SELECT * FROM batch_details WHERE batch_code='" . $rResult[0]['batch_code'] . "'";
                     $bvlResult = $db->rawQuery($bquery);
                     if ($bvlResult) {
                         $data['sample_batch_id'] = $bvlResult[0]['batch_id'];
@@ -164,7 +156,7 @@ try {
                         $data['sample_batch_id'] = $db->getInsertId();
                     }
 
-                    $query = "select vl_sample_id,result from vl_request_form where sample_code='" . $sampleVal . "'";
+                    $query = "SELECT vl_sample_id,result FROM vl_request_form WHERE sample_code='" . $sampleVal . "'";
                     $vlResult = $db->rawQuery($query);
                     $data['result_status'] = $status[$i];
 
@@ -174,19 +166,19 @@ try {
                         $data['data_sync'] = 0;
 
                         $db = $db->where('sample_code', $rResult[0]['sample_code']);
-                        $result = $db->update($tableName1, $data);
+                        $result = $db->update('vl_request_form', $data);
                     } else {
                         if ($importNonMatching == false) continue;
                         $data['sample_code'] = $rResult[0]['sample_code'];
                         $data['vlsm_country_id'] = $arr['vl_form'];
                         $data['vlsm_instance_id'] = $instanceResult[0]['vlsm_instance_id'];
-                        $db->insert($tableName1, $data);
+                        $db->insert('vl_request_form', $data);
                     }
                     $printSampleCode[] = "'" . $rResult[0]['sample_code'] . "'";
                 }
             }
             $db = $db->where('temp_sample_id', $id[$i]);
-            $result = $db->update($tableName, array('temp_sample_status' => 1));
+            $result = $db->update('temp_sample_import', array('temp_sample_status' => 1));
         }
         if (file_exists(TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $rResult[0]['import_machine_file_name'])) {
             copy(TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $rResult[0]['import_machine_file_name'], UPLOAD_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $rResult[0]['import_machine_file_name']);
@@ -259,7 +251,7 @@ try {
             }
             $data['data_sync'] = 0;
             $db = $db->where('sample_code', $accResult[$i]['sample_code']);
-            $result = $db->update($tableName1, $data);
+            $result = $db->update('vl_request_form', $data);
 
             $numberOfResults++;
 
@@ -268,7 +260,7 @@ try {
                 copy(TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $accResult[$i]['import_machine_file_name'], UPLOAD_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $accResult[$i]['import_machine_file_name']);
             }
             $db = $db->where('temp_sample_id', $accResult[$i]['temp_sample_id']);
-            $result = $db->update($tableName, array('temp_sample_status' => 1));
+            $result = $db->update('temp_sample_import', array('temp_sample_status' => 1));
         }
     }
     $sCode = implode(', ', $printSampleCode);

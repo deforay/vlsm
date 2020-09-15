@@ -77,56 +77,60 @@ include_once(APPLICATION_PATH . '/header.php');
 								</div>
 							</div>
 						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<div class="form-group">
-									<label for="lowVlResultText" class="col-lg-2 control-label">Low VL Result Text </label>
-									<div class="col-lg-7">
-										<textarea class="form-control" id="lowVlResultText" name="lowVlResultText" placeholder="Comma separated Low Viral Load Result Text for eg. Target Not Detected, TND, < 20, < 40" title="Low Viral Load Result Text for eg. Target Not Detected, TND, < 20, < 40"></textarea>
+						<?php if ($systemConfig['modules']['vl']) { ?>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<label for="lowVlResultText" class="col-lg-2 control-label">Low VL Result Text </label>
+										<div class="col-lg-7">
+											<textarea class="form-control" id="lowVlResultText" name="lowVlResultText" placeholder="Comma separated Low Viral Load Result Text for eg. Target Not Detected, TND, < 20, < 40" title="Low Viral Load Result Text for eg. Target Not Detected, TND, < 20, < 40"></textarea>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
+						<?php } ?>
 						<!-- <div class="box-header">
 							<h3 class="box-title ">Machine Names</h3>
 						</div> -->
-						<?php if($systemConfig['modules']['vl'] || $systemConfig['modules']['eid'] || $systemConfig['modules']['covid19']){ ?>
-						<div class="box-body">
-							<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed" style="width:100%;">
-								<thead>
-									<tr>
-										<th style="text-align:center;">Test Type</th>
-										<th style="text-align:center;">Number of In-House Controls</th>
-										<th style="text-align:center;">Number of Manufacturer Controls</th>
-										<th style="text-align:center;">No. Of Calibrators</th>
-									</tr>
-								</thead>
-								<tbody id="testTypesTable">
-									<?php if($systemConfig['modules']['vl']){?>
-									<tr>
-										<td align="left">VL<input type="hidden" name="testType[]" id="testType1" value="vl"/></td>
-										<td><input type="text" name="noHouseCtrl[]" id="noHouseCtrl1" class="form-control" placeholder="No of In-House Controls in vl" title="Please enter No of In-House Controls in vl" /></td>
-										<td><input type="text" name="noManufacturerCtrl[]" id="noManufacturerCtrl1" class="form-control" placeholder="No of Manufacturer Controls in vl" title="Please enter No of Manufacturer Controls in vl" /></td>
-										<td><input type="text" name="noCalibrators[]" id="noCalibrators1" class="form-control" placeholder="No of Calibrators in vl" title="Please enter No of Calibrators in vl" /></td>
-									</tr>
-									<?php } if($systemConfig['modules']['eid']){?>
-									<tr>
-										<td align="left">EID<input type="hidden" name="testType[]" id="testType1" value="eid"/></td>
-										<td><input type="text" name="noHouseCtrl[]" id="noHouseCtrl1" class="form-control" placeholder="No of In-House Controls in eid" title="Please enter No of In-House Controls in eid" /></td>
-										<td><input type="text" name="noManufacturerCtrl[]" id="noManufacturerCtrl1" class="form-control" placeholder="No of Manufacturer Controls in eid" in eid title="Please enter No of Manufacturer Controls in eid" /></td>
-										<td><input type="text" name="noCalibrators[]" id="noCalibrators1" class="form-control" placeholder="No of Calibrators in eid" title="Please enter No of Calibrators in eid" /></td>
-									</tr>
-									<?php } if($systemConfig['modules']['covid19']){?>
-									<tr>
-										<td align="left">Covid-19<input type="hidden" name="testType[]" id="testType1" value="covid-19"/></td>
-										<td><input type="text" name="noHouseCtrl[]" id="noHouseCtrl1" class="form-control" placeholder="No of In-House Controls in covid-19" title="Please enter No of In-House Controls in covid-19" /></td>
-										<td><input type="text" name="noManufacturerCtrl[]" id="noManufacturerCtrl1" class="form-control" placeholder="No of Manufacturer Controls in covid-19" title="Please enter No of Manufacturer Controls in covid-19" /></td>
-										<td><input type="text" name="noCalibrators[]" id="noCalibrators1" class="form-control" placeholder="No of Calibrators in covid-19" title="Please enter No of Calibrators in covid-19" /></td>
-									</tr>
-									<?php } ?>
-								</tbody>
-							</table>
-						</div>
+						<?php if ($systemConfig['modules']['vl'] || $systemConfig['modules']['eid'] || $systemConfig['modules']['covid19']) { ?>
+							<div class="box-body">
+								<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed" style="width:100%;">
+									<thead>
+										<tr>
+											<th style="text-align:center;">Test Type</th>
+											<th style="text-align:center;">Number of In-House Controls</th>
+											<th style="text-align:center;">Number of Manufacturer Controls</th>
+											<th style="text-align:center;">No. Of Calibrators</th>
+										</tr>
+									</thead>
+									<tbody id="testTypesTable">
+										<?php if ($systemConfig['modules']['vl']) { ?>
+											<tr>
+												<td align="left">VL<input type="hidden" name="testType[]" id="testType1" value="vl" /></td>
+												<td><input type="text" name="noHouseCtrl[]" id="noHouseCtrl1" class="form-control" placeholder="No of In-House Controls in vl" title="Please enter No of In-House Controls in vl" /></td>
+												<td><input type="text" name="noManufacturerCtrl[]" id="noManufacturerCtrl1" class="form-control" placeholder="No of Manufacturer Controls in vl" title="Please enter No of Manufacturer Controls in vl" /></td>
+												<td><input type="text" name="noCalibrators[]" id="noCalibrators1" class="form-control" placeholder="No of Calibrators in vl" title="Please enter No of Calibrators in vl" /></td>
+											</tr>
+										<?php }
+										if ($systemConfig['modules']['eid']) { ?>
+											<tr>
+												<td align="left">EID<input type="hidden" name="testType[]" id="testType1" value="eid" /></td>
+												<td><input type="text" name="noHouseCtrl[]" id="noHouseCtrl1" class="form-control" placeholder="No of In-House Controls in eid" title="Please enter No of In-House Controls in eid" /></td>
+												<td><input type="text" name="noManufacturerCtrl[]" id="noManufacturerCtrl1" class="form-control" placeholder="No of Manufacturer Controls in eid" in eid title="Please enter No of Manufacturer Controls in eid" /></td>
+												<td><input type="text" name="noCalibrators[]" id="noCalibrators1" class="form-control" placeholder="No of Calibrators in eid" title="Please enter No of Calibrators in eid" /></td>
+											</tr>
+										<?php }
+										if ($systemConfig['modules']['covid19']) { ?>
+											<tr>
+												<td align="left">Covid-19<input type="hidden" name="testType[]" id="testType1" value="covid-19" /></td>
+												<td><input type="text" name="noHouseCtrl[]" id="noHouseCtrl1" class="form-control" placeholder="No of In-House Controls in covid-19" title="Please enter No of In-House Controls in covid-19" /></td>
+												<td><input type="text" name="noManufacturerCtrl[]" id="noManufacturerCtrl1" class="form-control" placeholder="No of Manufacturer Controls in covid-19" title="Please enter No of Manufacturer Controls in covid-19" /></td>
+												<td><input type="text" name="noCalibrators[]" id="noCalibrators1" class="form-control" placeholder="No of Calibrators in covid-19" title="Please enter No of Calibrators in covid-19" /></td>
+											</tr>
+										<?php } ?>
+									</tbody>
+								</table>
+							</div>
 						<?php } ?>
 						<div class="box-header">
 							<h3 class="box-title ">Machine Names</h3>

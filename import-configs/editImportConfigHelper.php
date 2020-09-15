@@ -44,35 +44,50 @@ try {
             }
         }
 
-        if($configId > 0 && isset($_POST['testType']) && count($_POST['testType']) > 0){
-            if(count($configControlInfo) > 0){
-                foreach($_POST['testType'] as $key=>$val){
-                    if(trim($val)!=''){
-                        $configControlData = array('number_of_in_house_controls'=>$_POST['noHouseCtrl'][$key],'number_of_manufacturer_controls'=>$_POST['noManufacturerCtrl'][$key],'number_of_calibrators'=>$_POST['noCalibrators'][$key]);
-                        $db = $db->where('config_id',$configId);
-                        $db = $db->where('test_type',$val);
-                        $db->update($importControlTable,$configControlData);
+        if ($configId > 0 && isset($_POST['testType']) && count($_POST['testType']) > 0) {
+            if (count($configControlInfo) > 0) {
+                foreach ($_POST['testType'] as $key => $val) {
+                    if (trim($val) != '') {
+                        $configControlData = array('number_of_in_house_controls' => $_POST['noHouseCtrl'][$key], 'number_of_manufacturer_controls' => $_POST['noManufacturerCtrl'][$key], 'number_of_calibrators' => $_POST['noCalibrators'][$key]);
+                        $db = $db->where('config_id', $configId);
+                        $db = $db->where('test_type', $val);
+                        $db->update($importControlTable, $configControlData);
                     }
                 }
-            }else{
-                foreach($_POST['testType'] as $key=>$val){
-                    if(trim($val)!=''){
-                        $configControlData = array('test_type'=>$val,'config_id'=>$configId,'number_of_in_house_controls'=>$_POST['noHouseCtrl'][$key],'number_of_manufacturer_controls'=>$_POST['noManufacturerCtrl'][$key],'number_of_calibrators'=>$_POST['noCalibrators'][$key]);
-                        $db->insert($importControlTable,$configControlData);
+            } else {
+                foreach ($_POST['testType'] as $key => $val) {
+                    if (trim($val) != '') {
+                        $configControlData = array('test_type' => $val, 'config_id' => $configId, 'number_of_in_house_controls' => $_POST['noHouseCtrl'][$key], 'number_of_manufacturer_controls' => $_POST['noManufacturerCtrl'][$key], 'number_of_calibrators' => $_POST['noCalibrators'][$key]);
+                        $db->insert($importControlTable, $configControlData);
                     }
                 }
             }
         }
         $_SESSION['alertMsg'] = "Import config details updated successfully";
         $configDir = __DIR__;
-        $configFile = $configDir . DIRECTORY_SEPARATOR . $_POST['configurationFile'];
+        $configFileVL = $configDir . DIRECTORY_SEPARATOR . "vl" . DIRECTORY_SEPARATOR . $_POST['configurationFile'];
+        $configFileEID = $configDir . DIRECTORY_SEPARATOR . "eid" . DIRECTORY_SEPARATOR . $_POST['configurationFile'];
+        $configFileCovid19 = $configDir . DIRECTORY_SEPARATOR . "covid-19" . DIRECTORY_SEPARATOR . $_POST['configurationFile'];
+
 
         if (!file_exists($configDir)) {
             mkdir($configDir, 0777, true);
         }
 
-        if (!file_exists($configFile)) {
-            $fp = fopen($configFile, 'w');
+        if (!file_exists($configFileVL)) {
+            $fp = fopen($configFileVL, 'w');
+            fwrite($fp, '');
+            fclose($fp);
+        }
+
+        if (!file_exists($configFileEID)) {
+            $fp = fopen($configFileEID, 'w');
+            fwrite($fp, '');
+            fclose($fp);
+        }
+
+        if (!file_exists($configFileCovid19)) {
+            $fp = fopen($configFileCovid19, 'w');
             fwrite($fp, '');
             fclose($fp);
         }

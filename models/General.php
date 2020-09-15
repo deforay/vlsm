@@ -151,13 +151,12 @@ class General
             return false;
         }
 
-        if ($name == null) {
-            $systemConfigQuery = "SELECT * from system_config";
-        } else {
-            $systemConfigQuery = "SELECT * from system_config WHERE `name` = '$name'";
+        if (!empty($name)) {
+            $this->db->where('name', $name);
         }
 
-        $systemConfigResult = $this->db->query($systemConfigQuery);
+        $systemConfigResult = $this->db->get('system_config');
+
         $sarr = array();
         // now we create an associative array so that we can easily create view variables
         for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
@@ -181,16 +180,15 @@ class General
         if ($this->db == null) {
             return false;
         }
-        
+
         $pQuery = "SELECT * FROM province_details WHERE province_code like '$code'";
         $pResult = $this->db->rawQueryOne($pQuery);
 
-        if($pQuery){
+        if ($pQuery) {
             return $pResult['province_id'];
-        }else{
+        } else {
             return null;
         }
-        
     }
 
     // get data from the global_config table from database
@@ -201,13 +199,12 @@ class General
             return false;
         }
 
-        if ($name == null) {
-            $globalConfigQuery = "SELECT * from global_config";
-        } else {
-            $globalConfigQuery = "SELECT * from global_config WHERE `name` = '$name'";
+        if (!empty($name)) {
+            $this->db->where('name', $name);
         }
 
-        $globalConfigResult = $this->db->query($globalConfigQuery);
+        $globalConfigResult = $this->db->get('global_config');
+
         $garr = array();
         // now we create an associative array so that we can easily create view variables
         for ($i = 0; $i < sizeof($globalConfigResult); $i++) {
@@ -335,21 +332,14 @@ class General
             return false;
         }
 
-        if ($machineFile == null) {
-            $importConfigQuery = "SELECT low_vl_result_text from import_config";
-        } else {
-            $importConfigQuery = "SELECT low_vl_result_text from import_config WHERE `import_machine_file_name` = '$machineFile'";
+        if (!empty($machineFile)) {
+            $this->db->where('import_machine_file_name', $machineFile);
         }
 
-        $importConfigResult = $this->db->query($importConfigQuery);
-        $lowVlResults = array();
-        foreach ($importConfigResult as $row) {
-            if ($row['low_vl_result_text'] != "") {
-                $lowVlResults[] = $row['low_vl_result_text'];
-            }
-        }
+        $this->db->where ("low_vl_result_text", NULL, 'IS NOT');
+        $this->db->where ("status", 'active', 'like');
+        return $this->db->getValue('import_config', 'low_vl_result_text', null);
 
-        return implode(", ", $lowVlResults);
     }
 
     public function getFacilitiesByUser($userId = null)
@@ -360,7 +350,7 @@ class General
         $facilityWhereCondition = '';
 
         if (!empty($userId)) {
-            $userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT `facility_id` ORDER BY `facility_id` SEPARATOR ',') as `facility_id` FROM vl_user_facility_map WHERE user_id='" . $userId . "'";
+            $userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT `facility_id` SEPARATOR ',') as `facility_id` FROM vl_user_facility_map WHERE user_id='" . $userId . "'";
             $userfacilityMapresult = $this->db->rawQuery($userfacilityMapQuery);
             if ($userfacilityMapresult[0]['facility_id'] != null && $userfacilityMapresult[0]['facility_id'] != '') {
                 $facilityWhereCondition = " AND facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ") ";
@@ -400,8 +390,8 @@ class General
     {
 
         $response = "";
-        if($emptySelectText !== false){
-            $response .= '<option value="">'.$emptySelectText.'</option>';
+        if ($emptySelectText !== false) {
+            $response .= '<option value="">' . $emptySelectText . '</option>';
         }
         foreach ($optionList as $optId => $optName) {
             $selectedText = '';
