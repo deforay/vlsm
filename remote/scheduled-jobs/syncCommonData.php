@@ -324,7 +324,7 @@ if(!empty($result['covid19ReasonForTesting']) && sizeof($result['covid19ReasonFo
 if (!empty($result['globalConfig']) && count($result['globalConfig']) > 0) {
 
     foreach ($result['globalConfig'] as $config) {
-        $configQuery = "SELECT name FROM global_config WHERE name=" . $config['name'];
+        $configQuery = "SELECT name FROM global_config WHERE name='" . $config['name'] ."'";
         $configLocalResult = $db->query($configQuery);
         $configData = array(
             'display_name'          => $config['display_name'],
