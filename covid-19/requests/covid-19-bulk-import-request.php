@@ -27,6 +27,9 @@ $fileName = UPLOAD_PATH. DIRECTORY_SEPARATOR . 'import-request' . DIRECTORY_SEPA
       <!-- /.box-header -->
       <div class="box-body">
         <!-- form start -->
+        <div style="font-size:1.1em;padding:1em;">
+          <p>Please note that the columns marked in <span class="mandatory">red</span> are mandatory. </p>
+        </div>
         <form class="form-horizontal" method='post' name='addImportRequestForm' id='addImportRequestForm' enctype="multipart/form-data" autocomplete="off" action="bulk-import-request-helper.php">
           <div class="box-body">
             <div class="wizard_content">
