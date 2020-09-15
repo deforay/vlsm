@@ -122,7 +122,7 @@ try {
             $db = $db->where('name', $fieldName);
             $id = $db->update($tableName, $data);
             if($id){
-                $db = $db->where('name', 'logo');
+                $db = $db->where('name', $fieldName);
                 $db->update($tableName, array(
                     "updated_on" => $general->getDateTime(),
                     "updated_by" => $_SESSION['userId']

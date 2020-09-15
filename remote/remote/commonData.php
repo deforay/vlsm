@@ -3,10 +3,10 @@
 include(dirname(__FILE__) . "/../../startup.php");
 
 
-
 $general = new \Vlsm\Models\General($db);
 
 $data = json_decode(file_get_contents('php://input'), true);
+
 if ($data['Key'] == 'vlsm-get-remote') {
 
     $response = array();
@@ -93,6 +93,12 @@ if ($data['Key'] == 'vlsm-get-remote') {
 
 
     $condition = null;
+    if (isset($data['globalConfigLastModified']) && !empty($data['globalConfigLastModified'])) {
+        $condition = "updated_on > '" . $data['globalConfigLastModified'] . "' AND remote_sync_needed = 'yes'";
+    }
+    $response['globalConfig'] = $general->fetchDataFromTable('global_config', $condition);
+    
+    $condition = null;
     if (isset($data['provinceLastModified']) && !empty($data['provinceLastModified'])) {
         $condition = "updated_datetime > '" . $data['provinceLastModified'] . "'";
     }
@@ -104,7 +110,6 @@ if ($data['Key'] == 'vlsm-get-remote') {
         $condition = "updated_datetime > '" . $data['facilityLastModified'] . "'";
     }
     $response['facilities'] = $general->fetchDataFromTable('facility_details', $condition);
-
 
 
 
