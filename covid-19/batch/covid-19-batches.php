@@ -55,8 +55,6 @@ include_once(APPLICATION_PATH . '/header.php');
 									<th>Batch Code</th>
 									<th>No. of Samples</th>
 									<th>No. of Samples Tested</th>
-									<th>No. of Samples Low Level</th>
-									<th>No. of Samples High Level</th>
 									<th>Last Tested Date</th>
 									<th>Created On</th>
 									<?php if (isset($_SESSION['privileges']) && in_array("editBatch.php", $_SESSION['privileges'])) { ?>
@@ -66,7 +64,7 @@ include_once(APPLICATION_PATH . '/header.php');
 							</thead>
 							<tbody>
 								<tr>
-									<td colspan="3" class="dataTables_empty">Loading data from server</td>
+									<td colspan="6" class="dataTables_empty">Loading data from server</td>
 								</tr>
 							</tbody>
 						</table>
@@ -111,14 +109,6 @@ include_once(APPLICATION_PATH . '/header.php');
 					"bSortable": false
 				},
 				{
-					"sClass": "center",
-					"bSortable": false
-				},
-				{
-					"sClass": "center",
-					"bSortable": false
-				},
-				{
 					"sClass": "center"
 				},
 				<?php if (isset($_SESSION['privileges']) && in_array("editBatch.php", $_SESSION['privileges'])) { ?> {
@@ -128,7 +118,7 @@ include_once(APPLICATION_PATH . '/header.php');
 				<?php } ?>
 			],
 			"aaSorting": [
-				[6, "desc"]
+				[4, "desc"]
 			],
 			"bProcessing": true,
 			"bServerSide": true,

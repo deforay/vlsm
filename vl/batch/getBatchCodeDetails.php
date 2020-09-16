@@ -4,8 +4,10 @@
 
 $tableName = "batch_details";
 $primaryKey = "batch_id";
-$configQuery = "SELECT `value` FROM global_config WHERE name ='vl_form'";
-$configResult = $db->query($configQuery);
+
+$general = new \Vlsm\Models\General($db);
+
+
 
 if (isset($_POST['type']) && $_POST['type'] == 'vl') {
     $refTable = "vl_request_form";
@@ -25,13 +27,13 @@ if (isset($_POST['type']) && $_POST['type'] == 'vl') {
 }
 
 
-$general = new \Vlsm\Models\General($db);
+
 /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
 
 $aColumns = array('b.batch_code', "DATE_FORMAT(b.request_created_datetime,'%d-%b-%Y %H:%i:%s')");
-$orderColumns = array('b.batch_code', '', '', '', '', '', 'b.request_created_datetime');
+$orderColumns = array('b.batch_code', '', '', '', 'b.request_created_datetime');
 
 /* Indexed column (used for fast and accurate table cardinality) */
 $sIndexColumn = $primaryKey;
@@ -110,13 +112,16 @@ for ($i = 0; $i < count($aColumns); $i++) {
          * Get data to display
         */
 
-$sQuery = "SELECT b.request_created_datetime ,b.batch_code, b.batch_id,count(vl.sample_code) as sample_code FROM $refTable vl right join batch_details b on vl.sample_batch_id = b.batch_id";
-if (isset($sWhere) && $sWhere != "") {
-    $sWhere = ' where ' . $sWhere;
-    $sWhere = $sWhere . 'AND vl.vlsm_country_id ="' . $configResult[0]['value'] . '"';
-} else {
-    $sWhere = ' where vl.vlsm_country_id ="' . $configResult[0]['value'] . '"';
-}
+$sQuery = "SELECT SUM(CASE WHEN vl.sample_tested_datetime is not null THEN 1 ELSE 0 END) as `testcount`, 
+                MAX(vl.sample_tested_datetime) as last_tested_date,
+                b.request_created_datetime,
+                b.batch_code, 
+                b.batch_id, 
+                COUNT(vl.sample_code) AS total_samples 
+                FROM $refTable vl, batch_details b 
+                WHERE vl.sample_batch_id = b.batch_id
+                AND b.test_type like '".$_POST['type']."'";
+
 $sQuery = $sQuery . ' ' . $sWhere;
 $sQuery = $sQuery . ' group by b.batch_id';
 if (isset($sOrder) && $sOrder != "") {
@@ -133,14 +138,14 @@ $rResult = $db->rawQuery($sQuery);
 // print_r($rResult);
 /* Data set length after filtering */
 
-$aResultFilterTotal = $db->rawQuery("SELECT b.request_created_datetime, b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from $refTable vl right join batch_details b on vl.sample_batch_id = b.batch_id  $sWhere group by b.batch_id order by $sOrder");
-$iFilteredTotal = count($aResultFilterTotal);
 
-/* Total data set length */
-$aResultTotal =  $db->rawQuery("SELECT b.request_created_datetime, b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from $refTable vl right join batch_details b on vl.sample_batch_id = b.batch_id where vl.vlsm_country_id ='" . $configResult[0]['value'] . "' group by b.batch_id");
-// $aResultTotal = $countResult->fetch_row();
-//print_r($aResultTotal);
-$iTotal = count($aResultTotal);
+$aResultFilterTotal = $db->rawQueryOne("SELECT count(b.batch_id) as total from $refTable vl, batch_details b WHERE vl.sample_batch_id = b.batch_id AND b.test_type like '".$_POST['type']."' $sWhere group by b.batch_id");
+$iFilteredTotal = !empty($aResultFilterTotal['total']) ? $aResultFilterTotal['total'] : 0;
+
+$aResultTotal = $db->rawQueryOne("SELECT count(b.batch_id) as total from $refTable vl, batch_details b WHERE vl.sample_batch_id = b.batch_id AND b.test_type like '".$_POST['type']."' group by b.batch_id");
+$iTotal = !empty($aResultTotal['total']) ? $aResultTotal['total'] : 0;
+
+
 /*
          * Output
         */
@@ -156,27 +161,11 @@ if (isset($_SESSION['privileges']) && (in_array($editFileName, $_SESSION['privil
 }
 
 foreach ($rResult as $aRow) {
-    $humanDate = "";
+    $createdDate = "";
     if (trim($aRow['request_created_datetime']) != "" && $aRow['request_created_datetime'] != '0000-00-00 00:00:00') {
-        $date = $aRow['request_created_datetime'];
-        $humanDate =  date("d-M-Y H:i:s", strtotime($date));
+        $createdDate =  date("d-M-Y H:i:s", strtotime($aRow['request_created_datetime']));
     }
-    //get no. of samplesa have result.
-    $noOfSampleHaveResult = "select count(vl.sample_code) as no_of_sample_have_result from vl_request_form as  vl where vl.sample_batch_id='" . $aRow['batch_id'] . "' and vl.result!=''";
-    $noOfSampleHaveResultCount = $db->rawQuery($noOfSampleHaveResult);
-    //get no. of sample tested.
-    $noOfSampleTested = "select count(vl.sample_code) as no_of_sample_tested from vl_request_form as  vl where vl.sample_batch_id='" . $aRow['batch_id'] . "' and vl.result_status=7";
-    $noOfSampleResultCount = $db->rawQuery($noOfSampleTested);
-    //error_log($noOfSampleTested);
-    //get no. of sample tested low level.
-    $noOfSampleLowTested = "select count(vl.sample_code) as no_of_sample_low_tested from vl_request_form as  vl where vl.sample_batch_id='" . $aRow['batch_id'] . "' AND vl.result < 1000";
-    $noOfSampleLowResultCount = $db->rawQuery($noOfSampleLowTested);
-    //get no. of sample tested high level.
-    $noOfSampleHighTested = "select count(vl.sample_code) as no_of_sample_high_tested from vl_request_form as  vl where vl.sample_batch_id='" . $aRow['batch_id'] . "' AND vl.result > 1000";
-    $noOfSampleHighResultCount = $db->rawQuery($noOfSampleHighTested);
-    //get no. of sample tested high level.
-    $noOfSampleLastDateTested = "select max(vl.sample_tested_datetime) as last_tested_date from vl_request_form as  vl where vl.sample_batch_id='" . $aRow['batch_id'] . "'";
-    $noOfSampleLastDateTested = $db->rawQuery($noOfSampleLastDateTested);
+    
 
     $row = array();
     $printBarcode = '<a href="/vl/batch/generateBarcode.php?id=' . base64_encode($aRow['batch_id']) . '&type=' . $_POST['type'] . '" target="_blank" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Print bar code"><i class="fa fa-barcode"> Print Barcode</i></a>';
@@ -184,22 +173,20 @@ foreach ($rResult as $aRow) {
     $editPosition = '<a href="' . $editPositionFileName . '?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;margin-top:6px;" title="Edit Position"><i class="fa fa-sort-numeric-desc"> Edit Position</i></a>';
 
     $deleteBatch = '';
-    if ($aRow['sample_code'] == 0 || $noOfSampleHaveResultCount[0]['no_of_sample_have_result'] == 0) {
+    if ($aRow['total_samples'] == 0 || $aRow['testcount'] == 0) {
         $deleteBatch = '<a href="javascript:void(0);" class="btn btn-danger btn-xs" style="margin-right: 2px;margin-top:6px;" title="" onclick="deleteBatchCode(\'' . base64_encode($aRow['batch_id']) . '\',\'' . $aRow['batch_code'] . '\');"><i class="fa fa-times"> Delete</i></a>';
     }
 
     $date = '';
-    if ($noOfSampleLastDateTested[0]['last_tested_date'] != '0000-00-00 00:00:00' && $noOfSampleLastDateTested[0]['last_tested_date'] != null) {
-        $exp = explode(" ", $noOfSampleLastDateTested[0]['last_tested_date']);
-        $date = $general->humanDateFormat($exp[0]);
+    if ($aRow['last_tested_date'] != '0000-00-00 00:00:00' && $aRow['last_tested_date'] != null) {
+        $exp = explode(" ", $aRow['last_tested_date']);
+        $lastDate = $general->humanDateFormat($exp[0]);
     }
     $row[] = ucwords($aRow['batch_code']);
-    $row[] = $aRow['sample_code'];
-    $row[] = $noOfSampleResultCount[0]['no_of_sample_tested'];
-    $row[] = $noOfSampleLowResultCount[0]['no_of_sample_low_tested'];
-    $row[] = $noOfSampleHighResultCount[0]['no_of_sample_high_tested'];
-    $row[] = $date;
-    $row[] = $humanDate;
+    $row[] = $aRow['total_samples'];
+    $row[] = $aRow['testcount'];
+    $row[] = $lastDate;
+    $row[] = $createdDate;
     //    $row[] = '<select class="form-control" name="status" id=' . $aRow['batch_id'] . ' title="Please select status" onchange="updateStatus(this.id,this.value)">
     //		    <option value="pending" ' . ($aRow['batch_status'] == "pending" ? "selected=selected" : "") . '>Pending</option>
     //		    <option value="completed" ' . ($aRow['batch_status'] == "completed" ? "selected=selected" : "") . '>Completed</option>
