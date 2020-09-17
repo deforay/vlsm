@@ -120,7 +120,7 @@ $sQuery = "SELECT SUM(CASE WHEN vl.sample_tested_datetime is not null THEN 1 ELS
                 COUNT(vl.sample_code) AS total_samples 
                 FROM $refTable vl, batch_details b 
                 WHERE vl.sample_batch_id = b.batch_id
-                AND b.test_type like '".$_POST['type']."'";
+                AND b.test_type like '" . $_POST['type'] . "'";
 
 $sQuery = $sQuery . ' ' . $sWhere;
 $sQuery = $sQuery . ' group by b.batch_id';
@@ -139,10 +139,10 @@ $rResult = $db->rawQuery($sQuery);
 /* Data set length after filtering */
 
 
-$aResultFilterTotal = $db->rawQueryOne("SELECT count(b.batch_id) as total from $refTable vl, batch_details b WHERE vl.sample_batch_id = b.batch_id AND b.test_type like '".$_POST['type']."' $sWhere group by b.batch_id");
+$aResultFilterTotal = $db->rawQueryOne("SELECT COUNT(b.batch_id) AS total FROM $refTable vl, batch_details b WHERE vl.sample_batch_id = b.batch_id AND b.test_type LIKE '" . $_POST['type'] . "' $sWhere GROUP BY b.batch_id");
 $iFilteredTotal = !empty($aResultFilterTotal['total']) ? $aResultFilterTotal['total'] : 0;
 
-$aResultTotal = $db->rawQueryOne("SELECT count(b.batch_id) as total from $refTable vl, batch_details b WHERE vl.sample_batch_id = b.batch_id AND b.test_type like '".$_POST['type']."' group by b.batch_id");
+$aResultTotal = $db->rawQueryOne("SELECT COUNT(b.batch_id) AS total FROM $refTable vl, batch_details b WHERE vl.sample_batch_id = b.batch_id AND b.test_type LIKE '" . $_POST['type'] . "' GROUP BY b.batch_id");
 $iTotal = !empty($aResultTotal['total']) ? $aResultTotal['total'] : 0;
 
 
@@ -165,7 +165,7 @@ foreach ($rResult as $aRow) {
     if (trim($aRow['request_created_datetime']) != "" && $aRow['request_created_datetime'] != '0000-00-00 00:00:00') {
         $createdDate =  date("d-M-Y H:i:s", strtotime($aRow['request_created_datetime']));
     }
-    
+
 
     $row = array();
     $printBarcode = '<a href="/vl/batch/generateBarcode.php?id=' . base64_encode($aRow['batch_id']) . '&type=' . $_POST['type'] . '" target="_blank" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Print bar code"><i class="fa fa-barcode"> Print Barcode</i></a>';
