@@ -718,7 +718,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         
         checkIsResultAuthorized();
         <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
-        $(document).change('.test-result, #result', function(e) {
+        $(document).on('change', '.test-result, #result', function(e) {
             checkPostive();
         });
         checkPostive();
@@ -769,7 +769,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         });
 
         <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
-        $(document).change('.test-result, #result', function(e) {
+        $(document).on('change', '.test-result, #result', function(e) {
             checkPostive();
         });
         <?php }?>
