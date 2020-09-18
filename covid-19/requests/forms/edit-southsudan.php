@@ -407,7 +407,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                                         } else{
                                                                             $show =  "none";
                                                                         } ?>
-                                                                        <select onchange="otherCovidTestName(this.value,<?php echo ($indexKey + 1); ?>)" class="form-control test-name-table-input" id="testName<?php echo ($indexKey + 1); ?>" name="testName[]" title="Veuillez saisir le nom du test pour les lignes <?php echo ($indexKey + 1); ?>">
+                                                                        <select onchange="otherCovidTestName(this.value,<?php echo ($indexKey + 1); ?>)" class="form-control test-name-table-input" id="testName<?php echo ($indexKey + 1); ?>" name="testName[]" title="Please enter the name of the Testkit (or) Test Method used">
                                                                             <option value="">--Select--</option>
                                                                             <option value="PCR" <?php echo (isset($covid19TestInfo[$indexKey]['test_name']) && $covid19TestInfo[$indexKey]['test_name'] == 'PCR')?"selected='selected'":"";?>>PCR</option>
                                                                             <option value="GeneXpert" <?php echo (isset($covid19TestInfo[$indexKey]['test_name']) && $covid19TestInfo[$indexKey]['test_name'] == 'GeneXpert')?"selected='selected'":"";?>>GeneXpert</option>
@@ -415,7 +415,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                                             <option value="ELISA" <?php echo (isset($covid19TestInfo[$indexKey]['test_name']) && $covid19TestInfo[$indexKey]['test_name'] == 'ELISA')?"selected='selected'":"";?>>ELISA</option>
                                                                             <option value="other" <?php echo (isset($show) && $show == 'block')?"selected='selected'":"";?>>Others</option>
                                                                         </select>
-                                                                        <input <?php echo $value;?> type="text" name="testNameOther[]" id="testNameOther<?php echo ($indexKey + 1); ?>" class="form-control testNameOther<?php echo ($indexKey + 1); ?>" title="Veuillez saisir le nom du test pour les lignes <?php echo ($indexKey + 1); ?>" placeholder="Entrez le nom du test <?php echo ($indexKey + 1); ?>" style="display: <?php echo $show;?>;margin-top: 10px;"/>
+                                                                        <input <?php echo $value;?> type="text" name="testNameOther[]" id="testNameOther<?php echo ($indexKey + 1); ?>" class="form-control testNameOther<?php echo ($indexKey + 1); ?>" title="Please enter the name of the Testkit (or) Test Method used" placeholder="Enter Test Method used" style="display: <?php echo $show;?>;margin-top: 10px;"/>
                                                                     </td>
                                                                     <td><input type="text" value="<?php echo $general->humanDateFormat($covid19TestInfo[$indexKey]['sample_tested_datetime']); ?>" name="testDate[]" id="testDate<?php echo ($indexKey + 1); ?>" class="form-control test-name-table-input dateTime" placeholder="Tested on" title="Please enter the tested on for row <?php echo ($indexKey + 1); ?>" /></td>
                                                                     <td><select class="form-control test-result test-name-table-input result-focus" name="testResult[]" id="testResult<?php echo ($indexKey + 1); ?>" title="Please select the result for row <?php echo ($indexKey + 1); ?>">
@@ -435,7 +435,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                             <tr>
                                                                 <td class="text-center">1</td>
                                                                 <td>
-                                                                    <select onchange="otherCovidTestName(this.value,1)" class="form-control test-name-table-input" id="testName1" name="testName[]" title="Veuillez saisir le nom du test pour les lignes 1">
+                                                                    <select onchange="otherCovidTestName(this.value,1)" class="form-control test-name-table-input" id="testName1" name="testName[]" title="Please enter the name of the Testkit (or) Test Method used">
                                                                         <option value="">--Select--</option>
                                                                         <option value="PCR">PCR</option>
                                                                         <option value="GeneXpert">GeneXpert</option>
@@ -443,7 +443,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                                         <option value="ELISA">ELISA</option>
                                                                         <option value="other">Others</option>
                                                                     </select>
-                                                                    <input type="text" name="testNameOther[]" id="testNameOther1" class="form-control testNameOther1 test-name-table-input" title="Veuillez saisir le nom du test pour les lignes 1" placeholder="Entrez le nom du test 1" style="display: none;margin-top: 10px;"/>
+                                                                    <input type="text" name="testNameOther[]" id="testNameOther1" class="form-control testNameOther1 test-name-table-input" title="Please enter the name of the Testkit (or) Test Method used" placeholder="Entrez le nom du test 1" style="display: none;margin-top: 10px;"/>
                                                                 </td>
                                                                 <td><input type="text" name="testDate[]" id="testDate1" class="form-control test-name-table-input dateTime" placeholder="Tested on" title="Please enter the tested on for row 1" /></td>
                                                                 <td><select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult1" title="Please select the result for row 1">
@@ -706,7 +706,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
             checkIsResultAuthorized();
         });
 
-        $('#result').change(function(e){
+        $('#result, .test-result').change(function(e){
             if(this.value == 'positive'){
                 $('.other-diseases').hide();
                 $('#otherDiseases').removeClass('isRequired');
@@ -790,7 +790,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         deletedRow.push(id);
         $('#deletedRow').val(deletedRow);
     }
-
+    <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
     function checkPostive(){
         var itemLength = document.getElementsByName("testResult[]");
         for (i = 0; i < itemLength.length; i++) {
@@ -811,7 +811,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
             }
         }
     }
-    
+<?php } ?>
     function checkIsResultAuthorized(){
         if($('#isResultAuthorized').val() == 'no'){
             $('#authorizedBy,#authorizedOn').val('');

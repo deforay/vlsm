@@ -595,7 +595,7 @@ foreach ($fResult as $fDetails) {
             checkIsResultAuthorized();
         });
         <?php if (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes') { ?>
-            $(document).change('.test-result, #result', function(e) {
+            $(document).on('change', '.test-result, #result', function(e) {
                 checkPostive();
             });
         <?php } ?>
@@ -643,8 +643,9 @@ foreach ($fResult as $fDetails) {
             }
         });
     }
-
+    <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
     function checkPostive() {
+        // alert("show");
         var itemLength = document.getElementsByName("testResult[]");
         for (i = 0; i < itemLength.length; i++) {
 
@@ -664,7 +665,7 @@ foreach ($fResult as $fDetails) {
             }
         }
     }
-
+<?php } ?>
     function checkIsResultAuthorized() {
         if ($('#isResultAuthorized').val() == 'no') {
             $('#authorizedBy,#authorizedOn').val('');
