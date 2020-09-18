@@ -1,19 +1,20 @@
 <?php
 ob_start();
-$title = "Import Test Request From File";
+$title = "Import Test Requests In Bulk";
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 $general = new \Vlsm\Models\General($db);
-$fileName = UPLOAD_PATH. DIRECTORY_SEPARATOR . 'import-request' . DIRECTORY_SEPARATOR . 'Participant_Bulk_Import_Excel_Format_covid19.xlsx';
+$countryFormId = $general->getGlobalConfig('vl_form');
+$fileName = APPLICATION_PATH. DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'covid-19' . DIRECTORY_SEPARATOR . $countryFormId . DIRECTORY_SEPARATOR . 'Covid19_Bulk_Import_Excel_Format.xlsx';
 ?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
-    <h1><i class="fa fa-edit"></i> Import Test Request From File</h1>
+    <h1><i class="fa fa-edit"></i> Import Test Requests In Bulk</h1>
     <ol class="breadcrumb">
       <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li class="active">Import Request</li>
+      <li class="active">Import Test Requests In Bulk</li>
     </ol>
   </section>
 
@@ -41,14 +42,14 @@ $fileName = UPLOAD_PATH. DIRECTORY_SEPARATOR . 'import-request' . DIRECTORY_SEPA
                         <div class="form-group">
                           <label class="col-lg-4 control-label" for="requestFile">Upload File <span class="mandatory">*</span></label>
                           <div class="col-lg-7">
-                            <input type="file" class="isRequired" name="requestFile" id="requestFile" title="Please choose result file">
+                            <input type="file" class="isRequired" name="requestFile" id="requestFile" title="Please select a file to upload">
                             (Upload xls, xlsx, csv format)
                           </div>
                         </div>
                       </div>
                       <?php if(file_exists($fileName)) {?>
                       <div class="col-md-6">
-                        <a href="<?php echo '/uploads/import-request/Participant_Bulk_Import_Excel_Format_covid19.xlsx';?>" target="_blank" class="btn btn-sm btn-primary" download><i class="fa fa-download"></i> Download Example Format</a>
+                        <a href="<?php echo "/files/covid-19/{$countryFormId}/Covid19_Bulk_Import_Excel_Format.xlsx"; ?>" target="_blank" class="btn btn-sm btn-primary" download><i class="fa fa-download"></i> Download Example Format</a>
                       </div>
                       <?php } ?>
                     </div>

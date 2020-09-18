@@ -29,14 +29,13 @@ if (sizeof($requestResult) > 0) {
           $resultApprovedBy = '';
           $userSignaturePath = null;
           if (isset($result['result_approved_by']) && !empty($result['result_approved_by'])) {
-               $resultApprovedByRes = $users->getUserInfo($result['result_approved_by'], array('user_name','user_signature'));
+               $resultApprovedByRes = $users->getUserInfo($result['result_approved_by'], array('user_name', 'user_signature'));
                if ($resultApprovedByRes) {
                     $resultApprovedBy = $resultApprovedByRes['result_approved_by'];
                }
                if (!empty($resultApprovedByRes['user_signature'])) {
                     $userSignaturePath = UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature" . DIRECTORY_SEPARATOR . $resultApprovedByRes['user_signature'];
                }
-
           }
 
           $_SESSION['aliasPage'] = $page;
@@ -168,7 +167,7 @@ if (sizeof($requestResult) > 0) {
           if (!isset($result['patient_gender']) || trim($result['patient_gender']) == '') {
                $result['patient_gender'] = 'not reported';
           }
-          
+
           $vlResult = '';
           $smileyContent = '';
           $showMessage = '';

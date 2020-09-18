@@ -1,11 +1,9 @@
-<?php 
-/* echo "<pre>";print_r($_FILES);
-print_r($_POST);die; */
+<?php
+
 ob_start();
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-#require_once('../startup.php');  
 
 $arr = array();
 $general = new \Vlsm\Models\General($db);
@@ -35,8 +33,8 @@ try {
         // echo "<pre>";print_r($sheetData);die;
         $returnArray = array();
         foreach ($sheetData as $rowIndex => $rowData) {
-            if($rowIndex != 1){
-                if(isset($rowData['A']) && !empty($rowData['A'])){
+            if ($rowIndex != 1) {
+                if (isset($rowData['A']) && !empty($rowData['A'])) {
                     $sampleCode = $general->getDublicateDataFromField('form_covid19', 'sample_code', $rowData['A']);
 
                     $facility = $general->getDublicateDataFromField('facility_details', 'facility_name', $rowData['B']);
@@ -45,13 +43,13 @@ try {
                     $labName = $general->getDublicateDataFromField('facility_details', 'facility_name', $rowData['T']);
                     $result = $general->getDublicateDataFromField('r_covid19_results', 'result', $rowData['AC']);
                     $resultStatus = $general->getDublicateDataFromField('r_sample_status', 'status_name', $rowData['AG']);
-                    
+
                     if (trim($rowData['P']) != '') {
                         $sampleCollectionDate = date('Y-m-d H:i:s', strtotime($rowData['P']));
                     } else {
                         $sampleCollectionDate = null;
                     }
-                    
+
                     if (trim($rowData['S']) != '') {
                         $sampleReceivedDate = date('Y-m-d H:i:s', strtotime($rowData['S']));
                     } else {
@@ -91,21 +89,21 @@ try {
                         'result_status'                         => $resultStatus['status_id'],
                     );
                     // echo "<pre>";print_r($data);die;
-                    if(!$sampleCode){
+                    if (!$sampleCode) {
                         $lastId = $db->insert($tableName, $data);
-                    }else{
+                    } else {
                         $lastId = $sampleCode['covid19_id'];
                         $db = $db->where('covid19_id', $lastId);
-		                $db->update($tableName, $data);
+                        $db->update($tableName, $data);
                     }
-                    
+
                     $testData[0]['testRequest'] = $rowData['W'];
                     $testData[0]['testDate']    = $rowData['X'];
                     $testData[0]['testResult']  = $rowData['Y'];
                     $testData[1]['testRequest'] = $rowData['Z'];
                     $testData[1]['testDate']    = $rowData['AA'];
                     $testData[1]['testResult']  = $rowData['AB'];
-                    
+
                     foreach ($testData as $testKitName) {
                         if (trim($testKitName['testDate']) != '') {
                             $testDate = date('Y-m-d H:i', strtotime($testKitName['testDate']));
@@ -114,24 +112,23 @@ try {
                         }
 
                         $covid19TestData = array(
-                            'covid19_id'			=> $lastId,
-                            'test_name'				=> $testKitName['testRequest'],
+                            'covid19_id'            => $lastId,
+                            'test_name'                => $testKitName['testRequest'],
                             'facility_id'           => $labName['facility_id'],
-                            'sample_tested_datetime'=> date('Y-m-d H:i:s', strtotime($testDate)),
-                            'result'				=> strtolower($testKitName['testResult']),
+                            'sample_tested_datetime' => date('Y-m-d H:i:s', strtotime($testDate)),
+                            'result'                => strtolower($testKitName['testResult']),
                         );
                         $db->insert($testTableName, $covid19TestData);
                         $covid19Data['sample_tested_datetime'] = date('Y-m-d H:i:s', strtotime($testDate));
                     }
                     $db = $db->where('covid19_id', $lastId);
                     $id = $db->update($tableName, $covid19Data);
-                    
                 }
             }
         }
     }
     // echo "<pre>";print_r($returnArray);die;
-    $_SESSION['alertMsg'] = "Bulk imported successfully";
+    $_SESSION['alertMsg'] = "Data imported successfully";
     header("location:/covid-19/requests/covid-19-requests.php");
 } catch (Exception $exc) {
     error_log($exc->getMessage());
