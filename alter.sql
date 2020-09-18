@@ -2483,6 +2483,10 @@ CREATE TABLE `covid19_reasons_for_testing` (
   `reasons_detected` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+-- Amit 24 August 2020
+ALTER TABLE `vl_request_form` ADD INDEX(`last_modified_datetime`);
+ALTER TABLE `eid_form` ADD INDEX(`last_modified_datetime`);
+ALTER TABLE `form_covid19` ADD INDEX(`last_modified_datetime`);
 
 -- Amit 26 August 2020
 

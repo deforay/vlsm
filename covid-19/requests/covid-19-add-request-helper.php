@@ -196,7 +196,7 @@ try {
 		}
 	}
 
-
+	// echo "<pre>";print_r($_POST['testName']);die;
 	if (isset($_POST['covid19SampleId']) && $_POST['covid19SampleId'] != '' && ($_POST['isSampleRejected'] == 'no' || $_POST['isSampleRejected'] == '')) {
 		if (isset($_POST['testName']) && count($_POST['testName']) > 0) {
 			foreach ($_POST['testName'] as $testKey => $testKitName) {
