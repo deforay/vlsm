@@ -175,8 +175,8 @@ if (sizeof($requestResult) > 0) {
         }
 
         $userRes = array();
-        if (isset($result['approvedBy']) && trim($result['approvedBy']) != '') {
-            $resultApprovedBy = ucwords($result['approvedBy']);
+        if (isset($result['authorized_by']) && trim($result['authorized_by']) != '') {
+            $resultApprovedBy = ucwords($result['authorized_by']);
             $userRes = $users->getUserInfo($result['result_approved_by'], 'user_signature');
         } else {
             $resultApprovedBy  = '';
@@ -438,7 +438,7 @@ if (sizeof($requestResult) > 0) {
         } else {
             $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
         }
-        $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $general->humanDateFormat($result['result_approved_datetime']) . '</td>';
+        $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $general->humanDateFormat($result['authorized_on']) . '</td>';
         $html .= '</tr>';
 
         $html .= '<tr>';
