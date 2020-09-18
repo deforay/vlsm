@@ -480,7 +480,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         </tr>
                                         <tr class="change-reason" style="display: none;">
                                             <th class="other-diseases" style="display: <?php echo $otherDiseases;?>;"><label for="otherDiseases">Other Diseases<span class="mandatory">*</span></label></th>
-                                            <td class="other-diseases" style="display: <?php echo $otherDiseases;?>;">
+                                            <td class="other-diseases" stylother-de="display: <?php echo $otherDiseases;?>;">
                                                 <select name="otherDiseases" id="otherDiseases" class="form-control" title="Other Diseases">
                                                     <option value="">--Select--</option>
                                                     <optgroup label="Coronavirus">
