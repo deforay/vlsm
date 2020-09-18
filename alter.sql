@@ -2559,3 +2559,5 @@ SET global_config.category = global_config_temp.category, global_config.remote_s
 DROP TABLE global_config_temp;
 
 
+UPDATE `system_config` SET `value` = '4.1.1' WHERE `system_config`.`name` = 'version';
+-- Version 4.1.0 -- Amit -- 16-Sep-2020
