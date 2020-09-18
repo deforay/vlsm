@@ -63,26 +63,29 @@ try {
 	if (isset($_POST['covid19SampleId']) && $_POST['covid19SampleId'] != '' && ($_POST['isSampleRejected'] == 'no' || $_POST['isSampleRejected'] == '')) {
 		if(isset($_POST['testName']) && count($_POST['testName']) > 0){
 			foreach($_POST['testName'] as $testKey=>$testerName){
-				if (isset($_POST['testDate'][$testKey]) && trim($_POST['testDate'][$testKey]) != "") {
-					$testedDateTime = explode(" ", $_POST['testDate'][$testKey]);
-					$_POST['testDate'][$testKey] = $general->dateFormat($testedDateTime[0]) . " " . $testedDateTime[1];
-				} else {
-					$_POST['testDate'][$testKey] = NULL;
+				if(isset($testKitName) && !empty($testKitName)){
+
+					if (isset($_POST['testDate'][$testKey]) && trim($_POST['testDate'][$testKey]) != "") {
+						$testedDateTime = explode(" ", $_POST['testDate'][$testKey]);
+						$_POST['testDate'][$testKey] = $general->dateFormat($testedDateTime[0]) . " " . $testedDateTime[1];
+					} else {
+						$_POST['testDate'][$testKey] = NULL;
+					}
+					$covid19TestData = array(
+						'covid19_id'			=> $_POST['covid19SampleId'],
+						'test_name'				=> ($_POST['testName'][$testKey] == 'other')?$_POST['testNameOther'][$testKey]:$_POST['testName'][$testKey],
+						'facility_id'           => isset($_POST['labId']) ? $_POST['labId'] : null,
+						'sample_tested_datetime'=> $_POST['testDate'][$testKey],
+						'result'				=> $_POST['testResult'][$testKey],
+					);
+					if(isset($_POST['testId'][$testKey]) && $_POST['testId'][$testKey] != ''){
+						$db = $db->where('test_id', base64_decode($_POST['testId'][$testKey]));
+						$db->update($testTableName,$covid19TestData);
+					}else{
+						$db->insert($testTableName,$covid19TestData);
+					}
+					$covid19Data['sample_tested_datetime'] = date('Y-m-d H:i:s', strtotime($_POST['testDate'][$testKey]));
 				}
-				$covid19TestData = array(
-					'covid19_id'			=> $_POST['covid19SampleId'],
-					'test_name'				=> ($_POST['testName'][$testKey] == 'other')?$_POST['testNameOther'][$testKey]:$_POST['testName'][$testKey],
-					'facility_id'           => isset($_POST['labId']) ? $_POST['labId'] : null,
-					'sample_tested_datetime'=> $_POST['testDate'][$testKey],
-					'result'				=> $_POST['testResult'][$testKey],
-				);
-				if(isset($_POST['testId'][$testKey]) && $_POST['testId'][$testKey] != ''){
-					$db = $db->where('test_id', base64_decode($_POST['testId'][$testKey]));
-					$db->update($testTableName,$covid19TestData);
-				}else{
-					$db->insert($testTableName,$covid19TestData);
-				}
-				$covid19Data['sample_tested_datetime'] = date('Y-m-d H:i:s', strtotime($_POST['testDate'][$testKey]));
 			}
 		}
 	}else{
