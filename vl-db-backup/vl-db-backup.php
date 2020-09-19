@@ -1,14 +1,6 @@
 <?php
-defined('APPLICATION_ENV')
-    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ?
-        getenv('APPLICATION_ENV') :
-        'production'));
 
-if (APPLICATION_ENV == 'production') {
-    require_once('/includes/config.production.php');
-} else {
-    require_once('/includes/config.development.php');
-}
+require_once(dirname(__FILE__) . "/../../startup.php");
 
 define("BACKUP_PATH", "/../db-backup");
 
@@ -35,7 +27,6 @@ if (is_dir($folderPath)) {
         if ($oldFileName == 'index.php' || $oldFileName == "." || $oldFileName == ".." || $oldFileName == "") {
             continue;
         }
-
         if (time() - filemtime($file) > (86400) * $days) {
             unlink($file);
         }

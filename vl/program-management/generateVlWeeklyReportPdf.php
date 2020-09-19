@@ -1,6 +1,6 @@
 <?php
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+  session_start();
 }
 ob_start();
 
@@ -10,35 +10,35 @@ use setasign\Fpdi\Tcpdf\Fpdi;
 
 
 
-$tableName1="activity_log";
-$tableName2="vl_request_form";
+$tableName1 = "activity_log";
+$tableName2 = "vl_request_form";
 
-$configQuery="SELECT * from global_config";
-$configResult=$db->query($configQuery);
+$configQuery = "SELECT * from global_config";
+$configResult = $db->query($configQuery);
 $arr = array();
 // now we create an associative array so that we can easily create view variables
 for ($i = 0; $i < sizeof($configResult); $i++) {
   $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
 $country = $arr['vl_form'];
-if(isset($arr['default_time_zone']) && $arr['default_time_zone']!=''){
+if (isset($arr['default_time_zone']) && $arr['default_time_zone'] != '') {
   date_default_timezone_set($arr['default_time_zone']);
-}else{
-  date_default_timezone_set(!empty(date_default_timezone_get()) ?  date_default_timezone_get() : "UTC"); 
+} else {
+  date_default_timezone_set(!empty(date_default_timezone_get()) ?  date_default_timezone_get() : "UTC");
 }
-if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
-   $s_t_date = explode("to", $_POST['reportedDate']);
-   if (isset($s_t_date[0]) && trim($s_t_date[0]) != "") {
-     $start_date = $general->dateFormat(trim($s_t_date[0]));
-   }
-   if (isset($s_t_date[1]) && trim($s_t_date[1]) != "") {
-     $end_date = $general->dateFormat(trim($s_t_date[1]));
-   }
+if (isset($_POST['reportedDate']) && trim($_POST['reportedDate']) != '') {
+  $s_t_date = explode("to", $_POST['reportedDate']);
+  if (isset($s_t_date[0]) && trim($s_t_date[0]) != "") {
+    $start_date = $general->dateFormat(trim($s_t_date[0]));
+  }
+  if (isset($s_t_date[1]) && trim($s_t_date[1]) != "") {
+    $end_date = $general->dateFormat(trim($s_t_date[1]));
+  }
 }
 
 
-$systemConfigQuery ="SELECT * from system_config";
-$systemConfigResult=$db->query($systemConfigQuery);
+$systemConfigQuery = "SELECT * from system_config";
+$systemConfigResult = $db->query($systemConfigQuery);
 $sarr = array();
 // now we create an associative array so that we can easily create view variables
 for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
@@ -47,131 +47,137 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
 
 
 
-if($sarr['user_type']=='vluser'){
-  $vlLabQuery="SELECT * FROM facility_details where status='active' AND facility_id = ". $sarr['lab_name'];
+if ($sarr['user_type'] == 'vluser') {
+  $vlLabQuery = "SELECT * FROM facility_details where status='active' AND facility_id = " . $sarr['lab_name'];
   $vlLabResult = $db->rawQuery($vlLabQuery);
-}
-else if(isset($_POST['lab']) && trim($_POST['lab'])!= ''){
-    $vlLabQuery="SELECT * FROM facility_details where facility_id IN (".$_POST['lab'].") AND status='active'";
-    $vlLabResult = $db->rawQuery($vlLabQuery);
-}else{
-    $vlLabQuery="SELECT * FROM facility_details where facility_type = 2 AND status='active'";
-    $vlLabResult = $db->rawQuery($vlLabQuery);
+} else if (isset($_POST['lab']) && trim($_POST['lab']) != '') {
+  $vlLabQuery = "SELECT * FROM facility_details where facility_id IN (" . $_POST['lab'] . ") AND status='active'";
+  $vlLabResult = $db->rawQuery($vlLabQuery);
+} else {
+  $vlLabQuery = "SELECT * FROM facility_details where facility_type = 2 AND status='active'";
+  $vlLabResult = $db->rawQuery($vlLabQuery);
 }
 //header and footer
 //Pdf code start
-    // create new PDF document
-  class MYPDF extends TCPDF {
-  
-     //Page header
-      public function setHeading($title,$logo,$text,$lab,$report_date) {
-        $this->logo = $logo;
-        $this->text = $text;
-        $this->lab = $lab;
-        $this->title = $title;
-        $this->report_date = $report_date;
-      }
-      //Page header
-     public function Header() {
-         // Logo
-         //$image_file = K_PATH_IMAGES.'logo_example.jpg';
-         //$this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
-         // Set font
-         if(trim($this->logo)!=''){
-             if (file_exists(UPLOAD_PATH. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo)) {
-               $image_file = UPLOAD_PATH. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo;
-               $this->Image($image_file,20, 13, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
-             }
-         }
-         $this->SetFont('helvetica', 'B', 7);
-         $this->writeHTMLCell(30,0,16,28,$this->text, 0, 0, 0, true, 'A', true);
-         $this->SetFont('helvetica', '', 18);
-         $this->writeHTMLCell(0,0,10,18,$this->title, 0, 0, 0, true, 'C', true);
-         if(trim($this->lab)!= ''){
-           $this->SetFont('helvetica', '', 9);
-           $this->writeHTMLCell(0,0,10,26,strtoupper($this->lab), 0, 0, 0, true, 'C', true);
-         }
-         $this->SetFont('helvetica', '', 9);
-         $this->writeHTMLCell(0,0,0,26,'Report Date : '.$this->report_date, 0, 0, 0, true, 'R', true);
-         $this->writeHTMLCell(0,0,15,36,'<hr>', 0, 0, 0, true, 'C', true);
-     }
-  
-      // Page footer
-      public function Footer() {
-          // Position at 15 mm from bottom
-          $this->SetY(-15);
-          // Set font
-          $this->SetFont('helvetica', '', 8);
-          // Page number
-          $this->Cell(0, 10,  'Report generated on '.date('d/m/Y H:i:s'), 0, false, 'C', 0, '', 0, false, 'T', 'M');
-      }
+// create new PDF document
+class MYPDF extends TCPDF
+{
+
+  //Page header
+  public function setHeading($title, $logo, $text, $lab, $report_date)
+  {
+    $this->logo = $logo;
+    $this->text = $text;
+    $this->lab = $lab;
+    $this->title = $title;
+    $this->report_date = $report_date;
   }
-   
-  class Pdf_concat extends FPDI {
-       var $files = array();
-   
-       function setFiles($files) {
-           $this->files = $files;
-       }
-   
-       function concat() {
-           foreach($this->files AS $file) {
-                $pagecount = $this->setSourceFile($file);
-                for ($i = 1; $i <= $pagecount; $i++) {
-                     $tplidx = $this->ImportPage($i);
-                     $s = $this->getTemplatesize($tplidx);
-                     $this->AddPage('L', array($s['w'], $s['h']));
-                     $this->useTemplate($tplidx);
-                }
-           }
-       }
-  }
-  
-  if(sizeof($vlLabResult)> 0){
-    $_SESSION['rVal'] = $general->generateRandomString(6);
-    if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']) && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal'])) {
-      mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']);
+  //Page header
+  public function Header()
+  {
+    // Logo
+    //$image_file = K_PATH_IMAGES.'logo_example.jpg';
+    //$this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+    // Set font
+    if (trim($this->logo) != '') {
+      if (file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'logo' . DIRECTORY_SEPARATOR . $this->logo)) {
+        $image_file = UPLOAD_PATH . DIRECTORY_SEPARATOR . 'logo' . DIRECTORY_SEPARATOR . $this->logo;
+        $this->Image($image_file, 20, 13, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
+      }
     }
-    $pathFront = realpath(UPLOAD_PATH.$_SESSION['rVal'].'/');
-    $pages = array();
-    $page = 1;
-    $_SESSION['nbPages'] = (count($vlLabResult)+1);
-    foreach($vlLabResult as $vlLab){
-      $_SESSION['aliasPage'] = $page;
-        // create new PDF document
-      $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-      $pdf->setHeading('VIRAL LOAD STATISTICS',$arr['logo'],$arr['header'],$vlLab['facility_name'],$_POST['reportedDate']);
-      $pdf->setPageOrientation('L');
-      // set document information
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetTitle('VIRAL LOAD LAB WEEKLY REPORT');
-        //$pdf->SetSubject('TCPDF Tutorial');
-        //$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+    $this->SetFont('helvetica', 'B', 7);
+    $this->writeHTMLCell(30, 0, 16, 28, $this->text, 0, 0, 0, true, 'A', true);
+    $this->SetFont('helvetica', '', 18);
+    $this->writeHTMLCell(0, 0, 10, 18, $this->title, 0, 0, 0, true, 'C', true);
+    if (trim($this->lab) != '') {
+      $this->SetFont('helvetica', '', 9);
+      $this->writeHTMLCell(0, 0, 10, 26, strtoupper($this->lab), 0, 0, 0, true, 'C', true);
+    }
+    $this->SetFont('helvetica', '', 9);
+    $this->writeHTMLCell(0, 0, 0, 26, 'Report Date : ' . $this->report_date, 0, 0, 0, true, 'R', true);
+    $this->writeHTMLCell(0, 0, 15, 36, '<hr>', 0, 0, 0, true, 'C', true);
+  }
 
-        // set default header data
-        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH,PDF_HEADER_TITLE, PDF_HEADER_STRING);
+  // Page footer
+  public function Footer()
+  {
+    // Position at 15 mm from bottom
+    $this->SetY(-15);
+    // Set font
+    $this->SetFont('helvetica', '', 8);
+    // Page number
+    $this->Cell(0, 10,  'Report generated on ' . date('d/m/Y H:i:s'), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+  }
+}
 
-        // set header and footer fonts
-        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '',PDF_FONT_SIZE_MAIN));
-        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '',PDF_FONT_SIZE_DATA));
+class Pdf_concat extends FPDI
+{
+  var $files = array();
 
-        // set default monospaced font
-        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+  function setFiles($files)
+  {
+    $this->files = $files;
+  }
 
-        // set margins
-        $pdf->SetMargins(PDF_MARGIN_LEFT,PDF_MARGIN_TOP+14,PDF_MARGIN_RIGHT);
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+  function concat()
+  {
+    foreach ($this->files as $file) {
+      $pagecount = $this->setSourceFile($file);
+      for ($i = 1; $i <= $pagecount; $i++) {
+        $tplidx = $this->ImportPage($i);
+        $s = $this->getTemplatesize($tplidx);
+        $this->AddPage('L', array($s['w'], $s['h']));
+        $this->useTemplate($tplidx);
+      }
+    }
+  }
+}
 
-        // set auto page breaks
-        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+if (sizeof($vlLabResult) > 0) {
+  $_SESSION['rVal'] = $general->generateRandomString(6);
+  if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']) && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal'])) {
+    mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']);
+  }
+  $pathFront = realpath(UPLOAD_PATH . $_SESSION['rVal'] . '/');
+  $pages = array();
+  $page = 1;
+  $_SESSION['nbPages'] = (count($vlLabResult) + 1);
+  foreach ($vlLabResult as $vlLab) {
+    $_SESSION['aliasPage'] = $page;
+    // create new PDF document
+    $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+    $pdf->setHeading('VIRAL LOAD STATISTICS', $arr['logo'], $arr['header'], $vlLab['facility_name'], $_POST['reportedDate']);
+    $pdf->setPageOrientation('L');
+    // set document information
+    $pdf->SetCreator(PDF_CREATOR);
+    $pdf->SetTitle('VIRAL LOAD LAB WEEKLY REPORT');
+    //$pdf->SetSubject('TCPDF Tutorial');
+    //$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
-        // set image scale factor
-        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+    // set default header data
+    $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
 
-        // set font
-        $pdf->SetFont('helvetica', '', 8);
-        $sQuery="SELECT
+    // set header and footer fonts
+    $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+    $pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+    // set default monospaced font
+    $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+    // set margins
+    $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP + 14, PDF_MARGIN_RIGHT);
+    $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+    $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+    // set auto page breaks
+    $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+    // set image scale factor
+    $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+    // set font
+    $pdf->SetFont('helvetica', '', 8);
+    $sQuery = "SELECT
 	
 		 vl.facility_id,f.facility_code,f.facility_state,f.facility_district,f.facility_name,
 		
@@ -229,128 +235,127 @@ else if(isset($_POST['lab']) && trim($_POST['lab'])!= ''){
            END) AS totalGreaterThan1000,
 		COUNT(result) as total
 		 FROM vl_request_form as vl RIGHT JOIN facility_details as f ON f.facility_id=vl.facility_id
-       WHERE vl.lab_id = ".$vlLab['facility_id']." AND vl.vlsm_country_id = ".$country;
-    if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
-        if (trim($start_date) == trim($end_date)) {
-          $sQuery = $sQuery.' AND DATE(vl.sample_tested_datetime) = "'.$start_date.'"';
-        }else{
-          $sQuery = $sQuery.' AND DATE(vl.sample_tested_datetime) >= "'.$start_date.'" AND DATE(vl.sample_tested_datetime) <= "'.$end_date.'"';
-        }
+       WHERE vl.lab_id = " . $vlLab['facility_id'] . " AND vl.vlsm_country_id = " . $country;
+    if (isset($_POST['reportedDate']) && trim($_POST['reportedDate']) != '') {
+      if (trim($start_date) == trim($end_date)) {
+        $sQuery = $sQuery . ' AND DATE(vl.sample_tested_datetime) = "' . $start_date . '"';
+      } else {
+        $sQuery = $sQuery . ' AND DATE(vl.sample_tested_datetime) >= "' . $start_date . '" AND DATE(vl.sample_tested_datetime) <= "' . $end_date . '"';
+      }
     }
-    if(isset($_POST['searchData']) && trim($_POST['searchData'])!= ''){
-        //$sQuery = $sQuery.' AND (f.facility_state LIKE "%'.$_POST['searchData'].'%" OR f.facility_district LIKE "%'.$_POST['searchData'].'%" OR f.facility_name LIKE "%'.$_POST['searchData'].'%")';
+    if (isset($_POST['searchData']) && trim($_POST['searchData']) != '') {
+      //$sQuery = $sQuery.' AND (f.facility_state LIKE "%'.$_POST['searchData'].'%" OR f.facility_district LIKE "%'.$_POST['searchData'].'%" OR f.facility_name LIKE "%'.$_POST['searchData'].'%")';
     }
-    $sQuery = $sQuery.' GROUP BY vl.facility_id';
+    $sQuery = $sQuery . ' GROUP BY vl.facility_id';
     $sResult = $db->rawQuery($sQuery);
     //error_log($sQuery);
-      $pdf->AddPage();
-      //Statistics pdf start
-        $html = '';
-            $html.='<table style="border:2px solid #f4f4f4;">';
-             $html.='<thead>';
-                $html.='<tr>';
-		  $html.='<th rowspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>Province/State</strong></th>';
-		  $html.='<th rowspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>District/County</strong></th>';
-		  $html.='<th rowspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>Site Name</strong></th>';
-                  $html.='<th rowspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>Site ID</strong></th>';
-                  $html.='<th rowspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>No. of Rejections</strong></th>';
-                  $html.='<th colspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>Viral Load Results - Peds</strong></th>';
-                  $html.='<th colspan="4" align="center" style="border:1px solid #f4f4f4;"><strong>Viral Load Results - Adults</strong></th>';
-                  $html.='<th colspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>Viral Load Results - Pregnant/Breastfeeding Women</strong></th>';
-                  $html.='<th colspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>Age/Sex Unknown</strong></th>';
-                  $html.='<th colspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>Totals</strong></th>';
-                  $html.='<th rowspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>Total Test per Clinic</strong></th>';
-                $html.='</tr>';
-		$html.='<tr>';
-		  $html.='<th align="center" style="border:1px solid #f4f4f4;"> <strong>&lt;= 15 yrs &lt;= 1000 cp/ml</strong></th>';
-		  $html.='<th align="center" style="border:1px solid #f4f4f4;"> <strong>&lt;= 15 yrs &gt; 1000 cp/ml</strong></th>';
-		  $html.='<th align="center" style="border:1px solid #f4f4f4;"> <strong>&gt; 15yrs Male &lt; 1000 cp/ml</strong></th>';
-		  $html.='<th align="center" style="border:1px solid #f4f4f4;"> <strong>&gt; 15yrs Male &gt; 1000 cp/ml</strong></th>';
-		  $html.='<th align="center" style="border:1px solid #f4f4f4;"> <strong>&gt; 15yrs Female &lt;= 1000 cp/ml</strong></th>';
-		  $html.='<th align="center" style="border:1px solid #f4f4f4;"> <strong>&gt; 15yrs  Female &gt; 1000 cp/ml</strong></th>';
-		  $html.='<th align="center" style="border:1px solid #f4f4f4;"> <strong>&lt;= 1000 cp/ml</strong></th>';
-		  $html.='<th align="center" style="border:1px solid #f4f4f4;"> <strong>&gt; 1000 cp/ml</strong></th>';
-		  $html.='<th align="center" style="border:1px solid #f4f4f4;"><strong>Unknown Age/Sex &lt;= 1000ml</strong></th>';
-		  $html.='<th align="center" style="border:1px solid #f4f4f4;"><strong>Unknown Age/Sex &gt; 1000ml</strong></th>';
-		  $html.='<th align="center" style="border:1px solid #f4f4f4;"> <strong>&lt;= 1000 cp/ml</strong></th>';
-		  $html.='<th align="center" style="border:1px solid #f4f4f4;"> <strong>&gt; 1000 cp/ml</strong></th>';
-		$html.='</tr>';
-                $html.='</thead>';
-                $html.='<tbody>';
-                if(count($sResult) > 0){
-                  foreach($sResult as $result){
-                    $html.='<tr>';
-                    $html.='<td style="min-height:20px;border:1px solid #f4f4f4;">'.ucwords($result['facility_state']).'</td>';
-                    $html.='<td style="border:1px solid #f4f4f4;">'.ucwords($result['facility_district']).'</td>';
-                    $html.='<td style="border:1px solid #f4f4f4;">'.ucwords($result['facility_name']).'</td>';
-                    $html.='<td style="border:1px solid #f4f4f4;">'.$result['facility_code'].'</td>';
-                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['rejections'].'</td>';
-                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['lt15lt1000'].'</td>';
-                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['lt15gt1000'].'</td>';
-                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['gt15lt1000M'].'</td>';
-                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['gt15gt1000M'].'</td>';
-                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['gt15lt1000F'].'</td>';
-                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['gt15gt1000F'].'</td>';
-                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['preglt1000'].'</td>';
-                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['preggt1000'].'</td>';
-                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['ult1000'].'</td>';
-                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['ugt1000'].'</td>';
-                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['totalLessThan1000'].'</td>';
-                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['totalGreaterThan1000'].'</td>';
-                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['total'].'</td>';
-                    $html.='</tr>';
-                  }
-                }else{
-                  $html.='<tr>';
-                  $html.='<td style="min-height:20px;border:1px solid #f4f4f4;"></td>';
-                  $html.='<td style="border:1px solid #f4f4f4;"></td>';
-                  $html.='<td style="border:1px solid #f4f4f4;"></td>';
-                  $html.='<td style="border:1px solid #f4f4f4;"></td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
-                  $html.='</tr>';
-                }
-                $html.='</tbody>';
-            $html.='</table>';
-          $pdf->writeHTML($html);
-          $pdf->lastPage();
-          $filename = $pathFront. DIRECTORY_SEPARATOR .'p'.$page. '.pdf';
-          $pdf->Output($filename,"F");
-          $pages[] = $filename;
-        $page++;
+    $pdf->AddPage();
+    //Statistics pdf start
+    $html = '';
+    $html .= '<table style="border:2px solid #f4f4f4;">';
+    $html .= '<thead>';
+    $html .= '<tr>';
+    $html .= '<th rowspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>Province/State</strong></th>';
+    $html .= '<th rowspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>District/County</strong></th>';
+    $html .= '<th rowspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>Site Name</strong></th>';
+    $html .= '<th rowspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>Site ID</strong></th>';
+    $html .= '<th rowspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>No. of Rejections</strong></th>';
+    $html .= '<th colspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>Viral Load Results - Peds</strong></th>';
+    $html .= '<th colspan="4" align="center" style="border:1px solid #f4f4f4;"><strong>Viral Load Results - Adults</strong></th>';
+    $html .= '<th colspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>Viral Load Results - Pregnant/Breastfeeding Women</strong></th>';
+    $html .= '<th colspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>Age/Sex Unknown</strong></th>';
+    $html .= '<th colspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>Totals</strong></th>';
+    $html .= '<th rowspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>Total Test per Clinic</strong></th>';
+    $html .= '</tr>';
+    $html .= '<tr>';
+    $html .= '<th align="center" style="border:1px solid #f4f4f4;"> <strong>&lt;= 15 yrs &lt;= 1000 cp/ml</strong></th>';
+    $html .= '<th align="center" style="border:1px solid #f4f4f4;"> <strong>&lt;= 15 yrs &gt; 1000 cp/ml</strong></th>';
+    $html .= '<th align="center" style="border:1px solid #f4f4f4;"> <strong>&gt; 15yrs Male &lt; 1000 cp/ml</strong></th>';
+    $html .= '<th align="center" style="border:1px solid #f4f4f4;"> <strong>&gt; 15yrs Male &gt; 1000 cp/ml</strong></th>';
+    $html .= '<th align="center" style="border:1px solid #f4f4f4;"> <strong>&gt; 15yrs Female &lt;= 1000 cp/ml</strong></th>';
+    $html .= '<th align="center" style="border:1px solid #f4f4f4;"> <strong>&gt; 15yrs  Female &gt; 1000 cp/ml</strong></th>';
+    $html .= '<th align="center" style="border:1px solid #f4f4f4;"> <strong>&lt;= 1000 cp/ml</strong></th>';
+    $html .= '<th align="center" style="border:1px solid #f4f4f4;"> <strong>&gt; 1000 cp/ml</strong></th>';
+    $html .= '<th align="center" style="border:1px solid #f4f4f4;"><strong>Unknown Age/Sex &lt;= 1000ml</strong></th>';
+    $html .= '<th align="center" style="border:1px solid #f4f4f4;"><strong>Unknown Age/Sex &gt; 1000ml</strong></th>';
+    $html .= '<th align="center" style="border:1px solid #f4f4f4;"> <strong>&lt;= 1000 cp/ml</strong></th>';
+    $html .= '<th align="center" style="border:1px solid #f4f4f4;"> <strong>&gt; 1000 cp/ml</strong></th>';
+    $html .= '</tr>';
+    $html .= '</thead>';
+    $html .= '<tbody>';
+    if (count($sResult) > 0) {
+      foreach ($sResult as $result) {
+        $html .= '<tr>';
+        $html .= '<td style="min-height:20px;border:1px solid #f4f4f4;">' . ucwords($result['facility_state']) . '</td>';
+        $html .= '<td style="border:1px solid #f4f4f4;">' . ucwords($result['facility_district']) . '</td>';
+        $html .= '<td style="border:1px solid #f4f4f4;">' . ucwords($result['facility_name']) . '</td>';
+        $html .= '<td style="border:1px solid #f4f4f4;">' . $result['facility_code'] . '</td>';
+        $html .= '<td align="center" style="border:1px solid #f4f4f4;">' . $result['rejections'] . '</td>';
+        $html .= '<td align="center" style="border:1px solid #f4f4f4;">' . $result['lt15lt1000'] . '</td>';
+        $html .= '<td align="center" style="border:1px solid #f4f4f4;">' . $result['lt15gt1000'] . '</td>';
+        $html .= '<td align="center" style="border:1px solid #f4f4f4;">' . $result['gt15lt1000M'] . '</td>';
+        $html .= '<td align="center" style="border:1px solid #f4f4f4;">' . $result['gt15gt1000M'] . '</td>';
+        $html .= '<td align="center" style="border:1px solid #f4f4f4;">' . $result['gt15lt1000F'] . '</td>';
+        $html .= '<td align="center" style="border:1px solid #f4f4f4;">' . $result['gt15gt1000F'] . '</td>';
+        $html .= '<td align="center" style="border:1px solid #f4f4f4;">' . $result['preglt1000'] . '</td>';
+        $html .= '<td align="center" style="border:1px solid #f4f4f4;">' . $result['preggt1000'] . '</td>';
+        $html .= '<td align="center" style="border:1px solid #f4f4f4;">' . $result['ult1000'] . '</td>';
+        $html .= '<td align="center" style="border:1px solid #f4f4f4;">' . $result['ugt1000'] . '</td>';
+        $html .= '<td align="center" style="border:1px solid #f4f4f4;">' . $result['totalLessThan1000'] . '</td>';
+        $html .= '<td align="center" style="border:1px solid #f4f4f4;">' . $result['totalGreaterThan1000'] . '</td>';
+        $html .= '<td align="center" style="border:1px solid #f4f4f4;">' . $result['total'] . '</td>';
+        $html .= '</tr>';
+      }
+    } else {
+      $html .= '<tr>';
+      $html .= '<td style="min-height:20px;border:1px solid #f4f4f4;"></td>';
+      $html .= '<td style="border:1px solid #f4f4f4;"></td>';
+      $html .= '<td style="border:1px solid #f4f4f4;"></td>';
+      $html .= '<td style="border:1px solid #f4f4f4;"></td>';
+      $html .= '<td align="center" style="border:1px solid #f4f4f4;"></td>';
+      $html .= '<td align="center" style="border:1px solid #f4f4f4;"></td>';
+      $html .= '<td align="center" style="border:1px solid #f4f4f4;"></td>';
+      $html .= '<td align="center" style="border:1px solid #f4f4f4;"></td>';
+      $html .= '<td align="center" style="border:1px solid #f4f4f4;"></td>';
+      $html .= '<td align="center" style="border:1px solid #f4f4f4;"></td>';
+      $html .= '<td align="center" style="border:1px solid #f4f4f4;"></td>';
+      $html .= '<td align="center" style="border:1px solid #f4f4f4;"></td>';
+      $html .= '<td align="center" style="border:1px solid #f4f4f4;"></td>';
+      $html .= '<td align="center" style="border:1px solid #f4f4f4;"></td>';
+      $html .= '<td align="center" style="border:1px solid #f4f4f4;"></td>';
+      $html .= '<td align="center" style="border:1px solid #f4f4f4;"></td>';
+      $html .= '<td align="center" style="border:1px solid #f4f4f4;"></td>';
+      $html .= '<td align="center" style="border:1px solid #f4f4f4;"></td>';
+      $html .= '</tr>';
     }
-    $_SESSION['aliasPage'] = $page;
-    //Statistics pdf end
-    if($page > 1){
-      
-        
-        $filename = $pathFront. DIRECTORY_SEPARATOR .'p'.$page. '.pdf';
-        $pdf->Output($filename,"F");
-        $pages[] = $filename;
-        //Super lab performance pdf end
-        if(count($pages) >0){
-          $resultPdf = new Pdf_concat();
-          $resultPdf->setFiles($pages);
-          $resultPdf->setPrintHeader(false);
-          $resultPdf->setPrintFooter(false);
-          $resultPdf->concat();
-          $instance = isset($_SESSION['instanceFname']) ? $_SESSION['instanceFname'] : $_SESSION['instanceId'];
-          $reportFilename = 'VLSM-VL-Lab-Weekly-Report-' . date('d-M-Y-H-i-s') ."-".$instance.'.pdf';
-          $resultPdf->Output(UPLOAD_PATH. DIRECTORY_SEPARATOR.$reportFilename, "F");
-          $general->removeDirectory($pathFront);
-          unset($_SESSION['rVal']);
-        }
+    $html .= '</tbody>';
+    $html .= '</table>';
+    $pdf->writeHTML($html);
+    $pdf->lastPage();
+    $filename = $pathFront . DIRECTORY_SEPARATOR . 'p' . $page . '.pdf';
+    $pdf->Output($filename, "F");
+    $pages[] = $filename;
+    $page++;
+  }
+  $_SESSION['aliasPage'] = $page;
+  //Statistics pdf end
+  if ($page > 1) {
+
+
+    $filename = $pathFront . DIRECTORY_SEPARATOR . 'p' . $page . '.pdf';
+    $pdf->Output($filename, "F");
+    $pages[] = $filename;
+    //Super lab performance pdf end
+    if (count($pages) > 0) {
+      $resultPdf = new Pdf_concat();
+      $resultPdf->setFiles($pages);
+      $resultPdf->setPrintHeader(false);
+      $resultPdf->setPrintFooter(false);
+      $resultPdf->concat();
+      $reportFilename = 'VLSM-VL-Lab-Weekly-Report-' . date('d-M-Y-H-i-s') . '.pdf';
+      $resultPdf->Output(UPLOAD_PATH . DIRECTORY_SEPARATOR . $reportFilename, "F");
+      $general->removeDirectory($pathFront);
+      unset($_SESSION['rVal']);
     }
+  }
 }

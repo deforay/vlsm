@@ -6,7 +6,7 @@ class Facilities
 {
 
     protected $db = null;
-    protected $table = 'user_details';
+    protected $table = 'facility_details';
 
     public function __construct($db = null)
     {
@@ -35,31 +35,77 @@ class Facilities
         }
     }
 
-    public function getTestingLabs($condition = "status = 'active'", $onlyActive= true)
+    public function getFacilityMap($userId)
+    {
+        if(empty($userId)) return null;
+
+        $this->db->where("user_id", $userId);
+        return $this->db->getValue("vl_user_facility_map", "GROUP_CONCAT(DISTINCT facility_id SEPARATOR ',')");
+    }
+
+    public function getFacilities($onlyActive = true)
     {
 
-        $vlfmResult = null;
-        if(isset($_SESSION['userId'])){
-            $vlfmQuery = "SELECT GROUP_CONCAT(DISTINCT vlfm.facility_id SEPARATOR ',') as facilityId FROM vl_user_facility_map as vlfm where vlfm.user_id='" . $_SESSION['userId'] . "'";
-            $vlfmResult = $this->db->rawQueryOne($vlfmQuery);
+        $condition = '';
+        if ($onlyActive) {
+            $condition = " `status` = 'active' ";
         }
-        
-        if (!empty($vlfmResult) && isset($vlfmResult['facilityId'])) {
-            $condition .=  " AND facility_id IN (" . $vlfmResult[0]['facilityId'] . ")";
-        }        
 
-        $query = "SELECT facility_id,facility_name FROM facility_details WHERE $condition AND facility_type=2 ORDER BY facility_name";
-        $results = $this->db->rawQuery($query);
+        if (isset($_SESSION['userId'])) {
+            $facilityMap = $this->getFacilityMap($_SESSION['userId']);
+            if (!empty($facilityMap)) {
+                $condition .=  " AND `facility_id` IN (" . $facilityMap . ")";
+            }
+        }
+
+        $cols = array("facility_id", "facility_name");
+
+        if (!empty($condition)) {
+            $this->db->where($condition);
+        }
+
+        $this->db->where('facility_type != 2');
+        $this->db->orderBy("facility_name", "asc");
+
+        $results = $this->db->get($this->table, null, $cols);
+
         $response = array();
         foreach ($results as $row) {
             $response[$row['facility_id']] = $row['facility_name'];
         }
-        return $response;        
+        return $response;
     }
 
-    public function getFacilities($condition = null, $onlyActive= true)
+    public function getTestingLabs($onlyActive = true)
     {
-        $query = "SELECT * FROM facility_details where status='active' and facility_type!=2 ORDER BY facility_name";
-        return $this->db->rawQuery($query);
+
+        $condition = '';
+        if ($onlyActive) {
+            $condition = " `status` = 'active' ";
+        }
+
+        if (isset($_SESSION['userId'])) {
+            $facilityMap = $this->getFacilityMap($_SESSION['userId']);
+            if (!empty($facilityMap)) {
+                $condition .=  " AND `facility_id` IN (" . $facilityMap . ")";
+            }
+        }
+
+        $cols = array("facility_id", "facility_name");
+
+        if (!empty($condition)) {
+            $this->db->where($condition);
+        }
+
+        $this->db->where('facility_type = 2');
+        $this->db->orderBy("facility_name", "asc");
+
+        $results = $this->db->get($this->table, null, $cols);
+
+        $response = array();
+        foreach ($results as $row) {
+            $response[$row['facility_id']] = $row['facility_name'];
+        }
+        return $response;
     }
 }

@@ -20,10 +20,14 @@ if ($systemInfo != false) {
 //$dashboardUrl = $general->getGlobalConfig('vldashboard_url');
 /* Crosss Login Block Start */
 $_SESSION['logged'] = false;
-if (isset($_GET['u']) && trim($_GET['u']) != "" && isset($_GET['t']) && trim($_GET['t']) != "" && $recencyConfig['crosslogin']) {
+if (isset($_GET['u']) && isset($_GET['t']) && $recencyConfig['crosslogin']) {
+
+    $_GET['u'] = filter_var($_GET['u'], FILTER_SANITIZE_STRING);
+    $_GET['t'] = filter_var($_GET['t'], FILTER_SANITIZE_STRING);
+
     $_POST['username'] = base64_decode($_GET['u']);
-    $crossLoginQuery = "SELECT `login_id`,`password`,`user_name` FROM user_details WHERE `login_id` = '" . $_POST['username'] . "'";
-    $check = $db->rawQueryOne($crossLoginQuery);
+    $crossLoginQuery = "SELECT `login_id`,`password`,`user_name` FROM user_details WHERE `login_id` = ?";
+    $check = $db->rawQueryOne($crossLoginQuery, array($db->escape($_POST['username'])));
     if ($check) {
         $passwordCrossLoginSalt = $check['password'] . $recencyConfig['crossloginSalt'];
         $_POST['password'] = hash('sha256', $passwordCrossLoginSalt);
@@ -38,36 +42,40 @@ if (isset($_GET['u']) && trim($_GET['u']) != "" && isset($_GET['t']) && trim($_G
         $_POST['password'] = "";
     }
 } else {
-    if (!$recencyConfig['crosslogin'] && !isset($_POST['username']) && trim($_POST['username']) == "") {
+    if (!$recencyConfig['crosslogin'] && !isset($_POST['username']) && !empty($_POST['username'])) {
         $_SESSION['alertMsg'] = "Sorry! Recency cross-login has not been activated. Please contact system administrator.";
     }
 }
 /* Crosss Login Block End */
 try {
-    if (isset($_POST['username']) && trim($_POST['username']) != "" && isset($_POST['password']) && trim($_POST['password']) != "") {
+    if (isset($_POST['username']) && !empty($_POST['username']) && isset($_POST['password']) && !empty($_POST['password'])) {
+
+        $username = $db->escape($_POST['username']);
+        $password = $db->escape($_POST['password']);
+
         /* Crosss Login Block Start */
-        if (!isset($_GET['u']) && trim($_GET['u']) == "" && !isset($_GET['t']) && trim($_GET['t']) == "") {
-            $password = sha1($_POST['password'] . $systemConfig['passwordSalt']);
+        if (empty($_GET) || empty($_GET['u']) || empty($_GET['t'])) {
+            $password = sha1($password . $systemConfig['passwordSalt']);
         }
         /* Crosss Login Block End */
-        $adminUsername = $db->escape($_POST['username']);
-        $adminPassword = $db->escape($password);
-        $params = array($adminUsername, $adminPassword, 'active');
-        $admin = $db->rawQuery("SELECT * FROM user_details as ud INNER JOIN roles as r ON ud.role_id=r.role_id WHERE ud.login_id = ? AND ud.password = ? AND ud.status = ?", $params);
+
+        $queryParams = array($username, $password, 'active');
+        $admin = $db->rawQuery("SELECT * FROM user_details as ud INNER JOIN roles as r ON ud.role_id=r.role_id WHERE ud.login_id = ? AND ud.password = ? AND ud.status = ?", $queryParams);
 
         if (count($admin) > 0) {
             //add random key
-            $instanceQuery = "SELECT * FROM s_vlsm_instance";
-            $instanceResult = $db->query($instanceQuery);
+            $instanceResult = $db->rawQueryOne("SELECT vlsm_instance_id, instance_facility_name FROM s_vlsm_instance");
 
             if ($instanceResult) {
-                $_SESSION['instanceId'] = $instanceResult[0]['vlsm_instance_id'];
-                $_SESSION['instanceFname'] = $instanceResult[0]['instance_facility_name'];
+                $_SESSION['instanceId'] = $instanceResult['vlsm_instance_id'];
+                $_SESSION['instanceFacilityName'] = $instanceResult['instance_facility_name'];
             } else {
                 $id = $general->generateRandomString(32);
+                // deleting just in case there is a row already inserted
+                $db->delete('s_vlsm_instance');
                 $db->insert('s_vlsm_instance', array('vlsm_instance_id' => $id));
                 $_SESSION['instanceId'] = $id;
-                $_SESSION['instanceFname'] = '';
+                $_SESSION['instanceFacilityName'] = null;
 
                 //Update instance ID in facility and vl_request_form tbl
                 $data = array('vlsm_instance_id' => $id);
