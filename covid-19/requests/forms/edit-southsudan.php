@@ -559,7 +559,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
     provinceName = true;
     facilityName = true;
     machineName = true;
-    testCounter = <?php echo (isset($covid19TestInfo) && count($covid19TestInfo) > 0) ? (count($covid19TestInfo) + 1) : 2; ?>;
+    let testCounter = <?php echo (isset($covid19TestInfo) && count($covid19TestInfo) > 0) ? (count($covid19TestInfo)) : 1; ?>;
     deletedRow = [];
 
     function getfacilityDetails(obj) {
@@ -726,7 +726,9 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
 
     });
 
+
     function addTestRow() {
+        testCounter++;
         let rowString = `<tr>
                     <td class="text-center">${testCounter}</td>
                     <td>

@@ -63,15 +63,18 @@ $recencyConfig = array();
 // Domain URL of the Recency Web Application
 $recencyConfig['url'] = '';
 
-// This Salt should match the Salt on Recency Web app 
-$recencyConfig['crossloginSalt'] = "PUT-A-RANDOM-STRING-HERE";
 
-// Enable/Disable Recency Sync 
+
+// Enable/Disable Recency Viral Load tests sync 
 // true => Enabled
 // false => Disabled
 $recencyConfig['vlsync'] = false;
+
 
 // Enable/Disable Cross Login with Recency
 // true => Enabled
 // false => Disabled
 $recencyConfig['crosslogin'] = false;
+
+// This Salt should match the Salt on Recency Web app 
+$recencyConfig['crossloginSalt'] = "PUT-A-RANDOM-STRING-HERE";

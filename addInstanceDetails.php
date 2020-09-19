@@ -8,17 +8,17 @@ $fTypeResult = $db->rawQuery($fType);
 <link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui.1.11.0.css" />
 <link href="assets/css/jasny-bootstrap.min.css" rel="stylesheet" />
 <!-- Bootstrap 3.3.6 -->
-<link rel="stylesheet" href="assets/css/bootstrap.min.css">
-<link href="assets/css/style.css" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+<link href="/assets/css/style.css" rel="stylesheet" />
 <!-- Font Awesome -->
 <link rel="stylesheet" href="assets/css/font-awesome.min.4.5.0.css">
 <!-- DataTables -->
-<link rel="stylesheet" href="assets/plugins/datatables/dataTables.bootstrap.css">
-<link href="assets/css/deforayModal.css" rel="stylesheet" />
-<script type="text/javascript" src="assets/js/jquery.min.js"></script>
-<script src="assets/js/deforayModal.js"></script>
-<script type="text/javascript" src="assets/js/jasny-bootstrap.js"></script>
-<script src="assets/js/deforayValidation.js"></script>
+<link rel="stylesheet" href="/assets/plugins/datatables/dataTables.bootstrap.css">
+<link href="/assets/css/deforayModal.css" rel="stylesheet" />
+<script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/deforayModal.js"></script>
+<script type="text/javascript" src="/assets/js/jasny-bootstrap.js"></script>
+<script src="/assets/js/deforayValidation.js"></script>
 <style>
   b {
     font-size: 12px;
@@ -102,7 +102,7 @@ $fTypeResult = $db->rawQuery($fType);
     </div>
   </section>
 </div>
-<script src="assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
 <!-- DataTables -->
 <script type="text/javascript">
   <?php if (isset($_SESSION['success']) && trim($_SESSION['success']) != "") { ?>

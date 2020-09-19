@@ -1,10 +1,9 @@
 <?php
 //this file is get the value from remote and update in lab db
 
-require_once(dirname(__FILE__) . "/../../startup.php");
-
-
-
+//if (php_sapi_name() == 'cli') {
+    require_once(dirname(__FILE__) . "/../../startup.php");
+//}
 
 $general = new \Vlsm\Models\General($db);
 if (!isset($systemConfig['remoteURL']) || $systemConfig['remoteURL'] == '') {
@@ -14,25 +13,13 @@ if (!isset($systemConfig['remoteURL']) || $systemConfig['remoteURL'] == '') {
 
 $systemConfig['remoteURL'] = rtrim($systemConfig['remoteURL'], "/");
 
-//system config
-$systemConfigQuery = "SELECT * from system_config";
-$systemConfigResult = $db->query($systemConfigQuery);
-$sarr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
-    $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
-}
-//global config
-$cQuery = "SELECT * FROM global_config";
-$cResult = $db->query($cQuery);
-$arr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($cResult); $i++) {
-    $arr[$cResult[$i]['name']] = $cResult[$i]['value'];
-}
+$arr = $general->getGlobalConfig();
+$sarr = $general->getSystemConfig();
+
 //get remote data
-if (trim($sarr['lab_name']) == '') {
-    $sarr['lab_name'] = "''";
+if (empty($sarr['lab_name'])) {
+    echo "No Lab ID set in System Config";
+    exit(0);
 }
 
 
@@ -44,6 +31,8 @@ $data = array(
     'module' => 'vl',
     "Key" => "vlsm-lab-data--",
 );
+$columnList = array();
+
 //open connection
 $ch = curl_init($url);
 $json_data = json_encode($data);
@@ -76,7 +65,7 @@ if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == t
 
 
     if (!empty($apiResult) && is_array($apiResult) && count($apiResult) > 0) {
-        $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='vl_request_form'";
+        $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='vl_request_form'";
         $allColResult = $db->rawQuery($allColumns);
         $columnList = array_map('current', $allColResult);
 
@@ -292,7 +281,7 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
     curl_close($ch);
     $apiData = json_decode($curl_response, true);
 
-    $apiResult = $apiData['result'];
+    $apiResult = !empty($apiData['result']) ? $apiData['result'] : null;
 
     $removeKeys = array(
         'covid19_id',

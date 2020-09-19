@@ -54,6 +54,12 @@ try {
     $instanceId = '';
     if (isset($_SESSION['instanceId'])) {
       $instanceId = $_SESSION['instanceId'];
+    } else {
+      $instanceId = $general->generateRandomString(32);
+      // deleting just in case there is a row already inserted
+      $db->delete('s_vlsm_instance');
+      $db->insert('s_vlsm_instance', array('vlsm_instance_id' => $instanceId));
+      $_SESSION['instanceId'] = $instanceId;
     }
     $db = $db->where('name', 'instance_type');
     $db->update($globalTable, array('value' => $_POST['fType']));
@@ -72,7 +78,7 @@ try {
     $db = $db->where('vlsm_instance_id', $instanceId);
     $id = $db->update($tableName, $data);
     if ($id > 0) {
-      $_SESSION['instanceFname'] = $_POST['fName'];
+      $_SESSION['instanceFacilityName'] = $_POST['fName'];
       if (isset($_FILES['logo']['name']) && $_FILES['logo']['name'] != "") {
         if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "instance-logo") && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "instance-logo")) {
           mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "instance-logo");
@@ -95,14 +101,6 @@ try {
       $resource = 'instance-details';
 
       $general->activityLog($eventType, $action, $resource);
-
-      // $data=array(
-      //     'event_type'=>$eventType,
-      //     'action'=>$action,
-      //     'resource'=>$resource,
-      //     'date_time'=>$general->getDateTime()
-      // );
-      // $db->insert('activity_log',$data);
 
       $_SESSION['alertMsg'] = "Instance details added successfully";
       $_SESSION['success'] = "success";

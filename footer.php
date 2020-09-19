@@ -185,7 +185,10 @@
 		if ($_SESSION['logged']) { ?>
 			setCrossLogin();
 		<?php }
-		if (isset($_SESSION['instanceFname']) && $_SESSION['instanceFname'] == '') { ?>
+
+		// if instance facility name is not set, let us show the modal
+
+		if (empty($_SESSION['instanceFacilityName'])) { ?>
 			showModal('/addInstanceDetails.php', 900, 420);
 		<?php } ?>
 	});
@@ -408,7 +411,7 @@
 		$(".allMenu").removeClass('active');
 		$(".covid19ProgramMenu").addClass('active');
 		$(".covid19PrintResults").addClass('active');
-	}else if (splitsUrl == 'covid-19-export-data.php') {
+	} else if (splitsUrl == 'covid-19-export-data.php') {
 		$(".allMenu").removeClass('active');
 		$(".covid19ProgramMenu").addClass('active');
 		$(".covid19ExportResult").addClass('active');

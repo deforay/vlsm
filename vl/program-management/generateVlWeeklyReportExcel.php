@@ -367,9 +367,8 @@ foreach ($vlLabResult as $vlLab) {
 //Statistics sheet end
 if ($c > 0) {
     //Super lab performance sheet end
-    $instance = isset($_SESSION['instanceFname']) ? $_SESSION['instanceFname'] : $_SESSION['instanceId'];
     $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
-    $filename = 'VLSM-VL-Lab-Weekly-Report-' . date('d-M-Y-H-i-s') . "-" . $instance . '.xlsx';
+    $filename = 'VLSM-VL-Lab-Weekly-Report-' . date('d-M-Y-H-i-s') . '.xlsx';
     $writer->save(TEMP_PATH . DIRECTORY_SEPARATOR . $filename);
     echo $filename;
 } else {
