@@ -2,7 +2,7 @@
 
 ob_start();
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+	session_start();
 }
 include_once '../../startup.php';
 
@@ -233,10 +233,10 @@ try {
 
 
 	if (isset($_POST['covid19SampleId']) && $_POST['covid19SampleId'] != '' && ($_POST['isSampleRejected'] == 'no' || $_POST['isSampleRejected'] == '')) {
-		
+
 		if (isset($_POST['testName']) && count($_POST['testName']) > 0) {
 			foreach ($_POST['testName'] as $testKey => $testName) {
-				if(isset($testName) && !empty($testName)){
+				if (isset($testName) && !empty($testName)) {
 					if (isset($_POST['testDate'][$testKey]) && trim($_POST['testDate'][$testKey]) != "") {
 						$testedDateTime = explode(" ", $_POST['testDate'][$testKey]);
 						$_POST['testDate'][$testKey] = $general->dateFormat($testedDateTime[0]) . " " . $testedDateTime[1];
@@ -245,8 +245,8 @@ try {
 					}
 					$covid19TestData = array(
 						'covid19_id'			=> $_POST['covid19SampleId'],
-						'test_name'				=> $testName,
-						'test_name'				=> ($testName == 'other')?$_POST['testNameOther'][$testKey]:$_POST['testName'][$testKey],
+						//'test_name'				=> $testName,
+						'test_name'				=> ($testName == 'other') ? $_POST['testNameOther'][$testKey] : $testName,
 						'facility_id'           => isset($_POST['labId']) ? $_POST['labId'] : null,
 						'sample_tested_datetime' => $_POST['testDate'][$testKey],
 						'result'				=> $_POST['testResult'][$testKey],
