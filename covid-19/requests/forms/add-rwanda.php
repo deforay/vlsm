@@ -54,11 +54,8 @@ $province .= "<option value=''> -- Select -- </option>";
 foreach ($pdResult as $provinceName) {
     $province .= "<option data-code='" . $provinceName['province_code'] . "' data-province-id='" . $provinceName['province_id'] . "' data-name='" . $provinceName['province_name'] . "' value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
-//$facility = "";
-$facility = "<option value=''> -- Select -- </option>";
-foreach ($fResult as $fDetails) {
-    $facility .= "<option value='" . $fDetails['facility_id'] . "'>" . ucwords(addslashes($fDetails['facility_name'])) . "</option>";
-}
+
+$facility = $general->generateSelectOptions($healthFacilities, null, '-- Select --');
 
 ?>
 
@@ -160,10 +157,7 @@ foreach ($fResult as $fDetails) {
                                             <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
                                             <td>
                                                 <select name="labId" id="labId" class="form-control isRequired" title="Lab Name" style="width:100%;">
-                                                    <option value=""> -- Select -- </option>
-                                                    <?php foreach ($lResult as $labName) { ?>
-                                                        <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
-                                                    <?php } ?>
+                                                    <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
                                                 </select>
                                             </td>
                                             <!-- </tr> -->
@@ -218,7 +212,7 @@ foreach ($fResult as $fDetails) {
                                         <th>Patient address</th>
                                         <td><textarea class="form-control " id="patientAddress" name="patientAddress" placeholder="Patient Address" title="Patient Address" style="width:100%;" onchange=""></textarea></td>
                                     </tr>
-                                                                        
+
                                     <tr>
                                         <th>Patient Province</th>
                                         <td><input type="text" class="form-control " id="patientProvince" name="patientProvince" placeholder="Patient Province" title="Please enter the patient province" style="width:100%;" /></td>
@@ -233,9 +227,11 @@ foreach ($fResult as $fDetails) {
 
                                         <th></th>
                                         <td></td>
-                                    </tr> 
+                                    </tr>
                                     <tr>
-                                        <td colspan="4"><h4>Flight Details</h4></td>
+                                        <td colspan="4">
+                                            <h4>Flight Details</h4>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>Airline</th>
@@ -243,7 +239,7 @@ foreach ($fResult as $fDetails) {
 
                                         <th>Seat Number</th>
                                         <td><input type="text" class="form-control " id="seatNo" name="seatNo" placeholder="Seat Number" title="Please enter the seat number" style="width:100%;" /></td>
-                                    </tr>                                    
+                                    </tr>
                                     <tr>
                                         <th>Arrival Date and Time</th>
                                         <td><input type="text" class="form-control dateTime" id="arrivalDateTime" name="arrivalDateTime" placeholder="Arrival Date and Time" title="Please enter the arrival date and time" style="width:100%;" /></td>
@@ -257,7 +253,7 @@ foreach ($fResult as $fDetails) {
                                         <th>Reason of Visit (if applicable)</th>
                                         <td><input type="text" class="form-control" id="reasonOfVisit" name="reasonOfVisit" placeholder="Reason of Visit" title="Please enter reason of visit" style="width:100%;" /></td>
 
-                                    </tr> 
+                                    </tr>
                                 </table>
 
                                 <div class="box-header with-border sectionHeader">
@@ -424,10 +420,7 @@ foreach ($fResult as $fDetails) {
                                             <td class="lab-show"><label for="labId">Lab Name </label> </td>
                                             <td class="lab-show">
                                                 <select name="labId" id="labId" class="form-control" title="Lab Name" style="width:100%;">
-                                                    <option value=""> -- Select -- </option>
-                                                    <?php foreach ($lResult as $labName) { ?>
-                                                        <option value="<?php echo $labName['facility_id']; ?>" <?php echo ($covid19Info['lab_id'] == $labName['facility_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($labName['facility_name']); ?></option>
-                                                    <?php } ?>
+                                                    <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
                                                 </select>
                                             </td>
                                         <tr>
@@ -450,7 +443,7 @@ foreach ($fResult as $fDetails) {
                                         </tr>
                                         <tr class="show-rejection" style="display:none;">
                                             <th>Rejection Date<span class="mandatory">*</span></th>
-                                            <td><input class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Select Rejection Date"/></td>
+                                            <td><input class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Select Rejection Date" /></td>
                                             <td></td>
                                             <td></td>
                                         </tr>
@@ -676,7 +669,7 @@ foreach ($fResult as $fDetails) {
 
 
     function validateNow() {
-        if($('#isResultAuthorized').val() != "yes"){
+        if ($('#isResultAuthorized').val() != "yes") {
             $('#authorizedBy,#authorizedOn').removeClass('isRequired');
         }
         flag = deforayValidator.init({
@@ -709,14 +702,14 @@ foreach ($fResult as $fDetails) {
         // $('#province').select2({
         //     placeholder: "Province"
         // });
-        $('#isResultAuthorized').change(function(e){
+        $('#isResultAuthorized').change(function(e) {
             checkIsResultAuthorized();
         });
-        <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
-        $(document).on('change', '.test-result, #result', function(e) {
-            checkPostive();
-        });
-        <?php }?>
+        <?php if (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes') { ?>
+            $(document).on('change', '.test-result, #result', function(e) {
+                checkPostive();
+            });
+        <?php } ?>
 
     });
 
@@ -756,11 +749,11 @@ foreach ($fResult as $fDetails) {
             $('.ui-datepicker-calendar').show();
         });
         tableRowId++;
-        <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
-        $(document).on('change', '.test-result, #result', function(e) {
-            checkPostive();
-        });
-        <?php }?>
+        <?php if (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes') { ?>
+            $(document).on('change', '.test-result, #result', function(e) {
+                checkPostive();
+            });
+        <?php } ?>
     }
 
     function removeAttributeRow(el) {
@@ -773,36 +766,36 @@ foreach ($fResult as $fDetails) {
         });
     }
 
-    function checkPostive(){
+    function checkPostive() {
         var itemLength = document.getElementsByName("testResult[]");
         for (i = 0; i < itemLength.length; i++) {
-            
-            if(itemLength[i].value == 'positive'){
+
+            if (itemLength[i].value == 'positive') {
                 $('#result,.disabled-field').val('');
-                $('#result,.disabled-field').prop('disabled',true);
+                $('#result,.disabled-field').prop('disabled', true);
                 $('#result,.disabled-field').addClass('disabled');
                 $('#result,.disabled-field').removeClass('isRequired');
                 return false;
-            }else{
-                $('#result,.disabled-field').prop('disabled',false);
+            } else {
+                $('#result,.disabled-field').prop('disabled', false);
                 $('#result,.disabled-field').removeClass('disabled');
                 $('#result,.disabled-field').addClass('isRequired');
             }
-            if(itemLength[i].value != ''){
+            if (itemLength[i].value != '') {
                 $('#labId').addClass('isRequired');
             }
         }
     }
 
-    function checkIsResultAuthorized(){
-        if($('#isResultAuthorized').val() == 'no'){
+    function checkIsResultAuthorized() {
+        if ($('#isResultAuthorized').val() == 'no') {
             $('#authorizedBy,#authorizedOn').val('');
-            $('#authorizedBy,#authorizedOn').prop('disabled',true);
+            $('#authorizedBy,#authorizedOn').prop('disabled', true);
             $('#authorizedBy,#authorizedOn').addClass('disabled');
             $('#authorizedBy,#authorizedOn').removeClass('isRequired');
             return false;
-        }else{
-            $('#authorizedBy,#authorizedOn').prop('disabled',false);
+        } else {
+            $('#authorizedBy,#authorizedOn').prop('disabled', false);
             $('#authorizedBy,#authorizedOn').removeClass('disabled');
             $('#authorizedBy,#authorizedOn').addClass('isRequired');
         }

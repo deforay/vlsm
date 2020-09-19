@@ -35,7 +35,7 @@ try {
     'sample_tested_datetime' => $_POST['sampleTestedDateTime'],
     'is_sample_rejected' => isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
     'result' => isset($_POST['result']) ? $_POST['result'] : null,
-    'result_status' => 6,
+    'result_status' => 8,
     'data_sync' => 0,
     'reason_for_sample_rejection' => isset($_POST['sampleRejectionReason']) ? $_POST['sampleRejectionReason'] : null,
     'last_modified_by' => $_SESSION['userId'],

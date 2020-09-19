@@ -28,14 +28,17 @@ include_once(APPLICATION_PATH . '/header.php');
 
 $labFieldDisabled = '';
 
-if ($sarr['user_type'] == 'remoteuser') {
-    $labFieldDisabled = 'disabled="disabled"';
-    $vlfmQuery = "SELECT GROUP_CONCAT(DISTINCT vlfm.facility_id SEPARATOR ',') as facilityId FROM vl_user_facility_map as vlfm where vlfm.user_id='" . $_SESSION['userId'] . "'";
-    $vlfmResult = $db->rawQuery($vlfmQuery);
-}
+
 
 $general = new \Vlsm\Models\General($db);
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
 
+$arr = $general->getGlobalConfig();
+$sarr = $general->getSystemConfig();
+
+
+$healthFacilities = $facilitiesDb->getHealthFacilities('covid19');
+$testingLabs = $facilitiesDb->getTestingLabs('covid19');
 
 
 $rejectionTypeQuery = "SELECT DISTINCT rejection_type FROM r_covid19_sample_rejection_reasons WHERE rejection_reason_status ='active'";
@@ -44,17 +47,6 @@ $rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
 //sample rejection reason
 $rejectionQuery = "SELECT * FROM r_covid19_sample_rejection_reasons where rejection_reason_status = 'active'";
 $rejectionResult = $db->rawQuery($rejectionQuery);
-
-$condition = "status = 'active'";
-if (isset($vlfmResult[0]['facilityId'])) {
-    $condition = $condition . " AND facility_id IN(" . $vlfmResult[0]['facilityId'] . ")";
-}
-$fResult = $general->fetchDataFromTable('facility_details', $condition);
-
-
-//get lab facility details
-$condition = "facility_type='2' AND status='active'";
-$lResult = $general->fetchDataFromTable('facility_details', $condition);
 
 
 $id = base64_decode($_GET['id']);
@@ -65,11 +57,15 @@ $covid19Info = $db->rawQueryOne($covid19Query);
 $covid19TestQuery = "SELECT * from covid19_tests where covid19_id=$id ORDER BY test_id ASC";
 $covid19TestInfo = $db->rawQuery($covid19TestQuery);
 
+//var_dump($covid19TestInfo);die;
+
 // echo "<pre>"; var_dump($covid19Info);die;
 
 $specimenTypeResult = $general->fetchDataFromTable('r_covid19_sample_type', "status = 'active'");
 
 $arr = $general->getGlobalConfig();
+
+
 
 
 if ($arr['covid19_sample_code'] == 'auto' || $arr['covid19_sample_code'] == 'auto2' || $arr['covid19_sample_code'] == 'alphanumeric') {

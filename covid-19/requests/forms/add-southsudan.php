@@ -57,11 +57,8 @@ $province .= "<option value=''> -- Select -- </option>";
 foreach ($pdResult as $provinceName) {
     $province .= "<option data-code='" . $provinceName['province_code'] . "' data-province-id='" . $provinceName['province_id'] . "' data-name='" . $provinceName['province_name'] . "' value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
-//$facility = "";
-$facility = "<option value=''> -- Select -- </option>";
-foreach ($fResult as $fDetails) {
-    $facility .= "<option value='" . $fDetails['facility_id'] . "'>" . ucwords(addslashes($fDetails['facility_name'])) . "</option>";
-}
+
+$facility = $general->generateSelectOptions($healthFacilities, null, '-- Select --');
 
 ?>
 
@@ -163,10 +160,7 @@ foreach ($fResult as $fDetails) {
                                             <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
                                             <td>
                                                 <select name="labId" id="labId" class="form-control isRequired" title="Lab Name" style="width:100%;">
-                                                    <option value=""> -- Select -- </option>
-                                                    <?php foreach ($lResult as $labName) { ?>
-                                                        <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
-                                                    <?php } ?>
+                                                    <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
                                                 </select>
                                             </td>
                                             <!-- </tr> -->
@@ -316,10 +310,7 @@ foreach ($fResult as $fDetails) {
                                             <td class="lab-show"><label for="labId">Lab Name </label> </td>
                                             <td class="lab-show">
                                                 <select name="labId" id="labId" class="form-control" title="Lab Name" style="width:100%;">
-                                                    <option value=''> -- Select -- </option>
-                                                    <?php foreach ($lResult as $labName) { ?>
-                                                        <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
-                                                    <?php } ?>
+                                                    <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
                                                 </select>
                                             </td>
                                         <tr>
@@ -565,7 +556,7 @@ foreach ($fResult as $fDetails) {
 
 
     function validateNow() {
-        if($('#isResultAuthorized').val() != "yes"){
+        if ($('#isResultAuthorized').val() != "yes") {
             $('#authorizedBy,#authorizedOn').removeClass('isRequired');
         }
         flag = deforayValidator.init({
@@ -643,29 +634,31 @@ foreach ($fResult as $fDetails) {
             }
         });
     }
-    <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
-    function checkPostive() {
-        // alert("show");
-        var itemLength = document.getElementsByName("testResult[]");
-        for (i = 0; i < itemLength.length; i++) {
+    <?php if (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes') { ?>
 
-            if (itemLength[i].value == 'positive') {
-                $('#result,.disabled-field').val('');
-                $('#result,.disabled-field').prop('disabled', true);
-                $('#result,.disabled-field').addClass('disabled');
-                $('#result,.disabled-field').removeClass('isRequired');
-                return false;
-            } else {
-                $('#result,.disabled-field').prop('disabled', false);
-                $('#result,.disabled-field').removeClass('disabled');
-                $('#result,.disabled-field').addClass('isRequired');
-            }
-            if (itemLength[i].value != '') {
-                $('#labId').addClass('isRequired');
+        function checkPostive() {
+            // alert("show");
+            var itemLength = document.getElementsByName("testResult[]");
+            for (i = 0; i < itemLength.length; i++) {
+
+                if (itemLength[i].value == 'positive') {
+                    $('#result,.disabled-field').val('');
+                    $('#result,.disabled-field').prop('disabled', true);
+                    $('#result,.disabled-field').addClass('disabled');
+                    $('#result,.disabled-field').removeClass('isRequired');
+                    return false;
+                } else {
+                    $('#result,.disabled-field').prop('disabled', false);
+                    $('#result,.disabled-field').removeClass('disabled');
+                    $('#result,.disabled-field').addClass('isRequired');
+                }
+                if (itemLength[i].value != '') {
+                    $('#labId').addClass('isRequired');
+                }
             }
         }
-    }
-<?php } ?>
+    <?php } ?>
+
     function checkIsResultAuthorized() {
         if ($('#isResultAuthorized').val() == 'no') {
             $('#authorizedBy,#authorizedOn').val('');

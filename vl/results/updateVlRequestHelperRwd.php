@@ -137,7 +137,7 @@ try {
             'updated_on' => $general->getDateTime()
         );
         $db->insert($tableName2, $data);
-        header("location:vlTestResult.php");
+        header("location:/vl/results/vlTestResult.php");
     } else {
         $_SESSION['alertMsg'] = "Please try again later";
     }

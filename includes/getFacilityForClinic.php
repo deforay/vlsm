@@ -5,70 +5,68 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 #require_once('../startup.php');
 
-//global config
-$configQuery = "SELECT * from global_config";
-$configResult = $db->query($configQuery);
-$arr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($configResult); $i++) {
-  $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
-}
-//system config
-$systemConfigQuery = "SELECT * from system_config";
-$systemConfigResult = $db->query($systemConfigQuery);
-$sarr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
-  $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
-}
-if ($sarr['user_type'] == 'remoteuser') {
-  $vlfmQuery = "SELECT GROUP_CONCAT(DISTINCT vlfm.facility_id SEPARATOR ',') as facilityId FROM vl_user_facility_map as vlfm where vlfm.user_id='" . $_SESSION['userId'] . "'";
-  $vlfmResult = $db->rawQuery($vlfmQuery);
-}
+
+$general = new \Vlsm\Models\General($db);
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
+
+$arr = $general->getGlobalConfig();
+$sarr = $general->getSystemConfig();
+
+$facilityMap = $facilitiesDb->getFacilityMap($_SESSION['userId']);
+
 if ($arr['vl_form'] == '3') {
   $option = "<option value=''> -- Sélectionner -- </option>";
 } else {
   $option = "<option value=''> -- Select -- </option>";
 }
-if (isset($_POST['cName']) && !empty($_POST['cName'])) {
-  $id = $_POST['cName'];
-  $facilityQuery = "SELECT * from facility_details where facility_id=$id";
-  $facilityInfo = $db->query($facilityQuery);
+
+if (!empty($_POST['testType'])) {
+}
+
+$facilityIdRequested = !empty($_POST['cName']) ? $_POST['cName'] : null;
+$provinceRequested = !empty($_POST['pName']) ? $_POST['pName'] : null;
+$districtRequested = !empty($_POST['dName']) ? $_POST['dName'] : null;
+$facilityTypeRequested = !empty($_POST['fType']) ? $_POST['fType'] : null;
+
+if (!empty($facilityIdRequested)) {
+
+  $facilityQuery = "SELECT * FROM facility_details WHERE facility_id=$facilityIdRequested";
+  $facilityInfo = $db->rawQueryOne($facilityQuery);
   if ($facilityInfo) {
-    $provinceName = $facilityInfo[0]['facility_state'];
-    $pdQuery = "SELECT * from province_details"; // where province_name='" . $provinceName . "'";
+    $provinceName = $facilityInfo['facility_state'];
+    $pdQuery = "SELECT * FROM province_details";
     $pdResult = $db->query($pdQuery);
     $state = $option;
     foreach ($pdResult as $pdRow) {
       $selected = '';
-      if ($facilityInfo[0]['facility_state'] == $pdRow['province_name']) {
+      if ($facilityInfo['facility_state'] == $pdRow['province_name']) {
         $selected = "selected='selected'";
       }
       $state .= "<option data-code='" . $pdRow['province_code'] . "' data-province-id='" . $pdRow['province_id'] . "' data-name='" . $pdRow['province_name'] . "' value='" . $pdRow['province_name'] . "##" . $pdRow['province_code'] . "' $selected>" . ucwords($pdRow['province_name']) . "</option>";
     }
 
     $district = '';
-    if ($facilityInfo[0]['facility_district'] != '') {
+    if ($facilityInfo['facility_district'] != '') {
       $district .= $option;
-      $district .= "<option value='" . $facilityInfo[0]['facility_district'] . "' selected='selected'>" . ucwords($facilityInfo[0]['facility_district']) . "</option>";
+      $district .= "<option value='" . $facilityInfo['facility_district'] . "' selected='selected'>" . ucwords($facilityInfo['facility_district']) . "</option>";
     } else {
       $district .= $option;
     }
-    echo $state . "###" . $district . "###" . $facilityInfo[0]['contact_person'];
+    echo $state . "###" . $district . "###" . $facilityInfo['contact_person'];
   }
-}
-if (isset($_POST['pName']) && !empty($_POST['pName'])) {
-  $provinceName = explode("##", $_POST['pName']);
+} else if (!empty($provinceRequested)) {
+
+  $provinceName = explode("##", $provinceRequested);
   $dName = '';
-  if (isset($_POST['dName']) && trim($_POST['dName']) != '') {
-    $dName = " AND facility_district ='" . $_POST['dName'] . "'";
+  if (!empty($districtRequested)) {
+    $dName = " AND facility_district ='" . $districtRequested . "'";
   }
-  $facilityQuery = "SELECT * from facility_details where facility_state='" . $provinceName[0] . "' AND status='active'" . $dName;
-  if (isset($vlfmResult[0]['facilityId'])) {
-    $facilityQuery = $facilityQuery . " AND facility_id IN(" . $vlfmResult[0]['facilityId'] . ")";
+  $facilityQuery = "SELECT * FROM facility_details WHERE facility_state='" . $provinceName[0] . "' AND `status`='active'" . $dName;
+  if (!empty($facilityMap)) {
+    $facilityQuery = $facilityQuery . " AND facility_id IN(" . $facilityMap . ")";
   }
-  if (isset($_POST['fType']) && trim($_POST['fType']) != '') {
-    $facilityQuery = $facilityQuery . " AND facility_type='" . $_POST['fType'] . "'";
+  if (!empty($facilityTypeRequested)) {
+    $facilityQuery = $facilityQuery . " AND facility_type='" . $facilityTypeRequested . "'";
   }
   $facilityInfo = $db->query($facilityQuery);
   $facility = '';
@@ -86,9 +84,9 @@ if (isset($_POST['pName']) && !empty($_POST['pName'])) {
     $facility .= $option;
   }
   $district = '';
-  $facilityDistQuery = "SELECT DISTINCT facility_district from facility_details where facility_state='" . $provinceName[0] . "' AND status='active'";
-  if (isset($vlfmResult[0]['facilityId'])) {
-    $facilityDistQuery = $facilityDistQuery . " AND facility_id IN(" . $vlfmResult[0]['facilityId'] . ")";
+  $facilityDistQuery = "SELECT DISTINCT facility_district FROM facility_details WHERE facility_state='" . $provinceName[0] . "' AND `status`='active'";
+  if (!empty($facilityMap)) {
+    $facilityDistQuery = $facilityDistQuery . " AND facility_id IN(" . $facilityMap . ")";
   }
   //echo $facilityDistQuery;die;
   $facilityDistInfo = $db->query($facilityDistQuery);
@@ -103,15 +101,14 @@ if (isset($_POST['pName']) && !empty($_POST['pName'])) {
     $district .= $option;
   }
   echo $facility . "###" . $district . "###" . '';
-}
-if (isset($_POST['dName']) && trim($_POST['dName']) != '') {
-  $distName = $_POST['dName'];
-  $facilityQuery = "SELECT * from facility_details where facility_district LIKE '" . $distName . "' AND status='active'";
-  if (isset($vlfmResult[0]['facilityId'])) {
-    $facilityQuery = $facilityQuery . " AND facility_id IN(" . $vlfmResult[0]['facilityId'] . ")";
+} else if (!empty($districtRequested)) {
+  $distName = $districtRequested;
+  $facilityQuery = "SELECT * FROM facility_details where facility_district LIKE '" . $distName . "' AND `status`='active'";
+  if (!empty($facilityMap)) {
+    $facilityQuery = $facilityQuery . " AND facility_id IN(" . $facilityMap . ")";
   }
-  if (isset($_POST['fType']) && trim($_POST['fType']) != '') {
-    $facilityQuery = $facilityQuery . " AND facility_type='" . $_POST['fType'] . "'";
+  if (!empty($facilityTypeRequested)) {
+    $facilityQuery = $facilityQuery . " AND facility_type='" . $facilityTypeRequested . "'";
   }
   //echo $facilityQuery; die;
   $facilityInfo = $db->query($facilityQuery);
@@ -125,7 +122,7 @@ if (isset($_POST['dName']) && trim($_POST['dName']) != '') {
     }
   } else {
     if (isset($_POST['comingFromUser'])) {
-      $option = ' ';
+      $option = '';
     }
     $facility .= $option;
   }
@@ -142,19 +139,4 @@ if (isset($_POST['dName']) && trim($_POST['dName']) != '') {
     $facilityLab .= $option;
   }
   echo $facility . "###" . $facilityLab . "###";
-}
-
-//this statement coming from user
-if (isset($_POST['fType']) && $_POST['fType'] != '' && !isset($_POST['dName']) && !isset($_POST['pName'])) {
-  $facilityQuery = "SELECT * from facility_details where facility_type='" . $_POST['fType'] . "' AND status='active'";
-  $facilityLabInfo = $db->query($facilityQuery);
-  $facilityLab = '';
-  if ($facilityLabInfo) {
-    foreach ($facilityLabInfo as $fDetails) {
-      $facilityLab .= "<option value='" . $fDetails['facility_id'] . "'>" . ucwords(addslashes($fDetails['facility_name'])) . ' - ' . $fDetails['facility_code'] . "</option>";
-    }
-  } else {
-    $facilityLab .= ' ';
-  }
-  echo $facilityLab;
 }
