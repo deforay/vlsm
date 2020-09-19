@@ -479,27 +479,11 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             </td>
                                         </tr>
                                         <tr class="change-reason" style="display: none;">
-                                            <th class="other-diseases" style="display: <?php echo $otherDiseases;?>;"><label for="otherDiseases">Autres maladies<span class="mandatory">*</span></label></th>
-                                            <td class="other-diseases" style="display: <?php echo $otherDiseases;?>;">
-                                                <select name="otherDiseases" id="otherDiseases" class="form-control" title="Autres maladies">
-                                                    <option value="">--Select--</option>
-                                                    <optgroup label="Coronavirus">
-                                                        <option value="E-Sars-CoV" <?php echo ($covid19Info['other_diseases'] == 'E-Sars-CoV') ? "selected='selected'" : ""; ?>>E-Sars-CoV</option>
-                                                        <option value="N-Sars-Cov" <?php echo ($covid19Info['other_diseases'] == 'N-Sars-Cov') ? "selected='selected'" : ""; ?>>N-Sars-Cov</option>
-                                                        <option value="Other respiratory pathogens" <?php echo ($covid19Info['other_diseases'] == 'Other respiratory pathogens') ? "selected='selected'" : ""; ?>>Autres Pathogens Respiratories</option>
-                                                        <option value="Other Coronavirus" <?php echo ($covid19Info['other_diseases'] == 'Other Coronavirus') ? "selected='selected'" : ""; ?>>Autres Coronavirus</option>
-                                                    </optgroup>
-                                                    <optgroup label="Influenza">
-                                                        <option value="A/H1N1pdm09" <?php echo ($covid19Info['other_diseases'] == 'A/H1N1pdm09') ? "selected='selected'" : ""; ?>>A/H1N1pdm09</option>
-                                                        <option value="A/H3N2" <?php echo ($covid19Info['other_diseases'] == 'A/H3N2') ? "selected='selected'" : ""; ?>>A/H3N2</option>
-                                                        <option value="A/H5N1" <?php echo ($covid19Info['other_diseases'] == 'A/H5N1') ? "selected='selected'" : ""; ?>>A/H5N1</option>
-                                                        <option value="B/Yan" <?php echo ($covid19Info['other_diseases'] == 'B/Yan') ? "selected='selected'" : ""; ?>>B/Yan</option>
-                                                        <option value="B/Vic" <?php echo ($covid19Info['other_diseases'] == 'B/Vic') ? "selected='selected'" : ""; ?>>B/Vic</option>
-                                                    </optgroup>
-                                                </select>
-                                            </td>
+                                            
                                             <th class="change-reason" style="display: none;">Reason for Changing <span class="mandatory">*</span></td>
                                             <td class="change-reason" style="display: none;"><textarea type="text" name="reasonForChanging" id="reasonForChanging" class="form-control date" placeholder="Enter the reason for changing" title="Please enter the reason for changing"></textarea></td>
+                                            <td></td>
+                                            <td></td>
                                         </tr>
                                         <tr>
                                             <th>Is Result Authorized ?</th>
@@ -687,21 +671,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
             placeholder: "Select Clinic/Health Center"
         });
         getfacilityProvinceDetails($("#facilityId").val());
-        <?php if (isset($covid19Info['mother_treatment']) && in_array('Other', $covid19Info['mother_treatment'])) { ?>
-            $('#motherTreatmentOther').prop('disabled', false);
-        <?php } ?>
-
-        <?php if (isset($covid19Info['mother_vl_result']) && !empty($covid19Info['mother_vl_result'])) { ?>
-            updateMotherViralLoad();
-        <?php } ?>
-
-        $("#motherViralLoadCopiesPerMl").on("change keyup paste", function() {
-            var motherVl = $("#motherViralLoadCopiesPerMl").val();
-            //var motherVlText = $("#motherViralLoadText").val();
-            if (motherVl != '') {
-                $("#motherViralLoadText").val('');
-            }
-        });
+        
         $('#isResultAuthorized').change(function(e){
             checkIsResultAuthorized();
         });
