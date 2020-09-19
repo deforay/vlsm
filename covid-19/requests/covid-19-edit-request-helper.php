@@ -168,21 +168,21 @@ try {
 	);
 
 
-	if ($sarr['user_type'] == 'remoteuser') {
-		//$covid19Data['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] : NULL;
-	} else {
-		if (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') {
-			//$covid19Data['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') ? $_POST['sampleCodeCol'] : NULL;
-		} else {
-			$covid19Model = new \Vlsm\Models\Covid19($db);
+	// if ($sarr['user_type'] == 'remoteuser') {
+	// 	//$covid19Data['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] : NULL;
+	// } else {
+	// 	if (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') {
+	// 		//$covid19Data['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') ? $_POST['sampleCodeCol'] : NULL;
+	// 	} else {
+	// 		$covid19Model = new \Vlsm\Models\Covid19($db);
 
-			$sampleCodeKeysJson = $covid19Model->generateCovid19SampleCode($_POST['provinceCode'], $_POST['sampleCollectionDate']);
-			$sampleCodeKeys = json_decode($sampleCodeKeysJson, true);
-			$covid19Data['sample_code'] = $sampleCodeKeys['sampleCode'];
-			$covid19Data['sample_code_key'] = $sampleCodeKeys['sampleCodeKey'];
-			$covid19Data['sample_code_format'] = $sampleCodeKeys['sampleCodeFormat'];
-		}
-	}
+	// 		$sampleCodeKeysJson = $covid19Model->generateCovid19SampleCode($_POST['provinceCode'], $_POST['sampleCollectionDate']);
+	// 		$sampleCodeKeys = json_decode($sampleCodeKeysJson, true);
+	// 		$covid19Data['sample_code'] = $sampleCodeKeys['sampleCode'];
+	// 		$covid19Data['sample_code_key'] = $sampleCodeKeys['sampleCodeKey'];
+	// 		$covid19Data['sample_code_format'] = $sampleCodeKeys['sampleCodeFormat'];
+	// 	}
+	// }
 
 	if (isset($_POST['deletedRow']) && trim($_POST['deletedRow']) != '' && ($_POST['isSampleRejected'] == 'no' || $_POST['isSampleRejected'] == '')) {
 		$deleteRows = explode(',', $_POST['deletedRow']);
@@ -233,9 +233,10 @@ try {
 
 
 	if (isset($_POST['covid19SampleId']) && $_POST['covid19SampleId'] != '' && ($_POST['isSampleRejected'] == 'no' || $_POST['isSampleRejected'] == '')) {
+		
 		if (isset($_POST['testName']) && count($_POST['testName']) > 0) {
-			foreach ($_POST['testName'] as $testKey => $testerName) {
-				if(isset($testKitName) && !empty($testKitName)){
+			foreach ($_POST['testName'] as $testKey => $testName) {
+				if(isset($testName) && !empty($testName)){
 					if (isset($_POST['testDate'][$testKey]) && trim($_POST['testDate'][$testKey]) != "") {
 						$testedDateTime = explode(" ", $_POST['testDate'][$testKey]);
 						$_POST['testDate'][$testKey] = $general->dateFormat($testedDateTime[0]) . " " . $testedDateTime[1];
@@ -244,12 +245,13 @@ try {
 					}
 					$covid19TestData = array(
 						'covid19_id'			=> $_POST['covid19SampleId'],
-						'test_name'				=> $_POST['testName'][$testKey],
-						'test_name'				=> ($_POST['testName'][$testKey] == 'other')?$_POST['testNameOther'][$testKey]:$_POST['testName'][$testKey],
+						'test_name'				=> $testName,
+						'test_name'				=> ($testName == 'other')?$_POST['testNameOther'][$testKey]:$_POST['testName'][$testKey],
 						'facility_id'           => isset($_POST['labId']) ? $_POST['labId'] : null,
 						'sample_tested_datetime' => $_POST['testDate'][$testKey],
 						'result'				=> $_POST['testResult'][$testKey],
 					);
+					//var_dump($covid19TestData);die;
 					if (isset($_POST['testId'][$testKey]) && $_POST['testId'][$testKey] != '') {
 						$db = $db->where('test_id', base64_decode($_POST['testId'][$testKey]));
 						$db->update($testTableName, $covid19TestData);
@@ -270,7 +272,6 @@ try {
 		$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 		$id = $db->update($tableName, $covid19Data);
 	}
-
 	if ($id > 0 || $sid > 0 || $pid > 0) {
 		$_SESSION['alertMsg'] = "Covid-19 request updated successfully";
 		//Add event log

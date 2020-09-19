@@ -54,11 +54,8 @@ $province .= "<option value=''> -- Select -- </option>";
 foreach ($pdResult as $provinceName) {
     $province .= "<option data-code='" . $provinceName['province_code'] . "' data-province-id='" . $provinceName['province_id'] . "' data-name='" . $provinceName['province_name'] . "' value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
-//$facility = "";
-$facility = "<option value=''> -- Select -- </option>";
-foreach ($fResult as $fDetails) {
-    $facility .= "<option value='" . $fDetails['facility_id'] . "'>" . ucwords(addslashes($fDetails['facility_name'])) . "</option>";
-}
+
+$facility = $general->generateSelectOptions($healthFacilities, null, '-- Select --');
 
 ?>
 
@@ -110,9 +107,9 @@ foreach ($fResult as $fDetails) {
                                         <td>
                                             <select class="form-control" name="testNumber" id="testNumber" title="Prélévement" style="width:100%;">
                                                 <option value="">--Select--</option>
-                                                <?php foreach(range(1,5) as $element){
-                                                    echo '<option value="'.$element.'">'.$element.'</option>';
-                                                }?>
+                                                <?php foreach (range(1, 5) as $element) {
+                                                    echo '<option value="' . $element . '">' . $element . '</option>';
+                                                } ?>
                                             </select>
                                         </td>
                                         <td></td>
@@ -144,10 +141,7 @@ foreach ($fResult as $fDetails) {
                                             <td><label for="labId">LAB ID <span class="mandatory">*</span></label> </td>
                                             <td>
                                                 <select name="labId" id="labId" class="form-control isRequired" title="LAB ID" style="width:100%;">
-                                                    <option value=""> -- Select -- </option>
-                                                    <?php foreach ($lResult as $labName) { ?>
-                                                        <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
-                                                    <?php } ?>
+                                                    <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
                                                 </select>
                                             </td>
                                             <!-- </tr> -->
@@ -212,7 +206,7 @@ foreach ($fResult as $fDetails) {
                                         <th>Adresse du patient</th>
                                         <td><textarea class="form-control " id="patientAddress" name="patientAddress" placeholder="Adresse du patient" title="Adresse du patient" style="width:100%;" onchange=""></textarea></td>
                                     </tr>
-                                                                        
+
                                     <tr>
                                         <th>Province du patient</th>
                                         <td><input type="text" class="form-control " id="patientProvince" name="patientProvince" placeholder="Province du patient" title="Province du patient" style="width:100%;" /></td>
@@ -227,9 +221,11 @@ foreach ($fResult as $fDetails) {
 
                                         <th></th>
                                         <td></td>
-                                    </tr> 
+                                    </tr>
                                     <tr>
-                                        <td colspan="4"><h4>Les détails du vol</h4></td>
+                                        <td colspan="4">
+                                            <h4>Les détails du vol</h4>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>Compagnie aérienne</th>
@@ -237,7 +233,7 @@ foreach ($fResult as $fDetails) {
 
                                         <th>Numéro de siège</th>
                                         <td><input type="text" class="form-control " id="seatNo" name="seatNo" placeholder="Numéro de siège" title="Numéro de siège" style="width:100%;" /></td>
-                                    </tr>                                    
+                                    </tr>
                                     <tr>
                                         <th>Date et heure d'arrivée</th>
                                         <td><input type="text" class="form-control dateTime" id="arrivalDateTime" name="arrivalDateTime" placeholder="Date et heure d'arrivée" title="Date et heure d'arrivée" style="width:100%;" /></td>
@@ -251,12 +247,12 @@ foreach ($fResult as $fDetails) {
                                         <th>Raison de la visite (le cas échéant)</th>
                                         <td><input type="text" class="form-control" id="reasonOfVisit" name="reasonOfVisit" placeholder="Raison de la visite (le cas échéant)" title="Raison de la visite (le cas échéant)" style="width:100%;" /></td>
 
-                                    </tr> 
+                                    </tr>
                                 </table>
 
                                 <div class="box-header with-border sectionHeader">
                                     <h3 class="box-title">
-                                        Signes vitaux du patient 
+                                        Signes vitaux du patient
                                     </h3>
                                 </div>
                                 <table class="table">
@@ -274,17 +270,18 @@ foreach ($fResult as $fDetails) {
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th colspan="4"style="width:15% !important">Symptômes <span class="mandatory">*</span> </th>
+                                        <th colspan="4" style="width:15% !important">Symptômes <span class="mandatory">*</span> </th>
                                     </tr>
                                     <tr>
                                         <td colspan="4">
-                                            <table  id="symptomsTable" class="table table-bordered">
-                                                <?php $index = 0; foreach ($covid19Symptoms as $symptomId => $symptomName) { ?>
-                                                    <tr class="row<?php echo $index;?>">
+                                            <table id="symptomsTable" class="table table-bordered">
+                                                <?php $index = 0;
+                                                foreach ($covid19Symptoms as $symptomId => $symptomName) { ?>
+                                                    <tr class="row<?php echo $index; ?>">
                                                         <th style="width:50%;"><?php echo $symptomName; ?></th>
                                                         <td style="width:50%;">
                                                             <input name="symptomId[]" type="hidden" value="<?php echo $symptomId; ?>">
-                                                            <select name="symptomDetected[]" class="form-control isRequired" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" style="width:100%" onchange="checkSubSymptoms(this,<?php echo $symptomId;?>,<?php echo $index;?>);">
+                                                            <select name="symptomDetected[]" class="form-control isRequired" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" style="width:100%" onchange="checkSubSymptoms(this,<?php echo $symptomId; ?>,<?php echo $index; ?>);">
                                                                 <option value="">-- Select --</option>
                                                                 <option value='yes'> Oui </option>
                                                                 <option value='no'> Non </option>
@@ -292,16 +289,18 @@ foreach ($fResult as $fDetails) {
                                                             </select>
                                                         </td>
                                                     </tr>
-                                                <?php $index++; } ?>
+                                                <?php $index++;
+                                                } ?>
                                             </table>
                                         </td>
                                     </tr>
-                                    
+
                                     <tr>
                                         <td colspan="4">
-                                            <table  id="symptomsTable" class="table table-bordered">
-                                                <?php $index = 0; foreach ($covid19Comorbidities as $comorbiditiesId => $comorbiditiesName) { ?>
-                                                    <tr class="row<?php echo $index;?>">
+                                            <table id="symptomsTable" class="table table-bordered">
+                                                <?php $index = 0;
+                                                foreach ($covid19Comorbidities as $comorbiditiesId => $comorbiditiesName) { ?>
+                                                    <tr class="row<?php echo $index; ?>">
                                                         <th style="width:50%;"><?php echo $comorbiditiesName; ?></th>
                                                         <td style="width:50%;">
                                                             <input name="comorbidityId[]" type="hidden" value="<?php echo $comorbiditiesId; ?>">
@@ -313,22 +312,24 @@ foreach ($fResult as $fDetails) {
                                                             </select>
                                                         </td>
                                                     </tr>
-                                                <?php $index++; } ?>
+                                                <?php $index++;
+                                                } ?>
                                             </table>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th colspan="4"style="width:15% !important">Définition de cas <span class="mandatory">*</span> </th>
+                                        <th colspan="4" style="width:15% !important">Définition de cas <span class="mandatory">*</span> </th>
                                     </tr>
                                     <tr>
                                         <td colspan="4">
-                                            <table  id="responseTable" class="table table-bordered">
-                                                <?php $index = 0; foreach ($covid19ReasonsForTesting as $reasonId => $responseName) { ?>
-                                                    <tr class="row<?php echo $index;?>">
+                                            <table id="responseTable" class="table table-bordered">
+                                                <?php $index = 0;
+                                                foreach ($covid19ReasonsForTesting as $reasonId => $responseName) { ?>
+                                                    <tr class="row<?php echo $index; ?>">
                                                         <th style="width:50%;"><?php echo $responseName; ?></th>
                                                         <td style="width:50%;">
                                                             <input name="responseId[]" type="hidden" value="<?php echo $reasonId; ?>">
-                                                            <select name="responseDetected[]" class="form-control isRequired" title="Définition de cas <?php echo $responseName; ?>" style="width:100%" onchange="checkSubResponse(this,<?php echo $reasonId;?>,<?php echo $index;?>);">
+                                                            <select name="responseDetected[]" class="form-control isRequired" title="Définition de cas <?php echo $responseName; ?>" style="width:100%" onchange="checkSubResponse(this,<?php echo $reasonId; ?>,<?php echo $index; ?>);">
                                                                 <option value="">-- Select --</option>
                                                                 <option value='yes'> Oui </option>
                                                                 <option value='no'> Non </option>
@@ -336,7 +337,8 @@ foreach ($fResult as $fDetails) {
                                                             </select>
                                                         </td>
                                                     </tr>
-                                                <?php $index++; } ?>
+                                                <?php $index++;
+                                                } ?>
                                             </table>
                                         </td>
                                     </tr>
@@ -344,12 +346,12 @@ foreach ($fResult as $fDetails) {
 
                                 <div class="box-header with-border sectionHeader">
                                     <h3 class="box-title">
-                                        VOYAGE ET CONTACT 
+                                        VOYAGE ET CONTACT
                                     </h3>
                                 </div>
                                 <table class="table">
                                     <tr>
-                                        <th style="width: 15% !important;"><label for="hasRecentTravelHistory">Avez-vous voyagé au cours des 14 derniers jours ?  </label></th>
+                                        <th style="width: 15% !important;"><label for="hasRecentTravelHistory">Avez-vous voyagé au cours des 14 derniers jours ? </label></th>
                                         <td style="width:35% !important;">
                                             <select class="form-control" id="hasRecentTravelHistory" name="hasRecentTravelHistory" title="Avez-vous voyagé au cours des 14 derniers jours ?">
                                                 <option value="">--Select--</option>
@@ -357,17 +359,17 @@ foreach ($fResult as $fDetails) {
                                                 <option value="no">Non</option>
                                                 <option value="unknown">Inconnu</option>
                                             </select>
-                                        </td>                                        
+                                        </td>
                                         <th style="width: 15% !important;"><label for="countryName">Si oui, dans quels pays?</label></th>
                                         <td style="width:35% !important;">
-                                            <input type="text" class="form-control" id="countryName" name="countryName" placeholder="Si oui, dans quels pays ?" title="Si oui, dans quels pays?"/>
+                                            <input type="text" class="form-control" id="countryName" name="countryName" placeholder="Si oui, dans quels pays ?" title="Si oui, dans quels pays?" />
                                         </td>
                                     </tr>
 
                                     <tr>
                                         <th style="width: 15% !important;"><label for="returnDate">Date de retour</label></th>
                                         <td style="width:35% !important;">
-                                            <input type="text" class="form-control date" id="returnDate" name="returnDate" placeholder="e.g 09-Jan-1992" title="Date de retour"/>
+                                            <input type="text" class="form-control date" id="returnDate" name="returnDate" placeholder="e.g 09-Jan-1992" title="Date de retour" />
                                         </td>
                                     </tr>
                                 </table>
@@ -379,7 +381,7 @@ foreach ($fResult as $fDetails) {
                                     <tr>
                                         <th style="width:15% !important">Date d'apparition des symptômes <span class="mandatory">*</span> </th>
                                         <td style="width:35% !important;">
-                                            <input class="form-control date isRequired" type="text" name="dateOfSymptomOnset" id="dateOfSymptomOnset" placeholder="Date d'apparition des symptômes" title="Date d'apparition des symptômes"/>
+                                            <input class="form-control date isRequired" type="text" name="dateOfSymptomOnset" id="dateOfSymptomOnset" placeholder="Date d'apparition des symptômes" title="Date d'apparition des symptômes" />
                                         </td>
                                         <th style="width:15% !important">Date de la consultation initiale</th>
                                         <td style="width:35% !important;">
@@ -406,7 +408,7 @@ foreach ($fResult as $fDetails) {
                                             </select>
                                         </td>
                                     </tr>
-                                    
+
                                     <tr>
                                         <th style="width:15% !important"><label for="patientLivesWithChildren"></label>Habitez-vous avec les enfants ?</th>
                                         <td style="width:35% !important;">
@@ -430,7 +432,7 @@ foreach ($fResult as $fDetails) {
                                     <tr>
                                         <th style="width:15% !important">Fièvre / température (&deg;C) <span class="mandatory">*</span> </th>
                                         <td style="width:35% !important;">
-                                            <input class="form-control isRequired" type="number" name="feverTemp" id="feverTemp" placeholder="Fièvre / température (en &deg;Celcius)" title="Fièvre / température (en &deg;Celcius)"/>
+                                            <input class="form-control isRequired" type="number" name="feverTemp" id="feverTemp" placeholder="Fièvre / température (en &deg;Celcius)" title="Fièvre / température (en &deg;Celcius)" />
                                         </td>
                                         <th style="width:15% !important"><label for="temperatureMeasurementMethod">Température</label></th>
                                         <td style="width:35% !important;">
@@ -446,11 +448,11 @@ foreach ($fResult as $fDetails) {
                                     <tr>
                                         <th style="width:15% !important"><label for="respiratoryRate"> Fréquence Respiratoire</label></th>
                                         <td style="width:35% !important;">
-                                            <input class="form-control" type="number" name="respiratoryRate" id="respiratoryRate" placeholder="Fréquence Respiratoire" title="Fréquence Respiratoire"/>
+                                            <input class="form-control" type="number" name="respiratoryRate" id="respiratoryRate" placeholder="Fréquence Respiratoire" title="Fréquence Respiratoire" />
                                         </td>
                                         <th style="width:15% !important"><label for="oxygenSaturation"> Saturation en oxygène</label></th>
                                         <td style="width:35% !important;">
-                                            <input class="form-control" type="number" name="oxygenSaturation" id="oxygenSaturation" placeholder="Saturation en oxygène" title="Saturation en oxygène"/>
+                                            <input class="form-control" type="number" name="oxygenSaturation" id="oxygenSaturation" placeholder="Saturation en oxygène" title="Saturation en oxygène" />
                                         </td>
                                     </tr>
                                 </table>
@@ -507,10 +509,7 @@ foreach ($fResult as $fDetails) {
                                             <td class="lab-show"><label for="labId">Nom du laboratoire </label> </td>
                                             <td class="lab-show">
                                                 <select name="labId" id="labId" class="form-control" title="Nom du laboratoire" style="width:100%;">
-                                                    <option value=""> -- Select -- </option>
-                                                    <?php foreach ($lResult as $labName) { ?>
-                                                        <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
-                                                    <?php } ?>
+                                                    <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
                                                 </select>
                                             </td>
                                             <th>L'échantillon est-il rejeté?</th>
@@ -532,7 +531,7 @@ foreach ($fResult as $fDetails) {
                                                 </select>
                                             </td>
                                             <th>Date de rejet<span class="mandatory">*</span></th>
-                                            <td><input class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Date de rejet" title="Date de rejet"/></td>
+                                            <td><input class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Date de rejet" title="Date de rejet" /></td>
                                         </tr>
                                         <tr>
                                             <!-- <th style="width: 15% !important;"><label for="resultPcr">Date de Result PCR</label></th>
@@ -541,7 +540,7 @@ foreach ($fResult as $fDetails) {
                                             </td> -->
                                             <th style="width: 15% !important;"><label for="numberOfDaysSick">Depuis combien de jours êtes-vous malade?</label></th>
                                             <td style="width:35% !important;">
-                                                <input type="text" class="form-control" id="numberOfDaysSick" name="numberOfDaysSick" placeholder="Depuis combien de jours êtes-vous malade?" title="Date de Result PCR"/>
+                                                <input type="text" class="form-control" id="numberOfDaysSick" name="numberOfDaysSick" placeholder="Depuis combien de jours êtes-vous malade?" title="Date de Result PCR" />
                                             </td>
                                             <td></td>
                                             <td></td>
@@ -567,7 +566,7 @@ foreach ($fResult as $fDetails) {
                                                                     <option value="RdRp-SARS Cov-2">RdRp-SARS Cov-2</option>
                                                                     <option value="other">Others</option>
                                                                 </select>
-                                                                <input type="text" name="testNameOther[]" id="testNameOther1" class="form-control testInputOther1" title="Veuillez saisir le nom du test pour les lignes 1" placeholder="Entrez le nom du test 1" style="display: none;margin-top: 10px;"/>
+                                                                <input type="text" name="testNameOther[]" id="testNameOther1" class="form-control testInputOther1" title="Veuillez saisir le nom du test pour les lignes 1" placeholder="Entrez le nom du test 1" style="display: none;margin-top: 10px;" />
                                                             </td>
                                                             <td>
                                                                 <input type="text" name="testDate[]" id="testDate1" class="form-control test-name-table-input dateTime" placeholder="Testé sur" title="Veuillez saisir le test pour la ligne 1" />
@@ -633,7 +632,7 @@ foreach ($fResult as $fDetails) {
                                                 </select>
                                             </td>
                                             <th>Autorisé par</th>
-                                            <td><input type="text" name="authorizedBy" id="authorizedBy" class="disabled-field form-control" placeholder="Autorisé par" title="Autorisé par"/></td>
+                                            <td><input type="text" name="authorizedBy" id="authorizedBy" class="disabled-field form-control" placeholder="Autorisé par" title="Autorisé par" /></td>
 
                                         </tr>
                                         <tr>
@@ -786,41 +785,41 @@ foreach ($fResult as $fDetails) {
         $.unblockUI();
     }
 
-    function checkSubSymptoms(obj, parent, row){
-        if(obj.value == 'yes'){
+    function checkSubSymptoms(obj, parent, row) {
+        if (obj.value == 'yes') {
             $.post("getSymptomsByParentId.php", {
-                symptomParent: parent
-            },
-            function(data) {
-                if (data != "") {
-                    // $(".row"+row).append(data);
-                    $("#symptomsTable").find("tr:eq("+row+")").after(data);
-                }
-            });
-        } else{
-            $('.symptomRow'+parent).remove();
+                    symptomParent: parent
+                },
+                function(data) {
+                    if (data != "") {
+                        // $(".row"+row).append(data);
+                        $("#symptomsTable").find("tr:eq(" + row + ")").after(data);
+                    }
+                });
+        } else {
+            $('.symptomRow' + parent).remove();
         }
     }
-    
-    function checkSubResponse(obj, parent, row){
-        if(obj.value == 'yes'){
+
+    function checkSubResponse(obj, parent, row) {
+        if (obj.value == 'yes') {
             $.post("getResponseByParentId.php", {
-                responseParent: parent
-            },
-            function(data) {
-                if (data != "") {
-                    // $(".row"+row).append(data);
-                    $("#responseTable").find("tr:eq("+row+")").after(data);
-                }
-            });
-        } else{
-            $('.responseRow'+parent).remove();
+                    responseParent: parent
+                },
+                function(data) {
+                    if (data != "") {
+                        // $(".row"+row).append(data);
+                        $("#responseTable").find("tr:eq(" + row + ")").after(data);
+                    }
+                });
+        } else {
+            $('.responseRow' + parent).remove();
         }
     }
 
 
     function validateNow() {
-        if($('#isResultAuthorized').val() != "yes"){
+        if ($('#isResultAuthorized').val() != "yes") {
             $('#authorizedBy,#authorizedOn').removeClass('isRequired');
         }
         flag = deforayValidator.init({
@@ -853,36 +852,36 @@ foreach ($fResult as $fDetails) {
         // $('#province').select2({
         //     placeholder: "Province"
         // });
-        $('#isResultAuthorized').change(function(e){
+        $('#isResultAuthorized').change(function(e) {
             checkIsResultAuthorized();
         });
-        $('#medicalBackground').change(function(e){
-            if(this.value == 'yes'){
-                $('.medical-background-info').css('display','table-cell');
-                $('.medical-background-info').css('color','red');
-                $('.medical-background-yes').css('display','table-row');
-            } else{
-                $('.medical-background-yes,.medical-background-info').css('display','none');
+        $('#medicalBackground').change(function(e) {
+            if (this.value == 'yes') {
+                $('.medical-background-info').css('display', 'table-cell');
+                $('.medical-background-info').css('color', 'red');
+                $('.medical-background-yes').css('display', 'table-row');
+            } else {
+                $('.medical-background-yes,.medical-background-info').css('display', 'none');
             }
         });
 
-        $('#respiratoryRateSelect').change(function(e){
-            if(this.value == 'yes'){
-                $('.respiratory-rate').css('display','inline-flex ');
-            } else{
-                $('.respiratory-rate').css('display','none');
+        $('#respiratoryRateSelect').change(function(e) {
+            if (this.value == 'yes') {
+                $('.respiratory-rate').css('display', 'inline-flex ');
+            } else {
+                $('.respiratory-rate').css('display', 'none');
             }
         });
-        
-        $('#oxygenSaturationSelect').change(function(e){
-            if(this.value == 'yes'){
-                $('.oxygen-saturation').css('display','inline-flex');
-            } else{
-                $('.oxygen-saturation').css('display','none');
+
+        $('#oxygenSaturationSelect').change(function(e) {
+            if (this.value == 'yes') {
+                $('.oxygen-saturation').css('display', 'inline-flex');
+            } else {
+                $('.oxygen-saturation').css('display', 'none');
             }
         });
-        $('#result').change(function(e){
-            if(this.value == 'positive'){
+        $('#result').change(function(e) {
+            if (this.value == 'positive') {
                 $('.other-diseases').hide();
                 $('#otherDiseases').removeClass('isRequired');
             } else {
@@ -890,11 +889,11 @@ foreach ($fResult as $fDetails) {
                 $('#otherDiseases').addClass('isRequired');
             }
         });
-        <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
-        $(document).on('change', '.test-result, #result', function(e) {
-            checkPostive();
-        });
-        <?php }?>
+        <?php if (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes') { ?>
+            $(document).on('change', '.test-result, #result', function(e) {
+                checkPostive();
+            });
+        <?php } ?>
         checkPostive();
     });
 
@@ -934,11 +933,11 @@ foreach ($fResult as $fDetails) {
             $('.ui-datepicker-calendar').show();
         });
         tableRowId++;
-        <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
-        $(document).on('change', '.test-result, #result', function(e) {
-            checkPostive();
-        });
-        <?php }?>
+        <?php if (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes') { ?>
+            $(document).on('change', '.test-result, #result', function(e) {
+                checkPostive();
+            });
+        <?php } ?>
     }
 
     function removeAttributeRow(el) {
@@ -951,48 +950,46 @@ foreach ($fResult as $fDetails) {
         });
     }
 
-    function checkPostive(){
+    function checkPostive() {
         var itemLength = document.getElementsByName("testResult[]");
         for (i = 0; i < itemLength.length; i++) {
-            
-            if(itemLength[i].value == 'positive'){
+
+            if (itemLength[i].value == 'positive') {
                 $('#result,.disabled-field').val('');
-                $('#result,.disabled-field').prop('disabled',true);
+                $('#result,.disabled-field').prop('disabled', true);
                 $('#result,.disabled-field').addClass('disabled');
                 $('#result,.disabled-field').removeClass('isRequired');
                 return false;
-            }else{
-                $('#result,.disabled-field').prop('disabled',false);
+            } else {
+                $('#result,.disabled-field').prop('disabled', false);
                 $('#result,.disabled-field').removeClass('disabled');
                 $('#result,.disabled-field').addClass('isRequired');
             }
-            if(itemLength[i].value != ''){
+            if (itemLength[i].value != '') {
                 $('#labId').addClass('isRequired');
             }
         }
     }
 
-    function checkIsResultAuthorized(){
-        if($('#isResultAuthorized').val() == 'no'){
+    function checkIsResultAuthorized() {
+        if ($('#isResultAuthorized').val() == 'no') {
             $('#authorizedBy,#authorizedOn').val('');
-            $('#authorizedBy,#authorizedOn').prop('disabled',true);
+            $('#authorizedBy,#authorizedOn').prop('disabled', true);
             $('#authorizedBy,#authorizedOn').addClass('disabled');
             $('#authorizedBy,#authorizedOn').removeClass('isRequired');
             return false;
-        }else{
-            $('#authorizedBy,#authorizedOn').prop('disabled',false);
+        } else {
+            $('#authorizedBy,#authorizedOn').prop('disabled', false);
             $('#authorizedBy,#authorizedOn').removeClass('disabled');
             $('#authorizedBy,#authorizedOn').addClass('isRequired');
         }
     }
-    
-    function otherCovidTestName(val,id){
-        if(val == 'other'){
-            $('.testInputOther'+id).show();
-        } else{
-            $('.testInputOther'+id).hide();
+
+    function otherCovidTestName(val, id) {
+        if (val == 'other') {
+            $('.testInputOther' + id).show();
+        } else {
+            $('.testInputOther' + id).hide();
         }
     }
-
-    
 </script>

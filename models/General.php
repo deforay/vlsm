@@ -336,10 +336,9 @@ class General
             $this->db->where('import_machine_file_name', $machineFile);
         }
 
-        $this->db->where ("low_vl_result_text", NULL, 'IS NOT');
-        $this->db->where ("status", 'active', 'like');
+        $this->db->where("low_vl_result_text", NULL, 'IS NOT');
+        $this->db->where("status", 'active', 'like');
         return $this->db->getValue('import_config', 'low_vl_result_text', null);
-
     }
 
     public function getFacilitiesByUser($userId = null)
@@ -389,9 +388,9 @@ class General
     public function generateSelectOptions($optionList, $selectedOptions = array(), $emptySelectText = false)
     {
 
-        $response = "";
+        $response = '';
         if ($emptySelectText !== false) {
-            $response .= '<option value="">' . $emptySelectText . '</option>';
+            $response .= "<option value=''>$emptySelectText</option>";
         }
         foreach ($optionList as $optId => $optName) {
             $selectedText = '';

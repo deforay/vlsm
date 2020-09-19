@@ -56,30 +56,23 @@ $province .= "<option value=''> -- Select -- </option>";
 foreach ($pdResult as $provinceName) {
     $province .= "<option data-code='" . $provinceName['province_code'] . "' data-province-id='" . $provinceName['province_id'] . "' data-name='" . $provinceName['province_name'] . "' value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
-//$facility = "";
-$facility = "<option value=''> -- Select -- </option>";
-foreach ($fResult as $fDetails) {
-    $selected = "";
-    if ($covid19Info['facility_id'] == $fDetails['facility_id']) {
-        $selected = " selected='selected' ";
-    }
-    $facility .= "<option value='" . $fDetails['facility_id'] . "' $selected>" . ucwords(addslashes($fDetails['facility_name'])) . "</option>";
-}
+
+$facility = $general->generateSelectOptions($healthFacilities, $covid19Info['facility_id'], '-- Select --');
 
 
 //suggest sample id when lab user add request sample
-$sampleSuggestion = '';
-$sampleSuggestionDisplay = 'display:none;';
-$sCode = (isset($_GET['c']) && $_GET['c'] != '') ? $_GET['c'] : '';
-if ($sarr['user_type'] == 'vluser' && $sCode != '') {
-    $vlObj = new \Vlsm\Models\Covid19($db);
-    $sampleCollectionDate = explode(" ", $sampleCollectionDate);
-    $sampleCollectionDate = $general->humanDateFormat($sampleCollectionDate[0]);
-    $sampleSuggestionJson = $vlObj->generateCovid19SampleCode($stateResult[0]['province_code'], $sampleCollectionDate, 'png');
-    $sampleCodeKeys = json_decode($sampleSuggestionJson, true);
-    $sampleSuggestion = $sampleCodeKeys['sampleCode'];
-    $sampleSuggestionDisplay = 'display:block;';
-}
+//$sampleSuggestion = '';
+//$sampleSuggestionDisplay = 'display:none;';
+// $sCode = (isset($_GET['c']) && $_GET['c'] != '') ? $_GET['c'] : '';
+// if ($sarr['user_type'] == 'vluser' && $sCode != '') {
+//     $vlObj = new \Vlsm\Models\Covid19($db);
+//     $sampleCollectionDate = explode(" ", $sampleCollectionDate);
+//     $sampleCollectionDate = $general->humanDateFormat($sampleCollectionDate[0]);
+//     $sampleSuggestionJson = $vlObj->generateCovid19SampleCode($stateResult[0]['province_code'], $sampleCollectionDate, 'png');
+//     $sampleCodeKeys = json_decode($sampleSuggestionJson, true);
+//     $sampleSuggestion = $sampleCodeKeys['sampleCode'];
+//     $sampleSuggestionDisplay = 'display:block;';
+// }
 
 ?>
 
@@ -114,32 +107,32 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                     <h3 class="box-title" style="font-size:1em;">To be filled by requesting Clinician/Nurse</h3>
                                 </div>
                                 <table class="table" style="width:100%">
-                                    <?php if ($covid19Info['remote_sample'] == 'yes') { ?>
+                                    <!-- <?php if ($covid19Info['remote_sample'] == 'yes') { ?>
                                         <tr>
                                             <?php
-                                            if ($covid19Info['sample_code'] != '') {
+                                                if ($covid19Info['sample_code'] != '') {
                                             ?>
                                                 <td colspan="4"> <label for="sampleSuggest" class="text-danger">&nbsp;&nbsp;&nbsp;Please note that this Remote Sample has already been imported with VLSM Sample ID </td>
                                                 <td colspan="2" align="left"> <?php echo $covid19Info['sample_code']; ?></label> </td>
                                             <?php
-                                            } else {
+                                                } else {
                                             ?>
                                                 <td colspan="4"> <label for="sampleSuggest">Sample ID (might change while submitting the form)</label></td>
                                                 <td colspan="2" align="left"> <?php echo $sampleSuggestion; ?></td>
                                             <?php } ?>
                                         </tr>
-                                    <?php } ?>
+                                    <?php } ?> -->
                                     <tr>
                                         <?php if ($sarr['user_type'] == 'remoteuser') { ?>
                                             <td><label for="sampleCode">Sample ID </label> </td>
                                             <td colspan="5">
-                                                <span id="sampleCodeInText" style="width:30%;border-bottom:1px solid #333;"><?php echo ($sCode != '') ? $sCode : $covid19Info[$sampleCode]; ?></span>
-                                                <input type="hidden" class="<?php echo $sampleClass; ?>" id="sampleCode" name="sampleCode" value="<?php echo ($sCode != '') ? $sCode : $covid19Info[$sampleCode]; ?>" />
+                                                <span id="sampleCodeInText" style="width:30%;border-bottom:1px solid #333;"><?php echo $covid19Info[$sampleCode]; ?></span>
+                                                <input type="hidden" class="<?php echo $sampleClass; ?>" id="sampleCode" name="sampleCode" value="<?php echo $covid19Info[$sampleCode]; ?>" />
                                             </td>
                                         <?php } else { ?>
                                             <td><label for="sampleCode">Sample ID </label><span class="mandatory">*</span> </td>
                                             <td colspan="5">
-                                                <input type="text" readonly value="<?php echo ($sCode != '') ? $sCode : $covid19Info[$sampleCode]; ?>" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Sample ID" title="Please enter Sample ID" style="width:30%;" onchange="" />
+                                                <input type="text" readonly value="<?php echo $covid19Info[$sampleCode]; ?>" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Sample ID" title="Please enter Sample ID" style="width:30%;" onchange="" />
                                             </td>
                                         <?php } ?>
                                     </tr>
@@ -192,17 +185,14 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
                                             <td>
                                                 <select name="labId" id="labId" class="form-control isRequired" title="Lab Name" style="width:100%;">
-                                                    <option value=""> -- Select -- </option>
-                                                    <?php foreach ($lResult as $labName) { ?>
-                                                        <option value="<?php echo $labName['facility_id']; ?>" <?php echo ($covid19Info['lab_id'] == $labName['facility_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($labName['facility_name']); ?></option>
-                                                    <?php } ?>
+                                                    <?= $general->generateSelectOptions($testingLabs, $covid19Info['lab_id'], '-- Select --'); ?>
                                                 </select>
                                             </td>
                                             <!-- </tr> -->
                                         <?php } ?>
                                     </tr>
                                 </table>
-                                
+
                                 <div class="box-header with-border sectionHeader">
                                     <h3 class="box-title">CASE DETAILS/DEMOGRAPHICS</h3>
                                 </div>
@@ -283,10 +273,10 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         <td>
                                             <select name="testTypeRequested" id="testTypeRequested" class="form-control" title="Please choose type of test request" style="width:100%">
                                                 <option value="">-- Select --</option>
-                                                <option value="PCR" <?php echo (isset($covid19Info['type_of_test_requested']) && $covid19Info['type_of_test_requested'] == 'PCR')?"selected='selected'":"";?>>PCR</option>
-                                                <option value="GeneXpert" <?php echo (isset($covid19Info['type_of_test_requested']) && $covid19Info['type_of_test_requested'] == 'GeneXpert')?"selected='selected'":"";?>>GeneXpert</option>
-                                                <option value="RDT" <?php echo (isset($covid19Info['type_of_test_requested']) && $covid19Info['type_of_test_requested'] == 'RDT')?"selected='selected'":"";?>>RDT</option>
-                                                <option value="ELISA" <?php echo (isset($covid19Info['type_of_test_requested']) && $covid19Info['type_of_test_requested'] == 'ELISA')?"selected='selected'":"";?>>ELISA</option>
+                                                <option value="PCR" <?php echo (isset($covid19Info['type_of_test_requested']) && $covid19Info['type_of_test_requested'] == 'PCR') ? "selected='selected'" : ""; ?>>PCR</option>
+                                                <option value="GeneXpert" <?php echo (isset($covid19Info['type_of_test_requested']) && $covid19Info['type_of_test_requested'] == 'GeneXpert') ? "selected='selected'" : ""; ?>>GeneXpert</option>
+                                                <option value="RDT" <?php echo (isset($covid19Info['type_of_test_requested']) && $covid19Info['type_of_test_requested'] == 'RDT') ? "selected='selected'" : ""; ?>>RDT</option>
+                                                <option value="ELISA" <?php echo (isset($covid19Info['type_of_test_requested']) && $covid19Info['type_of_test_requested'] == 'ELISA') ? "selected='selected'" : ""; ?>>ELISA</option>
                                             </select>
                                             </select>
                                         </td>
@@ -317,8 +307,8 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             <select class="form-control" name="testNumber" id="testNumber" title="Prélévement" style="width:100%;">
                                                 <option value="">--Select--</option>
                                                 <?php foreach (range(1, 5) as $element) {
-                                                    $selected = (isset($covid19Info['test_number']) && $covid19Info['test_number'] == $element)?"selected='selected'":"";
-                                                    echo '<option value="' . $element . '" '.$selected.'>' . $element . '</option>';
+                                                    $selected = (isset($covid19Info['test_number']) && $covid19Info['test_number'] == $element) ? "selected='selected'" : "";
+                                                    echo '<option value="' . $element . '" ' . $selected . '>' . $element . '</option>';
                                                 } ?>
                                             </select>
                                         </td>
@@ -343,10 +333,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             <td class="lab-show"><label for="labId">Lab Name </label> </td>
                                             <td class="lab-show">
                                                 <select name="labId" id="labId" class="form-control" title="Lab Name" style="width:100%;">
-                                                    <option value=""> -- Select -- </option>
-                                                    <?php foreach ($lResult as $labName) { ?>
-                                                        <option value="<?php echo $labName['facility_id']; ?>" <?php echo ($covid19Info['lab_id'] == $labName['facility_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($labName['facility_name']); ?></option>
-                                                    <?php } ?>
+                                                    <?= $general->generateSelectOptions($testingLabs, $covid19Info['lab_id'], '-- Select --'); ?>
                                                 </select>
                                             </td>
                                         <tr>
@@ -378,7 +365,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         </tr>
                                         <tr class="show-rejection" style="display:none;">
                                             <th>Rejection Date<span class="mandatory">*</span></th>
-                                            <td><input value="<?php echo $general->humanDateFormat($covid19Info['rejection_on']); ?>" class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Select Rejection Date"/></td>
+                                            <td><input value="<?php echo $general->humanDateFormat($covid19Info['rejection_on']); ?>" class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Select Rejection Date" /></td>
                                             <td></td>
                                             <td></td>
                                         </tr>
@@ -399,23 +386,23 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                                 <tr>
                                                                     <td class="text-center"><?php echo ($indexKey + 1); ?><input type="hidden" name="testId[]" value="<?php echo base64_encode($covid19TestInfo[$indexKey]['test_id']); ?>"></td>
                                                                     <td>
-                                                                        <?php 
+                                                                        <?php
                                                                         $value = '';
-                                                                            if(!in_array($covid19TestInfo[$indexKey]['test_name'],array('PCR', 'GeneXpert', 'RDT', 'ELISA', 'other'))){
-                                                                            $value = 'value="'.$covid19TestInfo[$indexKey]['test_name'].'"';
+                                                                        if (!in_array($covid19TestInfo[$indexKey]['test_name'], array('PCR', 'GeneXpert', 'RDT', 'ELISA', 'other'))) {
+                                                                            $value = 'value="' . $covid19TestInfo[$indexKey]['test_name'] . '"';
                                                                             $show =  "block";
-                                                                        } else{
+                                                                        } else {
                                                                             $show =  "none";
                                                                         } ?>
                                                                         <select onchange="otherCovidTestName(this.value,<?php echo ($indexKey + 1); ?>)" class="form-control test-name-table-input" id="testName<?php echo ($indexKey + 1); ?>" name="testName[]" title="Please enter the name of the Testkit (or) Test Method used">
                                                                             <option value="">--Select--</option>
-                                                                            <option value="PCR" <?php echo (isset($covid19TestInfo[$indexKey]['test_name']) && $covid19TestInfo[$indexKey]['test_name'] == 'PCR')?"selected='selected'":"";?>>PCR</option>
-                                                                            <option value="GeneXpert" <?php echo (isset($covid19TestInfo[$indexKey]['test_name']) && $covid19TestInfo[$indexKey]['test_name'] == 'GeneXpert')?"selected='selected'":"";?>>GeneXpert</option>
-                                                                            <option value="RDT" <?php echo (isset($covid19TestInfo[$indexKey]['test_name']) && $covid19TestInfo[$indexKey]['test_name'] == 'RDT')?"selected='selected'":"";?>>RDT</option>
-                                                                            <option value="ELISA" <?php echo (isset($covid19TestInfo[$indexKey]['test_name']) && $covid19TestInfo[$indexKey]['test_name'] == 'ELISA')?"selected='selected'":"";?>>ELISA</option>
-                                                                            <option value="other" <?php echo (isset($show) && $show == 'block')?"selected='selected'":"";?>>Others</option>
+                                                                            <option value="PCR" <?php echo (isset($covid19TestInfo[$indexKey]['test_name']) && $covid19TestInfo[$indexKey]['test_name'] == 'PCR') ? "selected='selected'" : ""; ?>>PCR</option>
+                                                                            <option value="GeneXpert" <?php echo (isset($covid19TestInfo[$indexKey]['test_name']) && $covid19TestInfo[$indexKey]['test_name'] == 'GeneXpert') ? "selected='selected'" : ""; ?>>GeneXpert</option>
+                                                                            <option value="RDT" <?php echo (isset($covid19TestInfo[$indexKey]['test_name']) && $covid19TestInfo[$indexKey]['test_name'] == 'RDT') ? "selected='selected'" : ""; ?>>RDT</option>
+                                                                            <option value="ELISA" <?php echo (isset($covid19TestInfo[$indexKey]['test_name']) && $covid19TestInfo[$indexKey]['test_name'] == 'ELISA') ? "selected='selected'" : ""; ?>>ELISA</option>
+                                                                            <option value="other" <?php echo (isset($show) && $show == 'block') ? "selected='selected'" : ""; ?>>Others</option>
                                                                         </select>
-                                                                        <input <?php echo $value;?> type="text" name="testNameOther[]" id="testNameOther<?php echo ($indexKey + 1); ?>" class="form-control testNameOther<?php echo ($indexKey + 1); ?>" title="Please enter the name of the Testkit (or) Test Method used" placeholder="Enter Test Method used" style="display: <?php echo $show;?>;margin-top: 10px;"/>
+                                                                        <input <?php echo $value; ?> type="text" name="testNameOther[]" id="testNameOther<?php echo ($indexKey + 1); ?>" class="form-control testNameOther<?php echo ($indexKey + 1); ?>" title="Please enter the name of the Testkit (or) Test Method used" placeholder="Enter Test Method used" style="display: <?php echo $show; ?>;margin-top: 10px;" />
                                                                     </td>
                                                                     <td><input type="text" value="<?php echo $general->humanDateFormat($covid19TestInfo[$indexKey]['sample_tested_datetime']); ?>" name="testDate[]" id="testDate<?php echo ($indexKey + 1); ?>" class="form-control test-name-table-input dateTime" placeholder="Tested on" title="Please enter the tested on for row <?php echo ($indexKey + 1); ?>" /></td>
                                                                     <td><select class="form-control test-result test-name-table-input result-focus" name="testResult[]" id="testResult<?php echo ($indexKey + 1); ?>" title="Please select the result for row <?php echo ($indexKey + 1); ?>">
@@ -443,7 +430,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                                         <option value="ELISA">ELISA</option>
                                                                         <option value="other">Others</option>
                                                                     </select>
-                                                                    <input type="text" name="testNameOther[]" id="testNameOther1" class="form-control testNameOther1 test-name-table-input" title="Please enter the name of the Testkit (or) Test Method used" placeholder="Entrez le nom du test 1" style="display: none;margin-top: 10px;"/>
+                                                                    <input type="text" name="testNameOther[]" id="testNameOther1" class="form-control testNameOther1 test-name-table-input" title="Please enter the name of the Testkit (or) Test Method used" placeholder="Entrez le nom du test 1" style="display: none;margin-top: 10px;" />
                                                                 </td>
                                                                 <td><input type="text" name="testDate[]" id="testDate1" class="form-control test-name-table-input dateTime" placeholder="Tested on" title="Please enter the tested on for row 1" /></td>
                                                                 <td><select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult1" title="Please select the result for row 1">
@@ -479,7 +466,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             </td>
                                         </tr>
                                         <tr class="change-reason" style="display: none;">
-                                            
+
                                             <th class="change-reason" style="display: none;">Reason for Changing <span class="mandatory">*</span></td>
                                             <td class="change-reason" style="display: none;"><textarea type="text" name="reasonForChanging" id="reasonForChanging" class="form-control date" placeholder="Enter the reason for changing" title="Please enter the reason for changing"></textarea></td>
                                             <td></td>
@@ -519,9 +506,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                         <input type="hidden" name="formId" id="formId" value="7" />
                         <input type="hidden" name="deletedRow" id="deletedRow" value="" />
                         <input type="hidden" name="covid19SampleId" id="covid19SampleId" value="<?php echo $covid19Info['covid19_id']; ?>" />
-                        <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
-
-                        <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
+                        <input type="hidden" name="sampleCodeCol" id="sampleCodeCol" value="<?php echo $arr['sample_code']; ?>" />
                         <input type="hidden" name="oldStatus" id="oldStatus" value="<?php echo $covid19Info['result_status']; ?>" />
                         <input type="hidden" name="provinceCode" id="provinceCode" />
                         <input type="hidden" name="provinceId" id="provinceId" />
@@ -648,7 +633,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
     }
 
     function validateNow() {
-        if($('#isResultAuthorized').val() != "yes"){
+        if ($('#isResultAuthorized').val() != "yes") {
             $('#authorizedBy,#authorizedOn').removeClass('isRequired');
         }
         $("#provinceCode").val($("#province").find(":selected").attr("data-code"));
@@ -671,13 +656,13 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
             placeholder: "Select Clinic/Health Center"
         });
         getfacilityProvinceDetails($("#facilityId").val());
-        
-        $('#isResultAuthorized').change(function(e){
+
+        $('#isResultAuthorized').change(function(e) {
             checkIsResultAuthorized();
         });
 
-        $('#result, .test-result').change(function(e){
-            if(this.value == 'positive'){
+        $('#result, .test-result').change(function(e) {
+            if (this.value == 'positive') {
                 $('.other-diseases').hide();
                 $('#otherDiseases').removeClass('isRequired');
             } else {
@@ -685,14 +670,14 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                 $('#otherDiseases').addClass('isRequired');
             }
         });
-        
+
         checkIsResultAuthorized();
-        <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
-        $(document).on('change', '.test-result, #result', function(e) {
+        <?php if (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes') { ?>
+            $(document).on('change', '.test-result, #result', function(e) {
+                checkPostive();
+            });
             checkPostive();
-        });
-        checkPostive();
-        <?php }?>
+        <?php } ?>
 
     });
 
@@ -723,7 +708,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         </tr>`;
 
         $("#testKitNameTable").append(rowString);
-        
+
         $('.dateTime').datetimepicker({
             changeMonth: true,
             changeYear: true,
@@ -740,11 +725,11 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
             $('.ui-datepicker-calendar').show();
         });
 
-        <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
-        $(document).on('change', '.test-result, #result', function(e) {
-            checkPostive();
-        });
-        <?php }?>
+        <?php if (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes') { ?>
+            $(document).on('change', '.test-result, #result', function(e) {
+                checkPostive();
+            });
+        <?php } ?>
     }
 
     function removeTestRow(el) {
@@ -762,37 +747,39 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         deletedRow.push(id);
         $('#deletedRow').val(deletedRow);
     }
-    <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
-    function checkPostive(){
-        var itemLength = document.getElementsByName("testResult[]");
-        for (i = 0; i < itemLength.length; i++) {
-            
-            if(itemLength[i].value == 'positive'){
-                $('#result,.disabled-field').val('');
-                $('#result,.disabled-field').prop('disabled',true);
-                $('#result,.disabled-field').addClass('disabled');
-                $('#result,.disabled-field').removeClass('isRequired');
-                return false;
-            }else{
-                $('#result,.disabled-field').prop('disabled',false);
-                $('#result,.disabled-field').removeClass('disabled');
-                $('#result,.disabled-field').addClass('isRequired');
-            }
-            if(itemLength[i].value != ''){
-                $('#labId').addClass('isRequired');
+    <?php if (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes') { ?>
+
+        function checkPostive() {
+            var itemLength = document.getElementsByName("testResult[]");
+            for (i = 0; i < itemLength.length; i++) {
+
+                if (itemLength[i].value == 'positive') {
+                    $('#result,.disabled-field').val('');
+                    $('#result,.disabled-field').prop('disabled', true);
+                    $('#result,.disabled-field').addClass('disabled');
+                    $('#result,.disabled-field').removeClass('isRequired');
+                    return false;
+                } else {
+                    $('#result,.disabled-field').prop('disabled', false);
+                    $('#result,.disabled-field').removeClass('disabled');
+                    $('#result,.disabled-field').addClass('isRequired');
+                }
+                if (itemLength[i].value != '') {
+                    $('#labId').addClass('isRequired');
+                }
             }
         }
-    }
-<?php } ?>
-    function checkIsResultAuthorized(){
-        if($('#isResultAuthorized').val() == 'no'){
+    <?php } ?>
+
+    function checkIsResultAuthorized() {
+        if ($('#isResultAuthorized').val() == 'no') {
             $('#authorizedBy,#authorizedOn').val('');
-            $('#authorizedBy,#authorizedOn').prop('disabled',true);
+            $('#authorizedBy,#authorizedOn').prop('disabled', true);
             $('#authorizedBy,#authorizedOn').addClass('disabled');
             $('#authorizedBy,#authorizedOn').removeClass('isRequired');
             return false;
-        }else{
-            $('#authorizedBy,#authorizedOn').prop('disabled',false);
+        } else {
+            $('#authorizedBy,#authorizedOn').prop('disabled', false);
             $('#authorizedBy,#authorizedOn').removeClass('disabled');
             $('#authorizedBy,#authorizedOn').addClass('isRequired');
         }

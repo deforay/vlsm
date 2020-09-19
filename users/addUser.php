@@ -25,7 +25,7 @@ foreach ($pdResult as $provinceName) {
 // $facility = '';
 // $facility.="<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>";
 //province end
-$fQuery = "SELECT * FROM facility_type where facility_type_id IN(1,4)";
+$fQuery = "SELECT * FROM facility_type where facility_type_id IN(1,2)";
 $ftResult = $db->rawQuery($fQuery);
 
 ?>

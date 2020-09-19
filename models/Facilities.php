@@ -6,7 +6,7 @@ class Facilities
 {
 
     protected $db = null;
-    protected $table = 'facility_details';
+    protected $table = 'facilities';
 
     public function __construct($db = null)
     {
@@ -37,37 +37,49 @@ class Facilities
 
     public function getFacilityMap($userId)
     {
-        if(empty($userId)) return null;
+        if (empty($userId)) return null;
 
-        $this->db->where("user_id", $userId);
-        return $this->db->getValue("vl_user_facility_map", "GROUP_CONCAT(DISTINCT facility_id SEPARATOR ',')");
+        $this->db->where("map.user_id", $userId);
+        return $this->db->getValue("vl_user_facility_map map", "GROUP_CONCAT(DISTINCT map.facility_id SEPARATOR ',')");
     }
 
-    public function getFacilities($onlyActive = true)
+    // $testType = vl, eid, covid19 or any other tests that might be there. 
+    // Default $testType is null and returns all facilities
+    // $condition = WHERE condition (for eg. "facility_state = 1")
+    // $onlyActive = true/false
+    public function getHealthFacilities($testType = null, $condition = null, $onlyActive = true)
     {
 
-        $condition = '';
-        if ($onlyActive) {
-            $condition = " `status` = 'active' ";
-        }
-
-        if (isset($_SESSION['userId'])) {
+        if (!empty($_SESSION['userId'])) {
             $facilityMap = $this->getFacilityMap($_SESSION['userId']);
             if (!empty($facilityMap)) {
-                $condition .=  " AND `facility_id` IN (" . $facilityMap . ")";
+                $this->db->where("`facility_id` IN (" . $facilityMap . ")");
             }
         }
 
-        $cols = array("facility_id", "facility_name");
+        if (!empty($testType)) {
+            // subquery
+            $healthFacilities = $this->db->subQuery();
+            $healthFacilities->where("test_type like '$testType'");
+            $healthFacilities->get("health_facilities", null, "facility_id");
+
+            $this->db->where("facility_id", $healthFacilities, 'IN');
+        }
+
+
+        if ($onlyActive) {
+            $this->db->where('status', 'active');
+        }
 
         if (!empty($condition)) {
             $this->db->where($condition);
         }
 
-        $this->db->where('facility_type != 2');
+        $cols = array("facility_id", "facility_name");
+
         $this->db->orderBy("facility_name", "asc");
 
-        $results = $this->db->get($this->table, null, $cols);
+        $results = $this->db->get("facility_details", null, $cols);
 
         $response = array();
         foreach ($results as $row) {
@@ -76,31 +88,44 @@ class Facilities
         return $response;
     }
 
-    public function getTestingLabs($onlyActive = true)
+
+    // $testType = vl, eid, covid19 or any other tests that might be there. 
+    // Default $testType is null and returns all facilities with type=2 (testing site)
+    // $condition = WHERE condition (for eg. "facility_state = 1")
+    // $onlyActive = true/false
+    public function getTestingLabs($testType = null, $condition = null, $onlyActive = true)
     {
 
-        $condition = '';
-        if ($onlyActive) {
-            $condition = " `status` = 'active' ";
-        }
-
-        if (isset($_SESSION['userId'])) {
+        if (!empty($_SESSION['userId'])) {
             $facilityMap = $this->getFacilityMap($_SESSION['userId']);
             if (!empty($facilityMap)) {
-                $condition .=  " AND `facility_id` IN (" . $facilityMap . ")";
+                $this->db->where("`facility_id` IN (" . $facilityMap . ")");
             }
         }
 
-        $cols = array("facility_id", "facility_name");
+        if (!empty($testType)) {
+            // subquery
+            $testingLabs = $this->db->subQuery();
+            $testingLabs->where("test_type like '$testType'");
+            $testingLabs->get("testing_labs", null, "facility_id");
+
+            $this->db->where("facility_id", $testingLabs, 'IN');
+        }
+
+        if ($onlyActive) {
+            $this->db->where('status', 'active');
+        }
 
         if (!empty($condition)) {
             $this->db->where($condition);
         }
 
+        $cols = array("facility_id", "facility_name");
+
         $this->db->where('facility_type = 2');
         $this->db->orderBy("facility_name", "asc");
 
-        $results = $this->db->get($this->table, null, $cols);
+        $results = $this->db->get("facility_details", null, $cols);
 
         $response = array();
         foreach ($results as $row) {
