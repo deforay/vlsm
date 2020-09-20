@@ -4,8 +4,8 @@ $title = "Enter EID Result";
 include_once(APPLICATION_PATH . '/header.php');
 $tsQuery = "SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
-$configFormQuery = "SELECT * FROM global_config WHERE name ='vl_form'";
-$configFormResult = $db->rawQuery($configFormQuery);
+// $configFormQuery = "SELECT * FROM global_config WHERE name ='vl_form'";
+// $configFormResult = $db->rawQuery($configFormQuery);
 $sQuery = "SELECT * FROM r_eid_sample_type where status='active'";
 $sResult = $db->rawQuery($sQuery);
 $fQuery = "SELECT * FROM facility_details where status='active'";
@@ -312,10 +312,10 @@ if ($lastUrl1 != '' || $lastUrl2 != '') {
         }
       ],
       <?php if ($sarr['user_type'] != 'standalone') { ?> "aaSorting": [
-          [8, "desc"]
+          [9, "desc"]
         ],
       <?php } else { ?> "aaSorting": [
-          [7, "desc"]
+          [8, "desc"]
         ],
       <?php } ?> "bProcessing": true,
       "bServerSide": true,
@@ -365,7 +365,8 @@ if ($lastUrl1 != '' || $lastUrl2 != '') {
     document.cookie = "gender=" + $("#gender").val();
     document.cookie = "status=" + $("#status").val();
     $.unblockUI();
-  }ß
+  }
+  ß
 
   function exportAllVlTestResult() {
     $.blockUI();

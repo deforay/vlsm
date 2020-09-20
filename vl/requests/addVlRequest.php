@@ -6,28 +6,18 @@ include_once APPLICATION_PATH . '/header.php';
 
 $labFieldDisabled = '';
 
-// if($sarr['user_type']=='vluser'){
-//   include('../remote/pullDataFromRemote.php');
-// }else
 
-if ($sarr['user_type'] == 'remoteuser') {
-    $labFieldDisabled = 'disabled="disabled"';
-    $vlfmQuery = "SELECT GROUP_CONCAT(DISTINCT vlfm.facility_id SEPARATOR ',') as facilityId FROM vl_user_facility_map as vlfm where vlfm.user_id='" . $_SESSION['userId'] . "'";
-    $vlfmResult = $db->rawQuery($vlfmQuery);
-}
-$general = new \Vlsm\Models\General($db);
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
 
-//global config
-$arr = $general->getGlobalConfig();
+$healthFacilities = $facilitiesDb->getHealthFacilities('vl');
+$testingLabs = $facilitiesDb->getTestingLabs('vl');
 
 //get import config
 $condition = "status = 'active'";
 $importResult = $general->fetchDataFromTable('import_config', $condition);
 $userResult = $general->fetchDataFromTable('user_details', $condition);
 
-//get lab facility details
-$condition = "facility_type='2' AND status='active'";
-$lResult = $general->fetchDataFromTable('facility_details', $condition);
+
 //sample rejection reason
 $condition = "rejection_reason_status ='active'";
 $rejectionResult = $general->fetchDataFromTable('r_sample_rejection_reasons', $condition);
@@ -40,10 +30,6 @@ $rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
 $condition = "status = 'active'";
 $sResult = $general->fetchDataFromTable('r_vl_sample_type', $condition);
 
-if (isset($vlfmResult[0]['facilityId'])) {
-    $condition = $condition . " AND facility_id IN(" . $vlfmResult[0]['facilityId'] . ")";
-}
-$fResult = $general->fetchDataFromTable('facility_details', $condition);
 
 //get vltest reason details
 $testReason = $general->fetchDataFromTable('r_vl_test_reasons');

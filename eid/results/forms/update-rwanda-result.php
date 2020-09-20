@@ -41,15 +41,8 @@ $province .= "<option value=''> -- Select -- </option>";
 foreach ($pdResult as $provinceName) {
     $province .= "<option value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
-//$facility = "";
-$facility = "<option value=''> -- Select -- </option>";
-foreach ($fResult as $fDetails) {
-    $selected = "";
-    if ($eidInfo['facility_id'] == $fDetails['facility_id']) {
-        $selected = " selected='selected' ";
-    }
-    $facility .= "<option value='" . $fDetails['facility_id'] . "' $selected>" . ucwords(addslashes($fDetails['facility_name'])) . "</option>";
-}
+
+$facility = $general->generateSelectOptions($healthFacilities, $eidInfo['facility_id'], '-- Select --');
 
 $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(",", $eidInfo['mother_treatment']) : array();
 
@@ -92,7 +85,7 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                         <td><label for="sampleCode">Sample ID </label></td>
                                         <td>
                                             <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"><?php echo $eidInfo['sample_code'] ?></span>
-                                            
+
                                         </td>
                                     <?php } else { ?>
                                         <td><label for="sampleCode">Sample ID </label><span class="mandatory">*</span></td>
@@ -133,7 +126,7 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                             <option value=""> -- Select -- </option>
                                             <?php
                                             foreach ($implementingPartnerList as $implementingPartner) {
-                                                ?>
+                                            ?>
                                                 <option value="<?php echo ($implementingPartner['i_partner_id']); ?>" <?php echo ($eidInfo['implementing_partner'] == $implementingPartner['i_partner_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
                                             <?php } ?>
                                         </select>
@@ -144,7 +137,7 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                             <option value=""> -- Select -- </option>
                                             <?php
                                             foreach ($fundingSourceList as $fundingSource) {
-                                                ?>
+                                            ?>
                                                 <option value="<?php echo ($fundingSource['funding_source_id']); ?>" <?php echo ($eidInfo['funding_source'] == $fundingSource['funding_source_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
                                             <?php } ?>
                                         </select>
@@ -153,11 +146,8 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                         <!-- <tr> -->
                                         <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
                                         <td>
-                                            <select name="labId" id="labId" class="form-control isRequired" title="Lab Name" style="width:100%;">
-                                                <option value=""> -- Select -- </option>
-                                                <?php foreach ($lResult as $labName) { ?>
-                                                    <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
-                                                <?php } ?>
+                                            <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;">
+                                                <?= $general->generateSelectOptions($testingLabs, $eidInfo['lab_id'], '-- Select --'); ?>
                                             </select>
                                         </td>
                                         <!-- </tr> -->
@@ -345,7 +335,7 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                         </div>
                     </div>
 
-                    <form class="form-horizontal" method="post" name="editEIDRequestForm" id="editEIDRequestForm" autocomplete="off" action="eid-update-result-helper.php">                
+                    <form class="form-horizontal" method="post" name="editEIDRequestForm" id="editEIDRequestForm" autocomplete="off" action="eid-update-result-helper.php">
                         <div class="box box-primary">
                             <div class="box-body">
                                 <div class="box-header with-border">
@@ -357,8 +347,12 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                         <td>
                                             <input type="text" class="form-control dateTime isRequired" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter sample receipt date" value="<?php echo $general->humanDateFormat($eidInfo['sample_received_at_vl_lab_datetime']) ?>" onchange="" style="width:100%;" />
                                         </td>
-                                        <td></td>
-                                        <td></td>
+                                        <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
+                                        <td>
+                                            <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;">
+                                                <?= $general->generateSelectOptions($testingLabs, $eidInfo['lab_id'], '-- Select --'); ?>
+                                            </select>
+                                        </td>
                                     <tr>
                                         <th>Is Sample Rejected ? <span class="mandatory">*</span></th>
                                         <td>
@@ -379,8 +373,8 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                                         foreach ($rejectionResult as $reject) {
                                                             if ($type['rejection_type'] == $reject['rejection_type']) { ?>
                                                                 <option value="<?php echo $reject['rejection_reason_id']; ?>" <?php echo ($eidInfo['reason_for_sample_rejection'] == $reject['rejection_reason_id']) ? 'selected="selected"' : ''; ?>><?php echo ucwords($reject['rejection_reason_name']); ?></option>
-                                                            <?php }
-                                                    } ?>
+                                                        <?php }
+                                                        } ?>
                                                     </optgroup>
                                                 <?php }  ?>
                                             </select>
@@ -418,7 +412,7 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                     <?php } ?>
                     <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                     <input type="hidden" name="formId" id="formId" value="7" />
-                    <input type="hidden" name="eidSampleId" id="eidSampleId" value="<?php echo ($eidInfo['eid_id']); ?>"/>
+                    <input type="hidden" name="eidSampleId" id="eidSampleId" value="<?php echo ($eidInfo['eid_id']); ?>" />
                     <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
                     <input type="hidden" id="sampleCode" name="sampleCode" value="<?php echo $eidInfo['sample_code'] ?>" />
                     <a href="/eid/requests/eid-manual-results.php" class="btn btn-default"> Cancel</a>
@@ -451,17 +445,17 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
         }
         if ($.trim(pName) != '') {
             //if (provinceName) {
-                $.post("/includes/getFacilityForClinic.php", {
-                        pName: pName
-                    },
-                    function(data) {
-                        if (data != "") {
-                            details = data.split("###");
-                            $("#facilityId").html(details[0]);
-                            $("#district").html(details[1]);
-                            $("#clinicianName").val(details[2]);
-                        }
-                    });
+            $.post("/includes/getFacilityForClinic.php", {
+                    pName: pName
+                },
+                function(data) {
+                    if (data != "") {
+                        details = data.split("###");
+                        $("#facilityId").html(details[0]);
+                        $("#district").html(details[1]);
+                        $("#clinicianName").val(details[2]);
+                    }
+                });
             //}
         } else if (pName == '') {
             provinceName = true;

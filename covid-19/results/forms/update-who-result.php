@@ -41,15 +41,9 @@ $province .= "<option value=''> -- Select -- </option>";
 foreach ($pdResult as $provinceName) {
     $province .= "<option value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
-//$facility = "";
-$facility = "<option value=''> -- Select -- </option>";
-foreach ($fResult as $fDetails) {
-    $selected = "";
-    if ($covid19Info['facility_id'] == $fDetails['facility_id']) {
-        $selected = " selected='selected' ";
-    }
-    $facility .= "<option value='" . $fDetails['facility_id'] . "' $selected>" . ucwords(addslashes($fDetails['facility_name'])) . "</option>";
-}
+
+
+$facility = $general->generateSelectOptions($healthFacilities, $covid19Info['facility_id'], '-- Select --');
 
 
 ?>
@@ -147,11 +141,8 @@ foreach ($fResult as $fDetails) {
                                         <!-- <tr> -->
                                         <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
                                         <td>
-                                            <select name="labId" id="labId" class="form-control isRequired" title="Lab Name" style="width:100%;">
-                                                <option value=""> -- Select -- </option>
-                                                <?php foreach ($lResult as $labName) { ?>
-                                                    <option value="<?php echo $labName['facility_id']; ?>" <?php echo ($covid19Info['lab_id'] == $labName['facility_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($labName['facility_name']); ?></option>
-                                                <?php } ?>
+                                            <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;">
+                                                <?= $general->generateSelectOptions($testingLabs, $covid19Info['lab_id'], '-- Select --'); ?>
                                             </select>
                                         </td>
                                         <!-- </tr> -->
@@ -209,7 +200,7 @@ foreach ($fResult as $fDetails) {
                                 </tr>
                                 <tr>
                                     <th>Province</th>
-                                    <td><input type="text" value="<?php echo $covid19Info['patient_province']; ?>" class="form-control " id="patientProvince" name="patientProvince" placeholder="Patient Province" title="Please enter the patient province" style="width:100%;"/></td>
+                                    <td><input type="text" value="<?php echo $covid19Info['patient_province']; ?>" class="form-control " id="patientProvince" name="patientProvince" placeholder="Patient Province" title="Please enter the patient province" style="width:100%;" /></td>
 
                                     <th>District</th>
                                     <td><input class="form-control" value="<?php echo $covid19Info['patient_district']; ?>" id="patientDistrict" name="patientDistrict" placeholder="Patient District" title="Please enter the patient district" style="width:100%;"></td>
@@ -334,11 +325,8 @@ foreach ($fResult as $fDetails) {
                                         </td>
                                         <td>Testing Lab <span class="mandatory">*</span></td>
                                         <td>
-                                            <select name="labId" id="labId" class="form-control isRequired" title="Lab Name" style="width:100%;">
-                                                <option value=""> -- Select -- </option>
-                                                <?php foreach ($lResult as $labName) { ?>
-                                                    <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
-                                                <?php } ?>
+                                            <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;">
+                                                <?= $general->generateSelectOptions($testingLabs, $covid19Info['lab_id'], '-- Select --'); ?>
                                             </select>
                                         </td>
                                     <tr>
@@ -370,98 +358,98 @@ foreach ($fResult as $fDetails) {
                                     </tr>
                                     <tr class="show-rejection" style="display:none;">
                                         <th>Rejection Date<span class="mandatory">*</span></th>
-                                        <td><input value="<?php echo $general->humanDateFormat($covid19Info['rejection_on']); ?>" class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Select Rejection Date"/></td>
+                                        <td><input value="<?php echo $general->humanDateFormat($covid19Info['rejection_on']); ?>" class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Select Rejection Date" /></td>
                                         <td></td>
                                         <td></td>
                                     </tr>
                                     <tr>
                                         <td colspan="4">
                                             <table class="table table-bordered table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center">Test No.</th>
-                                                    <th class="text-center">Name of the Testkit (or) Test Method used</th>
-                                                    <th class="text-center">Date of Testing</th>
-                                                    <th class="text-center">Test Result</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="testKitNameTable">
-                                                <?php if(isset($covid19TestInfo) && count($covid19TestInfo) > 0){
-                                                    foreach($covid19TestInfo as $indexKey=>$rows){?>
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center">Test No.</th>
+                                                        <th class="text-center">Name of the Testkit (or) Test Method used</th>
+                                                        <th class="text-center">Date of Testing</th>
+                                                        <th class="text-center">Test Result</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="testKitNameTable">
+                                                    <?php if (isset($covid19TestInfo) && count($covid19TestInfo) > 0) {
+                                                        foreach ($covid19TestInfo as $indexKey => $rows) { ?>
+                                                            <tr>
+                                                                <td class="text-center"><?php echo ($indexKey + 1); ?><input type="hidden" name="testId[]" value="<?php echo base64_encode($covid19TestInfo[$indexKey]['test_id']); ?>"></td>
+                                                                <td><input type="text" value="<?php echo $covid19TestInfo[$indexKey]['test_name']; ?>" name="testName[]" id="testName<?php echo ($indexKey + 1); ?>" class="form-control test-name-table-input" placeholder="Test name" title="Please enter the test name for row <?php echo ($indexKey + 1); ?>" /></td>
+                                                                <td><input type="text" value="<?php echo $general->humanDateFormat($covid19TestInfo[$indexKey]['sample_tested_datetime']); ?>" name="testDate[]" id="testDate<?php echo ($indexKey + 1); ?>" class="form-control test-name-table-input dateTime" placeholder="Tested on" title="Please enter the tested on for row <?php echo ($indexKey + 1); ?>" /></td>
+                                                                <td><select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult<?php echo ($indexKey + 1); ?>" title="Please select the result for row <?php echo ($indexKey + 1); ?>">
+                                                                        <option value=''> -- Select -- </option>
+                                                                        <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
+                                                                            <option value="<?php echo $c19ResultKey; ?>" <?php echo ($covid19TestInfo[$indexKey]['result'] == $c19ResultKey) ? "selected='selected'" : ""; ?>> <?php echo $c19ResultValue; ?> </option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                </td>
+                                                                <td style="vertical-align:middle;text-align: center;">
+                                                                    <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;
+                                                                    <a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);deleteRow('<?php echo base64_encode($covid19TestInfo[$indexKey]['test_id']); ?>');"><i class="fa fa-minus"></i></a>
+                                                                </td>
+                                                            </tr>
+                                                        <?php }
+                                                    } else { ?>
                                                         <tr>
-                                                            <td class="text-center"><?php echo ($indexKey+1);?><input type="hidden" name="testId[]" value="<?php echo base64_encode($covid19TestInfo[$indexKey]['test_id']);?>"></td>
-                                                            <td><input type="text" value="<?php echo $covid19TestInfo[$indexKey]['test_name'];?>" name="testName[]" id="testName<?php echo ($indexKey+1);?>" class="form-control test-name-table-input" placeholder="Test name" title="Please enter the test name for row <?php echo ($indexKey+1);?>"/></td>
-                                                            <td><input type="text" value="<?php echo $general->humanDateFormat($covid19TestInfo[$indexKey]['sample_tested_datetime']);?>" name="testDate[]" id="testDate<?php echo ($indexKey+1);?>" class="form-control test-name-table-input dateTime" placeholder="Tested on"  title="Please enter the tested on for row <?php echo ($indexKey+1);?>"/></td>
-                                                            <td><select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult<?php echo ($indexKey+1);?>" title="Please select the result for row <?php echo ($indexKey+1);?>">
+                                                            <td class="text-center">1</td>
+                                                            <td><input type="text" name="testName[]" id="testName1" class="form-control test-name-table-input" placeholder="Test name" title="Please enter the test name for row 1" /></td>
+                                                            <td><input type="text" name="testDate[]" id="testDate1" class="form-control test-name-table-input dateTime" placeholder="Tested on" title="Please enter the tested on for row 1" /></td>
+                                                            <td><select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult1" title="Please select the result for row 1">
                                                                     <option value=''> -- Select -- </option>
                                                                     <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
-                                                                        <option value="<?php echo $c19ResultKey; ?>" <?php echo ($covid19TestInfo[$indexKey]['result'] == $c19ResultKey) ? "selected='selected'" : ""; ?>> <?php echo $c19ResultValue; ?> </option>
+                                                                        <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option>
                                                                     <?php } ?>
                                                                 </select>
                                                             </td>
                                                             <td style="vertical-align:middle;text-align: center;">
                                                                 <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;
-                                                                <a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);deleteRow('<?php echo base64_encode($covid19TestInfo[$indexKey]['test_id']);?>');"><i class="fa fa-minus"></i></a>
+                                                                <a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
                                                             </td>
                                                         </tr>
-                                                    <?php }
-                                                }else { ?>
-                                                    <tr>
-                                                        <td class="text-center">1</td>
-                                                        <td><input type="text" name="testName[]" id="testName1" class="form-control test-name-table-input" placeholder="Test name" title="Please enter the test name for row 1"/></td>
-                                                        <td><input type="text" name="testDate[]" id="testDate1" class="form-control test-name-table-input dateTime" placeholder="Tested on"  title="Please enter the tested on for row 1"/></td>
-                                                        <td><select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult1" title="Please select the result for row 1">
-                                                                <option value=''> -- Select -- </option>
-                                                                <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
-                                                                    <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option>
-                                                                <?php } ?>
-                                                            </select>
-                                                        </td>
-                                                        <td style="vertical-align:middle;text-align: center;">
-                                                            <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;
-                                                            <a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
-                                                        </td>
-                                                    </tr>
-                                                <?php }?>
-                                            </tbody>
+                                                    <?php } ?>
+                                                </tbody>
                                                 <tfoot>
-                                                        <th colspan="3" class="text-right">Final Result</th>
-                                                        <td>
-                                                            <select class="form-control" name="result" id="result">
-                                                                <option value=''> -- Select -- </option>
-                                                                <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
-                                                                    <option value="<?php echo $c19ResultKey; ?>" <?php echo ($covid19Info['result'] == $c19ResultKey) ? "selected='selected'" : ""; ?>> <?php echo $c19ResultValue; ?> </option>
-                                                                <?php } ?>
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
-                                        </td>
+                                                    <th colspan="3" class="text-right">Final Result</th>
+                                                    <td>
+                                                        <select class="form-control" name="result" id="result">
+                                                            <option value=''> -- Select -- </option>
+                                                            <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
+                                                                <option value="<?php echo $c19ResultKey; ?>" <?php echo ($covid19Info['result'] == $c19ResultKey) ? "selected='selected'" : ""; ?>> <?php echo $c19ResultValue; ?> </option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </td>
                                     </tr>
-                                    <tr class="change-reason" style="display: none;">
-                                        <th>Reason for Changing <span class="mandatory">*</span></td>
-                                        <td colspan="3"><textarea type="text" name="reasonForChanging" id="reasonForChanging" class="form-control date" placeholder="Enter the reason for changing" title="Please enter the reason for changing"></textarea></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Is Result Authorized ?</th>
-                                        <td>
-                                            <select name="isResultAuthorized" id="isResultAuthorized" class="disabled-field form-control" title="Is Result authorized ?" style="width:100%">
-                                                <option value="">-- Select --</option>
-                                                <option value='yes' <?php echo ($covid19Info['is_result_authorised'] == 'yes') ? "selected='selected'" : ""; ?>> Yes </option>
-                                                <option value='no' <?php echo ($covid19Info['is_result_authorised'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
-                                            </select>
-                                        </td>
-                                        <th>Authorized By</th>
-                                        <td><input type="text" value="<?php echo $covid19Info['authorized_by'];?>" name="authorizedBy" id="authorizedBy" class="disabled-field form-control" placeholder="Authorized By" /></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Authorized on</td>
-                                        <td><input type="text" value="<?php echo $general->humanDateFormat($covid19Info['authorized_on']);?>" name="authorizedOn" id="authorizedOn" class="disabled-field form-control date" placeholder="Authorized on" /></td>
-                                        <th></th>
-                                        <td></td>
-                                    </tr>
-                                    <!-- <tr>
+                                    </tfoot>
+                                </table>
+                                </td>
+                                </tr>
+                                <tr class="change-reason" style="display: none;">
+                                    <th>Reason for Changing <span class="mandatory">*</span></td>
+                                    <td colspan="3"><textarea type="text" name="reasonForChanging" id="reasonForChanging" class="form-control date" placeholder="Enter the reason for changing" title="Please enter the reason for changing"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <th>Is Result Authorized ?</th>
+                                    <td>
+                                        <select name="isResultAuthorized" id="isResultAuthorized" class="disabled-field form-control" title="Is Result authorized ?" style="width:100%">
+                                            <option value="">-- Select --</option>
+                                            <option value='yes' <?php echo ($covid19Info['is_result_authorised'] == 'yes') ? "selected='selected'" : ""; ?>> Yes </option>
+                                            <option value='no' <?php echo ($covid19Info['is_result_authorised'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
+                                        </select>
+                                    </td>
+                                    <th>Authorized By</th>
+                                    <td><input type="text" value="<?php echo $covid19Info['authorized_by']; ?>" name="authorizedBy" id="authorizedBy" class="disabled-field form-control" placeholder="Authorized By" /></td>
+                                </tr>
+                                <tr>
+                                    <th>Authorized on</td>
+                                    <td><input type="text" value="<?php echo $general->humanDateFormat($covid19Info['authorized_on']); ?>" name="authorizedOn" id="authorizedOn" class="disabled-field form-control date" placeholder="Authorized on" /></td>
+                                    <th></th>
+                                    <td></td>
+                                </tr>
+                                <!-- <tr>
                                         <td style="width:25%;"><label for="">Sample Test Date </label></td>
                                         <td style="width:25%;">
                                             <input type="text" class="form-control dateTime" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Sample Tested Date and Time" onchange="" value="<?php echo $general->humanDateFormat($covid19Info['sample_tested_datetime']) ?>" style="width:100%;" />
@@ -517,7 +505,7 @@ foreach ($fResult as $fDetails) {
     provinceName = true;
     facilityName = true;
     machineName = true;
-    tableRowId = <?php echo (isset($covid19TestInfo) && count($covid19TestInfo) > 0)?(count($covid19TestInfo) + 1):2;?>;
+    tableRowId = <?php echo (isset($covid19TestInfo) && count($covid19TestInfo) > 0) ? (count($covid19TestInfo) + 1) : 2; ?>;
     deletedRow = [];
 
     function getfacilityDetails(obj) {
@@ -620,8 +608,8 @@ foreach ($fResult as $fDetails) {
     }
 
     $(document).ready(function() {
-        $('.result-focus').change(function(e){
-            if($('#result').val()!= '' || $('#sampleRejectionReason').val()!= ''){
+        $('.result-focus').change(function(e) {
+            if ($('#result').val() != '' || $('#sampleRejectionReason').val() != '') {
                 $('.change-reason').show(500);
                 $('#reasonForChanging').addClass('isRequired');
             }
@@ -638,16 +626,16 @@ foreach ($fResult as $fDetails) {
             placeholder: "Province"
         });
         getfacilityProvinceDetails($("#facilityId").val());
-        $('#isResultAuthorized').change(function(e){
+        $('#isResultAuthorized').change(function(e) {
             checkIsResultAuthorized();
         });
         checkIsResultAuthorized();
-        <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
-        $(document).change('.test-result, #result', function(e) {
+        <?php if (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes') { ?>
+            $(document).change('.test-result, #result', function(e) {
+                checkPostive();
+            });
             checkPostive();
-        });
-        checkPostive();
-        <?php }?>
+        <?php } ?>
 
     });
 
@@ -665,9 +653,9 @@ foreach ($fResult as $fDetails) {
         f.setAttribute("style", "vertical-align:middle");
 
         b.innerHTML = tableRowId;
-        c.innerHTML = '<input type="text" name="testName[]" id="testName'+tableRowId+'" class="form-control test-name-table-input" placeholder="Test name" title="Please enter the test name for row '+tableRowId+'"/>';
-        d.innerHTML = '<input type="text" name="testDate[]" id="testDate'+tableRowId+'" class="form-control test-name-table-input dateTime" placeholder="Tested on"  title="Please enter the tested on for row '+tableRowId+'"/>';
-        e.innerHTML = '<select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult'+tableRowId+'" title="Please select the result for row '+tableRowId+'"><option value=""> -- Select -- </option><?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?> <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option> <?php } ?> </select>';
+        c.innerHTML = '<input type="text" name="testName[]" id="testName' + tableRowId + '" class="form-control test-name-table-input" placeholder="Test name" title="Please enter the test name for row ' + tableRowId + '"/>';
+        d.innerHTML = '<input type="text" name="testDate[]" id="testDate' + tableRowId + '" class="form-control test-name-table-input dateTime" placeholder="Tested on"  title="Please enter the tested on for row ' + tableRowId + '"/>';
+        e.innerHTML = '<select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult' + tableRowId + '" title="Please select the result for row ' + tableRowId + '"><option value=""> -- Select -- </option><?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?> <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option> <?php } ?> </select>';
         f.innerHTML = '<a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;<a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>';
         $(a).fadeIn(800);
         $('.dateTime').datetimepicker({
@@ -687,12 +675,12 @@ foreach ($fResult as $fDetails) {
         });
         tableRowId++;
 
-        <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
-        $(document).change('.test-result, #result', function(e) {
+        <?php if (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes') { ?>
+            $(document).change('.test-result, #result', function(e) {
+                checkPostive();
+            });
             checkPostive();
-        });
-        checkPostive();
-        <?php }?>
+        <?php } ?>
     }
 
     function removeAttributeRow(el) {
@@ -705,38 +693,38 @@ foreach ($fResult as $fDetails) {
         });
     }
 
-    function deleteRow(id){
+    function deleteRow(id) {
         deletedRow.push(id);
         $('#deletedRow').val(deletedRow);
     }
 
-    function checkPostive(){
+    function checkPostive() {
         var itemLength = document.getElementsByName("testResult[]");
         for (i = 0; i < itemLength.length; i++) {
-            
-            if(itemLength[i].value == 'positive'){
+
+            if (itemLength[i].value == 'positive') {
                 $('#result,.disabled-field').val('');
-                $('#result,.disabled-field').prop('disabled',true);
+                $('#result,.disabled-field').prop('disabled', true);
                 $('#result,.disabled-field').addClass('disabled');
                 $('#result,.disabled-field').removeClass('isRequired');
                 return false;
-            }else{
-                $('#result,.disabled-field').prop('disabled',false);
+            } else {
+                $('#result,.disabled-field').prop('disabled', false);
                 $('#result,.disabled-field').removeClass('disabled');
                 $('#result,.disabled-field').addClass('isRequired');
             }
         }
     }
 
-    function checkIsResultAuthorized(){
-        if($('#isResultAuthorized').val() == 'no'){
+    function checkIsResultAuthorized() {
+        if ($('#isResultAuthorized').val() == 'no') {
             $('#authorizedBy,#authorizedOn').val('');
-            $('#authorizedBy,#authorizedOn').prop('disabled',true);
+            $('#authorizedBy,#authorizedOn').prop('disabled', true);
             $('#authorizedBy,#authorizedOn').addClass('disabled');
             $('#authorizedBy,#authorizedOn').removeClass('isRequired');
             return false;
-        }else{
-            $('#authorizedBy,#authorizedOn').prop('disabled',false);
+        } else {
+            $('#authorizedBy,#authorizedOn').prop('disabled', false);
             $('#authorizedBy,#authorizedOn').removeClass('disabled');
             $('#authorizedBy,#authorizedOn').addClass('isRequired');
         }

@@ -77,15 +77,8 @@ $province .= "<option value=''> -- Select -- </option>";
 foreach ($pdResult as $provinceName) {
     $province .= "<option data-code='" . $provinceName['province_code'] . "' data-province-id='" . $provinceName['province_id'] . "' data-name='" . $provinceName['province_name'] . "' value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
-//$facility = "";
-$facility = "<option value=''> -- Select -- </option>";
-foreach ($fResult as $fDetails) {
-    $selected = "";
-    if ($eidInfo['facility_id'] == $fDetails['facility_id']) {
-        $selected = " selected='selected' ";
-    }
-    $facility .= "<option value='" . $fDetails['facility_id'] . "' $selected>" . ucwords(addslashes($fDetails['facility_name'])) . "</option>";
-}
+
+$facility = $general->generateSelectOptions($healthFacilities, $eidInfo['facility_id'], '-- Select --');
 
 $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(",", $eidInfo['mother_treatment']) : array();
 //$eidInfo['child_treatment'] = isset($eidInfo['child_treatment']) ? explode(",", $eidInfo['child_treatment']) : array();
@@ -125,11 +118,11 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                 <div class="col-xs-12 col-md-12 col-lg-12" style="<?php echo $sampleSuggestionDisplay; ?>">
                                     <?php
                                     if ($eidInfo['sample_code'] != '') {
-                                        ?>
+                                    ?>
                                         <label for="sampleSuggest" class="text-danger">Please note that this Remote Sample has already been imported with VLSM Sample ID <?php echo $eidInfo['sample_code']; ?></label>
                                     <?php
                                     } else {
-                                        ?>
+                                    ?>
                                         <label for="sampleSuggest">Sample ID (might change while submitting the form) - </label>
                                         <?php echo $sampleSuggestion; ?>
                                     <?php } ?>
@@ -182,7 +175,7 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                                 <option value=""> -- Select -- </option>
                                                 <?php
                                                 foreach ($implementingPartnerList as $implementingPartner) {
-                                                    ?>
+                                                ?>
                                                     <option value="<?php echo ($implementingPartner['i_partner_id']); ?>" <?php echo ($eidInfo['implementing_partner'] == $implementingPartner['i_partner_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
                                                 <?php } ?>
                                             </select>
@@ -193,7 +186,7 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                                 <option value=""> -- Select -- </option>
                                                 <?php
                                                 foreach ($fundingSourceList as $fundingSource) {
-                                                    ?>
+                                                ?>
                                                     <option value="<?php echo ($fundingSource['funding_source_id']); ?>" <?php echo ($eidInfo['funding_source'] == $fundingSource['funding_source_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
                                                 <?php } ?>
                                             </select>
@@ -202,11 +195,8 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                             <!-- <tr> -->
                                             <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
                                             <td>
-                                                <select name="labId" id="labId" class="form-control isRequired" title="Lab Name" style="width:100%;">
-                                                    <option value=""> -- Select -- </option>
-                                                    <?php foreach ($lResult as $labName) { ?>
-                                                        <option value="<?php echo $labName['facility_id']; ?>" <?php echo ($eidInfo['lab_id'] == $labName['facility_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($labName['facility_name']); ?></option>
-                                                    <?php } ?>
+                                                <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;">
+                                                    <?= $general->generateSelectOptions($testingLabs, $eidInfo['lab_id'], '-- Select --'); ?>
                                                 </select>
                                             </td>
                                             <!-- </tr> -->
@@ -407,8 +397,12 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                     <td>
                                         <input type="text" class="form-control dateTime isRequired" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;" />
                                     </td>
-                                    <td></td>
-                                    <td></td>
+                                    <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
+                                    <td>
+                                        <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;">
+                                            <?= $general->generateSelectOptions($testingLabs, $eidInfo['lab_id'], '-- Select --'); ?>
+                                        </select>
+                                    </td>
                                 <tr>
                                     <th>Is Sample Rejected ? <span class="mandatory">*</span> </th>
                                     <td>
@@ -426,11 +420,11 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                             <?php foreach ($rejectionTypeResult as $type) { ?>
                                                 <optgroup label="<?php echo ucwords($type['rejection_type']); ?>">
                                                     <?php
-                                                        foreach ($rejectionResult as $reject) {
-                                                            if ($type['rejection_type'] == $reject['rejection_type']) { ?>
+                                                    foreach ($rejectionResult as $reject) {
+                                                        if ($type['rejection_type'] == $reject['rejection_type']) { ?>
                                                             <option value="<?php echo $reject['rejection_reason_id']; ?>" <?php echo ($eidInfo['reason_for_sample_rejection'] == $reject['rejection_reason_id']) ? 'selected="selected"' : ''; ?>><?php echo ucwords($reject['rejection_reason_name']); ?></option>
                                                     <?php }
-                                                        } ?>
+                                                    } ?>
                                                 </optgroup>
                                             <?php } ?>
                                         </select>

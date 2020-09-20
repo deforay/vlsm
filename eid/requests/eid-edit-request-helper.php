@@ -186,23 +186,21 @@ try {
   );
 
 
-  if ($sarr['user_type'] == 'remoteuser') {
-    //$eidData['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] : NULL;
-  } else {
-    if ($_POST['sampleCodeCol'] != '') {
-      //$eidData['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') ? $_POST['sampleCodeCol'] : NULL;
-    } else {
-      $eidModel = new \Vlsm\Models\Eid($db);
+  // if ($sarr['user_type'] == 'remoteuser') {
+  //   //$eidData['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] : NULL;
+  // } else {
+  //   if ($_POST['sampleCodeCol'] != '') {
+  //     //$eidData['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') ? $_POST['sampleCodeCol'] : NULL;
+  //   } else {
+  //     $eidModel = new \Vlsm\Models\Eid($db);
 
-
-
-      $sampleCodeKeysJson = $eidModel->generateEIDSampleCode($_POST['provinceCode'], $_POST['sampleCollectionDate']);
-      $sampleCodeKeys = json_decode($sampleCodeKeysJson, true);
-      $eidData['sample_code'] = $sampleCodeKeys['sampleCode'];
-      $eidData['sample_code_key'] = $sampleCodeKeys['sampleCodeKey'];
-      $eidData['sample_code_format'] = $sampleCodeKeys['sampleCodeFormat'];
-    }
-  }
+  //     $sampleCodeKeysJson = $eidModel->generateEIDSampleCode($_POST['provinceCode'], $_POST['sampleCollectionDate']);
+  //     $sampleCodeKeys = json_decode($sampleCodeKeysJson, true);
+  //     $eidData['sample_code'] = $sampleCodeKeys['sampleCode'];
+  //     $eidData['sample_code_key'] = $sampleCodeKeys['sampleCodeKey'];
+  //     $eidData['sample_code_format'] = $sampleCodeKeys['sampleCodeFormat'];
+  //   }
+  // }
 
 
 

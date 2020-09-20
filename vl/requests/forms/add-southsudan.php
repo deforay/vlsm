@@ -25,7 +25,7 @@ if ($arr['sample_code'] == 'auto' || $arr['sample_code'] == 'alphanumeric' || $a
 }
 //check remote user
 $rKey = '';
-$pdQuery = "SELECT * from province_details";
+$pdQuery = "SELECT * FROM province_details";
 if ($sarr['user_type'] == 'remoteuser') {
      $sampleCodeKey = 'remote_sample_code_key';
      $sampleCode = 'remote_sample_code';
@@ -33,7 +33,7 @@ if ($sarr['user_type'] == 'remoteuser') {
      $chkUserFcMapQry = "Select user_id from vl_user_facility_map where user_id='" . $_SESSION['userId'] . "'";
      $chkUserFcMapResult = $db->query($chkUserFcMapQry);
      if ($chkUserFcMapResult) {
-          $pdQuery = "SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='" . $_SESSION['userId'] . "'";
+          $pdQuery = "SELECT * FROM province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='" . $_SESSION['userId'] . "'";
      }
      $rKey = 'R';
 } else {
@@ -47,41 +47,13 @@ $province .= "<option value=''> -- Select -- </option>";
 foreach ($pdResult as $provinceName) {
      $province .= "<option value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
-$facility = '';
-$facility .= "<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>";
+$facility = $general->generateSelectOptions($healthFacilities, null, '-- Select --');
 //regimen heading
 $artRegimenQuery = "SELECT DISTINCT headings FROM r_art_code_details WHERE nation_identifier ='sudan'";
 $artRegimenResult = $db->rawQuery($artRegimenQuery);
-$aQuery = "SELECT * from r_art_code_details where nation_identifier='sudan' AND art_status ='active'";
+$aQuery = "SELECT * FROM r_art_code_details where nation_identifier='sudan' AND art_status ='active'";
 $aResult = $db->query($aQuery);
-$end_date = date('Y-12-31');
-$start_date = date('Y-01-01');
-if ($arr['sample_code'] == 'MMYY') {
-     $mnthYr = date('my');
-     $end_date = date('Y-m-31');
-     $start_date = date('Y-m-01');
-} else if ($arr['sample_code'] == 'YY') {
-     $mnthYr = date('y');
-     $end_date = date('Y-12-31');
-     $start_date = date('Y-01-01');
-}
 
-
-$end_date = date('Y-12-31');
-$start_date = date('Y-01-01');
-//$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="1" AND vl.sample_code_title="'.$arr['sample_code'].'" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
-$svlQuery = 'SELECT ' . $sampleCodeKey . ' FROM vl_request_form as vl WHERE DATE(vl.sample_collection_date) >= "' . $start_date . '" AND DATE(vl.sample_collection_date) <= "' . $end_date . '" AND ' . $sampleCode . '!="" ORDER BY ' . $sampleCodeKey . ' DESC LIMIT 1';
-
-$svlResult = $db->query($svlQuery);
-$prefix = $arr['sample_code_prefix'];
-if ($svlResult[0][$sampleCodeKey] != '' && $svlResult[0][$sampleCodeKey] != NULL) {
-     $maxId = $svlResult[0][$sampleCodeKey] + 1;
-     $strparam = strlen($maxId);
-     $zeros = substr("000", $strparam);
-     $maxId = $zeros . $maxId;
-} else {
-     $maxId = '001';
-}
 $sKey = '';
 $sFormat = '';
 ?>
@@ -131,7 +103,7 @@ $sFormat = '';
                                                        <input type="text" class="form-control isRequired <?php echo $sampleClass; ?>" id="sampleCode" name="sampleCode" <?php echo $maxLength; ?> placeholder="Enter Sample ID" title="Please enter sample id" style="width:100%;" readonly onblur="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode; ?>',this.id,null,'This sample number already exists.Try another number',null)" />
                                                   </div>
                                              </div>
-                                             <div class="col-xs-3 col-md-3">
+                                             <div class="col-xs-4 col-md-4">
                                                   <div class="form-group">
                                                        <label for="sampleReordered">
                                                             <input type="checkbox" class="" id="sampleReordered" name="sampleReordered" value="yes" title="Please check sample reordered"> Sample Reordered
@@ -140,7 +112,7 @@ $sFormat = '';
                                              </div>
                                              <!-- BARCODESTUFF START -->
                                              <?php if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off") { ?>
-                                                  <div class="col-xs-3 col-md-3 pull-right">
+                                                  <div class="col-xs-4 col-md-4 pull-right">
                                                        <div class="form-group">
                                                             <label for="sampleCode">Print Barcode Label<span class="mandatory">*</span> </label>
                                                             <input type="checkbox" class="" id="printBarCode" name="printBarCode" checked />
@@ -150,7 +122,7 @@ $sFormat = '';
                                              <!-- BARCODESTUFF END -->
                                         </div>
                                         <div class="row">
-                                             <div class="col-xs-3 col-md-3">
+                                             <div class="col-xs-4 col-md-4">
                                                   <div class="form-group">
                                                        <label for="province">State/Province <span class="mandatory">*</span></label>
                                                        <select class="form-control isRequired" name="province" id="province" title="Please choose state" style="width:100%;" onchange="getProvinceDistricts(this);">
@@ -158,7 +130,7 @@ $sFormat = '';
                                                        </select>
                                                   </div>
                                              </div>
-                                             <div class="col-xs-3 col-md-3">
+                                             <div class="col-xs-4 col-md-4">
                                                   <div class="form-group">
                                                        <label for="district">District/County <span class="mandatory">*</span></label>
                                                        <select class="form-control isRequired" name="district" id="district" title="Please choose county" style="width:100%;" onchange="getFacilities(this);">
@@ -166,7 +138,7 @@ $sFormat = '';
                                                        </select>
                                                   </div>
                                              </div>
-                                             <div class="col-xs-3 col-md-3">
+                                             <div class="col-xs-4 col-md-4">
                                                   <div class="form-group">
                                                        <label for="fName">Clinic/Health Center <span class="mandatory">*</span></label>
                                                        <select class="form-control isRequired" id="fName" name="fName" title="Please select clinic/health center name" style="width:100%;" onchange="fillFacilityDetails();">
@@ -174,7 +146,7 @@ $sFormat = '';
                                                        </select>
                                                   </div>
                                              </div>
-                                             <div class="col-xs-3 col-md-3">
+                                             <div class="col-xs-3 col-md-3" style="display:none;">
                                                   <div class="form-group">
                                                        <label for="fCode">Clinic/Health Center Code </label>
                                                        <input type="text" class="form-control" style="width:100%;" name="fCode" id="fCode" placeholder="Clinic/Health Center Code" title="Please enter clinic/health center code">
@@ -190,7 +162,7 @@ $sFormat = '';
                                              <div class="col-xs-2 col-md-2 fContactPerson facilityContactPerson" style="display:none;"></div>
                                         </div>
                                         <div class="row">
-                                             <div class="col-xs-3 col-md-3">
+                                             <div class="col-xs-4 col-md-4">
                                                   <div class="form-group">
                                                        <label for="implementingPartner">Implementing Partner</label>
                                                        <select class="form-control" name="implementingPartner" id="implementingPartner" title="Please choose implementing partner" style="width:100%;">
@@ -203,7 +175,7 @@ $sFormat = '';
                                                        </select>
                                                   </div>
                                              </div>
-                                             <div class="col-xs-3 col-md-3">
+                                             <div class="col-xs-4 col-md-4">
                                                   <div class="form-group">
                                                        <label for="fundingSource">Funding Source</label>
                                                        <select class="form-control" name="fundingSource" id="fundingSource" title="Please choose implementing partner" style="width:100%;">
@@ -770,25 +742,18 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
      function sampleCodeGeneration() {
           var pName = $("#province").val();
           var sDate = $("#sampleCollectionDate").val();
+          $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
           if (pName != '' && sDate != '') {
                $.post("/vl/requests/sampleCodeGeneration.php", {
                          sDate: sDate
                     },
                     function(data) {
                          var sCodeKey = JSON.parse(data);
-                         <?php if ($arr['sample_code'] == 'auto') { ?>
-                              pNameVal = pName.split("##");
-                              sCode = sCodeKey.auto;
-                              $("#sampleCode").val('<?php echo $rKey; ?>' + pNameVal[1] + sCode + sCodeKey.maxId);
-                              $("#sampleCodeFormat").val('<?php echo $rKey; ?>' + pNameVal[1] + sCode);
-                              $("#sampleCodeKey").val(sCodeKey.maxId);
-                              checkSampleNameValidation('vl_request_form', '<?php echo $sampleCode; ?>', 'sampleCode', null, 'This sample number already exists.Try another number', null);
-                         <?php } else if ($arr['sample_code'] == 'YY' || $arr['sample_code'] == 'MMYY') { ?>
-                              $("#sampleCode").val('<?php echo $rKey . $prefix; ?>' + sCodeKey.mnthYr + sCodeKey.maxId);
-                              $("#sampleCodeFormat").val('<?php echo $rKey . $prefix; ?>' + sCodeKey.mnthYr);
-                              $("#sampleCodeKey").val(sCodeKey.maxId);
-                              checkSampleNameValidation('vl_request_form', '<?php echo $sampleCode; ?>', 'sampleCode', null, 'This sample number already exists.Try another number', null)
-                         <?php } ?>
+                         $("#sampleCode").val(sCodeKey.sampleCode);
+                         $("#sampleCodeInText").html(sCodeKey.sampleCode);
+                         $("#sampleCodeFormat").val(sCodeKey.sampleCodeFormat);
+                         $("#sampleCodeKey").val(sCodeKey.maxId);
+                         checkSampleNameValidation('vl_request_form', '<?php echo $sampleCode; ?>', 'sampleCode', null, 'This sample number already exists.Try another number', null)
                     });
           }
      }

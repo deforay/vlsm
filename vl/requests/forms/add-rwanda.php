@@ -40,37 +40,19 @@ $province .= "<option value=''> -- Select -- </option>";
 foreach ($pdResult as $provinceName) {
      $province .= "<option value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
-$facility = '';
-$facility .= "<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>";
-foreach ($fResult as $fDetails) {
-     $facility .= "<option data-code='" . $fDetails['facility_code'] . "' data-emails='" . $fDetails['facility_emails'] . "' data-mobile-nos='" . $fDetails['facility_mobile_numbers'] . "' data-contact-person='" . ucwords($fDetails['contact_person']) . "' value='" . $fDetails['facility_id'] . "'>" . ucwords(addslashes($fDetails['facility_name'])) . ' - ' . $fDetails['facility_code'] . "</option>";
-}
+
+$facility = $general->generateSelectOptions($healthFacilities, null, '-- Select --');
+
 //regimen heading
 $artRegimenQuery = "SELECT DISTINCT headings FROM r_art_code_details WHERE nation_identifier ='rwd'";
 $artRegimenResult = $db->rawQuery($artRegimenQuery);
+
 $aQuery = "SELECT * from r_art_code_details where nation_identifier='rwd' AND art_status ='active'";
 $aResult = $db->query($aQuery);
-if ($arr['sample_code'] == 'MMYY') {
-     $mnthYr = date('my');
-} else if ($arr['sample_code'] == 'YY') {
-     $mnthYr = date('y');
-}
-$start_date = date('Y-01-01');
-$end_date = date('Y-12-31');
-//$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="7" AND vl.sample_code_title="'.$arr['sample_code'].'" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
 
-$svlQuery = 'SELECT ' . $sampleCodeKey . ' FROM vl_request_form as vl WHERE DATE(vl.sample_collection_date) >= "' . $start_date . '" AND DATE(vl.sample_collection_date) <= "' . $end_date . '" AND ' . $sampleCode . '!="" ORDER BY ' . $sampleCodeKey . ' DESC LIMIT 1';
 
-$svlResult = $db->query($svlQuery);
-$prefix = $arr['sample_code_prefix'];
-if (isset($svlResult[0][$sampleCodeKey]) && $svlResult[0][$sampleCodeKey] != '' && $svlResult[0][$sampleCodeKey] != NULL) {
-     $maxId = $svlResult[0][$sampleCodeKey] + 1;
-     $strparam = strlen($maxId);
-     $zeros = substr("000", $strparam);
-     $maxId = $zeros . $maxId;
-} else {
-     $maxId = '001';
-}
+
+
 $sKey = '';
 $sFormat = '';
 ?>
@@ -190,10 +172,7 @@ $sFormat = '';
                                                        <div class="">
                                                             <label for="labId">VL Testing Hub <span class="mandatory">*</span></label>
                                                             <select name="labId" id="labId" class="form-control isRequired" title="Please choose a VL testing hub" style="width:100%;">
-                                                                 <option value="">-- Select --</option>
-                                                                 <?php foreach ($lResult as $labName) { ?>
-                                                                      <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
-                                                                 <?php } ?>
+                                                                 <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
                                                             </select>
                                                        </div>
                                                   </div>
@@ -309,10 +288,13 @@ $sFormat = '';
                                                                            <optgroup label="<?php echo ucwords($heading['headings']); ?>">
                                                                                 <?php
                                                                                 foreach ($aResult as $regimen) {
+
                                                                                      if ($heading['headings'] == $regimen['headings']) { ?>
                                                                                           <option value="<?php echo $regimen['art_code']; ?>"><?php echo $regimen['art_code']; ?></option>
-                                                                                <?php }
-                                                                                } ?>
+                                                                                <?php
+                                                                                     }
+                                                                                }
+                                                                                ?>
                                                                            </optgroup>
                                                                       <?php }
                                                                       if ($sarr['user_type'] != 'vluser') {  ?>
@@ -523,10 +505,7 @@ $sFormat = '';
                                                                                 <label for="labId" class="col-lg-5 control-label">Lab Name </label>
                                                                                 <div class="col-lg-7">
                                                                                      <select name="labId" id="labId" class="form-control" title="Please choose lab">
-                                                                                          <option value="">-- Select --</option>
-                                                                                          <?php foreach ($lResult as $labName) { ?>
-                                                                                               <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
-                                                                                          <?php } ?>
+                                                                                          <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
                                                                                      </select>
                                                                                 </div>
                                                                            </div>

@@ -32,11 +32,11 @@ include_once(APPLICATION_PATH . '/header.php');
 <?php
 
 
-$general = new \Vlsm\Models\General($db);
+// $general = new \Vlsm\Models\General($db);
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
 
-$arr = $general->getGlobalConfig();
-$sarr = $general->getSystemConfig();
+// $arr = $general->getGlobalConfig();
+// $sarr = $general->getSystemConfig();
 
 
 

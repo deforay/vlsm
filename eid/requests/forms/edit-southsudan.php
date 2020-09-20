@@ -43,15 +43,8 @@ $province .= "<option value=''> -- Select -- </option>";
 foreach ($pdResult as $provinceName) {
     $province .= "<option data-code='" . $provinceName['province_code'] . "' data-province-id='" . $provinceName['province_id'] . "' data-name='" . $provinceName['province_name'] . "' value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
-//$facility = "";
-$facility = "<option value=''> -- Select -- </option>";
-foreach ($fResult as $fDetails) {
-    $selected = "";
-    if ($eidInfo['facility_id'] == $fDetails['facility_id']) {
-        $selected = " selected='selected' ";
-    }
-    $facility .= "<option value='" . $fDetails['facility_id'] . "' $selected>" . ucwords(addslashes($fDetails['facility_name'])) . "</option>";
-}
+
+$facility = $general->generateSelectOptions($healthFacilities, $eidInfo['facility_id'], '-- Select --');
 
 $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(",", $eidInfo['mother_treatment']) : array();
 
@@ -60,14 +53,14 @@ $sampleSuggestion = '';
 $sampleSuggestionDisplay = 'display:none;';
 $sCode = $_GET['c'];
 if ($sarr['user_type'] == 'vluser' && $sCode != '') {
-     $vlObj = new \Vlsm\Models\Eid($db);
-     $sampleCollectionDate = explode(" ",$sampleCollectionDate);
-     $sampleCollectionDate = $general->humanDateFormat($sampleCollectionDate[0]);
-     $sampleSuggestionJson = $vlObj->generateEIDSampleCode($stateResult[0]['province_code'],$sampleCollectionDate,'png');
-     $sampleCodeKeys = json_decode($sampleSuggestionJson, true);
-     $sampleSuggestion = $sampleCodeKeys['sampleCode'];
-     $sampleSuggestionDisplay = 'display:block;';
-}    
+    $vlObj = new \Vlsm\Models\Eid($db);
+    $sampleCollectionDate = explode(" ", $sampleCollectionDate);
+    $sampleCollectionDate = $general->humanDateFormat($sampleCollectionDate[0]);
+    $sampleSuggestionJson = $vlObj->generateEIDSampleCode($stateResult[0]['province_code'], $sampleCollectionDate, 'png');
+    $sampleCodeKeys = json_decode($sampleSuggestionJson, true);
+    $sampleSuggestion = $sampleCodeKeys['sampleCode'];
+    $sampleSuggestionDisplay = 'display:block;';
+}
 
 ?>
 
@@ -121,13 +114,13 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         <td></td>
                                     </tr>
                                     <tr>
-                                        <td><label for="province">Province </label><span class="mandatory">*</span></td>
+                                        <td><label for="province">Province/State </label><span class="mandatory">*</span></td>
                                         <td>
                                             <select class="form-control isRequired" name="province" id="province" title="Please choose province" onchange="getfacilityDetails(this);" style="width:100%;">
                                                 <?php echo $province; ?>
                                             </select>
                                         </td>
-                                        <td><label for="district">District </label><span class="mandatory">*</span></td>
+                                        <td><label for="district">District/County </label><span class="mandatory">*</span></td>
                                         <td>
                                             <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getfacilityDistrictwise(this);">
                                                 <option value=""> -- Select -- </option>
@@ -148,7 +141,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                 <option value=""> -- Select -- </option>
                                                 <?php
                                                 foreach ($implementingPartnerList as $implementingPartner) {
-                                                    ?>
+                                                ?>
                                                     <option value="<?php echo ($implementingPartner['i_partner_id']); ?>" <?php echo ($eidInfo['implementing_partner'] == $implementingPartner['i_partner_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
                                                 <?php } ?>
                                             </select>
@@ -159,7 +152,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                 <option value=""> -- Select -- </option>
                                                 <?php
                                                 foreach ($fundingSourceList as $fundingSource) {
-                                                    ?>
+                                                ?>
                                                     <option value="<?php echo ($fundingSource['funding_source_id']); ?>" <?php echo ($eidInfo['funding_source'] == $fundingSource['funding_source_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
                                                 <?php } ?>
                                             </select>
@@ -168,22 +161,20 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             <!-- <tr> -->
                                             <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
                                             <td>
-                                                <select name="labId" id="labId" class="form-control isRequired" title="Lab Name" style="width:100%;">
-                                                    <option value=""> -- Select -- </option>
-                                                    <?php foreach ($lResult as $labName) { ?>
-                                                        <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
-                                                    <?php } ?>
+                                                <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;">
+                                                    <?= $general->generateSelectOptions($testingLabs, $eidInfo['lab_id'], '-- Select --'); ?>
                                                 </select>
                                             </td>
                                             <!-- </tr> -->
                                         <?php } ?>
                                     </tr>
                                 </table>
-                                <br><hr style="border: 1px solid #ccc;">
+                                <br>
+                                <hr style="border: 1px solid #ccc;">
 
                                 <div class="box-header with-border">
                                     <h3 class="box-title">CHILD and MOTHER INFORMATION</h3>
-                                </div>                                
+                                </div>
                                 <table class="table" style="width:100%">
 
                                     <tr>
@@ -199,7 +190,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                     <tr>
                                         <th><label for="childDob">Date of Birth <span class="mandatory">*</span> </label></th>
                                         <td>
-                                            <input type="text" class="form-control isRequired" id="childDob" name="childDob" placeholder="Date of birth" title="Please enter Date of birth" style="width:100%;" value="<?php echo $general->humanDateFormat($eidInfo['child_dob']) ?>"  onchange="calculateAgeInMonths();" />
+                                            <input type="text" class="form-control isRequired" id="childDob" name="childDob" placeholder="Date of birth" title="Please enter Date of birth" style="width:100%;" value="<?php echo $general->humanDateFormat($eidInfo['child_dob']) ?>" onchange="calculateAgeInMonths();" />
                                         </td>
                                         <th><label for="childGender">Gender <span class="mandatory">*</span> </label></th>
                                         <td>
@@ -342,7 +333,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                     <tr>
                                         <th style="width:15% !important">Sample Collection Date <span class="mandatory">*</span> </th>
                                         <td style="width:35% !important;">
-                                            <input class="form-control dateTime isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" value="<?php echo $general->humanDateFormat($eidInfo['sample_collection_date']); ?>" />
+                                            <input class="form-control dateTime isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" value="<?php echo ($eidInfo['sample_collection_date']); ?>" />
                                         </td>
                                         <th style="width:15% !important;"></th>
                                         <td style="width:35% !important;"></td>
@@ -375,8 +366,12 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             <td>
                                                 <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter sample receipt date" value="<?php echo $general->humanDateFormat($eidInfo['sample_received_at_vl_lab_datetime']) ?>" onchange="" style="width:100%;" />
                                             </td>
-                                            <td></td>
-                                            <td></td>
+                                            <td><label for="labId">Lab Name </label> </td>
+                                            <td>
+                                                <select name="labId" id="labId" class="form-control" title="Please select Testing Lab name" style="width:100%;">
+                                                    <?= $general->generateSelectOptions($testingLabs, $eidInfo['lab_id'], '-- Select --'); ?>
+                                                </select>
+                                            </td>
                                         <tr>
                                             <th>Is Sample Rejected ?</th>
                                             <td>
@@ -397,8 +392,8 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                             foreach ($rejectionResult as $reject) {
                                                                 if ($type['rejection_type'] == $reject['rejection_type']) { ?>
                                                                     <option value="<?php echo $reject['rejection_reason_id']; ?>" <?php echo ($eidInfo['reason_for_sample_rejection'] == $reject['rejection_reason_id']) ? 'selected="selected"' : ''; ?>><?php echo ucwords($reject['rejection_reason_name']); ?></option>
-                                                                <?php }
-                                                        } ?>
+                                                            <?php }
+                                                            } ?>
                                                         </optgroup>
                                                     <?php }  ?>
                                                 </select>
@@ -436,11 +431,9 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                         <?php } ?>
                         <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                         <input type="hidden" name="formId" id="formId" value="1" />
-                        <input type="hidden" name="eidSampleId" id="eidSampleId"  value="<?php echo $eidInfo['eid_id']; ?>" />
-                        <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
-                        
-                        <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
-                        <input type="hidden" name="oldStatus" id="oldStatus" value="<?php echo $eidInfo['result_status']; ?>" />                        
+                        <input type="hidden" name="eidSampleId" id="eidSampleId" value="<?php echo $eidInfo['eid_id']; ?>" />
+                        <input type="hidden" name="sampleCodeCol" id="sampleCodeCol" value="<?php echo $eidInfo['sample_code']; ?>" />
+                        <input type="hidden" name="oldStatus" id="oldStatus" value="<?php echo $eidInfo['result_status']; ?>" />
                         <input type="hidden" name="provinceCode" id="provinceCode" />
                         <input type="hidden" name="provinceId" id="provinceId" />
                         <a href="/eid/requests/eid-requests.php" class="btn btn-default"> Cancel</a>
@@ -473,17 +466,17 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         }
         if ($.trim(pName) != '') {
             //if (provinceName) {
-                $.post("/includes/getFacilityForClinic.php", {
-                        pName: pName
-                    },
-                    function(data) {
-                        if (data != "") {
-                            details = data.split("###");
-                            $("#facilityId").html(details[0]);
-                            $("#district").html(details[1]);
-                            $("#clinicianName").val(details[2]);
-                        }
-                    });
+            $.post("/includes/getFacilityForClinic.php", {
+                    pName: pName
+                },
+                function(data) {
+                    if (data != "") {
+                        details = data.split("###");
+                        $("#facilityId").html(details[0]);
+                        $("#district").html(details[1]);
+                        $("#clinicianName").val(details[2]);
+                    }
+                });
             //}
         } else if (pName == '') {
             provinceName = true;

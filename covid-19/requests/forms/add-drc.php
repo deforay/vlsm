@@ -50,12 +50,12 @@ if ($sarr['user_type'] == 'remoteuser') {
 }
 $pdResult = $db->query($pdQuery);
 $province = "";
-$province .= "<option value=''> -- Select -- </option>";
+$province .= "<option value=''> -- Sélectionner -- </option>";
 foreach ($pdResult as $provinceName) {
     $province .= "<option data-code='" . $provinceName['province_code'] . "' data-province-id='" . $provinceName['province_id'] . "' data-name='" . $provinceName['province_name'] . "' value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
 
-$facility = $general->generateSelectOptions($healthFacilities, null, '-- Select --');
+$facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélectionner --');
 
 ?>
 
@@ -125,7 +125,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         <td><label for="district">Zone de Santé </label><span class="mandatory">*</span></td>
                                         <td>
                                             <select class="form-control isRequired" name="district" id="district" title="Zone de Santé" style="width:100%;" onchange="getfacilityDistrictwise(this);">
-                                                <option value=""> -- Select -- </option>
+                                                <option value=""> -- Sélectionner -- </option>
                                             </select>
                                         </td>
                                         <td><label for="facilityId">Nom de l'installation </label><span class="mandatory">*</span></td>
@@ -140,8 +140,8 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             <!-- <tr> -->
                                             <td><label for="labId">LAB ID <span class="mandatory">*</span></label> </td>
                                             <td>
-                                                <select name="labId" id="labId" class="form-control isRequired" title="LAB ID" style="width:100%;">
-                                                    <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
+                                                <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;">
+                                                    <?= $general->generateSelectOptions($testingLabs, null, '-- Sélectionner --'); ?>
                                                 </select>
                                             </td>
                                             <!-- </tr> -->
@@ -181,7 +181,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         <th><label for="patientGender">Sexe <span class="mandatory">*</span> </label></th>
                                         <td>
                                             <select class="form-control isRequired" name="patientGender" id="patientGender">
-                                                <option value=''> -- Select -- </option>
+                                                <option value=''> -- Sélectionner -- </option>
                                                 <option value='male'> Homme </option>
                                                 <option value='female'> Femme </option>
                                                 <option value='other'> Other </option>
@@ -192,7 +192,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         <th><label for="isPatientPregnant">Enceinte</label></th>
                                         <td>
                                             <select class="form-control" name="isPatientPregnant" id="isPatientPregnant">
-                                                <option value=''> -- Select -- </option>
+                                                <option value=''> -- Sélectionner -- </option>
                                                 <option value='yes'> Enceinte </option>
                                                 <option value='no'> Pas Enceinte </option>
                                                 <option value='unknown'> Inconnue </option>
@@ -282,7 +282,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                         <td style="width:50%;">
                                                             <input name="symptomId[]" type="hidden" value="<?php echo $symptomId; ?>">
                                                             <select name="symptomDetected[]" class="form-control isRequired" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" style="width:100%" onchange="checkSubSymptoms(this,<?php echo $symptomId; ?>,<?php echo $index; ?>);">
-                                                                <option value="">-- Select --</option>
+                                                                <option value="">-- Sélectionner --</option>
                                                                 <option value='yes'> Oui </option>
                                                                 <option value='no'> Non </option>
                                                                 <option value='unknown'> Inconnu </option>
@@ -305,7 +305,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                         <td style="width:50%;">
                                                             <input name="comorbidityId[]" type="hidden" value="<?php echo $comorbiditiesId; ?>">
                                                             <select name="comorbidityDetected[]" class="form-control isRequired" title="<?php echo $comorbiditiesName; ?>" style="width:100%">
-                                                                <option value="">-- Select --</option>
+                                                                <option value="">-- Sélectionner --</option>
                                                                 <option value='yes'> Oui </option>
                                                                 <option value='no'> Non </option>
                                                                 <option value='unknown'> Inconnu </option>
@@ -330,7 +330,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                         <td style="width:50%;">
                                                             <input name="responseId[]" type="hidden" value="<?php echo $reasonId; ?>">
                                                             <select name="responseDetected[]" class="form-control isRequired" title="Définition de cas <?php echo $responseName; ?>" style="width:100%" onchange="checkSubResponse(this,<?php echo $reasonId; ?>,<?php echo $index; ?>);">
-                                                                <option value="">-- Select --</option>
+                                                                <option value="">-- Sélectionner --</option>
                                                                 <option value='yes'> Oui </option>
                                                                 <option value='no'> Non </option>
                                                                 <option value='unknown'> Inconnu </option>
@@ -499,7 +499,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             <th><label for="sampleCondition">Condition de l'échantillon</label></th>
                                             <td>
                                                 <select class="form-control" name="sampleCondition" id="sampleCondition" title="Condition de l'échantillon">
-                                                    <option value=''> -- Select -- </option>
+                                                    <option value=''> -- Sélectionner -- </option>
                                                     <option value="adequate"> Adéquat </option>
                                                     <option value="not-adequate"> Non Adéquat </option>
                                                     <option value="autres"> Autres </option>
@@ -509,7 +509,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             <td class="lab-show"><label for="labId">Nom du laboratoire </label> </td>
                                             <td class="lab-show">
                                                 <select name="labId" id="labId" class="form-control" title="Nom du laboratoire" style="width:100%;">
-                                                    <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
+                                                    <?= $general->generateSelectOptions($testingLabs, null, '-- Sélectionner --'); ?>
                                                 </select>
                                             </td>
                                             <th>L'échantillon est-il rejeté?</th>
@@ -526,7 +526,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             <th class="show-rejection" style="display:none;">Raison du rejet</th>
                                             <td class="show-rejection" style="display:none;">
                                                 <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason" title="Raison du rejet">
-                                                    <option value=''> -- Select -- </option>
+                                                    <option value=''> -- Sélectionner -- </option>
                                                     <?php echo $rejectionReason; ?>
                                                 </select>
                                             </td>
@@ -572,7 +572,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                                 <input type="text" name="testDate[]" id="testDate1" class="form-control test-name-table-input dateTime" placeholder="Testé sur" title="Veuillez saisir le test pour la ligne 1" />
                                                             </td>
                                                             <td><select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult1" title="Veuillez sélectionner le résultat pour la ligne 1">
-                                                                    <option value=''> -- Select -- </option>
+                                                                    <option value=''> -- Sélectionner -- </option>
                                                                     <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
                                                                         <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option>
                                                                     <?php } ?>
@@ -589,7 +589,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                             <th colspan="3" class="text-right">Résultat final</th>
                                                             <td>
                                                                 <select class="form-control" name="result" id="result" title="Résultat final">
-                                                                    <option value=''> -- Select -- </option>
+                                                                    <option value=''> -- Sélectionner -- </option>
                                                                     <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
                                                                         <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option>
                                                                     <?php } ?>
@@ -626,7 +626,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             <th>Le résultat est-il autorisé?</th>
                                             <td>
                                                 <select name="isResultAuthorized" id="isResultAuthorized" class="disabled-field form-control" title="Le résultat est-il autorisé?" style="width:100%">
-                                                    <option value="">-- Select --</option>
+                                                    <option value="">-- Sélectionner --</option>
                                                     <option value='yes'> Oui </option>
                                                     <option value='no'> Non </option>
                                                 </select>
@@ -712,7 +712,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
             $("#province").html("<?php echo $province; ?>");
             $("#facilityId").html("<?php echo $facility; ?>");
             $("#facilityId").select2("val", "");
-            $("#district").html("<option value=''> -- Select -- </option>");
+            $("#district").html("<option value=''> -- Sélectionner -- </option>");
         }
         $.unblockUI();
     }
@@ -751,7 +751,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                     }
                 });
         } else {
-            $("#facilityId").html("<option value=''> -- Select -- </option>");
+            $("#facilityId").html("<option value=''> -- Sélectionner -- </option>");
         }
         $.unblockUI();
     }
@@ -914,7 +914,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
         b.innerHTML = tableRowId;
         c.innerHTML = '<select onchange="otherCovidTestName(this.value,' + tableRowId + ')" class="form-control test-name-table-input" id="testName' + tableRowId + '" name="testName[]" title="Veuillez saisir le nom du test pour les lignes ' + tableRowId + '"> <option value="">--Select--</option> <option value="PCR/RT-PCR">PCR/RT-PCR</option> <option value="RdRp-SARS Cov-2">RdRp-SARS Cov-2</option> <option value="other">Others</option> </select> <input type="text" name="testName[]" id="testName' + tableRowId + '" class="form-control testInputOther' + tableRowId + ' test-name-table-input" placeholder="Entrez le nom du test ' + tableRowId + '" title="Veuillez saisir le nom du test pour les lignes ' + tableRowId + '" style="display: none;margin-top: 10px;"/>';
         d.innerHTML = '<input type="text" name="testDate[]" id="testDate' + tableRowId + '" class="form-control test-name-table-input dateTime" placeholder="Testé sur"  title="Veuillez sélectionner la Date de l analyse pour la ligne ' + tableRowId + '"/>';
-        e.innerHTML = '<select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult' + tableRowId + '" title="Veuillez sélectionner le résultat pour la ligne ' + tableRowId + '"><option value=""> -- Select -- </option><?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?> <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option> <?php } ?> </select>';
+        e.innerHTML = '<select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult' + tableRowId + '" title="Veuillez sélectionner le résultat pour la ligne ' + tableRowId + '"><option value=""> -- Sélectionner -- </option><?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?> <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option> <?php } ?> </select>';
         f.innerHTML = '<a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;<a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>';
         $(a).fadeIn(800);
         $('.dateTime').datetimepicker({

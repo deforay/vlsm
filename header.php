@@ -14,7 +14,7 @@ $crossLoginQuery = "SELECT `login_id`,`password`,`user_name` FROM `user_details`
 $crossLoginResult = $db->rawQueryOne($crossLoginQuery);
 /* Crosss Login Block End */
 
-$global = $general->getGlobalConfig();
+$arr = $general->getGlobalConfig();
 $sarr = $general->getSystemConfig();
 
 
@@ -36,15 +36,15 @@ if (isset($systemConfig['instanceName']) && !empty($systemConfig['instanceName']
 	$systemType = $systemConfig['instanceName'];
 }
 
-if (isset($global['default_time_zone']) && $global['default_time_zone'] != '') {
-	date_default_timezone_set($global['default_time_zone']);
+if (isset($arr['default_time_zone']) && $arr['default_time_zone'] != '') {
+	date_default_timezone_set($arr['default_time_zone']);
 } else {
 	date_default_timezone_set(!empty(date_default_timezone_get()) ?  date_default_timezone_get() : "UTC");
 }
 $hideResult = '';
 $hideRequest = '';
-if (isset($global['instance_type']) && $global['instance_type'] != '') {
-	if ($global['instance_type'] == 'Clinic/Lab') {
+if (isset($arr['instance_type']) && $arr['instance_type'] != '') {
+	if ($arr['instance_type'] == 'Clinic/Lab') {
 		$hideResult = "display:none;";
 	}
 }
@@ -299,7 +299,7 @@ $formConfigResult = $db->query($formConfigQuery);
 								<!-- Menu Footer-->
 								<?php $alignRight = '';
 								$showProfileBtn = "style=display:none;";
-								if ($global['edit_profile'] != 'no') {
+								if ($arr['edit_profile'] != 'no') {
 									$alignRight = "pull-right-xxxxx";
 									$showProfileBtn = "style=display:block;";
 								} ?>
@@ -322,10 +322,10 @@ $formConfigResult = $db->query($formConfigQuery);
 			<section class="sidebar">
 				<!-- sidebar menu: : style can be found in sidebar.less -->
 				<!-- Sidebar user panel -->
-				<?php if (isset($global['logo']) && trim($global['logo']) != "" && file_exists('uploads' . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $global['logo'])) { ?>
+				<?php if (isset($arr['logo']) && trim($arr['logo']) != "" && file_exists('uploads' . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $arr['logo'])) { ?>
 					<div class="user-panel">
 						<div align="center">
-							<img src="/uploads/logo/<?php echo $global['logo']; ?>" alt="Logo Image" style="max-width:120px;">
+							<img src="/uploads/logo/<?php echo $arr['logo']; ?>" alt="Logo Image" style="max-width:120px;">
 						</div>
 					</div>
 				<?php } ?>
@@ -519,7 +519,7 @@ $formConfigResult = $db->query($formConfigQuery);
 						} ?>
 
 						<?php
-						if (isset($global['enable_qr_mechanism']) && trim($global['enable_qr_mechanism']) == 'yes' && $grCodeMenuAccess == true) { ?>
+						if (isset($arr['enable_qr_mechanism']) && trim($arr['enable_qr_mechanism']) == 'yes' && $grCodeMenuAccess == true) { ?>
 							<li class="treeview qr">
 								<a href="#">
 									<i class="fa fa-qrcode"></i>
@@ -692,10 +692,10 @@ $formConfigResult = $db->query($formConfigQuery);
 								if (isset($_SESSION['privileges']) && in_array("covid-19-manual-results.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu covid19ResultsMenu"><a href="/covid-19/results/covid-19-manual-results.php"><i class="fa fa-circle-o"></i> Enter Result Manually</a></li>
 								<?php }
-								if ($global['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes' && isset($_SESSION['privileges']) && in_array("covid-19-confirmation-manifest.php", $_SESSION['privileges'])) { ?>
+								if ($arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes' && isset($_SESSION['privileges']) && in_array("covid-19-confirmation-manifest.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu covid19ResultsConfirmationMenu"><a href="/covid-19/results/covid-19-confirmation-manifest.php"><i class="fa fa-circle-o"></i> Confirmation Manifest</a></li>
 								<?php }
-								if ($global['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes' && isset($_SESSION['privileges']) && in_array("can-record-confirmatory-tests.php", $_SESSION['privileges']) && ($sarr['user_type'] != 'remoteuser')) { ?>
+								if ($arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes' && isset($_SESSION['privileges']) && in_array("can-record-confirmatory-tests.php", $_SESSION['privileges']) && ($sarr['user_type'] != 'remoteuser')) { ?>
 									<li class="allMenu canRecordConfirmatoryTestsCovid19Menu"><a href="/covid-19/results/can-record-confirmatory-tests.php"><i class="fa fa-circle-o"></i> Record Confirmatory Tests</a></li>
 								<?php } 
 								if (isset($_SESSION['privileges']) && in_array("covid-19-result-status.php", $_SESSION['privileges'])) { ?>

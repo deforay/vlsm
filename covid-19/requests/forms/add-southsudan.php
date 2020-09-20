@@ -159,7 +159,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             <!-- <tr> -->
                                             <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
                                             <td>
-                                                <select name="labId" id="labId" class="form-control isRequired" title="Lab Name" style="width:100%;">
+                                                <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;">
                                                     <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
                                                 </select>
                                             </td>
@@ -309,7 +309,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             </td>
                                             <td class="lab-show"><label for="labId">Lab Name </label> </td>
                                             <td class="lab-show">
-                                                <select name="labId" id="labId" class="form-control" title="Lab Name" style="width:100%;">
+                                                <select name="labId" id="labId" class="form-control" title="Please select Testing Lab name" style="width:100%;">
                                                     <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
                                                 </select>
                                             </td>
