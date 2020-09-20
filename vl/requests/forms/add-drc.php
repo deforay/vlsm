@@ -261,7 +261,7 @@ $sFormat = '';
                   <tr>
                     <td colspan="4">
                       <label for="hasChangedRegimen">Ce patient a-t-il déjà changé de régime de traitement? </label>
-                      <label class="radio-inline">&nbsp;&nbsp;&nbsp;&nbsp;Oui </label>
+                      <br><label class="radio-inline">&nbsp;&nbsp;&nbsp;&nbsp;Oui </label>
                       <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                         <input type="radio" class="" id="changedRegimenYes" name="hasChangedRegimen" value="yes" title="Please check any of one option">
                       </label>
@@ -277,7 +277,7 @@ $sFormat = '';
                   </tr>
                   <tr class="arvChangedElement" style="display:none;">
                     <td><label for="">Date du changement de régime ARV </label></td>
-                    <td colspan="2">
+                    <td colspan="3">
                       <input type="text" class="form-control date" id="dateOfArvRegimenChange" name="dateOfArvRegimenChange" placeholder="e.g 09-Jan-1992" title="Please enter date du changement de régime ARV" style="width:100%;" /> &nbsp;(Jour/Mois/Année)
                     </td>
                     <td></td>
@@ -288,7 +288,7 @@ $sFormat = '';
                   </tr>
                   <tr>
                     <td><label for="reasonForRequest">Motif de la demande </label></td>
-                    <td colspan="2">
+                    <td colspan="3">
                       <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose motif de la demande" onchange="checkVLTestReason();">
                         <option value=""> -- Sélectionner -- </option>
                         <?php
@@ -300,11 +300,9 @@ $sFormat = '';
                       </select>
                     </td>
                     <td style="text-align:center;"><label for="viralLoadNo">Charge virale N </label></td>
-                    <td colspan="2">
+                    <td colspan="3">
                       <input type="text" class="form-control" id="viralLoadNo" name="viralLoadNo" placeholder="Charge virale N" title="Please enter charge virale N" style="width:100%;" />
                     </td>
-                    <td></td>
-                    <td></td>
                   </tr>
                   <tr class="newVlTestReason" style="display:none;">
                     <td><label for="newVlTestReason">Autre, à préciser <span class="mandatory">*</span></label></td>
@@ -356,21 +354,19 @@ $sFormat = '';
                   </tr>
                   <tr>
                     <td><label for="lastViralLoadResult">Résultat dernière charge virale </label></td>
-                    <td colspan="2">
+                    <td colspan="3">
                       <input type="text" class="form-control" id="lastViralLoadResult" name="lastViralLoadResult" placeholder="Résultat dernière charge virale" title="Please enter résultat dernière charge virale" style="width:100%;" />
                     </td>
                     <td>copies/ml</td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
                   </tr>
                   <tr>
                     <td><label for="">Date dernière charge virale (demande) </label></td>
-                    <td colspan="2">
+                    <td colspan="3">
                       <input type="text" class="form-control date" id="lastViralLoadTestDate" name="lastViralLoadTestDate" placeholder="e.g 09-Jan-1992" title="Please enter date dernière charge virale" onchange="checkLastVLTestDate();" style="width:100%;" />
                     </td>
-                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -439,9 +435,9 @@ $sFormat = '';
                   </div>
                   <table class="table" style="width:100%">
                     <tr>
-                      <td style="width:25%;"><label for="">Date de réception de l'échantillon <span class="mandatory">*</span> </label></td>
+                      <td style="width:25%;"><label for="">Date de réception de l'échantillon <span class="mandatory">*</span> </label></td>
                       <td style="width:25%;">
-                        <input type="text" class="form-control dateTime isRequired" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="checkSampleReceviedDate();" style="width:100%;" />
+                        <input type="text" class="form-control dateTime isRequired" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de l'échantillon" <?php echo $labFieldDisabled; ?> onchange="checkSampleReceviedDate();" style="width:100%;" />
                       </td>
                       <td style="width:25%;"></td>
                       <td style="width:25%;"></td>

@@ -784,14 +784,16 @@ $disable = "disabled = 'disabled'";
 
 
 
-  if ($(".specialResults").is(':checked')) {
+  if ($(".specialResults:checked")) {
     $('#vlResult, #vlLog').val('');
     $('#vlResult,#vlLog').attr('readonly', true);
     $('#vlResult, #vlLog').removeClass('isRequired');
-    //$(".specialResults").not(this).attr('disabled',true);
-    //$('.specialResults').not(this).prop('checked', false).removeAttr('checked');
+    $(".specialResults").attr('disabled', false);
+    $(".specialResults").not($(".specialResults:checked")).attr('disabled',true);
+    $('.specialResults').not($(".specialResults:checked")).prop('checked', false).removeAttr('checked');
   }
   if ($('#vlResult, #vlLog').val() != '') {
+    $('.specialResults').prop('checked', false).removeAttr('checked');
     $(".specialResults").attr('disabled', true);
     $('#vlResult').addClass('isRequired');
   }

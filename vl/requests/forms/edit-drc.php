@@ -305,7 +305,7 @@ $sampleSuggestionDisplay = 'display:none;';
                   <tr>
                     <td colspan="4">
                       <label for="hasChangedRegimen">Ce patient a-t-il déjà changé de régime de traitement? </label>
-                      <label class="radio-inline">&nbsp;&nbsp;&nbsp;&nbsp;Oui </label>
+                      <br><label class="radio-inline">&nbsp;&nbsp;&nbsp;&nbsp;Oui </label>
                       <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                         <input type="radio" class="" id="changedRegimenYes" name="hasChangedRegimen" value="yes" title="Please check any of one option" <?php echo (trim($vlQueryInfo['has_patient_changed_regimen']) == "yes") ? 'checked="checked"' : ''; ?>>
                       </label>
@@ -321,10 +321,9 @@ $sampleSuggestionDisplay = 'display:none;';
                   </tr>
                   <tr class="arvChangedElement" style="display:<?php echo (trim($vlQueryInfo['has_patient_changed_regimen']) == "yes") ? '' : 'none'; ?>;">
                     <td><label for="">Date du changement de régime ARV </label></td>
-                    <td colspan="2">
+                    <td colspan="3">
                       <input type="text" class="form-control date" id="dateOfArvRegimenChange" name="dateOfArvRegimenChange" placeholder="e.g 09-Jan-1992" title="Please enter date du changement de régime ARV" value="<?php echo $vlQueryInfo['regimen_change_date']; ?>" style="width:100%;" />&nbsp;(Jour/Mois/Année)
                     </td>
-                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -332,7 +331,7 @@ $sampleSuggestionDisplay = 'display:none;';
                   </tr>
                   <tr>
                     <td><label for="reasonForRequest">Motif de la demande </label></td>
-                    <td colspan="2">
+                    <td colspan="3">
                       <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose motif de la demande" onchange="checkVLTestReason();">
                         <option value=""> -- Sélectionner -- </option>
                         <?php foreach ($vlTestReasonResult as $tReason) { ?>
@@ -344,18 +343,15 @@ $sampleSuggestionDisplay = 'display:none;';
                       </select>
                     </td>
                     <td style="text-align:center;"><label for="viralLoadNo">Charge virale N </label></td>
-                    <td colspan="2">
+                    <td colspan="3">
                       <input type="text" class="form-control" id="viralLoadNo" name="viralLoadNo" placeholder="Charge virale N" title="Please enter charge virale N" value="<?php echo $vlQueryInfo['vl_test_number']; ?>" style="width:100%;" />
                     </td>
-                    <td></td>
-                    <td></td>
                   </tr>
                   <tr class="newVlTestReason" style="display:none;">
                     <td><label for="newVlTestReason">Autre, à préciser <span class="mandatory">*</span></label></td>
-                    <td colspan="2">
+                    <td colspan="3">
                       <input type="text" class="form-control" name="newVlTestReason" id="newVlTestReason" placeholder="Virale Demande Raison" title="Please enter virale demande raison" style="width:100%;">
                     </td>
-                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -400,21 +396,19 @@ $sampleSuggestionDisplay = 'display:none;';
                   </tr>
                   <tr>
                     <td><label for="lastViralLoadResult">Résultat dernière charge virale </label></td>
-                    <td colspan="2">
+                    <td colspan="3">
                       <input type="text" class="form-control" id="lastViralLoadResult" name="lastViralLoadResult" placeholder="Résultat dernière charge virale" title="Please enter résultat dernière charge virale" value="<?php echo $vlQueryInfo['last_viral_load_result']; ?>" style="width:100%;" />
                     </td>
                     <td>copies/ml</td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
                   </tr>
                   <tr>
                     <td><label for="">Date dernière charge virale (demande) </label></td>
-                    <td colspan="2">
+                    <td colspan="3">
                       <input type="text" class="form-control date" id="lastViralLoadTestDate" name="lastViralLoadTestDate" placeholder="e.g 09-Jan-1992" title="Please enter date dernière charge virale" value="<?php echo $vlQueryInfo['last_viral_load_date']; ?>" onchange="checkLastVLTestDate();" style="width:100%;" />
                     </td>
-                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -483,12 +477,12 @@ $sampleSuggestionDisplay = 'display:none;';
                   </div>
                   <table class="table" style="width:100%">
                     <tr style="display:<?php echo ($sCode != '') ? 'none' : 'block'; ?>">
-                      <td style="width:25%;"><label for="">Date de réception de léchantillon </label></td>
-                      <td style="width:25%;">
-                        <input type="text" class="form-control dateTime" id="sampleReceivedDate<?php echo ($sCode != '') ? 'Lab' : ''; ?>" name="sampleReceivedDate<?php echo ($sCode != '') ? 'Lab' : ''; ?>" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="checkSampleReceviedDate();" value="<?php echo $vlQueryInfo['sample_received_at_vl_lab_datetime']; ?>" style="width:100%;" />
+                      <td><label for="">Date de réception de l'échantillon <span class="mandatory">*</span> </label></td>
+                      <td >
+                        <input type="text" class="form-control dateTime isRequired" id="sampleReceivedDate<?php echo ($sCode != '') ? 'Lab' : ''; ?>" name="sampleReceivedDate<?php echo ($sCode != '') ? 'Lab' : ''; ?>" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="checkSampleReceviedDate();" value="<?php echo $vlQueryInfo['sample_received_at_vl_lab_datetime']; ?>" style="width:100%;" />
                       </td>
-                      <td style="width:25%;"></td>
-                      <td style="width:25%;"></td>
+                      <td style=""></td>
+                      <td style=""></td>
                     </tr>
                     <?php if (isset($arr['testing_status']) && trim($arr['testing_status']) == "enabled") { ?>
                       <tr style="<?php echo (($_SESSION['userType'] == 'clinic' || $_SESSION['userType'] == 'lab') && $vlQueryInfo['result_status'] == 9) ? 'display:none;' : ''; ?>">
@@ -848,7 +842,7 @@ $sampleSuggestionDisplay = 'display:none;';
       }
     });
 
-    $('.specialResults').change(function() {
+    $('.specialResults').on('change',function() {
       if ($(this).is(':checked')) {
         $('#vlResult, #vlLog').val('');
         $('#vlResult,#vlLog').attr('readonly', true);

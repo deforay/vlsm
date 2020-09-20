@@ -729,7 +729,7 @@ if (isset($vlQueryInfo['reason_for_vl_result_changes']) && $vlQueryInfo['reason_
                                                                                 </div>
                                                                            </div>
                                                                            <div class="row">
-                                                                                <div class="col-md-4" style="<?php echo ((($sarr['user_type'] == 'remoteuser') && $vlQueryInfo['result_status'] == 9) || ($sCode != '')) ? 'display:none;' : ''; ?>">
+                                                                                <!-- <div class="col-md-4" style="<?php echo ((($sarr['user_type'] == 'remoteuser') && $vlQueryInfo['result_status'] == 9) || ($sCode != '')) ? 'display:none;' : ''; ?>">
                                                                                      <label class="col-lg-5 control-label" for="status">Status </label>
                                                                                      <div class="col-lg-7">
                                                                                           <select class="form-control labSection <?php echo ($sarr['user_type'] == 'remoteuser') ? '' : ''; ?>" id="status" name="status" title="Please select test status" <?php echo $labFieldDisabled; ?>>
@@ -739,7 +739,7 @@ if (isset($vlQueryInfo['reason_for_vl_result_changes']) && $vlQueryInfo['reason_
                                                                                                <?php } ?>
                                                                                           </select>
                                                                                      </div>
-                                                                                </div>
+                                                                                </div> -->
                                                                                 <div class="col-md-8 reasonForResultChanges" style="visibility:hidden;">
                                                                                      <label class="col-lg-2 control-label" for="reasonForResultChanges">Reason For Changes in Result<span class="mandatory">*</span> </label>
                                                                                      <div class="col-lg-10">
@@ -772,6 +772,22 @@ if (isset($vlQueryInfo['reason_for_vl_result_changes']) && $vlQueryInfo['reason_
      provinceName = true;
      facilityName = true;
      $(document).ready(function() {
+
+
+
+          if ($(".specialResults:checked")) {
+               $('#vlResult, #vlLog').val('');
+               $('#vlResult,#vlLog').attr('readonly', true);
+               $('#vlResult, #vlLog').removeClass('isRequired');
+               $(".specialResults").attr('disabled', false);
+               $(".specialResults").not($(".specialResults:checked")).attr('disabled', true);
+               $('.specialResults').not($(".specialResults:checked")).prop('checked', false).removeAttr('checked');
+          }
+          if ($('#vlResult, #vlLog').val() != '') {
+               $('.specialResults').prop('checked', false).removeAttr('checked');
+               $(".specialResults").attr('disabled', true);
+               $('#vlResult').addClass('isRequired');
+          }
           $('#fName').select2({
                placeholder: "Select Clinic/Health Center"
           });
@@ -784,10 +800,10 @@ if (isset($vlQueryInfo['reason_for_vl_result_changes']) && $vlQueryInfo['reason_
           result = ($("#vlResult").length) ? $("#vlResult").val() : '';
           //logVal = ($("#vlLog").length)?$("#vlLog").val():'';
 
-          $("#vlResult").on('keyup keypress blur change paste', function() {
-               if ($('#vlResult').val() != '') {
-                    if ($('#vlResult').val() != $('#vlResult').val().replace(/[^\d\.]/g, "")) {
-                         $('#vlResult').val('');
+          $("#vlResult, #vlLog").on('keyup keypress blur change paste', function() {
+               if ($(this).val() != '') {
+                    if ($(this).val() != $(this).val().replace(/[^\d\.]/g, "")) {
+                         $(this).val('');
                          alert('Please enter only numeric values for Viral Load Result')
                     }
                }
