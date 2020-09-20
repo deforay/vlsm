@@ -173,11 +173,11 @@ if (isset($vlQueryInfo['reason_for_vl_result_changes']) && $vlQueryInfo['reason_
                                                        <div class="">
                                                             <?php if ($sarr['user_type'] == 'remoteuser') { ?>
                                                                  <label for="sampleCode">Sample ID </label><br>
-                                                                 <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"><?php echo ($sCode != '') ? $sCode : $vlQueryInfo[$sampleCode]; ?></span>
-                                                                 <input type="hidden" class="<?php echo $sampleClass; ?>" id="sampleCode" name="sampleCode" value="<?php echo ($sCode != '') ? $sCode : $vlQueryInfo[$sampleCode]; ?>" />
+                                                                 <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"><?php echo $vlQueryInfo[$sampleCode]; ?></span>
+                                                                 <input type="hidden" class="<?php echo $sampleClass; ?>" id="sampleCode" name="sampleCode" value="<?php echo $vlQueryInfo[$sampleCode]; ?>" />
                                                             <?php } else { ?>
                                                                  <label for="sampleCode">Sample ID <span class="mandatory">*</span></label>
-                                                                 <input type="text" class="form-control isRequired <?php echo $sampleClass; ?>" id="sampleCode" name="sampleCode" <?php echo $maxLength; ?> placeholder="Enter Sample ID" title="Please enter sample id" value="<?php echo ($sCode != '') ? $sCode : $vlQueryInfo[$sampleCode]; ?>" style="width:100%;" readonly="readonly" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode; ?>',this.id,'<?php echo "vl_sample_id##" . $vlQueryInfo["vl_sample_id"]; ?>','This sample number already exists.Try another number',null)" />
+                                                                 <input type="text" class="form-control isRequired <?php echo $sampleClass; ?>" id="sampleCode" name="sampleCode" <?php echo $maxLength; ?> placeholder="Enter Sample ID" title="Please enter sample id" value="<?php echo $vlQueryInfo[$sampleCode]; ?>" style="width:100%;" readonly="readonly" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode; ?>',this.id,'<?php echo "vl_sample_id##" . $vlQueryInfo["vl_sample_id"]; ?>','This sample number already exists.Try another number',null)" />
                                                                  <input type="hidden" name="sampleCodeCol" value="<?php echo $vlQueryInfo['sample_code']; ?>" />
                                                             <?php } ?>
                                                        </div>
@@ -190,12 +190,6 @@ if (isset($vlQueryInfo['reason_for_vl_result_changes']) && $vlQueryInfo['reason_
                                                        </div>
                                                   </div>
 
-                                                  <div class="col-xs-3 col-md-3" style="display:<?php echo ($sCode != '') ? 'block' : 'none'; ?>">
-                                                       <div class="">
-                                                            <label class="" for="sampleReceivedDate">Date Sample Received at Testing Lab <span class="mandatory">*</span></label><br />
-                                                            <input type="text" class="form-control labSection dateTime isRequired" id="sampleReceivedDate<?php echo ($sCode == '') ? 'Lab' : ''; ?>" name="sampleReceivedDate<?php echo ($sCode == '') ? 'Lab' : ''; ?>" placeholder="Sample Received Date" title="Please select sample received date" value="<?php echo ($vlQueryInfo['sample_received_at_vl_lab_datetime'] != '' && $vlQueryInfo['sample_received_at_vl_lab_datetime'] != NULL) ? $vlQueryInfo['sample_received_at_vl_lab_datetime'] : date('d-M-Y H:i:s'); ?>" <?php echo $labFieldDisabled; ?> onchange="checkSampleReceviedDate();" />
-                                                       </div>
-                                                  </div>
 
                                              </div>
                                              <div class="row">
@@ -636,10 +630,10 @@ if (isset($vlQueryInfo['reason_for_vl_result_changes']) && $vlQueryInfo['reason_
                                                                                 </div>
                                                                            </div>
                                                                            <div class="row">
-                                                                                <div class="col-md-4" style="display:<?php echo ($sCode != '') ? 'none' : 'block'; ?>">
-                                                                                     <label class="col-lg-5 control-label" for="sampleReceivedDate">Date Sample Received at Testing Lab </label>
+                                                                                <div class="col-md-4">
+                                                                                     <label class="col-lg-5 control-label" for="sampleReceivedDate">Date Sample Received at Testing Lab</label>
                                                                                      <div class="col-lg-7">
-                                                                                          <input type="text" class="form-control labSection dateTime" id="sampleReceivedDate<?php echo ($sCode != '') ? 'Lab' : ''; ?>" name="sampleReceivedDate<?php echo ($sCode != '') ? 'Lab' : ''; ?>" placeholder="Sample Received Date" title="Please select sample received date" value="<?php echo $vlQueryInfo['sample_received_at_vl_lab_datetime']; ?>" <?php echo $labFieldDisabled; ?> onchange="checkSampleReceviedDate();" />
+                                                                                          <input type="text" class="form-control labSection dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="Sample Received Date" title="Please select sample received date" value="<?php echo $vlQueryInfo['sample_received_at_vl_lab_datetime']; ?>" <?php echo $labFieldDisabled; ?> onchange="checkSampleReceviedDate();" />
                                                                                      </div>
                                                                                 </div>
                                                                                 <div class="col-md-4">
