@@ -579,10 +579,9 @@ $sFormat = '';
                                                                                 <label class="col-lg-5 control-label" for="vlResult">Viral Load Result (copiesl/ml) </label>
                                                                                 <div class="col-lg-7">
                                                                                      <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" <?php echo $labFieldDisabled; ?> style="width:100%;" onchange="calculateLogValue(this)" />
-                                                                                     <input type="checkbox" class="specialResults" id="lt20" name="lt20" value="yes" title="Please check tnd" <?php echo $labFieldDisabled; ?>>
-                                                                                     < 20<br>
-                                                                                          <input type="checkbox" class="specialResults" id="tnd" name="tnd" value="yes" title="Please check tnd" <?php echo $labFieldDisabled; ?>> Target Not Detected<br>
-                                                                                          <input type="checkbox" class="specialResults" id="bdl" name="bdl" value="yes" title="Please check bdl" <?php echo $labFieldDisabled; ?>> Below Detection Level
+                                                                                     <input type="checkbox" class="specialResults" id="lt20" name="lt20" value="yes" title="Please check tnd" <?php echo $labFieldDisabled; ?>> &lt;20 <br>
+                                                                                     <input type="checkbox" class="specialResults" id="tnd" name="tnd" value="yes" title="Please check tnd" <?php echo $labFieldDisabled; ?>> Target Not Detected<br>
+                                                                                     <input type="checkbox" class="specialResults" id="bdl" name="bdl" value="yes" title="Please check bdl" <?php echo $labFieldDisabled; ?>> Below Detection Level
                                                                                 </div>
                                                                            </div>
                                                                            <div class="col-md-4 vlResult">
@@ -673,6 +672,21 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
      provinceName = true;
      facilityName = true;
      $(document).ready(function() {
+
+          if ($(".specialResults:checked")) {
+               $('#vlResult, #vlLog').val('');
+               $('#vlResult,#vlLog').attr('readonly', true);
+               $('#vlResult, #vlLog').removeClass('isRequired');
+               $(".specialResults").attr('disabled', false);
+               $(".specialResults").not($(".specialResults:checked")).attr('disabled', true);
+               $('.specialResults').not($(".specialResults:checked")).prop('checked', false).removeAttr('checked');
+          }
+          if ($('#vlResult, #vlLog').val() != '') {
+               $('.specialResults').prop('checked', false).removeAttr('checked');
+               $(".specialResults").attr('disabled', true);
+               $('#vlResult').addClass('isRequired');
+          }
+
           $('#fName').select2({
                placeholder: "Select Clinic/Health Center"
           });
