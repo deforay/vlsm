@@ -4,29 +4,24 @@ $title = "Enter VL Result";
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 
-$general = new \Vlsm\Models\General($db);
+
+
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
+
+$healthFacilities = $facilitiesDb->getHealthFacilities('vl');
+$testingLabs = $facilitiesDb->getTestingLabs('vl');
+
+
 $id = base64_decode($_GET['id']);
-$configQuery = "SELECT * from global_config";
-$configResult = $db->query($configQuery);
-$arr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($configResult); $i++) {
-  $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
-}
 
 //get import config
 $importQuery = "SELECT * FROM import_config WHERE status = 'active'";
 $importResult = $db->query($importQuery);
 
-$fQuery = "SELECT * FROM facility_details where status='active'";
-$fResult = $db->rawQuery($fQuery);
 
 $userQuery = "SELECT * FROM user_details where status='active'";
 $userResult = $db->rawQuery($userQuery);
 
-//get lab facility details
-$lQuery = "SELECT * FROM facility_details where facility_type='2' AND status ='active'";
-$lResult = $db->rawQuery($lQuery);
 //sample rejection reason
 $rejectionQuery = "SELECT * FROM r_sample_rejection_reasons where rejection_reason_status = 'active'";
 $rejectionResult = $db->rawQuery($rejectionQuery);
@@ -52,129 +47,129 @@ $suspectedTreatmentFailureAtQuery = "SELECT DISTINCT vl_sample_suspected_treatme
 $suspectedTreatmentFailureAtResult = $db->rawQuery($suspectedTreatmentFailureAtQuery);
 
 $vlQuery = "SELECT * from vl_request_form where vl_sample_id=$id";
-$vlQueryInfo = $db->query($vlQuery);
+$vlQueryInfo = $db->rawQueryOne($vlQuery);
 
-if (isset($vlQueryInfo[0]['patient_dob']) && trim($vlQueryInfo[0]['patient_dob']) != '' && $vlQueryInfo[0]['patient_dob'] != '0000-00-00') {
-  $vlQueryInfo[0]['patient_dob'] = $general->humanDateFormat($vlQueryInfo[0]['patient_dob']);
+if (isset($vlQueryInfo['patient_dob']) && trim($vlQueryInfo['patient_dob']) != '' && $vlQueryInfo['patient_dob'] != '0000-00-00') {
+  $vlQueryInfo['patient_dob'] = $general->humanDateFormat($vlQueryInfo['patient_dob']);
 } else {
-  $vlQueryInfo[0]['patient_dob'] = '';
+  $vlQueryInfo['patient_dob'] = '';
 }
 
-if (isset($vlQueryInfo[0]['sample_collection_date']) && trim($vlQueryInfo[0]['sample_collection_date']) != '' && $vlQueryInfo[0]['sample_collection_date'] != '0000-00-00 00:00:00') {
-  $expStr = explode(" ", $vlQueryInfo[0]['sample_collection_date']);
-  $vlQueryInfo[0]['sample_collection_date'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
+if (isset($vlQueryInfo['sample_collection_date']) && trim($vlQueryInfo['sample_collection_date']) != '' && $vlQueryInfo['sample_collection_date'] != '0000-00-00 00:00:00') {
+  $expStr = explode(" ", $vlQueryInfo['sample_collection_date']);
+  $vlQueryInfo['sample_collection_date'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
 } else {
-  $vlQueryInfo[0]['sample_collection_date'] = '';
+  $vlQueryInfo['sample_collection_date'] = '';
 }
 
-if (isset($vlQueryInfo[0]['treatment_initiated_date']) && trim($vlQueryInfo[0]['treatment_initiated_date']) != '' && $vlQueryInfo[0]['treatment_initiated_date'] != '0000-00-00') {
-  $vlQueryInfo[0]['treatment_initiated_date'] = $general->humanDateFormat($vlQueryInfo[0]['treatment_initiated_date']);
+if (isset($vlQueryInfo['treatment_initiated_date']) && trim($vlQueryInfo['treatment_initiated_date']) != '' && $vlQueryInfo['treatment_initiated_date'] != '0000-00-00') {
+  $vlQueryInfo['treatment_initiated_date'] = $general->humanDateFormat($vlQueryInfo['treatment_initiated_date']);
 } else {
-  $vlQueryInfo[0]['treatment_initiated_date'] = '';
+  $vlQueryInfo['treatment_initiated_date'] = '';
 }
 
-if (isset($vlQueryInfo[0]['date_of_initiation_of_current_regimen']) && trim($vlQueryInfo[0]['date_of_initiation_of_current_regimen']) != '' && $vlQueryInfo[0]['date_of_initiation_of_current_regimen'] != '0000-00-00') {
-  $vlQueryInfo[0]['date_of_initiation_of_current_regimen'] = $general->humanDateFormat($vlQueryInfo[0]['date_of_initiation_of_current_regimen']);
+if (isset($vlQueryInfo['date_of_initiation_of_current_regimen']) && trim($vlQueryInfo['date_of_initiation_of_current_regimen']) != '' && $vlQueryInfo['date_of_initiation_of_current_regimen'] != '0000-00-00') {
+  $vlQueryInfo['date_of_initiation_of_current_regimen'] = $general->humanDateFormat($vlQueryInfo['date_of_initiation_of_current_regimen']);
 } else {
-  $vlQueryInfo[0]['date_of_initiation_of_current_regimen'] = '';
+  $vlQueryInfo['date_of_initiation_of_current_regimen'] = '';
 }
 
-if (isset($vlQueryInfo[0]['test_requested_on']) && trim($vlQueryInfo[0]['test_requested_on']) != '' && $vlQueryInfo[0]['test_requested_on'] != '0000-00-00') {
-  $vlQueryInfo[0]['test_requested_on'] = $general->humanDateFormat($vlQueryInfo[0]['test_requested_on']);
+if (isset($vlQueryInfo['test_requested_on']) && trim($vlQueryInfo['test_requested_on']) != '' && $vlQueryInfo['test_requested_on'] != '0000-00-00') {
+  $vlQueryInfo['test_requested_on'] = $general->humanDateFormat($vlQueryInfo['test_requested_on']);
 } else {
-  $vlQueryInfo[0]['test_requested_on'] = '';
-}
-
-
-if (isset($vlQueryInfo[0]['sample_received_at_hub_datetime']) && trim($vlQueryInfo[0]['sample_received_at_hub_datetime']) != '' && $vlQueryInfo[0]['sample_received_at_hub_datetime'] != '0000-00-00 00:00:00') {
-  $expStr = explode(" ", $vlQueryInfo[0]['sample_received_at_hub_datetime']);
-  $vlQueryInfo[0]['sample_received_at_hub_datetime'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
-} else {
-  $vlQueryInfo[0]['sample_received_at_hub_datetime'] = '';
+  $vlQueryInfo['test_requested_on'] = '';
 }
 
 
-if (isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) != '' && $vlQueryInfo[0]['sample_received_at_vl_lab_datetime'] != '0000-00-00 00:00:00') {
-  $expStr = explode(" ", $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']);
-  $vlQueryInfo[0]['sample_received_at_vl_lab_datetime'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
+if (isset($vlQueryInfo['sample_received_at_hub_datetime']) && trim($vlQueryInfo['sample_received_at_hub_datetime']) != '' && $vlQueryInfo['sample_received_at_hub_datetime'] != '0000-00-00 00:00:00') {
+  $expStr = explode(" ", $vlQueryInfo['sample_received_at_hub_datetime']);
+  $vlQueryInfo['sample_received_at_hub_datetime'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
 } else {
-  $vlQueryInfo[0]['sample_received_at_vl_lab_datetime'] = '';
+  $vlQueryInfo['sample_received_at_hub_datetime'] = '';
 }
 
-if (isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sample_tested_datetime']) != '' && $vlQueryInfo[0]['sample_tested_datetime'] != '0000-00-00 00:00:00') {
-  $expStr = explode(" ", $vlQueryInfo[0]['sample_tested_datetime']);
-  $vlQueryInfo[0]['sample_tested_datetime'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
+
+if (isset($vlQueryInfo['sample_received_at_vl_lab_datetime']) && trim($vlQueryInfo['sample_received_at_vl_lab_datetime']) != '' && $vlQueryInfo['sample_received_at_vl_lab_datetime'] != '0000-00-00 00:00:00') {
+  $expStr = explode(" ", $vlQueryInfo['sample_received_at_vl_lab_datetime']);
+  $vlQueryInfo['sample_received_at_vl_lab_datetime'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
 } else {
-  $vlQueryInfo[0]['sample_tested_datetime'] = '';
+  $vlQueryInfo['sample_received_at_vl_lab_datetime'] = '';
 }
 
-if (isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0]['result_dispatched_datetime']) != '' && $vlQueryInfo[0]['result_dispatched_datetime'] != '0000-00-00 00:00:00') {
-  $expStr = explode(" ", $vlQueryInfo[0]['result_dispatched_datetime']);
-  $vlQueryInfo[0]['result_dispatched_datetime'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
+if (isset($vlQueryInfo['sample_tested_datetime']) && trim($vlQueryInfo['sample_tested_datetime']) != '' && $vlQueryInfo['sample_tested_datetime'] != '0000-00-00 00:00:00') {
+  $expStr = explode(" ", $vlQueryInfo['sample_tested_datetime']);
+  $vlQueryInfo['sample_tested_datetime'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
 } else {
-  $vlQueryInfo[0]['result_dispatched_datetime'] = '';
+  $vlQueryInfo['sample_tested_datetime'] = '';
 }
-if (isset($vlQueryInfo[0]['last_viral_load_date']) && trim($vlQueryInfo[0]['last_viral_load_date']) != '' && $vlQueryInfo[0]['last_viral_load_date'] != '0000-00-00') {
-  $vlQueryInfo[0]['last_viral_load_date'] = $general->humanDateFormat($vlQueryInfo[0]['last_viral_load_date']);
+
+if (isset($vlQueryInfo['result_dispatched_datetime']) && trim($vlQueryInfo['result_dispatched_datetime']) != '' && $vlQueryInfo['result_dispatched_datetime'] != '0000-00-00 00:00:00') {
+  $expStr = explode(" ", $vlQueryInfo['result_dispatched_datetime']);
+  $vlQueryInfo['result_dispatched_datetime'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
 } else {
-  $vlQueryInfo[0]['last_viral_load_date'] = '';
+  $vlQueryInfo['result_dispatched_datetime'] = '';
+}
+if (isset($vlQueryInfo['last_viral_load_date']) && trim($vlQueryInfo['last_viral_load_date']) != '' && $vlQueryInfo['last_viral_load_date'] != '0000-00-00') {
+  $vlQueryInfo['last_viral_load_date'] = $general->humanDateFormat($vlQueryInfo['last_viral_load_date']);
+} else {
+  $vlQueryInfo['last_viral_load_date'] = '';
 }
 //Set Date of demand
-if (isset($vlQueryInfo[0]['date_test_ordered_by_physician']) && trim($vlQueryInfo[0]['date_test_ordered_by_physician']) != '' && $vlQueryInfo[0]['date_test_ordered_by_physician'] != '0000-00-00') {
-  $vlQueryInfo[0]['date_test_ordered_by_physician'] = $general->humanDateFormat($vlQueryInfo[0]['date_test_ordered_by_physician']);
+if (isset($vlQueryInfo['date_test_ordered_by_physician']) && trim($vlQueryInfo['date_test_ordered_by_physician']) != '' && $vlQueryInfo['date_test_ordered_by_physician'] != '0000-00-00') {
+  $vlQueryInfo['date_test_ordered_by_physician'] = $general->humanDateFormat($vlQueryInfo['date_test_ordered_by_physician']);
 } else {
-  $vlQueryInfo[0]['date_test_ordered_by_physician'] = '';
+  $vlQueryInfo['date_test_ordered_by_physician'] = '';
 }
 //Has patient changed regimen section
-if (trim($vlQueryInfo[0]['has_patient_changed_regimen']) == "yes") {
-  if (isset($vlQueryInfo[0]['regimen_change_date']) && trim($vlQueryInfo[0]['regimen_change_date']) != '' && $vlQueryInfo[0]['regimen_change_date'] != '0000-00-00') {
-    $vlQueryInfo[0]['regimen_change_date'] = $general->humanDateFormat($vlQueryInfo[0]['regimen_change_date']);
+if (trim($vlQueryInfo['has_patient_changed_regimen']) == "yes") {
+  if (isset($vlQueryInfo['regimen_change_date']) && trim($vlQueryInfo['regimen_change_date']) != '' && $vlQueryInfo['regimen_change_date'] != '0000-00-00') {
+    $vlQueryInfo['regimen_change_date'] = $general->humanDateFormat($vlQueryInfo['regimen_change_date']);
   } else {
-    $vlQueryInfo[0]['regimen_change_date'] = '';
+    $vlQueryInfo['regimen_change_date'] = '';
   }
 } else {
-  $vlQueryInfo[0]['reason_for_regimen_change'] = '';
-  $vlQueryInfo[0]['regimen_change_date'] = '';
+  $vlQueryInfo['reason_for_regimen_change'] = '';
+  $vlQueryInfo['regimen_change_date'] = '';
 }
 //Set Dispatched From Clinic To Lab Date
-if (isset($vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']) && trim($vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']) != '' && $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab'] != '0000-00-00 00:00:00') {
-  $expStr = explode(" ", $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']);
-  $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
+if (isset($vlQueryInfo['date_dispatched_from_clinic_to_lab']) && trim($vlQueryInfo['date_dispatched_from_clinic_to_lab']) != '' && $vlQueryInfo['date_dispatched_from_clinic_to_lab'] != '0000-00-00 00:00:00') {
+  $expStr = explode(" ", $vlQueryInfo['date_dispatched_from_clinic_to_lab']);
+  $vlQueryInfo['date_dispatched_from_clinic_to_lab'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
 } else {
-  $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab'] = '';
+  $vlQueryInfo['date_dispatched_from_clinic_to_lab'] = '';
 }
 //Set Date of result printed datetime
-if (isset($vlQueryInfo[0]['result_printed_datetime']) && trim($vlQueryInfo[0]['result_printed_datetime']) != "" && $vlQueryInfo[0]['result_printed_datetime'] != '0000-00-00 00:00:00') {
-  $expStr = explode(" ", $vlQueryInfo[0]['result_printed_datetime']);
-  $vlQueryInfo[0]['result_printed_datetime'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
+if (isset($vlQueryInfo['result_printed_datetime']) && trim($vlQueryInfo['result_printed_datetime']) != "" && $vlQueryInfo['result_printed_datetime'] != '0000-00-00 00:00:00') {
+  $expStr = explode(" ", $vlQueryInfo['result_printed_datetime']);
+  $vlQueryInfo['result_printed_datetime'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
 } else {
-  $vlQueryInfo[0]['result_printed_datetime'] = '';
+  $vlQueryInfo['result_printed_datetime'] = '';
 }
 //reviewed datetime
-if (isset($vlQueryInfo[0]['result_reviewed_datetime']) && trim($vlQueryInfo[0]['result_reviewed_datetime']) != '' && $vlQueryInfo[0]['result_reviewed_datetime'] != null && $vlQueryInfo[0]['result_reviewed_datetime'] != '0000-00-00 00:00:00') {
-  $expStr = explode(" ", $vlQueryInfo[0]['result_reviewed_datetime']);
-  $vlQueryInfo[0]['result_reviewed_datetime'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
+if (isset($vlQueryInfo['result_reviewed_datetime']) && trim($vlQueryInfo['result_reviewed_datetime']) != '' && $vlQueryInfo['result_reviewed_datetime'] != null && $vlQueryInfo['result_reviewed_datetime'] != '0000-00-00 00:00:00') {
+  $expStr = explode(" ", $vlQueryInfo['result_reviewed_datetime']);
+  $vlQueryInfo['result_reviewed_datetime'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
 } else {
-  $vlQueryInfo[0]['result_reviewed_datetime'] = '';
+  $vlQueryInfo['result_reviewed_datetime'] = '';
 }
-if ($vlQueryInfo[0]['remote_sample'] == 'yes') {
-  $sampleCode = $vlQueryInfo[0]['remote_sample_code'];
+if ($vlQueryInfo['remote_sample'] == 'yes') {
+  $sampleCode = $vlQueryInfo['remote_sample_code'];
 } else {
-  $sampleCode = $vlQueryInfo[0]['sample_code'];
+  $sampleCode = $vlQueryInfo['sample_code'];
 }
 
-if ($vlQueryInfo[0]['patient_first_name'] != '') {
-  $patientFirstName = $general->crypto('decrypt', $vlQueryInfo[0]['patient_first_name'], $vlQueryInfo[0]['patient_art_no']);
+if ($vlQueryInfo['patient_first_name'] != '') {
+  $patientFirstName = $general->crypto('decrypt', $vlQueryInfo['patient_first_name'], $vlQueryInfo['patient_art_no']);
 } else {
   $patientFirstName = '';
 }
-if ($vlQueryInfo[0]['patient_middle_name'] != '') {
-  $patientMiddleName = $general->crypto('decrypt', $vlQueryInfo[0]['patient_middle_name'], $vlQueryInfo[0]['patient_art_no']);
+if ($vlQueryInfo['patient_middle_name'] != '') {
+  $patientMiddleName = $general->crypto('decrypt', $vlQueryInfo['patient_middle_name'], $vlQueryInfo['patient_art_no']);
 } else {
   $patientMiddleName = '';
 }
-if ($vlQueryInfo[0]['patient_last_name'] != '') {
-  $patientLastName = $general->crypto('decrypt', $vlQueryInfo[0]['patient_last_name'], $vlQueryInfo[0]['patient_art_no']);
+if ($vlQueryInfo['patient_last_name'] != '') {
+  $patientLastName = $general->crypto('decrypt', $vlQueryInfo['patient_last_name'], $vlQueryInfo['patient_art_no']);
 } else {
   $patientLastName = '';
 }
