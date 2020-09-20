@@ -3,7 +3,7 @@ ob_start();
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 
-$labFieldDisabled = '';
+$sCode = $labFieldDisabled = '';
 
 
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
