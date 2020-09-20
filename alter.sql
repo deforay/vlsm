@@ -1123,3 +1123,5 @@ INSERT INTO testing_labs (SELECT 'vl' AS `test_type`,facility_id FROM facility_d
 INSERT INTO testing_labs (SELECT 'eid' AS `test_type`,facility_id FROM facility_details WHERE facility_type=2);
 INSERT INTO testing_labs (SELECT 'covid19' AS `test_type`,facility_id FROM facility_details WHERE facility_type=2);
 
+UPDATE `system_config` SET `value` = '4.2.0' WHERE `system_config`.`name` = 'version';
+-- Version 4.2.0 -- Amit -- 20-Sep-2020
