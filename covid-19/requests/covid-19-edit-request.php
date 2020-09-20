@@ -29,13 +29,7 @@ include_once(APPLICATION_PATH . '/header.php');
 $labFieldDisabled = '';
 
 
-
-$general = new \Vlsm\Models\General($db);
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
-
-$arr = $general->getGlobalConfig();
-$sarr = $general->getSystemConfig();
-
 
 $healthFacilities = $facilitiesDb->getHealthFacilities('covid19');
 $testingLabs = $facilitiesDb->getTestingLabs('covid19');
@@ -62,10 +56,6 @@ $covid19TestInfo = $db->rawQuery($covid19TestQuery);
 // echo "<pre>"; var_dump($covid19Info);die;
 
 $specimenTypeResult = $general->fetchDataFromTable('r_covid19_sample_type', "status = 'active'");
-
-$arr = $general->getGlobalConfig();
-
-
 
 
 if ($arr['covid19_sample_code'] == 'auto' || $arr['covid19_sample_code'] == 'auto2' || $arr['covid19_sample_code'] == 'alphanumeric') {

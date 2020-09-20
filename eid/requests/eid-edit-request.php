@@ -28,15 +28,11 @@ include_once(APPLICATION_PATH . '/header.php');
 
 $labFieldDisabled = '';
 
-if ($sarr['user_type'] == 'remoteuser') {
-    $labFieldDisabled = 'disabled="disabled"';
-    $vlfmQuery = "SELECT GROUP_CONCAT(DISTINCT vlfm.facility_id SEPARATOR ',') as facilityId FROM vl_user_facility_map as vlfm where vlfm.user_id='" . $_SESSION['userId'] . "'";
-    $vlfmResult = $db->rawQuery($vlfmQuery);
-}
 
-$general = new \Vlsm\Models\General($db);
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
 
-
+$healthFacilities = $facilitiesDb->getHealthFacilities('eid');
+$testingLabs = $facilitiesDb->getTestingLabs('eid');
 
 $rejectionTypeQuery = "SELECT DISTINCT rejection_type FROM r_eid_sample_rejection_reasons WHERE rejection_reason_status ='active'";
 $rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);

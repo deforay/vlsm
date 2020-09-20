@@ -4,12 +4,12 @@ $rKey = '';
 if ($sarr['user_type'] == 'remoteuser') {
   $sampleCodeKey = 'remote_sample_code_key';
   $sampleCode = 'remote_sample_code';
-  $pdQuery = "SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='" . $_SESSION['userId'] . "'";
+  $pdQuery = "SELECT * FROM province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='" . $_SESSION['userId'] . "'";
   $rKey = 'R';
 } else {
   $sampleCodeKey = 'sample_code_key';
   $sampleCode = 'sample_code';
-  $pdQuery = "SELECT * from province_details";
+  $pdQuery = "SELECT * FROM province_details";
 }
 $artRegimenQuery = "SELECT DISTINCT headings FROM r_art_code_details WHERE nation_identifier ='ang'";
 $artRegimenResult = $db->rawQuery($artRegimenQuery);
@@ -26,29 +26,7 @@ foreach ($fResult as $fDetails) {
 //get ART list
 $aQuery = "SELECT * from r_art_code_details"; // where nation_identifier='drc'";
 $aResult = $db->query($aQuery);
-$start_date = date('Y-01-01');
-$end_date = date('Y-12-31');
-if ($arr['sample_code'] == 'MMYY') {
-  $mnthYr = date('my');
-  $start_date = date('Y-m-01');
-  $end_date = date('Y-m-31');
-} else if ($arr['sample_code'] == 'YY') {
-  $mnthYr = date('y');
-  $start_date = date('Y-01-01');
-  $end_date = date('Y-12-31');
-}
-//$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="3" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
-$svlQuery = 'SELECT ' . $sampleCodeKey . ' FROM vl_request_form as vl WHERE DATE(vl.sample_collection_date) >= "' . $start_date . '" AND DATE(vl.sample_collection_date) <= "' . $end_date . '" AND ' . $sampleCode . '!="" ORDER BY ' . $sampleCodeKey . ' DESC LIMIT 1';
-$svlResult = $db->query($svlQuery);
-$prefix = $arr['sample_code_prefix'];
-if ($svlResult[0][$sampleCodeKey] != '' && $svlResult[0][$sampleCodeKey] != NULL) {
-  $maxId = $svlResult[0][$sampleCodeKey] + 1;
-  $strparam = strlen($maxId);
-  $zeros = substr("000", $strparam);
-  $maxId = $zeros . $maxId;
-} else {
-  $maxId = '001';
-}
+
 $sKey = '';
 $sFormat = '';
 ?>
@@ -434,10 +412,7 @@ $sFormat = '';
                       <td style="width:14%;"><label for="">Nome do laboratório</label></td>
                       <td style="width:14%;">
                         <select name="labId" id="labId" class="form-control" title="Please choose Nome do laboratório" style="width: 100%;">
-                          <option value="">-- Select --</option>
-                          <?php foreach ($lResult as $labName) { ?>
-                            <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
-                          <?php } ?>
+                          <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
                         </select>
                       </td>
                       <td style="width:14%;"><label for="testingPlatform"> Plataforma de teste VL </label></td>

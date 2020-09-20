@@ -47,11 +47,8 @@ $province .= "<option value=''> -- Selecione -- </option>";
 foreach ($pdResult as $provinceName) {
     $province .= "<option value='" . $provinceName['province_name'] . "##" . (isset($provinceName['province_code']) && !empty($provinceName['province_code']) ? $provinceName['province_code'] : $provinceName['province_name']) . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
-//$facility = "";
-$facility = "<option value=''> -- Selecione -- </option>";
-foreach ($fResult as $fDetails) {
-    $facility .= "<option value='" . $fDetails['facility_id'] . "'>" . ucwords(addslashes($fDetails['facility_name'])) . "</option>";
-}
+
+$facility = $general->generateSelectOptions($healthFacilities, null, '-- Select --');
 
 ?>
 
@@ -104,7 +101,7 @@ foreach ($fResult as $fDetails) {
                                         <td></td>
                                     </tr>
                                     <tr>
-                                        <td><label for="province">Província  </label><span class="mandatory">*</span></td>
+                                        <td><label for="province">Província </label><span class="mandatory">*</span></td>
                                         <td>
                                             <select class="form-control isRequired" name="province" id="province" title="Please choose province" onchange="getfacilityDetails(this);" style="width:100%;">
                                                 <?php echo $province; ?>
@@ -131,7 +128,7 @@ foreach ($fResult as $fDetails) {
                                                 <option value=""> -- Selecione -- </option>
                                                 <?php
                                                 foreach ($implementingPartnerList as $implementingPartner) {
-                                                    ?>
+                                                ?>
                                                     <option value="<?php echo ($implementingPartner['i_partner_id']); ?>"><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
                                                 <?php } ?>
                                             </select>
@@ -142,17 +139,17 @@ foreach ($fResult as $fDetails) {
                                                 <option value=""> -- Selecione -- </option>
                                                 <?php
                                                 foreach ($fundingSourceList as $fundingSource) {
-                                                    ?>
+                                                ?>
                                                     <option value="<?php echo ($fundingSource['funding_source_id']); ?>"><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
                                                 <?php } ?>
                                             </select>
                                         </td>
-                                        
-                                            <td><label for="sector">Serviço/Sector </label> </td>
-                                            <td>
+
+                                        <td><label for="sector">Serviço/Sector </label> </td>
+                                        <td>
                                             <input type="text" class="form-control" id="sector" name="sector" placeholder="Serviço/Sector" title="Sector" style="width:100%;" onchange="" />
-                                            </td>
-                                            
+                                        </td>
+
                                     </tr>
                                     <tr>
                                         <td><label for="sampleRequestorName">Nome do solicitante </label> </td>
@@ -167,18 +164,15 @@ foreach ($fResult as $fDetails) {
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                    </tr>                                    
+                                    </tr>
                                     <tr>
-                                        
+
                                         <?php if ($sarr['user_type'] == 'remoteuser') { ?>
                                             <!-- <tr> -->
                                             <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
                                             <td>
-                                                <select name="labId" id="labId" class="form-control isRequired" title="Lab Name" style="width:100%;">
-                                                    <option value=""> -- Selecione -- </option>
-                                                    <?php foreach ($lResult as $labName) { ?>
-                                                        <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
-                                                    <?php } ?>
+                                                <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;">
+                                                    <?= $general->generateSelectOptions($testingLabs, null, '-- Selecione --'); ?>
                                                 </select>
                                             </td>
                                             <!-- </tr> -->
@@ -189,13 +183,14 @@ foreach ($fResult as $fDetails) {
                                         <td></td>
                                         <td></td>
 
-                                    </tr>                                    
+                                    </tr>
                                 </table>
-                                <br><hr style="border: 1px solid #ccc;">
-                                
+                                <br>
+                                <hr style="border: 1px solid #ccc;">
+
                                 <div class="box-header with-border">
                                     <h3 class="box-title">DADOS DO PACIENTE</h3>
-                                </div>                                
+                                </div>
                                 <table class="table" style="width:100%">
 
                                     <tr>
@@ -207,7 +202,7 @@ foreach ($fResult as $fDetails) {
                                         <th style="width:15% !important"><label for="childId">Nº Processo Clínico <span class="mandatory">*</span> </label></th>
                                         <td style="width:35% !important">
                                             <input type="text" class="form-control isRequired" id="childId" name="childId" placeholder="Código Criança" title="Please enter Exposed Infant Identification" style="width:100%;" onchange="" />
-                                        </td>                                        
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th><label for="childDob">Data de Nascimento <span class="mandatory">*</span> </label></th>
@@ -226,16 +221,16 @@ foreach ($fResult as $fDetails) {
                                     </tr>
                                     <tr>
                                         <th>Idade da criança (em meses)</th>
-                                        <td><input type="number" max="24" maxlength="2"  oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="childAge" name="childAge" placeholder="Age" title="Age" style="width:100%;" onchange="" /></td>
+                                        <td><input type="number" max="24" maxlength="2" oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="childAge" name="childAge" placeholder="Age" title="Age" style="width:100%;" onchange="" /></td>
                                         <th>Profilaxia da Criança</th>
                                         <td>
                                             <select class="form-control" name="childTreatment[]" id="childTreatment">
                                                 <option value=''> -- Selecione -- </option>
                                                 <option value='NVP por 12 semanas'> NVP por 12 semanas </option>
-                                                <option value='NVP + AZT'> NVP + AZT  </option>
-                                                <option value='Nenhuma'> Nenhuma  </option>
-                                                <option value='Other'> Outra (especifique)  </option>
-                                            </select>                                            
+                                                <option value='NVP + AZT'> NVP + AZT </option>
+                                                <option value='Nenhuma'> Nenhuma </option>
+                                                <option value='Other'> Outra (especifique) </option>
+                                            </select>
                                         </td>
 
                                     </tr>
@@ -252,20 +247,20 @@ foreach ($fResult as $fDetails) {
                                                 <optgroup label="> 6 meses">
                                                     <option value='Com leite materno'>Com leite materno</option>
                                                     <option value='Sem leite materno'>Sem leite materno</option>
-                                                </optgroup>                                                
-                                            </select>                                            
+                                                </optgroup>
+                                            </select>
                                         </td>
                                         <th> </th>
                                         <td></td>
 
                                     </tr>
                                     <tr>
-                                    <th>Nome da Mãe </th>
-                                        <td><input type="text" class="form-control " id="mothersName" name="motherName" placeholder="Nome da Mãe" title="Nome da Mãe" style="width:100%;" onchange="" /></td>                                        
+                                        <th>Nome da Mãe </th>
+                                        <td><input type="text" class="form-control " id="mothersName" name="motherName" placeholder="Nome da Mãe" title="Nome da Mãe" style="width:100%;" onchange="" /></td>
                                         <th>Nº Processo Clínico</th>
                                         <td><input type="text" class="form-control " id="mothersId" name="motherId" placeholder="Mother ART Number" title="Mother ART Number" style="width:100%;" onchange="" /></td>
 
-                                       
+
 
                                     </tr>
                                     <tr>
@@ -275,17 +270,17 @@ foreach ($fResult as $fDetails) {
                                                 <option value=''> -- Selecione -- </option>
                                                 <option value='yes'> Sim </option>
                                                 <option value='no'> Não </option>
-                                            </select>                                            
-                                        </td>                                        
+                                            </select>
+                                        </td>
                                         <th>Telemóvel</th>
                                         <td><input type="text" class="form-control " id="caretakerPhoneNumber" name="caretakerPhoneNumber" placeholder="Telemóvel" title="Caretaker Phone Number" style="width:100%;" onchange="" /></td>
                                     </tr>
                                     <tr>
                                         <th>Tratamento ARV da Mãe</th>
-                                        <td><input type="text" class="form-control " id="motherTreatment" name="motherTreatment[]" placeholder="Tratamento ARV da Mãe" title="Tratamento ARV da Mãe" style="width:100%;" onchange="" /></td>                                  
+                                        <td><input type="text" class="form-control " id="motherTreatment" name="motherTreatment[]" placeholder="Tratamento ARV da Mãe" title="Tratamento ARV da Mãe" style="width:100%;" onchange="" /></td>
                                         <th>Data de início</th>
                                         <td><input type="text" class="form-control date" id="motherTreatmentInitiationDate" name="motherTreatmentInitiationDate" placeholder="Data de início" title="Data de início" style="width:100%;" onchange="" /></td>
-                                    </tr>                                    
+                                    </tr>
 
 
                                 </table>
@@ -305,15 +300,15 @@ foreach ($fResult as $fDetails) {
                                             <input class="form-control dateTime isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" onchange="sampleCodeGeneration();" />
                                         </td>
 
-                                        <th style="width:14%;"> Tipo de amostra <span class="mandatory">*</span>  </th>
+                                        <th style="width:14%;"> Tipo de amostra <span class="mandatory">*</span> </th>
                                         <td style="width:35%;">
                                             <select name="specimenType" id="specimenType" class="form-control isRequired" title="Please choose Tipo de amostra" style="width:100%">
-                                            <option value="">-- Selecione --</option>
-                                            <?php foreach($sampleResult as $name){ ?>
-                                                <option value="<?php echo $name['sample_id'];?>"><?php echo ucwords($name['sample_name']);?></option>
+                                                <option value="">-- Selecione --</option>
+                                                <?php foreach ($sampleResult as $name) { ?>
+                                                    <option value="<?php echo $name['sample_id']; ?>"><?php echo ucwords($name['sample_name']); ?></option>
                                                 <?php } ?>
                                             </select>
-                                        </td>                                        
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>Técnico Responsável pela Colheita </th>
@@ -335,9 +330,19 @@ foreach ($fResult as $fDetails) {
                             <div class="box box-primary">
                                 <div class="box-body">
                                     <div class="box-header with-border">
-                                        <h3 class="box-title">Informações laboratoriais  </h3>
+                                        <h3 class="box-title">Informações laboratoriais </h3>
                                     </div>
                                     <table class="table" style="width:100%">
+                                        <tr>
+                                            <td><label for="labId">Lab Name</label> </td>
+                                            <td>
+                                                <select name="labId" id="labId" class="form-control" title="Please select Testing Lab name" style="width:100%;">
+                                                    <?= $general->generateSelectOptions($testingLabs, null, '-- Selecione --'); ?>
+                                                </select>
+                                            </td>
+                                            <th></th>
+                                            <td></td>
+                                        </tr>
                                         <tr>
                                             <th><label for="">Data e Hora da Recepção da Amostra </label></th>
                                             <td>
@@ -347,6 +352,7 @@ foreach ($fResult as $fDetails) {
                                             <td>
                                                 <input type="text" class="form-control" id="labReceptionPerson" name="labReceptionPerson" placeholder="Responsável da recepção" title="Técnico Responsável pela Recepção da Amostra " <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;" />
                                             </td>
+                                        </tr>
                                         <tr>
                                             <th>Rejeição da amostra ? </th>
                                             <td>
@@ -424,7 +430,7 @@ foreach ($fResult as $fDetails) {
     machineName = true;
 
     function getfacilityDetails(obj) {
-        
+
         $.blockUI();
         var cName = $("#facilityId").val();
         var pName = $("#province").val();
@@ -433,17 +439,17 @@ foreach ($fResult as $fDetails) {
         }
         if ($.trim(pName) != '') {
             //if (provinceName) {
-                $.post("/includes/getFacilityForClinic.php", {
-                        pName: pName
-                    },
-                    function(data) {
-                        if (data != "") {
-                            details = data.split("###");
-                            $("#facilityId").html(details[0]);
-                            $("#district").html(details[1]);
-                            //$("#clinicianName").val(details[2]);
-                        }
-                    });
+            $.post("/includes/getFacilityForClinic.php", {
+                    pName: pName
+                },
+                function(data) {
+                    if (data != "") {
+                        details = data.split("###");
+                        $("#facilityId").html(details[0]);
+                        $("#district").html(details[1]);
+                        //$("#clinicianName").val(details[2]);
+                    }
+                });
             //}
             sampleCodeGeneration();
         } else if (pName == '') {
@@ -535,11 +541,11 @@ foreach ($fResult as $fDetails) {
             <?php
             if ($arr['eid_sample_code'] == 'auto' || $arr['eid_sample_code'] == 'YY' || $arr['eid_sample_code'] == 'MMYY') {
             ?>
-                insertSampleCode('addEIDRequestForm', 'eidSampleId', 'sampleCode', 'sampleCodeKey', 'sampleCodeFormat', 3, 'sampleCollectionDate'); 
+                insertSampleCode('addEIDRequestForm', 'eidSampleId', 'sampleCode', 'sampleCodeKey', 'sampleCodeFormat', 3, 'sampleCollectionDate');
             <?php
             } else {
             ?>
-                document.getElementById('addEIDRequestForm').submit(); 
+                document.getElementById('addEIDRequestForm').submit();
             <?php
             } ?>
         }

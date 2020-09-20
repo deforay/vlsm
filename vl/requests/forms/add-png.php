@@ -27,11 +27,8 @@ $province .= "<option data-code='' data-name='' value=''> -- Select -- </option>
 foreach ($pdResult as $provinceName) {
   $province .= "<option data-code='" . $provinceName['province_code'] . "' data-province-id='" . $provinceName['province_id'] . "' data-name='" . substr(strtoupper($provinceName['province_name']), 0, 3) . "' value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
-$facility = '';
-$facility .= "<option value=''> -- Select -- </option>";
-foreach ($fResult as $fDetails) {
-  $facility .= "<option data-code='" . $fDetails['facility_code'] . "' data-emails='" . $fDetails['facility_emails'] . "' data-mobile-nos='" . $fDetails['facility_mobile_numbers'] . "' data-contact-person='" . $fDetails['contact_person'] . "' value='" . $fDetails['facility_id'] . "'>" . ucwords($fDetails['facility_name']) . "</option>";
-}
+
+$facility = $general->generateSelectOptions($healthFacilities, null, '-- Select --');
 
 ?>
 <!-- Content Wrapper. Contains page content -->
@@ -73,10 +70,7 @@ foreach ($fResult as $fDetails) {
                       <div class="">
                         <label for="labId">VL Testing Lab <span class="mandatory">*</span></label>
                         <select name="labId" id="labId" class="form-control isRequired" title="Please choose a VL testing hub" style="width:100%;">
-                          <option value="">-- Select --</option>
-                          <?php foreach ($lResult as $labName) { ?>
-                            <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
-                          <?php } ?>
+                          <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
                         </select>
                       </div>
                     </div>
@@ -395,14 +389,7 @@ foreach ($fResult as $fDetails) {
                       <td class="laboratoryId"><label for="laboratoryId">Laboratory Name</label></td>
                       <td>
                         <select name="laboratoryId" id="laboratoryId" class="form-control" title="Please choose lab name" style="width: 100%;">
-                          <option value=""> -- Select -- </option>
-                          <?php
-                          foreach ($lResult as $labName) {
-                          ?>
-                            <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
-                          <?php
-                          }
-                          ?>
+                          <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
                         </select>
                       </td>
                       <td class="reasonequ"></td>

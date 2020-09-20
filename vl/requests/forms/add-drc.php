@@ -11,7 +11,7 @@ $implementingPartnerQry = "SELECT * FROM r_implementation_partners WHERE i_partn
 $implementingPartnerList = $db->query($implementingPartnerQry);
 //check remote user
 $rKey = '';
-$pdQuery = "SELECT * from province_details";
+$pdQuery = "SELECT * FROM province_details";
 if ($sarr['user_type'] == 'remoteuser') {
   $sampleCodeKey = 'remote_sample_code_key';
   $sampleCode = 'remote_sample_code';
@@ -19,7 +19,7 @@ if ($sarr['user_type'] == 'remoteuser') {
   $chkUserFcMapQry = "Select user_id from vl_user_facility_map where user_id='" . $_SESSION['userId'] . "'";
   $chkUserFcMapResult = $db->query($chkUserFcMapQry);
   if ($chkUserFcMapResult) {
-    $pdQuery = "SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='" . $_SESSION['userId'] . "' group by province_name";
+    $pdQuery = "SELECT * FROM province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='" . $_SESSION['userId'] . "' group by province_name";
   }
   $rKey = 'R';
 } else {
@@ -33,37 +33,14 @@ $province .= "<option value=''> -- Sélectionner -- </option>";
 foreach ($pdResult as $provinceName) {
   $province .= "<option value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
-//$facility = "";
-$facility = "<option value=''> -- Sélectionner -- </option>";
-foreach ($fResult as $fDetails) {
-  $facility .= "<option value='" . $fDetails['facility_id'] . "'>" . ucwords(addslashes($fDetails['facility_name'])) . "</option>";
-}
+
+
+$facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélectionner --');
+
 //get ART list
 $aQuery = "SELECT * from r_art_code_details"; // where nation_identifier='drc'";
 $aResult = $db->query($aQuery);
-$start_date = date('Y-01-01');
-$end_date = date('Y-12-31');
-if ($arr['sample_code'] == 'MMYY') {
-  $mnthYr = date('my');
-  $start_date = date('Y-m-01');
-  $end_date = date('Y-m-31');
-} else if ($arr['sample_code'] == 'YY') {
-  $mnthYr = date('y');
-  $start_date = date('Y-01-01');
-  $end_date = date('Y-12-31');
-}
-//$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="3" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
-$svlQuery = 'SELECT ' . $sampleCodeKey . ' FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "' . $start_date . '" AND DATE(vl.request_created_datetime) <= "' . $end_date . '" AND ' . $sampleCode . '!="" ORDER BY ' . $sampleCodeKey . ' DESC LIMIT 1';
-$svlResult = $db->query($svlQuery);
-$prefix = $arr['sample_code_prefix'];
-if (isset($svlResult[0][$sampleCodeKey]) && $svlResult[0][$sampleCodeKey] != '' && $svlResult[0][$sampleCodeKey] != NULL) {
-  $maxId = $svlResult[0][$sampleCodeKey] + 1;
-  $strparam = strlen($maxId);
-  $zeros = substr("000", $strparam);
-  $maxId = $zeros . $maxId;
-} else {
-  $maxId = '001';
-}
+
 $sKey = '';
 $sFormat = '';
 ?>
@@ -188,10 +165,7 @@ $sFormat = '';
                       <td><label for="labId">Nom du laboratoire <span class="mandatory">*</span></label> </td>
                       <td>
                         <select name="labId" id="labId" class="form-control isRequired" title="Please choose laboratoire" style="width:100%;">
-                          <option value=""> -- Sélectionner -- </option>
-                          <?php foreach ($lResult as $labName) { ?>
-                            <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
-                          <?php } ?>
+                          <?= $general->generateSelectOptions($testingLabs, null, '-- Sélectionner --'); ?>
                         </select>
                       </td>
                       <!-- </tr> -->
@@ -503,21 +477,11 @@ $sFormat = '';
                       <td style="text-align:center;"><label for="newRejectionReason" class="newRejectionReason" style="display:none;">Autre, à préciser <span class="mandatory">*</span></label></td>
                       <td><input type="text" class="form-control newRejectionReason" id="newRejectionReason" name="newRejectionReason" placeholder="Motifs de rejet" title="Please enter motifs de rejet" <?php echo $labFieldDisabled; ?> style="width:100%;display:none;" /></td>
                     </tr>
-                    <!-- <tr>
-                                  <td><label for="sampleCode">Code Labo </label> <span class="mandatory">*</span></td>
-                                  <td>
-                                      <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" style="width:100%;" onchange="checkSampleNameValidation('vl_request_form','< ?php echo $sampleCode;?>',this.id,null,'The sample number that you entered already exists. Please try another number',null)"/>
-                                  </td>
-                                 <td></td><td></td>
-                              </tr> -->
                     <tr>
                       <td><label for="labId">Nom du laboratoire </label> </td>
                       <td>
                         <select name="labId" id="labId" class="form-control" title="Please choose laboratoire" style="width:100%;">
-                          <option value=""> -- Sélectionner -- </option>
-                          <?php foreach ($lResult as $labName) { ?>
-                            <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
-                          <?php } ?>
+                          <?= $general->generateSelectOptions($testingLabs, null, '-- Sélectionner --'); ?>
                         </select>
                       </td>
                       <td></td>

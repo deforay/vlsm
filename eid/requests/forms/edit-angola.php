@@ -41,15 +41,8 @@ $province .= "<option value=''> -- Selecione -- </option>";
 foreach ($pdResult as $provinceName) {
     $province .= "<option value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
-//$facility = "";
-$facility = "<option value=''> -- Selecione -- </option>";
-foreach ($fResult as $fDetails) {
-    $selected = "";
-    if ($eidInfo['facility_id'] == $fDetails['facility_id']) {
-        $selected = " selected='selected' ";
-    }
-    $facility .= "<option value='" . $fDetails['facility_id'] . "' $selected>" . ucwords(addslashes($fDetails['facility_name'])) . "</option>";
-}
+
+$facility = $general->generateSelectOptions($healthFacilities, $eidInfo['facility_id'], '-- Selecione --');
 
 //$eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(",", $eidInfo['mother_treatment']) : array();
 //$eidInfo['child_treatment'] = isset($eidInfo['child_treatment']) ? explode(",", $eidInfo['child_treatment']) : array();
@@ -135,7 +128,7 @@ foreach ($fResult as $fDetails) {
                                                 <option value=""> -- Selecione -- </option>
                                                 <?php
                                                 foreach ($implementingPartnerList as $implementingPartner) {
-                                                    ?>
+                                                ?>
                                                     <option value="<?php echo ($implementingPartner['i_partner_id']); ?>" <?php echo ($eidInfo['implementing_partner'] == $implementingPartner['i_partner_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
                                                 <?php } ?>
                                             </select>
@@ -146,37 +139,35 @@ foreach ($fResult as $fDetails) {
                                                 <option value=""> -- Selecione -- </option>
                                                 <?php
                                                 foreach ($fundingSourceList as $fundingSource) {
-                                                    ?>
+                                                ?>
                                                     <option value="<?php echo ($fundingSource['funding_source_id']); ?>" <?php echo ($eidInfo['funding_source'] == $fundingSource['funding_source_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
                                                 <?php } ?>
                                             </select>
                                         </td>
                                         <td><label for="sector">Serviço/Sector </label> </td>
-                                            <td>
+                                        <td>
                                             <input type="text" class="form-control" id="sector" name="sector" placeholder="Serviço/Sector" title="Sector" style="width:100%;" value="<?php echo $eidInfo['sector']; ?>" />
-                                            </td>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <?php if ($sarr['user_type'] == 'remoteuser') { ?>
                                             <!-- <tr> -->
                                             <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
                                             <td>
-                                                <select name="labId" id="labId" class="form-control isRequired" title="Lab Name" style="width:100%;">
-                                                    <option value=""> -- Selecione -- </option>
-                                                    <?php foreach ($lResult as $labName) { ?>
-                                                        <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
-                                                    <?php } ?>
+                                                <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;">
+                                                    <?= $general->generateSelectOptions($testingLabs, $eidInfo['lab_id'], '-- Selecione --'); ?>
                                                 </select>
                                             </td>
                                             <!-- </tr> -->
                                         <?php } ?>
                                     </tr>
                                 </table>
-                                <br><hr style="border: 1px solid #ccc;">
+                                <br>
+                                <hr style="border: 1px solid #ccc;">
 
                                 <div class="box-header with-border">
                                     <h3 class="box-title">DADOS DO PACIENTE</h3>
-                                </div>                                
+                                </div>
                                 <table class="table" style="width:100%">
 
                                     <tr>
@@ -192,7 +183,7 @@ foreach ($fResult as $fDetails) {
                                     <tr>
                                         <th><label for="childDob">Data de Nascimento <span class="mandatory">*</span> </label></th>
                                         <td>
-                                            <input type="text" class="form-control isRequired" id="childDob" name="childDob" placeholder="Date of birth" title="Please enter Date of birth" style="width:100%;" value="<?php echo $general->humanDateFormat($eidInfo['child_dob']) ?>"  onchange="calculateAgeInMonths();" />
+                                            <input type="text" class="form-control isRequired" id="childDob" name="childDob" placeholder="Date of birth" title="Please enter Date of birth" style="width:100%;" value="<?php echo $general->humanDateFormat($eidInfo['child_dob']) ?>" onchange="calculateAgeInMonths();" />
                                         </td>
                                         <th><label for="childGender">Género <span class="mandatory">*</span> </label></th>
                                         <td>
@@ -206,46 +197,46 @@ foreach ($fResult as $fDetails) {
                                     </tr>
                                     <tr>
                                         <th>Idade da criança (em meses)</th>
-                                        <td><input type="number" max="24" maxlength="2"  oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="childAge" name="childAge" placeholder="Age" title="Age" style="width:100%;" onchange=""  value="<?php echo $eidInfo['child_age']; ?>" /></td>
+                                        <td><input type="number" max="24" maxlength="2" oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="childAge" name="childAge" placeholder="Age" title="Age" style="width:100%;" onchange="" value="<?php echo $eidInfo['child_age']; ?>" /></td>
                                         <th>Profilaxia da Criança</th>
                                         <td>
                                             <select class="form-control" name="childTreatment[]" id="childTreatment">
                                                 <option value=''> -- Selecione -- </option>
-                                                <option value='NVP por 12 semanas'  <?php echo ('NVP por 12 semanas' == $eidInfo['child_treatment']) ? "selected='selected'" : ""; ?> > NVP por 12 semanas </option>
-                                                <option value='NVP + AZT'   <?php echo ('NVP + AZT' == $eidInfo['child_treatment']) ? "selected='selected'" : ""; ?> > NVP + AZT  </option>
-                                                <option value='Nenhuma'  <?php echo ('Nenhuma' == $eidInfo['child_treatment']) ? "selected='selected'" : ""; ?> > Nenhuma  </option>
-                                                <option value='Other'  <?php echo ('Other' == $eidInfo['child_treatment']) ? "selected='selected'" : ""; ?> > Outra (especifique)  </option>
-                                            </select>                                            
+                                                <option value='NVP por 12 semanas' <?php echo ('NVP por 12 semanas' == $eidInfo['child_treatment']) ? "selected='selected'" : ""; ?>> NVP por 12 semanas </option>
+                                                <option value='NVP + AZT' <?php echo ('NVP + AZT' == $eidInfo['child_treatment']) ? "selected='selected'" : ""; ?>> NVP + AZT </option>
+                                                <option value='Nenhuma' <?php echo ('Nenhuma' == $eidInfo['child_treatment']) ? "selected='selected'" : ""; ?>> Nenhuma </option>
+                                                <option value='Other' <?php echo ('Other' == $eidInfo['child_treatment']) ? "selected='selected'" : ""; ?>> Outra (especifique) </option>
+                                            </select>
                                         </td>
 
-                                    </tr>   
+                                    </tr>
                                     <tr>
                                         <th>Alimentação da Criança</th>
                                         <td>
                                             <select class="form-control" name="choiceOfFeeding" id="choiceOfFeeding">
                                                 <option value=''> -- Selecione -- </option>
                                                 <optgroup label="0-6 meses">
-                                                    <option value='Apenas leite materno'  <?php echo ($eidInfo['choice_of_feeding'] == 'Apenas leite materno') ? "selected='selected'" : ""; ?>>Apenas leite materno </option>
-                                                    <option value='Apenas leite artificial/substituto'  <?php echo ($eidInfo['choice_of_feeding'] == 'Apenas leite artificial/substituto') ? "selected='selected'" : ""; ?>>Apenas leite artificial/substituto</option>
-                                                    <option value='Mista (materno + artificial)'  <?php echo ($eidInfo['choice_of_feeding'] == 'Mista (materno + artificial)') ? "selected='selected'" : ""; ?>>Mista (materno + artificial)</option>
+                                                    <option value='Apenas leite materno' <?php echo ($eidInfo['choice_of_feeding'] == 'Apenas leite materno') ? "selected='selected'" : ""; ?>>Apenas leite materno </option>
+                                                    <option value='Apenas leite artificial/substituto' <?php echo ($eidInfo['choice_of_feeding'] == 'Apenas leite artificial/substituto') ? "selected='selected'" : ""; ?>>Apenas leite artificial/substituto</option>
+                                                    <option value='Mista (materno + artificial)' <?php echo ($eidInfo['choice_of_feeding'] == 'Mista (materno + artificial)') ? "selected='selected'" : ""; ?>>Mista (materno + artificial)</option>
                                                 </optgroup>
                                                 <optgroup label="> 6 meses">
-                                                    <option value='Com leite materno'  <?php echo ($eidInfo['choice_of_feeding'] == 'Com leite materno') ? "selected='selected'" : ""; ?>>Com leite materno</option>
+                                                    <option value='Com leite materno' <?php echo ($eidInfo['choice_of_feeding'] == 'Com leite materno') ? "selected='selected'" : ""; ?>>Com leite materno</option>
                                                     <option value='Sem leite materno' <?php echo ($eidInfo['choice_of_feeding'] == 'Sem leite materno') ? "selected='selected'" : ""; ?>>Sem leite materno</option>
-                                                </optgroup>                                                
-                                            </select>                                            
+                                                </optgroup>
+                                            </select>
                                         </td>
                                         <th> </th>
                                         <td></td>
 
                                     </tr>
-                                    
+
 
                                     <tr>
                                         <th>Nome da Mãe </th>
-                                        <td><input type="text" class="form-control " id="mothersName" name="mothersName" placeholder="Nome da Mãe" title="Nome da Mãe" style="width:100%;"  value="<?php echo $eidInfo['mother_name'] ?>" /></td>                                        
+                                        <td><input type="text" class="form-control " id="mothersName" name="mothersName" placeholder="Nome da Mãe" title="Nome da Mãe" style="width:100%;" value="<?php echo $eidInfo['mother_name'] ?>" /></td>
                                         <th>Nº Processo Clínico</th>
-                                        <td><input type="text" class="form-control " id="mothersId" name="mothersId" placeholder="Mother ART Number" title="Mother ART Number" style="width:100%;"  value="<?php echo $eidInfo['mother_id'] ?>" /></td>
+                                        <td><input type="text" class="form-control " id="mothersId" name="mothersId" placeholder="Mother ART Number" title="Mother ART Number" style="width:100%;" value="<?php echo $eidInfo['mother_id'] ?>" /></td>
                                     </tr>
                                     <tr>
                                         <th>Mãe da Criança Autoriza Contacto</th>
@@ -254,18 +245,18 @@ foreach ($fResult as $fDetails) {
                                                 <option value=''> -- Selecione -- </option>
                                                 <option value='yes' <?php echo ($eidInfo['caretaker_contact_consent'] == 'yes') ? "selected='selected'" : ""; ?>> Sim </option>
                                                 <option value='no' <?php echo ($eidInfo['caretaker_contact_consent'] == 'no') ? "selected='selected'" : ""; ?>> Não </option>
-                                            </select>                                            
-                                        </td>                                        
+                                            </select>
+                                        </td>
                                         <th>Telemóvel</th>
-                                        <td><input type="text" class="form-control " id="caretakerPhoneNumber" name="caretakerPhoneNumber" placeholder="Telemóvel" title="Caretaker Phone Number" style="width:100%;" value="<?php echo $eidInfo['caretaker_phone_number'] ?>"/></td>
-                                    </tr>                                    
-                                    
+                                        <td><input type="text" class="form-control " id="caretakerPhoneNumber" name="caretakerPhoneNumber" placeholder="Telemóvel" title="Caretaker Phone Number" style="width:100%;" value="<?php echo $eidInfo['caretaker_phone_number'] ?>" /></td>
+                                    </tr>
+
                                     <tr>
                                         <th>Tratamento ARV da Mãe</th>
-                                        <td><input type="text" class="form-control " id="motherTreatment" name="motherTreatment[]" placeholder="Tratamento ARV da Mãe" title="Tratamento ARV da Mãe" style="width:100%;" value="<?php echo $eidInfo['mother_treatment'] ?>" /></td>                                  
+                                        <td><input type="text" class="form-control " id="motherTreatment" name="motherTreatment[]" placeholder="Tratamento ARV da Mãe" title="Tratamento ARV da Mãe" style="width:100%;" value="<?php echo $eidInfo['mother_treatment'] ?>" /></td>
                                         <th>Data de início</th>
-                                        <td><input type="text" class="form-control date" id="motherTreatmentInitiationDate" name="motherTreatmentInitiationDate" placeholder="Data de início" title="Data de início" style="width:100%;"  value="<?php echo $general->humanDateFormat($eidInfo['mother_treatment_initiation_date']); ?>" /></td>
-                                    </tr>                                     
+                                        <td><input type="text" class="form-control date" id="motherTreatmentInitiationDate" name="motherTreatmentInitiationDate" placeholder="Data de início" title="Data de início" style="width:100%;" value="<?php echo $general->humanDateFormat($eidInfo['mother_treatment_initiation_date']); ?>" /></td>
+                                    </tr>
 
 
                                 </table>
@@ -280,18 +271,18 @@ foreach ($fResult as $fDetails) {
                                     <tr>
                                         <th style="width:15% !important">Data da Colheita <span class="mandatory">*</span> </th>
                                         <td style="width:35% !important;">
-                                            <input class="form-control dateTime isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date"  value="<?php echo $general->humanDateFormat($eidInfo['sample_collection_date']); ?>" />
+                                            <input class="form-control dateTime isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" value="<?php echo ($eidInfo['sample_collection_date']); ?>" />
                                         </td>
 
-                                        <th style="width:14%;"> Tipo de amostra <span class="mandatory">*</span>  </th>
+                                        <th style="width:14%;"> Tipo de amostra <span class="mandatory">*</span> </th>
                                         <td style="width:35%;">
                                             <select name="specimenType" id="specimenType" class="form-control isRequired" title="Please choose Tipo de amostra" style="width:100%">
-                                            <option value="">-- Selecione --</option>
-                                            <?php foreach($sampleResult as $name){ ?>
-                                                <option value="<?php echo $name['sample_id'];?>"  <?php echo ($eidInfo['specimen_type'] == $name['sample_id']) ? "selected='selected'" : ""; ?>  ><?php echo ucwords($name['sample_name']);?></option>
+                                                <option value="">-- Selecione --</option>
+                                                <?php foreach ($sampleResult as $name) { ?>
+                                                    <option value="<?php echo $name['sample_id']; ?>" <?php echo ($eidInfo['specimen_type'] == $name['sample_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($name['sample_name']); ?></option>
                                                 <?php } ?>
                                             </select>
-                                        </td>                                        
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>Técnico Responsável pela Colheita </th>
@@ -300,7 +291,7 @@ foreach ($fResult as $fDetails) {
                                         </td>
                                         <th>Contacto</th>
                                         <td>
-                                            <input class="form-control" type="text" name="sampleRequestorPhone" id="sampleRequestorPhone" placeholder="Contacto"  value="<?php echo $eidInfo['sample_requestor_phone']; ?>"/>
+                                            <input class="form-control" type="text" name="sampleRequestorPhone" id="sampleRequestorPhone" placeholder="Contacto" value="<?php echo $eidInfo['sample_requestor_phone']; ?>" />
                                         </td>
                                     </tr>
 
@@ -313,25 +304,36 @@ foreach ($fResult as $fDetails) {
                             <div class="box box-primary">
                                 <div class="box-body">
                                     <div class="box-header with-border">
-                                        <h3 class="box-title">Informações laboratoriais  </h3>
+                                        <h3 class="box-title">Informações laboratoriais </h3>
                                     </div>
                                     <table class="table" style="width:100%">
                                         <tr>
+                                            <td><label for="labId">Lab Name </label> </td>
+                                            <td>
+                                                <select name="labId" id="labId" class="form-control" title="Please select Testing Lab name" style="width:100%;">
+                                                    <?= $general->generateSelectOptions($testingLabs, $eidInfo['lab_id'], '-- Selecione --'); ?>
+                                                </select>
+                                            </td>
+                                            <th></th>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
                                             <th><label for="">Data e Hora da Recepção da Amostra </label></th>
                                             <td>
-                                                <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Data e Hora da Recepção da Amostra" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;"  value="<?php echo $general->humanDateFormat($eidInfo['sample_received_at_vl_lab_datetime']) ?>" />
+                                                <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Data e Hora da Recepção da Amostra" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;" value="<?php echo $general->humanDateFormat($eidInfo['sample_received_at_vl_lab_datetime']) ?>" />
                                             </td>
                                             <th><label for="">Responsável da recepção </label></th>
                                             <td>
-                                                <input type="text" class="form-control" id="labReceptionPerson" name="labReceptionPerson" placeholder="Responsável da recepção" title="Técnico Responsável pela Recepção da Amostra " <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;" value="<?php echo $eidInfo['lab_reception_person']; ?>"/>
+                                                <input type="text" class="form-control" id="labReceptionPerson" name="labReceptionPerson" placeholder="Responsável da recepção" title="Técnico Responsável pela Recepção da Amostra " <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;" value="<?php echo $eidInfo['lab_reception_person']; ?>" />
                                             </td>
+                                        </tr>
                                         <tr>
                                             <th>Rejeição da amostra ? </th>
                                             <td>
                                                 <select class="form-control" name="isSampleRejected" id="isSampleRejected" title="Rejeição da amostra ?">
                                                     <option value=''> -- Selecione -- </option>
                                                     <option value="yes" <?php echo ($eidInfo['is_sample_rejected'] == 'yes') ? "selected='selected'" : ""; ?>> Yes </option>
-                                                    <option value="no"  <?php echo ($eidInfo['is_sample_rejected'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
+                                                    <option value="no" <?php echo ($eidInfo['is_sample_rejected'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
                                                 </select>
                                             </td>
 
@@ -345,8 +347,8 @@ foreach ($fResult as $fDetails) {
                                                             foreach ($rejectionResult as $reject) {
                                                                 if ($type['rejection_type'] == $reject['rejection_type']) { ?>
                                                                     <option value="<?php echo $reject['rejection_reason_id']; ?>" <?php echo ($eidInfo['reason_for_sample_rejection'] == $reject['rejection_reason_id']) ? 'selected="selected"' : ''; ?>><?php echo ucwords($reject['rejection_reason_name']); ?></option>
-                                                                <?php }
-                                                        } ?>
+                                                            <?php }
+                                                            } ?>
                                                         </optgroup>
                                                     <?php } ?>
                                                 </select>
@@ -355,7 +357,7 @@ foreach ($fResult as $fDetails) {
                                         <tr>
                                             <td style="width:25%;"><label for="">Data da Quantificação </label></td>
                                             <td style="width:25%;">
-                                                <input type="text" class="form-control dateTime" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Data da Quantificação" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;"  value="<?php echo $general->humanDateFormat($eidInfo['sample_tested_datetime']) ?>"  />
+                                                <input type="text" class="form-control dateTime" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Data da Quantificação" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;" value="<?php echo $general->humanDateFormat($eidInfo['sample_tested_datetime']) ?>" />
                                             </td>
 
 
@@ -378,14 +380,14 @@ foreach ($fResult as $fDetails) {
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <?php if ($arr['sample_code'] == 'auto' || $arr['sample_code'] == 'YY' || $arr['sample_code'] == 'MMYY') { ?>
-                            <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat; ?>" />
-                            <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey; ?>" />
-                        <?php } ?>
+                        
                         <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                         <input type="hidden" name="formId" id="formId" value="8" />
-                        <input type="hidden" name="eidSampleId" id="eidSampleId" value="<?php echo ($eidInfo['eid_id']); ?>"/>
-                        <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
+                        <input type="hidden" name="eidSampleId" id="eidSampleId" value="<?php echo ($eidInfo['eid_id']); ?>" />
+                        <input type="hidden" name="sampleCodeCol" id="sampleCodeCol" value="<?php echo $eidInfo['sample_code']; ?>" />
+                        <input type="hidden" name="oldStatus" id="oldStatus" value="<?php echo $eidInfo['result_status']; ?>" />
+                        <input type="hidden" name="provinceCode" id="provinceCode" />
+                        <input type="hidden" name="provinceId" id="provinceId" />
                         <a href="/eid/requests/eid-requests.php" class="btn btn-default"> Cancel</a>
                     </div>
                     <!-- /.box-footer -->
@@ -416,17 +418,17 @@ foreach ($fResult as $fDetails) {
         }
         if ($.trim(pName) != '') {
             //if (provinceName) {
-                $.post("/includes/getFacilityForClinic.php", {
-                        pName: pName
-                    },
-                    function(data) {
-                        if (data != "") {
-                            details = data.split("###");
-                            $("#facilityId").html(details[0]);
-                            $("#district").html(details[1]);
-                            $("#clinicianName").val(details[2]);
-                        }
-                    });
+            $.post("/includes/getFacilityForClinic.php", {
+                    pName: pName
+                },
+                function(data) {
+                    if (data != "") {
+                        details = data.split("###");
+                        $("#facilityId").html(details[0]);
+                        $("#district").html(details[1]);
+                        $("#clinicianName").val(details[2]);
+                    }
+                });
             //}
         } else if (pName == '') {
             provinceName = true;
