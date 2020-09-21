@@ -54,13 +54,13 @@ if (!isset($stateResult[0]['province_code']) || $stateResult[0]['province_code']
   $stateResult[0]['province_code'] = '';
 }
 //district details
-$districtResult = array();
-if (trim($stateName) != '') {
-  $districtQuery = "SELECT DISTINCT facility_district from facility_details where facility_state='" . $stateName . "' AND status='active'";
-  $districtResult = $db->query($districtQuery);
-  $facilityQuery = "SELECT * from facility_details where `status`='active' AND facility_type='2'";
-  $lResult = $db->query($facilityQuery);
-}
+// $districtResult = array();
+// if (trim($stateName) != '') {
+//   $districtQuery = "SELECT DISTINCT facility_district from facility_details where facility_state='" . $stateName . "' AND status='active'";
+//   $districtResult = $db->query($districtQuery);
+//   $facilityQuery = "SELECT * from facility_details where `status`='active' AND facility_type='2'";
+//   $lResult = $db->query($facilityQuery);
+// }
 
 //set reason for changes history
 $rch = '';

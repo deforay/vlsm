@@ -2,14 +2,18 @@
 $title = "Enter VL Result";
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-$tsQuery = "SELECT * FROM r_sample_status";
-$tsResult = $db->rawQuery($tsQuery);
-$configFormQuery = "SELECT * FROM global_config WHERE name ='vl_form'";
-$configFormResult = $db->rawQuery($configFormQuery);
+
+
+$general = new \Vlsm\Models\General($db);
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
+$healthFacilites = $facilitiesDb->getHealthFacilities('vl');
+
+$facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
+
+
 $sQuery = "SELECT * FROM r_vl_sample_type where status='active'";
 $sResult = $db->rawQuery($sQuery);
-$fQuery = "SELECT * FROM facility_details where status='active'";
-$fResult = $db->rawQuery($fQuery);
+
 $batQuery = "SELECT batch_code FROM batch_details where test_type = 'vl' AND batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
 //check filters
@@ -92,14 +96,7 @@ if ($lastUrl1 != '' || $lastUrl2 != '') {
               <td><b>Facility Name :</b></td>
               <td>
                 <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple" style="width:220px;">
-                  <option value=""> -- Select -- </option>
-                  <?php
-                  foreach ($fResult as $name) {
-                  ?>
-                    <option value="<?php echo $name['facility_id']; ?>" <?php echo (in_array($name['facility_id'], $facilityName)) ? "selected='selected'" : "" ?>><?php echo ucwords($name['facility_name'] . "-" . $name['facility_code']); ?></option>
-                  <?php
-                  }
-                  ?>
+                  <?= $facilitiesDropdown; ?>
                 </select>
               </td>
 

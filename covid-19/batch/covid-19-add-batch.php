@@ -4,6 +4,13 @@ $title = "Covid-19 | Add Batch";
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 
+$general = new \Vlsm\Models\General($db);
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
+$healthFacilites = $facilitiesDb->getHealthFacilities('covid19');
+
+$facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
+
+
 
 //global config
 $configQuery = "SELECT `value` FROM global_config WHERE name ='vl_form'";
@@ -14,11 +21,6 @@ $importConfigQuery = "SELECT * FROM import_config WHERE status ='active'";
 $importConfigResult = $db->rawQuery($importConfigQuery);
 $query = "SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where sample_batch_id is NULL OR sample_batch_id='' ORDER BY f.facility_name ASC";
 $result = $db->rawQuery($query);
-
-$fQuery = "SELECT * FROM facility_details where status='active'";
-$fResult = $db->rawQuery($fQuery);
-$sQuery = "SELECT * FROM r_vl_sample_type where status='active'";
-$sResult = $db->rawQuery($sQuery);
 
 $start_date = date('Y-m-d');
 $end_date = date('Y-m-d');
@@ -117,14 +119,7 @@ foreach ($importConfigResult as $machine) {
                     <th>Facility</th>
                     <td>
                         <select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple">
-                            <!--<option value="">-- Select --</option>-->
-                            <?php
-                            foreach ($fResult as $name) {
-                            ?>
-                                <option value="<?php echo $name['facility_id']; ?>"><?php echo ucwords($name['facility_name'] . "-" . $name['facility_code']); ?></option>
-                            <?php
-                            }
-                            ?>
+                            <?= $facilitiesDropdown; ?>
                         </select>
                     </td>
                 </tr>
