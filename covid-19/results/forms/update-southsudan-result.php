@@ -56,29 +56,13 @@ foreach ($pdResult as $provinceName) {
     $province .= "<option data-code='" . $provinceName['province_code'] . "' data-province-id='" . $provinceName['province_id'] . "' data-name='" . $provinceName['province_name'] . "' value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
 //$facility = "";
-$facility = "<option value=''> -- Select -- </option>";
-foreach ($fResult as $fDetails) {
-    $selected = "";
-    if ($covid19Info['facility_id'] == $fDetails['facility_id']) {
-        $selected = " selected='selected' ";
-    }
-    $facility .= "<option value='" . $fDetails['facility_id'] . "' $selected>" . ucwords(addslashes($fDetails['facility_name'])) . "</option>";
-}
+$facility = $general->generateSelectOptions($healthFacilities, $covid19Info['facility_id'], '-- Select --');
 
 
 //suggest sample id when lab user add request sample
 $sampleSuggestion = '';
 $sampleSuggestionDisplay = 'display:none;';
-$sCode = (isset($_GET['c']) && $_GET['c'] != '') ? $_GET['c'] : '';
-if ($sarr['user_type'] == 'vluser' && $sCode != '') {
-    $vlObj = new \Vlsm\Models\Covid19($db);
-    $sampleCollectionDate = explode(" ", $sampleCollectionDate);
-    $sampleCollectionDate = $general->humanDateFormat($sampleCollectionDate[0]);
-    $sampleSuggestionJson = $vlObj->generateCovid19SampleCode($stateResult[0]['province_code'], $sampleCollectionDate, 'png');
-    $sampleCodeKeys = json_decode($sampleSuggestionJson, true);
-    $sampleSuggestion = $sampleCodeKeys['sampleCode'];
-    $sampleSuggestionDisplay = 'display:block;';
-}
+
 
 ?>
 
@@ -132,13 +116,13 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         <?php if ($sarr['user_type'] == 'remoteuser') { ?>
                                             <td><label for="sampleCode">Sample ID </label> </td>
                                             <td colspan="5">
-                                                <span id="sampleCodeInText" style="width:30%;border-bottom:1px solid #333;"><?php echo ($sCode != '') ? $sCode : $covid19Info[$sampleCode]; ?></span>
-                                                <input type="hidden" class="<?php echo $sampleClass; ?>" id="sampleCode" name="sampleCode" value="<?php echo ($sCode != '') ? $sCode : $covid19Info[$sampleCode]; ?>" />
+                                                <span id="sampleCodeInText" style="width:30%;border-bottom:1px solid #333;"><?php echo $covid19Info[$sampleCode]; ?></span>
+                                                <input type="hidden" class="<?php echo $sampleClass; ?>" id="sampleCode" name="sampleCode" value="<?php echo $covid19Info[$sampleCode]; ?>" />
                                             </td>
                                         <?php } else { ?>
                                             <td><label for="sampleCode">Sample ID </label><span class="mandatory">*</span> </td>
                                             <td colspan="5">
-                                                <input type="text" readonly value="<?php echo ($sCode != '') ? $sCode : $covid19Info[$sampleCode]; ?>" class="form-control" id="sampleCode" name="sampleCode" placeholder="Sample ID" title="Please enter Sample ID" style="width:30%;" onchange="" />
+                                                <input type="text" readonly value="<?php echo $covid19Info[$sampleCode]; ?>" class="form-control" id="sampleCode" name="sampleCode" placeholder="Sample ID" title="Please enter Sample ID" style="width:30%;" onchange="" />
                                             </td>
                                         <?php } ?>
                                     </tr>
@@ -191,10 +175,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
                                             <td>
                                                 <select name="labId" id="labId" class="form-control" title="Please select Testing Lab name" style="width:100%;">
-                                                    <option value=""> -- Select -- </option>
-                                                    <?php foreach ($lResult as $labName) { ?>
-                                                        <option value="<?php echo $labName['facility_id']; ?>" <?php echo ($covid19Info['lab_id'] == $labName['facility_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($labName['facility_name']); ?></option>
-                                                    <?php } ?>
+                                                <?= $general->generateSelectOptions($testingLabs, $covid19Info['lab_id'], '-- Select --'); ?>
                                                 </select>
                                             </td>
                                             <!-- </tr> -->
@@ -572,23 +553,6 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         $.unblockUI();
     }
 
-    function sampleCodeGeneration() {
-        var pName = $("#province").val();
-        var sDate = $("#sampleCollectionDate").val();
-        if (pName != '' && sDate != '') {
-            $.post("/covid-19/requests/generateSampleCode.php", {
-                    sDate: sDate,
-                    pName: pName
-                },
-                function(data) {
-                    var sCodeKey = JSON.parse(data);
-                    $("#sampleCode").val(sCodeKey.sampleCode);
-                    $("#sampleCodeInText").html(sCodeKey.sampleCodeInText);
-                    $("#sampleCodeFormat").val(sCodeKey.sampleCodeFormat);
-                    $("#sampleCodeKey").val(sCodeKey.sampleCodeKey);
-                });
-        }
-    }
 
     function getfacilityDistrictwise(obj) {
         $.blockUI();
