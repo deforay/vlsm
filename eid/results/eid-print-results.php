@@ -2,19 +2,26 @@
 $title = "Print EID Results";
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-$tsQuery = "SELECT * FROM r_sample_status";
-$tsResult = $db->rawQuery($tsQuery);
-$configFormQuery = "SELECT * FROM global_config WHERE name ='vl_form'";
-$configFormResult = $db->rawQuery($configFormQuery);
-$fQuery = "SELECT * FROM facility_details where status='active'";
-$fResult = $db->rawQuery($fQuery);
-$batQuery = "SELECT batch_code FROM batch_details where batch_status='completed'";
+
+
+$general = new \Vlsm\Models\General($db);
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
+$healthFacilites = $facilitiesDb->getHealthFacilities('eid');
+
+$facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
+
+
+// $tsQuery = "SELECT * FROM r_sample_status";
+// $tsResult = $db->rawQuery($tsQuery);
+
+
+$batQuery = "SELECT batch_code FROM batch_details WHERE test_type = 'eid' AND batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
-$fundingSourceQry = "SELECT * FROM r_funding_sources WHERE funding_source_status='active' ORDER BY funding_source_name ASC";
-$fundingSourceList = $db->query($fundingSourceQry);
-//Implementing partner list
-$implementingPartnerQry = "SELECT * FROM r_implementation_partners WHERE i_partner_status='active' ORDER BY i_partner_name ASC";
-$implementingPartnerList = $db->query($implementingPartnerQry);
+// $fundingSourceQry = "SELECT * FROM r_funding_sources WHERE funding_source_status='active' ORDER BY funding_source_name ASC";
+// $fundingSourceList = $db->query($fundingSourceQry);
+// //Implementing partner list
+// $implementingPartnerQry = "SELECT * FROM r_implementation_partners WHERE i_partner_status='active' ORDER BY i_partner_name ASC";
+// $implementingPartnerList = $db->query($implementingPartnerQry);
 ?>
 <style>
     .select2-selection__choice {
@@ -63,11 +70,11 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
                                                             <option value=""> -- Select -- </option>
                                                             <?php
                                                             foreach ($batResult as $code) {
-                                                                ?>
+                                                            ?>
                                                                 <option value="<?php echo $code['batch_code']; ?>"><?php echo $code['batch_code']; ?></option>
                                                             <?php
-                                                        }
-                                                        ?>
+                                                            }
+                                                            ?>
                                                         </select>
                                                     </td>
 
@@ -80,14 +87,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
                                                     <td><b>Facility Name :</b></td>
                                                     <td>
                                                         <select class="form-control" id="facility" name="facility" title="Please select facility name" multiple="multiple" style="width:220px;">
-                                                            <option value=""> -- Select -- </option>
-                                                            <?php
-                                                            foreach ($fResult as $name) {
-                                                                ?>
-                                                                <option value="<?php echo $name['facility_id']; ?>"><?php echo ucwords($name['facility_name'] . "-" . $name['facility_code']); ?></option>
-                                                            <?php
-                                                        }
-                                                        ?>
+                                                            <?= $facilitiesDropdown; ?>
                                                         </select>
                                                     </td>
                                                     <td></td>
@@ -187,11 +187,11 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
                                                             <option value=""> -- Select -- </option>
                                                             <?php
                                                             foreach ($batResult as $code) {
-                                                                ?>
+                                                            ?>
                                                                 <option value="<?php echo $code['batch_code']; ?>"><?php echo $code['batch_code']; ?></option>
                                                             <?php
-                                                        }
-                                                        ?>
+                                                            }
+                                                            ?>
                                                         </select>
                                                     </td>
 
@@ -204,14 +204,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
                                                     <td><b>Facility Name :</b></td>
                                                     <td>
                                                         <select class="form-control" id="printFacility" name="facility" title="Please select facility name" multiple="multiple" style="width:220px;">
-                                                            <option value=""> -- Select -- </option>
-                                                            <?php
-                                                            foreach ($fResult as $name) {
-                                                                ?>
-                                                                <option value="<?php echo $name['facility_id']; ?>"><?php echo ucwords($name['facility_name'] . "-" . $name['facility_code']); ?></option>
-                                                            <?php
-                                                        }
-                                                        ?>
+                                                            <?= $facilitiesDropdown; ?>
                                                         </select>
                                                     </td>
                                                     <td></td>

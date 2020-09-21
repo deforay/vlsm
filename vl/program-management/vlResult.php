@@ -3,23 +3,26 @@ $title = "Export Data";
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 
+
+$general = new \Vlsm\Models\General($db);
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
+
 $tsQuery = "SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
-//config  query
-$configQuery = "SELECT * from global_config";
-$configResult = $db->query($configQuery);
-$arr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($configResult); $i++) {
-	$arr[$configResult[$i]['name']] = $configResult[$i]['value'];
-}
+
+$arr = $general->getGlobalConfig();
+
 $sQuery = "SELECT * FROM r_vl_sample_type where status='active'";
 $sResult = $db->rawQuery($sQuery);
-$fQuery = "SELECT * FROM facility_details where status='active' and facility_type !=2";
-$fResult = $db->rawQuery($fQuery);
-$vlLabQuery = "SELECT * FROM facility_details where status='active' and facility_type =2";
-$vlLabResult = $db->rawQuery($vlLabQuery);
-$batQuery = "SELECT batch_code FROM batch_details where batch_status='completed'";
+
+
+$healthFacilites = $facilitiesDb->getHealthFacilities('vl');
+$facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
+$testingLabs = $facilitiesDb->getTestingLabs('vl');
+$testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- Select --");
+
+
+$batQuery = "SELECT batch_code FROM batch_details where test_type ='vl' AND batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
 //Funding source list
 $fundingSourceQry = "SELECT * FROM r_funding_sources WHERE funding_source_status='active' ORDER BY funding_source_name ASC";
@@ -79,27 +82,13 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 							<td><b>Facility Name :</b></td>
 							<td>
 								<select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple" style="width:220px;">
-									<option value=""> -- Select -- </option>
-									<?php
-									foreach ($fResult as $name) {
-										?>
-										<option value="<?php echo $name['facility_id']; ?>"><?php echo ucwords($name['facility_name'] . "-" . $name['facility_code']); ?></option>
-									<?php
-									}
-									?>
+									<?= $facilitiesDropdown; ?>
 								</select>
 							</td>
 							<td><b>VL Lab :</b></td>
 							<td>
 								<select class="form-control" id="vlLab" name="vlLab" title="Please select vl lab" style="width:220px;">
-									<option value=""> -- Select -- </option>
-									<?php
-									foreach ($vlLabResult as $vlLab) {
-										?>
-										<option value="<?php echo $vlLab['facility_id']; ?>"><?php echo ucwords($vlLab['facility_name'] . "-" . $vlLab['facility_code']); ?></option>
-									<?php
-									}
-									?>
+									<?= $testingLabsDropdown; ?>
 								</select>
 							</td>
 							<td><b>Sample Test Date&nbsp;:</b></td>

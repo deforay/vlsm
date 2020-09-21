@@ -2,19 +2,26 @@
 $title = "Print Covid-19 Results";
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-$tsQuery = "SELECT * FROM r_sample_status";
-$tsResult = $db->rawQuery($tsQuery);
-$configFormQuery = "SELECT * FROM global_config WHERE name ='vl_form'";
-$configFormResult = $db->rawQuery($configFormQuery);
-$fQuery = "SELECT * FROM facility_details where status='active'";
-$fResult = $db->rawQuery($fQuery);
-$batQuery = "SELECT batch_code FROM batch_details where batch_status='completed'";
+// $tsQuery = "SELECT * FROM r_sample_status";
+// $tsResult = $db->rawQuery($tsQuery);
+// $configFormQuery = "SELECT * FROM global_config WHERE name ='vl_form'";
+// $configFormResult = $db->rawQuery($configFormQuery);
+
+$batQuery = "SELECT batch_code FROM batch_details where test_type ='covid19' AND batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
-$fundingSourceQry = "SELECT * FROM r_funding_sources WHERE funding_source_status='active' ORDER BY funding_source_name ASC";
-$fundingSourceList = $db->query($fundingSourceQry);
-//Implementing partner list
-$implementingPartnerQry = "SELECT * FROM r_implementation_partners WHERE i_partner_status='active' ORDER BY i_partner_name ASC";
-$implementingPartnerList = $db->query($implementingPartnerQry);
+// $fundingSourceQry = "SELECT * FROM r_funding_sources WHERE funding_source_status='active' ORDER BY funding_source_name ASC";
+// $fundingSourceList = $db->query($fundingSourceQry);
+// //Implementing partner list
+// $implementingPartnerQry = "SELECT * FROM r_implementation_partners WHERE i_partner_status='active' ORDER BY i_partner_name ASC";
+// $implementingPartnerList = $db->query($implementingPartnerQry);
+
+
+$general = new \Vlsm\Models\General($db);
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
+$healthFacilites = $facilitiesDb->getHealthFacilities('covid19');
+
+$facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
+
 ?>
 <style>
     .select2-selection__choice {
@@ -63,11 +70,11 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
                                                             <option value=""> -- Select -- </option>
                                                             <?php
                                                             foreach ($batResult as $code) {
-                                                                ?>
+                                                            ?>
                                                                 <option value="<?php echo $code['batch_code']; ?>"><?php echo $code['batch_code']; ?></option>
                                                             <?php
-                                                        }
-                                                        ?>
+                                                            }
+                                                            ?>
                                                         </select>
                                                     </td>
 
@@ -80,14 +87,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
                                                     <td><b>Facility Name :</b></td>
                                                     <td>
                                                         <select class="form-control" id="facility" name="facility" title="Please select facility name" multiple="multiple" style="width:220px;">
-                                                            <option value=""> -- Select -- </option>
-                                                            <?php
-                                                            foreach ($fResult as $name) {
-                                                                ?>
-                                                                <option value="<?php echo $name['facility_id']; ?>"><?php echo ucwords($name['facility_name'] . "-" . $name['facility_code']); ?></option>
-                                                            <?php
-                                                        }
-                                                        ?>
+                                                            <?= $facilitiesDropdown; ?>
                                                         </select>
                                                     </td>
                                                     <td></td>
@@ -147,7 +147,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
                                                 </div>
                                             </span>
 
-                                            <table id="vlRequestDataTable" class="table table-bordered table-striped">
+                                            <table id="notPrintedTable" class="table table-bordered table-striped">
                                                 <thead>
                                                     <tr>
                                                         <th><input type="checkbox" id="checkRowsData" onclick="toggleAllVisible()" /></th>
@@ -187,11 +187,11 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
                                                             <option value=""> -- Select -- </option>
                                                             <?php
                                                             foreach ($batResult as $code) {
-                                                                ?>
+                                                            ?>
                                                                 <option value="<?php echo $code['batch_code']; ?>"><?php echo $code['batch_code']; ?></option>
                                                             <?php
-                                                        }
-                                                        ?>
+                                                            }
+                                                            ?>
                                                         </select>
                                                     </td>
 
@@ -204,14 +204,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
                                                     <td><b>Facility Name :</b></td>
                                                     <td>
                                                         <select class="form-control" id="printFacility" name="facility" title="Please select facility name" multiple="multiple" style="width:220px;">
-                                                            <option value=""> -- Select -- </option>
-                                                            <?php
-                                                            foreach ($fResult as $name) {
-                                                                ?>
-                                                                <option value="<?php echo $name['facility_id']; ?>"><?php echo ucwords($name['facility_name'] . "-" . $name['facility_code']); ?></option>
-                                                            <?php
-                                                        }
-                                                        ?>
+                                                            <?= $facilitiesDropdown; ?>
                                                         </select>
                                                     </td>
                                                     <td></td>
@@ -270,7 +263,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
                                                     </div>
                                                 </div>
                                             </span>
-                                            <table id="printedVlRequestDataTable" class="table table-bordered table-striped">
+                                            <table id="alreadyPrintedTable" class="table table-bordered table-striped">
                                                 <thead>
                                                     <tr>
                                                         <th><input type="checkbox" id="checkPrintedRowsData" onclick="toggleAllPrintedVisible()" /></th>
@@ -402,7 +395,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 
     function loadVlRequestData() {
         $.blockUI();
-        oTable = $('#vlRequestDataTable').dataTable({
+        oTable = $('#notPrintedTable').dataTable({
             "oLanguage": {
                 "sLengthMenu": "_MENU_ records per page"
             },
@@ -450,10 +443,10 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
                 },
             ],
             <?php if ($sarr['user_type'] != 'standalone') { ?> "aaSorting": [
-                    [9, "desc"]
+                    [8, "desc"]
                 ],
             <?php } else { ?> "aaSorting": [
-                    [8, "desc"]
+                    [7, "desc"]
                 ],
             <?php } ?> "fnDrawCallback": function() {
                 var checkBoxes = document.getElementsByName("chk[]");
@@ -506,7 +499,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 
     function loadPrintedVlRequestData() {
         $.blockUI();
-        opTable = $('#printedVlRequestDataTable').dataTable({
+        opTable = $('#alreadyPrintedTable').dataTable({
             "oLanguage": {
                 "sLengthMenu": "_MENU_ records per page"
             },
@@ -554,10 +547,10 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
                 },
             ],
             <?php if ($sarr['user_type'] != 'standalone') { ?> "aaSorting": [
-                    [9, "desc"]
+                    [8, "desc"]
                 ],
             <?php } else { ?> "aaSorting": [
-                    [8, "desc"]
+                    [7, "desc"]
                 ],
             <?php } ?> "fnDrawCallback": function() {
                 var checkBoxes = document.getElementsByName("chkPrinted[]");
