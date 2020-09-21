@@ -659,7 +659,7 @@ $sFormat = '';
     if (cName != '' && facilityName) {
       $.post("/includes/siteInformationDropdownOptions.php", {
           cName: cName,
-            testType: 'vl'
+          testType: 'vl'
         },
         function(data) {
           if (data != "") {

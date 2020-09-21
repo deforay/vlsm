@@ -253,11 +253,11 @@ $disable = "disabled = 'disabled'";
                         </td>
                         <td>
                           <select class="form-control" id="wardData" name="wardData" < ?php echo $disable; ?> title="Please select ward data" style="width:100%;">
-			    <option value="">-- Select --</option>
-			    <option value="inpatient" < ?php echo ($vlQueryInfo['ward']=="inpatient")?"selected='selected'":""?>>In-Patient</option>
-			    <option value="outpatient" < ?php echo ($vlQueryInfo['ward']=="outpatient")?"selected='selected'":""?>>Out-Patient</option>
-			    <option value="anc"< ?php echo ($vlQueryInfo['ward']=="anc")?"selected='selected'":""?>>ANC</option>
-			  </select>
+                          <option value="">-- Select --</option>
+                          <option value="inpatient" < ?php echo ($vlQueryInfo['ward']=="inpatient")?"selected='selected'":""?>>In-Patient</option>
+                          <option value="outpatient" < ?php echo ($vlQueryInfo['ward']=="outpatient")?"selected='selected'":""?>>Out-Patient</option>
+                          <option value="anc"< ?php echo ($vlQueryInfo['ward']=="anc")?"selected='selected'":""?>>ANC</option>
+                          </select>
                         </td>-->
                   <td>
                     <label for="officerName">Requesting Medical Officer </label>
