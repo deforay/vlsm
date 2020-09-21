@@ -531,17 +531,17 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 										<div class="col-md-12">
 											<div class="form-group">
 												<?php if (isset($arr['covid19_report_type']) && $arr['covid19_report_type'] != '') { ?>
-													<label for="covid19ReportType" class="col-lg-2 control-label">Covid19 Report Type<span class="mandatory ">*</span></label>
+													<label for="covid19ReportType" class="col-lg-2 control-label">Covid-19 Report Type<span class="mandatory ">*</span></label>
 													<div class="col-lg-4">
 														<select name="covid19ReportType" id="covid19ReportType" class="form-control isRequired" title="Please select covid19 report type">
 															<option value="">-- Select --</option>
 															<option value='rwanda' <?php echo ($arr['covid19_report_type'] == 'rwanda') ? "selected='selected'" : ""; ?>> Rawanda </option>
-															<option value='who' <?php echo ($arr['covid19_report_type'] == 'who') ? "selected='selected'" : ""; ?>> Who </option>
+															<option value='who' <?php echo ($arr['covid19_report_type'] == 'who') ? "selected='selected'" : ""; ?>> WHO </option>
 														</select>
 													</div>
 												<?php }
 												if (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] != '') { ?>
-													<label for="covid19PositiveConfirmatoryTestsRequiredByCentralLab" class="col-lg-2 control-label">Covid19 Positive Confirmatory Tests Required By CentralLab<span class="mandatory ">*</span></label>
+													<label for="covid19PositiveConfirmatoryTestsRequiredByCentralLab" class="col-lg-2 control-label">Covid-19 Positive Confirmatory Tests Required<span class="mandatory ">*</span></label>
 													<div class="col-lg-4">
 														<select name="covid19PositiveConfirmatoryTestsRequiredByCentralLab" id="covid19PositiveConfirmatoryTestsRequiredByCentralLab" class="form-control isRequired" title="Please select covid19 report type">
 															<option value="">-- Select --</option>
@@ -572,12 +572,12 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 														$sPrefixYYDisplay = '';
 													}
 													?>
-													<input type="radio" class="isRequired" title="Please select the Covid19 Sample Code Format" id="covid19_auto_generate_yy" name="covid19_sample_code" value="YY" <?php echo ($arr['covid19_sample_code'] == 'YY') ? 'checked' : ''; ?> onclick="makeReadonly('prefixMMYY','prefixYY')">&nbsp;<input <?php echo $sPrefixYYDisplay; ?> type="text" class="covid19_boxWidth covid19_prefixYY" id="covid19_prefixYY" name="covid19_sample_code_prefix" title="Enter Prefix" value="<?php echo $sPrefixYY; ?>" /> YY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-													<input type="radio" class="isRequired" title="Please select the Covid19 Sample Code Format" id="covid19_auto_generate_mmyy" name="covid19_sample_code" value="MMYY" <?php echo ($arr['covid19_sample_code'] == 'MMYY') ? 'checked' : ''; ?> onclick="makeReadonly('prefixYY','prefixMMYY')">&nbsp;<input <?php echo $sPrefixMMYYDisplay; ?> type="text" class="covid19_boxWidth covid19_prefixMMYY" id="covid19_prefixMMYY" name="covid19_sample_code_prefix" title="Enter Prefix" value="<?php echo $sPrefixMMYY; ?>" /> MMYY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-													<input type="radio" class="isRequired" title="Please select the Covid19 Sample Code Format" id="covid19_auto_generate" name="covid19_sample_code" value="auto" <?php echo ($arr['covid19_sample_code'] == 'auto') ? 'checked' : ''; ?>><span id="covid19_auto1"><?php echo ($arr['vl_form'] == 5) ? ' Auto 1' : ' Auto'; ?> </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-													<input type="radio" class="isRequired" title="Please select the Covid19 Sample Code Format" id="covid19_auto_generate2" name="covid19_sample_code" value="auto2" <?php echo ($arr['covid19_sample_code'] == 'auto2') ? 'checked' : ''; ?> style="display:<?php echo ($arr['vl_form'] == 5) ? '' : 'none'; ?>"><span id="covid19_auto2" style="display:<?php echo ($arr['vl_form'] == 5) ? '' : 'none'; ?>"> Auto 2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-													<input type="radio" class="isRequired" title="Please select the Covid19 Sample Code Format" id="covid19_numeric" name="covid19_sample_code" value="numeric" <?php echo ($arr['covid19_sample_code'] == 'numeric') ? 'checked' : ''; ?>> Numeric&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-													<input type="radio" class="isRequired" title="Please select the Covid19 Sample Code Format" id="covid19_alpha_numeric" name="covid19_sample_code" value="alphanumeric" <?php echo ($arr['covid19_sample_code'] == 'alphanumeric') ? 'checked' : ''; ?>> Alpha Numeric
+													<input type="radio" class="isRequired" title="Please select the Covid-19 Sample Code Format" id="covid19_auto_generate_yy" name="covid19_sample_code" value="YY" <?php echo ($arr['covid19_sample_code'] == 'YY') ? 'checked' : ''; ?> onclick="makeReadonly('prefixMMYY','prefixYY')">&nbsp;<input <?php echo $sPrefixYYDisplay; ?> type="text" class="covid19_boxWidth covid19_prefixYY" id="covid19_prefixYY" name="covid19_sample_code_prefix" title="Enter Prefix" value="<?php echo $sPrefixYY; ?>" /> YY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<input type="radio" class="isRequired" title="Please select the Covid-19 Sample Code Format" id="covid19_auto_generate_mmyy" name="covid19_sample_code" value="MMYY" <?php echo ($arr['covid19_sample_code'] == 'MMYY') ? 'checked' : ''; ?> onclick="makeReadonly('prefixYY','prefixMMYY')">&nbsp;<input <?php echo $sPrefixMMYYDisplay; ?> type="text" class="covid19_boxWidth covid19_prefixMMYY" id="covid19_prefixMMYY" name="covid19_sample_code_prefix" title="Enter Prefix" value="<?php echo $sPrefixMMYY; ?>" /> MMYY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<input type="radio" class="isRequired" title="Please select the Covid-19 Sample Code Format" id="covid19_auto_generate" name="covid19_sample_code" value="auto" <?php echo ($arr['covid19_sample_code'] == 'auto') ? 'checked' : ''; ?>><span id="covid19_auto1"><?php echo ($arr['vl_form'] == 5) ? ' Auto 1' : ' Auto'; ?> </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<input type="radio" class="isRequired" title="Please select the Covid-19 Sample Code Format" id="covid19_auto_generate2" name="covid19_sample_code" value="auto2" <?php echo ($arr['covid19_sample_code'] == 'auto2') ? 'checked' : ''; ?> style="display:<?php echo ($arr['vl_form'] == 5) ? '' : 'none'; ?>"><span id="covid19_auto2" style="display:<?php echo ($arr['vl_form'] == 5) ? '' : 'none'; ?>"> Auto 2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+													<input type="radio" class="isRequired" title="Please select the Covid-19 Sample Code Format" id="covid19_numeric" name="covid19_sample_code" value="numeric" <?php echo ($arr['covid19_sample_code'] == 'numeric') ? 'checked' : ''; ?>> Numeric&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<input type="radio" class="isRequired" title="Please select the Covid-19 Sample Code Format" id="covid19_alpha_numeric" name="covid19_sample_code" value="alphanumeric" <?php echo ($arr['covid19_sample_code'] == 'alphanumeric') ? 'checked' : ''; ?>> Alpha Numeric
 												</div>
 											</div>
 										</div>
@@ -619,7 +619,7 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 										<div class="col-md-12">
 											<div class="form-group">
 												<?php if (isset($arr['covid19_tests_table_in_results_pdf']) && $arr['covid19_tests_table_in_results_pdf'] != '') { ?>
-													<label for="covid19TestsTableInResultsPdf" class="col-lg-2 control-label">Covid19 Tests method in Results Pdf<span class="mandatory ">*</span></label>
+													<label for="covid19TestsTableInResultsPdf" class="col-lg-2 control-label">Show Covid19 Tests table in Results PDF<span class="mandatory ">*</span></label>
 													<div class="col-lg-4">
 														<select name="covid19TestsTableInResultsPdf" id="covid19TestsTableInResultsPdf" class="form-control isRequired" title="Please select covid19 Tests method in Results Pdf">
 															<option value="">-- Select --</option>

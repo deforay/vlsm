@@ -88,6 +88,14 @@ $pResult = $db->rawQuery($pQuery);
                   </div>
                 </div>
               </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                <label for="testingPoints" class="col-lg-4 control-label">Testing Point(s)<br> <small>(comma separated)</small> </label>
+                  <div class="col-lg-7">
+                  <input type="text" class="form-control" id="testingPoints" name="testingPoints" placeholder="eg. VCT, PMTCT" />
+                  </div>
+                </div>
+              </div>
               <!--<div class="col-md-6">
                     <div class="form-group">
                         <label for="reportEmail" class="col-lg-4 control-label">Report Email(s) </label>
