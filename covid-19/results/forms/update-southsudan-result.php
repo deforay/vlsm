@@ -316,27 +316,27 @@ $sampleSuggestionDisplay = 'display:none;';
                                     </div>
                                     <table class="table" style="width:100%">
                                         <tr>
-                                            <th><label for="">Sample Received Date </label></th>
+                                            <th><label for="">Sample Received Date <span class="mandatory">*</span></label></th>
                                             <td>
-                                                <input type="text" class="form-control" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter sample receipt date" value="<?php echo $general->humanDateFormat($covid19Info['sample_received_at_vl_lab_datetime']) ?>" onchange="" style="width:100%;" />
+                                                <input type="text" class="form-control isRequired" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter sample receipt date" value="<?php echo $general->humanDateFormat($covid19Info['sample_received_at_vl_lab_datetime']) ?>" onchange="" style="width:100%;" />
                                             </td>
-                                            <td class="lab-show"><label for="labId">Lab Name </label> </td>
+                                            <td class="lab-show"><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
                                             <td class="lab-show">
                                                 <select name="labId" id="labId" class="form-control" title="Please select Testing Lab name" style="width:100%;">
                                                     <?= $general->generateSelectOptions($testingLabs, $covid19Info['lab_id'], '-- Select --'); ?>
                                                 </select>
                                             </td>
                                         <tr>
-                                            <th>Is Sample Rejected ?</th>
+                                            <th>Is Sample Rejected ? <span class="mandatory">*</span></th>
                                             <td>
-                                                <select class="form-control result-focus" name="isSampleRejected" id="isSampleRejected">
+                                                <select class="form-control result-focus isRequired" name="isSampleRejected" id="isSampleRejected">
                                                     <option value=''> -- Select -- </option>
                                                     <option value="yes" <?php echo ($covid19Info['is_sample_rejected'] == 'yes') ? "selected='selected'" : ""; ?>> Yes </option>
                                                     <option value="no" <?php echo ($covid19Info['is_sample_rejected'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
                                                 </select>
                                             </td>
 
-                                            <th class="show-rejection" style="display:none;">Reason for Rejection</th>
+                                            <th class="show-rejection" style="display:none;">Reason for Rejection <span class="mandatory">*</span></th>
                                             <td class="show-rejection" style="display:none;">
                                                 <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason">
                                                     <option value="">-- Select --</option>
@@ -404,41 +404,13 @@ $sampleSuggestionDisplay = 'display:none;';
                                                                             <?php } ?>
                                                                         </select>
                                                                     </td>
-                                                                    <td style="vertical-align:middle;text-align: center;">
+                                                                    <td style="vertical-align:middle;text-align: center;width:100px;">
                                                                         <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="addTestRow();"><i class="fa fa-plus"></i></a>&nbsp;
                                                                         <a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeTestRow(this.parentNode.parentNode);deleteRow('<?php echo base64_encode($covid19TestInfo[$indexKey]['test_id']); ?>');"><i class="fa fa-minus"></i></a>
                                                                     </td>
                                                                 </tr>
                                                             <?php }
-                                                        } else { ?>
-                                                            <tr>
-                                                                <td class="text-center">1</td>
-                                                                <td>
-                                                                    <select onchange="otherCovidTestName(this.value,1)" class="form-control test-name-table-input" id="testName1" name="testName[]" title="Please enter the name of the Testkit (or) Test Method used">
-                                                                        <option value="">--Select--</option>
-                                                                        <option value="PCR">PCR</option>
-                                                                        <option value="GeneXpert">GeneXpert</option>
-                                                                        <option value="RDT">RDT</option>
-                                                                        <option value="ELISA">ELISA</option>
-                                                                        <option value="other">Others</option>
-                                                                    </select>
-                                                                    <input type="text" name="testNameOther[]" id="testNameOther1" class="form-control testNameOther1" title="Please enter the name of the Testkit (or) Test Method used" placeholder="Enter test method name" style="display: none;margin-top: 10px;" />
-                                                                </td>
-                                                                <td><input type="text" name="testDate[]" id="testDate1" class="form-control test-name-table-input dateTime" placeholder="Tested on" title="Please enter the tested on for row 1" /></td>
-                                                                <td><input type="text" name="testingPlatform[]" id="testingPlatform1" class="form-control test-name-table-input" placeholder="Testing Platform" title="Please enter the Testing Platform for 1" /></td>
-                                                                <td><select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult1" title="Please select the result for row 1">
-                                                                        <option value=''> -- Select -- </option>
-                                                                        <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
-                                                                            <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option>
-                                                                        <?php } ?>
-                                                                    </select>
-                                                                </td>
-                                                                <td style="vertical-align:middle;text-align: center;">
-                                                                    <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="addTestRow();"><i class="fa fa-plus"></i></a>&nbsp;
-                                                                    <a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeTestRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
-                                                                </td>
-                                                            </tr>
-                                                        <?php } ?>
+                                                        }?>
                                                     </tbody>
                                                     <!-- < ?php if (isset($_SESSION['privileges']) && in_array("record-final-result.php", $_SESSION['privileges'])) { ?>
                                                     < ?php }?> -->
@@ -639,6 +611,14 @@ $sampleSuggestionDisplay = 'display:none;';
             checkIsResultAuthorized();
         });
 
+        $('#result').change(function(e) {
+            if (this.value == '') {
+                $('#isResultAuthorized').attr('disabled',false);
+            } else{
+                $('#isResultAuthorized').attr('disabled',true);
+            }
+        });
+
         $('#result, .test-result').change(function(e) {
             if (this.value == 'positive') {
                 $('.other-diseases').hide();
@@ -654,7 +634,15 @@ $sampleSuggestionDisplay = 'display:none;';
                 checkPostive();
             });
             checkPostive();
+        <?php } else{ ?>
+            $('#result').addClass('isRequired');
+            $('#isResultAuthorized').val('yes');
+            $('#isResultAuthorized').attr('disabled',true);
         <?php } ?>
+        if($('#result').val() != ""){
+            $('#isResultAuthorized').val('yes');
+            $('#isResultAuthorized').attr('disabled',true);
+        }
     });
 
     
@@ -678,7 +666,7 @@ $sampleSuggestionDisplay = 'display:none;';
             <td>
                 <select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult${testCounter}" title="Please select the result"><?= $general->generateSelectOptions($covid19Results, null, '-- Select --'); ?></select>
             </td>
-            <td style="vertical-align:middle;text-align: center;">
+            <td style="vertical-align:middle;text-align: center;width:100px;">
                 <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="addTestRow(this);"><i class="fa fa-plus"></i></a>&nbsp;
                 <a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeTestRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
             </td>
@@ -741,8 +729,6 @@ $sampleSuggestionDisplay = 'display:none;';
     }
 
     function otherCovidTestName(val, id) {
-        console.log(val);
-        console.log(id);
         if (val == 'other') {
             $('.testNameOther' + id).show();
         } else {
