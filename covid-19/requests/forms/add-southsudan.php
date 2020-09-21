@@ -370,7 +370,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                                     <?= $general->generateSelectOptions($covid19Results, null, '-- Select --'); ?>
                                                                 </select>
                                                             </td>
-                                                            <td style="vertical-align:middle;text-align: center;">
+                                                            <td style="vertical-align:middle;text-align: center;width:100px;">
                                                                 <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="addTestRow();"><i class="fa fa-plus"></i></a>&nbsp;
                                                                 <a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeTestRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
                                                             </td>
@@ -617,7 +617,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
             <td>
                 <select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult${testCounter}" title="Please select the result"><?= $general->generateSelectOptions($covid19Results, null, '-- Select --'); ?></select>
             </td>
-            <td style="vertical-align:middle;text-align: center;">
+            <td style="vertical-align:middle;text-align: center;width:100px;">
                 <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="addTestRow(this);"><i class="fa fa-plus"></i></a>&nbsp;
                 <a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeTestRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
             </td>
