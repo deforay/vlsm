@@ -467,7 +467,8 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         if ($.trim(pName) != '') {
             //if (provinceName) {
             $.post("/includes/siteInformationDropdownOptions.php", {
-                    pName: pName
+                    pName: pName,
+                    testType: 'eid'
                 },
                 function(data) {
                     if (data != "") {
@@ -496,7 +497,8 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         if (dName != '') {
             $.post("/includes/siteInformationDropdownOptions.php", {
                     dName: dName,
-                    cliName: cName
+                    cliName: cName,
+                    testType: 'eid'
                 },
                 function(data) {
                     if (data != "") {
@@ -520,7 +522,8 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         }
         if (cName != '' && facilityName) {
             $.post("/includes/siteInformationDropdownOptions.php", {
-                    cName: cName
+                    cName: cName,
+                    testType: 'eid'
                 },
                 function(data) {
                     if (data != "") {

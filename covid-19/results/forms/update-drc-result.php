@@ -721,7 +721,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        
+
                         <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                         <input type="hidden" name="formId" id="formId" value="7" />
                         <input type="hidden" name="deletedRow" id="deletedRow" value="" />
@@ -761,7 +761,8 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
         if ($.trim(pName) != '') {
             //if (provinceName) {
             $.post("/includes/siteInformationDropdownOptions.php", {
-                    pName: pName
+                    pName: pName,
+                    testType: 'covid19'
                 },
                 function(data) {
                     if (data != "") {
@@ -790,7 +791,8 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
         if (dName != '') {
             $.post("/includes/siteInformationDropdownOptions.php", {
                     dName: dName,
-                    cliName: cName
+                    cliName: cName,
+                    testType: 'covid19'
                 },
                 function(data) {
                     if (data != "") {
@@ -814,7 +816,8 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
         }
         if (cName != '' && facilityName) {
             $.post("/includes/siteInformationDropdownOptions.php", {
-                    cName: cName
+                    cName: cName,
+                    testType: 'covid19'
                 },
                 function(data) {
                     if (data != "") {

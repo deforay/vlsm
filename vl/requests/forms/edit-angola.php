@@ -696,7 +696,8 @@ if ($vlQueryInfo['reason_for_vl_testing'] != '') {
     if ($.trim(pName) != '') {
       if (provinceName) {
         $.post("/includes/siteInformationDropdownOptions.php", {
-            pName: pName
+            pName: pName,
+            testType: 'vl'
           },
           function(data) {
             if (data != "") {
@@ -725,7 +726,8 @@ if ($vlQueryInfo['reason_for_vl_testing'] != '') {
     if (dName != '') {
       $.post("/includes/siteInformationDropdownOptions.php", {
           dName: dName,
-          cliName: cName
+          cliName: cName,
+          testType: 'vl'
         },
         function(data) {
           if (data != "") {
@@ -751,7 +753,8 @@ if ($vlQueryInfo['reason_for_vl_testing'] != '') {
     }
     if (cName != '' && facilityName) {
       $.post("/includes/siteInformationDropdownOptions.php", {
-          cName: cName
+          cName: cName,
+          testType: 'vl'
         },
         function(data) {
           if (data != "") {

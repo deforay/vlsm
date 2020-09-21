@@ -185,14 +185,14 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
                                             <td>
                                                 <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;">
-                                                <?= $general->generateSelectOptions($testingLabs, $covid19Info['lab_id'], '-- Select --'); ?>
+                                                    <?= $general->generateSelectOptions($testingLabs, $covid19Info['lab_id'], '-- Select --'); ?>
                                                 </select>
                                             </td>
                                             <!-- </tr> -->
                                         <?php } ?>
                                     </tr>
                                 </table>
-                                
+
                                 <div class="box-header with-border sectionHeader">
                                     <h3 class="box-title">PATIENT INFORMATION</h3>
                                 </div>
@@ -447,7 +447,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             <td class="lab-show"><label for="labId">Lab Name </label> </td>
                                             <td class="lab-show">
                                                 <select name="labId" id="labId" class="form-control" title="Please select Testing Lab name" style="width:100%;">
-                                                <?= $general->generateSelectOptions($testingLabs, $covid19Info['lab_id'], '-- Select --'); ?>
+                                                    <?= $general->generateSelectOptions($testingLabs, $covid19Info['lab_id'], '-- Select --'); ?>
                                                 </select>
                                             </td>
                                         <tr>
@@ -479,7 +479,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         </tr>
                                         <tr class="show-rejection" style="display:none;">
                                             <th>Rejection Date<span class="mandatory">*</span></th>
-                                            <td><input value="<?php echo $general->humanDateFormat($covid19Info['rejection_on']); ?>" class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Select Rejection Date"/></td>
+                                            <td><input value="<?php echo $general->humanDateFormat($covid19Info['rejection_on']); ?>" class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Select Rejection Date" /></td>
                                             <td></td>
                                             <td></td>
                                         </tr>
@@ -642,7 +642,8 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         if ($.trim(pName) != '') {
             //if (provinceName) {
             $.post("/includes/siteInformationDropdownOptions.php", {
-                    pName: pName
+                    pName: pName,
+                    testType: 'covid19'
                 },
                 function(data) {
                     if (data != "") {
@@ -671,7 +672,8 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         if (dName != '') {
             $.post("/includes/siteInformationDropdownOptions.php", {
                     dName: dName,
-                    cliName: cName
+                    cliName: cName,
+                    testType: 'covid19'
                 },
                 function(data) {
                     if (data != "") {
@@ -695,7 +697,8 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         }
         if (cName != '' && facilityName) {
             $.post("/includes/siteInformationDropdownOptions.php", {
-                    cName: cName
+                    cName: cName,
+                    testType: 'covid19'
                 },
                 function(data) {
                     if (data != "") {
@@ -715,7 +718,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
     }
 
     function validateNow() {
-        if($('#isResultAuthorized').val() != "yes"){
+        if ($('#isResultAuthorized').val() != "yes") {
             $('#authorizedBy,#authorizedOn').removeClass('isRequired');
         }
         $("#provinceCode").val($("#province").find(":selected").attr("data-code"));
@@ -769,16 +772,16 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                 $("#motherViralLoadText").val('');
             }
         });
-        $('#isResultAuthorized').change(function(e){
+        $('#isResultAuthorized').change(function(e) {
             checkIsResultAuthorized();
         });
         checkIsResultAuthorized();
-        <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
-        $(document).on('change', '.test-result, #result', function(e) {
+        <?php if (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes') { ?>
+            $(document).on('change', '.test-result, #result', function(e) {
+                checkPostive();
+            });
             checkPostive();
-        });
-        checkPostive();
-        <?php }?>
+        <?php } ?>
 
     });
 
@@ -818,11 +821,11 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         });
         tableRowId++;
 
-        <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
-        $(document).on('change', '.test-result, #result', function(e) {
-            checkPostive();
-        });
-        <?php }?>
+        <?php if (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes') { ?>
+            $(document).on('change', '.test-result, #result', function(e) {
+                checkPostive();
+            });
+        <?php } ?>
     }
 
     function removeAttributeRow(el) {
@@ -840,36 +843,36 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         $('#deletedRow').val(deletedRow);
     }
 
-    function checkPostive(){
+    function checkPostive() {
         var itemLength = document.getElementsByName("testResult[]");
         for (i = 0; i < itemLength.length; i++) {
-            
-            if(itemLength[i].value == 'positive'){
+
+            if (itemLength[i].value == 'positive') {
                 $('#result,.disabled-field').val('');
-                $('#result,.disabled-field').prop('disabled',true);
+                $('#result,.disabled-field').prop('disabled', true);
                 $('#result,.disabled-field').addClass('disabled');
                 $('#result,.disabled-field').removeClass('isRequired');
                 return false;
-            }else{
-                $('#result,.disabled-field').prop('disabled',false);
+            } else {
+                $('#result,.disabled-field').prop('disabled', false);
                 $('#result,.disabled-field').removeClass('disabled');
                 $('#result,.disabled-field').addClass('isRequired');
             }
-            if(itemLength[i].value != ''){
+            if (itemLength[i].value != '') {
                 $('#labId').addClass('isRequired');
             }
         }
     }
-    
-    function checkIsResultAuthorized(){
-        if($('#isResultAuthorized').val() == 'no'){
+
+    function checkIsResultAuthorized() {
+        if ($('#isResultAuthorized').val() == 'no') {
             $('#authorizedBy,#authorizedOn').val('');
-            $('#authorizedBy,#authorizedOn').prop('disabled',true);
+            $('#authorizedBy,#authorizedOn').prop('disabled', true);
             $('#authorizedBy,#authorizedOn').addClass('disabled');
             $('#authorizedBy,#authorizedOn').removeClass('isRequired');
             return false;
-        }else{
-            $('#authorizedBy,#authorizedOn').prop('disabled',false);
+        } else {
+            $('#authorizedBy,#authorizedOn').prop('disabled', false);
             $('#authorizedBy,#authorizedOn').removeClass('disabled');
             $('#authorizedBy,#authorizedOn').addClass('isRequired');
         }

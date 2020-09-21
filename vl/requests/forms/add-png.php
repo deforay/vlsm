@@ -671,7 +671,8 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
     if (pName != '') {
       if (provinceName) {
         $.post("/includes/siteInformationDropdownOptions.php", {
-            pName: pName
+            pName: pName,
+            testType: 'vl'
           },
           function(data) {
             if (data != "") {
@@ -699,7 +700,8 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
     if (dName != '') {
       $.post("/includes/siteInformationDropdownOptions.php", {
           dName: dName,
-          cliName: cName
+          cliName: cName,
+          testType: 'vl'
         },
         function(data) {
           if (data != "") {
@@ -723,7 +725,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
     //    }
     //    
     //    if(cName!='' && facilityName){
-    //      $.post("/includes/siteInformationDropdownOptions.php", { cName : cName},
+    //      $.post("/includes/siteInformationDropdownOptions.php", { cName : cName,testType: 'vl'},
     //      function(data){
     //	  if(data != ""){
     //            details = data.split("###");

@@ -518,7 +518,8 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
         if ($.trim(pName) != '') {
             //if (provinceName) {
             $.post("/includes/siteInformationDropdownOptions.php", {
-                    pName: pName
+                    pName: pName,
+                    testType: 'covid19'
                 },
                 function(data) {
                     if (data != "") {
@@ -547,7 +548,8 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
         if (dName != '') {
             $.post("/includes/siteInformationDropdownOptions.php", {
                     dName: dName,
-                    cliName: cName
+                    cliName: cName,
+                    testType: 'covid19'
                 },
                 function(data) {
                     if (data != "") {
@@ -571,7 +573,8 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
         }
         if (cName != '' && facilityName) {
             $.post("/includes/siteInformationDropdownOptions.php", {
-                    cName: cName
+                    cName: cName,
+                    testType: 'covid19'
                 },
                 function(data) {
                     if (data != "") {

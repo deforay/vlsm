@@ -220,7 +220,7 @@ foreach ($fResult as $fDetails) {
                                     </tr>
                                     <tr>
                                         <th>Province</th>
-                                        <td><input type="text" class="form-control " id="patientProvince" name="patientProvince" placeholder="Patient Province" title="Please enter the patient province" style="width:100%;"/></td>
+                                        <td><input type="text" class="form-control " id="patientProvince" name="patientProvince" placeholder="Patient Province" title="Please enter the patient province" style="width:100%;" /></td>
 
                                         <th>District</th>
                                         <td><input class="form-control" id="patientDistrict" name="patientDistrict" placeholder="Patient District" title="Please enter the patient district" style="width:100%;"></td>
@@ -339,7 +339,7 @@ foreach ($fResult as $fDetails) {
                                         <tr>
                                             <th><label for="">Sample Received Date </label></th>
                                             <td>
-                                                <input type="text" class="form-control" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter sample receipt date" <?php echo (isset($labFieldDisabled) && trim($labFieldDisabled) != '')?$labFieldDisabled:''; ?> onchange="" style="width:100%;" />
+                                                <input type="text" class="form-control" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter sample receipt date" <?php echo (isset($labFieldDisabled) && trim($labFieldDisabled) != '') ? $labFieldDisabled : ''; ?> onchange="" style="width:100%;" />
                                             </td>
                                             <td class="lab-show"><label for="labId">Lab Name </label> </td>
                                             <td class="lab-show">
@@ -370,7 +370,7 @@ foreach ($fResult as $fDetails) {
                                         </tr>
                                         <tr class="show-rejection" style="display:none;">
                                             <th>Rejection Date<span class="mandatory">*</span></th>
-                                            <td><input class="form-control date rejection-show" type="text" name="rejectionDate" id="rejectionDate" placeholder="Select Rejection Date"/></td>
+                                            <td><input class="form-control date rejection-show" type="text" name="rejectionDate" id="rejectionDate" placeholder="Select Rejection Date" /></td>
                                             <td></td>
                                             <td></td>
                                         </tr>
@@ -388,8 +388,8 @@ foreach ($fResult as $fDetails) {
                                                     <tbody id="testKitNameTable">
                                                         <tr>
                                                             <td class="text-center">1</td>
-                                                            <td><input type="text" name="testName[]" id="testName1" class="form-control test-name-table-input" placeholder="Test name" title="Please enter the test name for row 1s"/></td>
-                                                            <td><input type="text" name="testDate[]" id="testDate1" class="form-control test-name-table-input dateTime" placeholder="Tested on"  title="Please enter the tested on for row 1"/></td>
+                                                            <td><input type="text" name="testName[]" id="testName1" class="form-control test-name-table-input" placeholder="Test name" title="Please enter the test name for row 1s" /></td>
+                                                            <td><input type="text" name="testDate[]" id="testDate1" class="form-control test-name-table-input dateTime" placeholder="Tested on" title="Please enter the tested on for row 1" /></td>
                                                             <td><select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult1" title="Please select the result for row 1">
                                                                     <option value=''> -- Select -- </option>
                                                                     <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
@@ -444,7 +444,7 @@ foreach ($fResult as $fDetails) {
                                         <tr>
                                             <!-- <td style="width:25%;"><label for="">Sample Test Date </label></td>
                                             <td style="width:25%;">
-                                                <input type="text" class="form-control dateTime" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Sample Tested Date and Time" <?php echo (isset($labFieldDisabled) && trim($labFieldDisabled))?$labFieldDisabled:''; ?> onchange="" style="width:100%;" />
+                                                <input type="text" class="form-control dateTime" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Sample Tested Date and Time" <?php echo (isset($labFieldDisabled) && trim($labFieldDisabled)) ? $labFieldDisabled : ''; ?> onchange="" style="width:100%;" />
                                             </td> -->
 
 
@@ -503,7 +503,8 @@ foreach ($fResult as $fDetails) {
         if ($.trim(pName) != '') {
             //if (provinceName) {
             $.post("/includes/siteInformationDropdownOptions.php", {
-                    pName: pName
+                    pName: pName,
+                    testType: 'covid19'
                 },
                 function(data) {
                     if (data != "") {
@@ -551,7 +552,8 @@ foreach ($fResult as $fDetails) {
         if (dName != '') {
             $.post("/includes/siteInformationDropdownOptions.php", {
                     dName: dName,
-                    cliName: cName
+                    cliName: cName,
+                    testType: 'covid19'
                 },
                 function(data) {
                     if (data != "") {
@@ -575,7 +577,8 @@ foreach ($fResult as $fDetails) {
         }
         if (cName != '' && facilityName) {
             $.post("/includes/siteInformationDropdownOptions.php", {
-                    cName: cName
+                    cName: cName,
+                    testType: 'covid19'
                 },
                 function(data) {
                     if (data != "") {
@@ -596,7 +599,7 @@ foreach ($fResult as $fDetails) {
 
 
     function validateNow() {
-        if($('#isResultAuthorized').val() != "yes"){
+        if ($('#isResultAuthorized').val() != "yes") {
             $('#authorizedBy,#authorizedOn').removeClass('isRequired');
         }
         flag = deforayValidator.init({
@@ -629,19 +632,19 @@ foreach ($fResult as $fDetails) {
         // $('#province').select2({
         //     placeholder: "Province"
         // });
-        $('#isResultAuthorized').change(function(e){
+        $('#isResultAuthorized').change(function(e) {
             checkIsResultAuthorized();
         });
-        <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
-        $(document).on('change', '.test-result, #result', function(e) {
-            checkPostive();
-        });
-        <?php }?>
+        <?php if (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes') { ?>
+            $(document).on('change', '.test-result, #result', function(e) {
+                checkPostive();
+            });
+        <?php } ?>
     });
 
     function insRow() {
         rl = document.getElementById("testKitNameTable").rows.length;
-        tableRowId = (rl+1);
+        tableRowId = (rl + 1);
         var a = document.getElementById("testKitNameTable").insertRow(rl);
         a.setAttribute("style", "display:none");
         var b = a.insertCell(0);
@@ -654,9 +657,9 @@ foreach ($fResult as $fDetails) {
         f.setAttribute("style", "vertical-align:middle");
 
         b.innerHTML = tableRowId;
-        c.innerHTML = '<input type="text" name="testName[]" id="testName'+tableRowId+'" class="form-control test-name-table-input" placeholder="Test name" title="Please enter the test name for row '+tableRowId+'"/>';
-        d.innerHTML = '<input type="text" name="testDate[]" id="testDate'+tableRowId+'" class="form-control test-name-table-input dateTime" placeholder="Tested on"  title="Please enter the tested on for row '+tableRowId+'"/>';
-        e.innerHTML = '<select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult'+tableRowId+'" title="Please select the result for row '+tableRowId+'"><option value=""> -- Select -- </option><?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?> <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option> <?php } ?> </select>';
+        c.innerHTML = '<input type="text" name="testName[]" id="testName' + tableRowId + '" class="form-control test-name-table-input" placeholder="Test name" title="Please enter the test name for row ' + tableRowId + '"/>';
+        d.innerHTML = '<input type="text" name="testDate[]" id="testDate' + tableRowId + '" class="form-control test-name-table-input dateTime" placeholder="Tested on"  title="Please enter the tested on for row ' + tableRowId + '"/>';
+        e.innerHTML = '<select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult' + tableRowId + '" title="Please select the result for row ' + tableRowId + '"><option value=""> -- Select -- </option><?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?> <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option> <?php } ?> </select>';
         f.innerHTML = '<a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;<a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>';
         $(a).fadeIn(800);
         $('.dateTime').datetimepicker({
@@ -676,11 +679,11 @@ foreach ($fResult as $fDetails) {
         });
         tableRowId++;
 
-        <?php if(isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes'){ ?>
-        $(document).on('change', '.test-result, #result', function(e) {
-            checkPostive();
-        });
-        <?php }?>
+        <?php if (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes') { ?>
+            $(document).on('change', '.test-result, #result', function(e) {
+                checkPostive();
+            });
+        <?php } ?>
     }
 
     function removeAttributeRow(el) {
@@ -693,36 +696,36 @@ foreach ($fResult as $fDetails) {
         });
     }
 
-    function checkPostive(){
+    function checkPostive() {
         var itemLength = document.getElementsByName("testResult[]");
         for (i = 0; i < itemLength.length; i++) {
-            
-            if(itemLength[i].value == 'positive'){
+
+            if (itemLength[i].value == 'positive') {
                 $('#result,.disabled-field').val('');
-                $('#result,.disabled-field').prop('disabled',true);
+                $('#result,.disabled-field').prop('disabled', true);
                 $('#result,.disabled-field').addClass('disabled');
                 $('#result,.disabled-field').removeClass('isRequired');
                 return false;
-            }else{
-                $('#result,.disabled-field').prop('disabled',false);
+            } else {
+                $('#result,.disabled-field').prop('disabled', false);
                 $('#result,.disabled-field').removeClass('disabled');
                 $('#result,.disabled-field').addClass('isRequired');
             }
-            if(itemLength[i].value != ''){
+            if (itemLength[i].value != '') {
                 $('#labId').addClass('isRequired');
             }
         }
     }
 
-    function checkIsResultAuthorized(){
-        if($('#isResultAuthorized').val() == 'no'){
+    function checkIsResultAuthorized() {
+        if ($('#isResultAuthorized').val() == 'no') {
             $('#authorizedBy,#authorizedOn').val('');
-            $('#authorizedBy,#authorizedOn').prop('disabled',true);
+            $('#authorizedBy,#authorizedOn').prop('disabled', true);
             $('#authorizedBy,#authorizedOn').addClass('disabled');
             $('#authorizedBy,#authorizedOn').removeClass('isRequired');
             return false;
-        }else{
-            $('#authorizedBy,#authorizedOn').prop('disabled',false);
+        } else {
+            $('#authorizedBy,#authorizedOn').prop('disabled', false);
             $('#authorizedBy,#authorizedOn').removeClass('disabled');
             $('#authorizedBy,#authorizedOn').addClass('isRequired');
         }

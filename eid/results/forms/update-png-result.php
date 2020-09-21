@@ -503,7 +503,8 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
         }
         if (cName != '' && facilityName) {
             $.post("/includes/siteInformationDropdownOptions.php", {
-                    cName: cName
+                    cName: cName,
+                    testType: 'eid'
                 },
                 function(data) {
                     if (data != "") {
