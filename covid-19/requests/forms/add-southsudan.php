@@ -345,6 +345,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                             <th class="text-center">Test No.</th>
                                                             <th class="text-center">Name of the Testkit (or) Test Method used</th>
                                                             <th class="text-center">Date of Testing</th>
+                                                            <th class="text-center">Testing Platform</th>
                                                             <th class="text-center">Test Result</th>
                                                         </tr>
                                                     </thead>
@@ -363,6 +364,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                                 <input type="text" name="testNameOther[]" id="testNameOther1" class="form-control testNameOther1" title="Please enter the name of the Testkit (or) Test Method used" placeholder="Please enter the name of the Testkit (or) Test Method used" style="display: none;margin-top: 10px;" />
                                                             </td>
                                                             <td><input type="text" name="testDate[]" id="testDate1" class="form-control test-name-table-input dateTime" placeholder="Tested on" title="Please enter the tested on for row 1" /></td>
+                                                            <td><input type="text" name="testingPlatform[]" id="testingPlatform1" class="form-control test-name-table-input" placeholder="Testing Platform" title="Please enter the Testing Platform for 1" /></td>
                                                             <td>
                                                                 <select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult1" title="Please select the result for row 1">
                                                                     <?= $general->generateSelectOptions($covid19Results, null, '-- Select --'); ?>
@@ -376,7 +378,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                     </tbody>
                                                     <tfoot>
                                                         <tr>
-                                                            <th colspan="3" class="text-right">Final Result</th>
+                                                            <th colspan="4" class="text-right">Final Result</th>
                                                             <td>
                                                                 <select class="form-control" name="result" id="result">
                                                                     <option value=''> -- Select -- </option>
@@ -611,6 +613,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                 <input type="text" name="testNameOther[]" id="testNameOther${testCounter}" class="form-control testNameOther${testCounter}" title="Please enter the name of the Testkit (or) Test Method used" placeholder="Please enter the name of the Testkit (or) Test Method used" style="display: none;margin-top: 10px;" />
             </td>
             <td><input type="text" name="testDate[]" id="testDate${testCounter}" class="form-control test-name-table-input dateTime" placeholder="Tested on" title="Please enter the tested on for row ${testCounter}" /></td>
+            <td><input type="text" name="testingPlatform[]" id="testingPlatform${testCounter}" class="form-control test-name-table-input" placeholder="Testing Platform" title="Please enter the Testing Platform for ${testCounter}" /></td>
             <td>
                 <select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult${testCounter}" title="Please select the result"><?= $general->generateSelectOptions($covid19Results, null, '-- Select --'); ?></select>
             </td>

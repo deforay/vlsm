@@ -1128,3 +1128,7 @@ UPDATE `system_config` SET `value` = '4.2.0' WHERE `system_config`.`name` = 'ver
 
 -- Amit 21 Sep 2020
 ALTER TABLE `facility_details` ADD `testing_points` JSON NULL DEFAULT NULL AFTER `facility_type`;
+
+
+/* Thana 21-Sep-2020 */
+ALTER TABLE `covid19_tests` ADD `testing_platform` VARCHAR(255) NULL DEFAULT NULL AFTER `sample_tested_datetime`;
