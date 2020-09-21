@@ -334,7 +334,7 @@ $ftResult = $db->rawQuery($fQuery);
           $.blockUI();
           var pName = $("#province").val();
           if (pName != '') {
-               $.post("/includes/getFacilityForClinic.php", {
+               $.post("/includes/siteInformationDropdownOptions.php", {
                          pName: pName,
                          fType: $("#facilityType").val(),
                          comingFromUser: 'yes'
@@ -354,7 +354,7 @@ $ftResult = $db->rawQuery($fQuery);
           $.blockUI();
           var dName = $("#district").val();
           if (dName != '') {
-               $.post("/includes/getFacilityForClinic.php", {
+               $.post("/includes/siteInformationDropdownOptions.php", {
                          dName: dName,
                          fType: $("#facilityType").val(),
                          comingFromUser: 'yes'
@@ -379,7 +379,7 @@ $ftResult = $db->rawQuery($fQuery);
           } else if (pName != '') {
                getProvinceDistricts();
           } else if (fType != '') {
-               $.post("/includes/getFacilityForClinic.php", {
+               $.post("/includes/siteInformationDropdownOptions.php", {
                          fType: fType,
                          comingFromUser: 'yes'
                     },

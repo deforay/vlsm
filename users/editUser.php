@@ -376,7 +376,7 @@ function getProvinceDistricts(){
      $.blockUI();
      var pName = $("#province").val();
      if(pName!=''){
-               $.post("/includes/getFacilityForClinic.php", { pName : pName,fType:$("#facilityType").val(),comingFromUser:'yes'},
+               $.post("/includes/siteInformationDropdownOptions.php", { pName : pName,fType:$("#facilityType").val(),comingFromUser:'yes'},
                function(data){
                     if(data != ""){
                          details = data.split("###");
@@ -391,7 +391,7 @@ function getFacilities(){
      $.blockUI();
      var dName = $("#district").val();
      if(dName!=''){
-          $.post("/includes/getFacilityForClinic.php", {dName:dName,fType:$("#facilityType").val(),comingFromUser:'yes'},
+          $.post("/includes/siteInformationDropdownOptions.php", {dName:dName,fType:$("#facilityType").val(),comingFromUser:'yes'},
           function(data){
                if(data != ""){
                     details = data.split("###");
@@ -413,7 +413,7 @@ function getFacility()
     }else if(pName!=''){
         getProvinceDistricts();
     }else if(fType!=''){
-        $.post("/includes/getFacilityForClinic.php", { fType:fType,comingFromUser:'yes'},
+        $.post("/includes/siteInformationDropdownOptions.php", { fType:fType,comingFromUser:'yes'},
         function(data){
             $("#search").html(data);
         });

@@ -502,7 +502,7 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
             provinceName = false;
         }
         if (cName != '' && facilityName) {
-            $.post("/includes/getFacilityForClinic.php", {
+            $.post("/includes/siteInformationDropdownOptions.php", {
                     cName: cName
                 },
                 function(data) {

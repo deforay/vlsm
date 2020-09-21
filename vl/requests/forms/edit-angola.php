@@ -695,7 +695,7 @@ if ($vlQueryInfo['reason_for_vl_testing'] != '') {
     }
     if ($.trim(pName) != '') {
       if (provinceName) {
-        $.post("/includes/getFacilityForClinic.php", {
+        $.post("/includes/siteInformationDropdownOptions.php", {
             pName: pName
           },
           function(data) {
@@ -723,7 +723,7 @@ if ($vlQueryInfo['reason_for_vl_testing'] != '') {
     var dName = $("#district").val();
     var cName = $("#clinicName").val();
     if (dName != '') {
-      $.post("/includes/getFacilityForClinic.php", {
+      $.post("/includes/siteInformationDropdownOptions.php", {
           dName: dName,
           cliName: cName
         },
@@ -732,7 +732,7 @@ if ($vlQueryInfo['reason_for_vl_testing'] != '') {
             //$("#clinicName").html(data);
             details = data.split("###");
             $("#clinicName").html(details[0]);
-            $("#labId").html(details[1]);
+            //$("#labId").html(details[1]);
           }
         });
     } else {
@@ -750,7 +750,7 @@ if ($vlQueryInfo['reason_for_vl_testing'] != '') {
       provinceName = false;
     }
     if (cName != '' && facilityName) {
-      $.post("/includes/getFacilityForClinic.php", {
+      $.post("/includes/siteInformationDropdownOptions.php", {
           cName: cName
         },
         function(data) {

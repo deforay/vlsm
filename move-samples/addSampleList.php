@@ -314,7 +314,7 @@ foreach ($fResult as $fDetails) {
     }
     if ($.trim(pName) != '') {
       if (provinceName) {
-        $.post("/includes/getFacilityForClinic.php", {
+        $.post("/includes/siteInformationDropdownOptions.php", {
             pName: pName
           },
           function(data) {
@@ -341,7 +341,7 @@ foreach ($fResult as $fDetails) {
     var dName = $("#districtName").val();
     var cName = $("#facilityName").val();
     if (dName != '') {
-      $.post("/includes/getFacilityForClinic.php", {
+      $.post("/includes/siteInformationDropdownOptions.php", {
           dName: dName,
           cliName: cName
         },

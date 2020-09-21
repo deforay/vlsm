@@ -15,11 +15,11 @@ $testingLabs = $facilitiesDb->getTestingLabs('covid19');
 $id = base64_decode($_GET['id']);
 
 //get import config
-$importQuery = "SELECT * FROM import_config WHERE status = 'active'";
+$importQuery = "SELECT * FROM import_config WHERE `status` = 'active'";
 $importResult = $db->query($importQuery);
 
 
-$userQuery = "SELECT * FROM user_details where status='active'";
+$userQuery = "SELECT * FROM user_details WHERE `status` = 'active'";
 $userResult = $db->rawQuery($userQuery);
 
 

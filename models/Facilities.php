@@ -6,7 +6,7 @@ class Facilities
 {
 
     protected $db = null;
-    protected $table = 'facilities';
+    protected $table = 'facility_details';
 
     public function __construct($db = null)
     {
@@ -35,6 +35,20 @@ class Facilities
         }
     }
 
+    public function getTestingPoints($facilityId)
+    {
+
+        if (empty($facilityId)) return null;
+
+        $response = null;
+        $this->db->where("facility_id", $facilityId);
+        $testingPointsJson = $this->db->getValue($this->table, 'testing_points');
+        if($testingPointsJson){
+            $response= json_decode($testingPointsJson, true);
+        }
+        return $response;
+    }
+
     public function getFacilityMap($userId)
     {
         if (empty($userId)) return null;
@@ -42,6 +56,8 @@ class Facilities
         $this->db->where("map.user_id", $userId);
         return $this->db->getValue("vl_user_facility_map map", "GROUP_CONCAT(DISTINCT map.facility_id SEPARATOR ',')");
     }
+
+
 
     // $testType = vl, eid, covid19 or any other tests that might be there. 
     // Default $testType is null and returns all facilities
