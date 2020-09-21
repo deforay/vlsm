@@ -60,11 +60,11 @@ try {
 			$id = $db->delete($testTableName);
 		}
 	}
+	// echo "<pre>";print_r($_POST);die;
 	if (isset($_POST['covid19SampleId']) && $_POST['covid19SampleId'] != '' && ($_POST['isSampleRejected'] == 'no' || $_POST['isSampleRejected'] == '')) {
 		if(isset($_POST['testName']) && count($_POST['testName']) > 0){
 			foreach($_POST['testName'] as $testKey=>$testerName){
-				if(isset($testKitName) && !empty($testKitName)){
-
+				if(trim($_POST['testName'][$testKey]) != ""){
 					if (isset($_POST['testDate'][$testKey]) && trim($_POST['testDate'][$testKey]) != "") {
 						$testedDateTime = explode(" ", $_POST['testDate'][$testKey]);
 						$_POST['testDate'][$testKey] = $general->dateFormat($testedDateTime[0]) . " " . $testedDateTime[1];
@@ -76,6 +76,7 @@ try {
 						'test_name'				=> ($_POST['testName'][$testKey] == 'other')?$_POST['testNameOther'][$testKey]:$_POST['testName'][$testKey],
 						'facility_id'           => isset($_POST['labId']) ? $_POST['labId'] : null,
 						'sample_tested_datetime'=> $_POST['testDate'][$testKey],
+						'testing_platform'      => isset($_POST['testingPlatform'][$testKey]) ? $_POST['testingPlatform'][$testKey] : null,
 						'result'				=> $_POST['testResult'][$testKey],
 					);
 					if(isset($_POST['testId'][$testKey]) && $_POST['testId'][$testKey] != ''){
@@ -93,7 +94,6 @@ try {
 		$id = $db->delete($testTableName);
 		$covid19Data['sample_tested_datetime'] = null;
 	}
-	// echo '<pre>'; print_r($covid19Data);die;
 	//var_dump($covid19Data);die;
 	$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 	$id = $db->update($tableName, $covid19Data);
