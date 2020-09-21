@@ -33,6 +33,7 @@ try {
 	$covid19Data = array(
 		'sample_received_at_vl_lab_datetime'  => $_POST['sampleReceivedDate'],
 		'lab_id'                              => isset($_POST['labId']) ? $_POST['labId'] : null,
+		'testing_point'                       => isset($_POST['testingPoint']) ? $_POST['testingPoint'] : null,
 		'is_sample_rejected'                  => isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
 		'result'                              => isset($_POST['result']) ? $_POST['result'] : null,
 		'other_diseases'        			  => (isset($_POST['otherDiseases']) && $_POST['result'] != 'positive') ? $_POST['otherDiseases'] : null,

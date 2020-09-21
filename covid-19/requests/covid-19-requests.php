@@ -8,17 +8,16 @@ $title = "Covid-19 | View All Requests";
 
 include_once(APPLICATION_PATH . '/header.php');
 
+$general = new \Vlsm\Models\General($db);
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
+$healthFacilites = $facilitiesDb->getHealthFacilities('covid19');
 
+$facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
 
-$tsQuery = "SELECT * FROM r_sample_status";
-$tsResult = $db->rawQuery($tsQuery);
-$configFormQuery = "SELECT * FROM global_config WHERE name ='vl_form'";
-$configFormResult = $db->rawQuery($configFormQuery);
-$sQuery = "SELECT * FROM r_covid19_sample_type where status='active'";
+$sQuery = "SELECT * FROM r_covid19_sample_type WHERE `status`='active'";
 $sResult = $db->rawQuery($sQuery);
-$fQuery = "SELECT * FROM facility_details where status='active'";
-$fResult = $db->rawQuery($fQuery);
-$batQuery = "SELECT batch_code FROM batch_details test_type ='covid19' AND where batch_status='completed'";
+
+$batQuery = "SELECT batch_code FROM batch_details WHERE test_type ='covid19' AND batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
 ?>
 <style>
@@ -75,14 +74,7 @@ $batResult = $db->rawQuery($batQuery);
 							<td><b>Facility Name :</b></td>
 							<td>
 								<select class="form-control" id="facilityName" name="facilityName" multiple="multiple" title="Please select facility name" style="width:100%;">
-									<option value=""> -- Select -- </option>
-									<?php
-									foreach ($fResult as $name) {
-									?>
-										<option value="<?php echo $name['facility_id']; ?>"><?php echo ucwords($name['facility_name'] . "-" . $name['facility_code']); ?></option>
-									<?php
-									}
-									?>
+									<?= $facilitiesDropdown; ?>
 								</select>
 							</td>
 							<td style=""><b>Province/State&nbsp;:</b></td>

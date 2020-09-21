@@ -104,6 +104,7 @@ try {
 		'test_number'                         => isset($_POST['testNumber']) ? $_POST['testNumber'] : null,
 		'province_id'                         => isset($_POST['provinceId']) ? $_POST['provinceId'] : null,
 		'lab_id'                              => isset($_POST['labId']) ? $_POST['labId'] : null,
+		'testing_point'                       => isset($_POST['testingPoint']) ? $_POST['testingPoint'] : null,
 		'implementing_partner'                => isset($_POST['implementingPartner']) ? $_POST['implementingPartner'] : null,
 		'funding_source'                      => isset($_POST['fundingSource']) ? $_POST['fundingSource'] : null,
 		'patient_id'                          => isset($_POST['patientId']) ? $_POST['patientId'] : null,
