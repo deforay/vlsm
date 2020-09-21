@@ -418,7 +418,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $eidInfo['facilit
         }
         if ($.trim(pName) != '') {
             //if (provinceName) {
-            $.post("/includes/getFacilityForClinic.php", {
+            $.post("/includes/siteInformationDropdownOptions.php", {
                     pName: pName
                 },
                 function(data) {
@@ -446,7 +446,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $eidInfo['facilit
         var dName = $("#district").val();
         var cName = $("#facilityId").val();
         if (dName != '') {
-            $.post("/includes/getFacilityForClinic.php", {
+            $.post("/includes/siteInformationDropdownOptions.php", {
                     dName: dName,
                     cliName: cName
                 },
@@ -471,7 +471,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $eidInfo['facilit
             provinceName = false;
         }
         if (cName != '' && facilityName) {
-            $.post("/includes/getFacilityForClinic.php", {
+            $.post("/includes/siteInformationDropdownOptions.php", {
                     cName: cName
                 },
                 function(data) {

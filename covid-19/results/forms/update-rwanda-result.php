@@ -60,6 +60,8 @@ foreach ($pdResult as $provinceName) {
 
 $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['facility_id'], '-- Select --');
 
+//var_dump($facilitiesDb->getTestingPoints(16));die;
+
 ?>
 
 
@@ -626,7 +628,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
         }
         if ($.trim(pName) != '') {
             //if (provinceName) {
-            $.post("/includes/getFacilityForClinic.php", {
+            $.post("/includes/siteInformationDropdownOptions.php", {
                     pName: pName
                 },
                 function(data) {
@@ -654,7 +656,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
         var dName = $("#district").val();
         var cName = $("#facilityId").val();
         if (dName != '') {
-            $.post("/includes/getFacilityForClinic.php", {
+            $.post("/includes/siteInformationDropdownOptions.php", {
                     dName: dName,
                     cliName: cName
                 },
@@ -679,7 +681,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
             provinceName = false;
         }
         if (cName != '' && facilityName) {
-            $.post("/includes/getFacilityForClinic.php", {
+            $.post("/includes/siteInformationDropdownOptions.php", {
                     cName: cName
                 },
                 function(data) {

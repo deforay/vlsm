@@ -439,7 +439,7 @@ $batchResult = $db->rawQuery($batchQuery);
   function getProvinceDistricts() {
     var pName = $("#state").val();
     if ($.trim(pName) != '') {
-      $.post("/includes/getFacilityForClinic.php", {
+      $.post("/includes/siteInformationDropdownOptions.php", {
           pName: pName
         },
         function(data) {

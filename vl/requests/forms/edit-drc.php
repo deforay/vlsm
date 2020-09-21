@@ -641,7 +641,7 @@ $sampleSuggestionDisplay = 'display:none;';
     $.blockUI();
     var pName = $("#province").val();
     if ($.trim(pName) != '') {
-      $.post("/includes/getFacilityForClinic.php", {
+      $.post("/includes/siteInformationDropdownOptions.php", {
           pName: pName
         },
         function(data) {
@@ -662,7 +662,7 @@ $sampleSuggestionDisplay = 'display:none;';
     var dName = $("#district").val();
     var cName = $("#clinicName").val();
     if (dName != '') {
-      $.post("/includes/getFacilityForClinic.php", {
+      $.post("/includes/siteInformationDropdownOptions.php", {
           dName: dName,
           cliName: cName
         },
@@ -687,7 +687,7 @@ $sampleSuggestionDisplay = 'display:none;';
       provinceName = false;
     }
     if (cName != '' && facilityName) {
-      $.post("/includes/getFacilityForClinic.php", {
+      $.post("/includes/siteInformationDropdownOptions.php", {
           cName: cName
         },
         function(data) {

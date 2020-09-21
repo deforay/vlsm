@@ -705,7 +705,7 @@ $disable = "disabled = 'disabled'";
     }
     if ($.trim(pName) != '') {
       if (provinceName) {
-        $.post("/includes/getFacilityForClinic.php", {
+        $.post("/includes/siteInformationDropdownOptions.php", {
             pName: pName
           },
           function(data) {
@@ -733,7 +733,7 @@ $disable = "disabled = 'disabled'";
     var dName = $("#district").val();
     var cName = $("#clinicName").val();
     if (dName != '') {
-      $.post("/includes/getFacilityForClinic.php", {
+      $.post("/includes/siteInformationDropdownOptions.php", {
           dName: dName,
           cliName: cName
         },
@@ -757,7 +757,7 @@ $disable = "disabled = 'disabled'";
       provinceName = false;
     }
     if (cName != '' && facilityName) {
-      $.post("/includes/getFacilityForClinic.php", {
+      $.post("/includes/siteInformationDropdownOptions.php", {
           cName: cName
         },
         function(data) {

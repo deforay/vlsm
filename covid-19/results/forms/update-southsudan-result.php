@@ -175,7 +175,7 @@ $sampleSuggestionDisplay = 'display:none;';
                                             <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
                                             <td>
                                                 <select name="labId" id="labId" class="form-control" title="Please select Testing Lab name" style="width:100%;">
-                                                <?= $general->generateSelectOptions($testingLabs, $covid19Info['lab_id'], '-- Select --'); ?>
+                                                    <?= $general->generateSelectOptions($testingLabs, $covid19Info['lab_id'], '-- Select --'); ?>
                                                 </select>
                                             </td>
                                             <!-- </tr> -->
@@ -529,7 +529,7 @@ $sampleSuggestionDisplay = 'display:none;';
         }
         if ($.trim(pName) != '') {
             //if (provinceName) {
-            $.post("/includes/getFacilityForClinic.php", {
+            $.post("/includes/siteInformationDropdownOptions.php", {
                     pName: pName
                 },
                 function(data) {
@@ -559,7 +559,7 @@ $sampleSuggestionDisplay = 'display:none;';
         var dName = $("#district").val();
         var cName = $("#facilityId").val();
         if (dName != '') {
-            $.post("/includes/getFacilityForClinic.php", {
+            $.post("/includes/siteInformationDropdownOptions.php", {
                     dName: dName,
                     cliName: cName
                 },
@@ -584,7 +584,7 @@ $sampleSuggestionDisplay = 'display:none;';
             provinceName = false;
         }
         if (cName != '' && facilityName) {
-            $.post("/includes/getFacilityForClinic.php", {
+            $.post("/includes/siteInformationDropdownOptions.php", {
                     cName: cName
                 },
                 function(data) {
