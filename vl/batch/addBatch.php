@@ -3,24 +3,31 @@ ob_start();
 $title = "VL | Add New Batch";
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
+
+
+$general = new \Vlsm\Models\General($db);
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
+$healthFacilites = $facilitiesDb->getHealthFacilities('vl');
+
+$facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
+
+
 //global config
-$configQuery = "SELECT `value` FROM global_config WHERE name ='vl_form'";
-$configResult = $db->query($configQuery);
-$showUrgency = ($configResult[0]['value'] == 1 || $configResult[0]['value'] == 2) ? true : false;
+// $configQuery = "SELECT `value` FROM global_config WHERE name ='vl_form'";
+// $configResult = $db->query($configQuery);
+// $showUrgency = ($configResult[0]['value'] == 1 || $configResult[0]['value'] == 2) ? true : false;
 //Get active machines
 $importConfigQuery = "SELECT * FROM import_config WHERE status ='active'";
 $importConfigResult = $db->rawQuery($importConfigQuery);
 $query = "SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where sample_batch_id is NULL OR sample_batch_id='' ORDER BY f.facility_name ASC";
 $result = $db->rawQuery($query);
 
-$fQuery = "SELECT * FROM facility_details where status='active'";
-$fResult = $db->rawQuery($fQuery);
 $sQuery = "SELECT * FROM r_vl_sample_type where status='active'";
 $sResult = $db->rawQuery($sQuery);
 
 $start_date = date('Y-m-d');
 $end_date = date('Y-m-d');
-$batchQuery = 'SELECT MAX(batch_code_key) FROM batch_details as bd where DATE(bd.request_created_datetime) >= "' . $start_date . '" AND DATE(bd.request_created_datetime) <= "' . $end_date . '"';
+$batchQuery = 'SELECT MAX(batch_code_key) FROM batch_details as bd WHERE DATE(bd.request_created_datetime) >= "' . $start_date . '" AND DATE(bd.request_created_datetime) <= "' . $end_date . '"';
 $batchResult = $db->query($batchQuery);
 
 if ($batchResult[0]['MAX(batch_code_key)'] != '' && $batchResult[0]['MAX(batch_code_key)'] != NULL) {
@@ -135,14 +142,7 @@ foreach ($importConfigResult as $machine) {
 
 					<td>
 						<select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple">
-							<!--<option value="">-- Select --</option>-->
-							<?php
-							foreach ($fResult as $name) {
-							?>
-								<option value="<?php echo $name['facility_id']; ?>"><?php echo ucwords($name['facility_name'] . "-" . $name['facility_code']); ?></option>
-							<?php
-							}
-							?>
+							<?= $facilitiesDropdown; ?>
 						</select>
 
 					</td>

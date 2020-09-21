@@ -2,14 +2,16 @@
 $title = "Enter EID Result";
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-$tsQuery = "SELECT * FROM r_sample_status";
-$tsResult = $db->rawQuery($tsQuery);
-// $configFormQuery = "SELECT * FROM global_config WHERE name ='vl_form'";
-// $configFormResult = $db->rawQuery($configFormQuery);
-$sQuery = "SELECT * FROM r_eid_sample_type where status='active'";
-$sResult = $db->rawQuery($sQuery);
-$fQuery = "SELECT * FROM facility_details where status='active'";
-$fResult = $db->rawQuery($fQuery);
+
+
+$general = new \Vlsm\Models\General($db);
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
+$healthFacilites = $facilitiesDb->getHealthFacilities('eid');
+
+$facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
+
+
+
 $batQuery = "SELECT batch_code FROM batch_details where test_type = 'eid' AND batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
 //check filters
@@ -21,18 +23,18 @@ $gender = '';
 $status = 'no_result';
 $lastUrl1 = '';
 $lastUrl2 = '';
-if (isset($_SERVER['HTTP_REFERER'])) {
-  $lastUrl1 = strpos($_SERVER['HTTP_REFERER'], "updateVlTestResult.php");
-  $lastUrl2 = strpos($_SERVER['HTTP_REFERER'], "vlTestResult.php");
-}
-if ($lastUrl1 != '' || $lastUrl2 != '') {
-  $collectionDate = (isset($_COOKIE['collectionDate']) && $_COOKIE['collectionDate'] != '') ? $_COOKIE['collectionDate'] : '';
-  $batchCode = (isset($_COOKIE['batchCode']) && $_COOKIE['batchCode'] != '') ? $_COOKIE['batchCode'] : '';
+// if (isset($_SERVER['HTTP_REFERER'])) {
+//   $lastUrl1 = strpos($_SERVER['HTTP_REFERER'], "updateVlTestResult.php");
+//   $lastUrl2 = strpos($_SERVER['HTTP_REFERER'], "vlTestResult.php");
+// }
+// if ($lastUrl1 != '' || $lastUrl2 != '') {
+//   $collectionDate = (isset($_COOKIE['collectionDate']) && $_COOKIE['collectionDate'] != '') ? $_COOKIE['collectionDate'] : '';
+//   $batchCode = (isset($_COOKIE['batchCode']) && $_COOKIE['batchCode'] != '') ? $_COOKIE['batchCode'] : '';
 
-  $facilityName = (isset($_COOKIE['facilityName']) && $_COOKIE['facilityName'] != '') ? explode(',', $_COOKIE['facilityName']) : array();
+//   $facilityName = (isset($_COOKIE['facilityName']) && $_COOKIE['facilityName'] != '') ? explode(',', $_COOKIE['facilityName']) : array();
 
-  $status = (isset($_COOKIE['status']) && $_COOKIE['status'] != '') ? $_COOKIE['status'] : '';
-}
+//   $status = (isset($_COOKIE['status']) && $_COOKIE['status'] != '') ? $_COOKIE['status'] : '';
+// }
 ?>
 <style>
   .select2-selection__choice {
@@ -78,14 +80,7 @@ if ($lastUrl1 != '' || $lastUrl2 != '') {
               <td><b>Facility Name :</b></td>
               <td>
                 <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple" style="width:220px;">
-                  <option value=""> -- Select -- </option>
-                  <?php
-                  foreach ($fResult as $name) {
-                  ?>
-                    <option value="<?php echo $name['facility_id']; ?>" <?php echo (in_array($name['facility_id'], $facilityName)) ? "selected='selected'" : "" ?>><?php echo ucwords($name['facility_name'] . "-" . $name['facility_code']); ?></option>
-                  <?php
-                  }
-                  ?>
+                  <?= $facilitiesDropdown; ?>
                 </select>
               </td>
 

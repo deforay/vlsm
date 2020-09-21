@@ -5,6 +5,13 @@ $title = "EID | Add Batch";
 include_once(APPLICATION_PATH . '/header.php');
 
 
+$general = new \Vlsm\Models\General($db);
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
+$healthFacilites = $facilitiesDb->getHealthFacilities('eid');
+
+$facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
+
+
 //global config
 $configQuery = "SELECT `value` FROM global_config WHERE name ='vl_form'";
 $configResult = $db->query($configQuery);
@@ -15,14 +22,10 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
 $query = "SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where sample_batch_id is NULL OR sample_batch_id='' ORDER BY f.facility_name ASC";
 $result = $db->rawQuery($query);
 
-$fQuery = "SELECT * FROM facility_details where status='active'";
-$fResult = $db->rawQuery($fQuery);
-$sQuery = "SELECT * FROM r_vl_sample_type where status='active'";
-$sResult = $db->rawQuery($sQuery);
 
 $start_date = date('Y-m-d');
 $end_date = date('Y-m-d');
-$batchQuery = 'select MAX(batch_code_key) FROM batch_details as bd where DATE(bd.request_created_datetime) >= "' . $start_date . '" AND DATE(bd.request_created_datetime) <= "' . $end_date . '"';
+$batchQuery = 'SELECT MAX(batch_code_key) FROM batch_details AS bd WHERE DATE(bd.request_created_datetime) >= "' . $start_date . '" AND DATE(bd.request_created_datetime) <= "' . $end_date . '"';
 $batchResult = $db->query($batchQuery);
 
 if ($batchResult[0]['MAX(batch_code_key)'] != '' && $batchResult[0]['MAX(batch_code_key)'] != NULL) {
@@ -41,7 +44,7 @@ if ($batchResult[0]['MAX(batch_code_key)'] != '' && $batchResult[0]['MAX(batch_c
 //Set last machine label order
 $machinesLabelOrder = array();
 foreach ($importConfigResult as $machine) {
-    $lastOrderQuery = "SELECT label_order from batch_details WHERE machine ='" . $machine['config_id'] . "' ORDER BY request_created_datetime DESC";
+    $lastOrderQuery = "SELECT label_order FROM batch_details WHERE machine ='" . $machine['config_id'] . "' ORDER BY request_created_datetime DESC";
     $lastOrderInfo = $db->query($lastOrderQuery);
     if (isset($lastOrderInfo[0]['label_order']) && trim($lastOrderInfo[0]['label_order']) != '') {
         $machinesLabelOrder[$machine['config_id']] = implode(",", json_decode($lastOrderInfo[0]['label_order'], true));
@@ -117,14 +120,7 @@ foreach ($importConfigResult as $machine) {
                     <th>Facility</th>
                     <td>
                         <select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple">
-                            <!--<option value="">-- Select --</option>-->
-                            <?php
-                            foreach ($fResult as $name) {
-                            ?>
-                                <option value="<?php echo $name['facility_id']; ?>"><?php echo ucwords($name['facility_name'] . "-" . $name['facility_code']); ?></option>
-                            <?php
-                            }
-                            ?>
+                            <?= $facilitiesDropdown; ?>
                         </select>
                     </td>
                 </tr>

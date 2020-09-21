@@ -5,11 +5,19 @@ $title = "Edit Batch";
 
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
+
+$general = new \Vlsm\Models\General($db);
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
+$healthFacilites = $facilitiesDb->getHealthFacilities('vl');
+
+$facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
+
+
 $id = base64_decode($_GET['id']);
 //global config
-$configQuery = "SELECT `value` FROM global_config WHERE name ='vl_form'";
-$configResult = $db->query($configQuery);
-$showUrgency = ($configResult[0]['value'] == 1 || $configResult[0]['value'] == 2) ? true : false;
+// $configQuery = "SELECT `value` FROM global_config WHERE name ='vl_form'";
+// $configResult = $db->query($configQuery);
+// $showUrgency = ($configResult[0]['value'] == 1 || $configResult[0]['value'] == 2) ? true : false;
 $batchQuery = "SELECT * from batch_details as b_d LEFT JOIN import_config as i_c ON i_c.config_id=b_d.machine where batch_id=$id";
 $batchInfo = $db->query($batchQuery);
 $bQuery = "SELECT vl.sample_code,vl.sample_batch_id,vl.vl_sample_id,vl.facility_id,vl.result,vl.result_status,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE  (vl.is_sample_rejected IS NULL OR vl.is_sample_rejected = '' OR vl.is_sample_rejected = 'no') AND (vl.reason_for_sample_rejection IS NULL OR vl.reason_for_sample_rejection ='' OR vl.reason_for_sample_rejection = 0) AND vlsm_country_id = '" . $configResult[0]['value'] . "' AND vl.sample_code!='' AND vl.sample_batch_id = $id ORDER BY vl.last_modified_datetime ASC";
@@ -21,8 +29,6 @@ $query = "SELECT vl.sample_code,vl.sample_batch_id,vl.vl_sample_id,vl.facility_i
 $result = $db->rawQuery($query);
 $result = array_merge($batchResultresult, $result);
 
-$fQuery = "SELECT * FROM facility_details where status='active'";
-$fResult = $db->rawQuery($fQuery);
 $sQuery = "SELECT * FROM r_vl_sample_type where status='active'";
 $sResult = $db->rawQuery($sQuery);
 //Get active machines
@@ -79,13 +85,7 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
 				<div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
 			</div>
 			<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 80%;">
-				<tr style="display:<?php echo ($showUrgency == true) ? '' : 'none'; ?>">
-					<td><b>Urgency&nbsp;:</b></td>
-					<td colspan="3">
-						<input type="radio" name="urgency" title="Please choose urgency type" class="urgent" id="urgentYes" value="normal" />&nbsp;&nbsp;Normal
-						<input type="radio" name="urgency" title="Please choose urgency type" class="urgent" id="urgentYes" value="urgent" />&nbsp;&nbsp;Urgent
-					</td>
-				</tr>
+				
 				<tr>
 					<td>&nbsp;<b>Sample Collection Date&nbsp;:</b></td>
 					<td>
@@ -109,13 +109,7 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
 					<td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
 					<td>
 						<select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple">
-							<?php
-							foreach ($fResult as $name) {
-							?>
-								<option value="<?php echo $name['facility_id']; ?>"><?php echo ucwords($name['facility_name'] . "-" . $name['facility_code']); ?></option>
-							<?php
-							}
-							?>
+							<?= $facilitiesDropdown; ?>
 						</select>
 					</td>
 					<td><b>Gender&nbsp;:</b></td>

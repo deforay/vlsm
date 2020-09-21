@@ -3,22 +3,25 @@ ob_start();
 $title = "Email VL Test Results";
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-$configQuery = "SELECT * FROM global_config WHERE name ='vl_form'";
-$configResult = $db->rawQuery($configQuery);
-$formId = 0;
-if (isset($configResult[0]['value']) && trim($configResult[0]['value']) != '') {
-  $formId = intval($configResult[0]['value']);
-}
+
+$general = new \Vlsm\Models\General($db);
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
+$healthFacilites = $facilitiesDb->getHealthFacilities('vl');
+
+$facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
+
+
+$formId = $general->getGlobalConfig('vl_form');
+
 //main query
 $query = "SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vlsm_country_id = $formId AND is_result_mail_sent ='no' AND vl.result IS NOT NULL AND vl.result!= '' ORDER BY f.facility_name ASC";
 $result = $db->rawQuery($query);
 $sTypeQuery = "SELECT * FROM r_vl_sample_type where status='active'";
 $sTypeResult = $db->rawQuery($sTypeQuery);
-$facilityQuery = "SELECT * FROM facility_details where status='active'";
-$facilityResult = $db->rawQuery($facilityQuery);
+
 $pdQuery = "SELECT * from province_details";
 $pdResult = $db->query($pdQuery);
-$batchQuery = "SELECT * FROM batch_details";
+$batchQuery = "SELECT * FROM batch_details WHERE test_type='vl' AND batch_status='completed'";
 $batchResult = $db->rawQuery($batchQuery);
 ?>
 <link href="/assets/css/multi-select.css" rel="stylesheet" />
@@ -70,12 +73,7 @@ $batchResult = $db->rawQuery($batchQuery);
                   <label for="facility" class="col-lg-3 control-label">Facility Name (To)<span class="mandatory">*</span></label>
                   <div class="col-lg-9">
                     <select class="form-control isRequired" id="facility" name="facility" title="Please select facility name">
-                      <option value=""> -- Select -- </option>
-                      <?php
-                      foreach ($facilityResult as $facility) { ?>
-                        ?>
-                        <option data-name="<?php echo $facility['facility_name']; ?>" data-email="<?php echo $facility['facility_emails']; ?>" data-report-email="<?php echo $facility['report_email']; ?>" value="<?php echo base64_encode($facility['facility_id']); ?>"><?php echo ucwords($facility['facility_name']); ?></option>
-                      <?php } ?>
+                      <?= $facilitiesDropdown; ?>
                     </select>
                   </div>
                 </div>
