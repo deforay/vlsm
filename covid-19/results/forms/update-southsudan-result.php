@@ -129,13 +129,13 @@ $sampleSuggestionDisplay = 'display:none;';
                                     <tr>
                                         <td><label for="province">Province </label><span class="mandatory">*</span></td>
                                         <td>
-                                            <select class="form-control" name="province" id="province" title="Please choose province" onchange="getfacilityDetails(this);" style="width:100%;">
+                                            <select class="form-control" name="province" id="province" title="Please choose province" style="width:100%;">
                                                 <?php echo $province; ?>
                                             </select>
                                         </td>
                                         <td><label for="district">District </label><span class="mandatory">*</span></td>
                                         <td>
-                                            <select class="form-control" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getfacilityDistrictwise(this);">
+                                            <select class="form-control" name="district" id="district" title="Please choose district" style="width:100%;">
                                                 <option value=""> -- Select -- </option>
                                             </select>
                                         </td>
@@ -170,16 +170,6 @@ $sampleSuggestionDisplay = 'display:none;';
                                                 <?php } ?>
                                             </select>
                                         </td>
-                                        <?php if ($sarr['user_type'] == 'remoteuser') { ?>
-                                            <!-- <tr> -->
-                                            <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
-                                            <td>
-                                                <select name="labId" id="labId" class="form-control" title="Please select Testing Lab name" style="width:100%;">
-                                                    <?= $general->generateSelectOptions($testingLabs, $covid19Info['lab_id'], '-- Select --'); ?>
-                                                </select>
-                                            </td>
-                                            <!-- </tr> -->
-                                        <?php } ?>
                                     </tr>
                                 </table>
 
@@ -322,12 +312,22 @@ $sampleSuggestionDisplay = 'display:none;';
                                             </td>
                                             <td class="lab-show"><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
                                             <td class="lab-show">
-                                                <select name="labId" id="labId" class="form-control" title="Please select Testing Lab name" style="width:100%;">
+                                                <select name="labId" id="labId" class="form-control" title="Please select Testing Lab name" style="width:100%;" onchange="getTestingPoints();">
                                                     <?= $general->generateSelectOptions($testingLabs, $covid19Info['lab_id'], '-- Select --'); ?>
                                                 </select>
                                             </td>
                                         <tr>
-                                            <th>Is Sample Rejected ? <span class="mandatory">*</span></th>
+                                        <tr>
+                                            <th class="testingPointField" style="display:none;"><label for="">Testing Point </label></th>
+                                            <td class="testingPointField" style="display:none;">
+                                                <select name="testingPoint" id="testingPoint" class="form-control" title="Please select a Testing Point" style="width:100%;">
+                                                </select>
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Is Sample Rejected? <span class="mandatory">*</span></th>
                                             <td>
                                                 <select class="form-control result-focus isRequired" name="isSampleRejected" id="isSampleRejected">
                                                     <option value=''> -- Select -- </option>
@@ -492,62 +492,28 @@ $sampleSuggestionDisplay = 'display:none;';
     let testCounter = <?php echo (isset($covid19TestInfo) && count($covid19TestInfo) > 0) ? (count($covid19TestInfo)) : 0; ?>;
     deletedRow = [];
 
-    function getfacilityDetails(obj) {
-        $.blockUI();
-        var cName = $("#facilityId").val();
-        var pName = $("#province").val();
-        if (pName != '' && provinceName && facilityName) {
-            facilityName = false;
-        }
-        if ($.trim(pName) != '') {
-            //if (provinceName) {
-            $.post("/includes/siteInformationDropdownOptions.php", {
-                    pName: pName,
-                    testType: 'covid19'
+    function getTestingPoints() {
+        var labId = $("#labId").val();
+        var selectedTestingPoint = '<?php echo $covid19Info['covid19_id']; ?>';
+        if (labId) {
+            $.post("/includes/getTestingPoints.php", {
+                    labId: labId,
+                    selectedTestingPoint: selectedTestingPoint
                 },
                 function(data) {
                     if (data != "") {
-                        details = data.split("###");
-                        $("#facilityId").html(details[0]);
-                        $("#district").html(details[1]);
-                        //$("#clinicianName").val(details[2]);
+                        $(".testingPointField").show();
+                        $("#testingPoint").html(data);
+                    } else {
+                        $(".testingPointField").hide();
+                        $("#testingPoint").html('');
                     }
                 });
-            //}
-            sampleCodeGeneration();
-        } else if (pName == '') {
-            provinceName = true;
-            facilityName = true;
-            $("#province").html("<?php echo $province; ?>");
-            $("#facilityId").html("<?php echo $facility; ?>");
-            $("#facilityId").select2("val", "");
-            $("#district").html("<option value=''> -- Select -- </option>");
         }
-        $.unblockUI();
     }
 
 
-    function getfacilityDistrictwise(obj) {
-        $.blockUI();
-        var dName = $("#district").val();
-        var cName = $("#facilityId").val();
-        if (dName != '') {
-            $.post("/includes/siteInformationDropdownOptions.php", {
-                    dName: dName,
-                    cliName: cName,
-                    testType: 'covid19'
-                },
-                function(data) {
-                    if (data != "") {
-                        details = data.split("###");
-                        $("#facilityId").html(details[0]);
-                    }
-                });
-        } else {
-            $("#facilityId").html("<option value=''> -- Select -- </option>");
-        }
-        $.unblockUI();
-    }
+
 
     function getfacilityProvinceDetails(obj) {
         $.blockUI();
@@ -603,6 +569,7 @@ $sampleSuggestionDisplay = 'display:none;';
             placeholder: "Select Clinic/Health Center"
         });
         getfacilityProvinceDetails($("#facilityId").val());
+        getTestingPoints();
 
 
 

@@ -339,12 +339,22 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                                             </td>
                                             <td class="lab-show"><label for="labId">Lab Name </label> </td>
                                             <td class="lab-show">
-                                                <select name="labId" id="labId" class="form-control" title="Please select Testing Lab name" style="width:100%;">
+                                                <select name="labId" id="labId" class="form-control" title="Please select Testing Lab name" style="width:100%;" onchange="getTestingPoints();">
                                                     <?= $general->generateSelectOptions($testingLabs, $covid19Info['lab_id'], '-- Select --'); ?>
                                                 </select>
                                             </td>
+                                        </tr>
                                         <tr>
-                                            <th>Is Sample Rejected ?</th>
+                                            <th class="testingPointField" style="display:none;"><label for="">Testing Point </label></th>
+                                            <td class="testingPointField" style="display:none;">
+                                                <select name="testingPoint" id="testingPoint" class="form-control" title="Please select a Testing Point" style="width:100%;">
+                                                </select>
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Is Sample Rejected?</th>
                                             <td>
                                                 <select class="form-control result-focus" name="isSampleRejected" id="isSampleRejected">
                                                     <option value=''> -- Select -- </option>
@@ -631,11 +641,31 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
         }
     }
 
+    function getTestingPoints() {
+        var labId = $("#labId").val();
+        var selectedTestingPoint = '<?php echo $covid19Info['covid19_id']; ?>';
+        if (labId) {
+            $.post("/includes/getTestingPoints.php", {
+                    labId: labId,
+                    selectedTestingPoint: selectedTestingPoint
+                },
+                function(data) {
+                    if (data != "") {
+                        $(".testingPointField").show();
+                        $("#testingPoint").html(data);
+                    } else {
+                        $(".testingPointField").hide();
+                        $("#testingPoint").html('');
+                    }
+                });
+        }
+    }
+
     $(document).ready(function() {
-        if(testCounter == 0){
+        if (testCounter == 0) {
             addTestRow();
         }
-        
+
         $('.result-focus').change(function(e) {
             $('.change-reason').show(500);
             $('#reasonForChanging').addClass('isRequired');
@@ -645,6 +675,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
             placeholder: "Select Clinic/Health Center"
         });
         getfacilityProvinceDetails($("#facilityId").val());
+        getTestingPoints();
 
         $('#isResultAuthorized').change(function(e) {
             checkIsResultAuthorized();
