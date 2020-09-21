@@ -714,7 +714,8 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
           if (pName != '') {
                if (provinceName) {
                     $.post("/includes/siteInformationDropdownOptions.php", {
-                              pName: pName
+                              pName: pName,
+                              testType: 'vl'
                          },
                          function(data) {
                               if (data != "") {
@@ -765,7 +766,8 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
           if (dName != '') {
                $.post("/includes/siteInformationDropdownOptions.php", {
                          dName: dName,
-                         cliName: cName
+                         cliName: cName,
+                         testType: 'vl'
                     },
                     function(data) {
                          if (data != "") {

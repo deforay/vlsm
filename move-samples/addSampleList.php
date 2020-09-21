@@ -315,7 +315,8 @@ foreach ($fResult as $fDetails) {
     if ($.trim(pName) != '') {
       if (provinceName) {
         $.post("/includes/siteInformationDropdownOptions.php", {
-            pName: pName
+            pName: pName,
+          testType: 'vl'
           },
           function(data) {
             if (data != "") {

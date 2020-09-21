@@ -532,7 +532,8 @@ $eidInfo['child_treatment'] = explode(",", $eidInfo['child_treatment']);
     if ($.trim(pName) != '') {
       if (provinceName) {
         $.post("/includes/siteInformationDropdownOptions.php", {
-            pName: pName
+            pName: pName,
+            testType: 'eid'
           },
           function(data) {
             if (data != "") {
@@ -561,7 +562,8 @@ $eidInfo['child_treatment'] = explode(",", $eidInfo['child_treatment']);
     if (dName != '') {
       $.post("/includes/siteInformationDropdownOptions.php", {
           dName: dName,
-          cliName: cName
+          cliName: cName,
+          testType: 'eid'
         },
         function(data) {
           if (data != "") {
@@ -585,7 +587,8 @@ $eidInfo['child_treatment'] = explode(",", $eidInfo['child_treatment']);
     }
     if (cName != '' && facilityName) {
       $.post("/includes/siteInformationDropdownOptions.php", {
-          cName: cName
+          cName: cName,
+          testType: 'eid'
         },
         function(data) {
           if (data != "") {

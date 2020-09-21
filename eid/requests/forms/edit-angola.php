@@ -380,7 +380,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $eidInfo['facilit
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        
+
                         <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                         <input type="hidden" name="formId" id="formId" value="8" />
                         <input type="hidden" name="eidSampleId" id="eidSampleId" value="<?php echo ($eidInfo['eid_id']); ?>" />
@@ -419,7 +419,8 @@ $facility = $general->generateSelectOptions($healthFacilities, $eidInfo['facilit
         if ($.trim(pName) != '') {
             //if (provinceName) {
             $.post("/includes/siteInformationDropdownOptions.php", {
-                    pName: pName
+                    pName: pName,
+                    testType: 'eid'
                 },
                 function(data) {
                     if (data != "") {
@@ -448,7 +449,8 @@ $facility = $general->generateSelectOptions($healthFacilities, $eidInfo['facilit
         if (dName != '') {
             $.post("/includes/siteInformationDropdownOptions.php", {
                     dName: dName,
-                    cliName: cName
+                    cliName: cName,
+                    testType: 'eid'
                 },
                 function(data) {
                     if (data != "") {
@@ -472,7 +474,8 @@ $facility = $general->generateSelectOptions($healthFacilities, $eidInfo['facilit
         }
         if (cName != '' && facilityName) {
             $.post("/includes/siteInformationDropdownOptions.php", {
-                    cName: cName
+                    cName: cName,
+                    testType: 'eid'
                 },
                 function(data) {
                     if (data != "") {

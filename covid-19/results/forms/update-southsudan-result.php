@@ -396,7 +396,7 @@ $sampleSuggestionDisplay = 'display:none;';
                                                                         <input <?php echo $value; ?> type="text" name="testNameOther[]" id="testNameOther<?php echo ($indexKey + 1); ?>" class="form-control testNameOther<?php echo ($indexKey + 1); ?>" title="Please enter the name of the Testkit (or) Test Method used" placeholder="Entrez le nom du test <?php echo ($indexKey + 1); ?>" style="display: <?php echo $show; ?>;margin-top: 10px;" />
                                                                     </td>
                                                                     <td><input type="text" value="<?php echo $general->humanDateFormat($covid19TestInfo[$indexKey]['sample_tested_datetime']); ?>" name="testDate[]" id="testDate<?php echo ($indexKey + 1); ?>" class="form-control test-name-table-input dateTime" placeholder="Tested on" title="Please enter the tested on for row <?php echo ($indexKey + 1); ?>" /></td>
-                                                                    <td><input type="text" value="<?php echo $covid19TestInfo[$indexKey]['testing_platform'];?>" name="testingPlatform[]" id="testingPlatform<?php echo ($indexKey + 1); ?>" class="form-control test-name-table-input" placeholder="Testing Platform" title="Please enter the Testing Platform for <?php echo ($indexKey + 1); ?>" /></td>
+                                                                    <td><input type="text" value="<?php echo $covid19TestInfo[$indexKey]['testing_platform']; ?>" name="testingPlatform[]" id="testingPlatform<?php echo ($indexKey + 1); ?>" class="form-control test-name-table-input" placeholder="Testing Platform" title="Please enter the Testing Platform for <?php echo ($indexKey + 1); ?>" /></td>
                                                                     <td><select class="form-control test-result test-name-table-input result-focus" name="testResult[]" id="testResult<?php echo ($indexKey + 1); ?>" title="Please select the result for row <?php echo ($indexKey + 1); ?>">
                                                                             <option value=''> -- Select -- </option>
                                                                             <?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?>
@@ -409,8 +409,8 @@ $sampleSuggestionDisplay = 'display:none;';
                                                                         <a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeTestRow(this.parentNode.parentNode);deleteRow('<?php echo base64_encode($covid19TestInfo[$indexKey]['test_id']); ?>');"><i class="fa fa-minus"></i></a>
                                                                     </td>
                                                                 </tr>
-                                                            <?php }
-                                                        }?>
+                                                        <?php }
+                                                        } ?>
                                                     </tbody>
                                                     <!-- < ?php if (isset($_SESSION['privileges']) && in_array("record-final-result.php", $_SESSION['privileges'])) { ?>
                                                     < ?php }?> -->
@@ -502,7 +502,8 @@ $sampleSuggestionDisplay = 'display:none;';
         if ($.trim(pName) != '') {
             //if (provinceName) {
             $.post("/includes/siteInformationDropdownOptions.php", {
-                    pName: pName
+                    pName: pName,
+                    testType: 'covid19'
                 },
                 function(data) {
                     if (data != "") {
@@ -533,7 +534,8 @@ $sampleSuggestionDisplay = 'display:none;';
         if (dName != '') {
             $.post("/includes/siteInformationDropdownOptions.php", {
                     dName: dName,
-                    cliName: cName
+                    cliName: cName,
+                    testType: 'covid19'
                 },
                 function(data) {
                     if (data != "") {
@@ -557,7 +559,8 @@ $sampleSuggestionDisplay = 'display:none;';
         }
         if (cName != '' && facilityName) {
             $.post("/includes/siteInformationDropdownOptions.php", {
-                    cName: cName
+                    cName: cName,
+                    testType: 'covid19'
                 },
                 function(data) {
                     if (data != "") {
@@ -600,7 +603,7 @@ $sampleSuggestionDisplay = 'display:none;';
             placeholder: "Select Clinic/Health Center"
         });
         getfacilityProvinceDetails($("#facilityId").val());
-        
+
 
 
         $('.disabledForm input, .disabledForm select , .disabledForm textarea').attr('disabled', true);
@@ -613,9 +616,9 @@ $sampleSuggestionDisplay = 'display:none;';
 
         $('#result').change(function(e) {
             if (this.value == '') {
-                $('#isResultAuthorized').attr('disabled',false);
-            } else{
-                $('#isResultAuthorized').attr('disabled',true);
+                $('#isResultAuthorized').attr('disabled', false);
+            } else {
+                $('#isResultAuthorized').attr('disabled', true);
             }
         });
 
@@ -634,18 +637,18 @@ $sampleSuggestionDisplay = 'display:none;';
                 checkPostive();
             });
             checkPostive();
-        <?php } else{ ?>
+        <?php } else { ?>
             $('#result').addClass('isRequired');
             $('#isResultAuthorized').val('yes');
-            $('#isResultAuthorized').attr('disabled',true);
+            $('#isResultAuthorized').attr('disabled', true);
         <?php } ?>
-        if($('#result').val() != ""){
+        if ($('#result').val() != "") {
             $('#isResultAuthorized').val('yes');
-            $('#isResultAuthorized').attr('disabled',true);
+            $('#isResultAuthorized').attr('disabled', true);
         }
     });
 
-    
+
     function addTestRow() {
         testCounter++;
         let rowString = `<tr>

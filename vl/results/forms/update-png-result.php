@@ -194,61 +194,61 @@ $disable = "disabled = 'disabled'";
       <!-- /.box-header -->
       <div class="box-body">
         <!-- form start -->
-        
-          <div class="box-body">
-            <div class="box box-default">
-              <div class="box-body">
-                <div class="row">
-                  <div class="col-xs-3 col-md-3">
-                    <div class="form-group">
-                      <label for="sampleCode">Laboratory ID </label>
-                      <input type="text" class="form-control sampleCode" id="sampleCode" name="sampleCode" <?php echo $disable; ?> placeholder="Enter Laboratory ID" title="Please enter laboratory ID" style="width:100%;" value="<?php echo (isset($sCode) && $sCode != '') ? $sCode : $vlQueryInfo[$sampleCode]; ?>" onblur="checkNameValidation('vl_request_form','<?php echo $sampleCode; ?>',this,'<?php echo "vl_sample_id##" . $vlQueryInfo["vl_sample_id"]; ?>','The Laboratory ID that you entered already exists. Please try another ID',null)" />
-                    </div>
+
+        <div class="box-body">
+          <div class="box box-default">
+            <div class="box-body">
+              <div class="row">
+                <div class="col-xs-3 col-md-3">
+                  <div class="form-group">
+                    <label for="sampleCode">Laboratory ID </label>
+                    <input type="text" class="form-control sampleCode" id="sampleCode" name="sampleCode" <?php echo $disable; ?> placeholder="Enter Laboratory ID" title="Please enter laboratory ID" style="width:100%;" value="<?php echo (isset($sCode) && $sCode != '') ? $sCode : $vlQueryInfo[$sampleCode]; ?>" onblur="checkNameValidation('vl_request_form','<?php echo $sampleCode; ?>',this,'<?php echo "vl_sample_id##" . $vlQueryInfo["vl_sample_id"]; ?>','The Laboratory ID that you entered already exists. Please try another ID',null)" />
                   </div>
                 </div>
-                <br />
-                <table class="table" style="width:100%">
-                  <tr>
-                    <td colspan="6" style="font-size: 18px; font-weight: bold;">Section 1: Clinic Information</td>
-                  </tr>
-                  <tr>
-                    <td style="width:13%">
-                      <label for="province">Province </label>
-                    </td>
-                    <td style="width:20%">
-                      <select class="form-control" name="province" id="province" <?php echo $disable; ?> title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);">
-                        <option value=""> -- Select -- </option>
-                        <?php foreach ($pdResult as $provinceName) { ?>
-                          <option value="<?php echo $provinceName['province_name'] . "##" . $provinceName['province_code']; ?>" <?php echo (strtolower($facilityResult[0]['facility_state']) . "##" . $stateResult[0]['province_code'] == strtolower($provinceName['province_name']) . "##" . $provinceName['province_code']) ? "selected='selected'" : "" ?>><?php echo ucwords($provinceName['province_name']); ?></option>;
-                        <?php } ?>
-                      </select>
-                    </td>
-                    <td style="width:13%">
-                      <label for="district">District </label>
-                    </td>
-                    <td style="width:20%">
-                      <select class="form-control" name="district" id="district" <?php echo $disable; ?> title="Please choose district" onchange="getfacilityDistrictwise(this);" style="width:100%;">
-                        <option value=""> -- Select -- </option>
-                        <?php
-                        foreach ($districtResult as $districtName) {
-                        ?>
-                          <option value="<?php echo $districtName['facility_district']; ?>" <?php echo ($facilityResult[0]['facility_district'] == $districtName['facility_district']) ? "selected='selected'" : "" ?>><?php echo ucwords($districtName['facility_district']); ?></option>
-                        <?php
-                        }
-                        ?>
-                      </select>
-                    </td>
-                    <td style="width:14%">
-                      <label for="clinicName">Clinic/Ward </label>
-                    </td>
-                    <td style="width:20%">
-                      <select class="form-control" id="clinicName" name="clinicName" title="Please select clinic/ward" <?php echo $disable; ?> style="width:100%;" onchange="getfacilityProvinceDetails(this)">
-                        <?= $facility; ?>
-                      </select>
-                    </td>
-                  </tr>
-                  <tr>
-                    <!--<td>
+              </div>
+              <br />
+              <table class="table" style="width:100%">
+                <tr>
+                  <td colspan="6" style="font-size: 18px; font-weight: bold;">Section 1: Clinic Information</td>
+                </tr>
+                <tr>
+                  <td style="width:13%">
+                    <label for="province">Province </label>
+                  </td>
+                  <td style="width:20%">
+                    <select class="form-control" name="province" id="province" <?php echo $disable; ?> title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);">
+                      <option value=""> -- Select -- </option>
+                      <?php foreach ($pdResult as $provinceName) { ?>
+                        <option value="<?php echo $provinceName['province_name'] . "##" . $provinceName['province_code']; ?>" <?php echo (strtolower($facilityResult[0]['facility_state']) . "##" . $stateResult[0]['province_code'] == strtolower($provinceName['province_name']) . "##" . $provinceName['province_code']) ? "selected='selected'" : "" ?>><?php echo ucwords($provinceName['province_name']); ?></option>;
+                      <?php } ?>
+                    </select>
+                  </td>
+                  <td style="width:13%">
+                    <label for="district">District </label>
+                  </td>
+                  <td style="width:20%">
+                    <select class="form-control" name="district" id="district" <?php echo $disable; ?> title="Please choose district" onchange="getfacilityDistrictwise(this);" style="width:100%;">
+                      <option value=""> -- Select -- </option>
+                      <?php
+                      foreach ($districtResult as $districtName) {
+                      ?>
+                        <option value="<?php echo $districtName['facility_district']; ?>" <?php echo ($facilityResult[0]['facility_district'] == $districtName['facility_district']) ? "selected='selected'" : "" ?>><?php echo ucwords($districtName['facility_district']); ?></option>
+                      <?php
+                      }
+                      ?>
+                    </select>
+                  </td>
+                  <td style="width:14%">
+                    <label for="clinicName">Clinic/Ward </label>
+                  </td>
+                  <td style="width:20%">
+                    <select class="form-control" id="clinicName" name="clinicName" title="Please select clinic/ward" <?php echo $disable; ?> style="width:100%;" onchange="getfacilityProvinceDetails(this)">
+                      <?= $facility; ?>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <!--<td>
                         <label for="facility">Clinic/Ward </label>
                         </td>
                         <td>
@@ -259,215 +259,215 @@ $disable = "disabled = 'disabled'";
 			    <option value="anc"< ?php echo ($vlQueryInfo['ward']=="anc")?"selected='selected'":""?>>ANC</option>
 			  </select>
                         </td>-->
-                    <td>
-                      <label for="officerName">Requesting Medical Officer </label>
-                    </td>
-                    <td>
-                      <input type="text" class="form-control" name="officerName" id="officerName" <?php echo $disable; ?> placeholder="Officer Name" title="Enter Medical Officer Name" style="width:100%;" value="<?php echo $vlQueryInfo['lab_contact_person']; ?>">
-                    </td>
-                    <td>
-                      <label for="telephone">Telephone </label>
-                    </td>
-                    <td>
-                      <input type="text" class="form-control" name="telephone" id="telephone" <?php echo $disable; ?> placeholder="Telephone" title="Enter Telephone" style="width:100%;" value="<?php echo $vlQueryInfo['lab_phone_number']; ?>">
-                    </td>
-                    <td>
-                      <label for="clinicDate">Date </label>
-                    </td>
-                    <td>
-                      <input type="text" class="form-control date" name="clinicDate" id="clinicDate" <?php echo $disable; ?> placeholder="Date" title="Enter Date" style="width:100%;" value="<?php echo $vlQueryInfo['clinic_date']; ?>">
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colspan="6" style="font-size: 18px; font-weight: bold;">Section 2: Patient Information</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label for="patientFname">First Name </label>
-                    </td>
-                    <td>
-                      <input type="text" class="form-control" name="patientFname" id="patientFname" <?php echo $disable; ?> placeholder="First Name" title="Enter First Name" style="width:100%;" value="<?php echo $patientFirstName; ?>">
-                    </td>
-                    <td>
-                      <label for="surName">Last Name </label>
-                    </td>
-                    <td>
-                      <input type="text" class="form-control" name="surName" id="surName" placeholder="Last Name" <?php echo $disable; ?> title="Enter Last Name" style="width:100%;" value="<?php echo $patientLastName; ?>">
-                    </td>
-                    <td colspan="2">
-                      <label for="gender">Gender &nbsp;&nbsp;</label>
-                      <label class="radio-inline">
-                        <input type="radio" class="" id="genderMale" name="gender" value="male" <?php echo $disable; ?> title="Please check gender" <?php echo ($vlQueryInfo['patient_gender'] == 'male') ? "checked='checked'" : "" ?>> Male
-                      </label>
-                      <label class="radio-inline">
-                        <input type="radio" class="" id="genderFemale" name="gender" value="female" <?php echo $disable; ?> title="Please check gender" <?php echo ($vlQueryInfo['patient_gender'] == 'female') ? "checked='checked'" : "" ?>> Female
-                      </label>
-                      <label class="radio-inline">
-                        <input type="radio" class="" id="genderNotRecorded" name="gender" value="not_recorded" <?php echo $disable; ?> title="Please check gender" <?php echo ($vlQueryInfo['patient_gender'] == 'not_recorded') ? "checked='checked'" : "" ?>> Not Recorded
-                      </label>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><label for="dob">Date Of Birth</label></td>
-                    <td>
-                      <input type="text" class="form-control date" placeholder="DOB" name="dob" id="dob" <?php echo $disable; ?> title="Please choose DOB" style="width:100%;" value="<?php echo $vlQueryInfo['patient_dob']; ?>" />
-                    </td>
-                    <td><label for="patientARTNo">Clinic ID </label></td>
-                    <td>
-                      <input type="text" class="form-control" placeholder="Enter Clinic ID" name="patientARTNo" id="patientARTNo" <?php echo $disable; ?> title="Please enter Clinic ID" value="<?php echo $vlQueryInfo['patient_art_no']; ?>" style="width:100%;" />
-                    </td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td colspan="6" style="font-size: 18px; font-weight: bold;">Section 3: ART Information</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label for="artLine">Line of Treatment </label>
-                    </td>
-                    <td>
-                      <label class="radio-inline">
-                        <input type="radio" class="" id="firstLine" name="artLine" value="1" <?php echo ($vlQueryInfo['line_of_treatment'] == 1) ? 'checked="checked"' : ''; ?> <?php echo $disable; ?> title="Please check ART Line"> First Line
-                      </label>
-                      <label class="radio-inline">
-                        <input type="radio" class="" id="secondLine" name="artLine" value="2" <?php echo ($vlQueryInfo['line_of_treatment'] == 2) ? 'checked="checked"' : ''; ?> <?php echo $disable; ?> title="Please check ART Line"> Second Line
-                      </label>
-                    </td>
-                    <td>
-                      <label for="cdCells">CD4(cells/ul) </label>
-                    </td>
-                    <td>
-                      <input type="text" class="form-control" name="cdCells" id="cdCells" <?php echo $disable; ?> placeholder="CD4 Cells" title="CD4 Cells" style="width:100%;" value="<?php echo $vlQueryInfo['art_cd_cells']; ?>">
-                    </td>
-                    <td>
-                      <label for="cdDate">CD4 Date </label>
-                    </td>
-                    <td>
-                      <input type="text" class="form-control date" name="cdDate" id="cdDate" <?php echo $disable; ?> placeholder="CD4 Date" title="Enter CD4 Date" style="width:100%;" value="<?php echo $vlQueryInfo['art_cd_date']; ?>">
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label for="currentRegimen">Current Regimen </label>
-                    </td>
-                    <td>
-                      <select class="form-control" id="currentRegimen" name="currentRegimen" <?php echo $disable; ?> title="Please choose ART Regimen" onchange="checkValue();" style="width:100%;">
-                        <option value=""> -- Select -- </option>
-                        <?php
-                        foreach ($aResult as $parentRow) {
-                        ?>
-                          <option value="<?php echo $parentRow['art_code']; ?>" <?php echo ($vlQueryInfo['current_regimen'] == $parentRow['art_code']) ? "selected='selected'" : "" ?>><?php echo $parentRow['art_code']; ?></option>
-                        <?php
-                        }
-                        ?>
-                        <option value="other">Other</option>
-                      </select>
-                      <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="New Art Regimen" title="Please enter new ART regimen" style="display:none;width:100%;margin-top:1vh;">
-                    </td>
-                    <td>
-                      <label for="regStartDate">Current Regimen Start Date</label>
-                    </td>
-                    <td>
-                      <input type="text" class="form-control date" name="regStartDate" id="regStartDate" <?php echo $disable; ?> placeholder="Start Date" title="Enter Start Date" style="width:100%;" value="<?php echo $vlQueryInfo['date_of_initiation_of_current_regimen']; ?>">
-                    </td>
-                    <td colspan="2" class="clinicalStage"><label for="breastfeeding">WHO Clinical Stage</label>&nbsp;&nbsp;
-                      <label class="radio-inline">
-                        <input type="radio" id="clinicalOne" name="clinicalStage" value="one" <?php echo $disable; ?> title="WHO Clinical Statge" <?php echo ($vlQueryInfo['who_clinical_stage'] == 'one') ? "checked='checked'" : "" ?>>I
-                      </label>
-                      <label class="radio-inline">
-                        <input type="radio" id="clinicalTwo" name="clinicalStage" value="two" <?php echo $disable; ?> title="WHO Clinical Statge" <?php echo ($vlQueryInfo['who_clinical_stage'] == 'two') ? "checked='checked'" : "" ?>>II
-                      </label>
-                      <label class="radio-inline">
-                        <input type="radio" id="clinicalThree" name="clinicalStage" value="three" <?php echo $disable; ?> title="WHO Clinical Statge" <?php echo ($vlQueryInfo['who_clinical_stage'] == 'three') ? "checked='checked'" : "" ?>>III
-                      </label>
-                      <label class="radio-inline">
-                        <input type="radio" id="clinicalFour" name="clinicalStage" value="four" <?php echo $disable; ?> title="WHO Clinical Statge" <?php echo ($vlQueryInfo['who_clinical_stage'] == 'four') ? "checked='checked'" : "" ?>>IV
-                      </label>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colspan="6" style="font-size: 18px; font-weight: bold;">Section 4: Reason For Testing</td>
-                  </tr>
-                  <tr>
-                    <td colspan="3" class="routine">
-                      <label for="routine">Routine</label><br />
-                      <label class="radio-inline">
-                        &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="routineOne" name="reasonForTest" <?php echo $disable; ?> value="First VL, routine monitoring (On ART for at least 6 months)" title="Please Check Routine" <?php echo ($vlQueryInfo['reason_testing_png'] == 'First VL, routine monitoring (On ART for at least 6 months)') ? "checked='checked'" : "" ?>>First VL, routine monitoring (On ART for at least 6 months)
-                      </label>
-                      <label class="radio-inline">
-                        <input type="radio" id="routineTwo" name="reasonForTest" <?php echo $disable; ?> value="Annual routine follow-up VL (Previous VL < 1000 cp/mL)" title="Please Check Routine" <?php echo ($vlQueryInfo['reason_testing_png'] == 'Annual routine follow-up VL (Previous VL < 1000 cp/mL)') ? "checked='checked'" : "" ?>>Annual routine follow-up VL (Previous VL < 1000 cp/mL) </label> </td> <td colspan="3" class="suspect">
-                          <label for="suspect">Suspected Treatment Failure</label><br />
-                          <label class="radio-inline">
-                            <input type="radio" id="suspectOne" name="reasonForTest" value="Suspected TF" <?php echo $disable; ?> title="Please Suspected TF" <?php echo ($vlQueryInfo['reason_testing_png'] == 'Suspected TF') ? "checked='checked'" : "" ?>>Suspected TF
-                          </label>
-                          <label class="radio-inline">
-                            <input type="radio" id="suspectTwo" name="reasonForTest" <?php echo $disable; ?> value="Follow-up VL after EAC (Previous VL >= 1000 cp/mL)" title="Please Suspected TF" <?php echo ($vlQueryInfo['reason_testing_png'] == 'Follow-up VL after EAC (Previous VL >= 1000 cp/mL)') ? "checked='checked'" : "" ?>>Follow-up VL after EAC (Previous VL >= 1000 cp/mL)
-                          </label>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colspan="3">
-                      <label for="defaulter">Defaulter/ LTFU/ Poor Adherer</label><br />
-                      <label class="radio-inline">
-                        <input type="radio" id="defaulter" name="reasonForTest" <?php echo $disable; ?> value="VL (after 3 months EAC)" title="Check Defaulter/ LTFU/ Poor Adherer" <?php echo ($vlQueryInfo['reason_testing_png'] == 'VL (after 3 months EAC)') ? "checked='checked'" : "" ?>>VL (after 3 months EAC)
-                      </label>&nbsp;&nbsp;
-                    </td>
-                    <td colspan="3">
-                      <label for="other">Other</label><br />
-                      <label class="radio-inline">
-                        <input type="radio" id="other" name="reasonForTest" <?php echo $disable; ?> value="Re-collection requested by lab" title="Please check Other" <?php echo ($vlQueryInfo['reason_testing_png'] == 'Re-collection requested by lab') ? "checked='checked'" : "" ?>>Re-collection requested by lab
-                      </label>
-                      <label for="reason">&nbsp;&nbsp;&nbsp;&nbsp;Reason</label>
-                      <label class="radio-inline">
-                        <input type="text" class="form-control" id="reason" name="reason" <?php echo $disable; ?> placeholder="Enter Reason" title="Enter Reason" style="width:100%;" />
-                      </label>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colspan="2" style="font-size: 18px; font-weight: bold;">Section 5: Specimen information </td>
-                    <td colspan="4" style="font-size: 18px; font-weight: bold;"> Type of sample to transport</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label for="collectionDate">Collection date</label>
-                    </td>
-                    <td>
-                      <input type="text" class="form-control " name="collectionDate" id="collectionDate" <?php echo $disable; ?> placeholder="Collection Date" title="Enter Collection Date" style="width:100%;" value="<?php echo $vlQueryInfo['sample_collection_date']; ?>">
-                    </td>
-                    <td colspan="4" class="typeOfSample">
-                      <label class="radio-inline">
-                        <input type="radio" id="dbs" name="typeOfSample" value="DBS" <?php echo $disable; ?> title="Check DBS" <?php echo ($vlQueryInfo['sample_to_transport'] == 'DBS') ? "checked='checked'" : "" ?>>DBS
-                      </label>
-                      <label class="radio-inline" style="width:46%;">
-                        <input type="radio" id="wholeBlood" name="typeOfSample" value="Whole blood" <?php echo $disable; ?> title="Check Whole blood" style="margin-top:10px;" <?php echo ($vlQueryInfo['sample_to_transport'] == 'Whole blood') ? "checked='checked'" : "" ?>>Whole Blood
-                        <input type="text" name="wholeBloodOne" id="wholeBloodOne" class="form-control" style="width: 20%;" <?php echo $disable; ?> value="<?php echo $vlQueryInfo['whole_blood_ml']; ?>" />&nbsp; x &nbsp;<input type="text" name="wholeBloodTwo" id="wholeBloodTwo" class="form-control" style="width: 20%;" <?php echo $disable; ?> value="<?php echo $vlQueryInfo['whole_blood_vial']; ?>" />&nbsp;vial(s)
-                      </label>
-                      <label class="radio-inline" style="width:42%;">
-                        <input type="radio" id="plasma" name="typeOfSample" value="Plasma" title="Check Plasma" <?php echo $disable; ?> style="margin-top:10px;" <?php echo ($vlQueryInfo['sample_to_transport'] == 'Plasma') ? "checked='checked'" : "" ?>>Plasma
-                        <input type="text" name="plasmaOne" id="plasmaOne" class="form-control" style="width: 20%;" <?php echo $disable; ?> value="<?php echo $vlQueryInfo['plasma_ml']; ?>" />&nbsp;ml x &nbsp;<input type="text" name="plasmaTwo" id="plasmaTwo" class="form-control" style="width: 20%;" <?php echo $disable; ?> value="<?php echo $vlQueryInfo['plasma_vial']; ?>" />&nbsp;vial(s)
-                      </label>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label for="collectedBy">Specimen Collected by</label>
-                    </td>
-                    <td>
-                      <input type="text" class="form-control " name="collectedBy" id="collectedBy" placeholder="Collected By" title="Enter Collected By" <?php echo $disable; ?> style="width:100%;" value="<?php echo $vlQueryInfo['sample_collected_by']; ?>">
-                    </td>
-                    <td class="processTime"><label for="processTime">For onsite plasma processing only</label></td>
-                    <td>
-                      <input type="text" name="processTime" id="processTime" class="form-control" style="width: 100%;" placeholder="Time" <?php echo $disable; ?> title="Processing Time" value="<?php echo $vlQueryInfo['plasma_process_time']; ?>" />
-                    </td>
-                    <td><label for="processTech">Processing Tech</label></td>
-                    <td>
-                      <input type="text" name="processTech" id="processTech" class="form-control" style="width: 100%;" placeholder="Processing Tech" <?php echo $disable; ?> title="Processing Tech" value="<?php echo $vlQueryInfo['plasma_process_tech']; ?>" />
-                    </td>
-                  </tr>
-                  </table>
-                  <form class="form-inline" method='post' name='vlRequestForm' id='vlRequestForm' autocomplete="off" action="updateVlRequestHelperPng.php">
-                  <table  class="table" style="width:100%">
+                  <td>
+                    <label for="officerName">Requesting Medical Officer </label>
+                  </td>
+                  <td>
+                    <input type="text" class="form-control" name="officerName" id="officerName" <?php echo $disable; ?> placeholder="Officer Name" title="Enter Medical Officer Name" style="width:100%;" value="<?php echo $vlQueryInfo['lab_contact_person']; ?>">
+                  </td>
+                  <td>
+                    <label for="telephone">Telephone </label>
+                  </td>
+                  <td>
+                    <input type="text" class="form-control" name="telephone" id="telephone" <?php echo $disable; ?> placeholder="Telephone" title="Enter Telephone" style="width:100%;" value="<?php echo $vlQueryInfo['lab_phone_number']; ?>">
+                  </td>
+                  <td>
+                    <label for="clinicDate">Date </label>
+                  </td>
+                  <td>
+                    <input type="text" class="form-control date" name="clinicDate" id="clinicDate" <?php echo $disable; ?> placeholder="Date" title="Enter Date" style="width:100%;" value="<?php echo $vlQueryInfo['clinic_date']; ?>">
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="6" style="font-size: 18px; font-weight: bold;">Section 2: Patient Information</td>
+                </tr>
+                <tr>
+                  <td>
+                    <label for="patientFname">First Name </label>
+                  </td>
+                  <td>
+                    <input type="text" class="form-control" name="patientFname" id="patientFname" <?php echo $disable; ?> placeholder="First Name" title="Enter First Name" style="width:100%;" value="<?php echo $patientFirstName; ?>">
+                  </td>
+                  <td>
+                    <label for="surName">Last Name </label>
+                  </td>
+                  <td>
+                    <input type="text" class="form-control" name="surName" id="surName" placeholder="Last Name" <?php echo $disable; ?> title="Enter Last Name" style="width:100%;" value="<?php echo $patientLastName; ?>">
+                  </td>
+                  <td colspan="2">
+                    <label for="gender">Gender &nbsp;&nbsp;</label>
+                    <label class="radio-inline">
+                      <input type="radio" class="" id="genderMale" name="gender" value="male" <?php echo $disable; ?> title="Please check gender" <?php echo ($vlQueryInfo['patient_gender'] == 'male') ? "checked='checked'" : "" ?>> Male
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" class="" id="genderFemale" name="gender" value="female" <?php echo $disable; ?> title="Please check gender" <?php echo ($vlQueryInfo['patient_gender'] == 'female') ? "checked='checked'" : "" ?>> Female
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" class="" id="genderNotRecorded" name="gender" value="not_recorded" <?php echo $disable; ?> title="Please check gender" <?php echo ($vlQueryInfo['patient_gender'] == 'not_recorded') ? "checked='checked'" : "" ?>> Not Recorded
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td><label for="dob">Date Of Birth</label></td>
+                  <td>
+                    <input type="text" class="form-control date" placeholder="DOB" name="dob" id="dob" <?php echo $disable; ?> title="Please choose DOB" style="width:100%;" value="<?php echo $vlQueryInfo['patient_dob']; ?>" />
+                  </td>
+                  <td><label for="patientARTNo">Clinic ID </label></td>
+                  <td>
+                    <input type="text" class="form-control" placeholder="Enter Clinic ID" name="patientARTNo" id="patientARTNo" <?php echo $disable; ?> title="Please enter Clinic ID" value="<?php echo $vlQueryInfo['patient_art_no']; ?>" style="width:100%;" />
+                  </td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td colspan="6" style="font-size: 18px; font-weight: bold;">Section 3: ART Information</td>
+                </tr>
+                <tr>
+                  <td>
+                    <label for="artLine">Line of Treatment </label>
+                  </td>
+                  <td>
+                    <label class="radio-inline">
+                      <input type="radio" class="" id="firstLine" name="artLine" value="1" <?php echo ($vlQueryInfo['line_of_treatment'] == 1) ? 'checked="checked"' : ''; ?> <?php echo $disable; ?> title="Please check ART Line"> First Line
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" class="" id="secondLine" name="artLine" value="2" <?php echo ($vlQueryInfo['line_of_treatment'] == 2) ? 'checked="checked"' : ''; ?> <?php echo $disable; ?> title="Please check ART Line"> Second Line
+                    </label>
+                  </td>
+                  <td>
+                    <label for="cdCells">CD4(cells/ul) </label>
+                  </td>
+                  <td>
+                    <input type="text" class="form-control" name="cdCells" id="cdCells" <?php echo $disable; ?> placeholder="CD4 Cells" title="CD4 Cells" style="width:100%;" value="<?php echo $vlQueryInfo['art_cd_cells']; ?>">
+                  </td>
+                  <td>
+                    <label for="cdDate">CD4 Date </label>
+                  </td>
+                  <td>
+                    <input type="text" class="form-control date" name="cdDate" id="cdDate" <?php echo $disable; ?> placeholder="CD4 Date" title="Enter CD4 Date" style="width:100%;" value="<?php echo $vlQueryInfo['art_cd_date']; ?>">
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label for="currentRegimen">Current Regimen </label>
+                  </td>
+                  <td>
+                    <select class="form-control" id="currentRegimen" name="currentRegimen" <?php echo $disable; ?> title="Please choose ART Regimen" onchange="checkValue();" style="width:100%;">
+                      <option value=""> -- Select -- </option>
+                      <?php
+                      foreach ($aResult as $parentRow) {
+                      ?>
+                        <option value="<?php echo $parentRow['art_code']; ?>" <?php echo ($vlQueryInfo['current_regimen'] == $parentRow['art_code']) ? "selected='selected'" : "" ?>><?php echo $parentRow['art_code']; ?></option>
+                      <?php
+                      }
+                      ?>
+                      <option value="other">Other</option>
+                    </select>
+                    <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="New Art Regimen" title="Please enter new ART regimen" style="display:none;width:100%;margin-top:1vh;">
+                  </td>
+                  <td>
+                    <label for="regStartDate">Current Regimen Start Date</label>
+                  </td>
+                  <td>
+                    <input type="text" class="form-control date" name="regStartDate" id="regStartDate" <?php echo $disable; ?> placeholder="Start Date" title="Enter Start Date" style="width:100%;" value="<?php echo $vlQueryInfo['date_of_initiation_of_current_regimen']; ?>">
+                  </td>
+                  <td colspan="2" class="clinicalStage"><label for="breastfeeding">WHO Clinical Stage</label>&nbsp;&nbsp;
+                    <label class="radio-inline">
+                      <input type="radio" id="clinicalOne" name="clinicalStage" value="one" <?php echo $disable; ?> title="WHO Clinical Statge" <?php echo ($vlQueryInfo['who_clinical_stage'] == 'one') ? "checked='checked'" : "" ?>>I
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" id="clinicalTwo" name="clinicalStage" value="two" <?php echo $disable; ?> title="WHO Clinical Statge" <?php echo ($vlQueryInfo['who_clinical_stage'] == 'two') ? "checked='checked'" : "" ?>>II
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" id="clinicalThree" name="clinicalStage" value="three" <?php echo $disable; ?> title="WHO Clinical Statge" <?php echo ($vlQueryInfo['who_clinical_stage'] == 'three') ? "checked='checked'" : "" ?>>III
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" id="clinicalFour" name="clinicalStage" value="four" <?php echo $disable; ?> title="WHO Clinical Statge" <?php echo ($vlQueryInfo['who_clinical_stage'] == 'four') ? "checked='checked'" : "" ?>>IV
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="6" style="font-size: 18px; font-weight: bold;">Section 4: Reason For Testing</td>
+                </tr>
+                <tr>
+                  <td colspan="3" class="routine">
+                    <label for="routine">Routine</label><br />
+                    <label class="radio-inline">
+                      &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="routineOne" name="reasonForTest" <?php echo $disable; ?> value="First VL, routine monitoring (On ART for at least 6 months)" title="Please Check Routine" <?php echo ($vlQueryInfo['reason_testing_png'] == 'First VL, routine monitoring (On ART for at least 6 months)') ? "checked='checked'" : "" ?>>First VL, routine monitoring (On ART for at least 6 months)
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" id="routineTwo" name="reasonForTest" <?php echo $disable; ?> value="Annual routine follow-up VL (Previous VL < 1000 cp/mL)" title="Please Check Routine" <?php echo ($vlQueryInfo['reason_testing_png'] == 'Annual routine follow-up VL (Previous VL < 1000 cp/mL)') ? "checked='checked'" : "" ?>>Annual routine follow-up VL (Previous VL < 1000 cp/mL) </label> </td> <td colspan="3" class="suspect">
+                        <label for="suspect">Suspected Treatment Failure</label><br />
+                        <label class="radio-inline">
+                          <input type="radio" id="suspectOne" name="reasonForTest" value="Suspected TF" <?php echo $disable; ?> title="Please Suspected TF" <?php echo ($vlQueryInfo['reason_testing_png'] == 'Suspected TF') ? "checked='checked'" : "" ?>>Suspected TF
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio" id="suspectTwo" name="reasonForTest" <?php echo $disable; ?> value="Follow-up VL after EAC (Previous VL >= 1000 cp/mL)" title="Please Suspected TF" <?php echo ($vlQueryInfo['reason_testing_png'] == 'Follow-up VL after EAC (Previous VL >= 1000 cp/mL)') ? "checked='checked'" : "" ?>>Follow-up VL after EAC (Previous VL >= 1000 cp/mL)
+                        </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="3">
+                    <label for="defaulter">Defaulter/ LTFU/ Poor Adherer</label><br />
+                    <label class="radio-inline">
+                      <input type="radio" id="defaulter" name="reasonForTest" <?php echo $disable; ?> value="VL (after 3 months EAC)" title="Check Defaulter/ LTFU/ Poor Adherer" <?php echo ($vlQueryInfo['reason_testing_png'] == 'VL (after 3 months EAC)') ? "checked='checked'" : "" ?>>VL (after 3 months EAC)
+                    </label>&nbsp;&nbsp;
+                  </td>
+                  <td colspan="3">
+                    <label for="other">Other</label><br />
+                    <label class="radio-inline">
+                      <input type="radio" id="other" name="reasonForTest" <?php echo $disable; ?> value="Re-collection requested by lab" title="Please check Other" <?php echo ($vlQueryInfo['reason_testing_png'] == 'Re-collection requested by lab') ? "checked='checked'" : "" ?>>Re-collection requested by lab
+                    </label>
+                    <label for="reason">&nbsp;&nbsp;&nbsp;&nbsp;Reason</label>
+                    <label class="radio-inline">
+                      <input type="text" class="form-control" id="reason" name="reason" <?php echo $disable; ?> placeholder="Enter Reason" title="Enter Reason" style="width:100%;" />
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2" style="font-size: 18px; font-weight: bold;">Section 5: Specimen information </td>
+                  <td colspan="4" style="font-size: 18px; font-weight: bold;"> Type of sample to transport</td>
+                </tr>
+                <tr>
+                  <td>
+                    <label for="collectionDate">Collection date</label>
+                  </td>
+                  <td>
+                    <input type="text" class="form-control " name="collectionDate" id="collectionDate" <?php echo $disable; ?> placeholder="Collection Date" title="Enter Collection Date" style="width:100%;" value="<?php echo $vlQueryInfo['sample_collection_date']; ?>">
+                  </td>
+                  <td colspan="4" class="typeOfSample">
+                    <label class="radio-inline">
+                      <input type="radio" id="dbs" name="typeOfSample" value="DBS" <?php echo $disable; ?> title="Check DBS" <?php echo ($vlQueryInfo['sample_to_transport'] == 'DBS') ? "checked='checked'" : "" ?>>DBS
+                    </label>
+                    <label class="radio-inline" style="width:46%;">
+                      <input type="radio" id="wholeBlood" name="typeOfSample" value="Whole blood" <?php echo $disable; ?> title="Check Whole blood" style="margin-top:10px;" <?php echo ($vlQueryInfo['sample_to_transport'] == 'Whole blood') ? "checked='checked'" : "" ?>>Whole Blood
+                      <input type="text" name="wholeBloodOne" id="wholeBloodOne" class="form-control" style="width: 20%;" <?php echo $disable; ?> value="<?php echo $vlQueryInfo['whole_blood_ml']; ?>" />&nbsp; x &nbsp;<input type="text" name="wholeBloodTwo" id="wholeBloodTwo" class="form-control" style="width: 20%;" <?php echo $disable; ?> value="<?php echo $vlQueryInfo['whole_blood_vial']; ?>" />&nbsp;vial(s)
+                    </label>
+                    <label class="radio-inline" style="width:42%;">
+                      <input type="radio" id="plasma" name="typeOfSample" value="Plasma" title="Check Plasma" <?php echo $disable; ?> style="margin-top:10px;" <?php echo ($vlQueryInfo['sample_to_transport'] == 'Plasma') ? "checked='checked'" : "" ?>>Plasma
+                      <input type="text" name="plasmaOne" id="plasmaOne" class="form-control" style="width: 20%;" <?php echo $disable; ?> value="<?php echo $vlQueryInfo['plasma_ml']; ?>" />&nbsp;ml x &nbsp;<input type="text" name="plasmaTwo" id="plasmaTwo" class="form-control" style="width: 20%;" <?php echo $disable; ?> value="<?php echo $vlQueryInfo['plasma_vial']; ?>" />&nbsp;vial(s)
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label for="collectedBy">Specimen Collected by</label>
+                  </td>
+                  <td>
+                    <input type="text" class="form-control " name="collectedBy" id="collectedBy" placeholder="Collected By" title="Enter Collected By" <?php echo $disable; ?> style="width:100%;" value="<?php echo $vlQueryInfo['sample_collected_by']; ?>">
+                  </td>
+                  <td class="processTime"><label for="processTime">For onsite plasma processing only</label></td>
+                  <td>
+                    <input type="text" name="processTime" id="processTime" class="form-control" style="width: 100%;" placeholder="Time" <?php echo $disable; ?> title="Processing Time" value="<?php echo $vlQueryInfo['plasma_process_time']; ?>" />
+                  </td>
+                  <td><label for="processTech">Processing Tech</label></td>
+                  <td>
+                    <input type="text" name="processTech" id="processTech" class="form-control" style="width: 100%;" placeholder="Processing Tech" <?php echo $disable; ?> title="Processing Tech" value="<?php echo $vlQueryInfo['plasma_process_tech']; ?>" />
+                  </td>
+                </tr>
+              </table>
+              <form class="form-inline" method='post' name='vlRequestForm' id='vlRequestForm' autocomplete="off" action="updateVlRequestHelperPng.php">
+                <table class="table" style="width:100%">
                   <tr>
                     <td colspan="6" style="font-size: 18px; font-weight: bold;">CPHL Use Only </td>
                   </tr>
@@ -497,7 +497,7 @@ $disable = "disabled = 'disabled'";
                     <td class="laboratoryId"><label for="laboratoryId">Laboratory Name <span class="mandatory">*</span></label></td>
                     <td>
                       <select name="laboratoryId" id="laboratoryId" class="form-control isRequired" title="Please choose lab name" style="width:100%;">
-                      <?= $general->generateSelectOptions($testingLabs, $vlQueryInfo['lab_id'], '-- Select --'); ?>
+                        <?= $general->generateSelectOptions($testingLabs, $vlQueryInfo['lab_id'], '-- Select --'); ?>
                       </select>
                     </td>
                     <td class="reasonequ" style="display:<?php echo ($vlQueryInfo['is_sample_rejected'] == 'yes') ? "none" : ""; ?>"></td>
@@ -668,16 +668,16 @@ $disable = "disabled = 'disabled'";
                     </td>
                   </tr>
                 </table>
-              </div>
             </div>
           </div>
-          <!-- /.box-body -->
-          <div class="box-footer">
-            <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
-            <input type="hidden" name="vlSampleId" id="vlSampleId" value="<?php echo $vlQueryInfo['vl_sample_id']; ?>" />
-            <a href="vlTestResult.php" class="btn btn-default"> Cancel</a>
-          </div>
-          <!-- /.box-footer -->
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer">
+          <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
+          <input type="hidden" name="vlSampleId" id="vlSampleId" value="<?php echo $vlQueryInfo['vl_sample_id']; ?>" />
+          <a href="vlTestResult.php" class="btn btn-default"> Cancel</a>
+        </div>
+        <!-- /.box-footer -->
         </form>
         <!-- /.row -->
       </div>
@@ -754,7 +754,8 @@ $disable = "disabled = 'disabled'";
     if (pName != '') {
       if (provinceName) {
         $.post("/includes/siteInformationDropdownOptions.php", {
-            pName: pName
+            pName: pName,
+            testType: 'vl'
           },
           function(data) {
             if (data != "") {
@@ -782,7 +783,8 @@ $disable = "disabled = 'disabled'";
     if (dName != '') {
       $.post("/includes/siteInformationDropdownOptions.php", {
           dName: dName,
-          cliName: cName
+          cliName: cName,
+          testType: 'vl'
         },
         function(data) {
           if (data != "") {
@@ -805,7 +807,7 @@ $disable = "disabled = 'disabled'";
     //  provinceName = false;
     //}
     //if(cName!='' && facilityName){
-    //  $.post("/includes/siteInformationDropdownOptions.php", { cName : cName},
+    //  $.post("/includes/siteInformationDropdownOptions.php", { cName : cName,testType: 'vl'},
     //  function(data){
     //    if(data != ""){
     //      details = data.split("###");

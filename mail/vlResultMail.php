@@ -466,7 +466,8 @@ $batchResult = $db->rawQuery($batchQuery);
     var pName = $("#state").val();
     if ($.trim(pName) != '') {
       $.post("/includes/siteInformationDropdownOptions.php", {
-          pName: pName
+          pName: pName,
+          testType: 'vl'
         },
         function(data) {
           if ($.trim(data) != "") {

@@ -499,7 +499,7 @@ $disable = "disabled = 'disabled'";
                       <td style="width:14%;"><label for="">Nome do laboratório<span class="mandatory">*</span></label></td>
                       <td style="width:14%;">
                         <select name="labId" id="labId" class="isRequired form-control" title="Please choose Nome do laboratório" style="width: 100%" ;>
-                        <?= $general->generateSelectOptions($testingLabs, $vlQueryInfo['lab_id'], '-- Selecione --'); ?>
+                          <?= $general->generateSelectOptions($testingLabs, $vlQueryInfo['lab_id'], '-- Selecione --'); ?>
                         </select>
                       </td>
                       <td style="width:14%;"><label for="testingPlatform"> Plataforma de teste VL <span class="mandatory">*</span></label></td>
@@ -706,7 +706,8 @@ $disable = "disabled = 'disabled'";
     if ($.trim(pName) != '') {
       if (provinceName) {
         $.post("/includes/siteInformationDropdownOptions.php", {
-            pName: pName
+            pName: pName,
+            testType: 'vl'
           },
           function(data) {
             if (data != "") {
@@ -735,7 +736,8 @@ $disable = "disabled = 'disabled'";
     if (dName != '') {
       $.post("/includes/siteInformationDropdownOptions.php", {
           dName: dName,
-          cliName: cName
+          cliName: cName,
+          testType: 'vl'
         },
         function(data) {
           if (data != "") {
@@ -758,7 +760,8 @@ $disable = "disabled = 'disabled'";
     }
     if (cName != '' && facilityName) {
       $.post("/includes/siteInformationDropdownOptions.php", {
-          cName: cName
+          cName: cName,
+          testType: 'vl'
         },
         function(data) {
           if (data != "") {

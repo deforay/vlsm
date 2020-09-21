@@ -478,7 +478,7 @@ $sampleSuggestionDisplay = 'display:none;';
                   <table class="table" style="width:100%">
                     <tr style="display:<?php echo ($sCode != '') ? 'none' : 'block'; ?>">
                       <td><label for="">Date de réception de l'échantillon <span class="mandatory">*</span> </label></td>
-                      <td >
+                      <td>
                         <input type="text" class="form-control dateTime isRequired" id="sampleReceivedDate<?php echo ($sCode != '') ? 'Lab' : ''; ?>" name="sampleReceivedDate<?php echo ($sCode != '') ? 'Lab' : ''; ?>" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="checkSampleReceviedDate();" value="<?php echo $vlQueryInfo['sample_received_at_vl_lab_datetime']; ?>" style="width:100%;" />
                       </td>
                       <td style=""></td>
@@ -642,7 +642,8 @@ $sampleSuggestionDisplay = 'display:none;';
     var pName = $("#province").val();
     if ($.trim(pName) != '') {
       $.post("/includes/siteInformationDropdownOptions.php", {
-          pName: pName
+          pName: pName,
+          testType: 'vl'
         },
         function(data) {
           if (data != "") {
@@ -664,7 +665,8 @@ $sampleSuggestionDisplay = 'display:none;';
     if (dName != '') {
       $.post("/includes/siteInformationDropdownOptions.php", {
           dName: dName,
-          cliName: cName
+          cliName: cName,
+          testType: 'vl'
         },
         function(data) {
           if (data != "") {
@@ -688,7 +690,8 @@ $sampleSuggestionDisplay = 'display:none;';
     }
     if (cName != '' && facilityName) {
       $.post("/includes/siteInformationDropdownOptions.php", {
-          cName: cName
+          cName: cName,
+          testType: 'vl'
         },
         function(data) {
           if (data != "") {
@@ -842,7 +845,7 @@ $sampleSuggestionDisplay = 'display:none;';
       }
     });
 
-    $('.specialResults').on('change',function() {
+    $('.specialResults').on('change', function() {
       if ($(this).is(':checked')) {
         $('#vlResult, #vlLog').val('');
         $('#vlResult,#vlLog').attr('readonly', true);
