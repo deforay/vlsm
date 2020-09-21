@@ -252,6 +252,13 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                                         <th>Country of Residence</th>
                                         <td><input type="text" class="form-control" value="<?php echo $covid19Info['patient_nationality']; ?>" id="patientNationality" name="patientNationality" placeholder="Country of Residence" title="Please enter transit" style="width:100%;" /></td>
                                     </tr>
+                                    <tr>
+                                        <th>Passport Number</th>
+                                        <td><input class="form-control" id="patientPassportNumber" name="patientPassportNumber" value="<?php echo $covid19Info['patient_passport_number']; ?>" placeholder="Passport Number" title="Please enter Passport Number" style="width:100%;"></td>
+
+                                        <th></th>
+                                        <td></td>
+                                    </tr>
                                 </table>
 
                                 <div class="box-header with-border sectionHeader">
@@ -503,7 +510,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
     provinceName = true;
     facilityName = true;
     machineName = true;
-    let testCounter = <?php echo (isset($covid19TestInfo) && count($covid19TestInfo) > 0) ? (count($covid19TestInfo)) : 1; ?>;
+    let testCounter = <?php echo (isset($covid19TestInfo) && count($covid19TestInfo) > 0) ? (count($covid19TestInfo)) : 0; ?>;
     deletedRow = [];
 
     function getfacilityDetails(obj) {
@@ -625,7 +632,10 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
     }
 
     $(document).ready(function() {
-        addTestRow();
+        if(testCounter == 0){
+            addTestRow();
+        }
+        
         $('.result-focus').change(function(e) {
             $('.change-reason').show(500);
             $('#reasonForChanging').addClass('isRequired');

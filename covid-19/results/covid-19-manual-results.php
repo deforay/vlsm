@@ -304,10 +304,10 @@ if ($lastUrl1 != '' || $lastUrl2 != '') {
 				}
 			],
 			<?php if ($sarr['user_type'] != 'standalone') { ?> "aaSorting": [
-					[6, "desc"]
+					[7, "desc"]
 				],
 			<?php } else { ?> "aaSorting": [
-					[5, "desc"]
+					[6, "desc"]
 				],
 			<?php } ?> "bProcessing": true,
 			"bServerSide": true,
