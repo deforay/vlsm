@@ -5,19 +5,23 @@ include_once(APPLICATION_PATH . '/header.php');
 
 $tsQuery = "SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
-//config  query
-$configQuery = "SELECT * from global_config";
-$configResult = $db->query($configQuery);
-$arr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($configResult); $i++) {
-	$arr[$configResult[$i]['name']] = $configResult[$i]['value'];
-}
-$sQuery = "SELECT * FROM r_vl_sample_type where status='active'";
+
+//$arr = $general->getGlobalConfig();
+
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
+
+
+$healthFacilites = $facilitiesDb->getHealthFacilities('covid19');
+$facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
+$testingLabs = $facilitiesDb->getTestingLabs('covid19');
+$testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- Select --");
+
+
+
+$sQuery = "SELECT * FROM r_covid19_sample_type WHERE `status`='active'";
 $sResult = $db->rawQuery($sQuery);
-$fQuery = "SELECT * FROM facility_details where status='active'";
-$fResult = $db->rawQuery($fQuery);
-$batQuery = "SELECT batch_code FROM batch_details where batch_status='completed'";
+
+$batQuery = "SELECT batch_code FROM batch_details WHERE test_type='covid19' AND batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
 ?>
 <style>
@@ -90,14 +94,7 @@ $batResult = $db->rawQuery($batQuery);
 													<td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
 													<td>
 														<select class="form-control" id="hvlFacilityName" name="hvlFacilityName" title="Please select facility name" multiple="multiple" style="width:220px;">
-															<option value=""> -- Select -- </option>
-															<?php
-															foreach ($fResult as $name) {
-															?>
-																<option value="<?php echo $name['facility_id']; ?>"><?php echo ucwords($name['facility_name'] . "-" . $name['facility_code']); ?></option>
-															<?php
-															}
-															?>
+															<?= $facilitiesDropdown; ?>
 														</select>
 													</td>
 													<td>&nbsp;<b>Contact Status&nbsp;:</b></td>
@@ -111,7 +108,7 @@ $batResult = $db->rawQuery($batQuery);
 													</td>
 													<td><b>Gender&nbsp;:</b></td>
 													<td>
-														<select name="hvlGender" id="hvlGender" class="form-control" title="Please choose gender" style="width:220px;" onchange="hideFemaleDetails(this.value,'hvlPatientPregnant','hvlPatientBreastfeeding');">
+														<select name="hvlGender" id="hvlGender" class="form-control" title="Please choose gender" style="width:220px;" onchange="">
 															<option value=""> -- Select -- </option>
 															<option value="male">Male</option>
 															<option value="female">Female</option>
@@ -120,22 +117,10 @@ $batResult = $db->rawQuery($batQuery);
 													</td>
 												</tr>
 												<tr>
-													<td><b>Pregnant&nbsp;:</b></td>
-													<td>
-														<select name="hvlPatientPregnant" id="hvlPatientPregnant" class="form-control" title="Please choose pregnant option">
-															<option value=""> -- Select -- </option>
-															<option value="yes">Yes</option>
-															<option value="no">No</option>
-														</select>
-													</td>
-													<td><b>Breastfeeding&nbsp;:</b></td>
-													<td>
-														<select name="hvlPatientBreastfeeding" id="hvlPatientBreastfeeding" class="form-control" title="Please choose option">
-															<option value=""> -- Select -- </option>
-															<option value="yes">Yes</option>
-															<option value="no">No</option>
-														</select>
-													</td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
 												</tr>
 												<tr>
 													<td colspan="6">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
@@ -208,43 +193,24 @@ $batResult = $db->rawQuery($batQuery);
 													<td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
 													<td>
 														<select class="form-control" id="rjtFacilityName" name="facilityName" title="Please select facility name" multiple="multiple" style="width:220px;">
-															<option value=""> -- Select -- </option>
-															<?php
-															foreach ($fResult as $name) {
-															?>
-																<option value="<?php echo $name['facility_id']; ?>"><?php echo ucwords($name['facility_name'] . "-" . $name['facility_code']); ?></option>
-															<?php
-															}
-															?>
+															<?= $facilitiesDropdown; ?>
 														</select>
 													</td>
 													<td><b>Gender&nbsp;:</b></td>
 													<td>
-														<select name="rjtGender" id="rjtGender" class="form-control" title="Please choose gender" style="width:220px;" onchange="hideFemaleDetails(this.value,'rjtPatientPregnant','rjtPatientBreastfeeding');">
+														<select name="rjtGender" id="rjtGender" class="form-control" title="Please choose gender" style="width:220px;" onchange="">
 															<option value=""> -- Select -- </option>
 															<option value="male">Male</option>
 															<option value="female">Female</option>
 															<option value="not_recorded">Not Recorded</option>
 														</select>
 													</td>
-													<td><b>Pregnant&nbsp;:</b></td>
-													<td>
-														<select name="rjtPatientPregnant" id="rjtPatientPregnant" class="form-control" title="Please choose pregnant option">
-															<option value=""> -- Select -- </option>
-															<option value="yes">Yes</option>
-															<option value="no">No</option>
-														</select>
-													</td>
+													<td></td>
+													<td></td>
 												</tr>
 												<tr>
-													<td><b>Breastfeeding&nbsp;:</b></td>
-													<td>
-														<select name="rjtPatientBreastfeeding" id="rjtPatientBreastfeeding" class="form-control" title="Please choose option">
-															<option value=""> -- Select -- </option>
-															<option value="yes">Yes</option>
-															<option value="no">No</option>
-														</select>
-													</td>
+													<td></td>
+													<td></td>
 												</tr>
 												<tr>
 													<td colspan="6">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
@@ -313,43 +279,24 @@ $batResult = $db->rawQuery($batQuery);
 													<td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
 													<td>
 														<select class="form-control" id="noResultFacilityName" name="facilityName" title="Please select facility name" multiple="multiple" style="width:220px;">
-															<option value=""> -- Select -- </option>
-															<?php
-															foreach ($fResult as $name) {
-															?>
-																<option value="<?php echo $name['facility_id']; ?>"><?php echo ucwords($name['facility_name'] . "-" . $name['facility_code']); ?></option>
-															<?php
-															}
-															?>
+															<?= $facilitiesDropdown; ?>
 														</select>
 													</td>
 													<td><b>Gender&nbsp;:</b></td>
 													<td>
-														<select name="noResultGender" id="noResultGender" class="form-control" title="Please choose gender" style="width:220px;" onchange="hideFemaleDetails(this.value,'noResultPatientPregnant','noResultPatientBreastfeeding');">
+														<select name="noResultGender" id="noResultGender" class="form-control" title="Please choose gender" style="width:220px;" onchange="">
 															<option value=""> -- Select -- </option>
 															<option value="male">Male</option>
 															<option value="female">Female</option>
 															<option value="not_recorded">Not Recorded</option>
 														</select>
 													</td>
-													<td><b>Pregnant&nbsp;:</b></td>
-													<td>
-														<select name="noResultPatientPregnant" id="noResultPatientPregnant" class="form-control" title="Please choose pregnant option">
-															<option value=""> -- Select -- </option>
-															<option value="yes">Yes</option>
-															<option value="no">No</option>
-														</select>
-													</td>
+													<td></td>
+													<td></td>
 												</tr>
 												<tr>
-													<td><b>Breastfeeding&nbsp;:</b></td>
-													<td>
-														<select name="noResultPatientBreastfeeding" id="noResultPatientBreastfeeding" class="form-control" title="Please choose option">
-															<option value=""> -- Select -- </option>
-															<option value="yes">Yes</option>
-															<option value="no">No</option>
-														</select>
-													</td>
+													<td></td>
+													<td></td>
 												</tr>
 												<tr>
 													<td colspan="6">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
@@ -571,14 +518,6 @@ $batResult = $db->rawQuery($batQuery);
 					"name": "hvlGender",
 					"value": $("#hvlGender").val()
 				});
-				aoData.push({
-					"name": "hvlPatientPregnant",
-					"value": $("#hvlPatientPregnant").val()
-				});
-				aoData.push({
-					"name": "hvlPatientBreastfeeding",
-					"value": $("#hvlPatientBreastfeeding").val()
-				});
 				$.ajax({
 					"dataType": 'json',
 					"type": "POST",
@@ -660,14 +599,6 @@ $batResult = $db->rawQuery($batQuery);
 					"name": "rjtGender",
 					"value": $("#rjtGender").val()
 				});
-				aoData.push({
-					"name": "rjtPatientPregnant",
-					"value": $("#rjtPatientPregnant").val()
-				});
-				aoData.push({
-					"name": "rjtPatientBreastfeeding",
-					"value": $("#rjtPatientBreastfeeding").val()
-				});
 				$.ajax({
 					"dataType": 'json',
 					"type": "POST",
@@ -745,14 +676,6 @@ $batResult = $db->rawQuery($batQuery);
 				aoData.push({
 					"name": "noResultGender",
 					"value": $("#noResultGender").val()
-				});
-				aoData.push({
-					"name": "noResultPatientPregnant",
-					"value": $("#noResultPatientPregnant").val()
-				});
-				aoData.push({
-					"name": "noResultPatientBreastfeeding",
-					"value": $("#noResultPatientBreastfeeding").val()
 				});
 				$.ajax({
 					"dataType": 'json',
@@ -883,8 +806,6 @@ $batResult = $db->rawQuery($batQuery);
 				Sample_Type: $("#hvlSampleType  option:selected").text(),
 				Facility_Name: $("#hvlFacilityName  option:selected").text(),
 				Gender: $("#hvlGender  option:selected").text(),
-				Pregnant: $("#hvlPatientPregnant  option:selected").text(),
-				Breastfeeding: $("#hvlPatientBreastfeeding  option:selected").text(),
 				markAsComplete: markAsComplete
 			},
 			function(data) {
@@ -905,9 +826,7 @@ $batResult = $db->rawQuery($batQuery);
 				Batch_Code: $("#rjtBatchCode  option:selected").text(),
 				Sample_Type: $("#rjtSampleType  option:selected").text(),
 				Facility_Name: $("#rjtFacilityName  option:selected").text(),
-				Gender: $("#rjtGender  option:selected").text(),
-				Pregnant: $("#rjtPatientPregnant  option:selected").text(),
-				Breastfeeding: $("#rjtPatientBreastfeeding  option:selected").text()
+				Gender: $("#rjtGender  option:selected").text()
 			},
 			function(data) {
 				if (data == "" || data == null || data == undefined) {
@@ -927,9 +846,7 @@ $batResult = $db->rawQuery($batQuery);
 				Batch_Code: $("#noResultBatchCode  option:selected").text(),
 				Sample_Type: $("#noResultSampleType  option:selected").text(),
 				Facility_Name: $("#noResultFacilityName  option:selected").text(),
-				Gender: $("#noResultGender  option:selected").text(),
-				Pregnant: $("#noResultPatientPregnant  option:selected").text(),
-				Breastfeeding: $("#noResultPatientBreastfeeding  option:selected").text()
+				Gender: $("#noResultGender  option:selected").text()
 			},
 			function(data) {
 				if (data == "" || data == null || data == undefined) {
@@ -959,17 +876,7 @@ $batResult = $db->rawQuery($batQuery);
 			});
 	}
 
-	function hideFemaleDetails(value, pregnant, breastFeeding) {
-		if (value == 'female') {
-			$("#" + pregnant).attr("disabled", false);
-			$("#" + breastFeeding).attr("disabled", false);
-		} else {
-			$('select#' + pregnant + ' option').removeAttr("selected");
-			$('select#' + breastFeeding + ' option').removeAttr("selected");
-			$("#" + pregnant).attr("disabled", true);
-			$("#" + breastFeeding).attr("disabled", true);
-		}
-	}
+
 
 	function setSampleTestDate(obj) {
 		$(".stDate").val($("#" + obj.id).val());

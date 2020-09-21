@@ -66,9 +66,7 @@ if (isset($_SESSION['highViralResult']) && trim($_SESSION['highViralResult']) !=
           'hvlSampleType' => 'Sample Type',
           'hvlFacilityName' => 'Facility Name',
           'hvlContactStatus' => 'Contact Status',
-          'hvlGender' => 'Gender',
-          'hvlPatientPregnant' => 'Is Patient Pregnant',
-          'hvlPatientBreastfeeding' => 'Is Patient Breastfeeding'
+          'hvlGender' => 'Gender'
      );
 
      foreach ($_POST as $key => $value) {

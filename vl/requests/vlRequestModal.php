@@ -5,7 +5,7 @@ $sQuery = "SELECT * FROM r_vl_sample_type";
 $sResult = $db->rawQuery($sQuery);
 $fQuery = "SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
-$batQuery = "SELECT batch_code FROM batch_details where batch_status='completed'";
+$batQuery = "SELECT batch_code FROM batch_details where test_type = 'vl' AND batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
 ?>
 <link rel="stylesheet" media="all" type="text/css" href="/assets/css/jquery-ui.1.11.0.css" />

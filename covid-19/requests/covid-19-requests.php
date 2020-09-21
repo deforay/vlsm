@@ -18,7 +18,7 @@ $sQuery = "SELECT * FROM r_covid19_sample_type where status='active'";
 $sResult = $db->rawQuery($sQuery);
 $fQuery = "SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
-$batQuery = "SELECT batch_code FROM batch_details where batch_status='completed'";
+$batQuery = "SELECT batch_code FROM batch_details test_type ='covid19' AND where batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
 ?>
 <style>

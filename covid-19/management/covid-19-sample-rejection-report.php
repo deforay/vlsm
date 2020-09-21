@@ -3,13 +3,18 @@ $title = "Covid-19 | Sample Rejection Report";
 #require_once('../../startup.php'); 
 include_once(APPLICATION_PATH . '/header.php');
 
-$tsQuery = "SELECT * FROM r_sample_status";
-$tsResult = $db->rawQuery($tsQuery);
+// $tsQuery = "SELECT * FROM r_sample_status";
+// $tsResult = $db->rawQuery($tsQuery);
 
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
-$facilityList = $facilitiesDb->getAllFacilities('grouped');
-$lResult = $facilityList['labs'];
-$cResult = $facilityList['facilities'];
+
+
+$healthFacilites = $facilitiesDb->getHealthFacilities('covid19');
+$facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
+$testingLabs = $facilitiesDb->getTestingLabs('covid19');
+$testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- Select --");
+
+
 ?>
 <style>
   .select2-selection__choice {
@@ -41,14 +46,7 @@ $cResult = $facilityList['facilities'];
               <td>&nbsp;<b>Lab &nbsp;:</b></td>
               <td>
                 <select class="form-control" id="labName" name="labName" title="Please select lab name" style="width:220px;">
-                  <option value=""> -- Select -- </option>
-                  <?php
-                  foreach ($lResult as $name) {
-                  ?>
-                    <option value="<?php echo $name['facility_id']; ?>"><?php echo ucwords($name['facility_name']); ?></option>
-                  <?php
-                  }
-                  ?>
+                  <?= $testingLabsDropdown; ?>
                 </select>
               </td>
             </tr>
@@ -57,14 +55,7 @@ $cResult = $facilityList['facilities'];
               <td>&nbsp;<b>Clinic Name &nbsp;:</b></td>
               <td>
                 <select class="form-control" id="clinicName" name="clinicName" title="Please select clinic name" multiple="multiple" style="width:220px;">
-                  <option value=""> -- Select -- </option>
-                  <?php
-                  foreach ($cResult as $name) {
-                  ?>
-                    <option value="<?php echo $name['facility_id']; ?>"><?php echo ucwords($name['facility_name']); ?></option>
-                  <?php
-                  }
-                  ?>
+                  <?= $facilitiesDropdown; ?>
                 </select>
               </td>
               <td></td>

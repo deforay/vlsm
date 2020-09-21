@@ -12,15 +12,15 @@ $general = new \Vlsm\Models\General($db); // passing $db which is coming from st
 
 $tsQuery = "SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
-$configFormQuery = "SELECT * FROM global_config WHERE name ='vl_form'";
-$configFormResult = $db->rawQuery($configFormQuery);
+
 $sQuery = "SELECT * FROM r_vl_sample_type where status='active'";
 $sResult = $db->rawQuery($sQuery);
 
-// FETCHING FACILITIES
-$fResult = $general->getFacilitiesByUser($_SESSION['userId']);
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
+$healthFacilites = $facilitiesDb->getHealthFacilities('vl');
+$facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
 
-$batQuery = "SELECT batch_code FROM batch_details where batch_status='completed'";
+$batQuery = "SELECT batch_code FROM batch_details where test_type = 'vl' AND batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
 ?>
 <style>
@@ -79,17 +79,10 @@ $batResult = $db->rawQuery($batQuery);
                 </select>
               </td>
 
-              <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
+              <td>&nbsp;<b>Facility Name &nbsp;:</b></td>
               <td>
                 <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple" style="width:220px;">
-                  <option value=""> -- Select -- </option>
-                  <?php
-                  foreach ($fResult as $name) {
-                    ?>
-                    <option value="<?php echo $name['facility_id']; ?>"><?php echo ucwords($name['facility_name'] . "-" . $name['facility_code']); ?></option>
-                  <?php
-                }
-                ?>
+                  <?= $facilitiesDropdown; ?>
                 </select>
               </td>
 

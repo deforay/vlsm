@@ -3,14 +3,24 @@ $title = "Sample Rejection Report";
 #require_once('../../startup.php');
 
 include_once(APPLICATION_PATH . '/header.php');
-$tsQuery = "SELECT * FROM r_sample_status";
-$tsResult = $db->rawQuery($tsQuery);
-$sQuery = "SELECT * FROM r_vl_sample_type where status='active'";
+// $tsQuery = "SELECT * FROM r_sample_status";
+// $tsResult = $db->rawQuery($tsQuery);
+$sQuery = "SELECT * FROM r_vl_sample_type WHERE `status`='active'";
 $sResult = $db->rawQuery($sQuery);
-$lQuery = "SELECT * FROM facility_details where status='active' and facility_type=2";
-$lResult = $db->rawQuery($lQuery);
-$cQuery = "SELECT * FROM facility_details where status='active' and facility_type=1";
-$cResult = $db->rawQuery($cQuery);
+
+
+
+
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
+
+
+$healthFacilites = $facilitiesDb->getHealthFacilities('vl');
+$facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
+$testingLabs = $facilitiesDb->getTestingLabs('vl');
+$testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- Select --");
+
+
+
 ?>
 <style>
   .select2-selection__choice {
@@ -42,14 +52,7 @@ $cResult = $db->rawQuery($cQuery);
               <td>&nbsp;<b>Lab &nbsp;:</b></td>
               <td>
                 <select class="form-control" id="labName" name="labName" title="Please select lab name" style="width:220px;">
-                  <option value=""> -- Select -- </option>
-                  <?php
-                  foreach ($lResult as $name) {
-                  ?>
-                    <option value="<?php echo $name['facility_id']; ?>"><?php echo ucwords($name['facility_name']); ?></option>
-                  <?php
-                  }
-                  ?>
+                  <?= $testingLabsDropdown; ?>
                 </select>
               </td>
             </tr>
@@ -71,14 +74,7 @@ $cResult = $db->rawQuery($cQuery);
               <td>&nbsp;<b>Clinic Name &nbsp;:</b></td>
               <td>
                 <select class="form-control" id="clinicName" name="clinicName" title="Please select clinic name" multiple="multiple" style="width:220px;">
-                  <option value=""> -- Select -- </option>
-                  <?php
-                  foreach ($cResult as $name) {
-                  ?>
-                    <option value="<?php echo $name['facility_id']; ?>"><?php echo ucwords($name['facility_name']); ?></option>
-                  <?php
-                  }
-                  ?>
+                  <?= $facilitiesDropdown; ?>
                 </select>
               </td>
 
