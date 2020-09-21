@@ -1,6 +1,6 @@
 <?php
 
-// imported in covid-19-edit-request.php based on country in global config
+// imported in covid-19-update-result.php based on country in global config
 
 ob_start();
 
@@ -489,7 +489,7 @@ $sampleSuggestionDisplay = 'display:none;';
     provinceName = true;
     facilityName = true;
     machineName = true;
-    let testCounter = <?php echo (isset($covid19TestInfo) && count($covid19TestInfo) > 0) ? (count($covid19TestInfo)) : 1; ?>;
+    let testCounter = <?php echo (isset($covid19TestInfo) && count($covid19TestInfo) > 0) ? (count($covid19TestInfo)) : 0; ?>;
     deletedRow = [];
 
     function getfacilityDetails(obj) {
@@ -608,7 +608,10 @@ $sampleSuggestionDisplay = 'display:none;';
 
         $('.disabledForm input, .disabledForm select , .disabledForm textarea').attr('disabled', true);
         // $('.test-name-table-input').prop('disabled',true);
-        addTestRow();
+        if (testCounter == 0) {
+            addTestRow();
+        }
+
 
         $('#isResultAuthorized').change(function(e) {
             checkIsResultAuthorized();

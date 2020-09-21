@@ -84,7 +84,7 @@ class General
         }
     }
 
-    public function humanDateFormat($date)
+    public function humanDateFormat($date, $returnTimePart = true)
     {
         $date = trim($date);
         if ($date == null || $date == "" || $date == "0000-00-00" || substr($date, 0, strlen("0000-00-00")) === "0000-00-00") {
@@ -101,7 +101,7 @@ class General
 
             $newDate .= $mon . "-" . $dateArray[0];
 
-            if (isset($dateTimeArray[1]) && $dateTimeArray[1] != '') {
+            if ($returnTimePart && isset($dateTimeArray[1]) && $dateTimeArray[1] != '') {
                 $newDate .= " " . $dateTimeArray[1];
             }
 

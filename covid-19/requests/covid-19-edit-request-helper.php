@@ -120,6 +120,7 @@ try {
 		'patient_city'                    	  => isset($_POST['patientCity']) ? $_POST['patientCity'] : null,
 		'patient_occupation'                  => isset($_POST['patientOccupation']) ? $_POST['patientOccupation'] : null,
 		'patient_nationality'                 => isset($_POST['patientNationality']) ? $_POST['patientNationality'] : null,
+		'patient_passport_number'             => isset($_POST['patientPassportNumber']) ? $_POST['patientPassportNumber'] : null,
 		'flight_airline'                 	  => isset($_POST['airline']) ? $_POST['airline'] : null,
 		'flight_seat_no'                 	  => isset($_POST['seatNo']) ? $_POST['seatNo'] : null,
 		'flight_arrival_datetime'             => isset($_POST['arrivalDateTime']) ? $_POST['arrivalDateTime'] : null,

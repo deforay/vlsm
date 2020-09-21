@@ -1,7 +1,7 @@
 <?php
 ob_start();
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+	session_start();
 }
 include_once '../../startup.php';
 
@@ -107,6 +107,7 @@ try {
 		'patient_city'                    	  => isset($_POST['patientCity']) ? $_POST['patientCity'] : null,
 		'patient_occupation'                  => isset($_POST['patientOccupation']) ? $_POST['patientOccupation'] : null,
 		'patient_nationality'                 => isset($_POST['patientNationality']) ? $_POST['patientNationality'] : null,
+		'patient_passport_number'             => isset($_POST['patientPassportNumber']) ? $_POST['patientPassportNumber'] : null,
 		'flight_airline'                 	  => isset($_POST['airline']) ? $_POST['airline'] : null,
 		'flight_seat_no'                 	  => isset($_POST['seatNo']) ? $_POST['seatNo'] : null,
 		'flight_arrival_datetime'             => isset($_POST['arrivalDateTime']) ? $_POST['arrivalDateTime'] : null,
@@ -169,7 +170,7 @@ try {
 			$db->insert("covid19_patient_symptoms", $symptomData);
 		}
 	}
-	
+
 	$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 	$db->delete("covid19_reasons_for_testing");
 	if (isset($_POST['responseDetected']) && !empty($_POST['responseDetected'])) {
@@ -200,7 +201,7 @@ try {
 	if (isset($_POST['covid19SampleId']) && $_POST['covid19SampleId'] != '' && ($_POST['isSampleRejected'] == 'no' || $_POST['isSampleRejected'] == '')) {
 		if (isset($_POST['testName']) && count($_POST['testName']) > 0) {
 			foreach ($_POST['testName'] as $testKey => $testKitName) {
-				if(isset($testKitName) && !empty($testKitName)){
+				if (isset($testKitName) && !empty($testKitName)) {
 					if (isset($_POST['testDate'][$testKey]) && trim($_POST['testDate'][$testKey]) != "") {
 						$testedDateTime = explode(" ", $_POST['testDate'][$testKey]);
 						$_POST['testDate'][$testKey] = $general->dateFormat($testedDateTime[0]) . " " . $testedDateTime[1];
@@ -209,9 +210,9 @@ try {
 					}
 					$covid19TestData = array(
 						'covid19_id'			=> $_POST['covid19SampleId'],
-						'test_name'				=> ($testKitName == 'other')?$_POST['testNameOther'][$testKey]:$testKitName,
+						'test_name'				=> ($testKitName == 'other') ? $_POST['testNameOther'][$testKey] : $testKitName,
 						'facility_id'           => isset($_POST['labId']) ? $_POST['labId'] : null,
-						'sample_tested_datetime'=> date('Y-m-d H:i:s', strtotime($_POST['testDate'][$testKey])),
+						'sample_tested_datetime' => date('Y-m-d H:i:s', strtotime($_POST['testDate'][$testKey])),
 						'testing_platform'      => isset($_POST['testingPlatform'][$testKey]) ? $_POST['testingPlatform'][$testKey] : null,
 						'result'				=> $_POST['testResult'][$testKey],
 					);

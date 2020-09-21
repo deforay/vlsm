@@ -231,6 +231,13 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         <th>Nationality</th>
                                         <td><input type="text" class="form-control" id="patientNationality" name="patientNationality" placeholder="Nationality" title="Please enter the case nationality" style="width:100%;" /></td>
                                     </tr>
+                                    <tr>
+                                        <th>Passport Number</th>
+                                        <td><input class="form-control" id="patientPassportNumber" name="patientPassportNumber" placeholder="Passport Number" title="Please enter Passport Number" style="width:100%;"></td>
+
+                                        <th></th>
+                                        <td></td>
+                                    </tr>
 
                                 </table>
 
