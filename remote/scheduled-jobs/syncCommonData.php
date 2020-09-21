@@ -399,11 +399,13 @@ if (!empty($result['facilities']) && count($result['facilities']) > 0) {
             'address' => $facility['address'],
             'country' => $facility['country'],
             'facility_state' => $facility['facility_state'],
+            'facility_state' => $facility['facility_state'],
             'facility_district' => $facility['facility_district'],
             'facility_hub_name' => $facility['facility_hub_name'],
             'latitude' => $facility['latitude'],
             'longitude' => $facility['longitude'],
             'facility_type' => $facility['facility_type'],
+            'testing_points' => $facility['testing_points'],
             'status' => $facility['status'],
             'data_sync' => 1,
             'updated_datetime' => $facility['updated_datetime']
