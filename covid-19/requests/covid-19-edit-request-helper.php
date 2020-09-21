@@ -236,7 +236,7 @@ try {
 
 		if (isset($_POST['testName']) && count($_POST['testName']) > 0) {
 			foreach ($_POST['testName'] as $testKey => $testName) {
-				if (isset($testName) && !empty($testName)) {
+				if(trim($_POST['testName'][$testKey]) != ""){
 					if (isset($_POST['testDate'][$testKey]) && trim($_POST['testDate'][$testKey]) != "") {
 						$testedDateTime = explode(" ", $_POST['testDate'][$testKey]);
 						$_POST['testDate'][$testKey] = $general->dateFormat($testedDateTime[0]) . " " . $testedDateTime[1];
@@ -245,14 +245,13 @@ try {
 					}
 					$covid19TestData = array(
 						'covid19_id'			=> $_POST['covid19SampleId'],
-						//'test_name'				=> $testName,
 						'test_name'				=> ($testName == 'other') ? $_POST['testNameOther'][$testKey] : $testName,
 						'facility_id'           => isset($_POST['labId']) ? $_POST['labId'] : null,
-						'sample_tested_datetime' => $_POST['testDate'][$testKey],
+						'sample_tested_datetime'=> $_POST['testDate'][$testKey],
+						'testing_platform'      => isset($_POST['testingPlatform'][$testKey]) ? $_POST['testingPlatform'][$testKey] : null,
 						'result'				=> $_POST['testResult'][$testKey],
 					);
-					//var_dump($covid19TestData);die;
-					if (isset($_POST['testId'][$testKey]) && $_POST['testId'][$testKey] != '') {
+ 					if (isset($_POST['testId'][$testKey]) && $_POST['testId'][$testKey] != '') {
 						$db = $db->where('test_id', base64_decode($_POST['testId'][$testKey]));
 						$db->update($testTableName, $covid19TestData);
 					} else {

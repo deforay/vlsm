@@ -1125,3 +1125,6 @@ INSERT INTO testing_labs (SELECT 'covid19' AS `test_type`,facility_id FROM facil
 
 UPDATE `system_config` SET `value` = '4.2.0' WHERE `system_config`.`name` = 'version';
 -- Version 4.2.0 -- Amit -- 20-Sep-2020
+
+/* Thana 21-Sep-2020 */
+ALTER TABLE `covid19_tests` ADD `testing_platform` VARCHAR(255) NULL DEFAULT NULL AFTER `sample_tested_datetime`;

@@ -212,6 +212,7 @@ try {
 						'test_name'				=> ($testKitName == 'other')?$_POST['testNameOther'][$testKey]:$testKitName,
 						'facility_id'           => isset($_POST['labId']) ? $_POST['labId'] : null,
 						'sample_tested_datetime'=> date('Y-m-d H:i:s', strtotime($_POST['testDate'][$testKey])),
+						'testing_platform'      => isset($_POST['testingPlatform'][$testKey]) ? $_POST['testingPlatform'][$testKey] : null,
 						'result'				=> $_POST['testResult'][$testKey],
 					);
 					$db->insert($testTableName, $covid19TestData);
