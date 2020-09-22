@@ -446,11 +446,11 @@ $sampleSuggestionDisplay = 'display:none;';
                                                 </select>
                                             </td>
                                             <th>Authorized By</th>
-                                            <td><input type="text" value="<?php echo $covid19Info['authorized_by']; ?>" name="authorizedBy" id="authorizedBy" class="disabled-field form-control" placeholder="Authorized By" /></td>
+                                            <td><input type="text" value="<?php echo $covid19Info['authorized_by']; ?>" name="authorizedBy" id="authorizedBy" class="disabled-field form-control" placeholder="Authorized By" title="Please enter te Authorized By"/></td>
                                         </tr>
                                         <tr>
                                             <th>Authorized on</td>
-                                            <td><input type="text" value="<?php echo $general->humanDateFormat($covid19Info['authorized_on']); ?>" name="authorizedOn" id="authorizedOn" class="disabled-field form-control date" placeholder="Authorized on" /></td>
+                                            <td><input type="text" value="<?php echo $general->humanDateFormat($covid19Info['authorized_on']); ?>" name="authorizedOn" id="authorizedOn" class="disabled-field form-control date" placeholder="Authorized on" title="Please enter the Authorized on"/></td>
                                             <th></th>
                                             <td></td>
                                         </tr>
@@ -546,8 +546,11 @@ $sampleSuggestionDisplay = 'display:none;';
     }
 
     function validateNow() {
-        if ($('#isResultAuthorized').val() != "yes") {
+        if ($('#isResultAuthorized').val() != "yes" && $('#result').val() == "") {
             $('#authorizedBy,#authorizedOn').removeClass('isRequired');
+        } else{
+            $('#isResultAuthorized').val('yes');
+            $('#authorizedBy,#authorizedOn').addClass('isRequired');
         }
         $("#provinceCode").val($("#province").find(":selected").attr("data-code"));
         $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
@@ -584,14 +587,6 @@ $sampleSuggestionDisplay = 'display:none;';
             checkIsResultAuthorized();
         });
 
-        $('#result').change(function(e) {
-            if (this.value == '') {
-                $('#isResultAuthorized').attr('disabled', false);
-            } else {
-                $('#isResultAuthorized').attr('disabled', true);
-            }
-        });
-
         $('#result, .test-result').change(function(e) {
             if (this.value == 'positive') {
                 $('.other-diseases').hide();
@@ -610,11 +605,9 @@ $sampleSuggestionDisplay = 'display:none;';
         <?php } else { ?>
             $('#result').addClass('isRequired');
             $('#isResultAuthorized').val('yes');
-            $('#isResultAuthorized').attr('disabled', true);
         <?php } ?>
         if ($('#result').val() != "") {
             $('#isResultAuthorized').val('yes');
-            $('#isResultAuthorized').attr('disabled', true);
         }
     });
 
