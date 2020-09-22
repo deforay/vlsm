@@ -27,6 +27,12 @@ class Users
         $uQuery = "SELECT $columns FROM " . $this->table . " where user_id='$userId'";
         return $this->db->rawQueryOne($uQuery);
     }
+    
+    public function getActiveUserInfo()
+    {
+        $uQuery = "SELECT * FROM user_details where status='active'";
+        return $this->db->rawQuery($uQuery);
+    }
 
     public function addUserIfNotExists($name, $status = 'inactive', $role = 4)
     {

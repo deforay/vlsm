@@ -339,7 +339,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                                             </select>
                                         </td>
 
-                                        <th class="show-rejection" style="display:none;">Reason for Rejection</th>
+                                        <th class="show-rejection" style="display:none;">Reason for Rejection <span class="mandatory">*</span></th>
                                         <td class="show-rejection" style="display:none;">
                                             <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason">
                                                 <option value="">-- Select --</option>
@@ -594,6 +594,12 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
     }
 
     function validateNow() {
+        if ($('#isResultAuthorized').val() != "yes" && $('#result').val() == "") {
+            $('#authorizedBy,#authorizedOn').removeClass('isRequired');
+        } else{
+            $('#isResultAuthorized').val('yes');
+            $('#authorizedBy,#authorizedOn').addClass('isRequired');
+        }
         flag = deforayValidator.init({
             formId: 'editCovid19RequestForm'
         });
@@ -638,7 +644,13 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                 checkPostive();
             });
             checkPostive();
+        <?php }  else { ?>
+            $('#result').addClass('isRequired');
+            $('#isResultAuthorized').val('yes');
         <?php } ?>
+        if ($('#result').val() != "") {
+            $('#isResultAuthorized').val('yes');
+        }
 
     });
 
@@ -701,23 +713,28 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
         $('#deletedRow').val(deletedRow);
     }
 
-    function checkPostive() {
-        var itemLength = document.getElementsByName("testResult[]");
-        for (i = 0; i < itemLength.length; i++) {
+    <?php if (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes') { ?>
+        function checkPostive() {
+            var itemLength = document.getElementsByName("testResult[]");
+            for (i = 0; i < itemLength.length; i++) {
 
-            if (itemLength[i].value == 'positive') {
-                $('#result,.disabled-field').val('');
-                $('#result,.disabled-field').prop('disabled', true);
-                $('#result,.disabled-field').addClass('disabled');
-                $('#result,.disabled-field').removeClass('isRequired');
-                return false;
-            } else {
-                $('#result,.disabled-field').prop('disabled', false);
-                $('#result,.disabled-field').removeClass('disabled');
-                $('#result,.disabled-field').addClass('isRequired');
+                if (itemLength[i].value == 'positive') {
+                    $('#result,.disabled-field').val('');
+                    $('#result,.disabled-field').prop('disabled', true);
+                    $('#result,.disabled-field').addClass('disabled');
+                    $('#result,.disabled-field').removeClass('isRequired');
+                    return false;
+                } else {
+                    $('#result,.disabled-field').prop('disabled', false);
+                    $('#result,.disabled-field').removeClass('disabled');
+                    $('#result,.disabled-field').addClass('isRequired');
+                }
+                if (itemLength[i].value != '') {
+                    $('#labId').addClass('isRequired');
+                }
             }
         }
-    }
+    <?php } ?>
 
     function checkIsResultAuthorized() {
         if ($('#isResultAuthorized').val() == 'no') {

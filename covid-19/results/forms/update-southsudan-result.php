@@ -127,15 +127,15 @@ $sampleSuggestionDisplay = 'display:none;';
                                         <?php } ?>
                                     </tr>
                                     <tr>
-                                        <td><label for="province">Province </label><span class="mandatory">*</span></td>
+                                        <td><label for="province">State </label><span class="mandatory">*</span></td>
                                         <td>
-                                            <select class="form-control" name="province" id="province" title="Please choose province" style="width:100%;">
+                                            <select class="form-control" name="province" id="province" title="Please choose State" style="width:100%;">
                                                 <?php echo $province; ?>
                                             </select>
                                         </td>
-                                        <td><label for="district">District </label><span class="mandatory">*</span></td>
+                                        <td><label for="district">County </label><span class="mandatory">*</span></td>
                                         <td>
-                                            <select class="form-control" name="district" id="district" title="Please choose district" style="width:100%;">
+                                            <select class="form-control" name="district" id="district" title="Please choose County" style="width:100%;">
                                                 <option value=""> -- Select -- </option>
                                             </select>
                                         </td>
@@ -318,13 +318,31 @@ $sampleSuggestionDisplay = 'display:none;';
                                             </td>
                                         <tr>
                                         <tr>
+                                            <td><label for="specimenQuality">Specimen Quality</label></td>
+                                            <td>
+                                                <select class="form-control" id="specimenQuality" name="specimenQuality" title="Please Enter the qpecimen quality">
+                                                    <option value="">--Select--</option>
+                                                    <option value="good" <?php echo (isset($covid19Info['sample_condition']) && $covid19Info['sample_condition'] == 'good')?"selected='selected'":"";?>>Good</option>
+                                                    <option value="poor" <?php echo (isset($covid19Info['sample_condition']) && $covid19Info['sample_condition'] == 'poor')?"selected='selected'":"";?>>Poor</option>
+                                                </select>
+                                            </td>
+                                            <th><label for="labTechnician">Lab Technician </label></th>
+                                            <td>
+                                                <select name="labTechnician" id="labTechnician" class="form-control" title="Please select a Lab Technician" style="width:100%;">
+                                                    <option value="">--Select--</option>
+                                                    <?php foreach($labTechnicians as $labTech){
+                                                        $selected = (isset($covid19Info['lab_technician']) && $labTech['user_id'] == $covid19Info['lab_technician'])?"selected='selected'":"";
+                                                        echo '<option value="'.$labTech['user_id'].'" '.$selected.'>'.ucwords($labTech['user_name']).'</option>';
+                                                    }?>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
                                             <th class="testingPointField" style="display:none;"><label for="">Testing Point </label></th>
                                             <td class="testingPointField" style="display:none;">
                                                 <select name="testingPoint" id="testingPoint" class="form-control" title="Please select a Testing Point" style="width:100%;">
                                                 </select>
                                             </td>
-                                            <td></td>
-                                            <td></td>
                                         </tr>
                                         <tr>
                                             <th>Is Sample Rejected? <span class="mandatory">*</span></th>
@@ -497,23 +515,20 @@ $sampleSuggestionDisplay = 'display:none;';
         var selectedTestingPoint = '<?php echo $covid19Info['covid19_id']; ?>';
         if (labId) {
             $.post("/includes/getTestingPoints.php", {
-                    labId: labId,
-                    selectedTestingPoint: selectedTestingPoint
-                },
-                function(data) {
-                    if (data != "") {
-                        $(".testingPointField").show();
-                        $("#testingPoint").html(data);
-                    } else {
-                        $(".testingPointField").hide();
-                        $("#testingPoint").html('');
-                    }
-                });
+                labId: labId,
+                selectedTestingPoint: selectedTestingPoint
+            },
+            function(data) {
+                if (data != "") {
+                    $(".testingPointField").show();
+                    $("#testingPoint").html(data);
+                } else {
+                    $(".testingPointField").hide();
+                    $("#testingPoint").html('');
+                }
+            });
         }
     }
-
-
-
 
     function getfacilityProvinceDetails(obj) {
         $.blockUI();
@@ -570,6 +585,10 @@ $sampleSuggestionDisplay = 'display:none;';
 
         $('#facilityId').select2({
             placeholder: "Select Clinic/Health Center"
+        });
+
+        $('#labTechnician').select2({
+            placeholder: "Select Lab Technician"
         });
         getfacilityProvinceDetails($("#facilityId").val());
         getTestingPoints();
@@ -702,7 +721,6 @@ $sampleSuggestionDisplay = 'display:none;';
         }
     }
     <?php if (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes') { ?>
-
         function checkPostive() {
             var itemLength = document.getElementsByName("testResult[]");
             for (i = 0; i < itemLength.length; i++) {
