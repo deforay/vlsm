@@ -34,11 +34,12 @@ include_once(APPLICATION_PATH . '/header.php');
 
 // $general = new \Vlsm\Models\General($db);
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
+$userDb = new \Vlsm\Models\Users($db);
 
 // $arr = $general->getGlobalConfig();
 // $sarr = $general->getSystemConfig();
 
-
+$labTechnicians = $userDb->getActiveUserInfo();
 
 $healthFacilities = $facilitiesDb->getHealthFacilities('covid19');
 $testingLabs = $facilitiesDb->getTestingLabs('covid19');
