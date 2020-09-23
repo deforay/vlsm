@@ -43,8 +43,8 @@ class Facilities
         $response = null;
         $this->db->where("facility_id", $facilityId);
         $testingPointsJson = $this->db->getValue($this->table, 'testing_points');
-        if($testingPointsJson){
-            $response= json_decode($testingPointsJson, true);
+        if ($testingPointsJson) {
+            $response = json_decode($testingPointsJson, true);
         }
         return $response;
     }
@@ -62,8 +62,9 @@ class Facilities
     // $testType = vl, eid, covid19 or any other tests that might be there. 
     // Default $testType is null and returns all facilities
     // $condition = WHERE condition (for eg. "facility_state = 1")
+    // $allData = true/false (false = only id and name, true = all columns)
     // $onlyActive = true/false
-    public function getHealthFacilities($testType = null, $condition = null, $onlyActive = true)
+    public function getHealthFacilities($testType = null, $allData = false, $condition = null, $onlyActive = true)
     {
 
         if (!empty($_SESSION['userId'])) {
@@ -82,7 +83,6 @@ class Facilities
             $this->db->where("facility_id", $healthFacilities, 'IN');
         }
 
-
         if ($onlyActive) {
             $this->db->where('status', 'active');
         }
@@ -91,25 +91,31 @@ class Facilities
             $this->db->where($condition);
         }
 
-        $cols = array("facility_id", "facility_name");
-
         $this->db->orderBy("facility_name", "asc");
 
-        $results = $this->db->get("facility_details", null, $cols);
+        if ($allData) {
+            return $this->db->get("facility_details");
+        } else {
 
-        $response = array();
-        foreach ($results as $row) {
-            $response[$row['facility_id']] = $row['facility_name'];
+            $response = array();
+            $cols = array("facility_id", "facility_name");
+
+            $results = $this->db->get("facility_details", null, $cols);
+
+            foreach ($results as $row) {
+                $response[$row['facility_id']] = $row['facility_name'];
+            }
+            return $response;
         }
-        return $response;
     }
 
 
     // $testType = vl, eid, covid19 or any other tests that might be there. 
     // Default $testType is null and returns all facilities with type=2 (testing site)
     // $condition = WHERE condition (for eg. "facility_state = 1")
+    // $allData = true/false (false = only id and name, true = all columns)
     // $onlyActive = true/false
-    public function getTestingLabs($testType = null, $condition = null, $onlyActive = true)
+    public function getTestingLabs($testType = null, $allData = false, $condition = null, $onlyActive = true)
     {
 
         if (!empty($_SESSION['userId'])) {
@@ -136,17 +142,20 @@ class Facilities
             $this->db->where($condition);
         }
 
-        $cols = array("facility_id", "facility_name");
 
         $this->db->where('facility_type = 2');
         $this->db->orderBy("facility_name", "asc");
 
-        $results = $this->db->get("facility_details", null, $cols);
-
-        $response = array();
-        foreach ($results as $row) {
-            $response[$row['facility_id']] = $row['facility_name'];
+        if ($allData) {
+            return $this->db->get("facility_details");
+        } else {
+            $response = array();
+            $cols = array("facility_id", "facility_name");
+            $results = $this->db->get("facility_details", null, $cols);
+            foreach ($results as $row) {
+                $response[$row['facility_id']] = $row['facility_name'];
+            }
+            return $response;
         }
-        return $response;
     }
 }
