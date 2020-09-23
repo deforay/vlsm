@@ -386,9 +386,9 @@ $sampleSuggestionDisplay = 'display:none;';
                                                     <thead>
                                                         <tr>
                                                             <th class="text-center">Test No.</th>
-                                                            <th class="text-center">Name of the Testkit (or) Test Method used</th>
+                                                            <th class="text-center">Test Method</th>
                                                             <th class="text-center">Date of Testing</th>
-                                                            <th class="text-center">Testing Platform</th>
+                                                            <th class="text-center">Test Platform</th>
                                                             <th class="text-center">Test Result</th>
                                                         </tr>
                                                     </thead>
