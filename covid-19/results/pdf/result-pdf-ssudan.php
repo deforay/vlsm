@@ -370,15 +370,9 @@ if (sizeof($requestResult) > 0) {
             $html .= '</tr>';
 
             $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">TESTED BY</td>';
+                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">LABORATORY MANAGER</td>';
                 $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SIGNATURE</td>';
                 $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">DATE</td>';
-            $html .= '</tr>';
-
-            $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
             $html .= '</tr>';
 
             $html .= '<tr>';
@@ -386,12 +380,22 @@ if (sizeof($requestResult) > 0) {
             $html .= '</tr>';
 
             $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">APPROVED BY</td>';
+                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">LABORATORY QUALITY MANAGER</td>';
                 $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SIGNATURE</td>';
                 $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">DATE</td>';
             $html .= '</tr>';
 
             $html .= '<tr>';
+            $html .= '<td colspan="3" style="line-height:8px;"></td>';
+            $html .= '</tr>';
+
+            $html .= '<tr>';
+                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">LABORATORY SUPERVISOR</td>';
+                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SIGNATURE</td>';
+                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">DATE</td>';
+            $html .= '</tr>';
+
+           /*  $html .= '<tr>';
             $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $resultApprovedBy . '</td>';
             if (!empty($userSignaturePath) && file_exists($userSignaturePath)) {
                 $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"><img src="' . $userSignaturePath . '" style="width:70px;" /></td>';
@@ -399,7 +403,7 @@ if (sizeof($requestResult) > 0) {
                 $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
             }
                 $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $general->humanDateFormat($result['authorized_on']) . '</td>';
-            $html .= '</tr>';
+            $html .= '</tr>'; */
 
             $html .= '<tr>';
                 $html .= '<td colspan="3" style="line-height:20px;border-bottom:2px solid #d3d3d3;"></td>';
