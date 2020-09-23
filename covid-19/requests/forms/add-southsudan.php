@@ -9,7 +9,13 @@ ob_start();
 //Funding source list
 $fundingSourceQry = "SELECT * FROM r_funding_sources WHERE funding_source_status='active' ORDER BY funding_source_name ASC";
 $fundingSourceList = $db->query($fundingSourceQry);
+/* To get testing platform names */
+$testPlatformQry = "SELECT * FROM import_config WHERE status='active' ORDER BY machine_name ASC";
+$testPlatformResult = $db->query($testPlatformQry);
 
+foreach($testPlatformResult as $row){
+    $testPlatformList[$row['machine_name']] = $row['machine_name'];
+}
 //Implementing partner list
 $implementingPartnerQry = "SELECT * FROM r_implementation_partners WHERE i_partner_status='active' ORDER BY i_partner_name ASC";
 $implementingPartnerList = $db->query($implementingPartnerQry);
@@ -398,7 +404,11 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                                 <input type="text" name="testNameOther[]" id="testNameOther1" class="form-control testNameOther1" title="Please enter the name of the Testkit (or) Test Method used" placeholder="Please enter the name of the Testkit (or) Test Method used" style="display: none;margin-top: 10px;" />
                                                             </td>
                                                             <td><input type="text" name="testDate[]" id="testDate1" class="form-control test-name-table-input dateTime" placeholder="Tested on" title="Please enter the tested on for row 1" /></td>
-                                                            <td><input type="text" name="testingPlatform[]" id="testingPlatform1" class="form-control test-name-table-input" placeholder="Testing Platform" title="Please enter the Testing Platform for 1" /></td>
+                                                            <td>
+                                                                <select type="text" name="testingPlatform[]" id="testingPlatform1" class="form-control test-name-table-input" title="Please select the Testing Platform for 1">
+                                                                    <?= $general->generateSelectOptions($testPlatformList, null, '-- Select --'); ?>
+                                                                </select>
+                                                            </td>
                                                             <td>
                                                                 <select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult1" title="Please select the result for row 1">
                                                                     <?= $general->generateSelectOptions($covid19Results, null, '-- Select --'); ?>
@@ -675,7 +685,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                 <input type="text" name="testNameOther[]" id="testNameOther${testCounter}" class="form-control testNameOther${testCounter}" title="Please enter the name of the Testkit (or) Test Method used" placeholder="Please enter the name of the Testkit (or) Test Method used" style="display: none;margin-top: 10px;" />
             </td>
             <td><input type="text" name="testDate[]" id="testDate${testCounter}" class="form-control test-name-table-input dateTime" placeholder="Tested on" title="Please enter the tested on for row ${testCounter}" /></td>
-            <td><input type="text" name="testingPlatform[]" id="testingPlatform${testCounter}" class="form-control test-name-table-input" placeholder="Testing Platform" title="Please enter the Testing Platform for ${testCounter}" /></td>
+            <td><select type="text" name="testingPlatform[]" id="testingPlatform${testCounter}" class="form-control test-name-table-input" title="Please select the Testing Platform for ${testCounter}"><?= $general->generateSelectOptions($testPlatformList, null, '-- Select --'); ?></select></td>
             <td>
                 <select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult${testCounter}" title="Please select the result"><?= $general->generateSelectOptions($covid19Results, null, '-- Select --'); ?></select>
             </td>
