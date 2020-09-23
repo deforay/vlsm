@@ -248,7 +248,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                                     </tr>
                                     <tr>
                                         <th>City/Village</th>
-                                        <td><input class="form-control" id="patientCity" name="patientCity" placeholder="Case City/Village" title="Please enter the Case City/Village" style="width:100%;"></td>
+                                        <td><input class="form-control" value="<?php echo $covid19Info['patient_city']; ?>" id="patientCity" name="patientCity" placeholder="Case City/Village" title="Please enter the Case City/Village" style="width:100%;"></td>
                                         <th>Country of Residence</th>
                                         <td><input type="text" class="form-control" value="<?php echo $covid19Info['patient_nationality']; ?>" id="patientNationality" name="patientNationality" placeholder="Country of Residence" title="Please enter transit" style="width:100%;" /></td>
                                     </tr>
@@ -394,7 +394,10 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                                                             <?php }
                                                             } ?>
                                                         </optgroup>
-                                                    <?php }  ?>
+                                                    <?php }  
+                                                    if($covid19Info['reason_for_sample_rejection'] == 9999){
+                                                        echo '<option value="9999" selected="selected">Unspecified</option>';
+                                                    }?>
                                                 </select>
                                             </td>
                                         </tr>

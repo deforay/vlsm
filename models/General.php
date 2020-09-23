@@ -429,9 +429,13 @@ class General
         }
     }
 
-    public function getDublicateDataFromField($tablename, $fieldname, $fieldValue)
+    public function getDublicateDataFromField($tablename, $fieldname, $fieldValue, $lab = "")
     {
-        $query = "SELECT * FROM $tablename WHERE $fieldname =  '$fieldValue' LIMIT 1";
+        $query = "SELECT * FROM $tablename WHERE $fieldname =  '$fieldValue'";
+        if($lab != ""){
+            $query.= " AND $lab like 2";
+        }
+        $query.= " LIMIT 1";
         return $this->db->rawQueryOne($query);
     }
 }
