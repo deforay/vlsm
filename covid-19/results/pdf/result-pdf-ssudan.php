@@ -323,8 +323,17 @@ if (sizeof($requestResult) > 0) {
                 }
                 $html .= '</table>';
             }
-
+            foreach ($covid19TestInfo as $indexKey => $rows) {
+                $testPlatform = $rows['testing_platform'];
+            }
+            
             $html .= '<table style="padding:8px 2px 2px 2px;">
+                    <tr>
+                        <td colspan="2" style="line-height:10px;"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="line-height:11px;font-size:11px;text-align:left;"><b>TEST PLATFORM</b> : '.$testPlatform.'</td>
+                    </tr>
                     <tr>
                         <td colspan="2" style="line-height:10px;"></td>
                     </tr>
