@@ -137,15 +137,15 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                                         <?php } ?>
                                     </tr>
                                     <tr>
-                                        <td><label for="province">Province </label><span class="mandatory">*</span></td>
+                                        <td><label for="province">State </label><span class="mandatory">*</span></td>
                                         <td>
-                                            <select class="form-control isRequired" name="province" id="province" title="Please choose Province" onchange="getfacilityDetails(this);" style="width:100%;">
+                                            <select class="form-control isRequired" name="province" id="province" title="Please choose State" onchange="getfacilityDetails(this);" style="width:100%;">
                                                 <?php echo $province; ?>
                                             </select>
                                         </td>
-                                        <td><label for="district">District </label><span class="mandatory">*</span></td>
+                                        <td><label for="district">County </label><span class="mandatory">*</span></td>
                                         <td>
-                                            <select class="form-control isRequired" name="district" id="district" title="Please choose District" style="width:100%;" onchange="getfacilityDistrictwise(this);">
+                                            <select class="form-control isRequired" name="district" id="district" title="Please choose County" style="width:100%;" onchange="getfacilityDistrictwise(this);">
                                                 <option value=""> -- Select -- </option>
                                             </select>
                                         </td>
