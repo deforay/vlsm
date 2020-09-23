@@ -127,7 +127,12 @@ $tatSampleQuery = "select
                         CAST(ABS(AVG(TIMESTAMPDIFF(DAY,sample_received_at_vl_lab_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgReceivedDiff,
                         CAST(ABS(AVG(TIMESTAMPDIFF(DAY,result_printed_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgPrintedDiff
 
-                        from form_covid19 as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where (vl.sample_collection_date is not null AND vl.sample_collection_date not like '' AND DATE(vl.sample_collection_date) !='1970-01-01' AND DATE(vl.sample_collection_date) !='0000-00-00')
+                        from form_covid19 as vl 
+                        INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
+                        JOIN facility_details as f ON vl.facility_id=f.facility_id 
+                        LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id 
+                        
+                        where (vl.sample_collection_date is not null AND vl.sample_collection_date not like '' AND DATE(vl.sample_collection_date) !='1970-01-01' AND DATE(vl.sample_collection_date) !='0000-00-00')
                         AND ((vl.sample_tested_datetime is not null AND vl.sample_tested_datetime not like '' AND DATE(vl.sample_tested_datetime) !='1970-01-01' AND DATE(vl.sample_tested_datetime) !='0000-00-00') OR
                         (vl.result_printed_datetime is not null AND vl.result_printed_datetime not like '' AND DATE(vl.result_printed_datetime) !='1970-01-01' AND DATE(vl.result_printed_datetime) !='0000-00-00') OR
                         (vl.sample_received_at_vl_lab_datetime is not null AND vl.sample_received_at_vl_lab_datetime not like '' AND DATE(vl.sample_received_at_vl_lab_datetime) !='1970-01-01' AND DATE(vl.sample_received_at_vl_lab_datetime) !='0000-00-00'))
@@ -161,11 +166,36 @@ foreach ($tatResult as $sRow) {
     $j++;
 }
 
+$testReasonQuery = "SELECT count(c.sample_code) AS total, tr.test_reason_name 
+                    from form_covid19 as c 
+                    INNER JOIN r_covid19_test_reasons as tr ON c.reason_for_covid19_test = tr.test_reason_id 
+                    JOIN facility_details as f ON c.facility_id=f.facility_id 
+                    LEFT JOIN batch_details as b ON b.batch_id=c.sample_batch_id";
+
+$sWhere = ' WHERE c.reason_for_covid19_test IS NOT NULL ';
+if (isset($_POST['batchCode']) && trim($_POST['batchCode']) != '') {
+    $sWhere .= ' AND b.batch_code = "' . $_POST['batchCode'] . '"';
+}
+if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != '') {
+    $sWhere.= ' AND DATE(c.sample_collection_date) >= "'.$start_date.'" AND DATE(c.sample_collection_date) <= "'.$end_date.'"';
+}
+if (isset($_POST['facilityName']) && is_array($_POST['facilityName']) && count($_POST['facilityName']) > 0) {
+    $sWhere .= ' AND f.facility_id IN (' . implode(",", $_POST['facilityName']) . ')';
+}
+$testReasonQuery = $testReasonQuery . " " . $sWhere;
+$testReasonQuery = $testReasonQuery . " GROUP BY tr.test_reason_name";
+$testReasonResult = $db->rawQuery($testReasonQuery);
+// echo "<pre>";print_r($testReasonResult);die;
 ?>
 <div class="col-xs-12">
     <div class="box">
         <div class="box-body">
             <div id="covid19SampleStatusOverviewContainer" style="float:left;width:100%; margin: 0 auto;"></div>
+        </div>
+    </div>
+    <div class="box">
+        <div class="box-body">
+            <div id="covid19TestReasonContainer" style="float:left;width:100%; margin: 0 auto;"></div>
         </div>
     </div>
     <div class="box">
@@ -401,6 +431,68 @@ foreach ($tatResult as $sRow) {
                 }
                 ?>
             ],
+        });
+    <?php } if (isset($testReasonResult) && count($testReasonResult) > 0) { ?>
+        $('#covid19TestReasonContainer').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: 'Covid-19 Test Reasons'
+            },
+            credits: {
+                enabled: false
+            },
+            tooltip: {
+                pointFormat: 'Test Reasons :<b>{point.y}</b>'
+            },
+            plotOptions: {
+                pie: {
+                    size: '100%',
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        useHTML: true,
+                        format: '<div style="padding-bottom:10px;"><b>{point.name}</b>: {point.y}</div>',
+                        style: {
+
+                            //crop:false,
+                            //overflow:'none',
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        },
+                        distance: 10
+                    },
+                    showInLegend: true
+                }
+            },
+            series: [{
+                colorByPoint: false,
+                point: {
+                    /* events: {
+                        click: function(e) {
+                            //console.log(e.point.url);
+                            window.open(e.point.url, '_blank');
+                            e.preventDefault();
+                        }
+                    } */
+                },
+                data: [
+                    <?php
+                    foreach ($testReasonResult as $tRow) {
+                    ?> {
+                            name: '<?php echo ($tRow['test_reason_name']); ?>',
+                            y: <?php echo ($tRow['total']); ?>,
+                            color: '#<?php echo $general->random_color();?>',
+                        },
+                    <?php
+                    }
+                    ?>
+                ]
+            }]
         });
     <?php } ?>
 </script>
