@@ -214,6 +214,7 @@ if (sizeof($requestResult) > 0) {
         }
         foreach ($covid19TestInfo as $indexKey => $rows) {
             $testPlatform = $rows['testing_platform'];
+            $testMethod = $rows['test_name'];
         }
         $html = '';
         $html .= '<table style="padding:0px 2px 2px 2px;">';
@@ -254,13 +255,13 @@ if (sizeof($requestResult) > 0) {
             
             $html .= '<tr>';
                 $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">TEST PLATFORM</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
+                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">TEST METHOD</td>';
                 $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
                 $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
             $html .= '</tr>';
             $html .= '<tr>';
                 $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $testPlatform . '</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $testMethod . '</td>';
                 $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
                 $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
             $html .= '</tr>';
