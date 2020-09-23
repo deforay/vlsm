@@ -240,11 +240,11 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                                         <td><textarea class="form-control " id="patientAddress" name="patientAddress" placeholder="Address" title="Address" style="width:100%;" onchange=""><?php echo $covid19Info['patient_address']; ?></textarea></td>
                                     </tr>
                                     <tr>
-                                        <th>Case Province</th>
-                                        <td><input type="text" value="<?php echo $covid19Info['patient_province']; ?>" class="form-control " id="patientProvince" name="patientProvince" placeholder="Province" title="Please enter the province" style="width:100%;" /></td>
+                                        <th>Case State</th>
+                                        <td><input type="text" value="<?php echo $covid19Info['patient_province']; ?>" class="form-control " id="patientProvince" name="patientProvince" placeholder="State" title="Please enter the State" style="width:100%;" /></td>
 
-                                        <th>District</th>
-                                        <td><input class="form-control" value="<?php echo $covid19Info['patient_district']; ?>" id="patientDistrict" name="patientDistrict" placeholder="District" title="Please enter the district" style="width:100%;"></td>
+                                        <th>County</th>
+                                        <td><input class="form-control" value="<?php echo $covid19Info['patient_district']; ?>" id="patientDistrict" name="patientDistrict" placeholder="County" title="Please enter the County" style="width:100%;"></td>
                                     </tr>
                                     <tr>
                                         <th>City/Village</th>
