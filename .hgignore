@@ -19,5 +19,7 @@ Thumbs.db.orig
 config.production.php
 config.development.php
 index-new.php
+configs/bg.png
+configs/bg.jpg
 
 
