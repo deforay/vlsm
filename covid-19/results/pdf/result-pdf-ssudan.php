@@ -212,6 +212,9 @@ if (sizeof($requestResult) > 0) {
         if ($result['result_status'] == '4') {
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/cross.png" alt="rejected"/>';
         }
+        foreach ($covid19TestInfo as $indexKey => $rows) {
+            $testPlatform = $rows['testing_platform'];
+        }
         $html = '';
         $html .= '<table style="padding:0px 2px 2px 2px;">';
 
@@ -244,13 +247,30 @@ if (sizeof($requestResult) > 0) {
                 $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['facility_state']) . '</td>';
                 $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['facility_district']) . '</td>';
             $html .= '</tr>';
+            
+            $html .= '<tr>';
+                $html .= '<td colspan="4" style="line-height:5px;"></td>';
+            $html .= '</tr>';
+            
+            $html .= '<tr>';
+                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">TEST PLATFORM</td>';
+                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
+                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
+                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
+            $html .= '</tr>';
+            $html .= '<tr>';
+                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $testPlatform . '</td>';
+                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+            $html .= '</tr>';
 
             $html .= '<tr>';
             $html .= '<td colspan="4" style="line-height:5px;"></td>';
             $html .= '</tr>';
-            $html .= '</table>';
+        $html .= '</table>';
 
-            $html .= '<table style="padding:8px 2px 2px 2px;">';
+        $html .= '<table style="padding:8px 2px 2px 2px;">';
             $html .= '<tr>';
             $html .= '<td colspan="3" style="line-height:2px;border-bottom:1px solid #d3d3d3;"></td>';
             $html .= '</tr>';
@@ -323,17 +343,8 @@ if (sizeof($requestResult) > 0) {
                 }
                 $html .= '</table>';
             }
-            foreach ($covid19TestInfo as $indexKey => $rows) {
-                $testPlatform = $rows['testing_platform'];
-            }
             
             $html .= '<table style="padding:8px 2px 2px 2px;">
-                    <tr>
-                        <td colspan="2" style="line-height:10px;"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" style="line-height:11px;font-size:11px;text-align:left;"><b>TEST PLATFORM</b> : '.$testPlatform.'</td>
-                    </tr>
                     <tr>
                         <td colspan="2" style="line-height:10px;"></td>
                     </tr>
