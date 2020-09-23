@@ -41,16 +41,16 @@ $rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
 $rejectionQuery = "SELECT * FROM r_eid_sample_rejection_reasons where rejection_reason_status = 'active'";
 $rejectionResult = $db->rawQuery($rejectionQuery);
 
-$condition = "status = 'active'";
-if (isset($vlfmResult[0]['facilityId'])) {
-    $condition = $condition . " AND facility_id IN(" . $vlfmResult[0]['facilityId'] . ")";
-}
-$fResult = $general->fetchDataFromTable('facility_details', $condition);
+// $condition = "status = 'active'";
+// if (isset($vlfmResult[0]['facilityId'])) {
+//     $condition = $condition . " AND facility_id IN(" . $vlfmResult[0]['facilityId'] . ")";
+// }
+// $fResult = $general->fetchDataFromTable('facility_details', $condition);
 
 
-//get lab facility details
-$condition = "facility_type='2' AND status='active'";
-$lResult = $general->fetchDataFromTable('facility_details', $condition);
+// //get lab facility details
+// $condition = "facility_type='2' AND status='active'";
+// $lResult = $general->fetchDataFromTable('facility_details', $condition);
 
 
 $id = base64_decode($_GET['id']);
