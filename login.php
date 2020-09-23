@@ -22,10 +22,17 @@ $systemType = "Lab Sample Management Module";
 if ($sarr['user_type'] == 'remoteuser') {
   $shortName = 'Sample Tracking';
   $systemType = "Remote Sample Tracking Module";
-  $path = 'assets/img/remote-bg.jpg';
+  $path = '/assets/img/remote-bg.jpg';
 } else {
-  $path = 'assets/img/bg.jpg';
+  $path = '/assets/img/bg.jpg';
 }
+
+if (file_exists(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs/bg.jpg")) {
+  $path = '/configs/bg.jpg';
+} else if (file_exists(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs/bg.png")) {
+  $path = '/configs/bg.png';
+}
+
 ?>
 <!DOCTYPE html>
 <html>
