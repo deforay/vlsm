@@ -217,11 +217,11 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                     </tr>
 
                                     <tr>
-                                        <th>Province</th>
-                                        <td><input type="text" class="form-control " id="patientProvince" name="patientProvince" placeholder="Province" title="Please enter the Case Province" style="width:100%;" /></td>
+                                        <th>State</th>
+                                        <td><input type="text" class="form-control " id="patientProvince" name="patientProvince" placeholder="State" title="Please enter the Case State" style="width:100%;" /></td>
 
-                                        <th>District</th>
-                                        <td><input class="form-control" id="patientDistrict" name="patientDistrict" placeholder="District" title="Please enter the Case District" style="width:100%;"></td>
+                                        <th>County</th>
+                                        <td><input class="form-control" id="patientDistrict" name="patientDistrict" placeholder="County" title="Please enter the Case County" style="width:100%;"></td>
                                     </tr>
 
                                     <tr>
