@@ -36,10 +36,8 @@ class Users
 
     public function addUserIfNotExists($name, $status = 'inactive', $role = 4)
     {
-
         $uQuery = "SELECT user_id FROM $this->table where user_name like '$name'";
         $result = $this->db->rawQueryOne($uQuery);
-
         if ($result == null) {
             $general = new \Vlsm\Models\General($this->db);
             $userId = $general->generateUserID();
@@ -53,7 +51,6 @@ class Users
         } else {
             $userId = $result['user_id'];
         }
-
 
         return $userId;
     }

@@ -7,6 +7,8 @@ if (session_status() == PHP_SESSION_NONE) {
 
 $arr = array();
 $general = new \Vlsm\Models\General($db);
+$usersModel = new \Vlsm\Models\Users($db);
+
 $tableName = "form_covid19";
 $testTableName = 'covid19_tests';
 try {
@@ -40,9 +42,12 @@ try {
                     $facility = $general->getDublicateDataFromField('facility_details', 'facility_name', $rowData['B']);
                     $testReason = $general->getDublicateDataFromField('r_covid19_test_reasons', 'test_reason_name', $rowData['O']);
                     $sampleType = $general->getDublicateDataFromField('r_covid19_sample_type', 'sample_name', $rowData['Q']);
-                    $labName = $general->getDublicateDataFromField('facility_details', 'facility_name', $rowData['T']);
-                    $result = $general->getDublicateDataFromField('r_covid19_results', 'result', $rowData['AC']);
-                    $resultStatus = $general->getDublicateDataFromField('r_sample_status', 'status_name', $rowData['AG']);
+                    $labName = $general->getDublicateDataFromField('facility_details', 'facility_name', $rowData['T'], 'facility_type');
+                    $rejectionReason = $general->getDublicateDataFromField('r_covid19_sample_rejection_reasons', 'rejection_reason_name', $rowData['V']);
+
+                    $result = $general->getDublicateDataFromField('r_covid19_results', 'result', $rowData['AF']);
+                    $resultStatus = $general->getDublicateDataFromField('r_sample_status', 'status_name', $rowData['AJ']);
+                    $labTechnician = $usersModel->addUserIfNotExists($rowData['AM']);
 
                     if (trim($rowData['P']) != '') {
                         $sampleCollectionDate = date('Y-m-d H:i:s', strtotime($rowData['P']));
@@ -62,7 +67,7 @@ try {
                         'facility_id'                           => $facility['facility_id'],
                         'patient_name'                          => $rowData['C'],
                         'patient_id'                            => $rowData['D'],
-                        'patient_dob'                           => $general->dateFormat($rowData['E']),
+                        'patient_dob'                           => date('Y-m-d',strtotime($rowData['E'])),
                         'patient_age'                           => $rowData['F'],
                         'patient_gender'                        => strtolower($rowData['G']),
                         'patient_phone_number'                  => $rowData['H'],
@@ -79,14 +84,18 @@ try {
                         'sample_received_at_vl_lab_datetime'    => $sampleReceivedDate,
                         'lab_id'                                => $labName['facility_id'],
                         'is_sample_rejected'                    => strtolower($rowData['U']),
-                        'rejection_on'                          => $general->dateFormat($rowData['V']),
+                        'reason_for_sample_rejection'           => (isset($rejectionReason['rejection_reason_id']) && $rejectionReason['rejection_reason_id'] != "")?$rejectionReason['rejection_reason_id']:9999,
+                        'rejection_on'                          => date('Y-m-d',strtotime($rowData['W'])),
                         'result'                                => $result['result_id'],
-                        'is_result_authorised'                  => strtolower($rowData['AD']),
-                        'authorized_by'                         => ucwords($rowData['AE']),
-                        'authorized_on'                         => $general->dateFormat($rowData['AF']),
+                        'is_result_authorised'                  => strtolower($rowData['AG']),
+                        'authorized_by'                         => ucwords($rowData['AH']),
+                        'authorized_on'                         => date('Y-m-d',strtotime($rowData['AI'])),
                         'last_modified_datetime'                => $general->getDateTime(),
                         'last_modified_by'                      => $_SESSION['userId'],
                         'result_status'                         => $resultStatus['status_id'],
+                        'sample_condition'                      => strtolower($rowData['AK']),
+                        'patient_passport_number'               => $rowData['AL'],
+                        'lab_technician'                        => $labTechnician,
                     );
                     // echo "<pre>";print_r($data);die;
                     if (!$sampleCode) {
@@ -97,29 +106,37 @@ try {
                         $db->update($tableName, $data);
                     }
 
-                    $testData[0]['testRequest'] = $rowData['W'];
-                    $testData[0]['testDate']    = $rowData['X'];
-                    $testData[0]['testResult']  = $rowData['Y'];
-                    $testData[1]['testRequest'] = $rowData['Z'];
-                    $testData[1]['testDate']    = $rowData['AA'];
-                    $testData[1]['testResult']  = $rowData['AB'];
-
-                    foreach ($testData as $testKitName) {
-                        if (trim($testKitName['testDate']) != '') {
-                            $testDate = date('Y-m-d H:i', strtotime($testKitName['testDate']));
-                        } else {
-                            $testDate = null;
+                    $testData[0]['testRequest']     = $rowData['X'];
+                    $testData[0]['testDate']        = $rowData['Y'];
+                    $testData[0]['testingPlatform'] = $rowData['Z'];
+                    $testData[0]['testResult']      = $rowData['AA'];
+                    $testData[1]['testRequest']     = $rowData['AB'];
+                    $testData[1]['testDate']        = $rowData['AC'];
+                    $testData[1]['testingPlatform'] = $rowData['AD'];
+                    $testData[1]['testResult']      = $rowData['AE'];
+                    if(count($testData) > 0){
+                        /* Delete if already exist */
+                        $db = $db->where('covid19_id', $lastId);
+                        $db->delete($testTableName);
+                        
+                        foreach ($testData as $testKitName) {
+                            if (trim($testKitName['testDate']) != '') {
+                                $testDate = date('Y-m-d H:i', strtotime($testKitName['testDate']));
+                            } else {
+                                $testDate = null;
+                            }
+    
+                            $covid19TestData = array(
+                                'covid19_id'            => $lastId,
+                                'test_name'             => $testKitName['testRequest'],
+                                'facility_id'           => $labName['facility_id'],
+                                'testing_platform'      => $testKitName['testingPlatform'],
+                                'sample_tested_datetime'=> date('Y-m-d H:i:s', strtotime($testDate)),
+                                'result'                => strtolower($testKitName['testResult']),
+                            );
+                            $db->insert($testTableName, $covid19TestData);
+                            $covid19Data['sample_tested_datetime'] = date('Y-m-d H:i:s', strtotime($testDate));
                         }
-
-                        $covid19TestData = array(
-                            'covid19_id'            => $lastId,
-                            'test_name'                => $testKitName['testRequest'],
-                            'facility_id'           => $labName['facility_id'],
-                            'sample_tested_datetime' => date('Y-m-d H:i:s', strtotime($testDate)),
-                            'result'                => strtolower($testKitName['testResult']),
-                        );
-                        $db->insert($testTableName, $covid19TestData);
-                        $covid19Data['sample_tested_datetime'] = date('Y-m-d H:i:s', strtotime($testDate));
                     }
                     $db = $db->where('covid19_id', $lastId);
                     $id = $db->update($tableName, $covid19Data);
