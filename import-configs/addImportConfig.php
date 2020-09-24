@@ -16,7 +16,7 @@ include_once(APPLICATION_PATH . '/header.php');
 
 	<!-- Main content -->
 	<section class="content">
-		<!-- SELECT2 EXAMPLE -->
+
 		<div class="box box-default">
 			<div class="box-header with-border">
 				<div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
@@ -36,6 +36,21 @@ include_once(APPLICATION_PATH . '/header.php');
 								</div>
 							</div>
 
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="supportedTests" class="col-lg-4 control-label">Supported Tests <span class="mandatory">*</span></label>
+									<div class="col-lg-7">
+										<select multiple class="form-control" id="supportedTests" name="supportedTests[]">
+											
+											<option value='vl'>Viral Load</option>
+											<option value='eid'>EID</option>
+											<option value='covid19'>Covid-19</option>
+										</select>
+									</div>
+								</div>
+							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-6">
@@ -176,6 +191,12 @@ include_once(APPLICATION_PATH . '/header.php');
 
 <script type="text/javascript">
 	tableRowId = 2;
+
+	$(document).ready(function(){
+		$("#supportedTests").select2({
+			placeholder: "Select Test Types"
+		});
+	});
 
 	function validateNow() {
 		flag = deforayValidator.init({

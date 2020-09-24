@@ -1138,3 +1138,13 @@ ALTER TABLE `form_covid19` ADD `testing_point` VARCHAR(255) NULL DEFAULT NULL AF
 ALTER TABLE `form_covid19` ADD `patient_passport_number` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_nationality`;
 UPDATE `resources` SET `module` = 'covid-19' WHERE `resources`.`resource_id` = 32;
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '32', 'covid-19-clinic-report.php', 'Covid-19 Clinic Reports');
+
+
+UPDATE `system_config` SET `value` = '4.2.1' WHERE `system_config`.`name` = 'version';
+-- Version 4.2.1 -- Amit -- 23-Sep-2020
+
+
+
+-- Amit 24 Sep 2020
+ALTER TABLE `import_config` ADD `supported_tests` JSON NULL DEFAULT NULL AFTER `machine_name`;
+

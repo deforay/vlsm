@@ -6,7 +6,12 @@ include_once(APPLICATION_PATH . '/header.php');
 
 $id = base64_decode($_GET['id']);
 $sQuery = "SELECT * from import_config where config_id=$id";
-$sInfo = $db->query($sQuery);
+$sInfo = $db->rawQueryOne($sQuery);
+
+if (!empty($sInfo['supported_tests'])) {
+	$sInfo['supported_tests'] = json_decode($sInfo['supported_tests'], true);
+}
+
 $configMachineQuery = "SELECT * from import_config_machines where config_id=$id";
 $configMachineInfo = $db->query($configMachineQuery);
 $configControlQuery = "SELECT * from import_config_controls where config_id=$id";
@@ -31,7 +36,6 @@ foreach ($configControlInfo as $info) {
 
 	<!-- Main content -->
 	<section class="content">
-		<!-- SELECT2 EXAMPLE -->
 		<div class="box box-default">
 			<div class="box-header with-border">
 				<div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
@@ -47,7 +51,21 @@ foreach ($configControlInfo as $info) {
 								<div class="form-group">
 									<label for="configurationName" class="col-lg-4 control-label">Configuration Name<span class="mandatory">*</span></label>
 									<div class="col-lg-7">
-										<input type="text" class="form-control isRequired" id="configurationName" name="configurationName" placeholder="eg. Roche or Abbott" title="Please enter configuration name" value="<?php echo $sInfo[0]['machine_name']; ?>" onblur="checkNameValidation('import_config','machine_name',this,'<?php echo "config_id##" . $sInfo[0]['config_id']; ?>','This configuration name already exists.Try another name',null);" />
+										<input type="text" class="form-control isRequired" id="configurationName" name="configurationName" placeholder="eg. Roche or Abbott" title="Please enter configuration name" value="<?php echo $sInfo['machine_name']; ?>" onblur="checkNameValidation('import_config','machine_name',this,'<?php echo "config_id##" . $sInfo['config_id']; ?>','This configuration name already exists.Try another name',null);" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="supportedTests" class="col-lg-4 control-label">Supported Tests <span class="mandatory">*</span></label>
+									<div class="col-lg-7">
+										<select multiple class="form-control" id="supportedTests" name="supportedTests[]">
+											<option value='vl' <?php echo (in_array('vl', $sInfo['supported_tests'])) ? "selected='selected'" : '';  ?>>Viral Load</option>
+											<option value='eid' <?php echo (in_array('eid', $sInfo['supported_tests'])) ? "selected='selected'" : '';  ?>>EID</option>
+											<option value='covid19' <?php echo (in_array('covid19', $sInfo['supported_tests'])) ? "selected='selected'" : '';  ?>>Covid-19</option>
+										</select>
 									</div>
 								</div>
 							</div>
@@ -57,7 +75,7 @@ foreach ($configControlInfo as $info) {
 								<div class="form-group">
 									<label for="configurationName" class="col-lg-4 control-label">Configuration File Name<span class="mandatory">*</span></label>
 									<div class="col-lg-7">
-										<input type="text" class="form-control isRequired" id="configurationFile" name="configurationFile" placeholder="eg. roche.php or abbott.php" title="Please enter file name" value="<?php echo $sInfo[0]['import_machine_file_name']; ?>" onblur="checkNameValidation('import_config','import_machine_file_name',this,'<?php echo "config_id##" . $sInfo[0]['config_id']; ?>','This file name already exists.Try another name',null)" />
+										<input type="text" class="form-control isRequired" id="configurationFile" name="configurationFile" placeholder="eg. roche.php or abbott.php" title="Please enter file name" value="<?php echo $sInfo['import_machine_file_name']; ?>" onblur="checkNameValidation('import_config','import_machine_file_name',this,'<?php echo "config_id##" . $sInfo['config_id']; ?>','This file name already exists.Try another name',null)" />
 									</div>
 								</div>
 							</div>
@@ -67,7 +85,7 @@ foreach ($configControlInfo as $info) {
 								<div class="form-group">
 									<label for="configurationFileName" class="col-lg-4 control-label">Lower Limit</label>
 									<div class="col-lg-7">
-										<input type="text" class="form-control checkNum" id="lowerLimit" name="lowerLimit" placeholder="eg. 20" title="Please enter lower limit" value="<?php echo $sInfo[0]['lower_limit']; ?>" />
+										<input type="text" class="form-control checkNum" id="lowerLimit" name="lowerLimit" placeholder="eg. 20" title="Please enter lower limit" value="<?php echo $sInfo['lower_limit']; ?>" />
 									</div>
 								</div>
 							</div>
@@ -77,7 +95,7 @@ foreach ($configControlInfo as $info) {
 								<div class="form-group">
 									<label for="configurationFileName" class="col-lg-4 control-label">Higher Limit</label>
 									<div class="col-lg-7">
-										<input type="text" class="form-control checkNum" id="higherLimit" name="higherLimit" placeholder="eg. 10000000" title="Please enter lower limit" value="<?php echo $sInfo[0]['higher_limit']; ?>" />
+										<input type="text" class="form-control checkNum" id="higherLimit" name="higherLimit" placeholder="eg. 10000000" title="Please enter lower limit" value="<?php echo $sInfo['higher_limit']; ?>" />
 									</div>
 								</div>
 							</div>
@@ -87,7 +105,7 @@ foreach ($configControlInfo as $info) {
 								<div class="form-group">
 									<label for="maxNOfSamplesInBatch" class="col-lg-4 control-label">Maximum No. of Samples In a Batch <span class="mandatory">*</span></label>
 									<div class="col-lg-7">
-										<input type="text" class="form-control checkNum isRequired" id="maxNOfSamplesInBatch" name="maxNOfSamplesInBatch" placeholder="Max. no of samples" title="Please enter max no of samples in a row" value="<?php echo $sInfo[0]['max_no_of_samples_in_a_batch']; ?>" />
+										<input type="text" class="form-control checkNum isRequired" id="maxNOfSamplesInBatch" name="maxNOfSamplesInBatch" placeholder="Max. no of samples" title="Please enter max no of samples in a row" value="<?php echo $sInfo['max_no_of_samples_in_a_batch']; ?>" />
 									</div>
 								</div>
 							</div>
@@ -98,7 +116,7 @@ foreach ($configControlInfo as $info) {
 									<div class="form-group">
 										<label for="lowVlResultText" class="col-lg-2 control-label">Low VL Result Text </label>
 										<div class="col-lg-7">
-											<textarea class="form-control" id="lowVlResultText" name="lowVlResultText" placeholder="Comma separated Low Viral Load Result Text for eg. Target Not Detected, TND, < 20, < 40" title="Low Viral Load Result Text for eg. Target Not Detected, TND, < 20, < 40"><?php echo $sInfo[0]['low_vl_result_text']; ?></textarea>
+											<textarea class="form-control" id="lowVlResultText" name="lowVlResultText" placeholder="Comma separated Low Viral Load Result Text for eg. Target Not Detected, TND, < 20, < 40" title="Low Viral Load Result Text for eg. Target Not Detected, TND, < 20, < 40"><?php echo $sInfo['low_vl_result_text']; ?></textarea>
 										</div>
 									</div>
 								</div>
@@ -110,8 +128,8 @@ foreach ($configControlInfo as $info) {
 									<label for="status" class="col-lg-4 control-label">Status</label>
 									<div class="col-lg-7">
 										<select class="form-control" id="status" name="status" title="Please select import config status">
-											<option value="active" <?php echo ($sInfo[0]['status'] == 'active') ? 'selected="selected"' : ''; ?>>Active</option>
-											<option value="inactive" <?php echo ($sInfo[0]['status'] == 'inactive') ? 'selected="selected"' : ''; ?>>Inactive</option>
+											<option value="active" <?php echo ($sInfo['status'] == 'active') ? 'selected="selected"' : ''; ?>>Active</option>
+											<option value="inactive" <?php echo ($sInfo['status'] == 'inactive') ? 'selected="selected"' : ''; ?>>Inactive</option>
 										</select>
 									</div>
 								</div>
@@ -203,7 +221,7 @@ foreach ($configControlInfo as $info) {
 					</div>
 					<!-- /.box-body -->
 					<div class="box-footer">
-						<input type="hidden" id="configId" name="configId" value="<?php echo base64_encode($sInfo[0]['config_id']); ?>" />
+						<input type="hidden" id="configId" name="configId" value="<?php echo base64_encode($sInfo['config_id']); ?>" />
 						<a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
 						<a href="importConfig.php" class="btn btn-default"> Cancel</a>
 					</div>
@@ -221,6 +239,12 @@ foreach ($configControlInfo as $info) {
 
 <script type="text/javascript">
 	tableRowId = '<?php echo $i; ?>';
+
+	$(document).ready(function() {
+		$("#supportedTests").select2({
+			placeholder: "Select Test Types"
+		});
+	});
 
 	function validateNow() {
 		flag = deforayValidator.init({
