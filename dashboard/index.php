@@ -7,12 +7,12 @@ include_once(APPLICATION_PATH . '/header.php');
 
 
 /* Total data set length */
-$vlFormTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form");
+$vlFormTotal =  $db->rawQuery("SELECT COUNT(vl_sample_id) as total FROM vl_request_form");
 // $aResultTotal = $countResult->fetch_row();
 //print_r($aResultTotal);
 $labCount = $vlFormTotal[0]['total'];
 
-$facilityTotal =  $db->rawQuery("select COUNT(facility_id) as total FROM facility_details");
+$facilityTotal =  $db->rawQuery("SELECT COUNT(facility_id) as total FROM facility_details");
 $facilityCount = $facilityTotal[0]['total'];
 
 ?>

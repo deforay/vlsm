@@ -4,9 +4,6 @@ if (!isset($_SESSION['userId'])) {
 	header("location:/login.php");
 }
 
-
-
-
 $general = new \Vlsm\Models\General($db);
 
 /* Crosss Login Block Start */
@@ -148,9 +145,6 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 
 // COVID-19 Menu end
 
-
-$formConfigQuery = "SELECT * from global_config where name='vl_form'";
-$formConfigResult = $db->query($formConfigQuery);
 ?>
 <!DOCTYPE html>
 <html lang="en-US">
@@ -208,8 +202,8 @@ $formConfigResult = $db->query($formConfigQuery);
 	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 	<!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
 	<!-- jQuery 2.2.3 -->
 
@@ -658,7 +652,7 @@ $formConfigResult = $db->query($formConfigQuery);
 									<li class="allMenu addSamplesFromManifestCovid19Menu">
 										<a href="/covid-19/requests/addSamplesFromManifest.php"><i class="fa fa-circle-o"></i> Add Samples from Manifest</a>
 									</li>
-								<?php }?>
+								<?php } ?>
 								<li class="allMenu covid19BatchCodeMenu">
 									<a href="/covid-19/batch/covid-19-batches.php"><i class="fa fa-circle-o"></i> Manage Batch</a>
 								</li>
@@ -697,7 +691,7 @@ $formConfigResult = $db->query($formConfigQuery);
 								<?php }
 								if ($arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes' && isset($_SESSION['privileges']) && in_array("can-record-confirmatory-tests.php", $_SESSION['privileges']) && ($sarr['user_type'] != 'remoteuser')) { ?>
 									<li class="allMenu canRecordConfirmatoryTestsCovid19Menu"><a href="/covid-19/results/can-record-confirmatory-tests.php"><i class="fa fa-circle-o"></i> Record Confirmatory Tests</a></li>
-								<?php } 
+								<?php }
 								if (isset($_SESSION['privileges']) && in_array("covid-19-result-status.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu covid19ResultStatus"><a href="/covid-19/results/covid-19-result-status.php"><i class="fa fa-circle-o"></i> Manage Results Status</a></li>
 								<?php }
