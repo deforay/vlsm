@@ -96,6 +96,7 @@ include_once(APPLICATION_PATH . '/header.php');
 						<!-- /.box-body -->
 						<div class="box-footer">
 							<input type="hidden" name="facilityType" class="form-control" id="facilityType" value="<?php echo $type; ?>" />
+							<input type="hidden" name="mappedFacilities" id="mappedFacilities" value="" />
 							<a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
 							<a href="facilities.php" class="btn btn-default"> Cancel</a>
 						</div>
@@ -129,6 +130,10 @@ include_once(APPLICATION_PATH . '/header.php');
 	});
 
 	function validateNow() {
+
+		let mappedFacilities = JSON.stringify($("#facilities").val());
+		$("#mappedFacilities").val(mappedFacilities);
+		$("#facilities").val(""); // THIS IS IMPORTANT. TO REDUCE NUMBER OF PHP VARIABLES		
 		flag = deforayValidator.init({
 			formId: 'facilityTestMapForm'
 		});
