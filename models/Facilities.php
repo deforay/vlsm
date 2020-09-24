@@ -49,12 +49,18 @@ class Facilities
         return $response;
     }
 
+    // $facilityType = 1 for getting all mapped health facilities
+    // $facilityType = 2 for getting all mapped testing labs
+    // $facilityType = null for getting all mapped facilities
     public function getFacilityMap($userId, $facilityType = 1)
     {
         if (empty($userId)) return null;
 
-        $this->db->join("facility_details f", "map.facility_id=f.facility_id", "INNER");
-        $this->db->joinWhere("facility_details f", "f.facility_type", $facilityType);
+        if (!empty($facilityType)) {
+            $this->db->join("facility_details f", "map.facility_id=f.facility_id", "INNER");
+            $this->db->joinWhere("facility_details f", "f.facility_type", $facilityType);
+        }
+
         $this->db->where("map.user_id", $userId);
         return $this->db->getValue("vl_user_facility_map map", "GROUP_CONCAT(DISTINCT map.facility_id SEPARATOR ',')");
     }
@@ -121,7 +127,7 @@ class Facilities
     {
 
         if (!empty($_SESSION['userId'])) {
-            $facilityMap = $this->getFacilityMap($_SESSION['userId'],2);
+            $facilityMap = $this->getFacilityMap($_SESSION['userId'], 2);
             if (!empty($facilityMap)) {
                 $this->db->where("`facility_id` IN (" . $facilityMap . ")");
             }
