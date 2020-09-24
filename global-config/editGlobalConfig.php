@@ -49,7 +49,7 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 
 	<!-- Main content -->
 	<section class="content">
-		<!-- SELECT2 EXAMPLE -->
+		
 		<div class="box box-default">
 			<!--<div class="box-header with-border">
           <div class="pull-right" style="font-size:15px;"> </div>

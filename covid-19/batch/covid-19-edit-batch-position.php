@@ -98,7 +98,7 @@ if (isset($batchInfo[0]['label_order']) && trim($batchInfo[0]['label_order']) !=
 
 	<!-- Main content -->
 	<section class="content">
-		<!-- SELECT2 EXAMPLE -->
+		
 		<div class="box box-default">
 			<div class="box-header with-border">
 				<h4><strong>Batch Code : <?php echo (isset($batchInfo[0]['batch_code'])) ? $batchInfo[0]['batch_code'] : ''; ?></strong></h4>

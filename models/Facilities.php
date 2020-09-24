@@ -13,26 +13,20 @@ class Facilities
         $this->db = $db;
     }
 
-    // $responseType = all gives all facilities lumped in one array
-    // $responseType = grouped gives all clinics and labs lumped separately
-    public function getAllFacilities($responseType = 'all')
+    public function getAllFacilities($facilityType = null, $onlyActive = true)
     {
-        $query = "SELECT * FROM facility_details where status='active' ORDER BY facility_name";
 
-        if ($responseType == 'all') {
-            return $this->db->rawQuery($query);
-        } else if ($responseType == 'grouped') {
-            $resultArray = $this->db->rawQuery($query);
-            $response = array();
-            foreach ($resultArray as $row) {
-                if ($row['facility_type'] == 2) {
-                    $response['labs'][] = $row;
-                } else {
-                    $response['facilities'][] = $row;
-                }
-            }
-            return $response;
+        $this->db->orderBy("facility_name", "asc");
+
+        if (!empty($facilityType)) {
+            $this->db->where("facility_type", $facilityType);
         }
+
+        if ($onlyActive) {
+            $this->db->where('status', 'active');
+        }        
+
+        return $this->db->get("facility_details");
     }
 
     public function getTestingPoints($facilityId)
@@ -69,13 +63,14 @@ class Facilities
 
     // $testType = vl, eid, covid19 or any other tests that might be there. 
     // Default $testType is null and returns all facilities
+    // $byPassFacilityMap = true -> bypass faciliy map check, false -> do not bypass facility map check
     // $condition = WHERE condition (for eg. "facility_state = 1")
-    // $allData = true/false (false = only id and name, true = all columns)
+    // $allColumns = (false -> only facility_id and facility_name, true -> all columns)
     // $onlyActive = true/false
-    public function getHealthFacilities($testType = null, $allData = false, $condition = null, $onlyActive = true)
+    public function getHealthFacilities($testType = null, $byPassFacilityMap = false, $allColumns = false, $condition = null, $onlyActive = true)
     {
 
-        if (!empty($_SESSION['userId'])) {
+        if (!$byPassFacilityMap && !empty($_SESSION['userId'])) {
             $facilityMap = $this->getFacilityMap($_SESSION['userId']);
             if (!empty($facilityMap)) {
                 $this->db->where("`facility_id` IN (" . $facilityMap . ")");
@@ -101,7 +96,7 @@ class Facilities
 
         $this->db->orderBy("facility_name", "asc");
 
-        if ($allData) {
+        if ($allColumns) {
             return $this->db->get("facility_details");
         } else {
 
@@ -120,13 +115,14 @@ class Facilities
 
     // $testType = vl, eid, covid19 or any other tests that might be there. 
     // Default $testType is null and returns all facilities with type=2 (testing site)
+    // $byPassFacilityMap = true -> bypass faciliy map check, false -> do not bypass facility map check
     // $condition = WHERE condition (for eg. "facility_state = 1")
-    // $allData = true/false (false = only id and name, true = all columns)
+    // $allColumns = (false -> only facility_id and facility_name, true -> all columns)
     // $onlyActive = true/false
-    public function getTestingLabs($testType = null, $allData = false, $condition = null, $onlyActive = true)
+    public function getTestingLabs($testType = null, $byPassFacilityMap = false, $allColumns = false, $condition = null, $onlyActive = true)
     {
 
-        if (!empty($_SESSION['userId'])) {
+        if (!$byPassFacilityMap && !empty($_SESSION['userId'])) {
             $facilityMap = $this->getFacilityMap($_SESSION['userId'], 2);
             if (!empty($facilityMap)) {
                 $this->db->where("`facility_id` IN (" . $facilityMap . ")");
@@ -154,7 +150,7 @@ class Facilities
         $this->db->where('facility_type = 2');
         $this->db->orderBy("facility_name", "asc");
 
-        if ($allData) {
+        if ($allColumns) {
             return $this->db->get("facility_details");
         } else {
             $response = array();

@@ -39,7 +39,7 @@ if(isset($arr['rq_field']) && trim($arr['rq_field'])!= ''){
 
     <!-- Main content -->
     <section class="content">
-      <!-- SELECT2 EXAMPLE -->
+      
       <div class="box box-default">
         <!--<div class="box-header with-border">
           <div class="pull-right" style="font-size:15px;"> </div>

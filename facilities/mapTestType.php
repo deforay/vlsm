@@ -1,17 +1,15 @@
 <?php
 ob_start();
-$type = (isset($_GET['p']) && $_GET['p'] == 'type')?'yes':'no';
-if($type == 'no'){
+$type = (!empty($_GET['type'])) ? $_GET['type'] : $_GET['type'];
+if ($type == 'health-facilities') {
 	$title = "Manage Health Facilities";
-}else{
-	$title = "Manage Testing Lab";
+} else if ($type == 'testing-labs') {
+	$title = "Manage Testing Labs";
 }
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 
 
-$facilityQuery = "SELECT facility_id, facility_name FROM facility_details WHERE status = 'active'";
-$facilityResult = $db->query($facilityQuery);
 
 ?>
 <link href="/assets/css/jasny-bootstrap.min.css" rel="stylesheet" />
@@ -30,25 +28,25 @@ $facilityResult = $db->query($facilityQuery);
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<h1 class="fa fa-gears"> <?php echo $title;?></h1>
+		<h1 class="fa fa-gears"> <?php echo $title; ?></h1>
 		<ol class="breadcrumb">
 			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-			<li class="active"> <?php echo $title;?></li>
+			<li class="active"> <?php echo $title; ?></li>
 		</ol>
 	</section>
 
 	<!-- Main content -->
 	<section class="content">
-		<!-- SELECT2 EXAMPLE -->
+
 		<div class="box box-default">
-            <!-- /.box-header -->
+			<!-- /.box-header -->
 			<div class="box-body">
 				<!-- form start -->
-				<form class="form-horizontal" method='post' name='facilityTestMapForm' id='facilityTestMapForm' enctype="multipart/form-data" autocomplete="off" action="addFacilityTestTypeHelper.php">
+				<form class="form-horizontal" method='post' name='facilityTestMapForm' id='facilityTestMapForm' enctype="multipart/form-data" autocomplete="off" action="mapTestTypeHelper.php">
 					<div class="box-body">
 						<div class="panel panel-default">
 							<div class="panel-heading">
-								<h3 class="panel-title"> <?php echo $title;?></h3>
+								<h3 class="panel-title"> <?php echo $title; ?></h3>
 							</div>
 							<div class="panel-body">
 								<div class="row">
@@ -70,7 +68,7 @@ $facilityResult = $db->query($facilityQuery);
 								<div class="row">
 									<div class="col-md-7">
 										<div class="form-group">
-											<label for="facilities" class="col-lg-4 control-label">Select the <?php echo str_replace("Manage", "", $title);?> for test type </label>
+											<label for="facilities" class="col-lg-4 control-label">Select the <?php echo str_replace("Manage", "", $title); ?> for test type </label>
 											<div class="col-lg-8">
 												<div class="form-group">
 													<div class="col-md-12">
@@ -83,9 +81,9 @@ $facilityResult = $db->query($facilityQuery);
 															<a href="#" id="select-all-field" style="float:left;" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a> <a href="#" id="deselect-all-field" style="float:right;" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
 														</div><br /><br />
 														<select id="facilities" name="facilities[]" multiple="multiple" class="search">
-															<?php foreach($facilityResult as $facility){
-                                                                echo '<option value="'.$facility['facility_id'].'">'.$facility['facility_name'].'</option>';
-                                                            }?>
+															<?php foreach ($facilityResult as $facility) {
+																echo '<option value="' . $facility['facility_id'] . '">' . $facility['facility_name'] . '</option>';
+															} ?>
 														</select>
 													</div>
 												</div>
@@ -97,12 +95,12 @@ $facilityResult = $db->query($facilityQuery);
 						</div>
 						<!-- /.box-body -->
 						<div class="box-footer">
-                            <input type="hidden" name="facilityType" class="form-control" id="facilityType" value="<?php echo $type;?>"/>
+							<input type="hidden" name="facilityType" class="form-control" id="facilityType" value="<?php echo $type; ?>" />
 							<a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
 							<a href="facilities.php" class="btn btn-default"> Cancel</a>
 						</div>
 						<!-- /.box-footer -->
-                    </div>
+					</div>
 				</form>
 				<!-- /.row -->
 			</div>
@@ -141,28 +139,28 @@ $facilityResult = $db->query($facilityQuery);
 		}
 	}
 
-    function selectedTestType(val){
-        $.blockUI({
-            message: '<h3>Trying to get mapped facilities <br>Please wait...</h3>'
-        });
-        $.post("getTestTypeFacilitiesHelper.php", {
-            facilityType: $('#facilityType').val(),
-            testType: $('#testType').val()
-        },
-        function(toAppend) {
-            if (toAppend != "") {
-                if(toAppend != null && toAppend != undefined){
-                    $('.search').html(toAppend)
-                    init();
-                    $.unblockUI();
-                }
-            }
-        });
-    }
+	function selectedTestType(val) {
+		$.blockUI({
+			message: '<h3>Trying to get mapped facilities <br>Please wait...</h3>'
+		});
+		$.post("getTestTypeFacilitiesHelper.php", {
+				facilityType: $('#facilityType').val(),
+				testType: $('#testType').val()
+			},
+			function(toAppend) {
+				if (toAppend != "") {
+					if (toAppend != null && toAppend != undefined) {
+						$('.search').html(toAppend)
+						$('.search').multiSelect('refresh');
+						$.unblockUI();
+					}
+				}
+			});
+	}
 
-    function init(){
+	function init() {
 
-        $('.search').multiSelect({
+		$('.search').multiSelect({
 			selectableHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Field Name'>",
 			selectionHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Field Name'>",
 			afterInit: function(ms) {
@@ -197,7 +195,7 @@ $facilityResult = $db->query($facilityQuery);
 				this.qs2.cache();
 			}
 		});
-    }
+	}
 </script>
 <?php
 include(APPLICATION_PATH . '/footer.php');

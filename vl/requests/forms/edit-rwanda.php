@@ -140,7 +140,7 @@ if (isset($vlQueryInfo['reason_for_vl_result_changes']) && $vlQueryInfo['reason_
      </section>
      <!-- Main content -->
      <section class="content">
-          <!-- SELECT2 EXAMPLE -->
+          
           <div class="box box-default">
                <div class="box-header with-border">
                     <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>

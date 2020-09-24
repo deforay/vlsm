@@ -79,7 +79,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
     </section>
     <!-- Main content -->
     <section class="content">
-        <!-- SELECT2 EXAMPLE -->
+        
         <div class="box box-default">
             <div class="box-header with-border">
 

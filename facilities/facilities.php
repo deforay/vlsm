@@ -44,8 +44,8 @@ include_once(APPLICATION_PATH . '/header.php');
           <div class="box-header with-border">
             <?php if (isset($_SESSION['privileges']) && in_array("addFacility.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) { ?>
               <a href="addFacility.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Facility</a>
-              <a href="addFacilityTestType.php?p=type" class="btn btn-primary pull-right" style="margin-right: 10px;"> <i class="fa fa-plus"></i> Manage Testing Lab</a>
-              <a href="addFacilityTestType.php" class="btn btn-primary pull-right" style="margin-right: 10px;"> <i class="fa fa-plus"></i> Manage Health Facilities</a>
+              <a href="mapTestType.php?type=testing-labs" class="btn btn-primary pull-right" style="margin-right: 10px;"> <i class="fa fa-plus"></i> Manage Testing Lab</a>
+              <a href="mapTestType.php?type=health-facilities" class="btn btn-primary pull-right" style="margin-right: 10px;"> <i class="fa fa-plus"></i> Manage Health Facilities</a>
             <?php } ?>
             <!--<button class="btn btn-primary pull-right" style="margin-right: 1%;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>-->
           </div>

@@ -7,7 +7,7 @@ if (session_status() == PHP_SESSION_NONE) {
 $params     = $_POST['facilityType'];
 $testType   = $_POST['testType'];
 
-if($params == "yes"){
+if($params == "testing-labs"){
     $tableName ="testing_labs";
 } else{
     $tableName = "health_facilities";

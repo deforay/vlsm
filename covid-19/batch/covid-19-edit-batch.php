@@ -75,7 +75,7 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
 
 	<!-- Main content -->
 	<section class="content">
-		<!-- SELECT2 EXAMPLE -->
+		
 		<div class="box box-default">
 			<!-- <pre><?php print_r($result); ?></pre> -->
 			<div class="box-header with-border">
