@@ -12,7 +12,7 @@ $facilitiesDb = new \Vlsm\Models\Facilities($db);
 $arr = $general->getGlobalConfig();
 $sarr = $general->getSystemConfig();
 
-$facilityMap = $facilitiesDb->getFacilityMap($_SESSION['userId']);
+
 
 if ($arr['vl_form'] == '3') {
   $option = "<option value=''> -- Sélectionner -- </option>";
@@ -35,17 +35,20 @@ $facilityTypeTableList = array(
 $facilityIdRequested = !empty($_POST['cName']) ? $_POST['cName'] : null;
 $provinceRequested = !empty($_POST['pName']) ? $_POST['pName'] : null;
 $districtRequested = !empty($_POST['dName']) ? $_POST['dName'] : null;
-$facilityTypeRequested = !empty($_POST['fType']) ? $_POST['fType'] : null;
+$facilityTypeRequested = !empty($_POST['fType']) ? $_POST['fType'] : 1;   // 1 = Health Facilities
 
-$facilityTypeTable = !empty($facilityTypeRequested) ? $facilityTypeTableList[$facilityTypeRequested] : $facilityTypeTableList[1];  // 1 = Health Facilities
+$facilityTypeTable = !empty($facilityTypeRequested) ? $facilityTypeTableList[$facilityTypeRequested] : $facilityTypeTableList[$facilityTypeRequested];
 
+$facilityMap = null;
+if (empty($_POST['comingFromUser']) || $_POST['comingFromUser'] != 'yes') {
+  $facilityMap = $facilitiesDb->getFacilityMap($_SESSION['userId'], $facilityTypeRequested);
+}
 
 
 if (!empty($facilityIdRequested)) {
 
   $db->where("f.facility_id", $facilityIdRequested);
   $facilityInfo = $db->getOne('facility_details f');
-
 
   $provinceOptions = getProvinceDropdown($facilityInfo['facility_state']);
   $districtOptions = getDistrictDropdown($facilityInfo['facility_state'], $facilityInfo['facility_district']);
@@ -72,7 +75,15 @@ function getProvinceDropdown($selectedProvince = null)
 {
   global $db;
   global $option;
-  $pdResult = $db->get('province_details');
+  global $facilityMap;
+
+  if (!empty($facilityMap)) {
+    $db->join("facility_details f", "f.facility_state=p.province_name", "INNER");
+    //$db->joinWhere("facility_details f", "h.test_type", $testType);
+    $db->where("f.facility_id IN (" . $facilityMap . ")");
+  }
+
+  $pdResult = $db->get('province_details p');
   $state = $option;
   foreach ($pdResult as $pdRow) {
     $selected = '';
@@ -89,11 +100,15 @@ function getDistrictDropdown($selectedProvince = null, $selectedDistrict = null)
 {
   global $db;
   global $option;
+  global $facilityMap;
 
   if (!empty($selectedProvince)) {
     $db->where("f.facility_state", $selectedProvince);
   }
 
+  if (!empty($facilityMap)) {
+    $db->where("f.facility_id IN (" . $facilityMap . ")");
+  }
   $facilityInfo = $db->setQueryOption('DISTINCT')->get('facility_details f', null, array('facility_district'));
 
   $district = $option;
@@ -113,11 +128,10 @@ function getFacilitiesDropdown($provinceName = null, $districtRequested = null)
   global $db;
   global $option;
   global $testType;
-  global $facilityTypeRequested;
+  global $facilityMap;
   global $facilityTypeTable;
 
   $db->where("f.status", 'active');
-
 
 
   if (!empty($provinceName)) {
@@ -133,9 +147,6 @@ function getFacilitiesDropdown($provinceName = null, $districtRequested = null)
   //$db->where("f.facility_type", $facilityTypeRequested);
   $db->join("$facilityTypeTable h", "h.facility_id=f.facility_id", "INNER");
   $db->joinWhere("$facilityTypeTable h", "h.test_type", $testType);
-
-
-
 
   if (!empty($facilityMap)) {
     $db->where("f.facility_id IN (" . $facilityMap . ")");
