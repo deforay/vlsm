@@ -14,11 +14,12 @@ if($params == "testing-labs"){
 }
 
 try {
-    if(isset($_POST['facilities']) && count($_POST['facilities']) > 0){
+    $_POST['mappedFacilities'] = json_decode($_POST['mappedFacilities'], true);
+    if(isset($_POST['mappedFacilities']) && count($_POST['mappedFacilities']) > 0){
         $db = $db->where('test_type', $testType);
         $id = $db->delete($tableName);
         
-		foreach($_POST['facilities'] as $facility){
+		foreach($_POST['mappedFacilities'] as $facility){
 			$data=array(
 				'test_type'     =>$testType,
 				'facility_id'   => $facility,
