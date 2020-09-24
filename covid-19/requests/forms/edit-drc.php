@@ -89,7 +89,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
     </section>
     <!-- Main content -->
     <section class="content">
-        <!-- SELECT2 EXAMPLE -->
+        
         <div class="box box-default">
             <div class="box-header with-border">
                 <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indique un champ obligatoire &nbsp;</div>

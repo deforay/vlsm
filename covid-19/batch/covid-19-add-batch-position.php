@@ -180,7 +180,7 @@ if(isset($prevlabelInfo[0]['label_order']) && trim($prevlabelInfo[0]['label_orde
 
     <!-- Main content -->
     <section class="content">
-      <!-- SELECT2 EXAMPLE -->
+      
       <div class="box box-default">
         <div class="box-header with-border">
 			<h4><strong>Batch Code : <?php echo $batchInfo[0]['batch_code']; ?></strong></h4>
