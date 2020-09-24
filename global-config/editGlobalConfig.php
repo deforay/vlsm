@@ -535,7 +535,7 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 													<div class="col-lg-4">
 														<select name="covid19ReportType" id="covid19ReportType" class="form-control isRequired" title="Please select covid19 report type">
 															<option value="">-- Select --</option>
-															<option value='rwanda' <?php echo ($arr['covid19_report_type'] == 'rwanda') ? "selected='selected'" : ""; ?>> Rawanda </option>
+															<option value='rwanda' <?php echo ($arr['covid19_report_type'] == 'rwanda') ? "selected='selected'" : ""; ?>> Rwanda </option>
 															<option value='who' <?php echo ($arr['covid19_report_type'] == 'who') ? "selected='selected'" : ""; ?>> WHO </option>
 														</select>
 													</div>

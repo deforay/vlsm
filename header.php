@@ -239,9 +239,9 @@ $formConfigResult = $db->query($formConfigQuery);
 		}
 
 		.select2-container--default .select2-selection--multiple .select2-selection__choice {
-			background-color: #00c0ef;
-			border-color: #00acd6;
-			color: #fff !important;
+			/* background-color: #00c0ef;
+			border-color: #00acd6; */
+			color: #000 !important;
 			font-family: helvetica, arial, sans-serif;
 		}
 

@@ -12,12 +12,14 @@ $importControlTable = "import_config_controls";
 
 $configId = (int) base64_decode($_POST['configId']);
 
-$configControlQuery = "SELECT * from import_config_controls where config_id=$configId";
+$configControlQuery = "SELECT * FROM import_config_controls WHERE config_id=$configId";
 $configControlInfo = $db->query($configControlQuery);
 try {
     if (trim($_POST['configurationName']) != "") {
+        $_POST['supportedTests'] = !empty($_POST['supportedTests']) ? json_encode($_POST['supportedTests']) : null;
         $importConfigData = array(
             'machine_name' => $_POST['configurationName'],
+            'supported_tests' => $_POST['supportedTests'],
             'import_machine_file_name' => $_POST['configurationFile'],
             'lower_limit' => $_POST['lowerLimit'],
             'higher_limit' => $_POST['higherLimit'],
