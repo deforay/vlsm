@@ -110,8 +110,18 @@ if ($data['Key'] == 'vlsm-get-remote') {
         $condition = "updated_datetime > '" . $data['facilityLastModified'] . "'";
     }
     $response['facilities'] = $general->fetchDataFromTable('facility_details', $condition);
-
-
+    
+    $condition = null;
+    if (isset($data['healthFacilityLastModified']) && !empty($data['healthFacilityLastModified'])) {
+        $condition = "updated_datetime > '" . $data['healthFacilityLastModified'] . "'";
+    }
+    $response['healthFacilities'] = $general->fetchDataFromTable('health_facilities', $condition);
+    
+    $condition = null;
+    if (isset($data['testingLabsLastModified']) && !empty($data['testingLabsLastModified'])) {
+        $condition = "updated_datetime > '" . $data['testingLabsLastModified'] . "'";
+    }
+    $response['testingLabs'] = $general->fetchDataFromTable('testing_labs', $condition);
 
     echo json_encode($response);
 }

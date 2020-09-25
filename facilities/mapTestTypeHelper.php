@@ -22,7 +22,8 @@ try {
 		foreach($_POST['mappedFacilities'] as $facility){
 			$data=array(
 				'test_type'     =>$testType,
-				'facility_id'   => $facility,
+                'facility_id'   => $facility,
+                'updated_datetime'  => $general->getDateTime()
             );
 			$db->insert($tableName,$data);
 		}
