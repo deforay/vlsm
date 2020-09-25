@@ -46,7 +46,7 @@ class Facilities
     // $facilityType = 1 for getting all mapped health facilities
     // $facilityType = 2 for getting all mapped testing labs
     // $facilityType = null for getting all mapped facilities
-    public function getFacilityMap($userId, $facilityType = 1)
+    public function getFacilityMap($userId, $facilityType = null)
     {
         if (empty($userId)) return null;
 
@@ -116,10 +116,11 @@ class Facilities
     // $testType = vl, eid, covid19 or any other tests that might be there. 
     // Default $testType is null and returns all facilities with type=2 (testing site)
     // $byPassFacilityMap = true -> bypass faciliy map check, false -> do not bypass facility map check
+    // For testing labs we usually want to show all so we bypass = true by default
     // $condition = WHERE condition (for eg. "facility_state = 1")
     // $allColumns = (false -> only facility_id and facility_name, true -> all columns)
     // $onlyActive = true/false
-    public function getTestingLabs($testType = null, $byPassFacilityMap = false, $allColumns = false, $condition = null, $onlyActive = true)
+    public function getTestingLabs($testType = null, $byPassFacilityMap = true, $allColumns = false, $condition = null, $onlyActive = true)
     {
 
         if (!$byPassFacilityMap && !empty($_SESSION['userId'])) {
