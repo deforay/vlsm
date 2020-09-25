@@ -306,16 +306,12 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                                             <table id="symptomsTable" class="table table-bordered">
                                                 <?php $index = 0;
                                                 foreach ($covid19Symptoms as $symptomId => $symptomName) { ?>
-                                                    <tr class="row<?php echo $index; ?>">
-                                                        <th style="width:50%;"><?php echo $symptomName; ?></th>
-                                                        <td style="width:50%;">
-                                                            <input name="symptomId[]" type="hidden" value="<?php echo $symptomId; ?>">
-                                                            <select name="symptomDetected[]" id="symptomDetected<?php echo $symptomId; ?>" class="form-control" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" style="width:100%" onchange="checkSubSymptoms(this.value,<?php echo $symptomId; ?>,<?php echo $index; ?>);">
-                                                                <option value="">-- Sélectionner --</option>
-                                                                <option value='yes' <?php echo (isset($covid19SelectedSymptoms[$symptomId]) && $covid19SelectedSymptoms[$symptomId] == 'yes') ? "selected='selected'" : ""; ?>> Oui </option>
-                                                                <option value='no' <?php echo (isset($covid19SelectedSymptoms[$symptomId]) && $covid19SelectedSymptoms[$symptomId] == 'no') ? "selected='selected'" : ""; ?>> Non </option>
-                                                                <option value='unknown' <?php echo (isset($covid19SelectedSymptoms[$symptomId]) && $covid19SelectedSymptoms[$symptomId] == 'unknown') ? "selected='selected'" : ""; ?>> Inconnu </option>
-                                                            </select>
+                                                    <tr colspan="2" class="row<?php echo $index; ?>">
+                                                        <td style="display: flex;">
+                                                            <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                                            <input type="radio" class="" id="symptom<?php echo $symptomId; ?>" name="symptom" value="<?php echo $symptomId; ?>" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" onclick="checkSubSymptoms(this.value,<?php echo $symptomId; ?>,<?php echo $index; ?>);" <?php echo (isset($covid19SelectedSymptoms[$symptomId])) ? "checked" : ""; ?>>
+                                                            </label>
+                                                            <label class="radio-inline" for="symptom<?php echo $symptomId; ?>" style="padding-left:17px !important;margin-left:0;"><b><?php echo $symptomName; ?></b></label>
                                                         </td>
                                                     </tr>
                                                 <?php $index++;
@@ -326,7 +322,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
 
                                     <tr>
                                         <td colspan="4">
-                                            <table id="symptomsTable" class="table table-bordered">
+                                            <table id="comorbiditiesTable" class="table table-bordered">
                                                 <?php $index = 0;
                                                 foreach ($covid19Comorbidities as $comorbiditiesId => $comorbiditiesName) { ?>
                                                     <tr class="row<?php echo $index; ?>">
@@ -755,7 +751,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                                                                         </select>
                                                                     </td>
                                                                     <td style="vertical-align:middle;text-align: center;">
-                                                                        <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;
+                                                                        <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="addTestRow();"><i class="fa fa-plus"></i></a>&nbsp;
                                                                         <a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);deleteRow('<?php echo base64_encode($covid19TestInfo[$indexKey]['test_id']); ?>');"><i class="fa fa-minus"></i></a>
                                                                     </td>
                                                                 </tr>
@@ -782,7 +778,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                                                                     </select>
                                                                 </td>
                                                                 <td style="vertical-align:middle;text-align: center;">
-                                                                    <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;
+                                                                    <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="addTestRow();"><i class="fa fa-plus"></i></a>&nbsp;
                                                                     <a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
                                                                 </td>
                                                             </tr>
@@ -1034,7 +1030,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
         <?php } else { ?>
             $('.disabledForm input, .disabledForm select , .disabledForm textarea, .test-name-table-input').attr('disabled', true);
             $('.test-name-table-input').prop('disabled', true);
-            insRow();
+            addTestRow();
         <?php } ?>
 
         $('.enable-input input, .enable-input select , .enable-input textarea').attr('disabled', false);
@@ -1066,9 +1062,10 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
         }
         <?php $index = 0;
         if (isset($covid19Symptoms) && count($covid19Symptoms) > 0) {
-            foreach ($covid19Symptoms as $symptomId => $symptomName) { ?>
-                checkSubSymptoms($('#symptomDetected<?php echo $symptomId; ?>').val(), <?php echo $symptomId; ?>, <?php echo $index; ?>);
-        <?php $index++;
+            foreach ($covid19Symptoms as $symptomId => $symptomName) { 
+                if($covid19SelectedSymptoms[$symptomId] == "yes"){?>
+                checkSubSymptoms($('#symptom<?php echo $symptomId; ?>').val(), <?php echo $symptomId; ?>, <?php echo $index; ?>);
+                <?php } $index++;
             }
         } ?>
 
@@ -1080,17 +1077,20 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
             }
         } ?>
     });
-
     function checkSubSymptoms(val, parent, row) {
-        if (val == 'yes') {
+        if (val != "") {
             $.post("/covid-19/requests/getSymptomsByParentId.php", {
                     symptomParent: parent,
+                    from: 'update-result',
                     covid19Id: <?php echo $covid19Info['covid19_id']; ?>
                 },
                 function(data) {
                     if (data != "") {
-                        $("#symptomsTable").find("tr:eq(" + row + ")").after(data);
-                        $(".symptom-input").prop("disabled", true);
+                        $('.symptomRow' + parent).removeClass('hide-symptoms');
+                        $('.hide-symptoms').remove();
+                        $('.symptomRow' + parent).addClass('hide-symptoms');
+                        console.log(row);
+                        $(".row"+row).after(data);
                     }
                 });
         } else {
@@ -1117,9 +1117,9 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
 
     function addTestRow() {
         let rowString = `<tr>
-                    <td class="text-center">${testCounter}</td>
+                    <td class="text-center">${tableRowId}</td>
                     <td>
-                    <select onchange="otherCovidTestName(this.value,${testCounter})" class="form-control test-name-table-input" id="testName${testCounter}" name="testName[]" title="Please enter the name of the Testkit (or) Test Method used">
+                    <select onchange="otherCovidTestName(this.value,${tableRowId})" class="form-control test-name-table-input" id="testName${tableRowId}" name="testName[]" title="Please enter the name of the Testkit (or) Test Method used">
                     <option value="">--Select--</option>
                     <option value="PCR">PCR</option>
                     <option value="GeneXpert">GeneXpert</option>
@@ -1127,11 +1127,11 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                     <option value="ELISA">ELISA</option>
                     <option value="other">Others</option>
                 </select>
-                <input type="text" name="testNameOther[]" id="testNameOther${testCounter}" class="form-control testInputOther' + testCounter + '" title="Please enter the name of the Testkit (or) Test Method used" placeholder="Please enter the name of the Testkit (or) Test Method used" style="display: none;margin-top: 10px;" />
+                <input type="text" name="testNameOther[]" id="testNameOther${tableRowId}" class="form-control testInputOther' + tableRowId + '" title="Please enter the name of the Testkit (or) Test Method used" placeholder="Please enter the name of the Testkit (or) Test Method used" style="display: none;margin-top: 10px;" />
             </td>
-            <td><input type="text" name="testDate[]" id="testDate${testCounter}" class="form-control test-name-table-input dateTime" placeholder="Tested on" title="Please enter the tested on for row ${testCounter}" /></td>
+            <td><input type="text" name="testDate[]" id="testDate${tableRowId}" class="form-control test-name-table-input dateTime" placeholder="Tested on" title="Please enter the tested on for row ${tableRowId}" /></td>
             <td>
-                <select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult${testCounter}" title="Please select the result"><?= $general->generateSelectOptions($covid19Results, null, '-- Sélectionner --'); ?></select>
+                <select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult${tableRowId}" title="Please select the result"><?= $general->generateSelectOptions($covid19Results, null, '-- Sélectionner --'); ?></select>
             </td>
             <td style="vertical-align:middle;text-align: center;">
                 <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="addTestRow(this);"><i class="fa fa-plus"></i></a>&nbsp;
@@ -1170,7 +1170,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
             el.parentNode.removeChild(el);
             rl = document.getElementById("testKitNameTable").rows.length;
             if (rl == 0) {
-                testCounter = 0;
+                tableRowId = 0;
                 addTestRow();
             }
         });
