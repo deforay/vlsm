@@ -329,4 +329,12 @@ class Covid19
 
         return $response;
     }
+    
+    public function getCovid19ReasonsDetailsForTestingByFormId($formId)
+    {
+        if (empty($formId)) {
+            return null;
+        }
+        return $this->db->rawQueryOne("SELECT * FROM covid19_reasons_for_testing WHERE `covid19_id` = $formId");
+    }
 }
