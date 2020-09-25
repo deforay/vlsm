@@ -19,12 +19,16 @@ $configResult = $db->query($globalConfigQuery);
 $globalConfigLastModified = $general->getLastModifiedDateTime('global_config', 'updated_on');
 $provinceLastModified = $general->getLastModifiedDateTime('province_details');
 $facilityLastModified = $general->getLastModifiedDateTime('facility_details');
+$healthFacilityLastModified = $general->getLastModifiedDateTime('health_facilities');
+$testingLabsLastModified = $general->getLastModifiedDateTime('testing_labs');
 
 $data = array(
-    'globalConfigLastModified' => $globalConfigLastModified,
-    'provinceLastModified' => $provinceLastModified,
-    'facilityLastModified' => $facilityLastModified,
-    "Key" => "vlsm-get-remote",
+    'globalConfigLastModified'      => $globalConfigLastModified,
+    'provinceLastModified'          => $provinceLastModified,
+    'facilityLastModified'          => $facilityLastModified,
+    'healthFacilityLastModified'    => $healthFacilityLastModified,
+    'testingLabsLastModified'       => $testingLabsLastModified,
+    "Key"                           => "vlsm-get-remote",
 );
 
 if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) {
@@ -48,6 +52,7 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
     $data['covid19ReasonForTestingLastModified'] = $general->getLastModifiedDateTime('r_covid19_test_reasons');
 }
 
+// echo "<pre>";print_r($data);die;
 $url = $systemConfig['remoteURL'] . '/remote/remote/commonData.php';
 
 $ch = curl_init($url);
@@ -419,5 +424,40 @@ if (!empty($result['facilities']) && count($result['facilities']) > 0) {
             $db->insert('facility_details', $facilityData);
             $lastId = $db->getInsertId();
         }
+    }
+}
+
+
+//update or insert health facilities
+if (!empty($result['healthFacilities']) && count($result['healthFacilities']) > 0) {
+
+    $db = $db->where('test_type IN ("vl,eid,covid19")');
+    $id = $db->delete('health_facilities');
+    foreach ($result['healthFacilities'] as $healthFacility) {
+        $healthFacilityData = array(
+            'test_type'         =>$healthFacility['test_type'],
+            'facility_id'       => $healthFacility['facility_id'],
+            'updated_datetime'  => $general->getDateTime()
+        );
+        $lastId = 0;
+        $db->insert('health_facilities', $healthFacilityData);
+        $lastId = $db->getInsertId();
+    }
+}
+
+//update or insert testing labs
+if (!empty($result['testingLabs']) && count($result['testingLabs']) > 0) {
+
+    $db = $db->where('test_type IN ("vl,eid,covid19")');
+    $id = $db->delete('testing_labs');
+    foreach ($result['testingLabs'] as $testingLabs) {
+        $testingLabsData = array(
+            'test_type'         =>$testingLabs['test_type'],
+            'facility_id'       => $testingLabs['facility_id'],
+            'updated_datetime'  => $general->getDateTime()
+        );
+        $lastId = 0;
+        $db->insert('testing_labs', $testingLabsData);
+        $lastId = $db->getInsertId();
     }
 }
