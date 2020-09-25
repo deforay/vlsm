@@ -8,7 +8,7 @@ include_once '../../startup.php';
 
 $general = new \Vlsm\Models\General($db);
 
-// echo "<pre>";print_r($_POST);die;
+// echo "<pre>";print_r(json_encode($_POST['reasonDetails']));die;
 
 $tableName = "form_covid19";
 $tableName1 = "activity_log";
@@ -175,14 +175,24 @@ try {
 
 	$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 	$db->delete("covid19_reasons_for_testing");
-	if (isset($_POST['responseDetected']) && !empty($_POST['responseDetected'])) {
-
-		for ($i = 0; $i < count($_POST['responseDetected']); $i++) {
-			$symptomData = array();
-			$symptomData["covid19_id"] = $_POST['covid19SampleId'];
-			$symptomData["reasons_id"] = $_POST['responseId'][$i];
-			$symptomData["reasons_detected"] = $_POST['responseDetected'][$i];
-			$db->insert("covid19_reasons_for_testing", $symptomData);
+	if (isset($_POST['responseDetected']) && !empty($_POST['responseDetected']) || (isset($_POST['reasonDetails']) && !empty($_POST['reasonDetails']))) {
+		if(isset($_POST['reasonDetails']) > 0 && count($_POST['reasonDetails']) > 0){
+			// For DRC form only
+			$reasonData = array();
+			$reasonData["covid19_id"] 		= $_POST['covid19SampleId'];
+			$reasonData["reasons_id"] 		= $_POST['reason'];
+			$reasonData["reasons_detected"]	= "yes";
+			$reasonData["reason_details"] 	= json_encode($_POST['reasonDetails']);
+			$db->insert("covid19_reasons_for_testing", $reasonData);
+		} else{
+			// For Others forms
+			for ($i = 0; $i < count($_POST['responseDetected']); $i++) {
+				$reasonData = array();
+				$reasonData["covid19_id"] 		= $_POST['covid19SampleId'];
+				$reasonData["reasons_id"] 		= $_POST['responseId'][$i];
+				$reasonData["reasons_detected"]	= $_POST['responseDetected'][$i];
+				$db->insert("covid19_reasons_for_testing", $reasonData);
+			}
 		}
 	}
 
