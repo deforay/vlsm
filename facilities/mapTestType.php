@@ -81,9 +81,6 @@ include_once(APPLICATION_PATH . '/header.php');
 															<a href="#" id="select-all-field" style="float:left;" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a> <a href="#" id="deselect-all-field" style="float:right;" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
 														</div><br /><br />
 														<select id="facilities" name="facilities[]" multiple="multiple" class="search">
-															<?php foreach ($facilityResult as $facility) {
-																echo '<option value="' . $facility['facility_id'] . '">' . $facility['facility_name'] . '</option>';
-															} ?>
 														</select>
 													</div>
 												</div>
