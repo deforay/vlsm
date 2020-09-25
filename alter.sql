@@ -1148,3 +1148,6 @@ UPDATE `system_config` SET `value` = '4.2.1' WHERE `system_config`.`name` = 'ver
 -- Amit 24 Sep 2020
 ALTER TABLE `import_config` ADD `supported_tests` JSON NULL DEFAULT NULL AFTER `machine_name`;
 
+-- Thana 25 Sep 2020
+ALTER TABLE `health_facilities` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `facility_id`;
+ALTER TABLE `testing_labs` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `facility_id`;
