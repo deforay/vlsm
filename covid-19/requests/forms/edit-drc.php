@@ -92,7 +92,6 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
     </section>
     <!-- Main content -->
     <section class="content">
-        <pre><?= print_r($reasonDetails);?></pre>
         <div class="box box-default">
             <div class="box-header with-border">
                 <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indique un champ obligatoire &nbsp;</div>
@@ -321,16 +320,12 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             <table id="symptomsTable" class="table table-bordered">
                                                 <?php $index = 0;
                                                 foreach ($covid19Symptoms as $symptomId => $symptomName) { ?>
-                                                    <tr class="row<?php echo $index; ?>">
-                                                        <th style="width:50%;"><?php echo $symptomName; ?></th>
-                                                        <td style="width:50%;">
-                                                            <input name="symptomId[]" type="hidden" value="<?php echo $symptomId; ?>">
-                                                            <select name="symptomDetected[]" id="symptomDetected<?php echo $symptomId; ?>" class="form-control isRequired" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" style="width:100%" onchange="checkSubSymptoms(this.value,<?php echo $symptomId; ?>,<?php echo $index; ?>);">
-                                                                <option value="">-- Sélectionner --</option>
-                                                                <option value='yes' <?php echo (isset($covid19SelectedSymptoms[$symptomId]) && $covid19SelectedSymptoms[$symptomId] == 'yes') ? "selected='selected'" : ""; ?>> Oui </option>
-                                                                <option value='no' <?php echo (isset($covid19SelectedSymptoms[$symptomId]) && $covid19SelectedSymptoms[$symptomId] == 'no') ? "selected='selected'" : ""; ?>> Non </option>
-                                                                <option value='unknown' <?php echo (isset($covid19SelectedSymptoms[$symptomId]) && $covid19SelectedSymptoms[$symptomId] == 'unknown') ? "selected='selected'" : ""; ?>> Inconnu </option>
-                                                            </select>
+                                                    <tr colspan="2" class="row<?php echo $index; ?>">
+                                                        <td style="display: flex;">
+                                                            <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                                            <input type="radio" class="" id="symptom<?php echo $symptomId; ?>" name="symptom" value="<?php echo $symptomId; ?>" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" onclick="checkSubSymptoms(this.value,<?php echo $symptomId; ?>,<?php echo $index; ?>);" <?php echo (isset($covid19SelectedSymptoms[$symptomId])) ? "checked" : ""; ?>>
+                                                            </label>
+                                                            <label class="radio-inline" for="symptom<?php echo $symptomId; ?>" style="padding-left:17px !important;margin-left:0;"><b><?php echo $symptomName; ?></b></label>
                                                         </td>
                                                     </tr>
                                                 <?php $index++;
@@ -341,10 +336,10 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
 
                                     <tr>
                                         <td colspan="4">
-                                            <table id="symptomsTable" class="table table-bordered">
+                                            <table id="comorbiditiesTable" class="table table-bordered">
                                                 <?php $index = 0;
                                                 foreach ($covid19Comorbidities as $comorbiditiesId => $comorbiditiesName) { ?>
-                                                    <tr class="row<?php echo $index; ?>">
+                                                    <tr>
                                                         <th style="width:50%;"><?php echo $comorbiditiesName; ?></th>
                                                         <td style="width:50%;">
                                                             <input name="comorbidityId[]" type="hidden" value="<?php echo $comorbiditiesId; ?>">
@@ -1087,24 +1082,28 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
 
         <?php $index = 0;
         if (isset($covid19Symptoms) && count($covid19Symptoms) > 0) {
-            foreach ($covid19Symptoms as $symptomId => $symptomName) { ?>
-                checkSubSymptoms($('#symptomDetected<?php echo $symptomId; ?>').val(), <?php echo $symptomId; ?>, <?php echo $index; ?>);
-        <?php $index++;
+            foreach ($covid19Symptoms as $symptomId => $symptomName) { 
+                if($covid19SelectedSymptoms[$symptomId] == "yes"){?>
+                checkSubSymptoms($('#symptom<?php echo $symptomId; ?>').val(), <?php echo $symptomId; ?>, <?php echo $index; ?>);
+                <?php } $index++;
             }
         } ?>
 
     });
 
     function checkSubSymptoms(val, parent, row) {
-        if (val == 'yes') {
+        if (val != "") {
             $.post("getSymptomsByParentId.php", {
                     symptomParent: parent,
                     covid19Id: <?php echo $covid19Info['covid19_id']; ?>
                 },
                 function(data) {
                     if (data != "") {
-                        // $(".row"+row).append(data);
-                        $("#symptomsTable").find("tr:eq(" + row + ")").after(data);
+                        $('.symptomRow' + parent).removeClass('hide-symptoms');
+                        $('.hide-symptoms').remove();
+                        $('.symptomRow' + parent).addClass('hide-symptoms');
+                        console.log(row);
+                        $(".row"+row).after(data);
                     }
                 });
         } else {

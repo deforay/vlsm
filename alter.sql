@@ -1152,3 +1152,4 @@ ALTER TABLE `import_config` ADD `supported_tests` JSON NULL DEFAULT NULL AFTER `
 ALTER TABLE `health_facilities` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `facility_id`;
 ALTER TABLE `testing_labs` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `facility_id`;
 ALTER TABLE `covid19_reasons_for_testing` ADD `reason_details` TEXT NULL DEFAULT NULL AFTER `reasons_detected`;
+ALTER TABLE `covid19_patient_symptoms` ADD `symptom_details` TEXT NULL DEFAULT NULL AFTER `symptom_detected`;
