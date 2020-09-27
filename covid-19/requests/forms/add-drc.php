@@ -1098,7 +1098,10 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
         }
     }
 
-    function checkSubSymptoms(obj, parent, row) {
+    function checkSubSymptoms(obj, parent, row, sub = "") {
+        if(sub != "sub"){
+            $('.hide-symptoms').remove();
+        }
         if (obj.value != '') {
             $.post("getSymptomsByParentId.php", {
                     symptomParent: parent

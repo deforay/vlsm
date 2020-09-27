@@ -21,7 +21,7 @@ if(count($covid19Symptoms) > 0){
         echo '<tr class="symptomRow'.$_POST['symptomParent'].' hide-symptoms" id="'.$_POST['symptomParent'].'">
                 <td colspan="2" style="padding-left: 70px;display: flex;">
                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                        <input type="checkbox" class="reason-checkbox symptoms-checkbox" id="symptomDetails'.$symptoms['symptom_id'].'" name="symptomDetails[]" value="'.$symptoms['symptom_id'].'" title="Veuillez choisir la valeur pour '. $symptoms['symptom_name'].'" onclick="checkSubSymptoms(this,'.$symptoms['symptom_id'].','.$index.');" '.$checked.' ' .$disabled.'>
+                        <input type="checkbox" class="reason-checkbox symptoms-checkbox" id="symptomDetails'.$symptoms['symptom_id'].'" name="symptomDetails[]" value="'.$symptoms['symptom_id'].'" title="Veuillez choisir la valeur pour '. $symptoms['symptom_name'].'" onclick="checkSubSymptoms(this,'.$symptoms['symptom_id'].','.$index.', "sub");" '.$checked.' ' .$disabled.'>
                     </label>
                     <label class="radio-inline" for="symptomDetails'.$symptoms['symptom_id'].'" style="padding-left:17px !important;margin-left:0;">'.ucwords($symptoms['symptom_name']).'</label>
                 </td>
