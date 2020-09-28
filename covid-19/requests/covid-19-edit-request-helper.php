@@ -100,6 +100,7 @@ try {
 
 
 	$covid19Data = array(
+		'serial_no'                           => isset($_POST['serialNo']) ? $_POST['serialNo'] : null,
 		'facility_id'                         => isset($_POST['facilityId']) ? $_POST['facilityId'] : null,
 		'test_number'                         => isset($_POST['testNumber']) ? $_POST['testNumber'] : null,
 		'province_id'                         => isset($_POST['provinceId']) ? $_POST['provinceId'] : null,
@@ -198,17 +199,17 @@ try {
 	$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 	$sid = $db->delete("covid19_patient_symptoms");
 	if (isset($_POST['symptomDetected']) && !empty($_POST['symptomDetected']) || (isset($_POST['symptom']) && !empty($_POST['symptom']))) {
-		if(isset($_POST['symptom']) > 0 && count($_POST['symptom']) > 0){
+		if (isset($_POST['symptom']) > 0 && count($_POST['symptom']) > 0) {
 			// For DRC form only
 			for ($i = 0; $i < count($_POST['symptom']); $i++) {
 				$symptomData = array();
 				$symptomData["covid19_id"] 		= $_POST['covid19SampleId'];
 				$symptomData["symptom_id"] 		= $_POST['symptom'][$i];
 				$symptomData["symptom_detected"]	= "yes";
-				$symptomData["symptom_details"] 	= (isset($_POST['symptomDetails'][$_POST['symptom'][$i]]) && count($_POST['symptomDetails'][$_POST['symptom'][$i]]) > 0)?json_encode($_POST['symptomDetails'][$_POST['symptom'][$i]]):null;
+				$symptomData["symptom_details"] 	= (isset($_POST['symptomDetails'][$_POST['symptom'][$i]]) && count($_POST['symptomDetails'][$_POST['symptom'][$i]]) > 0) ? json_encode($_POST['symptomDetails'][$_POST['symptom'][$i]]) : null;
 				$db->insert("covid19_patient_symptoms", $symptomData);
 			}
-		} else{
+		} else {
 			// For Others forms
 			for ($i = 0; $i < count($_POST['symptomDetected']); $i++) {
 				$symptomData = array();
@@ -223,7 +224,7 @@ try {
 	$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 	$db->delete("covid19_reasons_for_testing");
 	if (isset($_POST['responseDetected']) && !empty($_POST['responseDetected']) || (isset($_POST['reasonDetails']) && !empty($_POST['reasonDetails']))) {
-		if(isset($_POST['reasonDetails']) > 0 && count($_POST['reasonDetails']) > 0){
+		if (isset($_POST['reasonDetails']) > 0 && count($_POST['reasonDetails']) > 0) {
 			// For DRC form only
 			$reasonData = array();
 			$reasonData["covid19_id"] 		= $_POST['covid19SampleId'];
@@ -231,7 +232,7 @@ try {
 			$reasonData["reasons_detected"]	= "yes";
 			$reasonData["reason_details"] 	= json_encode($_POST['reasonDetails']);
 			$db->insert("covid19_reasons_for_testing", $reasonData);
-		} else{
+		} else {
 			// For Others forms
 			for ($i = 0; $i < count($_POST['responseDetected']); $i++) {
 				$reasonData = array();
@@ -261,7 +262,7 @@ try {
 
 		if (isset($_POST['testName']) && count($_POST['testName']) > 0) {
 			foreach ($_POST['testName'] as $testKey => $testName) {
-				if(trim($_POST['testName'][$testKey]) != ""){
+				if (trim($_POST['testName'][$testKey]) != "") {
 					if (isset($_POST['testDate'][$testKey]) && trim($_POST['testDate'][$testKey]) != "") {
 						$testedDateTime = explode(" ", $_POST['testDate'][$testKey]);
 						$_POST['testDate'][$testKey] = $general->dateFormat($testedDateTime[0]) . " " . $testedDateTime[1];
@@ -272,11 +273,11 @@ try {
 						'covid19_id'			=> $_POST['covid19SampleId'],
 						'test_name'				=> ($testName == 'other') ? $_POST['testNameOther'][$testKey] : $testName,
 						'facility_id'           => isset($_POST['labId']) ? $_POST['labId'] : null,
-						'sample_tested_datetime'=> $_POST['testDate'][$testKey],
+						'sample_tested_datetime' => $_POST['testDate'][$testKey],
 						'testing_platform'      => isset($_POST['testingPlatform'][$testKey]) ? $_POST['testingPlatform'][$testKey] : null,
 						'result'				=> $_POST['testResult'][$testKey],
 					);
- 					if (isset($_POST['testId'][$testKey]) && $_POST['testId'][$testKey] != '') {
+					if (isset($_POST['testId'][$testKey]) && $_POST['testId'][$testKey] != '') {
 						$db = $db->where('test_id', base64_decode($_POST['testId'][$testKey]));
 						$db->update($testTableName, $covid19TestData);
 					} else {
