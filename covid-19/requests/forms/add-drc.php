@@ -58,7 +58,6 @@ foreach ($pdResult as $provinceName) {
 $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélectionner --');
 
 ?>
-
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -279,7 +278,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 foreach ($covid19Symptoms as $symptomId => $symptomName) { ?>
                                                     <tr colspan="2" class="row<?php echo $index; ?>">
                                                         <td style="display: flex;">
-                                                            <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                                            <label class="radio-inline" style="width:4%;margin-left:0;">
                                                             <input type="checkbox" class="" id="symptom<?php echo $symptomId; ?>" name="symptom[]" value="<?php echo $symptomId; ?>" title="<?php echo $symptomName; ?>" onclick="checkSubSymptoms(this.value,<?php echo $symptomId; ?>,<?php echo $index; ?>);">
                                                             </label>
                                                             <label class="radio-inline" for="symptom<?php echo $symptomId; ?>" style="padding-left:17px !important;margin-left:0;"><b><?php echo $symptomName; ?></b></label>
@@ -290,8 +289,18 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                             </table>
                                         </td>
                                     </tr>
-
                                     <tr>
+                                        <th style="width:15% !important"><label for="medicalHistory"></label>Antécédents Médicaux</th>
+                                        <td style="width:35% !important;">
+                                            <select name="medicalHistory" id="medicalHistory" class="form-control" title="Antécédents Médicaux">
+                                                <option value="">--Select--</option>
+                                                <option value="yes">Oui</option>
+                                                <option value="no">Non</option>
+                                                <option value="unknown">Inconnu</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr class="comorbidities-row" style="display: none;">
                                         <td colspan="4">
                                             <table id="comorbiditiesTable" class="table table-bordered">
                                                 <?php $index = 0;
@@ -300,7 +309,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                         <th style="width:50%;"><?php echo $comorbiditiesName; ?></th>
                                                         <td style="width:50%;">
                                                             <input name="comorbidityId[]" type="hidden" value="<?php echo $comorbiditiesId; ?>">
-                                                            <select name="comorbidityDetected[]" class="form-control isRequired" title="<?php echo $comorbiditiesName; ?>" style="width:100%">
+                                                            <select name="comorbidityDetected[]" class="form-control" title="<?php echo $comorbiditiesName; ?>" style="width:100%">
                                                                 <option value="">-- Sélectionner --</option>
                                                                 <option value='yes'> Oui </option>
                                                                 <option value='no'> Non </option>
@@ -321,7 +330,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                             <table id="responseTable" class="table table-bordered">
                                                 <tr>
                                                     <td colspan="2">
-                                                        <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
                                                             <input type="radio" class="" id="reason1" name="reason" value="1" title="Cas suspect de COVID-1" onchange="checkSubReason(this,'Cas_suspect_de_COVID_19');">
                                                         </label>
                                                         <label class="radio-inline" for="reason1" style="padding-left:17px !important;margin-left:0;"><b>Cas suspect de COVID-19</b></label>
@@ -329,7 +338,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 </tr>
                                                 <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
                                                     <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
                                                             <input type="checkbox" class="reason-checkbox" id="suspect1" name="reasonDetails[]" value="Fièvre d'accès brutal (Inferieur ou égale à 38°C, vérifié à la salle d'urgence, la consultation externe, ou l'hôpital) ET(cochez une ou deux des cases suivantes)">
                                                         </label>
                                                         <label class="radio-inline" for="suspect1" style="padding-left:17px !important;margin-left:0;">Fièvre d'accès brutal (Inferieur ou égale à 38°C, vérifié à la salle d'urgence, la consultation externe, ou l'hôpital) ET(cochez une ou deux des cases suivantes)</label>
@@ -337,7 +346,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 </tr>
                                                 <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
                                                     <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
                                                             <input type="checkbox" class="reason-checkbox" id="suspect2" name="reasonDetails[]" value="Toux">
                                                         </label>
                                                         <label class="radio-inline" for="suspect2" style="padding-left:17px !important;margin-left:0;">Toux</label>
@@ -345,7 +354,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 </tr>
                                                 <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
                                                     <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
                                                             <input type="checkbox" class="reason-checkbox" id="suspect3" name="reasonDetails[]" value="Rhume">
                                                         </label>
                                                         <label class="radio-inline" for="suspect3" style="padding-left:17px !important;margin-left:0;">Rhume</label>
@@ -353,7 +362,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 </tr>
                                                 <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
                                                     <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
                                                             <input type="checkbox" class="reason-checkbox" id="suspect4" name="reasonDetails[]" value="Mal de gorge">
                                                         </label>
                                                         <label class="radio-inline" for="suspect4" style="padding-left:17px !important;margin-left:0;">Mal de gorge</label>
@@ -361,7 +370,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 </tr>
                                                 <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
                                                     <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
                                                             <input type="checkbox" class="reason-checkbox" id="suspect5" name="reasonDetails[]" value="Difficulté respiratoire">
                                                         </label>
                                                         <label class="radio-inline" for="suspect5" style="padding-left:17px !important;margin-left:0;">Difficulté respiratoire</label>
@@ -369,7 +378,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 </tr>
                                                 <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
                                                     <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
                                                             <input type="checkbox" class="reason-checkbox" id="suspect6" name="reasonDetails[]" value="Notion de séjour ou voyage dans les zones a épidémie a COVID-19 dans les 14 jours précédant les symptômes ci-dessous.">
                                                         </label>
                                                         <label class="radio-inline" for="suspect6" style="padding-left:17px !important;margin-left:0;">Notion de séjour ou voyage dans les zones a épidémie a COVID-19 dans les 14 jours précédant les symptômes ci-dessous.</label>
@@ -382,7 +391,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 </tr>
                                                 <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
                                                     <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
                                                             <input type="checkbox" class="reason-checkbox" id="suspect7" name="reasonDetails[]" value="IRA d'intensité variable (simple a sévère) ayant été en contact étroite avec cas probable ou un cas confirmé de la maladie a COVID-19">
                                                         </label>
                                                         <label class="radio-inline" for="suspect7" style="padding-left:17px !important;margin-left:0;">IRA d'intensité variable (simple a sévère) ayant été en contact étroite avec cas probable ou un cas confirmé de la maladie a COVID-19</label>
@@ -391,7 +400,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 
                                                 <tr>
                                                     <td colspan="2">
-                                                        <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
                                                             <input type="radio" id="reason2" name="reason" value="2" onchange="checkSubReason(this,'Cas_probable_de_COVID_19');">
                                                         </label>
                                                         <label class="radio-inline" for="reason2" style="padding-left:17px !important;margin-left:0;"><b>Cas probable de COVID-19</b></label>
@@ -399,7 +408,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 </tr>
                                                 <tr class="Cas_probable_de_COVID_19 hide-reasons" style="display: none;">
                                                     <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
                                                             <input type="checkbox" class="reason-checkbox" id="probable1" name="reasonDetails[]" value="Tout cas suspects dont le résultat de laboratoire pour le diagnostic de COVID-19 n'est pas concluant (indéterminé)">
                                                         </label>
                                                         <label class="radio-inline" for="probable1" style="padding-left:17px !important;margin-left:0;">Tout cas suspects dont le résultat de laboratoire pour le diagnostic de COVID-19 n'est pas concluant (indéterminé)</label>
@@ -412,7 +421,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 </tr>
                                                 <tr class="Cas_probable_de_COVID_19 hide-reasons" style="display: none;">
                                                     <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
                                                             <input type="checkbox" class="reason-checkbox" id="probable2" name="reasonDetails[]" value="Tout décès dans un tableau d'IRA pour lequel il n'a pas été possible d'obtenir des échantillons biologiques pour confirmation au laboratoire mais dont les investigations ont révélé un lien épidémiologique avec un cas confirmé ou probable">
                                                         </label>
                                                         <label class="radio-inline" for="probable2" style="padding-left:17px !important;margin-left:0;">Tout décès dans un tableau d'IRA pour lequel il n'a pas été possible d'obtenir des échantillons biologiques pour confirmation au laboratoire mais dont les investigations ont révélé un lien épidémiologique avec un cas confirmé ou probable</label>
@@ -425,7 +434,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 </tr>
                                                 <tr class="Cas_probable_de_COVID_19 hide-reasons" style="display: none;">
                                                     <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
                                                             <input type="checkbox" class="reason-checkbox" id="probable4" name="reasonDetails[]" value="Notion de séjour ou voyage dans les 14 jours précédant le décès dans les zones a épidémie de la maladie a COVID-19">
                                                         </label>
                                                         <label class="radio-inline" for="probable4" style="padding-left:17px !important;margin-left:0;">Notion de séjour ou voyage dans les 14 jours précédant le décès dans les zones a épidémie de la maladie a COVID-19</label>
@@ -434,7 +443,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
 
                                                 <tr>
                                                     <td colspan="2">
-                                                        <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
                                                             <input type="radio" id="reason3" name="reason" value="3" onchange="checkSubReason(this,'Cas_confirme_de_COVID_19');">
                                                         </label>
                                                         <label class="radio-inline" for="reason3" style="padding-left:17px !important;margin-left:0;"><b>Cas confirme de covid-19</b></label>
@@ -442,7 +451,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 </tr>
                                                 <tr class="Cas_confirme_de_COVID_19 hide-reasons" style="display: none;">
                                                     <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
                                                             <input type="checkbox" class="reason-checkbox" id="confirme1" name="reasonDetails[]" value="Toute personne avec une confirmation en laboratoire de l'infection au COVID-19, quelles que soient les signes et symptômes cliniques">
                                                         </label>
                                                         <label class="radio-inline" for="confirme1" style="padding-left:17px !important;margin-left:0;">Toute personne avec une confirmation en laboratoire de l'infection au COVID-19, quelles que soient les signes et symptômes cliniques</label>
@@ -451,7 +460,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 
                                                 <tr>
                                                     <td colspan="2">
-                                                        <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
                                                             <input type="radio" id="reason4" name="reason" value="4" onchange="checkSubReason(this,'Non_cas_contact_de_COVID_19');">
                                                         </label>
                                                         <label class="radio-inline" for="reason4" style="padding-left:17px !important;margin-left:0;"><b>Non cas contact de COVID-19</b></label>
@@ -459,7 +468,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 </tr>
                                                 <tr class="Non_cas_contact_de_COVID_19 hide-reasons" style="display: none;">
                                                     <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
                                                             <input type="checkbox" class="reason-checkbox" id="contact1" name="reasonDetails[]" value="Tout cas suspects avec deux résultats de laboratoire négatifs au COVID-19 a au moins 48 heures d'intervalle">
                                                         </label>
                                                         <label class="radio-inline" for="contact1" style="padding-left:17px !important;margin-left:0;">Tout cas suspects avec deux résultats de laboratoire négatifs au COVID-19 a au moins 48 heures d'intervalle</label>
@@ -515,15 +524,6 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th style="width:15% !important"><label for="medicalHistory"></label>Antécédents Médicaux</th>
-                                        <td style="width:35% !important;">
-                                            <select name="medicalHistory" id="medicalHistory" class="form-control" title="Antécédents Médicaux">
-                                                <option value="">--Select--</option>
-                                                <option value="yes">Oui</option>
-                                                <option value="no">Non</option>
-                                                <option value="unknown">Inconnu</option>
-                                            </select>
-                                        </td>
                                         <th style="width:15% !important"><label for="recentHospitalization"></label>Avez-vous été hospitalisé durant les 12 derniers mois ? Have you been hospitalized in the past 12 months ? </th>
                                         <td style="width:35% !important;">
                                             <select name="recentHospitalization" id="recentHospitalization" class="form-control" title="Avez-vous été hospitalisé durant les 12 derniers mois ? Have you been hospitalized in the past 12 months ? ">
@@ -533,9 +533,6 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 <option value="unknown">Inconnu</option>
                                             </select>
                                         </td>
-                                    </tr>
-
-                                    <tr>
                                         <th style="width:15% !important"><label for="patientLivesWithChildren"></label>Habitez-vous avec les enfants ?</th>
                                         <td style="width:35% !important;">
                                             <select name="patientLivesWithChildren" id="patientLivesWithChildren" class="form-control" title="Habitez-vous avec les enfants ?">
@@ -545,6 +542,9 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 <option value="unknown">Inconnu</option>
                                             </select>
                                         </td>
+                                    </tr>
+
+                                    <tr>
                                         <th style="width:15% !important"><label for="patientCaresForChildren"></label>prenez-vous soins des enfants ?</th>
                                         <td style="width:35% !important;">
                                             <select name="patientCaresForChildren" id="patientCaresForChildren" class="form-control" title="prenez-vous soins des enfants ?">
@@ -554,12 +554,12 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 <option value="unknown">Inconnu</option>
                                             </select>
                                         </td>
-                                    </tr>
-                                    <tr>
                                         <th style="width:15% !important">Fièvre / température (&deg;C) <span class="mandatory">*</span> </th>
                                         <td style="width:35% !important;">
                                             <input class="form-control isRequired" type="number" name="feverTemp" id="feverTemp" placeholder="Fièvre / température (en &deg;Celcius)" title="Fièvre / température (en &deg;Celcius)" />
                                         </td>
+                                    </tr>
+                                    <tr>
                                         <th style="width:15% !important"><label for="temperatureMeasurementMethod">Température</label></th>
                                         <td style="width:35% !important;">
                                             <select name="temperatureMeasurementMethod" id="temperatureMeasurementMethod" class="form-control" title="Température">
@@ -570,16 +570,18 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 <option value="unknown">Inconnu</option>
                                             </select>
                                         </td>
-                                    </tr>
-                                    <tr>
                                         <th style="width:15% !important"><label for="respiratoryRate"> Fréquence Respiratoire</label></th>
                                         <td style="width:35% !important;">
                                             <input class="form-control" type="number" name="respiratoryRate" id="respiratoryRate" placeholder="Fréquence Respiratoire" title="Fréquence Respiratoire" />
                                         </td>
+                                    </tr>
+                                    <tr>
                                         <th style="width:15% !important"><label for="oxygenSaturation"> Saturation en oxygène</label></th>
                                         <td style="width:35% !important;">
                                             <input class="form-control" type="number" name="oxygenSaturation" id="oxygenSaturation" placeholder="Saturation en oxygène" title="Saturation en oxygène" />
                                         </td>
+                                        <th></th>
+                                        <td></td>
                                     </tr>
                                 </table>
 
@@ -918,6 +920,16 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
         if ($('#isResultAuthorized').val() != "yes") {
             $('#authorizedBy,#authorizedOn').removeClass('isRequired');
         }
+        if($('#medicalHistory').val() == "yes"){
+            if($('input[name ="comorbidityDetected"] select option[selected=selected][value!=" "]').length > 0){
+                alert("Veuillez sélectionner au moins une option sous Antécédents médicaux");
+                return false;
+            }
+        }
+        if($('input[name ="symptom"] select option[selected=selected][value!=" "]').length > 0){
+            alert("Veuillez sélectionner au moins une option sous Symptômes");
+            return false;
+        }
         flag = deforayValidator.init({
             formId: 'addCovid19RequestForm'
         });
@@ -948,6 +960,14 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
         // $('#province').select2({
         //     placeholder: "Province"
         // });
+        $('#medicalHistory').change(function(e) {
+            if($(this).val() == "yes"){
+                $('.comorbidities-row').show();
+            } else{
+                $('.comorbidities-row').hide();
+            }
+        });
+
         $('#isResultAuthorized').change(function(e) {
             checkIsResultAuthorized();
         });
