@@ -1167,3 +1167,7 @@ DELETE FROM roles_privileges_map WHERE privilege_id not in (select privilege_id 
 
 ALTER TABLE `privileges` ADD UNIQUE( `resource_id`, `privilege_name`);
 ALTER TABLE `resources` ADD UNIQUE( `module`, `resource_name`);
+
+-- Amit 28-Sep-2020
+
+ALTER TABLE `form_covid19` ADD `external_sample_code` VARCHAR(255) NULL DEFAULT NULL AFTER `sample_code`;
