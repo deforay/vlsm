@@ -11,6 +11,14 @@ if (!isset($interfaceConfig['enabled']) || $interfaceConfig['enabled'] === false
 $vlsmDb  = $db; // assigning to another variable to avoid confusion
 
 $usersModel = new \Vlsm\Models\Users($vlsmDb);
+$general = new \Vlsm\Models\General($vlsmDb);
+
+$labId = $general->getSystemConfig('lab_name');
+
+if (empty($labId)) {
+    echo "No Lab ID set in System Config";
+    exit(0);
+}
 
 $interfacedb = new MysqliDb(
     $interfaceConfig['dbHost'],
@@ -113,6 +121,7 @@ if (count($interfaceInfo) > 0) {
             $userId = $usersModel->addUserIfNotExists($result['tested_by']);
 
             $data = array(
+                'lab_id' => $labId,
                 'tested_by' => $userId,
                 'result_approved_by' => $userId,
                 'result_approved_datetime' => $result['authorised_date_time'],
@@ -195,7 +204,6 @@ if (count($interfaceInfo) > 0) {
 
     if ($numberOfResults > 0) {
         $importedBy = isset($_SESSION['userId']) ? $_SESSION['userId'] : 'AUTO';
-        $general = new \Vlsm\Models\General($vlsmDb);
         $general->resultImportStats($numberOfResults, 'interface', $importedBy);
     }
 }
