@@ -4,6 +4,8 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 #require_once('../startup.php');  
+$general = new \Vlsm\Models\General($db);
+
 $params     = $_POST['facilityType'];
 $testType   = $_POST['testType'];
 
