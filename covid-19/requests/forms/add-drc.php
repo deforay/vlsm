@@ -273,17 +273,51 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                     </tr>
                                     <tr>
                                         <td colspan="4">
-                                            <table id="symptomsTable" class="table table-bordered">
+                                            <table id="symptomsTable" class="table table-bordered table-striped">
                                                 <?php $index = 0;
                                                 foreach ($covid19Symptoms as $symptomId => $symptomName) { ?>
-                                                    <tr colspan="2" class="row<?php echo $index; ?>">
-                                                        <td style="display: flex;">
+                                                    <tr class="row<?php echo $index; ?>">
+                                                        <!-- <td style="display: flex;">
                                                             <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                                <input type="checkbox" class="checkSymptoms" id="symptom<?php echo $symptomId; ?>" name="symptom[]" value="<?php echo $symptomId; ?>" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" onclick="checkSubSymptoms(this.value,<?php echo $symptomId; ?>,<?php echo $index; ?>);">
+                                                                <input type="checkbox" class="checkSymptoms" id="xsymptom<?php echo $symptomId; ?>" name="symptom[]" value="<?php echo $symptomId; ?>" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" onclick="checkSubSymptoms(this.value,<?php echo $symptomId; ?>,<?php echo $index; ?>);">
                                                             </label>
                                                             <label class="radio-inline" for="symptom<?php echo $symptomId; ?>" style="padding-left:17px !important;margin-left:0;"><b><?php echo $symptomName; ?></b></label>
+                                                        </td> -->
+                                                        <th style="width:50%;"><?php echo $symptomName; ?></th>
+                                                        <td style="width:50%;">
+                                                            <input name="symptomId[]" type="hidden" value="<?php echo $symptomId; ?>">
+                                                            <select name="symptomDetected[]" id="symptomDetected<?php echo $symptomId; ?>" class="form-control" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" style="width:100%">
+                                                                <option value="">-- Sélectionner --</option>
+                                                                <option value='yes'> Oui </option>
+                                                                <option value='no'> Non </option>
+                                                                <option value='unknown'> Inconnu </option>
+                                                            </select>
+
+                                                            <br>
+                                                            <?php
+                                                            if ($symptomId == 13) {
+                                                            ?>
+                                                                <label class="" for="symptomDetails14" style="margin-left:0;">Si oui:<br> Sanglante?</label>
+                                                                <select name="symptomDetails[13][]" class="form-control" style="width:100%">
+                                                                    <option value="">-- Sélectionner --</option>
+                                                                    <option value='yes'> Oui </option>
+                                                                    <option value='no'> Non </option>
+                                                                    <option value='unknown'> Inconnu </option>
+                                                                </select>
+                                                                <label class="" for="symptomDetails15" style="margin-left:0;">Aqueuse?</label>
+                                                                <select name="symptomDetails[13][]" class="form-control" style="width:100%">
+                                                                    <option value="">-- Sélectionner --</option>
+                                                                    <option value='yes'> Oui </option>
+                                                                    <option value='no'> Non </option>
+                                                                    <option value='unknown'> Inconnu </option>
+                                                                </select>
+                                                                <label class="" for="symptomDetails16" style="margin-left:0;">Nombre De Selles Par /24h</label>
+                                                                    <input type="text" value="" class="form-control reason-checkbox symptoms-checkbox" id="symptomDetails16" name="symptomDetails[13][]" placeholder="Nombre de selles par /24h" title="Nombre de selles par /24h">
+
+                                                            <?php } ?>
                                                         </td>
                                                     </tr>
+
                                                 <?php $index++;
                                                 } ?>
                                             </table>
@@ -293,7 +327,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                         <th style="width:15% !important"><label for="medicalHistory"></label>Antécédents Médicaux</th>
                                         <td style="width:35% !important;">
                                             <select name="medicalHistory" id="medicalHistory" class="form-control" title="Antécédents Médicaux">
-                                                <option value="">--Select--</option>
+                                                <option value="">-- Sélectionner --</option>
                                                 <option value="yes">Oui</option>
                                                 <option value="no">Non</option>
                                                 <option value="unknown">Inconnu</option>
@@ -331,7 +365,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 <tr>
                                                     <td colspan="2">
                                                         <label class="radio-inline" style="margin-left:0;">
-                                                            <input type="radio" class="" id="reason1" name="reason" value="1" title="Cas suspect de COVID-1" onchange="checkSubReason(this,'Cas_suspect_de_COVID_19');">
+                                                            <input type="radio" class="" id="reason1" name="reasonForCovid19Test" value="1" title="Cas suspect de COVID-1" onchange="checkSubReason(this,'Cas_suspect_de_COVID_19');">
                                                             <strong>Cas suspect de COVID-19</strong>
                                                         </label>
 
@@ -402,7 +436,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 <tr>
                                                     <td colspan="2">
                                                         <label class="radio-inline" style="margin-left:0;">
-                                                            <input type="radio" id="reason2" name="reason" value="2" onchange="checkSubReason(this,'Cas_probable_de_COVID_19');">
+                                                            <input type="radio" id="reason2" name="reasonForCovid19Test" value="2" onchange="checkSubReason(this,'Cas_probable_de_COVID_19');">
                                                             <strong>Cas probable de COVID-19</strong>
                                                         </label>
 
@@ -446,7 +480,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 <tr>
                                                     <td colspan="2">
                                                         <label class="radio-inline" style="margin-left:0;">
-                                                            <input type="radio" id="reason3" name="reason" value="3" onchange="checkSubReason(this,'Cas_confirme_de_COVID_19');">
+                                                            <input type="radio" id="reason3" name="reasonForCovid19Test" value="3" onchange="checkSubReason(this,'Cas_confirme_de_COVID_19');">
                                                             <strong><b>Cas confirme de covid-19</strong>
                                                         </label>
 
@@ -464,7 +498,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 <tr>
                                                     <td colspan="2">
                                                         <label class="radio-inline" style="margin-left:0;">
-                                                            <input type="radio" id="reason4" name="reason" value="4" onchange="checkSubReason(this,'Non_cas_contact_de_COVID_19');">
+                                                            <input type="radio" id="reason4" name="reasonForCovid19Test" value="4" onchange="checkSubReason(this,'Non_cas_contact_de_COVID_19');">
                                                             <strong><b>Non cas contact de COVID-19</strong>
                                                         </label>
 
@@ -1123,7 +1157,8 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
     }
 
     function checkSubSymptoms(obj, parent, row, sub = "") {
-        if (obj.value != '') {
+        //alert(obj.value);
+        if (obj.value === 'yes') {
             $.post("getSymptomsByParentId.php", {
                     symptomParent: parent
                 },

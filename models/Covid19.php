@@ -248,7 +248,7 @@ class Covid19
 
         return $response;
     }
-    public function getCovid19SymptomsByFormId($formId)
+    public function getCovid19SymptomsByFormId($formId, $allData = false)
     {
         if (empty($formId)) {
             return null;
@@ -260,11 +260,16 @@ class Covid19
         if (is_array($formId)) {
             $results = $this->db->rawQuery("SELECT * FROM covid19_patient_symptoms WHERE `covid19_id` IN (" . implode(",", $formId) . ")");
 
+
+            if($allData) return $results;
+
             foreach ($results as $row) {
                 $response[$row['covid19_id']][$row['symptom_id']] = $row['symptom_detected'];
             }
         } else {
             $results = $this->db->rawQuery("SELECT * FROM covid19_patient_symptoms WHERE `covid19_id` = $formId");
+
+            if($allData) return $results;
 
             foreach ($results as $row) {
                 $response[$row['symptom_id']] = $row['symptom_detected'];
