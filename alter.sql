@@ -1153,3 +1153,17 @@ ALTER TABLE `health_facilities` ADD `updated_datetime` DATETIME NULL DEFAULT NUL
 ALTER TABLE `testing_labs` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `facility_id`;
 ALTER TABLE `covid19_reasons_for_testing` ADD `reason_details` TEXT NULL DEFAULT NULL AFTER `reasons_detected`;
 ALTER TABLE `covid19_patient_symptoms` ADD `symptom_details` TEXT NULL DEFAULT NULL AFTER `symptom_detected`;
+
+-- Amit 27 Sep 2020
+
+-- You may have to disable "Enable foreign key checks" checkbox on phpMyAdmin
+SET FOREIGN_KEY_CHECKS=0;
+DELETE FROM privileges WHERE privilege_id IN (
+  SELECT calc_id FROM ( SELECT MAX(privilege_id) AS calc_id FROM privileges GROUP BY `resource_id`, `privilege_name` HAVING COUNT(privilege_id) > 1 ) as temp_privileges
+);
+SET FOREIGN_KEY_CHECKS=1;
+
+DELETE FROM roles_privileges_map WHERE privilege_id not in (select privilege_id from privileges);
+
+ALTER TABLE `privileges` ADD UNIQUE( `resource_id`, `privilege_name`);
+ALTER TABLE `resources` ADD UNIQUE( `module`, `resource_name`);

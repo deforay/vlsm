@@ -87,6 +87,7 @@ try {
 	$covid19Data = array(
 		'vlsm_instance_id'                    => $instanceId,
 		'vlsm_country_id'                     => $_POST['formId'],
+		'serial_no'                           => isset($_POST['serialNo']) ? $_POST['serialNo'] : null,
 		'facility_id'                         => isset($_POST['facilityId']) ? $_POST['facilityId'] : null,
 		'test_number'                         => isset($_POST['testNumber']) ? $_POST['testNumber'] : null,
 		'province_id'                         => isset($_POST['provinceId']) ? $_POST['provinceId'] : null,

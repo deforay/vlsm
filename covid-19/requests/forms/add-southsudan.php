@@ -13,7 +13,7 @@ $fundingSourceList = $db->query($fundingSourceQry);
 $testPlatformQry = "SELECT * FROM import_config WHERE status='active' ORDER BY machine_name ASC";
 $testPlatformResult = $db->query($testPlatformQry);
 
-foreach($testPlatformResult as $row){
+foreach ($testPlatformResult as $row) {
     $testPlatformList[$row['machine_name']] = $row['machine_name'];
 }
 //Implementing partner list
@@ -79,7 +79,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
     </section>
     <!-- Main content -->
     <section class="content">
-        
+
         <div class="box box-default">
             <div class="box-header with-border">
 
@@ -118,13 +118,13 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         <td></td>
                                     </tr>
                                     <tr>
-                                        <td><label for="province">State </label><span class="mandatory">*</span></td>
+                                        <td><label for="province">Health Faclility State </label><span class="mandatory">*</span></td>
                                         <td>
                                             <select class="form-control isRequired" name="province" id="province" title="Please choose State" onchange="getfacilityDetails(this);" style="width:100%;">
                                                 <?php echo $province; ?>
                                             </select>
                                         </td>
-                                        <td><label for="district">County </label><span class="mandatory">*</span></td>
+                                        <td><label for="district">Health Facility County </label><span class="mandatory">*</span></td>
                                         <td>
                                             <select class="form-control isRequired" name="district" id="district" title="Please choose County" style="width:100%;" onchange="getfacilityDistrictwise(this);">
                                                 <option value=""> -- Select -- </option>
@@ -181,6 +181,14 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                 <table class="table" style="width:100%">
 
                                     <tr>
+                                        <th style="width:15% !important"><label for="patientId">Case ID <span class="mandatory">*</span> </label></th>
+                                        <td style="width:35% !important">
+                                            <input type="text" class="form-control isRequired" id="patientId" name="patientId" placeholder="Case Identification" title="Please enter Case ID" style="width:100%;" onchange="" />
+                                        </td>
+                                        <th style="width:15% !important"><label for="serialNo">DHIS2 Case ID <span class="mandatory">*</span> </label></th>
+                                        <td style="width:35% !important"><input type="text" class="form-control" id="serialNo" name="serialNo" placeholder="DHIS2 Case ID" title="Please enter DHIS2 Case ID" style="width:100%;" /></td>
+                                    </tr>
+                                    <tr>
                                         <th style="width:15% !important"><label for="firstName">First Name <span class="mandatory">*</span> </label></th>
                                         <td style="width:35% !important">
                                             <input type="text" class="form-control isRequired" id="firstName" name="firstName" placeholder="First Name" title="Please enter First name" style="width:100%;" onchange="" />
@@ -191,18 +199,15 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th style="width:15% !important"><label for="patientId">Case ID <span class="mandatory">*</span> </label></th>
-                                        <td style="width:35% !important">
-                                            <input type="text" class="form-control isRequired" id="patientId" name="patientId" placeholder="Case Identification" title="Please enter Case ID" style="width:100%;" onchange="" />
-                                        </td>
+
                                         <th><label for="patientDob">Date of Birth <span class="mandatory">*</span> </label></th>
                                         <td>
                                             <input type="text" class="form-control isRequired" id="patientDob" name="patientDob" placeholder="Date of Birth" title="Please enter Date of birth" style="width:100%;" onchange="calculateAgeInYears();" />
                                         </td>
-                                    </tr>
-                                    <tr>
                                         <th>Age (years)</th>
                                         <td><input type="number" max="150" maxlength="3" oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="patientAge" name="patientAge" placeholder="Case Age (in years)" title="Case Age" style="width:100%;" onchange="" /></td>
+                                    </tr>
+                                    <tr>
                                         <th><label for="patientGender">Gender <span class="mandatory">*</span> </label></th>
                                         <td>
                                             <select class="form-control isRequired" name="patientGender" id="patientGender" title="Please select the gender">
@@ -213,36 +218,29 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
 
                                             </select>
                                         </td>
-                                    </tr>
-                                    <tr>
                                         <th>Phone number</th>
                                         <td><input type="text" class="form-control " id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Phone Number" title="Case Phone Number" style="width:100%;" onchange="" /></td>
-
+                                    </tr>
+                                    <tr>
                                         <th>Address</th>
                                         <td><textarea class="form-control " id="patientAddress" name="patientAddress" placeholder="Address" title="Case Address" style="width:100%;" onchange=""></textarea></td>
-                                    </tr>
 
-                                    <tr>
                                         <th>State</th>
                                         <td><input type="text" class="form-control " id="patientProvince" name="patientProvince" placeholder="State" title="Please enter the Case State" style="width:100%;" /></td>
-
+                                    </tr>
+                                    <tr>
                                         <th>County</th>
                                         <td><input class="form-control" id="patientDistrict" name="patientDistrict" placeholder="County" title="Please enter the Case County" style="width:100%;"></td>
-                                    </tr>
 
-                                    <tr>
                                         <th>City/Village</th>
                                         <td><input class="form-control" id="patientCity" name="patientCity" placeholder="Case City/Village" title="Please enter the Case City/Village" style="width:100%;"></td>
-
-                                        <th>Nationality</th>
-                                        <td><input type="text" class="form-control" id="patientNationality" name="patientNationality" placeholder="Nationality" title="Please enter the case nationality" style="width:100%;" /></td>
                                     </tr>
                                     <tr>
+                                        <th>Nationality</th>
+                                        <td><input type="text" class="form-control" id="patientNationality" name="patientNationality" placeholder="Nationality" title="Please enter the case nationality" style="width:100%;" /></td>
                                         <th>Passport Number</th>
                                         <td><input class="form-control" id="patientPassportNumber" name="patientPassportNumber" placeholder="Passport Number" title="Please enter Passport Number" style="width:100%;"></td>
 
-                                        <th></th>
-                                        <td></td>
                                     </tr>
 
                                 </table>
@@ -308,7 +306,8 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                 </table>
                             </div>
                         </div>
-                        <?php if ($sarr['user_type'] != 'remoteuser') { ?>
+                        <?php //if ($sarr['user_type'] != 'remoteuser') { ?>
+                        <?php if (false) { ?>
                             <div class="box box-primary">
                                 <div class="box-body">
                                     <div class="box-header with-border">
@@ -340,9 +339,9 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             <td>
                                                 <select name="labTechnician" id="labTechnician" class="form-control" title="Please select a Lab Technician" style="width:100%;">
                                                     <option value="">--Select--</option>
-                                                    <?php foreach($labTechnicians as $labTech){
-                                                        echo '<option value="'.$labTech['user_id'].'">'.ucwords($labTech['user_name']).'</option>';
-                                                    }?>
+                                                    <?php foreach ($labTechnicians as $labTech) {
+                                                        echo '<option value="' . $labTech['user_id'] . '">' . ucwords($labTech['user_name']) . '</option>';
+                                                    } ?>
                                                 </select>
                                             </td>
                                         </tr>
@@ -655,7 +654,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
         $('#labTechnician').select2({
             placeholder: "Select Lab Technician"
         });
-        
+
         $('#isResultAuthorized').change(function(e) {
             checkIsResultAuthorized();
         });
