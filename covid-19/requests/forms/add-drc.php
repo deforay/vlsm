@@ -278,14 +278,8 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 foreach ($covid19Symptoms as $symptomId => $symptomName) { ?>
                                                     <tr colspan="2" class="row<?php echo $index; ?>">
                                                         <td style="display: flex;">
-<<<<<<< working copy
                                                             <label class="radio-inline" style="width:4%;margin-left:0;">
                                                             <input type="checkbox" class="" id="symptom<?php echo $symptomId; ?>" name="symptom[]" value="<?php echo $symptomId; ?>" title="<?php echo $symptomName; ?>" onclick="checkSubSymptoms(this.value,<?php echo $symptomId; ?>,<?php echo $index; ?>);">
-=======
-                                                            <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                                                <input type="checkbox" class="" id="symptom<?php echo $symptomId; ?>" name="symptom[]" value="<?php echo $symptomId; ?>" title="<?php echo $symptomName; ?>" onclick="checkSubSymptoms(this.value,<?php echo $symptomId; ?>,<?php echo $index; ?>);">
->>>>>>> merge rev
-                                                            </label>
                                                             <label class="radio-inline" for="symptom<?php echo $symptomId; ?>" style="padding-left:17px !important;margin-left:0;"><b><?php echo $symptomName; ?></b></label>
                                                         </td>
                                                     </tr>
