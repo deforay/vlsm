@@ -100,7 +100,7 @@ try {
 
 
 	$covid19Data = array(
-		'serial_no'                           => isset($_POST['serialNo']) ? $_POST['serialNo'] : null,
+		'external_sample_code'                => isset($_POST['externalSampleCode']) ? $_POST['externalSampleCode'] : null,
 		'facility_id'                         => isset($_POST['facilityId']) ? $_POST['facilityId'] : null,
 		'test_number'                         => isset($_POST['testNumber']) ? $_POST['testNumber'] : null,
 		'province_id'                         => isset($_POST['provinceId']) ? $_POST['provinceId'] : null,
