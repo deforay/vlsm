@@ -38,10 +38,10 @@ if (empty($auth) || !preg_match("/\b$expectedBearerToken\b/", $auth)) {
 }
 
 
-$sampleCode = !empty($_POST['s']) ? explode(",", filter_var($_POST['s'], FILTER_SANITIZE_STRING)) : null;
-$recencyId = !empty($_POST['r']) ? explode(",", filter_var($_POST['r'], FILTER_SANITIZE_STRING)) : null;
-$from = !empty($_POST['f']) ? filter_var($_POST['f'], FILTER_SANITIZE_STRING) : null;
-$to = !empty($_POST['t']) ? filter_var($_POST['t'], FILTER_SANITIZE_STRING) : null;;
+$sampleCode = !empty($_REQUEST['s']) ? explode(",", filter_var($_REQUEST['s'], FILTER_SANITIZE_STRING)) : null;
+$recencyId = !empty($_REQUEST['r']) ? explode(",", filter_var($_REQUEST['r'], FILTER_SANITIZE_STRING)) : null;
+$from = !empty($_REQUEST['f']) ? filter_var($_REQUEST['f'], FILTER_SANITIZE_STRING) : null;
+$to = !empty($_REQUEST['t']) ? filter_var($_REQUEST['t'], FILTER_SANITIZE_STRING) : null;;
 
 
 if (!$sampleCode && !$recencyId && (!$from || !$to)) {

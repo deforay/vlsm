@@ -21,10 +21,13 @@ $covid19Results = $covid19Obj->getCovid19Results();
 $specimenTypeResult = $covid19Obj->getCovid19SampleTypes();
 
 $covid19Symptoms = $covid19Obj->getCovid19SymptomsDRC();
-$covid19SelectedSymptoms = $covid19Obj->getCovid19SymptomsByFormId($covid19Info['covid19_id']);
-foreach ($covid19SelectedSymptoms as $key => $val) {
-    $symptomArray[] = $key;
+$covid19SelectedSymptomsData = $covid19Obj->getCovid19SymptomsByFormId($covid19Info['covid19_id'], true);
+$covid19SelectedSymptoms = array();
+foreach ($covid19SelectedSymptomsData as $row) {
+    $covid19SelectedSymptoms[$row['symptom_id']]['value'] = $row['symptom_detected'];
+    $covid19SelectedSymptoms[$row['symptom_id']]['sDetails'] = json_decode($row['symptom_details'], true);
 }
+
 
 $covid19ReasonsForTesting = $covid19Obj->getCovid19ReasonsForTestingDRC();
 $covid19SelectedReasonsForTesting = $covid19Obj->getCovid19ReasonsForTestingByFormId($covid19Info['covid19_id']);
@@ -99,7 +102,6 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
     </section>
     <!-- Main content -->
     <section class="content">
-        <!-- <pre><?php print_r($symptomArray); ?></pre> -->
         <div class="box box-default">
             <div class="box-header with-border">
                 <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indique un champ obligatoire &nbsp;</div>
@@ -328,12 +330,45 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             <table id="symptomsTable" class="table table-bordered">
                                                 <?php $index = 0;
                                                 foreach ($covid19Symptoms as $symptomId => $symptomName) { ?>
-                                                    <tr colspan="2" class="row<?php echo $index; ?>">
-                                                        <td style="display: flex;">
+                                                    <tr class="row<?php echo $index; ?>">
+                                                        <!-- <td style="display: flex;">
                                                             <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                                <input type="checkbox" class="checkSymptoms" id="symptom<?php echo $symptomId; ?>" name="symptom[]" value="<?php echo $symptomId; ?>" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" onclick="checkSubSymptoms(this.value,<?php echo $symptomId; ?>,<?php echo $index; ?>);" <?php echo (in_array($symptomId, $symptomArray)) ? "checked" : ""; ?>>
+                                                                <input type="checkbox" class="checkSymptoms" id="xsymptom<?php echo $symptomId; ?>" name="symptom[]" value="<?php echo $symptomId; ?>" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" onclick="checkSubSymptoms(this.value,<?php echo $symptomId; ?>,<?php echo $index; ?>);">
                                                             </label>
                                                             <label class="radio-inline" for="symptom<?php echo $symptomId; ?>" style="padding-left:17px !important;margin-left:0;"><b><?php echo $symptomName; ?></b></label>
+                                                        </td> -->
+                                                        <th style="width:50%;"><?php echo $symptomName; ?></th>
+                                                        <td style="width:50%;">
+                                                            <input name="symptomId[]" type="hidden" value="<?php echo $symptomId; ?>">
+                                                            <select name="symptomDetected[]" id="symptomDetected<?php echo $symptomId; ?>" class="form-control" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" style="width:100%">
+                                                                <option value="">-- Sélectionner --</option>
+                                                                <option value='yes' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['value']) && $covid19SelectedSymptoms[$symptomId]['value'] == 'yes') ? "selected='selected'" : ""; ?>> Oui </option>
+                                                                <option value='no' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['value']) && $covid19SelectedSymptoms[$symptomId]['value'] == 'no') ? "selected='selected'" : ""; ?>> Non </option>
+                                                                <option value='unknown' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['value']) && $covid19SelectedSymptoms[$symptomId]['value'] == 'unknown') ? "selected='selected'" : ""; ?>> Inconnu </option>
+                                                            </select>
+
+                                                            <br>
+                                                            <?php
+                                                            if ($symptomId == 13) {
+                                                            ?>
+                                                                <label class="" for="" style="margin-left:0;">Si oui:<br> Sanglante?</label>
+                                                                <select name="symptomDetails[13][]" class="form-control" style="width:100%">
+                                                                    <option value="">-- Sélectionner --</option>
+                                                                    <option value='yes' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['sDetails'][0]) && $covid19SelectedSymptoms[$symptomId]['sDetails'][0] == 'yes') ? "selected='selected'" : ""; ?>> Oui </option>
+                                                                    <option value='no' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['sDetails'][0]) && $covid19SelectedSymptoms[$symptomId]['sDetails'][0] == 'no') ? "selected='selected'" : ""; ?>> Non </option>
+                                                                    <option value='unknown' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['sDetails'][0]) && $covid19SelectedSymptoms[$symptomId]['sDetails'][0] == 'unknown') ? "selected='selected'" : ""; ?>> Inconnu </option>
+                                                                </select>
+                                                                <label class="" for="" style="margin-left:0;">Aqueuse?</label>
+                                                                <select name="symptomDetails[13][]" class="form-control" style="width:100%">
+                                                                    <option value="">-- Sélectionner --</option>
+                                                                    <option value='yes' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['sDetails'][1]) && $covid19SelectedSymptoms[$symptomId]['sDetails'][1] == 'yes') ? "selected='selected'" : ""; ?>> Oui </option>
+                                                                    <option value='no' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['sDetails'][1]) && $covid19SelectedSymptoms[$symptomId]['sDetails'][1] == 'no') ? "selected='selected'" : ""; ?>> Non </option>
+                                                                    <option value='unknown' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['sDetails'][1]) && $covid19SelectedSymptoms[$symptomId]['sDetails'][1] == 'unknown') ? "selected='selected'" : ""; ?>> Inconnu </option>
+                                                                </select>
+                                                                <label class="" for="" style="margin-left:0;">Nombre De Selles Par /24h</label>
+                                                                <input type="text" class="form-control reason-checkbox symptoms-checkbox" id="" name="symptomDetails[13][]" placeholder="Nombre de selles par /24h" title="Nombre de selles par /24h" value="<?php echo $covid19SelectedSymptoms[$symptomId]['sDetails'][2]; ?>">
+
+                                                            <?php } ?>
                                                         </td>
                                                     </tr>
                                                 <?php $index++;
@@ -383,7 +418,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                 <tr>
                                                     <td colspan="2">
                                                         <label class="radio-inline" style="margin-left:0;">
-                                                            <input type="radio" class="" id="reason1" name="reason" value="1" title="Please check response" onchange="checkSubReason(this,'Cas_suspect_de_COVID_19');" <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "checked" : ""; ?>>
+                                                            <input type="radio" class="" id="reason1" name="reasonForCovid19Test" value="1" title="Please check response" onchange="checkSubReason(this,'Cas_suspect_de_COVID_19');" <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "checked" : ""; ?>>
                                                             <strong>Cas suspect de COVID-19</strong>
                                                         </label>
 
@@ -454,10 +489,10 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                 <tr>
                                                     <td colspan="2">
                                                         <label class="radio-inline" style="margin-left:0;">
-                                                            <input type="radio" id="reason2" name="reason" value="2" title="Please check response" onchange="checkSubReason(this,'Cas_probable_de_COVID_19');" <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 2) ? "checked" : ""; ?>>
+                                                            <input type="radio" id="reason2" name="reasonForCovid19Test" value="2" title="Please check response" onchange="checkSubReason(this,'Cas_probable_de_COVID_19');" <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 2) ? "checked" : ""; ?>>
                                                             <strong>Cas probable de COVID-19</strong>
                                                         </label>
-                                                        
+
                                                     </td>
                                                 </tr>
                                                 <tr class="Cas_probable_de_COVID_19 hide-reasons" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 2) ? "grid" : "none"; ?>;">
@@ -498,10 +533,10 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                 <tr>
                                                     <td colspan="2">
                                                         <label class="radio-inline" style="margin-left:0;">
-                                                            <input type="radio" id="reason3" name="reason" value="3" title="Please check response" onchange="checkSubReason(this,'Cas_confirme_de_COVID_19');" <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 3) ? "checked" : ""; ?>>
+                                                            <input type="radio" id="reason3" name="reasonForCovid19Test" value="3" title="Please check response" onchange="checkSubReason(this,'Cas_confirme_de_COVID_19');" <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 3) ? "checked" : ""; ?>>
                                                             <strong>Cas confirme de covid-19</strong>
                                                         </label>
-                                                        
+
                                                     </td>
                                                 </tr>
                                                 <tr class="Cas_confirme_de_COVID_19 hide-reasons" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 3) ? "grid" : "none"; ?>;">
@@ -516,10 +551,10 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                 <tr>
                                                     <td colspan="2">
                                                         <label class="radio-inline" style="margin-left:0;">
-                                                            <input type="radio" id="reason4" name="reason" value="4" title="Please check response" onchange="checkSubReason(this,'Non_cas_contact_de_COVID_19');" <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 4) ? "checked" : ""; ?>>
+                                                            <input type="radio" id="reason4" name="reasonForCovid19Test" value="4" title="Please check response" onchange="checkSubReason(this,'Non_cas_contact_de_COVID_19');" <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 4) ? "checked" : ""; ?>>
                                                             <strong>Non cas contact de COVID-19</strong>
                                                         </label>
-                                                        
+
                                                     </td>
                                                 </tr>
                                                 <tr class="Non_cas_contact_de_COVID_19 hide-reasons" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 4) ? "grid" : "none"; ?>;">
@@ -1127,8 +1162,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
     });
 
     function checkSubSymptoms(obj, parent, row, sub = "") {
-        console.log($('input .checkSymptoms').attr('checked'));
-        if ($(obj).prop('checked') == true) {
+        if ($(obj).val() == 'yes') {
             $.post("getSymptomsByParentId.php", {
                     symptomParent: parent,
                     covid19Id: <?php echo $covid19Info['covid19_id']; ?>
