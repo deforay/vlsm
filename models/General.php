@@ -236,8 +236,8 @@ class General
             $configQuery = "SELECT $fieldName from $tableName WHERE $condition";
         }
         $configResult = $this->db->query($configQuery);
-        if($tableName == 'health_facilities' || $tableName == 'testing_labs'){
-            if(count($configResult) > 0){
+        if ($tableName == 'health_facilities' || $tableName == 'testing_labs') {
+            if (count($configResult) > 0) {
                 $configQuery = "SELECT * from $tableName WHERE $condition OR updated_datetime IS NULL";
                 $configResult = $this->db->query($configQuery);
             }
@@ -407,7 +407,7 @@ class General
                     $selectedText = "selected='selected'";
                 }
             }
-            $response .= "<option value='$optId' $selectedText>$optName</option>";
+            $response .= "<option value='" . addslashes($optId) . "' $selectedText>" . addslashes($optName) . "</option>";
         }
         return $response;
     }
@@ -438,18 +438,20 @@ class General
     public function getDublicateDataFromField($tablename, $fieldname, $fieldValue, $lab = "")
     {
         $query = "SELECT * FROM $tablename WHERE $fieldname =  '$fieldValue'";
-        if($lab != ""){
-            $query.= " AND $lab like 2";
+        if ($lab != "") {
+            $query .= " AND $lab like 2";
         }
-        $query.= " LIMIT 1";
+        $query .= " LIMIT 1";
         return $this->db->rawQueryOne($query);
     }
 
-    function random_color_part() {
-        return str_pad( dechex( mt_rand( 0, 255 ) ), 2, '0', STR_PAD_LEFT);
+    function random_color_part()
+    {
+        return str_pad(dechex(mt_rand(0, 255)), 2, '0', STR_PAD_LEFT);
     }
-    
-    function random_color() {
+
+    function random_color()
+    {
         return $this->random_color_part() . $this->random_color_part() . $this->random_color_part();
     }
 }

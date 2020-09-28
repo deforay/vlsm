@@ -69,7 +69,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
     </section>
     <!-- Main content -->
     <section class="content">
-        
+
         <div class="box box-default">
             <div class="box-header with-border">
 
@@ -278,8 +278,13 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 foreach ($covid19Symptoms as $symptomId => $symptomName) { ?>
                                                     <tr colspan="2" class="row<?php echo $index; ?>">
                                                         <td style="display: flex;">
+<<<<<<< working copy
                                                             <label class="radio-inline" style="width:4%;margin-left:0;">
                                                             <input type="checkbox" class="" id="symptom<?php echo $symptomId; ?>" name="symptom[]" value="<?php echo $symptomId; ?>" title="<?php echo $symptomName; ?>" onclick="checkSubSymptoms(this.value,<?php echo $symptomId; ?>,<?php echo $index; ?>);">
+=======
+                                                            <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                                                <input type="checkbox" class="" id="symptom<?php echo $symptomId; ?>" name="symptom[]" value="<?php echo $symptomId; ?>" title="<?php echo $symptomName; ?>" onclick="checkSubSymptoms(this.value,<?php echo $symptomId; ?>,<?php echo $index; ?>);">
+>>>>>>> merge rev
                                                             </label>
                                                             <label class="radio-inline" for="symptom<?php echo $symptomId; ?>" style="padding-left:17px !important;margin-left:0;"><b><?php echo $symptomName; ?></b></label>
                                                         </td>
@@ -397,7 +402,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                         <label class="radio-inline" for="suspect7" style="padding-left:17px !important;margin-left:0;">IRA d'intensité variable (simple a sévère) ayant été en contact étroite avec cas probable ou un cas confirmé de la maladie a COVID-19</label>
                                                     </td>
                                                 </tr>
-                                                
+
                                                 <tr>
                                                     <td colspan="2">
                                                         <label class="radio-inline" style="width:4%;margin-left:0;">
@@ -457,7 +462,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                         <label class="radio-inline" for="confirme1" style="padding-left:17px !important;margin-left:0;">Toute personne avec une confirmation en laboratoire de l'infection au COVID-19, quelles que soient les signes et symptômes cliniques</label>
                                                     </td>
                                                 </tr>
-                                                
+
                                                 <tr>
                                                     <td colspan="2">
                                                         <label class="radio-inline" style="width:4%;margin-left:0;">
@@ -1108,13 +1113,13 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
         }
     }
 
-    function checkSubReason(obj,show){
+    function checkSubReason(obj, show) {
         $('.reason-checkbox').prop("checked", false);
-        if($(obj). prop("checked", true)){
-            $('.'+show).show();
-            $('.'+show).removeClass('hide-reasons');
+        if ($(obj).prop("checked", true)) {
+            $('.' + show).show();
+            $('.' + show).removeClass('hide-reasons');
             $('.hide-reasons').hide();
-            $('.'+show).addClass('hide-reasons');
+            $('.' + show).addClass('hide-reasons');
         }
     }
 
@@ -1125,10 +1130,10 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                 },
                 function(data) {
                     if (data != "") {
-                        if($('.hide-symptoms').hasClass('symptomRow' + parent)){
+                        if ($('.hide-symptoms').hasClass('symptomRow' + parent)) {
                             $('.symptomRow' + parent).remove();
                         }
-                        $(".row"+row).after(data);
+                        $(".row" + row).after(data);
                     }
                 });
         } else {
