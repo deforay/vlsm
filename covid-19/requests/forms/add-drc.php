@@ -280,7 +280,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                     <tr colspan="2" class="row<?php echo $index; ?>">
                                                         <td style="display: flex;">
                                                             <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                                            <input type="radio" class="" id="symptom<?php echo $symptomId; ?>" name="symptom" value="<?php echo $symptomId; ?>" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" onclick="checkSubSymptoms(this.value,<?php echo $symptomId; ?>,<?php echo $index; ?>);">
+                                                            <input type="checkbox" class="" id="symptom<?php echo $symptomId; ?>" name="symptom[]" value="<?php echo $symptomId; ?>" title="<?php echo $symptomName; ?>" onclick="checkSubSymptoms(this.value,<?php echo $symptomId; ?>,<?php echo $index; ?>);">
                                                             </label>
                                                             <label class="radio-inline" for="symptom<?php echo $symptomId; ?>" style="padding-left:17px !important;margin-left:0;"><b><?php echo $symptomName; ?></b></label>
                                                         </td>
@@ -1099,18 +1099,15 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
     }
 
     function checkSubSymptoms(obj, parent, row, sub = "") {
-        if(sub != "sub"){
-            $('.hide-symptoms').remove();
-        }
         if (obj.value != '') {
             $.post("getSymptomsByParentId.php", {
                     symptomParent: parent
                 },
                 function(data) {
                     if (data != "") {
-                        $('.symptomRow' + parent).removeClass('hide-symptoms');
-                        $('.hide-symptoms').remove();
-                        $('.symptomRow' + parent).addClass('hide-symptoms');
+                        if($('.hide-symptoms').hasClass('symptomRow' + parent)){
+                            $('.symptomRow' + parent).remove();
+                        }
                         $(".row"+row).after(data);
                     }
                 });

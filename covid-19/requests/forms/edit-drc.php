@@ -22,6 +22,9 @@ $specimenTypeResult = $covid19Obj->getCovid19SampleTypes();
 
 $covid19Symptoms = $covid19Obj->getCovid19SymptomsDRC();
 $covid19SelectedSymptoms = $covid19Obj->getCovid19SymptomsByFormId($covid19Info['covid19_id']);
+foreach($covid19SelectedSymptoms as $key=>$val){
+    $symptomArray[] = $key;
+}
 
 $covid19ReasonsForTesting = $covid19Obj->getCovid19ReasonsForTestingDRC();
 $covid19SelectedReasonsForTesting = $covid19Obj->getCovid19ReasonsForTestingByFormId($covid19Info['covid19_id']);
@@ -92,6 +95,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
     </section>
     <!-- Main content -->
     <section class="content">
+        <!-- <pre><?php print_r($symptomArray);?></pre> -->
         <div class="box box-default">
             <div class="box-header with-border">
                 <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indique un champ obligatoire &nbsp;</div>
@@ -323,7 +327,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                     <tr colspan="2" class="row<?php echo $index; ?>">
                                                         <td style="display: flex;">
                                                             <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                                            <input type="radio" class="" id="symptom<?php echo $symptomId; ?>" name="symptom" value="<?php echo $symptomId; ?>" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" onclick="checkSubSymptoms(this.value,<?php echo $symptomId; ?>,<?php echo $index; ?>);" <?php echo (isset($covid19SelectedSymptoms[$symptomId])) ? "checked" : ""; ?>>
+                                                            <input type="checkbox" class="" id="symptom<?php echo $symptomId; ?>" name="symptom[]" value="<?php echo $symptomId; ?>" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" onclick="checkSubSymptoms(this.value,<?php echo $symptomId; ?>,<?php echo $index; ?>);" <?php echo (in_array($symptomId,$symptomArray)) ? "checked" : ""; ?>>
                                                             </label>
                                                             <label class="radio-inline" for="symptom<?php echo $symptomId; ?>" style="padding-left:17px !important;margin-left:0;"><b><?php echo $symptomName; ?></b></label>
                                                         </td>
@@ -1091,18 +1095,17 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
 
     });
 
-    function checkSubSymptoms(val, parent, row) {
-        if (val != "") {
+    function checkSubSymptoms(obj, parent, row, sub = "") {
+        if (obj.value != '') {
             $.post("getSymptomsByParentId.php", {
                     symptomParent: parent,
                     covid19Id: <?php echo $covid19Info['covid19_id']; ?>
                 },
                 function(data) {
                     if (data != "") {
-                        $('.symptomRow' + parent).removeClass('hide-symptoms');
-                        $('.hide-symptoms').remove();
-                        $('.symptomRow' + parent).addClass('hide-symptoms');
-                        console.log(row);
+                        if($('.hide-symptoms').hasClass('symptomRow' + parent)){
+                            $('.symptomRow' + parent).remove();
+                        }
                         $(".row"+row).after(data);
                     }
                 });
@@ -1174,15 +1177,15 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         for (i = 0; i < itemLength.length; i++) {
 
             if (itemLength[i].value == 'positive') {
-                $('#result,.disabled-field').val('');
-                $('#result,.disabled-field').prop('disabled', true);
-                $('#result,.disabled-field').addClass('disabled');
-                $('#result,.disabled-field').removeClass('isRequired');
+                $('.disabled-field').val('');
+                $('.disabled-field').prop('disabled', true);
+                $('.disabled-field').addClass('disabled');
+                $('.disabled-field').removeClass('isRequired');
                 return false;
             } else {
-                $('#result,.disabled-field').prop('disabled', false);
-                $('#result,.disabled-field').removeClass('disabled');
-                $('#result,.disabled-field').addClass('isRequired');
+                $('.disabled-field').prop('disabled', false);
+                $('.disabled-field').removeClass('disabled');
+                $('.disabled-field').addClass('isRequired');
             }
             if (itemLength[i].value != '') {
                 $('#labId').addClass('isRequired');

@@ -22,6 +22,9 @@ $specimenTypeResult = $covid19Obj->getCovid19SampleTypes();
 
 $covid19Symptoms = $covid19Obj->getCovid19SymptomsDRC();
 $covid19SelectedSymptoms = $covid19Obj->getCovid19SymptomsByFormId($covid19Info['covid19_id']);
+foreach($covid19SelectedSymptoms as $key=>$val){
+    $symptomArray[] = $key;
+}
 
 $covid19ReasonsForTesting = $covid19Obj->getCovid19ReasonsForTestingDRC();
 $covid19SelectedReasonsForTesting = $covid19Obj->getCovid19ReasonsForTestingByFormId($covid19Info['covid19_id']);
@@ -309,7 +312,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                                                     <tr colspan="2" class="row<?php echo $index; ?>">
                                                         <td style="display: flex;">
                                                             <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                                            <input type="radio" class="" id="symptom<?php echo $symptomId; ?>" name="symptom" value="<?php echo $symptomId; ?>" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" onclick="checkSubSymptoms(this.value,<?php echo $symptomId; ?>,<?php echo $index; ?>);" <?php echo (isset($covid19SelectedSymptoms[$symptomId])) ? "checked" : ""; ?>>
+                                                            <input type="checkbox" class="" id="symptom<?php echo $symptomId; ?>" name="symptom" value="<?php echo $symptomId; ?>" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" onclick="checkSubSymptoms(this.value,<?php echo $symptomId; ?>,<?php echo $index; ?>);" <?php echo (in_array($symptomId,$symptomArray)) ? "checked" : ""; ?>>
                                                             </label>
                                                             <label class="radio-inline" for="symptom<?php echo $symptomId; ?>" style="padding-left:17px !important;margin-left:0;"><b><?php echo $symptomName; ?></b></label>
                                                         </td>
@@ -1077,19 +1080,18 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
             }
         } ?>
     });
-    function checkSubSymptoms(val, parent, row) {
-        if (val != "") {
+    function checkSubSymptoms(obj, parent, row, sub = "") {
+        if (obj.value != '') {
             $.post("/covid-19/requests/getSymptomsByParentId.php", {
                     symptomParent: parent,
-                    from: 'update-result',
+                    from : 'update-result',
                     covid19Id: <?php echo $covid19Info['covid19_id']; ?>
                 },
                 function(data) {
                     if (data != "") {
-                        $('.symptomRow' + parent).removeClass('hide-symptoms');
-                        $('.hide-symptoms').remove();
-                        $('.symptomRow' + parent).addClass('hide-symptoms');
-                        console.log(row);
+                        if($('.hide-symptoms').hasClass('symptomRow' + parent)){
+                            $('.symptomRow' + parent).remove();
+                        }
                         $(".row"+row).after(data);
                     }
                 });
