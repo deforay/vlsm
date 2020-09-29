@@ -221,32 +221,6 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                         <th></th>
                                         <td></td>
                                     </tr>
-                                    <tr>
-                                        <td colspan="4">
-                                            <h4>Les détails du vol</h4>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>Compagnie aérienne</th>
-                                        <td><input type="text" class="form-control " id="airline" name="airline" placeholder="Compagnie aérienne" title="Compagnie aérienne" style="width:100%;" /></td>
-
-                                        <th>Numéro de siège</th>
-                                        <td><input type="text" class="form-control " id="seatNo" name="seatNo" placeholder="Numéro de siège" title="Numéro de siège" style="width:100%;" /></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Date et heure d'arrivée</th>
-                                        <td><input type="text" class="form-control dateTime" id="arrivalDateTime" name="arrivalDateTime" placeholder="Date et heure d'arrivée" title="Date et heure d'arrivée" style="width:100%;" /></td>
-
-                                        <th>Aeroport DE DEPART</th>
-                                        <td><input type="text" class="form-control " id="airportOfDeparture" name="airportOfDeparture" placeholder="Aeroport DE DEPART" title="Aeroport DE DEPART" style="width:100%;" /></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Transit</th>
-                                        <td><input type="text" class="form-control" id="transit" name="transit" placeholder="Transit" title="Transit" style="width:100%;" /></td>
-                                        <th>Raison de la visite (le cas échéant)</th>
-                                        <td><input type="text" class="form-control" id="reasonOfVisit" name="reasonOfVisit" placeholder="Raison de la visite (le cas échéant)" title="Raison de la visite (le cas échéant)" style="width:100%;" /></td>
-
-                                    </tr>
                                 </table>
 
                                 <div class="box-header with-border sectionHeader">
@@ -630,23 +604,33 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                         <td style="width:35% !important;">
                                             <input type="text" class="form-control date" id="returnDate" name="returnDate" placeholder="e.g 09-Jan-1992" title="Date de retour" />
                                         </td>
+                                        
+                                        <th>Compagnie aérienne</th>
+                                        <td><input type="text" class="form-control " id="airline" name="airline" placeholder="Compagnie aérienne" title="Compagnie aérienne" style="width:100%;" /></td>
                                     </tr>
-                                </table>
-
-                                <div class="box-header with-border sectionHeader">
-                                    <h3 class="box-title">FACTEURS DE RISQUE ÉPIDÉMIOLOGIQUE ET EXPOSITIONS</h3>
-                                </div>
-                                <table class="table">
                                     <tr>
+                                        <th>Numéro de siège</th>
+                                        <td><input type="text" class="form-control " id="seatNo" name="seatNo" placeholder="Numéro de siège" title="Numéro de siège" style="width:100%;" /></td>
+
+                                        <th>Date et heure d'arrivée</th>
+                                        <td><input type="text" class="form-control dateTime" id="arrivalDateTime" name="arrivalDateTime" placeholder="Date et heure d'arrivée" title="Date et heure d'arrivée" style="width:100%;" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Aeroport DE DEPART</th>
+                                        <td><input type="text" class="form-control " id="airportOfDeparture" name="airportOfDeparture" placeholder="Aeroport DE DEPART" title="Aeroport DE DEPART" style="width:100%;" /></td>
+
+                                        <th>Transit</th>
+                                        <td><input type="text" class="form-control" id="transit" name="transit" placeholder="Transit" title="Transit" style="width:100%;" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Raison de la visite (le cas échéant)</th>
+                                        <td><input type="text" class="form-control" id="reasonOfVisit" name="reasonOfVisit" placeholder="Raison de la visite (le cas échéant)" title="Raison de la visite (le cas échéant)" style="width:100%;" /></td>
+
                                         <th>Occupation du patient</th>
                                         <td>
                                             <input class="form-control" type="text" name="patientOccupation" id="patientOccupation" placeholder="Occupation du patient" title="Occupation du patient" />
                                         </td>
-                                        <th></th>
-                                        <td></td>
-
                                     </tr>
-
                                 </table>
                             </div>
                         </div>
@@ -983,7 +967,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
 
 
     $(document).ready(function() {
-        $('.sidebar-mini').addClass('sidebar-collapse');
+        
         $('#facilityId').select2({
             placeholder: "Nom de l'installation"
         });
