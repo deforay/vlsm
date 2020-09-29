@@ -33,7 +33,7 @@ try {
 	$covid19Data = array(
 		'sample_received_at_vl_lab_datetime'  => $_POST['sampleReceivedDate'],
 		'lab_id'                              => isset($_POST['labId']) ? $_POST['labId'] : null,
-		'sample_condition'  				  => isset($_POST['specimenQuality']) ? $_POST['specimenQuality'] : null,
+		'sample_condition'  				  => isset($_POST['sampleCondition']) ? $_POST['sampleCondition'] : (isset($_POST['specimenQuality']) ? $_POST['specimenQuality'] : null),
 		'lab_technician' 					  => (isset($_POST['labTechnician']) && $_POST['labTechnician'] != '') ? $_POST['labTechnician'] :  null,
 		'testing_point'                       => isset($_POST['testingPoint']) ? $_POST['testingPoint'] : null,
 		'is_sample_rejected'                  => isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
@@ -51,7 +51,7 @@ try {
 		'last_modified_datetime'              => $general->getDateTime()
 	);
 
-
+	// echo "<pre>";print_r($covid19Data);die;
 	if (isset($_POST['isSampleRejected']) && $_POST['isSampleRejected'] == 'yes') {
 		$covid19Data['result'] = null;
 		$covid19Data['result_status'] = 4;
@@ -100,8 +100,11 @@ try {
 	//var_dump($covid19Data);die;
 	$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 	$id = $db->update($tableName, $covid19Data);
-
-	$_SESSION['alertMsg'] = "Covid-19 result updated successfully";
+	if($id > 0){
+		$_SESSION['alertMsg'] = "Covid-19 result updated successfully";
+	} else{
+		$_SESSION['alertMsg'] = "Please try again later";
+	}
 	//Add event log
 	$eventType = 'update-covid-19-result';
 	$action = ucwords($_SESSION['userName']) . ' updated a result for the Covid-19 sample no. ' . $_POST['sampleCode'];

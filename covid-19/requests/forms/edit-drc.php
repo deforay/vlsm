@@ -266,33 +266,163 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         <th></th>
                                         <td></td>
                                     </tr>
+                                </table>
+                                <div class="box-header with-border sectionHeader">
+                                    <h3 class="box-title">
+                                        Definition de cas
+                                    </h3>
+                                </div>
+                                <table id="responseTable" class="table table-bordered">
                                     <tr>
-                                        <td colspan="4">
-                                            <h4>Les détails du vol</h4>
+                                        <td colspan="2">
+                                            <label class="radio-inline" style="margin-left:0;">
+                                                <input type="radio" class="" id="reason1" name="reasonForCovid19Test" value="1" title="Please check response" onchange="checkSubReason(this,'Cas_suspect_de_COVID_19');" <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "checked" : ""; ?>>
+                                                <strong>Cas suspect de COVID-19</strong>
+                                            </label>
+
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <th>Compagnie aérienne</th>
-                                        <td><input type="text" class="form-control " value="<?php echo $covid19Info['flight_airline']; ?>" id="airline" name="airline" placeholder="Compagnie aérienne" title="Compagnie aérienne" style="width:100%;" /></td>
-
-                                        <th>Numéro de siège</th>
-                                        <td><input type="text" class="form-control " value="<?php echo $covid19Info['flight_seat_no']; ?>" id="seatNo" name="seatNo" placeholder="Numéro de siège" title="Numéro de siège" style="width:100%;" /></td>
+                                    <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "grid" : "none"; ?>;">
+                                        <td colspan="2" style="padding-left: 70px;display: flex;">
+                                            <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                <input type="checkbox" class="checkbox" id="suspect1" name="reasonDetails[]" value="Fièvre d'accès brutal (Inferieur ou égale à 38°C, vérifié à la salle d'urgence, la consultation externe, ou l'hôpital) ET(cochez une ou deux des cases suivantes)" title="Please check response" <?php echo (in_array("Fièvre d'accès brutal (Inferieur ou égale à 38°C, vérifié à la salle d'urgence, la consultation externe, ou l'hôpital) ET(cochez une ou deux des cases suivantes)", $reasonDetails)) ? "checked" : ""; ?>>
+                                            </label>
+                                            <label class="radio-inline" for="suspect1" style="padding-left:17px !important;margin-left:0;">Fièvre d'accès brutal (Inferieur ou égale à 38°C, vérifié à la salle d'urgence, la consultation externe, ou l'hôpital) ET(cochez une ou deux des cases suivantes)</label>
+                                        </td>
                                     </tr>
-                                    <tr>
-                                        <th>Date et heure d'arrivée</th>
-                                        <td><input type="text" class="form-control dateTime" value="<?php echo $general->humanDateFormat($covid19Info['flight_arrival_datetime']); ?>" id="arrivalDateTime" name="arrivalDateTime" placeholder="Date et heure d'arrivée" title="Date et heure d'arrivée" style="width:100%;" /></td>
-
-                                        <th>Aeroport DE DEPART</th>
-                                        <td><input type="text" class="form-control" value="<?php echo $covid19Info['flight_airport_of_departure']; ?>" id="airportOfDeparture" name="airportOfDeparture" placeholder="Aeroport DE DEPART" title="Aeroport DE DEPART" style="width:100%;" /></td>
+                                    <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "grid" : "none"; ?>;">
+                                        <td colspan="2" style="padding-left: 70px;display: flex;">
+                                            <ul style=" display: inline-flex; list-style: none; padding: 0px; ">
+                                                <li>
+                                                    <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                        <input type="checkbox" class="checkbox" id="suspect2" name="reasonDetails[]" value="Toux" title="Please check response" <?php echo (in_array("Toux", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "checked" : ""; ?>>
+                                                    </label>
+                                                    <label class="radio-inline" for="suspect2" style="padding-left:17px !important;margin-left:0;">Toux</label>
+                                                </li>
+                                                <li>
+                                                    <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                    <input type="checkbox" class="checkbox" id="suspect3" name="reasonDetails[]" value="Rhume" title="Please check response" <?php echo (in_array("Rhume", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "checked" : ""; ?>>
+                                                    </label>
+                                                    <label class="radio-inline" for="suspect3" style="padding-left:17px !important;margin-left:0;">Rhume</label>
+                                                </li>
+                                                <li>
+                                                    <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                    <input type="checkbox" class="checkbox" id="suspect4" name="reasonDetails[]" value="Mal de gorge" title="Please check response" <?php echo (in_array("Mal de gorge", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "checked" : ""; ?>>
+                                                    </label>
+                                                    <label class="radio-inline" for="suspect4" style="padding-left:17px !important;margin-left:0;">Mal de gorge</label>
+                                                </li>
+                                                <li>
+                                                    <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                    <input type="checkbox" class="checkbox" id="suspect5" name="reasonDetails[]" value="Difficulté respiratoire" title="Please check response" <?php echo (in_array("Difficulté respiratoire", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "checked" : ""; ?>>
+                                                    </label>
+                                                    <label class="radio-inline" for="suspect5" style="padding-left:17px !important;margin-left:0;">Difficulté respiratoire</label>
+                                                </li>
+                                            </ul>
+                                        </td>
                                     </tr>
-                                    <tr>
-                                        <th>Transit</th>
-                                        <td><input type="text" class="form-control" value="<?php echo $covid19Info['flight_transit']; ?>" id="transit" name="transit" placeholder="Transit" title="Transit" style="width:100%;" /></td>
-                                        <th>Raison de la visite (le cas échéant)</th>
-                                        <td><input type="text" class="form-control" value="<?php echo $covid19Info['reason_of_visit']; ?>" id="reasonOfVisit" name="reasonOfVisit" placeholder="Raison de la visite (le cas échéant)" title="Raison de la visite (le cas échéant)" style="width:100%;" /></td>
+                                    <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "grid" : "none"; ?>;">
+                                        <td colspan="2" style="padding-left: 70px;display: flex;">
+                                            <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                <input type="checkbox" class="checkbox" id="suspect6" name="reasonDetails[]" value="Notion de séjour ou voyage dans les zones a épidémie a COVID-19 dans les 14 jours précédant les symptômes ci-dessous." title="Please check response" <?php echo (in_array("Notion de séjour ou voyage dans les zones a épidémie a COVID-19 dans les 14 jours précédant les symptômes ci-dessous.", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "checked" : ""; ?>>
+                                            </label>
+                                            <label class="radio-inline" for="suspect6" style="padding-left:17px !important;margin-left:0;">Notion de séjour ou voyage dans les zones a épidémie a COVID-19 dans les 14 jours précédant les symptômes ci-dessous.</label>
+                                        </td>
+                                    </tr>
+                                    <tr class="Cas_suspect_de_COVID_19 hide-reasons text-center" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "grid" : "none"; ?>;">
+                                        <td>
+                                            <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">OU</label>
+                                        </td>
+                                    </tr>
+                                    <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "grid" : "none"; ?>;">
+                                        <td colspan="2" style="padding-left: 70px;display: flex;">
+                                            <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                <input type="checkbox" class="checkbox" id="suspect7" name="reasonDetails[]" value="IRA d'intensité variable (simple a sévère) ayant été en contact étroite avec cas probable ou un cas confirmé de la maladie a COVID-19" title="Please check response" <?php echo (in_array("IRA d'intensité variable (simple a sévère) ayant été en contact étroite avec cas probable ou un cas confirmé de la maladie a COVID-19", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "checked" : ""; ?>>
+                                            </label>
+                                            <label class="radio-inline" for="suspect7" style="padding-left:17px !important;margin-left:0;">IRA d'intensité variable (simple a sévère) ayant été en contact étroite avec cas probable ou un cas confirmé de la maladie a COVID-19</label>
+                                        </td>
+                                    </tr>
 
+                                    <tr>
+                                        <td colspan="2">
+                                            <label class="radio-inline" style="margin-left:0;">
+                                                <input type="radio" id="reason2" name="reasonForCovid19Test" value="2" title="Please check response" onchange="checkSubReason(this,'Cas_probable_de_COVID_19');" <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 2) ? "checked" : ""; ?>>
+                                                <strong>Cas probable de COVID-19</strong>
+                                            </label>
+
+                                        </td>
+                                    </tr>
+                                    <tr class="Cas_probable_de_COVID_19 hide-reasons" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 2) ? "grid" : "none"; ?>;">
+                                        <td colspan="2" style="padding-left: 70px;display: flex;">
+                                            <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                <input type="checkbox" class="checkbox" id="probable1" name="reasonDetails[]" value="Tout cas suspects dont le résultat de laboratoire pour le diagnostic de COVID-19 n'est pas concluant (indéterminé)" title="Please check response" <?php echo (in_array("Tout cas suspects dont le résultat de laboratoire pour le diagnostic de COVID-19 n'est pas concluant (indéterminé)", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 2) ? "checked" : ""; ?>>
+                                            </label>
+                                            <label class="radio-inline" for="probable1" style="padding-left:17px !important;margin-left:0;">Tout cas suspects dont le résultat de laboratoire pour le diagnostic de COVID-19 n'est pas concluant (indéterminé)</label>
+                                        </td>
+                                    </tr>
+                                    <tr class="Cas_probable_de_COVID_19 hide-reasons text-center" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 2) ? "grid" : "none"; ?>;">
+                                        <td>
+                                            <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">OU</label>
+                                        </td>
+                                    </tr>
+                                    <tr class="Cas_probable_de_COVID_19 hide-reasons" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 2) ? "grid" : "none"; ?>;">
+                                        <td colspan="2" style="padding-left: 70px;display: flex;">
+                                            <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                <input type="checkbox" class="checkbox" id="probable2" name="reasonDetails[]" value="Tout décès dans un tableau d'IRA pour lequel il n'a pas été possible d'obtenir des échantillons biologiques pour confirmation au laboratoire mais dont les investigations ont révélé un lien épidémiologique avec un cas confirmé ou probable" title="Please check response" <?php echo (in_array("Tout décès dans un tableau d'IRA pour lequel il n'a pas été possible d'obtenir des échantillons biologiques pour confirmation au laboratoire mais dont les investigations ont révélé un lien épidémiologique avec un cas confirmé ou probable", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 2) ? "checked" : ""; ?>>
+                                            </label>
+                                            <label class="radio-inline" for="probable2" style="padding-left:17px !important;margin-left:0;">Tout décès dans un tableau d'IRA pour lequel il n'a pas été possible d'obtenir des échantillons biologiques pour confirmation au laboratoire mais dont les investigations ont révélé un lien épidémiologique avec un cas confirmé ou probable</label>
+                                        </td>
+                                    </tr>
+                                    <tr class="Cas_probable_de_COVID_19 hide-reasons text-center" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "grid" : "none"; ?>;">
+                                        <td>
+                                            <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">OU</label>
+                                        </td>
+                                    </tr>
+                                    <tr class="Cas_probable_de_COVID_19 hide-reasons" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 2) ? "grid" : "none"; ?>;">
+                                        <td colspan="2" style="padding-left: 70px;display: flex;">
+                                            <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                <input type="checkbox" class="checkbox" id="probable4" name="reasonDetails[]" value="Une notion de séjour ou voyage dans les 14 jours précédant le décès dans les zones a épidémie de la maladie a COVID-19" title="Please check response" <?php echo (in_array("Notion de séjour ou voyage dans les 14 jours précédant le décès dans les zones a épidémie de la maladie a COVID-19", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 2) ? "checked" : ""; ?>>
+                                            </label>
+                                            <label class="radio-inline" for="probable4" style="padding-left:17px !important;margin-left:0;">Une notion de séjour ou voyage dans les 14 jours précédant le décès dans les zones a épidémie de la maladie a COVID-19</label>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="2">
+                                            <label class="radio-inline" style="margin-left:0;">
+                                                <input type="radio" id="reason3" name="reasonForCovid19Test" value="3" title="Please check response" onchange="checkSubReason(this,'Cas_confirme_de_COVID_19');" <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 3) ? "checked" : ""; ?>>
+                                                <strong>Cas confirme de covid-19</strong>
+                                            </label>
+
+                                        </td>
+                                    </tr>
+                                    <tr class="Cas_confirme_de_COVID_19 hide-reasons" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 3) ? "grid" : "none"; ?>;">
+                                        <td colspan="2" style="padding-left: 70px;display: flex;">
+                                            <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                <input type="checkbox" class="checkbox" id="confirme1" name="reasonDetails[]" value="Toute personne avec une confirmation en laboratoire de l'infection au COVID-19, quelles que soient les signes et symptômes cliniques" title="Please check response" <?php echo (in_array("Toute personne avec une confirmation en laboratoire de l'infection au COVID-19, quelles que soient les signes et symptômes cliniques", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 3) ? "checked" : ""; ?>>
+                                            </label>
+                                            <label class="radio-inline" for="confirme1" style="padding-left:17px !important;margin-left:0;">Toute personne avec une confirmation en laboratoire de l'infection au COVID-19, quelles que soient les signes et symptômes cliniques</label>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="2">
+                                            <label class="radio-inline" style="margin-left:0;">
+                                                <input type="radio" id="reason4" name="reasonForCovid19Test" value="4" title="Please check response" onchange="checkSubReason(this,'Non_cas_contact_de_COVID_19');" <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 4) ? "checked" : ""; ?>>
+                                                <strong>Non cas contact de COVID-19</strong>
+                                            </label>
+
+                                        </td>
+                                    </tr>
+                                    <tr class="Non_cas_contact_de_COVID_19 hide-reasons" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 4) ? "grid" : "none"; ?>;">
+                                        <td colspan="2" style="padding-left: 70px;display: flex;">
+                                            <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                <input type="checkbox" class="checkbox" id="contact1" name="reasonDetails[]" value="Tout cas suspects avec deux résultats de laboratoire négatifs au COVID-19 a au moins 48 heures d'intervalle" title="Please check response" <?php echo (in_array("Tout cas suspects avec deux résultats de laboratoire négatifs au COVID-19 a au moins 48 heures d'intervalle", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 4) ? "checked" : ""; ?>>
+                                            </label>
+                                            <label class="radio-inline" for="contact1" style="padding-left:17px !important;margin-left:0;">Tout cas suspects avec deux résultats de laboratoire négatifs au COVID-19 a au moins 48 heures d'intervalle</label>
+                                        </td>
                                     </tr>
                                 </table>
+
                                 <div class="box-header with-border sectionHeader">
                                     <h3 class="box-title">
                                         Signes vitaux du patient
@@ -300,23 +430,61 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                 </div>
                                 <table class="table">
                                     <tr>
+                                        <th style="width:15% !important">Fever/Temperature (&deg;C) <span class="mandatory">*</span> </th>
+                                        <td style="width:35% !important;">
+                                            <input class="form-control isRequired" type="number" value="<?php echo $covid19Info['fever_temp']; ?>" name="feverTemp" id="feverTemp" placeholder="Fever/Temperature (in &deg;Celcius)" />
+                                        </td>
+                                        <th style="width:15% !important"><label for="temperatureMeasurementMethod">Température</label></th>
+                                        <td style="width:35% !important;">
+                                            <select name="temperatureMeasurementMethod" id="temperatureMeasurementMethod" class="form-control" title="Température">
+                                                <option value="">--Select--</option>
+                                                <option value="auxillary" <?php echo ($covid19Info['temperature_measurement_method'] == 'auxillary') ? "selected='selected'" : ""; ?>>Axillaire</option>
+                                                <option value="oral" <?php echo ($covid19Info['temperature_measurement_method'] == 'oral') ? "selected='selected'" : ""; ?>>Orale</option>
+                                                <option value="rectal" <?php echo ($covid19Info['temperature_measurement_method'] == 'rectal') ? "selected='selected'" : ""; ?>>Rectale</option>
+                                                <option value="unknown" <?php echo ($covid19Info['temperature_measurement_method'] == 'unknown') ? "selected='selected'" : ""; ?>>Inconnu</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="width:15% !important"><label for="respiratoryRate"> Fréquence Respiratoire</label></th>
+                                        <td style="width:35% !important;">
+                                            <input class="form-control" type="number" value="<?php echo $covid19Info['respiratory_rate']; ?>" name="respiratoryRate" id="respiratoryRate" placeholder="Fréquence Respiratoire" title="Fréquence Respiratoire" />
+                                        </td>
+                                        <th style="width:15% !important"><label for="oxygenSaturation"> Saturation en oxygène</label></th>
+                                        <td style="width:35% !important;">
+                                            <input class="form-control" type="number" value="<?php echo $covid19Info['oxygen_saturation']; ?>" name="oxygenSaturation" id="oxygenSaturation" placeholder="Saturation en oxygène" title="Saturation en oxygène" />
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <th style="width: 15%;"><label for="specimenType"> Type(s) d' échantillon(s) dans le tube (cochez au moins une des cases suivants) <span class="mandatory">*</span></label></th>
                                         <td style="width: 35%;">
                                             <select class="form-control isRequired" id="specimenType" name="specimenType" title="Type(s) d' échantillon(s) dans le tube">
                                                 <option value="">--Select--</option>
-                                                <!-- <option value="oropharyngeal">Oropharyngée</option>
-                                                <option value="nasal-both">Nasale / Les Deux</option>
-                                                <option value="sputum">Expectorations</option>
-                                                <option value="alveolar-broncho-wash">Lavage broncho alvéolaire</option>
-                                                <option value="tracheal-aspiration">Aspiration trachéale</option>
-                                                <option value="serum">Sérum</option> -->
                                                 <?php echo $general->generateSelectOptions($specimenTypeResult, $covid19Info['specimen_type']); ?>
                                             </select>
                                         </td>
-                                        <th style="width:15% !important"><label for="specimenType">Date de prélèvement de l'échantillon <span class="mandatory">*</span></label></th>
+                                        <th style="width: 15% !important;"><label for="numberOfDaysSick">Depuis combien de jours êtes-vous malade?</label></th>
+                                        <td style="width:35% !important;">
+                                            <input type="text" value="<?php echo $covid19Info['number_of_days_sick']; ?>" class="form-control" id="numberOfDaysSick" name="numberOfDaysSick" placeholder="Depuis combien de jours êtes-vous malade?" title="Date de Result PCR" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="width:15% !important">Date d'apparition des symptômes <span class="mandatory">*</span> </th>
+                                        <td style="width:35% !important;">
+                                            <input class="form-control date isRequired" type="text" name="dateOfSymptomOnset" id="dateOfSymptomOnset" placeholder="Date d'apparition des symptômes" value="<?php echo $general->humanDateFormat($covid19Info['date_of_symptom_onset']); ?> " />
+                                        </td>
+                                        <th style="width:15% !important">Date de la consultation initiale</th>
+                                        <td style="width:35% !important;">
+                                            <input class="form-control date" type="text" name="dateOfInitialConsultation" id="dateOfInitialConsultation" placeholder="Date of Initial Consultation" value="<?php echo $general->humanDateFormat($covid19Info['date_of_initial_consultation']); ?> " />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="width:15% !important"><label for="sampleCollectionDate">Date de prélèvement de l'échantillon <span class="mandatory">*</span></label></th>
                                         <td style="width:35% !important;">
                                             <input class="form-control isRequired" value="<?php echo date('d-M-Y H:i:s', strtotime($covid19Info['sample_collection_date'])); ?>" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Date de prélèvement de l'échantillon" title="Date de prélèvement de l'échantillon" onchange="sampleCodeGeneration();" />
                                         </td>
+                                        <th></th>
+                                        <td></td>
                                     </tr>
                                     <tr>
                                         <th colspan="4" style="width:15% !important">Symptômes <span class="mandatory">*</span> </th>
@@ -410,213 +578,10 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             </table>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <th colspan="4" style="width:15% !important">Définition de cas <span class="mandatory">*</span> </th>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="4">
-                                            <table id="responseTable" class="table table-bordered">
-                                                <tr>
-                                                    <td colspan="2">
-                                                        <label class="radio-inline" style="margin-left:0;">
-                                                            <input type="radio" class="" id="reason1" name="reasonForCovid19Test" value="1" title="Please check response" onchange="checkSubReason(this,'Cas_suspect_de_COVID_19');" <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "checked" : ""; ?>>
-                                                            <strong>Cas suspect de COVID-19</strong>
-                                                        </label>
-
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "grid" : "none"; ?>;">
-                                                    <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                            <input type="checkbox" class="checkbox" id="suspect1" name="reasonDetails[]" value="Fièvre d'accès brutal (Inferieur ou égale à 38°C, vérifié à la salle d'urgence, la consultation externe, ou l'hôpital) ET(cochez une ou deux des cases suivantes)" title="Please check response" <?php echo (in_array("Fièvre d'accès brutal (Inferieur ou égale à 38°C, vérifié à la salle d'urgence, la consultation externe, ou l'hôpital) ET(cochez une ou deux des cases suivantes)", $reasonDetails)) ? "checked" : ""; ?>>
-                                                        </label>
-                                                        <label class="radio-inline" for="suspect1" style="padding-left:17px !important;margin-left:0;">Fièvre d'accès brutal (Inferieur ou égale à 38°C, vérifié à la salle d'urgence, la consultation externe, ou l'hôpital) ET(cochez une ou deux des cases suivantes)</label>
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "grid" : "none"; ?>;">
-                                                    <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                            <input type="checkbox" class="checkbox" id="suspect2" name="reasonDetails[]" value="Toux" title="Please check response" <?php echo (in_array("Toux", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "checked" : ""; ?>>
-                                                        </label>
-                                                        <label class="radio-inline" for="suspect2" style="padding-left:17px !important;margin-left:0;">Toux</label>
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "grid" : "none"; ?>;">
-                                                    <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                            <input type="checkbox" class="checkbox" id="suspect3" name="reasonDetails[]" value="Rhume" title="Please check response" <?php echo (in_array("Rhume", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "checked" : ""; ?>>
-                                                        </label>
-                                                        <label class="radio-inline" for="suspect3" style="padding-left:17px !important;margin-left:0;">Rhume</label>
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "grid" : "none"; ?>;">
-                                                    <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                            <input type="checkbox" class="checkbox" id="suspect4" name="reasonDetails[]" value="Mal de gorge" title="Please check response" <?php echo (in_array("Mal de gorge", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "checked" : ""; ?>>
-                                                        </label>
-                                                        <label class="radio-inline" for="suspect4" style="padding-left:17px !important;margin-left:0;">Mal de gorge</label>
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "grid" : "none"; ?>;">
-                                                    <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                            <input type="checkbox" class="checkbox" id="suspect5" name="reasonDetails[]" value="Difficulté respiratoire" title="Please check response" <?php echo (in_array("Difficulté respiratoire", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "checked" : ""; ?>>
-                                                        </label>
-                                                        <label class="radio-inline" for="suspect5" style="padding-left:17px !important;margin-left:0;">Difficulté respiratoire</label>
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "grid" : "none"; ?>;">
-                                                    <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                            <input type="checkbox" class="checkbox" id="suspect6" name="reasonDetails[]" value="Notion de séjour ou voyage dans les zones a épidémie a COVID-19 dans les 14 jours précédant les symptômes ci-dessous." title="Please check response" <?php echo (in_array("Notion de séjour ou voyage dans les zones a épidémie a COVID-19 dans les 14 jours précédant les symptômes ci-dessous.", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "checked" : ""; ?>>
-                                                        </label>
-                                                        <label class="radio-inline" for="suspect6" style="padding-left:17px !important;margin-left:0;">Notion de séjour ou voyage dans les zones a épidémie a COVID-19 dans les 14 jours précédant les symptômes ci-dessous.</label>
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_suspect_de_COVID_19 hide-reasons text-center" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "grid" : "none"; ?>;">
-                                                    <td>
-                                                        <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">OU</label>
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "grid" : "none"; ?>;">
-                                                    <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                            <input type="checkbox" class="checkbox" id="suspect7" name="reasonDetails[]" value="IRA d'intensité variable (simple a sévère) ayant été en contact étroite avec cas probable ou un cas confirmé de la maladie a COVID-19" title="Please check response" <?php echo (in_array("IRA d'intensité variable (simple a sévère) ayant été en contact étroite avec cas probable ou un cas confirmé de la maladie a COVID-19", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "checked" : ""; ?>>
-                                                        </label>
-                                                        <label class="radio-inline" for="suspect7" style="padding-left:17px !important;margin-left:0;">IRA d'intensité variable (simple a sévère) ayant été en contact étroite avec cas probable ou un cas confirmé de la maladie a COVID-19</label>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td colspan="2">
-                                                        <label class="radio-inline" style="margin-left:0;">
-                                                            <input type="radio" id="reason2" name="reasonForCovid19Test" value="2" title="Please check response" onchange="checkSubReason(this,'Cas_probable_de_COVID_19');" <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 2) ? "checked" : ""; ?>>
-                                                            <strong>Cas probable de COVID-19</strong>
-                                                        </label>
-
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_probable_de_COVID_19 hide-reasons" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 2) ? "grid" : "none"; ?>;">
-                                                    <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                            <input type="checkbox" class="checkbox" id="probable1" name="reasonDetails[]" value="Tout cas suspects dont le résultat de laboratoire pour le diagnostic de COVID-19 n'est pas concluant (indéterminé)" title="Please check response" <?php echo (in_array("Tout cas suspects dont le résultat de laboratoire pour le diagnostic de COVID-19 n'est pas concluant (indéterminé)", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 2) ? "checked" : ""; ?>>
-                                                        </label>
-                                                        <label class="radio-inline" for="probable1" style="padding-left:17px !important;margin-left:0;">Tout cas suspects dont le résultat de laboratoire pour le diagnostic de COVID-19 n'est pas concluant (indéterminé)</label>
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_probable_de_COVID_19 hide-reasons text-center" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 2) ? "grid" : "none"; ?>;">
-                                                    <td>
-                                                        <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">OU</label>
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_probable_de_COVID_19 hide-reasons" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 2) ? "grid" : "none"; ?>;">
-                                                    <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                            <input type="checkbox" class="checkbox" id="probable2" name="reasonDetails[]" value="Tout décès dans un tableau d'IRA pour lequel il n'a pas été possible d'obtenir des échantillons biologiques pour confirmation au laboratoire mais dont les investigations ont révélé un lien épidémiologique avec un cas confirmé ou probable" title="Please check response" <?php echo (in_array("Tout décès dans un tableau d'IRA pour lequel il n'a pas été possible d'obtenir des échantillons biologiques pour confirmation au laboratoire mais dont les investigations ont révélé un lien épidémiologique avec un cas confirmé ou probable", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 2) ? "checked" : ""; ?>>
-                                                        </label>
-                                                        <label class="radio-inline" for="probable2" style="padding-left:17px !important;margin-left:0;">Tout décès dans un tableau d'IRA pour lequel il n'a pas été possible d'obtenir des échantillons biologiques pour confirmation au laboratoire mais dont les investigations ont révélé un lien épidémiologique avec un cas confirmé ou probable</label>
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_probable_de_COVID_19 hide-reasons text-center" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "grid" : "none"; ?>;">
-                                                    <td>
-                                                        <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">OU</label>
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_probable_de_COVID_19 hide-reasons" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 2) ? "grid" : "none"; ?>;">
-                                                    <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                            <input type="checkbox" class="checkbox" id="probable4" name="reasonDetails[]" value="Notion de séjour ou voyage dans les 14 jours précédant le décès dans les zones a épidémie de la maladie a COVID-19" title="Please check response" <?php echo (in_array("Notion de séjour ou voyage dans les 14 jours précédant le décès dans les zones a épidémie de la maladie a COVID-19", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 2) ? "checked" : ""; ?>>
-                                                        </label>
-                                                        <label class="radio-inline" for="probable4" style="padding-left:17px !important;margin-left:0;">Notion de séjour ou voyage dans les 14 jours précédant le décès dans les zones a épidémie de la maladie a COVID-19</label>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td colspan="2">
-                                                        <label class="radio-inline" style="margin-left:0;">
-                                                            <input type="radio" id="reason3" name="reasonForCovid19Test" value="3" title="Please check response" onchange="checkSubReason(this,'Cas_confirme_de_COVID_19');" <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 3) ? "checked" : ""; ?>>
-                                                            <strong>Cas confirme de covid-19</strong>
-                                                        </label>
-
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_confirme_de_COVID_19 hide-reasons" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 3) ? "grid" : "none"; ?>;">
-                                                    <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                            <input type="checkbox" class="checkbox" id="confirme1" name="reasonDetails[]" value="Toute personne avec une confirmation en laboratoire de l'infection au COVID-19, quelles que soient les signes et symptômes cliniques" title="Please check response" <?php echo (in_array("Toute personne avec une confirmation en laboratoire de l'infection au COVID-19, quelles que soient les signes et symptômes cliniques", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 3) ? "checked" : ""; ?>>
-                                                        </label>
-                                                        <label class="radio-inline" for="confirme1" style="padding-left:17px !important;margin-left:0;">Toute personne avec une confirmation en laboratoire de l'infection au COVID-19, quelles que soient les signes et symptômes cliniques</label>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td colspan="2">
-                                                        <label class="radio-inline" style="margin-left:0;">
-                                                            <input type="radio" id="reason4" name="reasonForCovid19Test" value="4" title="Please check response" onchange="checkSubReason(this,'Non_cas_contact_de_COVID_19');" <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 4) ? "checked" : ""; ?>>
-                                                            <strong>Non cas contact de COVID-19</strong>
-                                                        </label>
-
-                                                    </td>
-                                                </tr>
-                                                <tr class="Non_cas_contact_de_COVID_19 hide-reasons" style="display: <?php echo (isset($covid19SelectedReasonsDetailsForTesting['reasons_id']) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 4) ? "grid" : "none"; ?>;">
-                                                    <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                            <input type="checkbox" class="checkbox" id="contact1" name="reasonDetails[]" value="Tout cas suspects avec deux résultats de laboratoire négatifs au COVID-19 a au moins 48 heures d'intervalle" title="Please check response" <?php echo (in_array("Tout cas suspects avec deux résultats de laboratoire négatifs au COVID-19 a au moins 48 heures d'intervalle", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 4) ? "checked" : ""; ?>>
-                                                        </label>
-                                                        <label class="radio-inline" for="contact1" style="padding-left:17px !important;margin-left:0;">Tout cas suspects avec deux résultats de laboratoire négatifs au COVID-19 a au moins 48 heures d'intervalle</label>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
                                 </table>
 
-                                <div class="box-header with-border sectionHeader">
-                                    <h3 class="box-title">
-                                        VOYAGE ET CONTACT
-                                    </h3>
-                                </div>
                                 <table class="table">
                                     <tr>
-                                        <th style="width: 15% !important;"><label for="hasRecentTravelHistory">Avez-vous voyagé au cours des 14 derniers jours ? </label></th>
-                                        <td style="width:35% !important;">
-                                            <select class="form-control" id="hasRecentTravelHistory" name="hasRecentTravelHistory" title="Avez-vous voyagé au cours des 14 derniers jours ?">
-                                                <option value="">--Select--</option>
-                                                <option value="yes" <?php echo ($covid19Info['has_recent_travel_history'] == 'yes') ? "selected='selected'" : ""; ?>>Oui</option>
-                                                <option value="no" <?php echo ($covid19Info['has_recent_travel_history'] == 'no') ? "selected='selected'" : ""; ?>>Non</option>
-                                                <option value="unknown" <?php echo ($covid19Info['has_recent_travel_history'] == 'unknown') ? "selected='selected'" : ""; ?>>Inconnu</option>
-                                            </select>
-                                        </td>
-                                        <th style="width: 15% !important;"><label for="countryName">Si oui, dans quels pays?</label></th>
-                                        <td style="width:35% !important;">
-                                            <input type="text" value="<?php echo $covid19Info['travel_country_names']; ?>" class="form-control" id="countryName" name="countryName" placeholder="Si oui, dans quels pays ?" title="Si oui, dans quels pays?" />
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <th style="width: 15% !important;"><label for="returnDate">Date de retour</label></th>
-                                        <td style="width:35% !important;">
-                                            <input type="text" value="<?php echo $general->humanDateFormat($covid19Info['travel_return_date']); ?>" class="form-control date" id="returnDate" name="returnDate" placeholder="e.g 09-Jan-1992" title="Date de retour" />
-                                        </td>
-                                    </tr>
-                                </table>
-
-                                <div class="box-header with-border sectionHeader">
-                                    <h3 class="box-title">SIGNES ET SYMPTÔMES CLINIQUES</h3>
-                                </div>
-                                <table class="table">
-                                    <tr>
-                                        <th style="width:15% !important">Date d'apparition des symptômes <span class="mandatory">*</span> </th>
-                                        <td style="width:35% !important;">
-                                            <input class="form-control date isRequired" type="text" name="dateOfSymptomOnset" id="dateOfSymptomOnset" placeholder="Date d'apparition des symptômes" value="<?php echo $general->humanDateFormat($covid19Info['date_of_symptom_onset']); ?> " />
-                                        </td>
-                                        <th style="width:15% !important">Date de la consultation initiale</th>
-                                        <td style="width:35% !important;">
-                                            <input class="form-control date" type="text" name="dateOfInitialConsultation" id="dateOfInitialConsultation" placeholder="Date of Initial Consultation" value="<?php echo $general->humanDateFormat($covid19Info['date_of_initial_consultation']); ?> " />
-                                        </td>
-                                    </tr>
-                                    <tr>
-
                                         <th style="width:15% !important"><label for="recentHospitalization"></label>Avez-vous été hospitalisé durant les 12 derniers mois ? Have you been hospitalized in the past 12 months ? </th>
                                         <td style="width:35% !important;">
                                             <select name="recentHospitalization" id="recentHospitalization" class="form-control" title="Avez-vous été hospitalisé durant les 12 derniers mois ? Have you been hospitalized in the past 12 months ? ">
@@ -638,7 +603,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                     </tr>
 
                                     <tr>
-                                        <th style="width:15% !important"><label for="patientCaresForChildren"></label>prenez-vous soins des enfants ?</th>
+                                        <th style="width:15% !important"><label for="patientCaresForChildren"></label>Prenez-vous soins des enfants ?</th>
                                         <td style="width:35% !important;">
                                             <select name="patientCaresForChildren" id="patientCaresForChildren" class="form-control" title="prenez-vous soins des enfants ?">
                                                 <option value="">--Select--</option>
@@ -647,61 +612,82 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                 <option value="unknown" <?php echo ($covid19Info['patient_cares_for_children'] == 'unknown') ? "selected='selected'" : ""; ?>>Inconnu</option>
                                             </select>
                                         </td>
-                                        <th style="width:15% !important">Fever/Temperature (&deg;C) <span class="mandatory">*</span> </th>
-                                        <td style="width:35% !important;">
-                                            <input class="form-control isRequired" type="number" value="<?php echo $covid19Info['fever_temp']; ?>" name="feverTemp" id="feverTemp" placeholder="Fever/Temperature (in &deg;Celcius)" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th style="width:15% !important"><label for="temperatureMeasurementMethod">Température</label></th>
-                                        <td style="width:35% !important;">
-                                            <select name="temperatureMeasurementMethod" id="temperatureMeasurementMethod" class="form-control" title="Température">
-                                                <option value="">--Select--</option>
-                                                <option value="auxillary" <?php echo ($covid19Info['temperature_measurement_method'] == 'auxillary') ? "selected='selected'" : ""; ?>>Axillaire</option>
-                                                <option value="oral" <?php echo ($covid19Info['temperature_measurement_method'] == 'oral') ? "selected='selected'" : ""; ?>>Orale</option>
-                                                <option value="rectal" <?php echo ($covid19Info['temperature_measurement_method'] == 'rectal') ? "selected='selected'" : ""; ?>>Rectale</option>
-                                                <option value="unknown" <?php echo ($covid19Info['temperature_measurement_method'] == 'unknown') ? "selected='selected'" : ""; ?>>Inconnu</option>
+                                        <th style="width:15% !important">Avez-vous eu des contacts étroits avec toute personne une maladie similaire a la vôtre durant ces 3 derniers semaines?</th>
+                                        <td colspan="3">
+                                            <select name="closeContacts" id="closeContacts" class="form-control" title="prenez-vous soins des enfants ?">
+                                                <option value="yes" <?php echo ($covid19Info['close_contacts'] == 'yes') ? "selected='selected'" : ""; ?>>Oui</option>
+                                                <option value="no" <?php echo ($covid19Info['close_contacts'] == 'no') ? "selected='selected'" : ""; ?>>Non</option>
+                                                <option value="unknown" <?php echo ($covid19Info['close_contacts'] == 'unknown') ? "selected='selected'" : ""; ?>>Inconnu</option>
                                             </select>
                                         </td>
-                                        <th style="width:15% !important"><label for="respiratoryRate"> Fréquence Respiratoire</label></th>
-                                        <td style="width:35% !important;">
-                                            <input class="form-control" type="number" value="<?php echo $covid19Info['respiratory_rate']; ?>" name="respiratoryRate" id="respiratoryRate" placeholder="Fréquence Respiratoire" title="Fréquence Respiratoire" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th style="width:15% !important"><label for="oxygenSaturation"> Saturation en oxygène</label></th>
-                                        <td style="width:35% !important;">
-                                            <input class="form-control" type="number" value="<?php echo $covid19Info['oxygen_saturation']; ?>" name="oxygenSaturation" id="oxygenSaturation" placeholder="Saturation en oxygène" title="Saturation en oxygène" />
-                                        </td>
-                                        <th></th>
-                                        <td></td>
                                     </tr>
                                 </table>
-
                                 <div class="box-header with-border sectionHeader">
-                                    <h3 class="box-title">FACTEURS DE RISQUE ÉPIDÉMIOLOGIQUE ET EXPOSITIONS</h3>
+                                    <h3 class="box-title">
+                                        VOYAGE ET CONTACT
+                                    </h3>
                                 </div>
                                 <table class="table">
                                     <tr>
-                                        <th style="width:15% !important">Contacts étroits du patient <span class="mandatory">*</span></th>
-                                        <td colspan="3">
-                                            <textarea name="closeContacts" class="form-control" placeholder="Contacts étroits du patient" title="Contacts étroits du patient" style="width:100%;min-height:100px;"><?php echo $covid19Info['close_contacts']; ?></textarea>
-                                            <span class="text-danger">
-                                                Ajoutez les noms et numéros de téléphone des contacts proches (foyer, membres de la famille, amis avec lesquels vous avez été en contact au cours des 14 derniers jours)
-                                            </span>
+                                        <th style="width: 15% !important;"><label for="hasRecentTravelHistory">Avez-vous voyagé au cours des 14 derniers jours ? </label></th>
+                                        <td style="width:35% !important;">
+                                            <select class="form-control" id="hasRecentTravelHistory" name="hasRecentTravelHistory" title="Avez-vous voyagé au cours des 14 derniers jours ?">
+                                                <option value="">--Select--</option>
+                                                <option value="yes" <?php echo ($covid19Info['has_recent_travel_history'] == 'yes') ? "selected='selected'" : ""; ?>>Oui</option>
+                                                <option value="no" <?php echo ($covid19Info['has_recent_travel_history'] == 'no') ? "selected='selected'" : ""; ?>>Non</option>
+                                                <option value="unknown" <?php echo ($covid19Info['has_recent_travel_history'] == 'unknown') ? "selected='selected'" : ""; ?>>Inconnu</option>
+                                            </select>
                                         </td>
-
+                                        <th style="width: 15% !important;"><label for="countryName">Si oui, dans quels pays?</label></th>
+                                        <td style="width:35% !important;">
+                                            <input type="text" value="<?php echo $covid19Info['travel_country_names']; ?>" class="form-control" id="countryName" name="countryName" placeholder="Si oui, dans quels pays ?" title="Si oui, dans quels pays?" />
+                                        </td>
                                     </tr>
                                     <tr>
+                                        <th style="width: 15% !important;"><label for="returnDate">Date de retour</label></th>
+                                        <td style="width:35% !important;">
+                                            <input type="text" value="<?php echo $general->humanDateFormat($covid19Info['travel_return_date']); ?>" class="form-control date" id="returnDate" name="returnDate" placeholder="e.g 09-Jan-1992" title="Date de retour" />
+                                        </td>
+                                        
+                                        <th>Compagnie aérienne</th>
+                                        <td><input type="text" class="form-control " value="<?php echo $covid19Info['flight_airline']; ?>" id="airline" name="airline" placeholder="Compagnie aérienne" title="Compagnie aérienne" style="width:100%;" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Numéro de siège</th>
+                                        <td><input type="text" class="form-control " value="<?php echo $covid19Info['flight_seat_no']; ?>" id="seatNo" name="seatNo" placeholder="Numéro de siège" title="Numéro de siège" style="width:100%;" /></td>
+
+                                        <th>Date et heure d'arrivée</th>
+                                        <td><input type="text" class="form-control dateTime" value="<?php echo $general->humanDateFormat($covid19Info['flight_arrival_datetime']); ?>" id="arrivalDateTime" name="arrivalDateTime" placeholder="Date et heure d'arrivée" title="Date et heure d'arrivée" style="width:100%;" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Aeroport DE DEPART</th>
+                                        <td><input type="text" class="form-control" value="<?php echo $covid19Info['flight_airport_of_departure']; ?>" id="airportOfDeparture" name="airportOfDeparture" placeholder="Aeroport DE DEPART" title="Aeroport DE DEPART" style="width:100%;" /></td>
+
+                                        <th>Transit</th>
+                                        <td><input type="text" class="form-control" value="<?php echo $covid19Info['flight_transit']; ?>" id="transit" name="transit" placeholder="Transit" title="Transit" style="width:100%;" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Raison de la visite (le cas échéant)</th>
+                                        <td><input type="text" class="form-control" value="<?php echo $covid19Info['reason_of_visit']; ?>" id="reasonOfVisit" name="reasonOfVisit" placeholder="Raison de la visite (le cas échéant)" title="Raison de la visite (le cas échéant)" style="width:100%;" /></td>
+                                        
                                         <th>Occupation du patient</th>
                                         <td>
                                             <input class="form-control" value="<?php echo $covid19Info['patient_occupation']; ?>" type="text" name="patientOccupation" id="patientOccupation" placeholder="Occupation du patient" title="Occupation du patient" />
                                         </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="width: 15% !important;"><label for="hasRecentTravelHistory">Patiend fume-t-il? </label></th>
+                                        <td style="width:35% !important;">
+                                            <select class="form-control" id="doesPatientSmoke" name="doesPatientSmoke" title="Patiend fume-t-il?">
+                                                <option value="">--Select--</option>
+                                                <option value="yes" <?php echo ($covid19Info['does_patient_smoke'] == 'yes') ? "selected='selected'" : ""; ?>>Oui</option>
+                                                <option value="no" <?php echo ($covid19Info['does_patient_smoke'] == 'no') ? "selected='selected'" : ""; ?>>Non</option>
+                                                <option value="unknown" <?php echo ($covid19Info['does_patient_smoke'] == 'unknown') ? "selected='selected'" : ""; ?>>Inconnu</option>
+                                            </select>
+                                        </td>
                                         <th></th>
                                         <td></td>
-
                                     </tr>
-
                                 </table>
                             </div>
                         </div>
@@ -763,18 +749,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             <th class="show-rejection" style="display: none;">Date de rejet<span class="mandatory">*</span></th>
                                             <td class="show-rejection" style="display: none;"><input value="<?php echo $general->humanDateFormat($covid19Info['rejection_on']); ?>" class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Date de rejet" title="Date de rejet" /></td>
                                         </tr>
-                                        <tr>
-                                            <!-- <th style="width: 15% !important;"><label for="resultPcr">Date de Result PCR</label></th>
-                                            <td style="width:35% !important;">
-                                                <input type="text" class="form-control date" id="resultPcr" name="resultPcr" placeholder="e.g 09-Jan-1992" title="Date de Result PCR"/>
-                                            </td> -->
-                                            <th style="width: 15% !important;"><label for="numberOfDaysSick">Depuis combien de jours êtes-vous malade?</label></th>
-                                            <td style="width:35% !important;">
-                                                <input type="text" value="<?php echo $covid19Info['number_of_days_sick']; ?>" class="form-control" id="numberOfDaysSick" name="numberOfDaysSick" placeholder="Depuis combien de jours êtes-vous malade?" title="Date de Result PCR" />
-                                            </td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
+                                            
                                         <tr>
                                             <td colspan="4">
                                                 <table class="table table-bordered table-striped" id="testNameTable">
@@ -818,8 +793,8 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                                         </select>
                                                                     </td>
                                                                     <td style="vertical-align:middle;text-align: center;">
-                                                                        <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;
-                                                                        <a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);deleteRow('<?php echo base64_encode($covid19TestInfo[$indexKey]['test_id']); ?>');"><i class="fa fa-minus"></i></a>
+                                                                        <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="addTestRow();"><i class="fa fa-plus"></i></a>&nbsp;
+                                                                        <a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeTestRow(this.parentNode.parentNode);deleteRow('<?php echo base64_encode($covid19TestInfo[$indexKey]['test_id']); ?>');"><i class="fa fa-minus"></i></a>
                                                                     </td>
                                                                 </tr>
                                                             <?php }
@@ -845,8 +820,8 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                                     </select>
                                                                 </td>
                                                                 <td style="vertical-align:middle;text-align: center;">
-                                                                    <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;
-                                                                    <a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
+                                                                    <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="addTestRow();"><i class="fa fa-plus"></i></a>&nbsp;
+                                                                    <a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeTestRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
                                                                 </td>
                                                             </tr>
                                                         <?php } ?>
@@ -894,7 +869,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         <tr>
                                             <th>Le résultat est-il autorisé?</th>
                                             <td>
-                                                <select name="isResultAuthorized" id="isResultAuthorized" class="disabled-field form-control" title="Le résultat est-il autorisé?" style="width:100%">
+                                                <select name="isResultAuthorized" id="isResultAuthorized" class="form-control" title="Le résultat est-il autorisé?" style="width:100%">
                                                     <option value="">-- Sélectionner --</option>
                                                     <option value='yes' <?php echo ($covid19Info['is_result_authorised'] == 'yes') ? "selected='selected'" : ""; ?>> Oui </option>
                                                     <option value='no' <?php echo ($covid19Info['is_result_authorised'] == 'no') ? "selected='selected'" : ""; ?>> Non </option>
@@ -1058,12 +1033,12 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         if ($('#isResultAuthorized').val() != "yes") {
             $('#authorizedBy,#authorizedOn').removeClass('isRequired');
         }
-        if ($('#medicalHistory').val() == "yes") {
+        /* if ($('#medicalHistory').val() == "yes") {
             if ($('.comorbidity-select :selected').length > 0) {
                 alert("Veuillez sélectionner au moins une option sous Antécédents médicaux");
                 return false;
             }
-        }
+        } */
         if ($('input[name="symptom[]"]:checked').length > 0) {
             alert("Veuillez sélectionner au moins une option sous Symptômes");
             return false;
@@ -1191,25 +1166,30 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         }
     }
 
-    function insRow() {
-        rl = document.getElementById("testKitNameTable").rows.length;
-        var a = document.getElementById("testKitNameTable").insertRow(rl);
-        a.setAttribute("style", "display:none");
-        var b = a.insertCell(0);
-        var c = a.insertCell(1);
-        var d = a.insertCell(2);
-        var e = a.insertCell(3);
-        var f = a.insertCell(4);
-        f.setAttribute("align", "center");
-        b.setAttribute("align", "center");
-        f.setAttribute("style", "vertical-align:middle");
+    function addTestRow() {
+        let rowString = `<tr>
+                    <td class="text-center">${tableRowId}</td>
+                    <td>
+                    <select onchange="otherCovidTestName(this.value,${tableRowId})" class="form-control test-name-table-input" id="testName${tableRowId}" name="testName[]" title="Please enter the name of the Testkit (or) Test Method used">
+                    <option value="">--Select--</option>
+                    <option value="PCR/RT-PCR">PCR/RT-PCR</option>
+                    <option value="RdRp-SARS Cov-2">RdRp-SARS Cov-2</option>
+                    <option value="other">Others</option>
+                </select>
+                <input type="text" name="testNameOther[]" id="testNameOther${tableRowId}" class="form-control testInputOther' + tableRowId + '" title="Please enter the name of the Testkit (or) Test Method used" placeholder="Please enter the name of the Testkit (or) Test Method used" style="display: none;margin-top: 10px;" />
+            </td>
+            <td><input type="text" name="testDate[]" id="testDate${tableRowId}" class="form-control test-name-table-input dateTime" placeholder="Tested on" title="Please enter the tested on for row ${tableRowId}" /></td>
+            <td>
+                <select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult${tableRowId}" title="Please select the result"><?= $general->generateSelectOptions($covid19Results, null, '-- Sélectionner --'); ?></select>
+            </td>
+            <td style="vertical-align:middle;text-align: center;">
+                <a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="addTestRow(this);"><i class="fa fa-plus"></i></a>&nbsp;
+                <a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeTestRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
+            </td>
+        </tr>`;
 
-        b.innerHTML = tableRowId;
-        c.innerHTML = '<select onchange="changeDRCTestName(this.value,' + tableRowId + ')" class="form-control test-name-table-input" id="testName' + tableRowId + '" name="testName[]" title="Veuillez saisir le nom du test pour les lignes ' + tableRowId + '"> <option value="">--Select--</option> <option value="PCR/RT-PCR">PCR/RT-PCR</option> <option value="RdRp-SARS Cov-2">RdRp-SARS Cov-2</option> <option value="other">Others</option> </select> <input type="text" name="testNameOther[]" id="testNameOther' + tableRowId + '" class="form-control testInputOther' + tableRowId + ' test-name-table-input" placeholder="Entrez le nom du test ' + tableRowId + '" title="Veuillez saisir le nom du test pour les lignes ' + tableRowId + '" style="display: none;margin-top: 10px;"/>';
-        d.innerHTML = '<input type="text" name="testDate[]" id="testDate' + tableRowId + '" class="form-control test-name-table-input dateTime" placeholder="Tested on"  title="Please enter the tested on for row ' + tableRowId + '"/>';
-        e.innerHTML = '<select class="form-control test-result test-name-table-input" name="testResult[]" id="testResult' + tableRowId + '" title="Please select the result for row ' + tableRowId + '"><option value=""> -- Sélectionner -- </option><?php foreach ($covid19Results as $c19ResultKey => $c19ResultValue) { ?> <option value="<?php echo $c19ResultKey; ?>"> <?php echo $c19ResultValue; ?> </option> <?php } ?> </select>';
-        f.innerHTML = '<a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;<a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>';
-        $(a).fadeIn(800);
+        $("#testKitNameTable").append(rowString);
+
         $('.dateTime').datetimepicker({
             changeMonth: true,
             changeYear: true,
@@ -1235,12 +1215,13 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         showcomorbidities();
     }
 
-    function removeAttributeRow(el) {
+    function removeTestRow(el) {
         $(el).fadeOut("slow", function() {
             el.parentNode.removeChild(el);
             rl = document.getElementById("testKitNameTable").rows.length;
             if (rl == 0) {
-                insRow();
+                tableRowId = 0;
+                addTestRow();
             }
         });
     }
