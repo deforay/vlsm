@@ -111,6 +111,7 @@ try {
 		'patient_district'                    => isset($_POST['patientDistrict']) ? $_POST['patientDistrict'] : null,
 		'patient_city'                    	  => isset($_POST['patientCity']) ? $_POST['patientCity'] : null,
 		'patient_occupation'                  => isset($_POST['patientOccupation']) ? $_POST['patientOccupation'] : null,
+		'does_patient_smoke'                  => isset($_POST['doesPatientSmoke']) ? $_POST['doesPatientSmoke'] : null,
 		'patient_nationality'                 => isset($_POST['patientNationality']) ? $_POST['patientNationality'] : null,
 		'patient_passport_number'             => isset($_POST['patientPassportNumber']) ? $_POST['patientPassportNumber'] : null,
 		'flight_airline'                 	  => isset($_POST['airline']) ? $_POST['airline'] : null,
