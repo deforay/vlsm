@@ -458,8 +458,8 @@ $eidInfo['child_treatment'] = explode(",", $eidInfo['child_treatment']);
                         </select>
                       </td>
 
-                      <th>Reason for Rejection</th>
-                      <td>
+                      <th class="rejected" style="display: none;">Reason for Rejection</th>
+                      <td class="rejected" style="display: none;">
                         <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason" title="Please select reason for sample rejection">
                           <option value=''> -- Sélectionner -- </option>
                           <option value="Technical Problem" <?php echo ($eidInfo['reason_for_sample_rejection'] == 'Technical Problem') ? "selected='selected'" : ""; ?>> Problème technique </option>

@@ -125,18 +125,14 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             <?php
                                             if ($covid19Info['sample_code'] != '') {
                                             ?>
-                                                <td> <label for="sampleSuggest" class="text-danger">&nbsp;&nbsp;&nbsp;Veuillez noter que cet exemple distant a déjà été importé avec VLSM N°EPID </td>
-                                                <td align="left"> <?php echo $covid19Info['sample_code']; ?></label> </td>
+                                                <td colspan="4"> <label for="sampleSuggest" class="text-danger">&nbsp;&nbsp;&nbsp;Veuillez noter que cet exemple distant a déjà été importé avec VLSM N°EPID </td>
+                                                <td colspan="4"  align="left"> <?php echo $covid19Info['sample_code']; ?></label> </td>
                                             <?php
                                             } else {
                                             ?>
-                                                <td> <label for="sampleSuggest">N°EPID (peut changer lors de la soumission du formulaire)</label></td>
-                                                <td align="left"> <?php echo $sampleSuggestion; ?></td>
+                                                <td colspan="4"> <label for="sampleSuggest">N°EPID (peut changer lors de la soumission du formulaire)</label></td>
+                                                <td colspan="4" align="left"> <?php echo $sampleSuggestion; ?></td>
                                             <?php } ?>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
                                         </tr>
                                     <?php } ?>
                                     <tr>
@@ -327,9 +323,14 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                     </tr>
                                     <tr>
                                         <td colspan="4">
-                                            <table id="symptomsTable" class="table table-bordered">
+                                            <table id="symptomsTable" class="table table-bordered table-striped">
                                                 <?php $index = 0;
-                                                foreach ($covid19Symptoms as $symptomId => $symptomName) { ?>
+                                                foreach ($covid19Symptoms as $symptomId => $symptomName) { 
+                                                    $diarrhée = "";$display = "display:none;";
+                                                    if ($symptomId == 13) {
+                                                        $diarrhée = "diarrhée";
+                                                        $display = (isset($covid19SelectedSymptoms[$symptomId]['value']) && $covid19SelectedSymptoms[$symptomId]['value'] == "yes")?"":'display:none;';
+                                                    }?>
                                                     <tr class="row<?php echo $index; ?>">
                                                         <!-- <td style="display: flex;">
                                                             <label class="radio-inline" style="width:4%;margin-left:0;">
@@ -340,7 +341,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                         <th style="width:50%;"><?php echo $symptomName; ?></th>
                                                         <td style="width:50%;">
                                                             <input name="symptomId[]" type="hidden" value="<?php echo $symptomId; ?>">
-                                                            <select name="symptomDetected[]" id="symptomDetected<?php echo $symptomId; ?>" class="form-control" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" style="width:100%">
+                                                            <select name="symptomDetected[]" id="symptomDetected<?php echo $symptomId; ?>" class="form-control <?php echo $diarrhée;?>" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" style="width:100%">
                                                                 <option value="">-- Sélectionner --</option>
                                                                 <option value='yes' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['value']) && $covid19SelectedSymptoms[$symptomId]['value'] == 'yes') ? "selected='selected'" : ""; ?>> Oui </option>
                                                                 <option value='no' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['value']) && $covid19SelectedSymptoms[$symptomId]['value'] == 'no') ? "selected='selected'" : ""; ?>> Non </option>
@@ -351,22 +352,22 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                             <?php
                                                             if ($symptomId == 13) {
                                                             ?>
-                                                                <label class="" for="" style="margin-left:0;">Si oui:<br> Sanglante?</label>
-                                                                <select name="symptomDetails[13][]" class="form-control" style="width:100%">
+                                                                <label class="diarrhée-sub" for="" style="margin-left:0;<?php echo $display;?>">Si oui:<br> Sanglante?</label>
+                                                                <select name="symptomDetails[13][]" class="form-control diarrhée-sub" style="width:100%;<?php echo $display;?>">
                                                                     <option value="">-- Sélectionner --</option>
                                                                     <option value='yes' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['sDetails'][0]) && $covid19SelectedSymptoms[$symptomId]['sDetails'][0] == 'yes') ? "selected='selected'" : ""; ?>> Oui </option>
                                                                     <option value='no' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['sDetails'][0]) && $covid19SelectedSymptoms[$symptomId]['sDetails'][0] == 'no') ? "selected='selected'" : ""; ?>> Non </option>
                                                                     <option value='unknown' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['sDetails'][0]) && $covid19SelectedSymptoms[$symptomId]['sDetails'][0] == 'unknown') ? "selected='selected'" : ""; ?>> Inconnu </option>
                                                                 </select>
-                                                                <label class="" for="" style="margin-left:0;">Aqueuse?</label>
-                                                                <select name="symptomDetails[13][]" class="form-control" style="width:100%">
+                                                                <label class="diarrhée-sub" for="" style="margin-left:0;<?php echo $display;?>">Aqueuse?</label>
+                                                                <select name="symptomDetails[13][]" class="form-control diarrhée-sub" style="width:100%;<?php echo $display;?>">
                                                                     <option value="">-- Sélectionner --</option>
                                                                     <option value='yes' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['sDetails'][1]) && $covid19SelectedSymptoms[$symptomId]['sDetails'][1] == 'yes') ? "selected='selected'" : ""; ?>> Oui </option>
                                                                     <option value='no' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['sDetails'][1]) && $covid19SelectedSymptoms[$symptomId]['sDetails'][1] == 'no') ? "selected='selected'" : ""; ?>> Non </option>
                                                                     <option value='unknown' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['sDetails'][1]) && $covid19SelectedSymptoms[$symptomId]['sDetails'][1] == 'unknown') ? "selected='selected'" : ""; ?>> Inconnu </option>
                                                                 </select>
-                                                                <label class="" for="" style="margin-left:0;">Nombre De Selles Par /24h</label>
-                                                                <input type="text" class="form-control reason-checkbox symptoms-checkbox" id="" name="symptomDetails[13][]" placeholder="Nombre de selles par /24h" title="Nombre de selles par /24h" value="<?php echo $covid19SelectedSymptoms[$symptomId]['sDetails'][2]; ?>">
+                                                                <label class="diarrhée-sub" for="" style="margin-left:0;<?php echo $display;?>">Nombre De Selles Par /24h</label>
+                                                                <input type="text" style="<?php echo $display;?>" class="form-control reason-checkbox symptoms-checkbox diarrhée-sub" id="" name="symptomDetails[13][]" placeholder="Nombre de selles par /24h" title="Nombre de selles par /24h" value="<?php echo $covid19SelectedSymptoms[$symptomId]['sDetails'][2]; ?>">
 
                                                             <?php } ?>
                                                         </td>
@@ -1110,6 +1111,15 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         <?php if (isset($covid19Info['mother_vl_result']) && !empty($covid19Info['mother_vl_result'])) { ?>
             updateMotherViralLoad();
         <?php } ?>
+
+        $('.diarrhée').change(function(e) {
+            if(this.value == "yes"){
+                $('.diarrhée-sub').show();
+            } else{
+                $('.diarrhée-sub').hide();
+                $('.diarrhée-sub').val('');
+            }
+        });
 
         $('#medicalHistory').change(function(e) {
             if ($(this).val() == "yes") {

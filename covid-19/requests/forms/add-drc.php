@@ -275,7 +275,11 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                         <td colspan="4">
                                             <table id="symptomsTable" class="table table-bordered table-striped">
                                                 <?php $index = 0;
-                                                foreach ($covid19Symptoms as $symptomId => $symptomName) { ?>
+                                                foreach ($covid19Symptoms as $symptomId => $symptomName) { 
+                                                    $diarrhée = "";
+                                                    if ($symptomId == 13) {
+                                                        $diarrhée = "diarrhée";
+                                                    }?>
                                                     <tr class="row<?php echo $index; ?>">
                                                         <!-- <td style="display: flex;">
                                                             <label class="radio-inline" style="width:4%;margin-left:0;">
@@ -286,7 +290,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                         <th style="width:50%;"><?php echo $symptomName; ?></th>
                                                         <td style="width:50%;">
                                                             <input name="symptomId[]" type="hidden" value="<?php echo $symptomId; ?>">
-                                                            <select name="symptomDetected[]" id="symptomDetected<?php echo $symptomId; ?>" class="form-control" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" style="width:100%">
+                                                            <select name="symptomDetected[]" id="symptomDetected<?php echo $symptomId; ?>" class="form-control <?php echo $diarrhée;?>" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" style="width:100%">
                                                                 <option value="">-- Sélectionner --</option>
                                                                 <option value='yes'> Oui </option>
                                                                 <option value='no'> Non </option>
@@ -297,22 +301,22 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                             <?php
                                                             if ($symptomId == 13) {
                                                             ?>
-                                                                <label class="" for="symptomDetails14" style="margin-left:0;">Si oui:<br> Sanglante?</label>
-                                                                <select name="symptomDetails[13][]" class="form-control" style="width:100%">
+                                                                <label class="diarrhée-sub" for="symptomDetails14" style="margin-left:0;display:none;">Si oui:<br> Sanglante?</label>
+                                                                <select name="symptomDetails[13][]" class="form-control diarrhée-sub" style="width:100%;display:none;">
                                                                     <option value="">-- Sélectionner --</option>
                                                                     <option value='yes'> Oui </option>
                                                                     <option value='no'> Non </option>
                                                                     <option value='unknown'> Inconnu </option>
                                                                 </select>
-                                                                <label class="" for="symptomDetails15" style="margin-left:0;">Aqueuse?</label>
-                                                                <select name="symptomDetails[13][]" class="form-control" style="width:100%">
+                                                                <label class="diarrhée-sub" for="symptomDetails15" style="margin-left:0;display:none;">Aqueuse?</label>
+                                                                <select name="symptomDetails[13][]" class="form-control diarrhée-sub" style="width:100%;display:none;">
                                                                     <option value="">-- Sélectionner --</option>
                                                                     <option value='yes'> Oui </option>
                                                                     <option value='no'> Non </option>
                                                                     <option value='unknown'> Inconnu </option>
                                                                 </select>
-                                                                <label class="" for="symptomDetails16" style="margin-left:0;">Nombre De Selles Par /24h</label>
-                                                                    <input type="text" value="" class="form-control reason-checkbox symptoms-checkbox" id="symptomDetails16" name="symptomDetails[13][]" placeholder="Nombre de selles par /24h" title="Nombre de selles par /24h">
+                                                                <label class="diarrhée-sub" for="symptomDetails16" style="margin-left:0;display:none;">Nombre De Selles Par /24h</label>
+                                                                    <input type="text" value="" style="display:none;" class="form-control reason-checkbox symptoms-checkbox diarrhée-sub" id="symptomDetails16" name="symptomDetails[13][]" placeholder="Nombre de selles par /24h" title="Nombre de selles par /24h">
 
                                                             <?php } ?>
                                                         </td>
@@ -998,6 +1002,13 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
         // $('#province').select2({
         //     placeholder: "Province"
         // });
+        $('.diarrhée').change(function(e) {
+            if(this.value == "yes"){
+                $('.diarrhée-sub').show();
+            } else{
+                $('.diarrhée-sub').hide();
+            }
+        });
         $('#medicalHistory').change(function(e) {
             if ($(this).val() == "yes") {
                 $('.comorbidities-row').show();

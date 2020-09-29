@@ -116,6 +116,18 @@ require_once($fileArray[$arr['vl_form']]);
 
 <script>
   $(document).ready(function() {
+    $("#isSampleRejected").change();
+	$("#isSampleRejected").on("change", function() {
+		if (this.value == "yes") {
+			$('.rejected').show();
+			$('#sampleRejectionReason').addClass('isRequired');
+			$('#sampleTestedDateTime').removeClass('isRequired');
+		} else {
+			$('.rejected').show();
+			$('#sampleRejectionReason').removeClass('isRequired');
+			$('#sampleTestedDateTime').addClass('isRequired');
+		}
+	});
     $('.date').datepicker({
       changeMonth: true,
       changeYear: true,
