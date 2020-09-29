@@ -1170,3 +1170,4 @@ ALTER TABLE `resources` ADD UNIQUE( `module`, `resource_name`);
 
 -- Amit 28-Sep-2020
 ALTER TABLE `form_covid19` ADD `external_sample_code` VARCHAR(255) NULL DEFAULT NULL AFTER `sample_code`;
+ALTER TABLE `form_covid19` ADD `does_patient_smoke` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_occupation`;

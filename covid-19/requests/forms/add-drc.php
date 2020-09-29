@@ -248,34 +248,35 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                     </tr>
                                     <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
                                         <td colspan="2" style="padding-left: 70px;display: flex;">
-                                            <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                <input type="checkbox" class="reason-checkbox" id="suspect2" name="reasonDetails[]" value="Toux">
-                                            </label>
-                                            <label class="radio-inline" for="suspect2" style="padding-left:17px !important;margin-left:0;">Toux</label>
-                                        </td>
-                                    </tr>
-                                    <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
-                                        <td colspan="2" style="padding-left: 70px;display: flex;">
-                                            <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                <input type="checkbox" class="reason-checkbox" id="suspect3" name="reasonDetails[]" value="Rhume">
-                                            </label>
-                                            <label class="radio-inline" for="suspect3" style="padding-left:17px !important;margin-left:0;">Rhume</label>
-                                        </td>
-                                    </tr>
-                                    <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
-                                        <td colspan="2" style="padding-left: 70px;display: flex;">
-                                            <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                <input type="checkbox" class="reason-checkbox" id="suspect4" name="reasonDetails[]" value="Mal de gorge">
-                                            </label>
-                                            <label class="radio-inline" for="suspect4" style="padding-left:17px !important;margin-left:0;">Mal de gorge</label>
-                                        </td>
-                                    </tr>
-                                    <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
-                                        <td colspan="2" style="padding-left: 70px;display: flex;">
-                                            <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                <input type="checkbox" class="reason-checkbox" id="suspect5" name="reasonDetails[]" value="Difficulté respiratoire">
-                                            </label>
-                                            <label class="radio-inline" for="suspect5" style="padding-left:17px !important;margin-left:0;">Difficulté respiratoire</label>
+                                            <ul style=" display: inline-flex; list-style: none; padding: 0px; ">
+                                                <li>
+                                                    <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                    <input type="checkbox" class="reason-checkbox" id="suspect2" name="reasonDetails[]" value="Toux">
+                                                    </label>
+                                                    <label class="radio-inline" for="suspect2" style="padding-left:17px !important;margin-left:0;">Toux</label>
+                                                </li>
+                                                <li>
+                                                    <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">(OU)</label>
+                                                </li>
+                                                <li>
+                                                    <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                        <input type="checkbox" class="reason-checkbox" id="suspect3" name="reasonDetails[]" value="Rhume">
+                                                    </label>
+                                                    <label class="radio-inline" for="suspect3" style="padding-left:17px !important;margin-left:0;">Rhume</label>
+                                                </li>
+                                                <li>
+                                                    <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                        <input type="checkbox" class="reason-checkbox" id="suspect4" name="reasonDetails[]" value="Mal de gorge">
+                                                    </label>
+                                                    <label class="radio-inline" for="suspect4" style="padding-left:17px !important;margin-left:0;">Mal de gorge</label>
+                                                </li>
+                                                <li>
+                                                    <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                        <input type="checkbox" class="reason-checkbox" id="suspect5" name="reasonDetails[]" value="Difficulté respiratoire">
+                                                    </label>
+                                                    <label class="radio-inline" for="suspect5" style="padding-left:17px !important;margin-left:0;">Difficulté respiratoire</label>
+                                                </li>
+                                            </ul>
                                         </td>
                                     </tr>
                                     <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
@@ -288,7 +289,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                     </tr>
                                     <tr class="Cas_suspect_de_COVID_19 hide-reasons text-center" style="display: none;">
                                         <td>
-                                            <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">OU</label>
+                                            <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">(OU)</label>
                                         </td>
                                     </tr>
                                     <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
@@ -319,7 +320,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                     </tr>
                                     <tr class="Cas_probable_de_COVID_19 hide-reasons text-center" style="display: none;">
                                         <td>
-                                            <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">OU</label>
+                                            <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">(OU)</label>
                                         </td>
                                     </tr>
                                     <tr class="Cas_probable_de_COVID_19 hide-reasons" style="display: none;">
@@ -332,15 +333,15 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                     </tr>
                                     <tr class="Cas_probable_de_COVID_19 hide-reasons text-center" style="display: none;">
                                         <td>
-                                            <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">OU</label>
+                                            <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">(OU)</label>
                                         </td>
                                     </tr>
                                     <tr class="Cas_probable_de_COVID_19 hide-reasons" style="display: none;">
                                         <td colspan="2" style="padding-left: 70px;display: flex;">
                                             <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                <input type="checkbox" class="reason-checkbox" id="probable4" name="reasonDetails[]" value="Notion de séjour ou voyage dans les 14 jours précédant le décès dans les zones a épidémie de la maladie a COVID-19">
+                                                <input type="checkbox" class="reason-checkbox" id="probable4" name="reasonDetails[]" value="Une notion de séjour ou voyage dans les 14 jours précédant le décès dans les zones a épidémie de la maladie a COVID-19">
                                             </label>
-                                            <label class="radio-inline" for="probable4" style="padding-left:17px !important;margin-left:0;">Notion de séjour ou voyage dans les 14 jours précédant le décès dans les zones a épidémie de la maladie a COVID-19</label>
+                                            <label class="radio-inline" for="probable4" style="padding-left:17px !important;margin-left:0;">Une notion de séjour ou voyage dans les 14 jours précédant le décès dans les zones a épidémie de la maladie a COVID-19</label>
                                         </td>
                                     </tr>
 
@@ -630,6 +631,28 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                         <td>
                                             <input class="form-control" type="text" name="patientOccupation" id="patientOccupation" placeholder="Occupation du patient" title="Occupation du patient" />
                                         </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Raison de la visite (le cas échéant)</th>
+                                        <td><input type="text" class="form-control" id="reasonOfVisit" name="reasonOfVisit" placeholder="Raison de la visite (le cas échéant)" title="Raison de la visite (le cas échéant)" style="width:100%;" /></td>
+
+                                        <th>Occupation du patient</th>
+                                        <td>
+                                            <input class="form-control" type="text" name="patientOccupation" id="patientOccupation" placeholder="Occupation du patient" title="Occupation du patient" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="width: 15% !important;"><label for="hasRecentTravelHistory">Patiend fume-t-il? </label></th>
+                                        <td style="width:35% !important;">
+                                            <select class="form-control" id="doesPatientSmoke" name="doesPatientSmoke" title="Patiend fume-t-il?">
+                                                <option value="">--Select--</option>
+                                                <option value="yes">Oui</option>
+                                                <option value="no">Non</option>
+                                                <option value="unknown">Inconnu</option>
+                                            </select>
+                                        </td>
+                                        <th></th>
+                                        <td></td>
                                     </tr>
                                 </table>
                             </div>
