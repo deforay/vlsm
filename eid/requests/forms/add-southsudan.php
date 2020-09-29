@@ -369,8 +369,8 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                 </select>
                                             </td>
 
-                                            <th>Reason for Rejection</th>
-                                            <td>
+                                            <th class="rejected" style="display: none;">Reason for Rejection</th>
+                      						<td class="rejected" style="display: none;">
                                                 <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason">
                                                     <option value=''> -- Select -- </option>
                                                     <?php echo $rejectionReason; ?>
@@ -414,7 +414,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                         <input type="hidden" name="formId" id="formId" value="1" />
                         <input type="hidden" name="eidSampleId" id="eidSampleId" value="" />
                         <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
-                        <a href="/eid/requests/eid-add-request.php" class="btn btn-default"> Cancel</a>
+                        <a href="/eid/requests/eid-requests.php" class="btn btn-default"> Cancel</a>
                     </div>
                     <!-- /.box-footer -->
                 </form>

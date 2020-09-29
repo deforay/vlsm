@@ -306,15 +306,53 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                                     </tr>
                                     <tr>
                                         <td colspan="4">
-                                            <table id="symptomsTable" class="table table-bordered">
+                                        <table id="symptomsTable" class="table table-bordered table-striped">
                                                 <?php $index = 0;
-                                                foreach ($covid19Symptoms as $symptomId => $symptomName) { ?>
-                                                    <tr colspan="2" class="row<?php echo $index; ?>">
-                                                        <td style="display: flex;">
+                                                foreach ($covid19Symptoms as $symptomId => $symptomName) { 
+                                                    $diarrhée = "";$display = "display:none;";
+                                                    if ($symptomId == 13) {
+                                                        $diarrhée = "diarrhée";
+                                                        $display = (isset($covid19SelectedSymptoms[$symptomId]['value']) && $covid19SelectedSymptoms[$symptomId]['value'] == "yes")?"":'display:none;';
+                                                    }?>
+                                                    <tr class="row<?php echo $index; ?>">
+                                                        <!-- <td style="display: flex;">
                                                             <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                            <input type="checkbox" class="" id="symptom<?php echo $symptomId; ?>" name="symptom" value="<?php echo $symptomId; ?>" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" onclick="checkSubSymptoms(this.value,<?php echo $symptomId; ?>,<?php echo $index; ?>);" <?php echo (in_array($symptomId,$symptomArray)) ? "checked" : ""; ?>>
+                                                                <input type="checkbox" class="checkSymptoms" id="xsymptom<?php echo $symptomId; ?>" name="symptom[]" value="<?php echo $symptomId; ?>" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" onclick="checkSubSymptoms(this.value,<?php echo $symptomId; ?>,<?php echo $index; ?>);">
                                                             </label>
-                                                            <label class="radio-inline" for="symptom<?php echo $symptomId; ?>" style="margin-left:0;"><b><?php echo $symptomName; ?></b></label>
+                                                            <label class="radio-inline" for="symptom<?php echo $symptomId; ?>" style="padding-left:17px !important;margin-left:0;"><b><?php echo $symptomName; ?></b></label>
+                                                        </td> -->
+                                                        <th style="width:50%;"><?php echo $symptomName; ?></th>
+                                                        <td style="width:50%;">
+                                                            <input name="symptomId[]" type="hidden" value="<?php echo $symptomId; ?>">
+                                                            <select name="symptomDetected[]" id="symptomDetected<?php echo $symptomId; ?>" class="form-control <?php echo $diarrhée;?>" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" style="width:100%">
+                                                                <option value="">-- Sélectionner --</option>
+                                                                <option value='yes' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['value']) && $covid19SelectedSymptoms[$symptomId]['value'] == 'yes') ? "selected='selected'" : ""; ?>> Oui </option>
+                                                                <option value='no' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['value']) && $covid19SelectedSymptoms[$symptomId]['value'] == 'no') ? "selected='selected'" : ""; ?>> Non </option>
+                                                                <option value='unknown' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['value']) && $covid19SelectedSymptoms[$symptomId]['value'] == 'unknown') ? "selected='selected'" : ""; ?>> Inconnu </option>
+                                                            </select>
+
+                                                            <br>
+                                                            <?php
+                                                            if ($symptomId == 13) {
+                                                            ?>
+                                                                <label class="diarrhée-sub" for="" style="margin-left:0;<?php echo $display;?>">Si oui:<br> Sanglante?</label>
+                                                                <select name="symptomDetails[13][]" class="form-control diarrhée-sub" style="width:100%;<?php echo $display;?>">
+                                                                    <option value="">-- Sélectionner --</option>
+                                                                    <option value='yes' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['sDetails'][0]) && $covid19SelectedSymptoms[$symptomId]['sDetails'][0] == 'yes') ? "selected='selected'" : ""; ?>> Oui </option>
+                                                                    <option value='no' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['sDetails'][0]) && $covid19SelectedSymptoms[$symptomId]['sDetails'][0] == 'no') ? "selected='selected'" : ""; ?>> Non </option>
+                                                                    <option value='unknown' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['sDetails'][0]) && $covid19SelectedSymptoms[$symptomId]['sDetails'][0] == 'unknown') ? "selected='selected'" : ""; ?>> Inconnu </option>
+                                                                </select>
+                                                                <label class="diarrhée-sub" for="" style="margin-left:0;<?php echo $display;?>">Aqueuse?</label>
+                                                                <select name="symptomDetails[13][]" class="form-control diarrhée-sub" style="width:100%;<?php echo $display;?>">
+                                                                    <option value="">-- Sélectionner --</option>
+                                                                    <option value='yes' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['sDetails'][1]) && $covid19SelectedSymptoms[$symptomId]['sDetails'][1] == 'yes') ? "selected='selected'" : ""; ?>> Oui </option>
+                                                                    <option value='no' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['sDetails'][1]) && $covid19SelectedSymptoms[$symptomId]['sDetails'][1] == 'no') ? "selected='selected'" : ""; ?>> Non </option>
+                                                                    <option value='unknown' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['sDetails'][1]) && $covid19SelectedSymptoms[$symptomId]['sDetails'][1] == 'unknown') ? "selected='selected'" : ""; ?>> Inconnu </option>
+                                                                </select>
+                                                                <label class="diarrhée-sub" for="" style="margin-left:0;<?php echo $display;?>">Nombre De Selles Par /24h</label>
+                                                                <input type="text" style="<?php echo $display;?>" class="form-control reason-checkbox symptoms-checkbox diarrhée-sub" id="" name="symptomDetails[13][]" placeholder="Nombre de selles par /24h" title="Nombre de selles par /24h" value="<?php echo $covid19SelectedSymptoms[$symptomId]['sDetails'][2]; ?>">
+
+                                                            <?php } ?>
                                                         </td>
                                                     </tr>
                                                 <?php $index++;

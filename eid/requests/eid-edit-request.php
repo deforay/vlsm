@@ -132,7 +132,25 @@ require_once($fileArray[$arr['vl_form']]);
         }
     }
 
+    function rejectedElements() {
+        console.log($('#isSampleRejected').val());
+        if ($('#isSampleRejected').val() == "yes") {
+            $('.rejected').show();
+            $('#sampleRejectionReason').addClass('isRequired');
+            $('#sampleTestedDateTime').removeClass('isRequired');
+        } else {
+            $('.rejected').hide();
+            $('#sampleRejectionReason').removeClass('isRequired');
+            $('#sampleTestedDateTime').addClass('isRequired');
+        }
+    }
+
     $(document).ready(function() {
+        rejectedElements();
+        $("#isSampleRejected").on("change", function() {
+            rejectedElements();
+        });
+
         $('.date').datepicker({
             changeMonth: true,
             changeYear: true,
