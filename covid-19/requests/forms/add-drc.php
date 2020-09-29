@@ -446,6 +446,22 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 <?php echo $general->generateSelectOptions($specimenTypeResult); ?>
                                             </select>
                                         </td>
+                                        <th style="width: 15% !important;"><label for="numberOfDaysSick">Depuis combien de jours êtes-vous malade?</label></th>
+                                        <td style="width:35% !important;">
+                                            <input type="text" class="form-control" id="numberOfDaysSick" name="numberOfDaysSick" placeholder="Depuis combien de jours êtes-vous malade?" title="Date de Result PCR" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="width:15% !important">Date d'apparition des symptômes <span class="mandatory">*</span> </th>
+                                        <td style="width:35% !important;">
+                                            <input class="form-control date isRequired" type="text" name="dateOfSymptomOnset" id="dateOfSymptomOnset" placeholder="Date d'apparition des symptômes" title="Date d'apparition des symptômes" />
+                                        </td>
+                                        <th style="width:15% !important">Date de la consultation initiale</th>
+                                        <td style="width:35% !important;">
+                                            <input class="form-control date" type="text" name="dateOfInitialConsultation" id="dateOfInitialConsultation" placeholder="Date de la consultation initiale" title="Date de la consultation initiale" />
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <th style="width:15% !important"><label for="specimenType">Date de prélèvement de l'échantillon <span class="mandatory">*</span></label></th>
                                         <td style="width:35% !important;">
                                             <input class="form-control isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Date de prélèvement de l'échantillon" title="Date de prélèvement de l'échantillon" onchange="sampleCodeGeneration();" />
@@ -618,23 +634,6 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                 </table>
 
                                 <div class="box-header with-border sectionHeader">
-                                    <h3 class="box-title">SIGNES ET SYMPTÔMES CLINIQUES</h3>
-                                </div>
-                                <table class="table">
-                                    <tr>
-                                        <th style="width:15% !important">Date d'apparition des symptômes <span class="mandatory">*</span> </th>
-                                        <td style="width:35% !important;">
-                                            <input class="form-control date isRequired" type="text" name="dateOfSymptomOnset" id="dateOfSymptomOnset" placeholder="Date d'apparition des symptômes" title="Date d'apparition des symptômes" />
-                                        </td>
-                                        <th style="width:15% !important">Date de la consultation initiale</th>
-                                        <td style="width:35% !important;">
-                                            <input class="form-control date" type="text" name="dateOfInitialConsultation" id="dateOfInitialConsultation" placeholder="Date de la consultation initiale" title="Date de la consultation initiale" />
-                                        </td>
-                                    </tr>>
-                                    
-                                </table>
-
-                                <div class="box-header with-border sectionHeader">
                                     <h3 class="box-title">FACTEURS DE RISQUE ÉPIDÉMIOLOGIQUE ET EXPOSITIONS</h3>
                                 </div>
                                 <table class="table">
@@ -705,12 +704,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                             <td style="width:35% !important;">
                                                 <input type="text" class="form-control date" id="resultPcr" name="resultPcr" placeholder="e.g 09-Jan-1992" title="Date de Result PCR"/>
                                             </td> -->
-                                            <th style="width: 15% !important;"><label for="numberOfDaysSick">Depuis combien de jours êtes-vous malade?</label></th>
-                                            <td style="width:35% !important;">
-                                                <input type="text" class="form-control" id="numberOfDaysSick" name="numberOfDaysSick" placeholder="Depuis combien de jours êtes-vous malade?" title="Date de Result PCR" />
-                                            </td>
-                                            <td></td>
-                                            <td></td>
+                                            
                                         </tr>
                                         <tr>
                                             <td colspan="4">
@@ -989,7 +983,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
 
 
     $(document).ready(function() {
-
+        $('.sidebar-mini').addClass('sidebar-collapse');
         $('#facilityId').select2({
             placeholder: "Nom de l'installation"
         });
