@@ -251,10 +251,193 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
 
                                 <div class="box-header with-border sectionHeader">
                                     <h3 class="box-title">
+                                        Definition de cas
+                                    </h3>
+                                </div>
+                                <table id="responseTable" class="table table-bordered">
+                                    <tr>
+                                        <td colspan="2">
+                                            <label class="radio-inline" style="margin-left:0;">
+                                                <input type="radio" class="" id="reason1" name="reasonForCovid19Test" value="1" title="Cas suspect de COVID-1" onchange="checkSubReason(this,'Cas_suspect_de_COVID_19');">
+                                                <strong>Cas suspect de COVID-19</strong>
+                                            </label>
+
+                                        </td>
+                                    </tr>
+                                    <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
+                                        <td colspan="2" style="padding-left: 70px;display: flex;">
+                                            <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                <input type="checkbox" class="reason-checkbox" id="suspect1" name="reasonDetails[]" value="Fièvre d'accès brutal (Inferieur ou égale à 38°C, vérifié à la salle d'urgence, la consultation externe, ou l'hôpital) ET(cochez une ou deux des cases suivantes)">
+                                            </label>
+                                            <label class="radio-inline" for="suspect1" style="padding-left:17px !important;margin-left:0;">Fièvre d'accès brutal (Inferieur ou égale à 38°C, vérifié à la salle d'urgence, la consultation externe, ou l'hôpital) ET(cochez une ou deux des cases suivantes)</label>
+                                        </td>
+                                    </tr>
+                                    <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
+                                        <td colspan="2" style="padding-left: 70px;display: flex;">
+                                            <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                <input type="checkbox" class="reason-checkbox" id="suspect2" name="reasonDetails[]" value="Toux">
+                                            </label>
+                                            <label class="radio-inline" for="suspect2" style="padding-left:17px !important;margin-left:0;">Toux</label>
+                                        </td>
+                                    </tr>
+                                    <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
+                                        <td colspan="2" style="padding-left: 70px;display: flex;">
+                                            <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                <input type="checkbox" class="reason-checkbox" id="suspect3" name="reasonDetails[]" value="Rhume">
+                                            </label>
+                                            <label class="radio-inline" for="suspect3" style="padding-left:17px !important;margin-left:0;">Rhume</label>
+                                        </td>
+                                    </tr>
+                                    <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
+                                        <td colspan="2" style="padding-left: 70px;display: flex;">
+                                            <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                <input type="checkbox" class="reason-checkbox" id="suspect4" name="reasonDetails[]" value="Mal de gorge">
+                                            </label>
+                                            <label class="radio-inline" for="suspect4" style="padding-left:17px !important;margin-left:0;">Mal de gorge</label>
+                                        </td>
+                                    </tr>
+                                    <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
+                                        <td colspan="2" style="padding-left: 70px;display: flex;">
+                                            <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                <input type="checkbox" class="reason-checkbox" id="suspect5" name="reasonDetails[]" value="Difficulté respiratoire">
+                                            </label>
+                                            <label class="radio-inline" for="suspect5" style="padding-left:17px !important;margin-left:0;">Difficulté respiratoire</label>
+                                        </td>
+                                    </tr>
+                                    <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
+                                        <td colspan="2" style="padding-left: 70px;display: flex;">
+                                            <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                <input type="checkbox" class="reason-checkbox" id="suspect6" name="reasonDetails[]" value="Notion de séjour ou voyage dans les zones a épidémie a COVID-19 dans les 14 jours précédant les symptômes ci-dessous.">
+                                            </label>
+                                            <label class="radio-inline" for="suspect6" style="padding-left:17px !important;margin-left:0;">Notion de séjour ou voyage dans les zones a épidémie a COVID-19 dans les 14 jours précédant les symptômes ci-dessous.</label>
+                                        </td>
+                                    </tr>
+                                    <tr class="Cas_suspect_de_COVID_19 hide-reasons text-center" style="display: none;">
+                                        <td>
+                                            <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">OU</label>
+                                        </td>
+                                    </tr>
+                                    <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
+                                        <td colspan="2" style="padding-left: 70px;display: flex;">
+                                            <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                <input type="checkbox" class="reason-checkbox" id="suspect7" name="reasonDetails[]" value="IRA d'intensité variable (simple a sévère) ayant été en contact étroite avec cas probable ou un cas confirmé de la maladie a COVID-19">
+                                            </label>
+                                            <label class="radio-inline" for="suspect7" style="padding-left:17px !important;margin-left:0;">IRA d'intensité variable (simple a sévère) ayant été en contact étroite avec cas probable ou un cas confirmé de la maladie a COVID-19</label>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="2">
+                                            <label class="radio-inline" style="margin-left:0;">
+                                                <input type="radio" id="reason2" name="reasonForCovid19Test" value="2" onchange="checkSubReason(this,'Cas_probable_de_COVID_19');">
+                                                <strong>Cas probable de COVID-19</strong>
+                                            </label>
+
+                                        </td>
+                                    </tr>
+                                    <tr class="Cas_probable_de_COVID_19 hide-reasons" style="display: none;">
+                                        <td colspan="2" style="padding-left: 70px;display: flex;">
+                                            <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                <input type="checkbox" class="reason-checkbox" id="probable1" name="reasonDetails[]" value="Tout cas suspects dont le résultat de laboratoire pour le diagnostic de COVID-19 n'est pas concluant (indéterminé)">
+                                            </label>
+                                            <label class="radio-inline" for="probable1" style="padding-left:17px !important;margin-left:0;">Tout cas suspects dont le résultat de laboratoire pour le diagnostic de COVID-19 n'est pas concluant (indéterminé)</label>
+                                        </td>
+                                    </tr>
+                                    <tr class="Cas_probable_de_COVID_19 hide-reasons text-center" style="display: none;">
+                                        <td>
+                                            <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">OU</label>
+                                        </td>
+                                    </tr>
+                                    <tr class="Cas_probable_de_COVID_19 hide-reasons" style="display: none;">
+                                        <td colspan="2" style="padding-left: 70px;display: flex;">
+                                            <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                <input type="checkbox" class="reason-checkbox" id="probable2" name="reasonDetails[]" value="Tout décès dans un tableau d'IRA pour lequel il n'a pas été possible d'obtenir des échantillons biologiques pour confirmation au laboratoire mais dont les investigations ont révélé un lien épidémiologique avec un cas confirmé ou probable">
+                                            </label>
+                                            <label class="radio-inline" for="probable2" style="padding-left:17px !important;margin-left:0;">Tout décès dans un tableau d'IRA pour lequel il n'a pas été possible d'obtenir des échantillons biologiques pour confirmation au laboratoire mais dont les investigations ont révélé un lien épidémiologique avec un cas confirmé ou probable</label>
+                                        </td>
+                                    </tr>
+                                    <tr class="Cas_probable_de_COVID_19 hide-reasons text-center" style="display: none;">
+                                        <td>
+                                            <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">OU</label>
+                                        </td>
+                                    </tr>
+                                    <tr class="Cas_probable_de_COVID_19 hide-reasons" style="display: none;">
+                                        <td colspan="2" style="padding-left: 70px;display: flex;">
+                                            <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                <input type="checkbox" class="reason-checkbox" id="probable4" name="reasonDetails[]" value="Notion de séjour ou voyage dans les 14 jours précédant le décès dans les zones a épidémie de la maladie a COVID-19">
+                                            </label>
+                                            <label class="radio-inline" for="probable4" style="padding-left:17px !important;margin-left:0;">Notion de séjour ou voyage dans les 14 jours précédant le décès dans les zones a épidémie de la maladie a COVID-19</label>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="2">
+                                            <label class="radio-inline" style="margin-left:0;">
+                                                <input type="radio" id="reason3" name="reasonForCovid19Test" value="3" onchange="checkSubReason(this,'Cas_confirme_de_COVID_19');">
+                                                <strong><b>Cas confirme de covid-19</strong>
+                                            </label>
+
+                                        </td>
+                                    </tr>
+                                    <tr class="Cas_confirme_de_COVID_19 hide-reasons" style="display: none;">
+                                        <td colspan="2" style="padding-left: 70px;display: flex;">
+                                            <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                <input type="checkbox" class="reason-checkbox" id="confirme1" name="reasonDetails[]" value="Toute personne avec une confirmation en laboratoire de l'infection au COVID-19, quelles que soient les signes et symptômes cliniques">
+                                            </label>
+                                            <label class="radio-inline" for="confirme1" style="padding-left:17px !important;margin-left:0;">Toute personne avec une confirmation en laboratoire de l'infection au COVID-19, quelles que soient les signes et symptômes cliniques</label>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="2">
+                                            <label class="radio-inline" style="margin-left:0;">
+                                                <input type="radio" id="reason4" name="reasonForCovid19Test" value="4" onchange="checkSubReason(this,'Non_cas_contact_de_COVID_19');">
+                                                <strong><b>Non cas contact de COVID-19</strong>
+                                            </label>
+
+                                        </td>
+                                    </tr>
+                                    <tr class="Non_cas_contact_de_COVID_19 hide-reasons" style="display: none;">
+                                        <td colspan="2" style="padding-left: 70px;display: flex;">
+                                            <label class="radio-inline" style="width:4%;margin-left:0;">
+                                                <input type="checkbox" class="reason-checkbox" id="contact1" name="reasonDetails[]" value="Tout cas suspects avec deux résultats de laboratoire négatifs au COVID-19 a au moins 48 heures d'intervalle">
+                                            </label>
+                                            <label class="radio-inline" for="contact1" style="padding-left:17px !important;margin-left:0;">Tout cas suspects avec deux résultats de laboratoire négatifs au COVID-19 a au moins 48 heures d'intervalle</label>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="box-header with-border sectionHeader">
+                                    <h3 class="box-title">
                                         Signes vitaux du patient
                                     </h3>
                                 </div>
                                 <table class="table">
+                                    <tr>
+                                        <th style="width:15% !important">Fièvre / température (&deg;C) <span class="mandatory">*</span> </th>
+                                        <td style="width:35% !important;">
+                                            <input class="form-control isRequired" type="number" name="feverTemp" id="feverTemp" placeholder="Fièvre / température (en &deg;Celcius)" title="Fièvre / température (en &deg;Celcius)" />
+                                        </td>
+                                        <th style="width:15% !important"><label for="temperatureMeasurementMethod">Température</label></th>
+                                        <td style="width:35% !important;">
+                                            <select name="temperatureMeasurementMethod" id="temperatureMeasurementMethod" class="form-control" title="Température">
+                                                <option value="">--Select--</option>
+                                                <option value="auxillary">Axillaire</option>
+                                                <option value="oral">Orale</option>
+                                                <option value="rectal">Rectale</option>
+                                                <option value="unknown">Inconnu</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="width:15% !important"><label for="respiratoryRate"> Fréquence Respiratoire</label></th>
+                                        <td style="width:35% !important;">
+                                            <input class="form-control" type="number" name="respiratoryRate" id="respiratoryRate" placeholder="Fréquence Respiratoire" title="Fréquence Respiratoire" />
+                                        </td>
+                                        <th style="width:15% !important"><label for="oxygenSaturation"> Saturation en oxygène</label></th>
+                                        <td style="width:35% !important;">
+                                            <input class="form-control" type="number" name="oxygenSaturation" id="oxygenSaturation" placeholder="Saturation en oxygène" title="Saturation en oxygène" />
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <th style="width: 15%;"><label for="specimenType"> Type(s) d' échantillon(s) dans le tube (cochez au moins une des cases suivants) <span class="mandatory">*</span></label></th>
                                         <td style="width: 35%;">
@@ -360,167 +543,50 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                             </table>
                                         </td>
                                     </tr>
+                                </table>
+                                <table class="table">
                                     <tr>
-                                        <th colspan="4" style="width:15% !important">Définition de cas <span class="mandatory">*</span> </th>
+                                        <th style="width:15% !important"><label for="recentHospitalization"></label>Avez-vous été hospitalisé durant les 12 derniers mois? </th>
+                                        <td style="width:35% !important;">
+                                            <select name="recentHospitalization" id="recentHospitalization" class="form-control" title="Avez-vous été hospitalisé durant les 12 derniers mois? ">
+                                                <option value="">--Select--</option>
+                                                <option value="yes">Oui</option>
+                                                <option value="no">Non</option>
+                                                <option value="unknown">Inconnu</option>
+                                            </select>
+                                        </td>
+                                        <th style="width:15% !important"><label for="patientLivesWithChildren"></label>Habitez-vous avec les enfants ?</th>
+                                        <td style="width:35% !important;">
+                                            <select name="patientLivesWithChildren" id="patientLivesWithChildren" class="form-control" title="Habitez-vous avec les enfants ?">
+                                                <option value="">--Select--</option>
+                                                <option value="yes">Oui</option>
+                                                <option value="no">Non</option>
+                                                <option value="unknown">Inconnu</option>
+                                            </select>
+                                        </td>
                                     </tr>
+
                                     <tr>
-                                        <td colspan="4">
-                                            <table id="responseTable" class="table table-bordered">
-                                                <tr>
-                                                    <td colspan="2">
-                                                        <label class="radio-inline" style="margin-left:0;">
-                                                            <input type="radio" class="" id="reason1" name="reasonForCovid19Test" value="1" title="Cas suspect de COVID-1" onchange="checkSubReason(this,'Cas_suspect_de_COVID_19');">
-                                                            <strong>Cas suspect de COVID-19</strong>
-                                                        </label>
-
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
-                                                    <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                            <input type="checkbox" class="reason-checkbox" id="suspect1" name="reasonDetails[]" value="Fièvre d'accès brutal (Inferieur ou égale à 38°C, vérifié à la salle d'urgence, la consultation externe, ou l'hôpital) ET(cochez une ou deux des cases suivantes)">
-                                                        </label>
-                                                        <label class="radio-inline" for="suspect1" style="padding-left:17px !important;margin-left:0;">Fièvre d'accès brutal (Inferieur ou égale à 38°C, vérifié à la salle d'urgence, la consultation externe, ou l'hôpital) ET(cochez une ou deux des cases suivantes)</label>
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
-                                                    <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                            <input type="checkbox" class="reason-checkbox" id="suspect2" name="reasonDetails[]" value="Toux">
-                                                        </label>
-                                                        <label class="radio-inline" for="suspect2" style="padding-left:17px !important;margin-left:0;">Toux</label>
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
-                                                    <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                            <input type="checkbox" class="reason-checkbox" id="suspect3" name="reasonDetails[]" value="Rhume">
-                                                        </label>
-                                                        <label class="radio-inline" for="suspect3" style="padding-left:17px !important;margin-left:0;">Rhume</label>
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
-                                                    <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                            <input type="checkbox" class="reason-checkbox" id="suspect4" name="reasonDetails[]" value="Mal de gorge">
-                                                        </label>
-                                                        <label class="radio-inline" for="suspect4" style="padding-left:17px !important;margin-left:0;">Mal de gorge</label>
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
-                                                    <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                            <input type="checkbox" class="reason-checkbox" id="suspect5" name="reasonDetails[]" value="Difficulté respiratoire">
-                                                        </label>
-                                                        <label class="radio-inline" for="suspect5" style="padding-left:17px !important;margin-left:0;">Difficulté respiratoire</label>
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
-                                                    <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                            <input type="checkbox" class="reason-checkbox" id="suspect6" name="reasonDetails[]" value="Notion de séjour ou voyage dans les zones a épidémie a COVID-19 dans les 14 jours précédant les symptômes ci-dessous.">
-                                                        </label>
-                                                        <label class="radio-inline" for="suspect6" style="padding-left:17px !important;margin-left:0;">Notion de séjour ou voyage dans les zones a épidémie a COVID-19 dans les 14 jours précédant les symptômes ci-dessous.</label>
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_suspect_de_COVID_19 hide-reasons text-center" style="display: none;">
-                                                    <td>
-                                                        <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">OU</label>
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
-                                                    <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                            <input type="checkbox" class="reason-checkbox" id="suspect7" name="reasonDetails[]" value="IRA d'intensité variable (simple a sévère) ayant été en contact étroite avec cas probable ou un cas confirmé de la maladie a COVID-19">
-                                                        </label>
-                                                        <label class="radio-inline" for="suspect7" style="padding-left:17px !important;margin-left:0;">IRA d'intensité variable (simple a sévère) ayant été en contact étroite avec cas probable ou un cas confirmé de la maladie a COVID-19</label>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td colspan="2">
-                                                        <label class="radio-inline" style="margin-left:0;">
-                                                            <input type="radio" id="reason2" name="reasonForCovid19Test" value="2" onchange="checkSubReason(this,'Cas_probable_de_COVID_19');">
-                                                            <strong>Cas probable de COVID-19</strong>
-                                                        </label>
-
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_probable_de_COVID_19 hide-reasons" style="display: none;">
-                                                    <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                            <input type="checkbox" class="reason-checkbox" id="probable1" name="reasonDetails[]" value="Tout cas suspects dont le résultat de laboratoire pour le diagnostic de COVID-19 n'est pas concluant (indéterminé)">
-                                                        </label>
-                                                        <label class="radio-inline" for="probable1" style="padding-left:17px !important;margin-left:0;">Tout cas suspects dont le résultat de laboratoire pour le diagnostic de COVID-19 n'est pas concluant (indéterminé)</label>
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_probable_de_COVID_19 hide-reasons text-center" style="display: none;">
-                                                    <td>
-                                                        <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">OU</label>
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_probable_de_COVID_19 hide-reasons" style="display: none;">
-                                                    <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                            <input type="checkbox" class="reason-checkbox" id="probable2" name="reasonDetails[]" value="Tout décès dans un tableau d'IRA pour lequel il n'a pas été possible d'obtenir des échantillons biologiques pour confirmation au laboratoire mais dont les investigations ont révélé un lien épidémiologique avec un cas confirmé ou probable">
-                                                        </label>
-                                                        <label class="radio-inline" for="probable2" style="padding-left:17px !important;margin-left:0;">Tout décès dans un tableau d'IRA pour lequel il n'a pas été possible d'obtenir des échantillons biologiques pour confirmation au laboratoire mais dont les investigations ont révélé un lien épidémiologique avec un cas confirmé ou probable</label>
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_probable_de_COVID_19 hide-reasons text-center" style="display: none;">
-                                                    <td>
-                                                        <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">OU</label>
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_probable_de_COVID_19 hide-reasons" style="display: none;">
-                                                    <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                            <input type="checkbox" class="reason-checkbox" id="probable4" name="reasonDetails[]" value="Notion de séjour ou voyage dans les 14 jours précédant le décès dans les zones a épidémie de la maladie a COVID-19">
-                                                        </label>
-                                                        <label class="radio-inline" for="probable4" style="padding-left:17px !important;margin-left:0;">Notion de séjour ou voyage dans les 14 jours précédant le décès dans les zones a épidémie de la maladie a COVID-19</label>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td colspan="2">
-                                                        <label class="radio-inline" style="margin-left:0;">
-                                                            <input type="radio" id="reason3" name="reasonForCovid19Test" value="3" onchange="checkSubReason(this,'Cas_confirme_de_COVID_19');">
-                                                            <strong><b>Cas confirme de covid-19</strong>
-                                                        </label>
-
-                                                    </td>
-                                                </tr>
-                                                <tr class="Cas_confirme_de_COVID_19 hide-reasons" style="display: none;">
-                                                    <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                            <input type="checkbox" class="reason-checkbox" id="confirme1" name="reasonDetails[]" value="Toute personne avec une confirmation en laboratoire de l'infection au COVID-19, quelles que soient les signes et symptômes cliniques">
-                                                        </label>
-                                                        <label class="radio-inline" for="confirme1" style="padding-left:17px !important;margin-left:0;">Toute personne avec une confirmation en laboratoire de l'infection au COVID-19, quelles que soient les signes et symptômes cliniques</label>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td colspan="2">
-                                                        <label class="radio-inline" style="margin-left:0;">
-                                                            <input type="radio" id="reason4" name="reasonForCovid19Test" value="4" onchange="checkSubReason(this,'Non_cas_contact_de_COVID_19');">
-                                                            <strong><b>Non cas contact de COVID-19</strong>
-                                                        </label>
-
-                                                    </td>
-                                                </tr>
-                                                <tr class="Non_cas_contact_de_COVID_19 hide-reasons" style="display: none;">
-                                                    <td colspan="2" style="padding-left: 70px;display: flex;">
-                                                        <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                            <input type="checkbox" class="reason-checkbox" id="contact1" name="reasonDetails[]" value="Tout cas suspects avec deux résultats de laboratoire négatifs au COVID-19 a au moins 48 heures d'intervalle">
-                                                        </label>
-                                                        <label class="radio-inline" for="contact1" style="padding-left:17px !important;margin-left:0;">Tout cas suspects avec deux résultats de laboratoire négatifs au COVID-19 a au moins 48 heures d'intervalle</label>
-                                                    </td>
-                                                </tr>
-                                            </table>
+                                        <th style="width:15% !important"><label for="patientCaresForChildren"></label>prenez-vous soins des enfants ?</th>
+                                        <td style="width:35% !important;">
+                                            <select name="patientCaresForChildren" id="patientCaresForChildren" class="form-control" title="prenez-vous soins des enfants ?">
+                                                <option value="">--Select--</option>
+                                                <option value="yes">Oui</option>
+                                                <option value="no">Non</option>
+                                                <option value="unknown">Inconnu</option>
+                                            </select>
+                                        </td>
+                                        <th style="width:15% !important">Avez-vous eu des contacts étroits avec toute personne une maladie similaire a la vôtre durant ces 3 derniers semaines?<span class="mandatory">*</span></th>
+                                        <td colspan="3">
+                                            <select name="closeContacts" id="closeContacts" class="form-control" title="prenez-vous soins des enfants ?">
+                                                <option value="">--Select--</option>
+                                                <option value="yes">Oui</option>
+                                                <option value="no">Non</option>
+                                                <option value="unknown">Inconnu</option>
+                                            </select>
                                         </td>
                                     </tr>
                                 </table>
-
                                 <div class="box-header with-border sectionHeader">
                                     <h3 class="box-title">
                                         VOYAGE ET CONTACT
@@ -564,83 +630,14 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                         <td style="width:35% !important;">
                                             <input class="form-control date" type="text" name="dateOfInitialConsultation" id="dateOfInitialConsultation" placeholder="Date de la consultation initiale" title="Date de la consultation initiale" />
                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <th style="width:15% !important"><label for="recentHospitalization"></label>Avez-vous été hospitalisé durant les 12 derniers mois ? Have you been hospitalized in the past 12 months ? </th>
-                                        <td style="width:35% !important;">
-                                            <select name="recentHospitalization" id="recentHospitalization" class="form-control" title="Avez-vous été hospitalisé durant les 12 derniers mois ? Have you been hospitalized in the past 12 months ? ">
-                                                <option value="">--Select--</option>
-                                                <option value="yes">Oui</option>
-                                                <option value="no">Non</option>
-                                                <option value="unknown">Inconnu</option>
-                                            </select>
-                                        </td>
-                                        <th style="width:15% !important"><label for="patientLivesWithChildren"></label>Habitez-vous avec les enfants ?</th>
-                                        <td style="width:35% !important;">
-                                            <select name="patientLivesWithChildren" id="patientLivesWithChildren" class="form-control" title="Habitez-vous avec les enfants ?">
-                                                <option value="">--Select--</option>
-                                                <option value="yes">Oui</option>
-                                                <option value="no">Non</option>
-                                                <option value="unknown">Inconnu</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <th style="width:15% !important"><label for="patientCaresForChildren"></label>prenez-vous soins des enfants ?</th>
-                                        <td style="width:35% !important;">
-                                            <select name="patientCaresForChildren" id="patientCaresForChildren" class="form-control" title="prenez-vous soins des enfants ?">
-                                                <option value="">--Select--</option>
-                                                <option value="yes">Oui</option>
-                                                <option value="no">Non</option>
-                                                <option value="unknown">Inconnu</option>
-                                            </select>
-                                        </td>
-                                        <th style="width:15% !important">Fièvre / température (&deg;C) <span class="mandatory">*</span> </th>
-                                        <td style="width:35% !important;">
-                                            <input class="form-control isRequired" type="number" name="feverTemp" id="feverTemp" placeholder="Fièvre / température (en &deg;Celcius)" title="Fièvre / température (en &deg;Celcius)" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th style="width:15% !important"><label for="temperatureMeasurementMethod">Température</label></th>
-                                        <td style="width:35% !important;">
-                                            <select name="temperatureMeasurementMethod" id="temperatureMeasurementMethod" class="form-control" title="Température">
-                                                <option value="">--Select--</option>
-                                                <option value="auxillary">Axillaire</option>
-                                                <option value="oral">Orale</option>
-                                                <option value="rectal">Rectale</option>
-                                                <option value="unknown">Inconnu</option>
-                                            </select>
-                                        </td>
-                                        <th style="width:15% !important"><label for="respiratoryRate"> Fréquence Respiratoire</label></th>
-                                        <td style="width:35% !important;">
-                                            <input class="form-control" type="number" name="respiratoryRate" id="respiratoryRate" placeholder="Fréquence Respiratoire" title="Fréquence Respiratoire" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th style="width:15% !important"><label for="oxygenSaturation"> Saturation en oxygène</label></th>
-                                        <td style="width:35% !important;">
-                                            <input class="form-control" type="number" name="oxygenSaturation" id="oxygenSaturation" placeholder="Saturation en oxygène" title="Saturation en oxygène" />
-                                        </td>
-                                        <th></th>
-                                        <td></td>
-                                    </tr>
+                                    </tr>>
+                                    
                                 </table>
 
                                 <div class="box-header with-border sectionHeader">
                                     <h3 class="box-title">FACTEURS DE RISQUE ÉPIDÉMIOLOGIQUE ET EXPOSITIONS</h3>
                                 </div>
                                 <table class="table">
-                                    <tr>
-                                        <th style="width:15% !important">Contacts étroits du patient <span class="mandatory">*</span></th>
-                                        <td colspan="3">
-                                            <textarea name="closeContacts" class="form-control" style="width:100%;min-height:100px;" placeholder="Contacts étroits du patient" title="Contacts étroits du patient"></textarea>
-                                            <span class="text-danger">
-                                                Ajoutez les noms et numéros de téléphone des contacts proches (foyer, membres de la famille, amis avec lesquels vous avez été en contact au cours des 14 derniers jours)
-                                            </span>
-                                        </td>
-
-                                    </tr>
                                     <tr>
                                         <th>Occupation du patient</th>
                                         <td>
