@@ -243,7 +243,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                             <label class="radio-inline" style="width:4%;margin-left:0;">
                                                 <input type="checkbox" class="reason-checkbox" id="suspect1" name="reasonDetails[]" value="Fièvre d'accès brutal (Inferieur ou égale à 38°C, vérifié à la salle d'urgence, la consultation externe, ou l'hôpital) ET(cochez une ou deux des cases suivantes)">
                                             </label>
-                                            <label class="radio-inline" for="suspect1" style="padding-left:17px !important;margin-left:0;">Fièvre d'accès brutal (Inferieur ou égale à 38°C, vérifié à la salle d'urgence, la consultation externe, ou l'hôpital) ET(cochez une ou deux des cases suivantes)</label>
+                                            <label class="radio-inline" for="suspect1" style="padding-left:17px !important;margin-left:0;">Fièvre d'accès brutal (Inferieur ou égale à 38°C, vérifié à la salle d'urgence, la consultation externe, ou l'hôpital) ET <br>(cochez une ou deux des cases suivantes)</label>
                                         </td>
                                     </tr>
                                     <tr class="Cas_suspect_de_COVID_19 hide-reasons" style="display: none;">
@@ -441,6 +441,8 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                         <td style="width:35% !important;">
                                             <input class="form-control isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Date de prélèvement de l'échantillon" title="Date de prélèvement de l'échantillon" onchange="sampleCodeGeneration();" />
                                         </td>
+                                        <th></th>
+                                        <td></td>
                                     </tr>
                                     <tr>
                                         <th colspan="4" style="width:15% !important">Symptômes <span class="mandatory">*</span> </th>
@@ -558,7 +560,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                     </tr>
 
                                     <tr>
-                                        <th style="width:15% !important"><label for="patientCaresForChildren"></label>prenez-vous soins des enfants ?</th>
+                                        <th style="width:15% !important"><label for="patientCaresForChildren"></label>Prenez-vous soins des enfants ?</th>
                                         <td style="width:35% !important;">
                                             <select name="patientCaresForChildren" id="patientCaresForChildren" class="form-control" title="prenez-vous soins des enfants ?">
                                                 <option value="">--Select--</option>
@@ -567,7 +569,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                 <option value="unknown">Inconnu</option>
                                             </select>
                                         </td>
-                                        <th style="width:15% !important">Avez-vous eu des contacts étroits avec toute personne une maladie similaire a la vôtre durant ces 3 derniers semaines?<span class="mandatory">*</span></th>
+                                        <th style="width:15% !important">Avez-vous eu des contacts étroits avec toute personne une maladie similaire a la vôtre durant ces 3 derniers semaines?</th>
                                         <td colspan="3">
                                             <select name="closeContacts" id="closeContacts" class="form-control" title="prenez-vous soins des enfants ?">
                                                 <option value="">--Select--</option>
@@ -705,13 +707,6 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                             </td>
                                             <th>Date de rejet<span class="mandatory">*</span></th>
                                             <td><input class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Date de rejet" title="Date de rejet" /></td>
-                                        </tr>
-                                        <tr>
-                                            <!-- <th style="width: 15% !important;"><label for="resultPcr">Date de Result PCR</label></th>
-                                            <td style="width:35% !important;">
-                                                <input type="text" class="form-control date" id="resultPcr" name="resultPcr" placeholder="e.g 09-Jan-1992" title="Date de Result PCR"/>
-                                            </td> -->
-                                            
                                         </tr>
                                         <tr>
                                             <td colspan="4">
