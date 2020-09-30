@@ -14,6 +14,8 @@ $healthFacilites = $facilitiesDb->getHealthFacilities('covid19');
 
 $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
 
+$formId = $general->getGlobalConfig('vl_form');
+
 $sQuery = "SELECT * FROM r_covid19_sample_type WHERE `status`='active'";
 $sResult = $db->rawQuery($sQuery);
 
@@ -108,6 +110,10 @@ $batResult = $db->rawQuery($batQuery);
 
 								<?php
 								if (isset($_SESSION['privileges']) && in_array("covid-19-add-request.php", $_SESSION['privileges'])) { ?>
+									<?php if ($formId == 1) { ?>
+										<a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-quick-add.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Quick Add Covid-19 Request</a>
+									<?php } ?>
+
 									<a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-add-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Add new Covid-19 Request</a>
 									<!-- <a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-bulk-import-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Bulk Import Covid-19 Request</a> -->
 								<?php } ?>
