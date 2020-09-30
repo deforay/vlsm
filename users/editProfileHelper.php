@@ -41,11 +41,12 @@ try {
                     $url = rtrim($recencyConfig['url'], "/");
                     $result = $client->post($url.'/api/update-password', [
                         'form_params' => [
-                            'u' => $_POST['loginId'],
+                            'u' => $_POST['email'],
                             't' => sha1($_POST['password'] . $systemConfig['passwordSalt'])
                         ]
                     ]);
                     $response = json_decode($result->getBody()->getContents());
+                    
                     if($response->status == 'fail'){
                         error_log('Recency profile not updated! for the user->'.$_POST['userName']);
                     }
