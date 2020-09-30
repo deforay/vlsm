@@ -150,7 +150,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                     <tr>
                                         <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
                                         <td>
-                                            <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;">
+                                            <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;" onchange="getTestingPoints();">
                                                 <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
                                             </select>
                                         </td>
@@ -164,8 +164,11 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             </select>
                                         </td>
 
-                                        <th></th>
-                                        <td></td>
+                                        <th class="testingPointField" style="display:none;"><label for="">Testing Point </label></th>
+                                        <td class="testingPointField" style="display:none;">
+                                            <select name="testingPoint" id="testingPoint" class="form-control" title="Please select a Testing Point" style="width:100%;">
+                                            </select>
+                                        </td>
                                     </tr>
                                 </table>
                             </div>
@@ -208,13 +211,25 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
         }
     }
 
-    $(document).ready(function() {
-
-        $('#facilityId').select2({
-            placeholder: "Select Clinic/Health Center"
-        });
-
-    });
+    function getTestingPoints() {
+        var labId = $("#labId").val();
+        var selectedTestingPoint = null;
+        if (labId) {
+            $.post("/includes/getTestingPoints.php", {
+                    labId: labId,
+                    selectedTestingPoint: selectedTestingPoint
+                },
+                function(data) {
+                    if (data != "") {
+                        $(".testingPointField").show();
+                        $("#testingPoint").html(data);
+                    } else {
+                        $(".testingPointField").hide();
+                        $("#testingPoint").html('');
+                    }
+                });
+        }
+    }
 
     function sampleCodeGeneration() {
         var pName = $("#province").val();
@@ -233,4 +248,11 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                 });
         }
     }
+
+    $(document).ready(function() {
+        $('#facilityId').select2({
+            placeholder: "Select Clinic/Health Center"
+        });
+    });
+
 </script>

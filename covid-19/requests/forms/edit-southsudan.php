@@ -677,7 +677,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
 
     function getTestingPoints() {
         var labId = $("#labId").val();
-        var selectedTestingPoint = '<?php echo $covid19Info['covid19_id']; ?>';
+        var selectedTestingPoint = '<?php echo $covid19Info['testing_point']; ?>';
         if (labId) {
             $.post("/includes/getTestingPoints.php", {
                     labId: labId,
