@@ -74,6 +74,7 @@ $sharedPrivileges = array(
 	'imported-results.php'        		=> 'addImportResult.php',
 	'importedStatistics.php'      		=> 'addImportResult.php',
 	'covid-19-bulk-import-request.php'	=> 'covid-19-add-request.php',
+	'covid-19-quick-add.php'	=> 'covid-19-add-request.php',
 	'mapTestType.php'					=> 'addFacility.php',
 );
 
