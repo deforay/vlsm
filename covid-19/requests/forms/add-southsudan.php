@@ -306,8 +306,8 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                 </table>
                             </div>
                         </div>
-                        <?php //if ($sarr['user_type'] != 'remoteuser') { ?>
-                        <?php if (false) { ?>
+                        <?php if ($sarr['user_type'] != 'remoteuser') { ?>
+                        <?php // if (false) { ?>
                             <div class="box box-primary">
                                 <div class="box-body">
                                     <div class="box-header with-border">
