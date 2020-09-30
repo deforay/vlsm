@@ -124,7 +124,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         
                                         <td><label for="facilityId">Facility </label><span class="mandatory">*</span></td>
                                         <td>
-                                            <select class="form-control isRequired " name="facilityId" id="facilityId" title="Please choose service provider" style="width:100%;" onchange="getfacilityProvinceDetails(this);">
+                                            <select class="form-control isRequired " name="facilityId" id="facilityId" title="Please choose service provider" style="width:100%;">
                                                 <?php echo $facility; ?>
                                             </select>
                                         </td>
@@ -176,6 +176,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                             <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat; ?>" />
                             <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey; ?>" />
                             <input type="hidden" name="saveNext" id="saveNext" />
+                            <input type="hidden" name="quickForm" id="quickForm" value="quick" />
                             <!-- <input type="hidden" name="pageURL" id="pageURL" value="<?php echo $_SERVER['PHP_SELF']; ?>" /> -->
                         <?php } ?>
                         <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
