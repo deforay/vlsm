@@ -11,6 +11,7 @@ $usersModel = new \Vlsm\Models\Users($db);
 
 $tableName = "form_covid19";
 $testTableName = 'covid19_tests';
+// echo "<pre>";print_r($_FILES);die;
 try {
     $arr = $general->getGlobalConfig();
 
@@ -64,7 +65,7 @@ try {
                     $data = array(
                         'sample_code'                           => $rowData['A'],
                         'vlsm_country_id'                       => $arr['vl_form'],
-                        'facility_id'                           => $facility['facility_id'],
+                        'facility_id'                           => isset($facility['facility_id'])?$facility['facility_id']:null,
                         'patient_name'                          => $rowData['C'],
                         'patient_id'                            => $rowData['D'],
                         'serial_no'                             => $rowData['E'],
@@ -78,12 +79,12 @@ try {
                         'patient_city'                          => $rowData['M'],
                         'patient_nationality'                   => $rowData['N'],
                         'type_of_test_requested'                => $rowData['O'],
-                        'reason_for_covid19_test'               => $testReason['test_reason_id'],
+                        'reason_for_covid19_test'               => isset($testReason['test_reason_id'])?$testReason['test_reason_id']:null,
                         'sample_collection_date'                => $sampleCollectionDate,
-                        'specimen_type'                         => $sampleType['sample_id'],
+                        'specimen_type'                         => isset($sampleType['sample_id'])?$sampleType['sample_id']:null,
                         'test_number'                           => $rowData['S'],
                         'sample_received_at_vl_lab_datetime'    => $sampleReceivedDate,
-                        'lab_id'                                => $labName['facility_id'],
+                        'lab_id'                                => isset($labName['facility_id'])?$labName['facility_id']:null,
                         'is_sample_rejected'                    => strtolower($rowData['V']),
                         'reason_for_sample_rejection'           => (isset($rejectionReason['rejection_reason_id']) && $rejectionReason['rejection_reason_id'] != "")?$rejectionReason['rejection_reason_id']:9999,
                         'rejection_on'                          => date('Y-m-d',strtotime($rowData['X'])),
@@ -93,10 +94,10 @@ try {
                         'authorized_on'                         => date('Y-m-d',strtotime($rowData['AJ'])),
                         'last_modified_datetime'                => $general->getDateTime(),
                         'last_modified_by'                      => $_SESSION['userId'],
-                        'result_status'                         => $resultStatus['status_id'],
+                        'result_status'                         => isset($resultStatus['status_id'])?$resultStatus['status_id']:null,
                         'sample_condition'                      => strtolower($rowData['ALK']),
                         'patient_passport_number'               => $rowData['AM'],
-                        'lab_technician'                        => $labTechnician,
+                        'lab_technician'                        => isset($labTechnician)?$labTechnician:null,
                     );
                     // echo "<pre>";print_r($data);die;
                     if (!$sampleCode) {
@@ -130,7 +131,7 @@ try {
                             $covid19TestData = array(
                                 'covid19_id'            => $lastId,
                                 'test_name'             => $testKitName['testRequest'],
-                                'facility_id'           => $labName['facility_id'],
+                                'facility_id'           => isset($labName['facility_id'])?$labName['facility_id']:null,
                                 'testing_platform'      => $testKitName['testingPlatform'],
                                 'sample_tested_datetime'=> date('Y-m-d H:i:s', strtotime($testDate)),
                                 'result'                => strtolower($testKitName['testResult']),
@@ -144,9 +145,9 @@ try {
                 }
             }
         }
+        $_SESSION['alertMsg'] = "Data imported successfully";
     }
     // echo "<pre>";print_r($returnArray);die;
-    $_SESSION['alertMsg'] = "Data imported successfully";
     header("location:/covid-19/requests/covid-19-requests.php");
 } catch (Exception $exc) {
     error_log($exc->getMessage());
