@@ -2,6 +2,9 @@
 $title = "VL Quarterly Monitoring Report";
 #require_once('../../startup.php'); 
 include_once(APPLICATION_PATH . '/header.php');
+
+$general = new \Vlsm\Models\General($db);
+
 $startYear = date("Y", strtotime("-2 month"));
 $startMonth = date('m', strtotime('-2 month'));
 $endYear = date('Y');
@@ -13,17 +16,22 @@ $endDate = date('Y-m');
 $tsQuery = "SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
 //config  query
-$configQuery = "SELECT * from global_config";
-$configResult = $db->query($configQuery);
-$arr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($configResult); $i++) {
-  $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
-}
+
+//$arr = $general->getGlobalConfig();
+
 $sQuery = "SELECT * FROM r_vl_sample_type where status='active'";
 $sResult = $db->rawQuery($sQuery);
-$fQuery = "SELECT * FROM facility_details where status='active' and facility_type=2";
-$fResult = $db->rawQuery($fQuery);
+
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
+
+
+// $healthFacilites = $facilitiesDb->getHealthFacilities('vl');
+// $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
+$testingLabs = $facilitiesDb->getTestingLabs('vl');
+$testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- Select --");
+
+
+
 ?>
 <style>
   .bluebox,
@@ -185,14 +193,7 @@ $fResult = $db->rawQuery($fQuery);
               <td><b>Lab Name :</b></td>
               <td>
                 <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name">
-                  <option value="">-- Select --</option>
-                  <?php
-                  foreach ($fResult as $name) {
-                  ?>
-                    <option value="<?php echo $name['facility_id']; ?>"><?php echo ucwords($name['facility_name'] . "-" . $name['facility_code']); ?></option>
-                  <?php
-                  }
-                  ?>
+                  <?= $testingLabsDropdown; ?>
                 </select>
               </td>
               <td style=""><b>Region/Province&nbsp;:</b></td>

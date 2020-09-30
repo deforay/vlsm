@@ -329,7 +329,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         <tr>
                                             <td><label for="specimenQuality">Specimen Quality</label></td>
                                             <td>
-                                                <select class="form-control" id="specimenQuality" name="specimenQuality" title="Please Enter the qpecimen quality">
+                                                <select class="form-control" id="specimenQuality" name="specimenQuality" title="Please enter the specimen quality">
                                                     <option value="">--Select--</option>
                                                     <option value="good">Good</option>
                                                     <option value="poor">Poor</option>
