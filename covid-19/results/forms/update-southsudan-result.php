@@ -328,7 +328,7 @@ $sampleSuggestionDisplay = 'display:none;';
                                         <tr>
                                             <td><label for="specimenQuality">Specimen Quality</label></td>
                                             <td>
-                                                <select class="form-control" id="specimenQuality" name="specimenQuality" title="Please Enter the qpecimen quality">
+                                                <select class="form-control" id="specimenQuality" name="specimenQuality" title="Please enter the specimen quality">
                                                     <option value="">--Select--</option>
                                                     <option value="good" <?php echo (isset($covid19Info['sample_condition']) && $covid19Info['sample_condition'] == 'good')?"selected='selected'":"";?>>Good</option>
                                                     <option value="poor" <?php echo (isset($covid19Info['sample_condition']) && $covid19Info['sample_condition'] == 'poor')?"selected='selected'":"";?>>Poor</option>

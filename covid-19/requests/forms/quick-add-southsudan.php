@@ -157,7 +157,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
 
                                         <td><label for="specimenQuality">Specimen Quality <span class="mandatory">*</span></label></td>
                                         <td>
-                                            <select class="form-control isRequired" id="specimenQuality" name="specimenQuality" title="Please Enter the qpecimen quality" style="width:100%">
+                                            <select class="form-control isRequired" id="specimenQuality" name="specimenQuality" title="Please enter the specimen quality" style="width:100%">
                                                 <option value="">--Select--</option>
                                                 <option value="good">Good</option>
                                                 <option value="poor">Poor</option>

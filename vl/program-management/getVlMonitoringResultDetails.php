@@ -4,14 +4,12 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 #require_once('../../startup.php');  
 
+$general = new \Vlsm\Models\General($db);
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
+$facilityMap = $facilitiesDb->getFacilityMap($_SESSION['userId']);
 
-$formConfigQuery = "SELECT * from global_config where name='vl_form'";
-$configResult = $db->query($formConfigQuery);
-$arr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($configResult); $i++) {
-     $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
-}
+$formId = $general->getGlobalConfig('vl_form');
+
 //system config
 $systemConfigQuery = "SELECT * from system_config";
 $systemConfigResult = $db->query($systemConfigQuery);
@@ -150,9 +148,11 @@ if (isset($sWhere) && $sWhere != "") {
                $sWhere = $sWhere . ' AND DATE(vl.sample_tested_datetime) >= "' . $sTestDate . '" AND DATE(vl.sample_tested_datetime) <= "' . $eTestDate . '"';
           }
      }
+
      if (isset($_POST['facilityName']) && $_POST['facilityName'] != '') {
           $sWhere = $sWhere . ' AND vl.lab_id = "' . $_POST['facilityName'] . '"';
      }
+
      if (isset($_POST['district']) && trim($_POST['district']) != '') {
           $sWhere = $sWhere . " AND f.facility_district LIKE '%" . $_POST['district'] . "%' ";
      }
@@ -205,19 +205,16 @@ if (isset($sWhere) && $sWhere != "") {
      }
 }
 if ($sWhere != '') {
-     $sWhere = $sWhere . ' AND vl.result!="" AND vl.vlsm_country_id="' . $arr['vl_form'] . '" AND vl.result_status!=9';
+     $sWhere = $sWhere . ' AND vl.result!="" AND vl.vlsm_country_id="' . $formId . '" AND vl.result_status!=9';
 } else {
-     $sWhere = $sWhere . ' where vl.result!="" AND vl.vlsm_country_id="' . $arr['vl_form'] . '" AND vl.result_status!=9';
+     $sWhere = $sWhere . ' where vl.result!="" AND vl.vlsm_country_id="' . $formId . '" AND vl.result_status!=9';
 }
-if ($sarr['user_type'] == 'remoteuser') {
-     //$sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
-     //$dWhere = $dWhere." AND request_created_by='".$_SESSION['userId']."'";
-     $userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT facility_id ORDER BY facility_id SEPARATOR ',') as facility_id FROM vl_user_facility_map where user_id='" . $_SESSION['userId'] . "'";
-     $userfacilityMapresult = $db->rawQuery($userfacilityMapQuery);
-     if ($userfacilityMapresult[0]['facility_id'] != null && $userfacilityMapresult[0]['facility_id'] != '') {
-          $sWhere = $sWhere . " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")   AND remote_sample='yes'";
-     }
+
+if (!empty($facilityMap)) {
+     $sWhere .= " AND vl.facility_id IN ($facilityMap) ";
 }
+
+
 $sQuery = $sQuery . ' ' . $sWhere;
 //echo $sQuery;die;
 $_SESSION['vlMonitoringResultQuery'] = $sQuery;
