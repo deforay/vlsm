@@ -67,3 +67,170 @@ foreach ($pdResult as $provinceName) {
 $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select --');
 
 ?>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1><i class="fa fa-edit"></i> COVID-19 VIRUS LABORATORY TEST REQUEST FORM</h1>
+        <ol class="breadcrumb">
+            <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Add New Request</li>
+        </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="box box-default">
+            <div class="box-header with-border">
+
+                <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <!-- form start -->
+                <form class="form-horizontal" method="post" name="addCovid19RequestForm" id="addCovid19RequestForm" autocomplete="off" action="covid-19-add-request-helper.php">
+                    <div class="box-body">
+                        <div class="box box-default">
+                            <div class="box-body">
+                                <div class="box-header with-border sectionHeader">
+                                    <h3 class="box-title">QUICK ADD FORM</h3>
+                                </div>
+                                <table class="table" style="width:100%">
+                                    <tr>
+                                        <?php if ($sarr['user_type'] == 'remoteuser') { ?>
+                                            <td><label for="sampleCode">Sample ID </label></td>
+                                            <td>
+                                                <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"></span>
+                                                <input type="hidden" id="sampleCode" name="sampleCode" />
+                                            </td>
+                                        <?php } else { ?>
+                                            <td><label for="sampleCode">Sample ID </label><span class="mandatory">*</span></td>
+                                            <td>
+                                                <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" readonly="readonly" placeholder="Sample ID" title="Please enter sample code" style="width:100%;" onchange="checkSampleNameValidation('form_covid19','<?php echo $sampleCode; ?>',this.id,null,'The sample id that you entered already exists. Please try another sample id',null)" />
+                                            </td>
+                                        <?php } ?>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="patientId">Case ID <span class="mandatory">*</span> </label></th>
+                                        <td>
+                                            <input type="text" class="form-control isRequired" id="patientId" name="patientId" placeholder="Case Identification" title="Please enter Case ID" style="width:100%;" onchange="" />
+                                        </td>
+
+                                        <th><label for="externalSampleCode">DHIS2 Case ID </label></th>
+                                        <td><input type="text" class="form-control" id="externalSampleCode" name="externalSampleCode" placeholder="DHIS2 Case ID" title="Please enter DHIS2 Case ID" style="width:100%;" /></td>
+                                        
+                                        <td><label for="facilityId">Facility </label><span class="mandatory">*</span></td>
+                                        <td>
+                                            <select class="form-control isRequired " name="facilityId" id="facilityId" title="Please choose service provider" style="width:100%;">
+                                                <?php echo $facility; ?>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Specimen Type <span class="mandatory">*</span></th>
+                                        <td>
+                                            <select name="specimenType" id="specimenType" class="form-control isRequired" title="Please choose specimen type" style="width:100%">
+                                                <?php echo $general->generateSelectOptions($specimenTypeResult, null, '-- Select --'); ?>
+                                            </select>
+                                        </td>
+
+                                        <th>Sample Collection Date <span class="mandatory">*</span> </th>
+                                        <td>
+                                            <input class="form-control isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" onchange="sampleCodeGeneration();" />
+                                        </td>
+                                        
+                                        <th><label for="">Sample Received Date <span class="mandatory">*</span></label></th>
+                                        <td>
+                                            <input type="text" class="form-control isRequired" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter sample receipt date" <?php echo (isset($labFieldDisabled) && trim($labFieldDisabled) != '') ? $labFieldDisabled : ''; ?> onchange="" style="width:100%;" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
+                                        <td>
+                                            <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;">
+                                                <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
+                                            </select>
+                                        </td>
+
+                                        <td><label for="specimenQuality">Specimen Quality <span class="mandatory">*</span></label></td>
+                                        <td>
+                                            <select class="form-control isRequired" id="specimenQuality" name="specimenQuality" title="Please Enter the qpecimen quality" style="width:100%">
+                                                <option value="">--Select--</option>
+                                                <option value="good">Good</option>
+                                                <option value="poor">Poor</option>
+                                            </select>
+                                        </td>
+
+                                        <th></th>
+                                        <td></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <?php if ($arr['covid19_sample_code'] == 'auto' || $arr['covid19_sample_code'] == 'YY' || $arr['covid19_sample_code'] == 'MMYY') { ?>
+                            <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat; ?>" />
+                            <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey; ?>" />
+                            <input type="hidden" name="saveNext" id="saveNext" />
+                            <input type="hidden" name="quickForm" id="quickForm" value="quick" />
+                            <!-- <input type="hidden" name="pageURL" id="pageURL" value="<?php echo $_SERVER['PHP_SELF']; ?>" /> -->
+                        <?php } ?>
+                        <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
+                        <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();$('#saveNext').val('next');return false;">Save and Next</a>
+                        <input type="hidden" name="formId" id="formId" value="<?php echo $arr['vl_form']; ?>" />
+                        <input type="hidden" name="covid19SampleId" id="covid19SampleId" value="" />
+                        <a href="/covid-19/requests/covid-19-requests.php" class="btn btn-default"> Cancel</a>
+                    </div>
+                    <!-- /.box-footer -->
+                </form>
+                <!-- /.row -->
+            </div>
+        </div>
+        <!-- /.box -->
+    </section>
+    <!-- /.content -->
+</div>
+<script type="text/javascript">
+    function validateNow() {
+        flag = deforayValidator.init({
+            formId: 'addCovid19RequestForm'
+        });
+        if (flag) {
+            <?php if ($arr['covid19_sample_code'] == 'auto' || $arr['covid19_sample_code'] == 'YY' || $arr['covid19_sample_code'] == 'MMYY') { ?>
+                insertSampleCode('addCovid19RequestForm', 'covid19SampleId', 'sampleCode', 'sampleCodeKey', 'sampleCodeFormat', 3, 'sampleCollectionDate');
+            <?php } else { ?>
+                document.getElementById('addCovid19RequestForm').submit();
+            <?php } ?>
+        }
+    }
+
+    $(document).ready(function() {
+
+        $('#facilityId').select2({
+            placeholder: "Select Clinic/Health Center"
+        });
+
+    });
+
+    function sampleCodeGeneration() {
+        var pName = $("#province").val();
+        var sDate = $("#sampleCollectionDate").val();
+        if (pName != '' && sDate != '') {
+            $.post("/covid-19/requests/generateSampleCode.php", {
+                    sDate: sDate,
+                    pName: pName
+                },
+                function(data) {
+                    var sCodeKey = JSON.parse(data);
+                    $("#sampleCode").val(sCodeKey.sampleCode);
+                    $("#sampleCodeInText").html(sCodeKey.sampleCodeInText);
+                    $("#sampleCodeFormat").val(sCodeKey.sampleCodeFormat);
+                    $("#sampleCodeKey").val(sCodeKey.sampleCodeKey);
+                });
+        }
+    }
+</script>
