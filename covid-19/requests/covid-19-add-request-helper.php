@@ -9,8 +9,7 @@ include_once '../../startup.php';
 $general = new \Vlsm\Models\General($db);
 
 // echo "<pre>";
-// var_dump($_POST['symptomId']);
-// var_dump($_POST);
+// print_r($_POST);
 // die;
 
 $tableName = "form_covid19";
@@ -251,16 +250,14 @@ try {
 	} else {
 		$_SESSION['alertMsg'] = "Unable to add this Covid-19 sample. Please try again later";
 	}
-	if(isset($_POST['saveNext']) && $_POST['saveNext'] == 'next' && isset($_POST['quickForm']) && $_POST['quickForm'] == "quick"){
+	if(isset($_POST['saveNext']) && $_POST['saveNext'] == 'next' && (isset($_POST['quickForm']) && $_POST['quickForm'] == "quick")){
 		header("location:/covid-19/requests/covid-19-quick-add.php");
 	} else{
-		header("location:/covid-19/requests/covid-19-requests.php");
-	}
-
-	if (isset($_POST['saveNext']) && $_POST['saveNext'] == 'next') {
-		header("location:/covid-19/requests/covid-19-add-request.php");
-	} else {
-		header("location:/covid-19/requests/covid-19-requests.php");
+		if (isset($_POST['saveNext']) && $_POST['saveNext'] == 'next') {
+			header("location:/covid-19/requests/covid-19-add-request.php");
+		} else {
+			header("location:/covid-19/requests/covid-19-requests.php");
+		}
 	}
 } catch (Exception $exc) {
 	error_log($exc->getMessage());
