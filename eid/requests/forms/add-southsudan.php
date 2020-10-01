@@ -2,6 +2,7 @@
 // imported in eid-add-request.php based on country in global config
 
 ob_start();
+$eidObj = new \Vlsm\Models\Eid($db);
 
 //Funding source list
 $fundingSourceQry = "SELECT * FROM r_funding_sources WHERE funding_source_status='active' ORDER BY funding_source_name ASC";
@@ -20,7 +21,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 // Getting the list of Provinces, Districts and Facilities
 
 $eidResults = $general->getEidResults();
-
+$specimenTypeResult = $eidObj->getEidSampleTypes();
 
 $rKey = '';
 $sKey = '';
@@ -101,15 +102,15 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         <td></td>
                                     </tr>
                                     <tr>
-                                        <td><label for="province">Province </label><span class="mandatory">*</span></td>
+                                        <td><label for="province">State </label><span class="mandatory">*</span></td>
                                         <td>
-                                            <select class="form-control isRequired" name="province" id="province" title="Please choose province" onchange="getfacilityDetails(this);" style="width:100%;">
+                                            <select class="form-control isRequired" name="province" id="province" title="Please choose State" onchange="getfacilityDetails(this);" style="width:100%;">
                                                 <?php echo $province; ?>
                                             </select>
                                         </td>
-                                        <td><label for="district">District </label><span class="mandatory">*</span></td>
+                                        <td><label for="district">County </label><span class="mandatory">*</span></td>
                                         <td>
-                                            <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getfacilityDistrictwise(this);">
+                                            <select class="form-control isRequired" name="district" id="district" title="Please choose County" style="width:100%;" onchange="getfacilityDistrictwise(this);">
                                                 <option value=""> -- Select -- </option>
                                             </select>
                                         </td>
@@ -193,7 +194,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         <th>Infant Age (months)</th>
                                         <td><input type="number" max="24" maxlength="2" oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="childAge" name="childAge" placeholder="Age" title="Age" style="width:100%;" onchange="" /></td>
                                         <th>Mother ART Number</th>
-                                        <td><input type="text" class="form-control " id="motherId" name="motherId" placeholder="Mother ART Number" title="Mother ART Number" style="width:100%;" onchange="" /></td>
+                                        <td><input type="text" class="form-control " id="mothersId" name="mothersId" placeholder="Mother ART Number" title="Mother ART Number" style="width:100%;" onchange="" /></td>
                                     </tr>
                                     <tr>
                                         <th>Caretaker phone number</th>
@@ -322,8 +323,12 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         <td style="width:35% !important;">
                                             <input class="form-control dateTime isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" onchange="sampleCodeGeneration();" />
                                         </td>
-                                        <th style="width:15% !important;"></th>
-                                        <td style="width:35% !important;"></td>
+                                        <th style="width:15% !important">Sample Type <span class="mandatory">*</span> </th>
+                                        <td style="width:35% !important;">
+                                            <select name="specimenType" id="specimenType" class="form-control isRequired" title="Please choose specimen type" style="width:100%">
+                                                <?php echo $general->generateSelectOptions($specimenTypeResult, null, '-- Select --'); ?>
+                                            </select>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>Requesting Officer</th>
