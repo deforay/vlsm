@@ -123,7 +123,9 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                         vl.patient_gender,
                         vl.patient_age,
                         vl.sample_collection_date,
+                        vl.type_of_test_requested,
                         vl.date_of_symptom_onset,
+                        vl.sample_condition,
                         vl.contact_with_confirmed_case,
                         vl.has_recent_travel_history,
                         vl.travel_country_names,
@@ -136,6 +138,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                         vl.approver_comments,
                         b.batch_code,
                         ts.status_name,
+                        rst.sample_name,
                         f.facility_name,
                         l_f.facility_name as labName,
                         f.facility_code,
@@ -143,6 +146,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                         f.facility_district,
                         u_d.user_name as reviewedBy,
                         a_u_d.user_name as approvedBy,
+                        lt_u_d.user_name as labTechnician,
                         rs.rejection_reason_name,
                         r_f_s.funding_source_name,
                         r_i_p.i_partner_name 
@@ -155,6 +159,8 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                         LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id 
                         LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by 
                         LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by 
+                        LEFT JOIN user_details as lt_u_d ON lt_u_d.user_id=vl.lab_technician 
+                        LEFT JOIN r_covid19_sample_type as rst ON rst.sample_id=vl.specimen_type 
                         LEFT JOIN r_covid19_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection 
                         LEFT JOIN r_funding_sources as r_f_s ON r_f_s.funding_source_id=vl.funding_source 
                         LEFT JOIN r_implementation_partners as r_i_p ON r_i_p.i_partner_id=vl.implementing_partner";
@@ -360,7 +366,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
           if (isset($sLimit) && isset($sOffset)) {
                $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
           }
-          //die($sQuery);
+          // die($sQuery);
           $rResult = $db->rawQuery($sQuery);
           /* Data set length after filtering */
 
