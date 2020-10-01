@@ -382,6 +382,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 									<li class="allMenu resultEmailConfigMenu">
 										<a href="/vl/result-mail/testResultEmailConfig.php"><i class="fa fa-circle-o"></i>Test Result Email/SMS <br>Configuration</a>
 									</li>
+								<?php } if (isset($_SESSION['privileges']) && in_array("covid19-comorbidities.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu referenceCovidMenu">
 										<a href="/covid-19/reference/covid19-comorbidities.php"><i class="fa fa-circle-o"></i>Covid19-Comorbidities <br>Configuration</a>
 									</li>
