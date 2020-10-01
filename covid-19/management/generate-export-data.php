@@ -9,8 +9,9 @@ ob_start();
 
 $general = new \Vlsm\Models\General($db);
 
-$eidResults = $general->getEidResults();
-
+$covid19Results = $general->getCovid19Results();
+/* Global config data */
+$arr = $general->getGlobalConfig();
 //system config
 $systemConfigQuery = "SELECT * from system_config";
 $systemConfigResult = $db->query($systemConfigQuery);
@@ -19,7 +20,7 @@ $sarr = array();
 for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
 	$sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
 }
-// die($_SESSION['covid19ResultQuery']);
+// echo "<pre>";print_r($sarr);die;
 if (isset($_SESSION['covid19ResultQuery']) && trim($_SESSION['covid19ResultQuery']) != "") {
 
 	$rResult = $db->rawQuery($_SESSION['covid19ResultQuery']);
@@ -27,8 +28,11 @@ if (isset($_SESSION['covid19ResultQuery']) && trim($_SESSION['covid19ResultQuery
 	$excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
 	$output = array();
 	$sheet = $excel->getActiveSheet();
-
-	$headings = array("S.No.", "Sample Code", "Health Facility Name", "Health Facility Code", "District/County", "Province/State", "Patient ID", "Patient Name", "Patient DoB", "Patient Age", "Patient Gender", "Sample Collection Date","Date of Symptom Onset", "Has the patient had contact with a confirmed case?", "Has the patient had a recent history of travelling to an affected area?", "If Yes, Country Name(s)", "Return Date", "Is Sample Rejected?", "Sample Tested On", "Result", "Sample Received On", "Date Result Dispatched", "Comments", "Funding Source", "Implementing Partner");
+	if($arr['vl_form'] == 1){
+		$headings = array("S.No.", "Sample Code", "Health Facility Name", "Health Facility Code", "Lab staff Assigned", "County", "State", "Patient ID", "Patient Name", "Patient DoB", "Patient Age", "Patient Gender", "Date specimen collected", "Reason Test Request",  "Sample Received On", "Date specimen Entered", "Specimen Condition", "Specimen Status", "Specimen Type", "Date specimen Tested", "Testing Platform", "Test Method", "Result", "Date result released");
+	} else{
+		$headings = array("S.No.", "Sample Code", "Health Facility Name", "Health Facility Code", "District/County", "Province/State", "Patient ID", "Patient Name", "Patient DoB", "Patient Age", "Patient Gender", "Sample Collection Date","Date of Symptom Onset", "Has the patient had contact with a confirmed case?", "Has the patient had a recent history of travelling to an affected area?", "If Yes, Country Name(s)", "Return Date", "Is Sample Rejected?", "Sample Tested On", "Result", "Sample Received On", "Date Result Dispatched", "Comments", "Funding Source", "Implementing Partner");
+	}
 
 	$colNo = 1;
 
@@ -85,6 +89,16 @@ if (isset($_SESSION['covid19ResultQuery']) && trim($_SESSION['covid19ResultQuery
 	$no = 1;
 	foreach ($rResult as $aRow) {
 		$row = array();
+		if($arr['vl_form'] == 1){
+			// Get testing platform and test method 
+			$covid19TestQuery = "SELECT * from covid19_tests where covid19_id= " . $aRow['covid19_id'] . " ORDER BY test_id ASC";
+			$covid19TestInfo = $db->rawQuery($covid19TestQuery);
+			foreach ($covid19TestInfo as $indexKey => $rows) {
+				$testPlatform = $rows['testing_platform'];
+				$testMethod = $rows['test_name'];
+			}
+		}
+		
 		//date of birth
 		$dob = '';
 		if ($aRow['patient_dob'] != NULL && trim($aRow['patient_dob']) != '' && $aRow['patient_dob'] != '0000-00-00') {
@@ -140,32 +154,60 @@ if (isset($_SESSION['covid19ResultQuery']) && trim($_SESSION['covid19ResultQuery
 		} else {
 			$patientLname = '';
 		}
+		if($arr['vl_form'] == 1){
 
-		$row[] = $no;
-		$row[] = $aRow[$sampleCode];
-		$row[] = ucwords($aRow['facility_name']);
-		$row[] = $aRow['facility_code'];
-		$row[] = ucwords($aRow['facility_district']);
-		$row[] = ucwords($aRow['facility_state']);
-		$row[] = $aRow['patient_id'];
-		$row[] = $patientFname . " " . $patientLname;
-		$row[] = $dob;
-		$row[] = ($aRow['patient_age'] != NULL && trim($aRow['patient_age']) != '' && $aRow['patient_age'] > 0) ? $aRow['patient_age'] : 0;
-		$row[] = $gender;
-		$row[] = $sampleCollectionDate;
-		$row[] = $general->humanDateFormat($aRow['date_of_symptom_onset']);
-		$row[] = ucwords($aRow['contact_with_confirmed_case']);
-		$row[] = ucwords($aRow['has_recent_travel_history']);
-		$row[] = ucwords($aRow['travel_country_names']);
-		$row[] = $general->humanDateFormat($aRow['travel_return_date']);
-		$row[] = $sampleRejection;
-		$row[] = $sampleTestedOn;
-		$row[] = $eidResults[$aRow['result']];
-		$row[] = $general->humanDateFormat($aRow['sample_received_at_vl_lab_datetime']);
-		$row[] = $resultDispatchedDate;
-		$row[] = ucfirst($aRow['approver_comments']);
-		$row[] = (isset($aRow['funding_source_name']) && trim($aRow['funding_source_name']) != '') ? ucwords($aRow['funding_source_name']) : '';
-		$row[] = (isset($aRow['i_partner_name']) && trim($aRow['i_partner_name']) != '') ? ucwords($aRow['i_partner_name']) : '';
+			$row[] = $no;
+			$row[] = $aRow[$sampleCode];
+			$row[] = ucwords($aRow['facility_name']);
+			$row[] = $aRow['facility_code'];
+			$row[] = ucwords($aRow['labTechnician']);
+			$row[] = ucwords($aRow['facility_district']);
+			$row[] = ucwords($aRow['facility_state']);
+			$row[] = $aRow['patient_id'];
+			$row[] = $patientFname . " " . $patientLname;
+			$row[] = $dob;
+			$row[] = ($aRow['patient_age'] != NULL && trim($aRow['patient_age']) != '' && $aRow['patient_age'] > 0) ? $aRow['patient_age'] : 0;
+			$row[] = $gender;
+			$row[] = $sampleCollectionDate;
+			$row[] = ucwords($aRow['type_of_test_requested']);
+			$row[] = $general->humanDateFormat($aRow['sample_received_at_vl_lab_datetime']);
+			$row[] = $general->humanDateFormat($aRow['date_of_symptom_onset']);
+			$row[] = ucwords($aRow['sample_condition']);
+			$row[] = ucwords($aRow['status_name']);
+			$row[] = ucwords($aRow['sample_name']);
+			$row[] = $sampleTestedOn;
+			$row[] = ucwords($testPlatform);
+			$row[] = ucwords($testMethod);
+			$row[] = $covid19Results[$aRow['result']];
+			$row[] = $resultDispatchedDate;
+		} else{
+
+			$row[] = $no;
+			$row[] = $aRow[$sampleCode];
+			$row[] = ucwords($aRow['facility_name']);
+			$row[] = $aRow['facility_code'];
+			$row[] = ucwords($aRow['facility_district']);
+			$row[] = ucwords($aRow['facility_state']);
+			$row[] = $aRow['patient_id'];
+			$row[] = $patientFname . " " . $patientLname;
+			$row[] = $dob;
+			$row[] = ($aRow['patient_age'] != NULL && trim($aRow['patient_age']) != '' && $aRow['patient_age'] > 0) ? $aRow['patient_age'] : 0;
+			$row[] = $gender;
+			$row[] = $sampleCollectionDate;
+			$row[] = $general->humanDateFormat($aRow['date_of_symptom_onset']);
+			$row[] = ucwords($aRow['contact_with_confirmed_case']);
+			$row[] = ucwords($aRow['has_recent_travel_history']);
+			$row[] = ucwords($aRow['travel_country_names']);
+			$row[] = $general->humanDateFormat($aRow['travel_return_date']);
+			$row[] = $sampleRejection;
+			$row[] = $sampleTestedOn;
+			$row[] = $covid19Results[$aRow['result']];
+			$row[] = $general->humanDateFormat($aRow['sample_received_at_vl_lab_datetime']);
+			$row[] = $resultDispatchedDate;
+			$row[] = ucfirst($aRow['approver_comments']);
+			$row[] = (isset($aRow['funding_source_name']) && trim($aRow['funding_source_name']) != '') ? ucwords($aRow['funding_source_name']) : '';
+			$row[] = (isset($aRow['i_partner_name']) && trim($aRow['i_partner_name']) != '') ? ucwords($aRow['i_partner_name']) : '';
+		}
 		$output[] = $row;
 		$no++;
 	}

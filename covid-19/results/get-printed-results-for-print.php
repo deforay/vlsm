@@ -332,7 +332,7 @@ foreach ($rResult as $aRow) {
 		$row[] = $aRow['remote_sample_code'];
 	}
 	$row[] = $aRow['batch_code'];
-	$row[] = $aRow['child_id'];
+	$row[] = $aRow['patient_id'];
 	$row[] = $patientFname." ".$patientLname;
 	$row[] = ($aRow['facility_name']);
 	$row[] = $covid19Results[$aRow['result']];
