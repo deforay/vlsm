@@ -11,6 +11,8 @@ include_once(APPLICATION_PATH . '/header.php');
 $general = new \Vlsm\Models\General($db);
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
 $healthFacilites = $facilitiesDb->getHealthFacilities('covid19');
+/* Global config data */
+$arr = $general->getGlobalConfig();
 
 $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
 
@@ -79,9 +81,9 @@ $batResult = $db->rawQuery($batQuery);
 									<?= $facilitiesDropdown; ?>
 								</select>
 							</td>
-							<td style=""><b>Province/State&nbsp;:</b></td>
+							<td ><b>Province/State&nbsp;:</b></td>
 							<td>
-								<input style="" type="text" id="state" name="state" class="form-control" placeholder="Enter Province/State" style="background:#fff;" onkeyup="loadVlRequestStateDistrict()" />
+								<input  type="text" id="state" name="state" class="form-control" placeholder="Enter Province/State" style="background:#fff;" onkeyup="loadVlRequestStateDistrict()" />
 							</td>
 							<td><b>District/County :</b></td>
 							<td>
@@ -99,13 +101,15 @@ $batResult = $db->rawQuery($batQuery);
 							<td colspan="4">
 								<?php if (isset($_SESSION['privileges']) && in_array("covid-19-add-request.php", $_SESSION['privileges'])) { ?>
 									<a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-add-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Add new Covid-19 Request</a>
-									<!-- <a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-bulk-import-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Bulk Import Covid-19 Request</a> -->
-								<?php } ?>
+									<?php if($arr['vl_form'] == 1){ ?>
+										<a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-bulk-import-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Bulk Import Covid-19 Request</a>
+									<?php }
+								} ?>
 							</td>
 						</tr>
 					</table>
 					<table id="filter" class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
-						<tr id="" style="">
+						<tr id="" >
 							<td>
 
 								<?php
@@ -115,8 +119,10 @@ $batResult = $db->rawQuery($batQuery);
 									<?php } ?>
 
 									<a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-add-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Add new Covid-19 Request</a>
-									<!-- <a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-bulk-import-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Bulk Import Covid-19 Request</a> -->
-								<?php } ?>
+									<?php if($arr['vl_form'] == 1){ ?>
+									<a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-bulk-import-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Bulk Import Covid-19 Request</a>
+									<?php }
+								} ?>
 								<button style=" margin: 0px 5px; " class="btn btn-primary btn-sm pull-right" style="margin-right:5px;" onclick="hideAdvanceSearch('filter','advanceFilter');"><span>Show Advanced Search</span></button>
 							</td>
 						</tr>
