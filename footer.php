@@ -423,6 +423,11 @@
 		$(".allMenu").removeClass('active');
 		$(".covid19ProgramMenu").addClass('active');
 		$(".covid19ClinicReportMenu").addClass('active');
+	} else if (splitsUrl == 'covid19-comorbidities.php') {
+		$(".manage").addClass('active');
+		$(".covid19-reference-manage").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".reference-comorbidities").addClass('active');
 	} else {
 		$(".allMenu").removeClass('active');
 		$(".dashboardMenu").addClass('active');
