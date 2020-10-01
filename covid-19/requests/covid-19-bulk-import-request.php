@@ -31,7 +31,7 @@ $fileName = APPLICATION_PATH. DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATO
         <div style="font-size:1.1em;padding:1em;">
           <p>Please note that the columns marked in <span class="mandatory">red</span> are mandatory. </p>
         </div>
-        <form class="form-horizontal" method='post' name='addImportRequestForm' id='addImportRequestForm' enctype="multipart/form-data" autocomplete="off" action="bulk-import-request-helper.php">
+        <form class="form-horizontal" method='post' name='addImportRequestForm' id='addImportRequestForm' enctype="multipart/form-data" autocomplete="off" action="covid-19-bulk-import-request-helper.php">
           <div class="box-body">
             <div class="wizard_content">
               <div class="row setup-content step" id="step-1" style="display:block;">
@@ -62,7 +62,7 @@ $fileName = APPLICATION_PATH. DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATO
                     <div class="row form-group">
                       <div class="box-footer">
                         <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
-                        <a href="/dashboard/index.php" class="btn btn-default"> Cancel</a>
+                        <a href="/covid-19/requests/covid-19-requests.php" class="btn btn-default"> Cancel</a>
                       </div>
                     </div>
                   </div>
