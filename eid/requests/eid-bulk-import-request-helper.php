@@ -33,7 +33,7 @@ try {
         $sheetData   = $spreadsheet->getActiveSheet();
         $sheetData   = $sheetData->toArray(null, true, true, true);
 
-        // echo "<pre>";print_r($sheetData);die;
+        echo "<pre>";print_r($sheetData);die;
         $returnArray = array();
         foreach ($sheetData as $rowIndex => $rowData) {
             if ($rowIndex != 1) {
