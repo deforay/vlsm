@@ -206,7 +206,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         <th>Infant Age (months)</th>
                                         <td><input type="number" max=24 maxlength="2" oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="childAge" name="childAge" placeholder="Age" title="Age" style="width:100%;" onchange="" value="<?php echo $eidInfo['child_age']; ?>" /></td>
                                         <th>Mother ART Number</th>
-                                        <td><input type="text" class="form-control " id="motherId" name="motherId" placeholder="Mother ART Number" title="Mother ART Number" style="width:100%;" value="<?php echo $eidInfo['mother_id'] ?>" onchange="" /></td>
+                                        <td><input type="text" class="form-control " id="mothersId" name="mothersId" placeholder="Mother ART Number" title="Mother ART Number" style="width:100%;" value="<?php echo $eidInfo['mother_id'] ?>" onchange="" /></td>
                                     </tr>
                                     <tr>
                                         <th>Caretaker phone number</th>
@@ -324,7 +324,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                 </table>
 
                                 <br><br>
-                                <table class="table" style="">
+                                <table class="table">
                                     <tr>
                                         <th colspan=4 style="border-top:#000 1px solid;">
                                             <h4>Sample Information</h4>
@@ -335,8 +335,12 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         <td style="width:35% !important;">
                                             <input class="form-control dateTime isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" value="<?php echo ($eidInfo['sample_collection_date']); ?>" />
                                         </td>
-                                        <th style="width:15% !important;"></th>
-                                        <td style="width:35% !important;"></td>
+                                        <th style="width:15% !important">Sample Type <span class="mandatory">*</span> </th>
+                                        <td style="width:35% !important;">
+                                            <select name="specimenType" id="specimenType" class="form-control isRequired" title="Please choose specimen type" style="width:100%">
+                                                <?php echo $general->generateSelectOptions($specimenTypeResult, $eidInfo['specimen_type'], '-- Select --'); ?>
+                                            </select>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>Requesting Officer</th>
