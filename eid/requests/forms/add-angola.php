@@ -258,7 +258,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         <th>Nome da Mãe </th>
                                         <td><input type="text" class="form-control " id="mothersName" name="motherName" placeholder="Nome da Mãe" title="Nome da Mãe" style="width:100%;" onchange="" /></td>
                                         <th>Nº Processo Clínico</th>
-                                        <td><input type="text" class="form-control " id="mothersId" name="motherId" placeholder="Mother ART Number" title="Mother ART Number" style="width:100%;" onchange="" /></td>
+                                        <td><input type="text" class="form-control " id="mothersId" name="mothersId" placeholder="Mother ART Number" title="Mother ART Number" style="width:100%;" onchange="" /></td>
 
 
 
