@@ -1179,3 +1179,11 @@ UPDATE `system_config` SET `value` = '4.2.2' WHERE `system_config`.`name` = 'ver
 -- Thana 01-OCt-2020
 INSERT INTO `resources` (`resource_id`, `module`, `resource_name`, `display_name`) VALUES (NULL, 'covid-19', 'covid-19-reference', 'Covid-19 Reference Management');
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '33', 'covid19-sample-type.php', 'Manage Reference');
+
+--Sudarmathi 01-Oct-2020
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '33', 'covid19-comorbidities.php', 'Manage Comorbidities')
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '33', 'addCovid19Comorbidities.php', 'Add Comorbidities');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '33', 'editCovid19Comorbidities.php', 'Edit Comorbidities');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '33', 'covid19-sample-rejection-reasons.php', 'Manage Sample Rejection Reasons');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '33', 'addCovid19SampleRejectionReason.php', 'Add Sample Rejection Reason');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '33', 'editCovid19SampleRejectionReason.php', 'Edit Sample Rejection Reason');

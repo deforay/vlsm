@@ -73,6 +73,7 @@ $sharedPrivileges = array(
 	'covid-19-update-result.php'       		=> 'covid-19-manual-results.php',
 	'imported-results.php'        			=> 'addImportResult.php',
 	'importedStatistics.php'      			=> 'addImportResult.php',
+	'eid-bulk-import-request.php'			=> 'eid-add-request.php',
 	'covid-19-bulk-import-request.php'		=> 'covid-19-add-request.php',
 	'covid-19-quick-add.php'				=> 'covid-19-add-request.php',
 	'mapTestType.php'						=> 'addFacility.php',
@@ -81,7 +82,6 @@ $sharedPrivileges = array(
 	'covid19-symptoms.php'					=> 'covid19-sample-type.php',
 	'covid19-test-reasons.php'				=> 'covid19-sample-type.php',
 );
-
 // Does the current file share privileges with another privilege ?
 $currentFileName = isset($sharedPrivileges[$currentFileName]) ? $sharedPrivileges[$currentFileName] : $currentFileName;
 
@@ -91,6 +91,7 @@ if (!in_array($currentFileName, $skipPrivilegeCheckFiles)) {
 		header("location:/error/401.php");
 	}
 }
+// echo "<pre>";print_r($_SESSION['privileges']);die;
 // if(isset($_SERVER['HTTP_REFERER'])){
 //   $previousUrl = $_SERVER['HTTP_REFERER'];
 //   $urlLast = explode('/',$previousUrl);
@@ -346,8 +347,25 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 									<i class="fa fa-angle-left pull-right"></i>
 								</span>
 							</a>
-							<ul class="treeview-menu">
-								<?php if (isset($_SESSION['privileges']) && in_array("roles.php", $_SESSION['privileges'])) { ?>
+							<ul class="treeview-menu covid19-reference">
+								<?php if (isset($_SESSION['privileges']) && in_array("covid19-sample-type.php", $_SESSION['privileges'])) { ?>
+									<li class="treeview covid19-reference-manage">
+										<a href="#"><i class="fa fa-gears"></i> Covid19 Reference
+											<span class="pull-right-container">
+											<i class="fa fa-angle-left pull-right"></i>
+											</span>
+										</a>
+										
+										<ul class="treeview-menu">
+											<li class="allMenu reference-comorbidities">
+												<a href="/covid-19/reference/covid19-comorbidities.php"><i class="fa fa-caret-right"></i>Covid19-Comorbidities <br>Configuration</a>
+											</li>
+											<li class="allMenu reference-sample-rejection-reasons">
+												<a href="/covid-19/reference/covid19-sample-rejection-reasons.php"><i class="fa fa-caret-right"></i>Covid19-Sample <br>Rejection Reasons</a>
+											</li>
+										</ul>
+									</li>
+								<?php } if (isset($_SESSION['privileges']) && in_array("roles.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu roleMenu">
 										<a href="/roles/roles.php"><i class="fa fa-circle-o"></i> Roles</a>
 									</li>
@@ -389,8 +407,6 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 								<?php } ?>
 							</ul>
 						</li>
-
-
 					<?php } ?>
 
 					<?php

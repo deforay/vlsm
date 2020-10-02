@@ -14,6 +14,7 @@ $healthFacilites = $facilitiesDb->getHealthFacilities('eid');
 
 $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
 
+$formId = $general->getGlobalConfig('vl_form');
 
 $batQuery = "SELECT batch_code FROM batch_details where test_type = 'eid' AND batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
@@ -75,9 +76,9 @@ $batResult = $db->rawQuery($batQuery);
 									<?= $facilitiesDropdown; ?>
 								</select>
 							</td>
-							<td style=""><b>Province/State&nbsp;:</b></td>
+							<td ><b>Province/State&nbsp;:</b></td>
 							<td>
-								<input style="" type="text" id="state" name="state" class="form-control" placeholder="Enter Province/State" style="background:#fff;" onkeyup="loadVlRequestStateDistrict()" />
+								<input  type="text" id="state" name="state" class="form-control" placeholder="Enter Province/State" style="background:#fff;" onkeyup="loadVlRequestStateDistrict()" />
 							</td>
 							<td><b>District/County :</b></td>
 							<td>
@@ -96,8 +97,10 @@ $batResult = $db->rawQuery($batQuery);
 								<?php
 								if (isset($_SESSION['privileges']) && in_array("eid-add-request.php", $_SESSION['privileges'])) { ?>
 									<a href="/eid/requests/eid-add-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Add new EID Request</a>
-								<?php }
-							?>
+									<?php if($formId == 1){ ?>
+									<a style=" margin: 0px 5px; " href="/eid/requests/eid-bulk-import-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Bulk Import EID Request</a>
+									<?php }
+								} ?>
 
 								&nbsp;
 
@@ -105,16 +108,16 @@ $batResult = $db->rawQuery($batQuery);
 						</tr>
 					</table>
 					<table id="filter" class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
-						<tr id="" style="">
+						<tr id="" >
 							<td>
 
 								<?php
 								if (isset($_SESSION['privileges']) && in_array("eid-add-request.php", $_SESSION['privileges'])) { ?>
 									<a href="/eid/requests/eid-add-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Add new EID Request</a>
-								<?php }
-							?>
-
-
+									<?php if($formId == 1){ ?>
+									<a style=" margin: 0px 5px; " href="/eid/requests/eid-bulk-import-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Bulk Import EID Request</a>
+									<?php }
+								} ?>
 								&nbsp;<button class="btn btn-primary btn-sm pull-right" style="margin-right:5px;" onclick="hideAdvanceSearch('filter','advanceFilter');"><span>Show Advanced Search</span></button>
 							</td>
 						</tr>
