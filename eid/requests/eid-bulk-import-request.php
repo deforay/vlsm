@@ -62,7 +62,7 @@ $fileName = APPLICATION_PATH. DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATO
                     <div class="row form-group">
                       <div class="box-footer">
                         <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
-                        <a href="/covid-19/requests/covid-19-requests.php" class="btn btn-default"> Cancel</a>
+                        <a href="/eid/requests/eid-requests.php" class="btn btn-default"> Cancel</a>
                       </div>
                     </div>
                   </div>

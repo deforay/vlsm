@@ -454,4 +454,10 @@ class General
     {
         return $this->random_color_part() . $this->random_color_part() . $this->random_color_part();
     }
+
+    function ageInMonth($date){
+        $birthday = new \DateTime($date);
+        $diff = $birthday->diff(new \DateTime());
+        return $diff->format('%m') + 12 * $diff->format('%y');
+    }
 }
