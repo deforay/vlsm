@@ -141,4 +141,14 @@ class Eid
         }
         return $response;
     }
+
+    public function getEidSampleTypes()
+    {
+        $results = $this->db->rawQuery("SELECT * FROM r_eid_sample_type where status='active'");
+        $response = array();
+        foreach ($results as $row) {
+            $response[$row['sample_id']] = $row['sample_name'];
+        }
+        return $response;
+    }
 }
