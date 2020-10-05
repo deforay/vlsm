@@ -1180,10 +1180,19 @@ UPDATE `system_config` SET `value` = '4.2.2' WHERE `system_config`.`name` = 'ver
 INSERT INTO `resources` (`resource_id`, `module`, `resource_name`, `display_name`) VALUES (NULL, 'covid-19', 'covid-19-reference', 'Covid-19 Reference Management');
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '33', 'covid19-sample-type.php', 'Manage Reference');
 
--- Sudarmathi 01-Oct-2020
-INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '33', 'covid19-comorbidities.php', 'Manage Comorbidities');
-INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '33', 'addCovid19Comorbidities.php', 'Add Comorbidities');
-INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '33', 'editCovid19Comorbidities.php', 'Edit Comorbidities');
+--Sudarmathi 01-Oct-2020
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '33', 'covid19-comorbidities.php', 'Manage Comorbidities')
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '33', 'add-covid19-comorbidities.php', 'Add Comorbidities');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '33', 'edit-covid19-comorbidities.php', 'Edit Comorbidities');
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '33', 'covid19-sample-rejection-reasons.php', 'Manage Sample Rejection Reasons');
-INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '33', 'addCovid19SampleRejectionReason.php', 'Add Sample Rejection Reason');
-INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '33', 'editCovid19SampleRejectionReason.php', 'Edit Sample Rejection Reason');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '33', 'add-covid19-sample-rejection-reason.php', 'Add Sample Rejection Reason');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '33', 'edit-covid19-sample-rejection-reason.php', 'Edit Sample Rejection Reason');
+
+CREATE TABLE `rejection_type` (
+ `rejection_type_id` int(11) NOT NULL AUTO_INCREMENT,
+ `rejection_type` varchar(255) NOT NULL,
+ PRIMARY KEY (`rejection_type_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
+
+INSERT INTO `rejection_type` (`rejection_type_id`, `rejection_type`) VALUES (NULL, 'testing'), (NULL, 'general');
+ALTER TABLE `rejection_type` ADD `updated_datetime` DATETIME NULL AFTER `rejection_type`;

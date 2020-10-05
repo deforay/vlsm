@@ -4,8 +4,8 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 #require_once('../startup.php');  
 
-$tableName = "r_covid19_comorbidities";
-$primaryKey = "comorbidity_id";
+$tableName = "r_covid19_sample_rejection_reasons";
+$primaryKey = "rejection_reason_id";
 //system config
 $systemConfigQuery = "SELECT * from system_config";
 $systemConfigResult = $db->query($systemConfigQuery);
@@ -18,7 +18,7 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
          * you want to insert a non-database field (for example a counter or static image)
         */
 
-$aColumns = array('comorbidity_name', 'comorbidity_status', 'status');
+$aColumns = array('rejection_reason_name', 'rejection_type', 'rejection_reason_code','rejection_reason_status');
 
 /* Indexed column (used for fast and accurate table cardinality) */
 $sIndexColumn = $primaryKey;
@@ -96,7 +96,7 @@ for ($i = 0; $i < count($aColumns); $i++) {
          * Get data to display
         */
 
-$sQuery = "SELECT * FROM r_covid19_comorbidities";
+$sQuery = "SELECT * FROM r_covid19_sample_rejection_reasons";
 
 if (isset($sWhere) && $sWhere != "") {
     $sWhere = ' where ' . $sWhere;
@@ -117,11 +117,11 @@ $rResult = $db->rawQuery($sQuery);
 // print_r($rResult);
 /* Data set length after filtering */
 
-$aResultFilterTotal = $db->rawQuery("SELECT * FROM r_covid19_comorbidities $sWhere order by $sOrder");
+$aResultFilterTotal = $db->rawQuery("SELECT * FROM r_covid19_sample_rejection_reasons $sWhere order by $sOrder");
 $iFilteredTotal = count($aResultFilterTotal);
 
 /* Total data set length */
-$aResultTotal =  $db->rawQuery("select COUNT(comorbidity_id) as total FROM r_covid19_comorbidities");
+$aResultTotal =  $db->rawQuery("select COUNT(rejection_reason_id) as total FROM r_covid19_sample_rejection_reasons");
 // $aResultTotal = $countResult->fetch_row();
 //print_r($aResultTotal);
 $iTotal = $aResultTotal[0]['total'];
@@ -138,10 +138,12 @@ $output = array(
 
 foreach ($rResult as $aRow) {
     $row = array();
-    $row[] = ucwords($aRow['comorbidity_name']);
-    $row[] = ucwords($aRow['comorbidity_status']);
-    if (isset($_SESSION['privileges']) && in_array("edit-covid19-comorbidities.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) {
-        $row[] = '<a href="edit-covid19-comorbidities.php?id=' . base64_encode($aRow['comorbidity_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
+    $row[] = ucwords($aRow['rejection_reason_name']);
+    $row[] = ucwords($aRow['rejection_type']);
+    $row[] = ucwords($aRow['rejection_reason_code']);
+    $row[] = ucwords($aRow['rejection_reason_status']);
+    if (isset($_SESSION['privileges']) && in_array("edit-covid19-sample-rejection-reason.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) {
+        $row[] = '<a href="edit-covid19-sample-rejection-reason.php?id=' . base64_encode($aRow['rejection_reason_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
     }
     $output['aaData'][] = $row;
 }
