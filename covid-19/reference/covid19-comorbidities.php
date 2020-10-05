@@ -42,7 +42,7 @@ include_once(APPLICATION_PATH . '/header.php');
             </div>
           </span>
           <div class="box-header with-border">
-            <?php if (isset($_SESSION['privileges']) && in_array("add-covid19-comorbidities.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) { ?>
+            <?php if (isset($_SESSION['privileges']) && in_array("covid19-sample-type.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) { ?>
               <a href="add-covid19-comorbidities.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Covid 19-Comorbidities</a>
             <?php } ?>
             <!--<button class="btn btn-primary pull-right" style="margin-right: 1%;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>-->
@@ -54,14 +54,14 @@ include_once(APPLICATION_PATH . '/header.php');
                 <tr>
                   <th>Comorbidity Name</th>
                   <th>Comorbidity Status</th>
-                  <?php if (isset($_SESSION['privileges']) && in_array("edit-covid19-comorbidities.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) { ?>
+                  <?php if (isset($_SESSION['privileges']) && in_array("covid19-sample-type.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) { ?>
                     <th>Action</th>
                   <?php } ?>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td colspan="6" class="dataTables_empty">Loading data from server</td>
+                  <td colspan="3" class="dataTables_empty">Loading data from server</td>
                 </tr>
               </tbody>
 
@@ -100,7 +100,7 @@ include_once(APPLICATION_PATH . '/header.php');
         {
           "sClass": "center"
         },
-        <?php if (isset($_SESSION['privileges']) && in_array("edit-covid19-comorbidities.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) { ?> {
+        <?php if (isset($_SESSION['privileges']) && in_array("covid19-sample-type.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) { ?> {
             "sClass": "center",
             "bSortable": false
           },
