@@ -63,24 +63,28 @@ $skipPrivilegeCheckFiles = array(
 // on the left put intermediate/inner file, on the right put the file
 // which has entry in privileges table.
 $sharedPrivileges = array(
-	'eid-add-batch-position.php'  			=> 'eid-add-batch.php',
-	'eid-edit-batch-position.php' 			=> 'eid-edit-batch.php',
-	'eid-update-result.php'       			=> 'eid-manual-results.php',
-	'covid-19-add-batch-position.php'		=> 'covid-19-add-batch.php',
-	'mail-covid-19-results.php'  			=> 'covid-19-print-results.php',
-	'covid-19-result-mail-confirm.php'  	=> 'covid-19-print-results.php',
-	'covid-19-edit-batch-position.php' 		=> 'covid-19-edit-batch.php',
-	'covid-19-update-result.php'       		=> 'covid-19-manual-results.php',
-	'imported-results.php'        			=> 'addImportResult.php',
-	'importedStatistics.php'      			=> 'addImportResult.php',
-	'eid-bulk-import-request.php'			=> 'eid-add-request.php',
-	'covid-19-bulk-import-request.php'		=> 'covid-19-add-request.php',
-	'covid-19-quick-add.php'				=> 'covid-19-add-request.php',
-	'mapTestType.php'						=> 'addFacility.php',
-	'covid19-sample-rejection-reasons.php'	=> 'covid19-sample-type.php',
-	'covid19-comorbidities.php'				=> 'covid19-sample-type.php',
-	'covid19-symptoms.php'					=> 'covid19-sample-type.php',
-	'covid19-test-reasons.php'				=> 'covid19-sample-type.php',
+	'eid-add-batch-position.php'  				=> 'eid-add-batch.php',
+	'eid-edit-batch-position.php' 				=> 'eid-edit-batch.php',
+	'eid-update-result.php'       				=> 'eid-manual-results.php',
+	'covid-19-add-batch-position.php'			=> 'covid-19-add-batch.php',
+	'mail-covid-19-results.php'  				=> 'covid-19-print-results.php',
+	'covid-19-result-mail-confirm.php'  		=> 'covid-19-print-results.php',
+	'covid-19-edit-batch-position.php' 			=> 'covid-19-edit-batch.php',
+	'covid-19-update-result.php'       			=> 'covid-19-manual-results.php',
+	'imported-results.php'        				=> 'addImportResult.php',
+	'importedStatistics.php'      				=> 'addImportResult.php',
+	'eid-bulk-import-request.php'				=> 'eid-add-request.php',
+	'covid-19-bulk-import-request.php'			=> 'covid-19-add-request.php',
+	'covid-19-quick-add.php'					=> 'covid-19-add-request.php',
+	'mapTestType.php'							=> 'addFacility.php',
+	'covid19-sample-rejection-reasons.php'		=> 'covid19-sample-type.php',
+	'add-covid19-sample-rejection-reason.php'	=> 'covid19-sample-type.php',
+	'edit-covid19-sample-rejection-reason.php'	=> 'covid19-sample-type.php',
+	'covid19-comorbidities.php'					=> 'covid19-sample-type.php',
+	'add-covid19-comorbidities.php'				=> 'covid19-sample-type.php',
+	'edit-covid19-comorbidities.php'			=> 'covid19-sample-type.php',
+	'covid19-symptoms.php'						=> 'covid19-sample-type.php',
+	'covid19-test-reasons.php'					=> 'covid19-sample-type.php',
 );
 // Does the current file share privileges with another privilege ?
 $currentFileName = isset($sharedPrivileges[$currentFileName]) ? $sharedPrivileges[$currentFileName] : $currentFileName;
@@ -258,6 +262,18 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 			background: #ddd;
 			color: #333;
 			font-weight: bold;
+		}
+		.select2-container .select2-selection--single{
+			height: auto !important;
+		}
+		.select2-container--default .select2-selection--single .select2-selection__arrow {
+			top: 6px !important;
+		}
+		.select2-container--default .select2-selection--single .select2-selection__rendered {
+			line-height: 22px !important;
+		}
+		.select2-container .select2-selection--single .select2-selection__rendered {
+			margin-top: 0px !important;
 		}
 	</style>
 </head>
