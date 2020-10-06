@@ -28,7 +28,7 @@ try {
     }
 
     $lastUpdate = $rResult[count($rResult) - 1]['last_modified_datetime'];
-    $output['timestamp'] = strtotime(date('Y-m-d H:i:s'));
+    $output['timestamp'] = strtotime($instanceUpdateOn);
     foreach ($rResult as $aRow) {
 
         
