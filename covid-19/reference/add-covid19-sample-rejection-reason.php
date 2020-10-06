@@ -2,7 +2,7 @@
 ob_start();
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-$rejQuery = "SELECT * from rejection_type";
+$rejQuery = "SELECT DISTINCT rejection_type from r_covid19_sample_rejection_reasons";
 $rejInfo = $db->query($rejQuery);
 ?>
 <!-- Content Wrapper. Contains page content -->
@@ -41,7 +41,7 @@ $rejInfo = $db->query($rejQuery);
                 <div class="form-group">
                   <label for="rejectionType" class="col-lg-4 control-label">Rejection Type</label>
                   <div class="col-lg-7">
-                    <select class="form-control isRequired select2" id="rejectionType" name="rejectionType" placeholder="Rejection Type" title="Please enter Rejection Type"  onchange="addNewRejectionType(this.id);">
+                    <select class="form-control isRequired select2" id="rejectionType" name="rejectionType" placeholder="Rejection Type" title="Please enter Rejection Type" >
                       <option value=""> -- Select -- </option>
                       <?php
                       foreach ($rejInfo as $type) {
