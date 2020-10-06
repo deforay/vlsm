@@ -27,23 +27,23 @@ $tndArray = array(
 
 try {
 
-
     $instanceUpdateOn = $db->getValue('s_vlsm_instance', 'vl_last_dash_sync');
-
+    
     if (!empty($instanceUpdateOn)) {
         $db->where('last_modified_datetime', $instanceUpdateOn, ">=");
     }
-
+    
     $db->orderBy("last_modified_datetime", "ASC");
-
+    
     $rResult = $db->get('vl_request_form', 5000);
-
+    
     if (empty($rResult)) {
         exit(0);
     }
 
     $lastUpdate = $rResult[count($rResult) - 1]['last_modified_datetime'];
-
+    
+    $output['timestamp'] = strtotime($instanceUpdateOn);
     foreach ($rResult as $aRow) {
 
         $VLAnalysisResult = $aRow['result_value_absolute'];
@@ -72,11 +72,11 @@ try {
 
         $aRow['DashVL_Abs'] = $DashVL_Abs;
         $aRow['DashVL_AnalysisResult'] = $DashVL_AnalysisResult;
-        $output[] = $aRow;
+        $output['data'][] = $aRow;
     }
 
     $currentDate = date('d-m-y-h-i-s');
-
+    // echo "<pre>";print_r($output);die;
 
     $filename = 'export-vl-result-' . $currentDate . '.json';
     $fp = fopen(TEMP_PATH . DIRECTORY_SEPARATOR . $filename, 'w');
@@ -111,7 +111,7 @@ try {
     $result = curl_exec($ch);
     curl_close($ch);
 
-    //var_dump($result);
+    // echo ($result);die;
     $deResult = json_decode($result, true);
 
     if (isset($deResult['status']) && trim($deResult['status']) == 'success') {
