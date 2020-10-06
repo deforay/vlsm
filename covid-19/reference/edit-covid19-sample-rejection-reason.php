@@ -2,7 +2,7 @@
 ob_start();
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-$rejQuery = "SELECT * from rejection_type";
+$rejQuery = "SELECT DISTINCT rejection_type from r_covid19_sample_rejection_reasons";
 $rejInfo = $db->query($rejQuery);
 $id = base64_decode($_GET['id']);
 $rsnQuery = "SELECT * from r_covid19_sample_rejection_reasons where rejection_reason_id=$id";
@@ -45,7 +45,7 @@ $rsnInfo = $db->query($rsnQuery);
 								<div class="form-group">
 									<label for="rejectionType" class="col-lg-4 control-label">Rejection Type</label>
 									<div class="col-lg-7">
-										<select class="form-control select2 isRequired" id="rejectionType" name="rejectionType" placeholder="Rejection Type" title="Please enter Rejection Type" onchange="addNewRejectionType(this.id);">
+										<select class="form-control select2 isRequired" id="rejectionType" name="rejectionType" placeholder="Rejection Type" title="Please enter Rejection Type" >
 											<option value=""> -- Select -- </option>
 											<?php foreach ($rejInfo as $type) { ?>
 												<option value="<?php echo $type['rejection_type']; ?>" <?php echo (strtolower($rsnInfo[0]['rejection_type']) == strtolower($type['rejection_type']))?"selected":"";?>><?php echo ucwords($type['rejection_type']); ?></option>

@@ -1196,3 +1196,7 @@ CREATE TABLE `rejection_type` (
 
 INSERT INTO `rejection_type` (`rejection_type_id`, `rejection_type`) VALUES (NULL, 'testing'), (NULL, 'general');
 ALTER TABLE `rejection_type` ADD `updated_datetime` DATETIME NULL AFTER `rejection_type`;
+
+
+--Sudarmathi 06-Oct-2020
+DROP TABLE rejection_type;
