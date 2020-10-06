@@ -366,24 +366,8 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 								</span>
 							</a>
 							<ul class="treeview-menu covid19-reference">
-								<?php if (isset($_SESSION['privileges']) && in_array("covid19-sample-type.php", $_SESSION['privileges'])) { ?>
-									<li class="treeview covid19-reference-manage">
-										<a href="#"><i class="fa fa-gears"></i> Covid19 Reference
-											<span class="pull-right-container">
-											<i class="fa fa-angle-left pull-right"></i>
-											</span>
-										</a>
-										
-										<ul class="treeview-menu">
-											<li class="allMenu reference-comorbidities">
-												<a href="/covid-19/reference/covid19-comorbidities.php"><i class="fa fa-caret-right"></i>Covid19-Comorbidities <br>Configuration</a>
-											</li>
-											<li class="allMenu reference-sample-rejection-reasons">
-												<a href="/covid-19/reference/covid19-sample-rejection-reasons.php"><i class="fa fa-caret-right"></i>Covid19-Sample <br>Rejection Reasons</a>
-											</li>
-										</ul>
-									</li>
-								<?php } if (isset($_SESSION['privileges']) && in_array("roles.php", $_SESSION['privileges'])) { ?>
+								
+								<?php  if (isset($_SESSION['privileges']) && in_array("roles.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu roleMenu">
 										<a href="/roles/roles.php"><i class="fa fa-circle-o"></i> Roles</a>
 									</li>
@@ -426,8 +410,24 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 							</ul>
 						</li>
 					<?php } ?>
-
-					<?php
+					<?php if (isset($_SESSION['privileges']) && in_array("covid19-sample-type.php", $_SESSION['privileges'])) { ?>
+						<li class="treeview covid19-reference-manage">
+							<a href="#"><i class="fa fa-gears"></i> Covid19 Reference
+								<span class="pull-right-container">
+								<i class="fa fa-angle-left pull-right"></i>
+								</span>
+							</a>
+							
+							<ul class="treeview-menu">
+								<li class="allMenu reference-comorbidities">
+									<a href="/covid-19/reference/covid19-comorbidities.php"><i class="fa fa-caret-right"></i>Covid19-Comorbidities <br>Configuration</a>
+								</li>
+								<li class="allMenu reference-sample-rejection-reasons">
+									<a href="/covid-19/reference/covid19-sample-rejection-reasons.php"><i class="fa fa-caret-right"></i>Covid19-Sample <br>Rejection Reasons</a>
+								</li>
+							</ul>
+						</li>
+					<?php }
 					if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) { ?>
 
 						<li class="header">VIRAL LOAD</li>
