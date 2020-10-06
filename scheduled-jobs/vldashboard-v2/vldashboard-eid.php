@@ -28,7 +28,7 @@ try {
     }
 
     $lastUpdate = $rResult[count($rResult) - 1]['last_modified_datetime'];
-
+    $output['timestamp'] = strtotime($instanceUpdateOn);
     foreach ($rResult as $aRow) {
 
         
@@ -39,7 +39,7 @@ try {
                 $aRow['sample_code']      = $aRow['remote_sample_code'];
             }
         }
-        $output[] = $aRow;
+        $output['data'][] = $aRow;
     }
 
     $currentDate = date('d-m-y-h-i-s');
