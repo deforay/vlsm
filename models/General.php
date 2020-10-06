@@ -236,12 +236,7 @@ class General
             $configQuery = "SELECT $fieldName from $tableName WHERE $condition";
         }
         $configResult = $this->db->query($configQuery);
-        if ($tableName == 'health_facilities' || $tableName == 'testing_labs') {
-            if (count($configResult) > 0) {
-                $configQuery = "SELECT * from $tableName WHERE $condition OR updated_datetime IS NULL";
-                $configResult = $this->db->query($configQuery);
-            }
-        }
+
         return $configResult;
     }
 
