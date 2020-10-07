@@ -238,9 +238,9 @@ if (sizeof($requestResult) > 0) {
             
             $html .= '<tr>';
                 $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">PASSPORT NUMBER / NN</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">LABORATORY NAME</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">STATE</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">COUNTRY</td>';
+                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">HEALTH FACILITY/POE</td>';
+                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">HEALTH FACILITY/POE STATE</td>';
+                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">HEALTH FACILITY/POE COUNTY</td>';
             $html .= '</tr>';
             $html .= '<tr>';
                 $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['patient_passport_number'] . '</td>';
@@ -351,7 +351,7 @@ if (sizeof($requestResult) > 0) {
                     </tr>
                     <tr style="background-color:#f3f3f3;">
                         <td style="line-height:70px;font-size:18px;font-weight:normal;"><br>&nbsp;&nbsp;Test Result &nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . $covid19Results[$result['result']] . '</td>
-                        <td align="center"><br>' . $smileyContent . '</td>
+                        <td align="center"><br></td>
                     </tr>
                 </table>';
             $html .= '</td>';
