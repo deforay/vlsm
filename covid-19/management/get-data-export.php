@@ -140,6 +140,8 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                         vl.result,
                         vl.is_result_authorised,
                         vl.approver_comments,
+                        vl.request_created_datetime,
+                        vl.result_printed_datetime,
                         rtr.test_reason_name,
                         b.batch_code,
                         ts.status_name,
