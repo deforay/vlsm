@@ -11,22 +11,55 @@ class SouthSudan_PDF extends MYPDF
         // Logo
 
         if ($this->htitle != '') {
-            if (trim($this->logo) != '') {
-                if (file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'logo' . DIRECTORY_SEPARATOR . $this->logo)) {
-                    $image_file = UPLOAD_PATH . DIRECTORY_SEPARATOR . 'logo' . DIRECTORY_SEPARATOR . $this->logo;
-                    $this->Image($image_file, 95, 5, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
+            
+            if(isset($this->formId) && $this->formId == 1){
+                if (trim($this->logo) != '') {
+                    if (file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'logo' . DIRECTORY_SEPARATOR . $this->logo)) {
+                        $image_file = UPLOAD_PATH . DIRECTORY_SEPARATOR . 'logo' . DIRECTORY_SEPARATOR . $this->logo;
+                        $this->Image($image_file, 35, 5, 25, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
+                    }
                 }
-            }
-            $this->SetFont('helvetica', 'B', 8);
-            $this->writeHTMLCell(0, 0, 10, 22, $this->text, 0, 0, 0, true, 'C', true);
-            if (trim($this->lab) != '') {
-                $this->SetFont('helvetica', '', 9);
-                $this->writeHTMLCell(0, 0, 10, 26, strtoupper($this->lab), 0, 0, 0, true, 'C', true);
-            }
-            $this->SetFont('helvetica', '', 14);
-            $this->writeHTMLCell(0, 0, 10, 30, 'PATIENT REPORT FOR COVID-19 TEST', 0, 0, 0, true, 'C', true);
+                $this->SetFont('helvetica', 'B', 12);
+                $this->writeHTMLCell(0, 0, 20, 5, $this->text, 0, 0, 0, true, 'C', true);
+                if (trim($this->lab) != '') {
+                    $this->SetFont('helvetica', 'B', 10);
+                    $this->writeHTMLCell(0, 0, 20, 10, strtoupper($this->lab), 0, 0, 0, true, 'C', true);
+                }
 
-            $this->writeHTMLCell(0, 0, 15, 38, '<hr>', 0, 0, 0, true, 'C', true);
+                $this->SetFont('helvetica', '', 9);
+                $this->writeHTMLCell(0, 0, 20, 15, 'Juba- Addis Ababa Road near Mobil roundabout', 0, 0, 0, true, 'C', true);
+                
+                $this->SetFont('helvetica', '', 9);
+                $this->writeHTMLCell(0, 0, 20, 20, 'Email: nphlsscovid19results@gmail.com', 0, 0, 0, true, 'C', true);
+                
+                $this->SetFont('helvetica', '', 9);
+                $this->writeHTMLCell(0, 0, 20, 25, 'Tell: 0929310671', 0, 0, 0, true, 'C', true);
+                
+                $this->SetFont('helvetica', 'B', 9);
+                $this->writeHTMLCell(0, 0, 20, 30, 'COVID-19 (SARS-COV-2) Individual Lab Test Results Report Form', 0, 0, 0, true, 'C', true);
+    
+                $this->writeHTMLCell(0, 0, 25, 35, '<hr>', 0, 0, 0, true, 'C', true);
+            }else{
+                if (trim($this->logo) != '') {
+                    if (file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'logo' . DIRECTORY_SEPARATOR . $this->logo)) {
+                        $image_file = UPLOAD_PATH . DIRECTORY_SEPARATOR . 'logo' . DIRECTORY_SEPARATOR . $this->logo;
+                        $this->Image($image_file, 95, 5, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
+                    }
+                }
+
+                $this->SetFont('helvetica', 'B', 8);
+                $this->writeHTMLCell(0, 0, 10, 22, $this->text, 0, 0, 0, true, 'C', true);
+                if (trim($this->lab) != '') {
+                    $this->SetFont('helvetica', '', 9);
+                    $this->writeHTMLCell(0, 0, 10, 26, strtoupper($this->lab), 0, 0, 0, true, 'C', true);
+                }
+
+                $this->SetFont('helvetica', '', 14);
+                $this->writeHTMLCell(0, 0, 10, 30, 'PATIENT REPORT FOR COVID-19 TEST', 0, 0, 0, true, 'C', true);
+                
+                $this->writeHTMLCell(0, 0, 15, 38, '<hr>', 0, 0, 0, true, 'C', true);
+            }
+            
         }
     }
 }
@@ -71,7 +104,7 @@ if (sizeof($requestResult) > 0) {
         }
         // create new PDF document
         $pdf = new SouthSudan_PDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->setHeading($arr['logo'], $arr['header'], $result['labName'], $title = 'COVID 19 PATIENT REPORT');
+        $pdf->setHeading($arr['logo'], $arr['header'], $result['labName'], $title = 'COVID 19 PATIENT REPORT',$labFacilityId = null, $formId = $arr['vl_form']);
         // set document information
         $pdf->SetCreator('VLSM');
         $pdf->SetTitle('Covid-19 Patient Report');
