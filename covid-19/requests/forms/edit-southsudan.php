@@ -366,10 +366,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                                             <td>
                                                 <select name="labTechnician" id="labTechnician" class="form-control" title="Please select a Lab Technician" style="width:100%;">
                                                     <option value="">--Select--</option>
-                                                    <?php foreach ($labTechnicians as $labTech) {
-                                                        $selected = (isset($covid19Info['lab_technician']) && $labTech['user_id'] == $covid19Info['lab_technician']) ? "selected='selected'" : "";
-                                                        echo '<option value="' . $labTech['user_id'] . '" ' . $selected . '>' . ucwords($labTech['user_name']) . '</option>';
-                                                    } ?>
+                                                    <?= $general->generateSelectOptions($labTechniciansResults, $covid19Info['lab_technician'], '-- Select --'); ?>
                                                 </select>
                                             </td>
                                         </tr>

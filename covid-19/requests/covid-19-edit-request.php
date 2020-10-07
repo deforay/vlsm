@@ -35,7 +35,9 @@ $userDb = new \Vlsm\Models\Users($db);
 $labTechnicians = $userDb->getActiveUserInfo();
 $healthFacilities = $facilitiesDb->getHealthFacilities('covid19');
 $testingLabs = $facilitiesDb->getTestingLabs('covid19');
-
+foreach ($labTechnicians as $labTech) {
+    $labTechniciansResults[$labTech['user_id']] = ucwords($labTech['user_name']);
+}
 
 $rejectionTypeQuery = "SELECT DISTINCT rejection_type FROM r_covid19_sample_rejection_reasons WHERE rejection_reason_status ='active'";
 $rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);

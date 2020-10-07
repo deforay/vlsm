@@ -1200,3 +1200,11 @@ ALTER TABLE `rejection_type` ADD `updated_datetime` DATETIME NULL AFTER `rejecti
 
 --Sudarmathi 06-Oct-2020
 DROP TABLE rejection_type;
+
+-- Thana 07-Oct-2020
+DELETE FROM `privileges` WHERE `privileges`.`privilege_id` = 129;
+DELETE FROM `privileges` WHERE `privileges`.`privilege_id` = 128;
+DELETE FROM `privileges` WHERE `privileges`.`privilege_id` = 127;
+DELETE FROM `privileges` WHERE `privileges`.`privilege_id` = 126;
+DELETE FROM `privileges` WHERE `privileges`.`privilege_id` = 125;
+DELETE FROM `privileges` WHERE `privileges`.`privilege_id` = 124;

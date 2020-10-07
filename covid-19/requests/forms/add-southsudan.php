@@ -340,9 +340,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             <td>
                                                 <select name="labTechnician" id="labTechnician" class="form-control" title="Please select a Lab Technician" style="width:100%;">
                                                     <option value="">--Select--</option>
-                                                    <?php foreach ($labTechnicians as $labTech) {
-                                                        echo '<option value="' . $labTech['user_id'] . '">' . ucwords($labTech['user_name']) . '</option>';
-                                                    } ?>
+                                                    <?= $general->generateSelectOptions($labTechniciansResults, $_SESSION['userId'], '-- Select --'); ?>
                                                 </select>
                                             </td>
                                         </tr>
