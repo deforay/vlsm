@@ -135,19 +135,19 @@ $sampleSuggestionDisplay = 'display:none;';
                                         <?php } ?>
                                     </tr>
                                     <tr>
-                                        <td><label for="province">State </label><span class="mandatory">*</span></td>
+                                        <td><label for="province">Health Facility/POE State </label><span class="mandatory">*</span></td>
                                         <td>
                                             <select class="form-control" name="province" id="province" title="Please choose State" style="width:100%;">
                                                 <?php echo $province; ?>
                                             </select>
                                         </td>
-                                        <td><label for="district">County </label><span class="mandatory">*</span></td>
+                                        <td><label for="district">Health Facility/POE County </label><span class="mandatory">*</span></td>
                                         <td>
                                             <select class="form-control" name="district" id="district" title="Please choose County" style="width:100%;">
                                                 <option value=""> -- Select -- </option>
                                             </select>
                                         </td>
-                                        <td><label for="facilityId">Health Facility </label><span class="mandatory">*</span></td>
+                                        <td><label for="facilityId">Health Facility/POE </label><span class="mandatory">*</span></td>
                                         <td>
                                             <select class="form-control " name="facilityId" id="facilityId" title="Please choose service provider" style="width:100%;" onchange="getfacilityProvinceDetails(this);">
                                                 <?php echo $facility; ?>
@@ -279,7 +279,7 @@ $sampleSuggestionDisplay = 'display:none;';
                                     <tr>
                                         <th style="width:15% !important">Sample Collection Date <span class="mandatory">*</span> </th>
                                         <td style="width:35% !important;">
-                                            <input class="form-control" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" value="<?php echo ($covid19Info['sample_collection_date']); ?>" />
+                                            <input class="form-control" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" value="<?php echo $general->humanDateFormat($covid19Info['sample_collection_date']); ?>" />
                                         </td>
                                         <th>Specimen Type <span class="mandatory">*</span></th>
                                         <td>
@@ -593,10 +593,12 @@ $sampleSuggestionDisplay = 'display:none;';
     }
 
     $(document).ready(function() {
-        $('.result-focus').change(function(e) {
-            $('.change-reason').show(500);
-            $('#reasonForChanging').addClass('isRequired');
-        });
+        <?php if (isset($covid19TestInfo) && count($covid19TestInfo) > 0) {?>
+            $('.result-focus').change(function(e) {
+                $('.change-reason').show(500);
+                $('#reasonForChanging').addClass('isRequired');
+            });
+        <?php } ?>
 
         $('#facilityId').select2({
             placeholder: "Select Clinic/Health Center"
