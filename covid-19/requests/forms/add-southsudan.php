@@ -3,15 +3,19 @@
 
 ob_start();
 
-
-
-
 //Funding source list
 $fundingSourceQry = "SELECT * FROM r_funding_sources WHERE funding_source_status='active' ORDER BY funding_source_name ASC";
 $fundingSourceList = $db->query($fundingSourceQry);
 /* To get testing platform names */
 $testPlatformQry = "SELECT * FROM `import_config` WHERE (JSON_SEARCH(supported_tests, 'all', 'covid19') IS NOT NULL) AND `status` = 'active' ORDER BY `machine_name` ASC";
 $testPlatformResult = $db->query($testPlatformQry);
+// Nationality
+$nationalityQry = "SELECT * FROM `countries` ORDER BY `iso_name` ASC";
+$nationalityResult = $db->query($nationalityQry);
+
+foreach ($nationalityResult as $nrow) {
+    $nationalityList[$nrow['id']] = ucwords($nrow['iso_name']) . ' ('.$nrow['iso3'].')';
+}
 
 foreach ($testPlatformResult as $row) {
     $testPlatformList[$row['machine_name']] = $row['machine_name'];
@@ -237,7 +241,11 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                     </tr>
                                     <tr>
                                         <th>Nationality</th>
-                                        <td><input type="text" class="form-control" id="patientNationality" name="patientNationality" placeholder="Nationality" title="Please enter the case nationality" style="width:100%;" /></td>
+                                        <td>
+                                            <select name="patientNationality" id="patientNationality" class="form-control" title="Please choose nationality" style="width:100%">
+                                                <?= $general->generateSelectOptions($nationalityList, null, '-- Select --'); ?>
+                                            </select>
+                                        </td>
                                         <th>Passport Number</th>
                                         <td><input class="form-control" id="patientPassportNumber" name="patientPassportNumber" placeholder="Passport Number" title="Please enter Passport Number" style="width:100%;"></td>
 
@@ -652,6 +660,10 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
         });
         $('#labTechnician').select2({
             placeholder: "Select Lab Technician"
+        });
+        
+        $('#patientNationality').select2({
+            placeholder: "Select Nationality"
         });
 
         $('#isResultAuthorized').change(function(e) {

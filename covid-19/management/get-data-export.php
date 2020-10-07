@@ -122,6 +122,10 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                         vl.patient_dob,
                         vl.patient_gender,
                         vl.patient_age,
+                        vl.patient_province,
+                        vl.patient_district,
+                        vl.patient_nationality,
+                        vl.patient_city,
                         vl.sample_collection_date,
                         vl.type_of_test_requested,
                         vl.date_of_symptom_onset,
@@ -150,10 +154,12 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                         lt_u_d.user_name as labTechnician,
                         rs.rejection_reason_name,
                         r_f_s.funding_source_name,
+                        c.iso_name as nationality,
                         r_i_p.i_partner_name 
                         
                         FROM form_covid19 as vl 
                         
+                        LEFT JOIN countries as c ON vl.patient_nationality=c.id
                         LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
                         LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id 
                         LEFT JOIN r_sample_status as ts ON ts.status_id=vl.result_status 

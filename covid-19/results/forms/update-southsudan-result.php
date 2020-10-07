@@ -11,7 +11,13 @@ $fundingSourceList = $db->query($fundingSourceQry);
 /* To get testing platform names */
 $testPlatformQry = "SELECT * FROM `import_config` WHERE (JSON_SEARCH(supported_tests, 'all', 'covid19') IS NOT NULL) AND `status` = 'active' ORDER BY `machine_name` ASC";
 $testPlatformResult = $db->query($testPlatformQry);
+// Nationality
+$nationalityQry = "SELECT * FROM `countries` ORDER BY `iso_name` ASC";
+$nationalityResult = $db->query($nationalityQry);
 
+foreach ($nationalityResult as $nrow) {
+    $nationalityList[$nrow['id']] = ucwords($nrow['iso_name']) . ' ('.$nrow['iso3'].')';
+}
 foreach($testPlatformResult as $row){
     $testPlatformList[$row['machine_name']] = $row['machine_name'];
 }
@@ -237,8 +243,12 @@ $sampleSuggestionDisplay = 'display:none;';
                                     <tr>
                                         <th>City/Village</th>
                                         <td><input class="form-control" value="<?php echo $covid19Info['patient_city']; ?>" id="patientCity" name="patientCity" placeholder="Case City/Village" title="Please enter the Case City/Village" style="width:100%;"></td>
-                                        <th>Country of Residence</th>
-                                        <td><input type="text" class="form-control" value="<?php echo $covid19Info['patient_nationality']; ?>" id="patientNationality" name="patientNationality" placeholder="Country of Residence" title="Please enter transit" style="width:100%;" /></td>
+                                        <th>Nationality</th>
+                                        <td>
+                                            <select name="patientNationality" id="patientNationality" class="form-control" title="Please choose nationality" style="width:100%">
+                                                <?= $general->generateSelectOptions($nationalityList, $covid19Info['patient_nationality'], '-- Select --'); ?>
+                                            </select>
+                                        </td>
                                     </tr>
                                 </table>
 
@@ -590,6 +600,10 @@ $sampleSuggestionDisplay = 'display:none;';
     }
 
     $(document).ready(function() {
+        $('#patientNationality').select2({
+            placeholder: "Select Nationality"
+        });
+
         <?php if (isset($covid19TestInfo) && count($covid19TestInfo) > 0) {?>
             $('.result-focus').change(function(e) {
                 $('.change-reason').show(500);
