@@ -85,6 +85,8 @@ $sharedPrivileges = array(
 	'edit-covid19-comorbidities.php'			=> 'covid19-sample-type.php',
 	'covid19-symptoms.php'						=> 'covid19-sample-type.php',
 	'covid19-test-reasons.php'					=> 'covid19-sample-type.php',
+	'add-covid19-sample-type.php'				=> 'covid19-sample-type.php',
+	'edit-covid19-sample-type.php'				=> 'covid19-sample-type.php',
 );
 // Does the current file share privileges with another privilege ?
 $currentFileName = isset($sharedPrivileges[$currentFileName]) ? $sharedPrivileges[$currentFileName] : $currentFileName;
@@ -406,28 +408,32 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 									<li class="allMenu resultEmailConfigMenu">
 										<a href="/vl/result-mail/testResultEmailConfig.php"><i class="fa fa-circle-o"></i>Test Result Email/SMS <br>Configuration</a>
 									</li>
+								<?php } if (isset($_SESSION['privileges']) && in_array("covid19-sample-type.php", $_SESSION['privileges'])) { ?>
+									<li class="treeview covid19-reference-manage">
+										<a href="#"><i class="fa fa-gears"></i> Covid19 Reference
+											<span class="pull-right-container">
+											<i class="fa fa-angle-left pull-right"></i>
+											</span>
+										</a>
+										
+										<ul class="treeview-menu">
+											<li class="allMenu reference-comorbidities">
+												<a href="/covid-19/reference/covid19-comorbidities.php"><i class="fa fa-caret-right"></i>Covid19-Comorbidities <br>Configuration</a>
+											</li>
+											<li class="allMenu reference-sample-rejection-reasons">
+												<a href="/covid-19/reference/covid19-sample-rejection-reasons.php"><i class="fa fa-caret-right"></i>Covid19-Sample <br>Rejection Reasons</a>
+											</li>
+											<li class="allMenu reference-sample-type">
+												<a href="/covid-19/reference/covid19-sample-type.php"><i class="fa fa-caret-right"></i>Covid19-Sample Type</a>
+											</li>
+										</ul>
+									</li>
 								<?php } ?>
 							</ul>
 						</li>
 					<?php } ?>
-					<?php if (isset($_SESSION['privileges']) && in_array("covid19-sample-type.php", $_SESSION['privileges'])) { ?>
-						<li class="treeview covid19-reference-manage">
-							<a href="#"><i class="fa fa-gears"></i> Covid19 Reference
-								<span class="pull-right-container">
-								<i class="fa fa-angle-left pull-right"></i>
-								</span>
-							</a>
-							
-							<ul class="treeview-menu">
-								<li class="allMenu reference-comorbidities">
-									<a href="/covid-19/reference/covid19-comorbidities.php"><i class="fa fa-caret-right"></i>Covid19-Comorbidities <br>Configuration</a>
-								</li>
-								<li class="allMenu reference-sample-rejection-reasons">
-									<a href="/covid-19/reference/covid19-sample-rejection-reasons.php"><i class="fa fa-caret-right"></i>Covid19-Sample <br>Rejection Reasons</a>
-								</li>
-							</ul>
-						</li>
-					<?php }
+
+					<?php 
 					if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) { ?>
 
 						<li class="header">VIRAL LOAD</li>
