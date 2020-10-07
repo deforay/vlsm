@@ -118,23 +118,36 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 } else {
 	$allAdminMenuAccess = false;
 }
-if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('vlRequest.php', 'addVlRequest.php', 'batchcode.php', 'vlRequestMail.php', 'specimenReferralManifestList.php', 'sample-list.php'))) {
-	$requestMenuAccess = true;
+if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('vlRequest.php', 'addVlRequest.php', 'addSamplesFromManifest.php', 'batchcode.php', 'vlRequestMail.php', 'specimenReferralManifestList.php', 'sampleList.php'))) {
+	$vlRequestMenuAccess = true;
 } else {
-	$requestMenuAccess = false;
+	$vlRequestMenuAccess = false;
 }
-if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('addImportResult.php', 'vlTestResult.php', 'vlResultApproval.php', 'vlResultMail.php', 'vlWeeklyReport.php', 'sampleRejectionReport.php', 'vlMonitoringReport.php'))) {
-	$testResultMenuAccess = true;
+if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('addImportResult.php', 'vlTestResult.php', 'vlResultApproval.php', 'vlResultMail.php'))) {
+	$vlTestResultMenuAccess = true;
 } else {
-	$testResultMenuAccess = false;
+	$vlTestResultMenuAccess = false;
 }
-if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('vl-sample-status.php', 'vlResult.php', 'highViralLoad.php', 'vlControlReport.php'))) {
-	$managementMenuAccess = true;
+if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('vl-sample-status.php', 'vlResult.php', 'highViralLoad.php', 'vlControlReport.php', 'vlWeeklyReport.php', 'sampleRejectionReport.php', 'vlMonitoringReport.php'))) {
+	$vlManagementMenuAccess = true;
 } else {
-	$managementMenuAccess = false;
+	$vlManagementMenuAccess = false;
 }
 
-if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('eid-export-data.php', 'eid-sample-rejection-report.php', 'eid-sample-status.php', 'eid-print-results.php'))) {
+// EID MENUS
+if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('eid-requests.php', 'eid-add-request.php', 'addSamplesFromManifest.php', 'eid-batches.php', 'specimenReferralManifestList.php'))) {
+	$eidTestRequestMenuAccess = true;
+} else {
+	$eidTestRequestMenuAccess = false;
+}
+
+if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('addImportResult.php', 'eid-manual-results.php', 'eid-result-status.php'))) {
+	$eidTestResultMenuAccess = true;
+} else {
+	$eidTestResultMenuAccess = false;
+}
+
+if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('eid-sample-status.php', 'eid-export-data.php', 'eid-print-results.php', 'eid-sample-rejection-report.php', 'eid-clinic-report.php'))) {
 	$eidManagementMenuAccess = true;
 } else {
 	$eidManagementMenuAccess = false;
@@ -150,18 +163,24 @@ if (isset($_SESSION['privileges']) && in_array(('index.php'), $_SESSION['privile
 	$dashBoardMenuAccess = false;
 }
 
-
-// EID MENUS
-
-
 // COVID-19 Menu start
+if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array("covid-19-requests.php", "covid-19-add-request.php", "covid-19-edit-request.php", "addSamplesFromManifest.php", "covid-19-batches.php", "specimenReferralManifestList.php"))) {
+	$covid19TestRequestMenuAccess = true;
+} else {
+	$covid19TestRequestMenuAccess = false;
+}
+
+if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('addImportResult.php', 'covid-19-manual-results.php', 'covid-19-confirmation-manifest.php', 'can-record-confirmatory-tests.php', 'covid-19-result-status.php', 'covid-19-print-results.php'))) {
+	$covid19TestResultMenuAccess = true;
+} else {
+	$covid19TestResultMenuAccess = false;
+}
 
 if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('covid-19-export-data.php', 'covid-19-sample-rejection-report.php', 'covid-19-sample-status.php', 'covid-19-print-results.php'))) {
 	$covid19ManagementMenuAccess = true;
 } else {
 	$covid19ManagementMenuAccess = false;
 }
-
 // COVID-19 Menu end
 
 ?>
@@ -271,15 +290,19 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 			color: #333;
 			font-weight: bold;
 		}
-		.select2-container .select2-selection--single{
+
+		.select2-container .select2-selection--single {
 			height: auto !important;
 		}
+
 		.select2-container--default .select2-selection--single .select2-selection__arrow {
 			top: 6px !important;
 		}
+
 		.select2-container--default .select2-selection--single .select2-selection__rendered {
 			line-height: 22px !important;
 		}
+
 		.select2-container .select2-selection--single .select2-selection__rendered {
 			margin-top: 0px !important;
 		}
@@ -374,8 +397,8 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 								</span>
 							</a>
 							<ul class="treeview-menu covid19-reference">
-								
-								<?php  if (isset($_SESSION['privileges']) && in_array("roles.php", $_SESSION['privileges'])) { ?>
+
+								<?php if (isset($_SESSION['privileges']) && in_array("roles.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu roleMenu">
 										<a href="/roles/roles.php"><i class="fa fa-circle-o"></i> Roles</a>
 									</li>
@@ -414,14 +437,15 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 									<li class="allMenu resultEmailConfigMenu">
 										<a href="/vl/result-mail/testResultEmailConfig.php"><i class="fa fa-circle-o"></i>Test Result Email/SMS <br>Configuration</a>
 									</li>
-								<?php } if (isset($_SESSION['privileges']) && in_array("covid19-sample-type.php", $_SESSION['privileges'])) { ?>
+								<?php }
+								if (isset($_SESSION['privileges']) && in_array("covid19-sample-type.php", $_SESSION['privileges'])) { ?>
 									<li class="treeview covid19-reference-manage">
 										<a href="#"><i class="fa fa-gears"></i> Covid 19 Reference
 											<span class="pull-right-container">
-											<i class="fa fa-angle-left pull-right"></i>
+												<i class="fa fa-angle-left pull-right"></i>
 											</span>
 										</a>
-										
+
 										<ul class="treeview-menu">
 											<li class="allMenu reference-comorbidities">
 												<a href="/covid-19/reference/covid19-comorbidities.php"><i class="fa fa-caret-right"></i>Covid 19-Comorbidities <br>Configuration</a>
@@ -445,12 +469,10 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 						</li>
 					<?php } ?>
 
-					<?php 
-					if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) { ?>
-
+					<?php
+					if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true && ($vlRequestMenuAccess == true || $vlTestResultMenuAccess == true || $vlManagementMenuAccess == true)) { ?>
 						<li class="header">VIRAL LOAD</li>
-
-						<?php if ($requestMenuAccess == true) { ?>
+						<?php if ($vlRequestMenuAccess == true) { ?>
 							<li class="treeview request" style="<?php echo $hideRequest; ?>">
 								<a href="#">
 									<i class="fa fa-edit"></i>
@@ -499,7 +521,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 								</ul>
 							</li>
 						<?php }
-						if ($testResultMenuAccess == true) { ?>
+						if ($vlTestResultMenuAccess == true) { ?>
 							<li class="treeview test" style="<?php echo $hideResult; ?>">
 								<a href="#">
 									<i class="fa fa-tasks"></i>
@@ -523,10 +545,8 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 									<?php }  ?>
 								</ul>
 							</li>
-						<?php } ?>
-
-						<?php
-						if ($managementMenuAccess == true) { ?>
+						<?php }
+						if ($vlManagementMenuAccess == true) { ?>
 							<li class="treeview program">
 								<a href="#">
 									<i class="fa fa-book"></i>
@@ -589,49 +609,51 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 									<?php } ?>
 								</ul>
 							</li>
-						<?php } ?>
-					<?php } ?>
-
-					<?php if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) {  ?>
+						<?php } 
+					} 
+					
+					if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true && ($eidTestRequestMenuAccess == true || $eidTestResultMenuAccess == true || $eidManagementMenuAccess == true)) {  ?>
 						<li class="header">EARLY INFANT DIAGNOSIS (EID)</li>
-						<li class="treeview eidRequest" style="<?php echo $hideRequest; ?>">
-							<a href="#">
-								<i class="fa fa-edit"></i>
-								<span>Request Management</span>
-								<span class="pull-right-container">
-									<i class="fa fa-angle-left pull-right"></i>
-								</span>
-							</a>
-							<ul class="treeview-menu">
-								<li class="allMenu eidRequestMenu">
-									<a href="/eid/requests/eid-requests.php"><i class="fa fa-circle-o"></i> View Test Requests</a>
-								</li>
-								<li class="allMenu addEidRequestMenu">
-									<a href="/eid/requests/eid-add-request.php"><i class="fa fa-circle-o"></i> Add New Request</a>
-								</li>
-								<?php if (isset($_SESSION['privileges']) && in_array("addSamplesFromManifest.php", $_SESSION['privileges']) && ($sarr['user_type'] != 'remoteuser')) { ?>
-									<li class="allMenu addSamplesFromManifestEidMenu">
-										<a href="/eid/requests/addSamplesFromManifest.php"><i class="fa fa-circle-o"></i> Add Samples from Manifest</a>
-									</li>
-								<?php } ?>
-								<li class="allMenu eidBatchCodeMenu">
-									<a href="/eid/batch/eid-batches.php"><i class="fa fa-circle-o"></i> Manage Batch</a>
-								</li>
-								<?php
-								if (isset($_SESSION['privileges']) && in_array("specimenReferralManifestList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
-									<li class="allMenu specimenReferralManifestListMenu">
-										<a href="/specimen-referral-manifest/specimenReferralManifestList.php?t=<?php echo base64_encode('eid'); ?>"><i class="fa fa-circle-o"></i> EID Specimen Manifest</a>
-									</li>
-								<?php } ?>
-							</ul>
-						</li>
-
-					<?php }
-					?>
-
-
-					<?php
-					if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true && $testResultMenuAccess == true) { ?>
+						<?php if($eidTestRequestMenuAccess == true){ ?>
+							<li class="treeview eidRequest" style="<?php echo $hideRequest; ?>">
+								<a href="#">
+									<i class="fa fa-edit"></i>
+									<span>Request Management</span>
+									<span class="pull-right-container">
+										<i class="fa fa-angle-left pull-right"></i>
+									</span>
+								</a>
+								<ul class="treeview-menu">
+									<?php if (isset($_SESSION['privileges']) && in_array("eid-requests.php", $_SESSION['privileges']) && ($sarr['user_type'] != 'remoteuser')) { ?>
+										<li class="allMenu eidRequestMenu">
+											<a href="/eid/requests/eid-requests.php"><i class="fa fa-circle-o"></i> View Test Requests</a>
+										</li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("eid-add-request.php", $_SESSION['privileges']) && ($sarr['user_type'] != 'remoteuser')) { ?>
+										<li class="allMenu addEidRequestMenu">
+											<a href="/eid/requests/eid-add-request.php"><i class="fa fa-circle-o"></i> Add New Request</a>
+										</li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("addSamplesFromManifest.php", $_SESSION['privileges']) && ($sarr['user_type'] != 'remoteuser')) { ?>
+										<li class="allMenu addSamplesFromManifestEidMenu">
+											<a href="/eid/requests/addSamplesFromManifest.php"><i class="fa fa-circle-o"></i> Add Samples from Manifest</a>
+										</li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("eid-batches.php", $_SESSION['privileges']) && ($sarr['user_type'] != 'remoteuser')) { ?>
+										<li class="allMenu eidBatchCodeMenu">
+											<a href="/eid/batch/eid-batches.php"><i class="fa fa-circle-o"></i> Manage Batch</a>
+										</li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("specimenReferralManifestList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
+										<li class="allMenu specimenReferralManifestListMenu">
+											<a href="/specimen-referral-manifest/specimenReferralManifestList.php?t=<?php echo base64_encode('eid'); ?>"><i class="fa fa-circle-o"></i> EID Specimen Manifest</a>
+										</li>
+									<?php } ?>
+								</ul>
+							</li>
+						<?php }
+					}
+					if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true && $eidTestResultMenuAccess == true) { ?>
 						<li class="treeview eidResults" style="<?php echo $hideResult; ?>">
 							<a href="#">
 								<i class="fa fa-tasks"></i>
@@ -652,10 +674,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 								<?php } ?>
 							</ul>
 						</li>
-					<?php } ?>
-
-
-					<?php
+					<?php }
 					if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true && $eidManagementMenuAccess == true) { ?>
 						<li class="treeview eidProgramMenu">
 							<a href="#">
@@ -686,49 +705,49 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 					<?php
 					} ?>
 
-
 					<!-- COVID-19 START -->
-
-					<?php if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) {  ?>
+					<?php if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true && ($covid19TestRequestMenuAccess == true || $covid19TestResultMenuAccess == true || $covid19ManagementMenuAccess == true)) {  ?>
 						<li class="header">COVID-19</li>
-						<li class="treeview covid19Request" style="<?php echo $hideRequest; ?>">
-							<a href="#">
-								<i class="fa fa-edit"></i>
-								<span>Request Management</span>
-								<span class="pull-right-container">
-									<i class="fa fa-angle-left pull-right"></i>
-								</span>
-							</a>
-							<ul class="treeview-menu">
-								<li class="allMenu covid19RequestMenu">
-									<a href="/covid-19/requests/covid-19-requests.php"><i class="fa fa-circle-o"></i> View Test Requests</a>
-								</li>
-								<li class="allMenu addCovid19RequestMenu">
-									<a href="/covid-19/requests/covid-19-add-request.php"><i class="fa fa-circle-o"></i> Add New Request</a>
-								</li>
-								<?php if (isset($_SESSION['privileges']) && in_array("addSamplesFromManifest.php", $_SESSION['privileges']) && ($sarr['user_type'] != 'remoteuser')) { ?>
-									<li class="allMenu addSamplesFromManifestCovid19Menu">
-										<a href="/covid-19/requests/addSamplesFromManifest.php"><i class="fa fa-circle-o"></i> Add Samples from Manifest</a>
-									</li>
-								<?php } ?>
-								<li class="allMenu covid19BatchCodeMenu">
-									<a href="/covid-19/batch/covid-19-batches.php"><i class="fa fa-circle-o"></i> Manage Batch</a>
-								</li>
-								<?php
-								if (isset($_SESSION['privileges']) && in_array("specimenReferralManifestList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
-									<li class="allMenu specimenReferralManifestListMenu">
-										<a href="/specimen-referral-manifest/specimenReferralManifestList.php?t=<?php echo base64_encode('covid19'); ?>"><i class="fa fa-circle-o"></i> Covid-19 Specimen Manifest</a>
-									</li>
-								<?php } ?>
-							</ul>
-						</li>
-
-					<?php }
-					?>
-
-
-					<?php
-					if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true && $testResultMenuAccess == true) { ?>
+						<?php if ($covid19TestRequestMenuAccess == true) { ?>
+							<li class="treeview covid19Request" style="<?php echo $hideRequest; ?>">
+								<a href="#">
+									<i class="fa fa-edit"></i>
+									<span>Request Management</span>
+									<span class="pull-right-container">
+										<i class="fa fa-angle-left pull-right"></i>
+									</span>
+								</a>
+								<ul class="treeview-menu">
+									<?php if (isset($_SESSION['privileges']) && in_array("covid-19-requests.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu covid19RequestMenu">
+											<a href="/covid-19/requests/covid-19-requests.php"><i class="fa fa-circle-o"></i> View Test Requests</a>
+										</li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("covid-19-add-request.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu addCovid19RequestMenu">
+											<a href="/covid-19/requests/covid-19-add-request.php"><i class="fa fa-circle-o"></i> Add New Request</a>
+										</li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("addSamplesFromManifest.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu addSamplesFromManifestCovid19Menu">
+											<a href="/covid-19/requests/addSamplesFromManifest.php"><i class="fa fa-circle-o"></i> Add Samples from Manifest</a>
+										</li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("covid-19-batches.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu covid19BatchCodeMenu">
+											<a href="/covid-19/batch/covid-19-batches.php"><i class="fa fa-circle-o"></i> Manage Batch</a>
+										</li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("specimenReferralManifestList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
+										<li class="allMenu specimenReferralManifestListMenu">
+											<a href="/specimen-referral-manifest/specimenReferralManifestList.php?t=<?php echo base64_encode('covid19'); ?>"><i class="fa fa-circle-o"></i> Covid-19 Specimen Manifest</a>
+										</li>
+									<?php } ?>
+								</ul>
+							</li>
+						<?php }
+					}
+					if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true && $covid19TestResultMenuAccess == true) { ?>
 						<li class="treeview covid19Results" style="<?php echo $hideResult; ?>">
 							<a href="#">
 								<i class="fa fa-tasks"></i>
@@ -758,10 +777,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 								<?php }  ?>
 							</ul>
 						</li>
-					<?php } ?>
-
-
-					<?php
+					<?php } 
 					if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true && $covid19ManagementMenuAccess == true) { ?>
 						<li class="treeview covid19ProgramMenu">
 							<a href="#">
@@ -791,8 +807,6 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 						</li>
 					<?php
 					} ?>
-
-
 					<!-- COVID-19 END -->
 
 					<!---->

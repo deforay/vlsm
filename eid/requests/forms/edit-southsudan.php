@@ -159,9 +159,9 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         </td>
                                         <?php if ($sarr['user_type'] == 'remoteuser') { ?>
                                             <!-- <tr> -->
-                                            <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
+                                            <td><label for="labId">Testing Laboratory <span class="mandatory">*</span></label> </td>
                                             <td>
-                                                <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;">
+                                                <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Testing Laboratory" style="width:100%;">
                                                     <?= $general->generateSelectOptions($testingLabs, $eidInfo['lab_id'], '-- Select --'); ?>
                                                 </select>
                                             </td>
@@ -370,9 +370,9 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             <td>
                                                 <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter sample receipt date" value="<?php echo $general->humanDateFormat($eidInfo['sample_received_at_vl_lab_datetime']) ?>" onchange="" style="width:100%;" />
                                             </td>
-                                            <td><label for="labId">Lab Name </label> </td>
+                                            <td><label for="labId">Testing Laboratory </label> </td>
                                             <td>
-                                                <select name="labId" id="labId" class="form-control" title="Please select Testing Lab name" style="width:100%;">
+                                                <select name="labId" id="labId" class="form-control" title="Please select Testing Testing Laboratory" style="width:100%;">
                                                     <?= $general->generateSelectOptions($testingLabs, $eidInfo['lab_id'], '-- Select --'); ?>
                                                 </select>
                                             </td>

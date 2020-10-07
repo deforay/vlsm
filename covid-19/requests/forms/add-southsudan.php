@@ -163,9 +163,9 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         </td>
                                         <?php if ($sarr['user_type'] == 'remoteuser') { ?>
                                             <!-- <tr> -->
-                                            <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
+                                            <td><label for="labId">Testing Laboratory <span class="mandatory">*</span></label> </td>
                                             <td>
-                                                <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;">
+                                                <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Testing Laboratory" style="width:100%;">
                                                     <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
                                                 </select>
                                             </td>
@@ -320,9 +320,9 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             <td>
                                                 <input type="text" class="form-control" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter sample receipt date" <?php echo (isset($labFieldDisabled) && trim($labFieldDisabled) != '') ? $labFieldDisabled : ''; ?> onchange="" style="width:100%;" />
                                             </td>
-                                            <td class="lab-show"><label for="labId">Lab Name </label> </td>
+                                            <td class="lab-show"><label for="labId">Testing Laboratory </label> </td>
                                             <td class="lab-show">
-                                                <select name="labId" id="labId" class="form-control" title="Please select Testing Lab name" style="width:100%;" onchange="getTestingPoints();">
+                                                <select name="labId" id="labId" class="form-control" title="Please select Testing Testing Laboratory" style="width:100%;" onchange="getTestingPoints();">
                                                     <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
                                                 </select>
                                             </td>
