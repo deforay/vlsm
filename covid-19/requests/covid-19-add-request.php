@@ -40,7 +40,9 @@ $userDb = new \Vlsm\Models\Users($db);
 // $sarr = $general->getSystemConfig();
 
 $labTechnicians = $userDb->getActiveUserInfo();
-
+foreach ($labTechnicians as $labTech) {
+    $labTechniciansResults[$labTech['user_id']] = ucwords($labTech['user_name']);
+}
 $healthFacilities = $facilitiesDb->getHealthFacilities('covid19');
 $testingLabs = $facilitiesDb->getTestingLabs('covid19');
 
