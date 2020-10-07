@@ -403,6 +403,10 @@
 		$(".allMenu").removeClass('active');
 		$(".covid19Results").addClass('active');
 		$(".covid19ResultStatus").addClass('active');
+	} else if (splitsUrl == 'mail-covid-19-results.php') {
+		$(".allMenu").removeClass('active');
+		$(".covid19Results").addClass('active');
+		$(".covid19ResultMailMenu").addClass('active');
 	} else if (splitsUrl == 'covid-19-sample-status.php') {
 		$(".allMenu").removeClass('active');
 		$(".covid19ProgramMenu").addClass('active');
