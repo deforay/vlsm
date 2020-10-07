@@ -26,7 +26,7 @@ $specimenTypeResult = $eidObj->getEidSampleTypes();
 $rKey = '';
 $sKey = '';
 $sFormat = '';
-$pdQuery = "SELECT * from province_details";
+$pdQuery = "SELECT * FROM province_details";
 if ($sarr['user_type'] == 'remoteuser') {
     $sampleCodeKey = 'remote_sample_code_key';
     $sampleCode = 'remote_sample_code';
@@ -114,7 +114,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                 <option value=""> -- Select -- </option>
                                             </select>
                                         </td>
-                                        <td><label for="facilityId">Health Facility </label><span class="mandatory">*</span></td>
+                                        <td><label for="facilityId">Health Facility/Referral Site </label><span class="mandatory">*</span></td>
                                         <td>
                                             <select class="form-control isRequired " name="facilityId" id="facilityId" title="Please choose service provider" style="width:100%;" onchange="getfacilityProvinceDetails(this);">
                                                 <?php echo $facility; ?>
