@@ -20,7 +20,7 @@ $sarr = array();
 for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
 	$sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
 }
-// echo "<pre>";print_r($sarr);die;
+// echo "<pre>";print_r($arr);die;
 if (isset($_SESSION['covid19ResultQuery']) && trim($_SESSION['covid19ResultQuery']) != "") {
 
 	$rResult = $db->rawQuery($_SESSION['covid19ResultQuery']);
@@ -29,7 +29,7 @@ if (isset($_SESSION['covid19ResultQuery']) && trim($_SESSION['covid19ResultQuery
 	$output = array();
 	$sheet = $excel->getActiveSheet();
 	if($arr['vl_form'] == 1){
-		$headings = array("S.No.", "Sample Code", "Testing Laboratory", "Lab staff Assigned", "County", "State", "Testing Point", "Patient ID", "Patient Name", "Patient DoB", "Patient Age", "Patient Gender", "Date specimen collected", "Reason Test Request",  "Sample Received On", "Date specimen Entered", "Specimen Condition", "Specimen Status", "Specimen Type", "Date specimen Tested", "Testing Platform", "Test Method", "Result", "Date result released");
+		$headings = array("S.No.", "Sample Code", "Testing Lab Name", "Lab staff Assigned", "Health Facility/POE County", "Health Facility/POE State", "Health Facility/POE", "Patient ID", "Patient Name", "Patient DoB", "Patient Age", "Patient Gender", "Residence/ State", "Residence/ County", "Nationality", "Residence/ Boma ", "Date specimen collected", "Reason Test Request",  "Sample Received On", "Date specimen Entered", "Specimen Condition", "Specimen Status", "Specimen Type", "Date specimen Tested", "Testing Platform", "Test Method", "Result", "Date result released");
 	} else{
 		$headings = array("S.No.", "Sample Code", "Health Facility Name", "Health Facility Code", "District/County", "Province/State", "Patient ID", "Patient Name", "Patient DoB", "Patient Age", "Patient Gender", "Sample Collection Date","Date of Symptom Onset", "Has the patient had contact with a confirmed case?", "Has the patient had a recent history of travelling to an affected area?", "If Yes, Country Name(s)", "Return Date", "Is Sample Rejected?", "Sample Tested On", "Result", "Sample Received On", "Date Result Dispatched", "Comments", "Funding Source", "Implementing Partner");
 	}
@@ -168,6 +168,10 @@ if (isset($_SESSION['covid19ResultQuery']) && trim($_SESSION['covid19ResultQuery
 			$row[] = $dob;
 			$row[] = ($aRow['patient_age'] != NULL && trim($aRow['patient_age']) != '' && $aRow['patient_age'] > 0) ? $aRow['patient_age'] : 0;
 			$row[] = $gender;
+			$row[] = ucwords($aRow['patient_province']);
+			$row[] = ucwords($aRow['patient_district']);
+			$row[] = ucwords($aRow['nationality']);
+			$row[] = ucwords($aRow['patient_city']);
 			$row[] = $sampleCollectionDate;
 			$row[] = ucwords($aRow['test_reason_name']);
 			$row[] = $general->humanDateFormat($aRow['sample_received_at_vl_lab_datetime']);

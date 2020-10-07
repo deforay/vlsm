@@ -432,6 +432,26 @@
 		$(".covid19-reference-manage").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".reference-comorbidities").addClass('active');
+	} else if (splitsUrl == 'covid19-sample-rejection-reasons.php') {
+		$(".manage").addClass('active');
+		$(".covid19-reference-manage").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".reference-sample-rejection-reasons").addClass('active');
+	} else if (splitsUrl == 'covid19-sample-type.php') {
+		$(".manage").addClass('active');
+		$(".covid19-reference-manage").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".reference-sample-type").addClass('active');
+	} else if (splitsUrl == 'covid19-symptoms.php') {
+		$(".manage").addClass('active');
+		$(".covid19-reference-manage").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".reference-symptoms").addClass('active');
+	} else if (splitsUrl == 'covid19-test-reasons.php') {
+		$(".manage").addClass('active');
+		$(".covid19-reference-manage").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".reference-test-reasons").addClass('active');
 	} else {
 		$(".allMenu").removeClass('active');
 		$(".dashboardMenu").addClass('active');
