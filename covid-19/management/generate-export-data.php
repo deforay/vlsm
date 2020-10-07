@@ -29,7 +29,7 @@ if (isset($_SESSION['covid19ResultQuery']) && trim($_SESSION['covid19ResultQuery
 	$output = array();
 	$sheet = $excel->getActiveSheet();
 	if($arr['vl_form'] == 1){
-		$headings = array("S.No.", "Sample Code", "Health Facility Name", "Health Facility Code", "Lab staff Assigned", "County", "State", "Patient ID", "Patient Name", "Patient DoB", "Patient Age", "Patient Gender", "Date specimen collected", "Reason Test Request",  "Sample Received On", "Date specimen Entered", "Specimen Condition", "Specimen Status", "Specimen Type", "Date specimen Tested", "Testing Platform", "Test Method", "Result", "Date result released");
+		$headings = array("S.No.", "Sample Code", "Health Facility Name", "Lab staff Assigned", "County", "State", "Testing Point", "Patient ID", "Patient Name", "Patient DoB", "Patient Age", "Patient Gender", "Date specimen collected", "Reason Test Request",  "Sample Received On", "Date specimen Entered", "Specimen Condition", "Specimen Status", "Specimen Type", "Date specimen Tested", "Testing Platform", "Test Method", "Result", "Date result released");
 	} else{
 		$headings = array("S.No.", "Sample Code", "Health Facility Name", "Health Facility Code", "District/County", "Province/State", "Patient ID", "Patient Name", "Patient DoB", "Patient Age", "Patient Gender", "Sample Collection Date","Date of Symptom Onset", "Has the patient had contact with a confirmed case?", "Has the patient had a recent history of travelling to an affected area?", "If Yes, Country Name(s)", "Return Date", "Is Sample Rejected?", "Sample Tested On", "Result", "Sample Received On", "Date Result Dispatched", "Comments", "Funding Source", "Implementing Partner");
 	}
@@ -158,18 +158,18 @@ if (isset($_SESSION['covid19ResultQuery']) && trim($_SESSION['covid19ResultQuery
 
 			$row[] = $no;
 			$row[] = $aRow[$sampleCode];
-			$row[] = ucwords($aRow['facility_name']);
-			$row[] = $aRow['facility_code'];
+			$row[] = ucwords($aRow['labName']);
 			$row[] = ucwords($aRow['labTechnician']);
 			$row[] = ucwords($aRow['facility_district']);
 			$row[] = ucwords($aRow['facility_state']);
+			$row[] = ucwords($aRow['facility_name']);
 			$row[] = $aRow['patient_id'];
 			$row[] = $patientFname . " " . $patientLname;
 			$row[] = $dob;
 			$row[] = ($aRow['patient_age'] != NULL && trim($aRow['patient_age']) != '' && $aRow['patient_age'] > 0) ? $aRow['patient_age'] : 0;
 			$row[] = $gender;
 			$row[] = $sampleCollectionDate;
-			$row[] = ucwords($aRow['type_of_test_requested']);
+			$row[] = ucwords($aRow['test_reason_name']);
 			$row[] = $general->humanDateFormat($aRow['sample_received_at_vl_lab_datetime']);
 			$row[] = $general->humanDateFormat($aRow['date_of_symptom_onset']);
 			$row[] = ucwords($aRow['sample_condition']);
