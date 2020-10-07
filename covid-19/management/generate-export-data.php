@@ -165,25 +165,25 @@ if (isset($_SESSION['covid19ResultQuery']) && trim($_SESSION['covid19ResultQuery
 			$row[] = ucwords($aRow['facility_name']);
 			$row[] = $aRow['patient_id'];
 			$row[] = $patientFname . " " . $patientLname;
-			$row[] = $dob;
+			$row[] = $general->humanDateFormat($aRow['patient_dob']);
 			$row[] = ($aRow['patient_age'] != NULL && trim($aRow['patient_age']) != '' && $aRow['patient_age'] > 0) ? $aRow['patient_age'] : 0;
-			$row[] = $gender;
+			$row[] = ucwords($aRow['patient_gender']);
 			$row[] = ucwords($aRow['patient_province']);
 			$row[] = ucwords($aRow['patient_district']);
 			$row[] = ucwords($aRow['nationality']);
 			$row[] = ucwords($aRow['patient_city']);
-			$row[] = $sampleCollectionDate;
+			$row[] = $general->humanDateFormat($aRow['sample_collection_date']);
 			$row[] = ucwords($aRow['test_reason_name']);
 			$row[] = $general->humanDateFormat($aRow['sample_received_at_vl_lab_datetime']);
-			$row[] = $general->humanDateFormat($aRow['date_of_symptom_onset']);
+			$row[] = $general->humanDateFormat($aRow['request_created_datetime']);
 			$row[] = ucwords($aRow['sample_condition']);
 			$row[] = ucwords($aRow['status_name']);
 			$row[] = ucwords($aRow['sample_name']);
-			$row[] = $sampleTestedOn;
+			$row[] = $general->humanDateFormat($aRow['sample_tested_datetime']);
 			$row[] = ucwords($testPlatform);
 			$row[] = ucwords($testMethod);
 			$row[] = $covid19Results[$aRow['result']];
-			$row[] = $resultDispatchedDate;
+			$row[] = $general->humanDateFormat($aRow['result_printed_datetime']);
 		} else{
 
 			$row[] = $no;
