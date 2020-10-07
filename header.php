@@ -87,6 +87,9 @@ $sharedPrivileges = array(
 	'covid19-test-reasons.php'					=> 'covid19-sample-type.php',
 	'add-covid19-sample-type.php'				=> 'covid19-sample-type.php',
 	'edit-covid19-sample-type.php'				=> 'covid19-sample-type.php',
+	'covid19-test-symptoms.php'					=> 'covid19-sample-type.php',
+	'add-covid19-symptoms.php'					=> 'covid19-sample-type.php',
+	'edit-covid19-symptoms.php'					=> 'covid19-sample-type.php',
 );
 // Does the current file share privileges with another privilege ?
 $currentFileName = isset($sharedPrivileges[$currentFileName]) ? $sharedPrivileges[$currentFileName] : $currentFileName;
@@ -449,6 +452,9 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 											</li>
 											<li class="allMenu reference-sample-type">
 												<a href="/covid-19/reference/covid19-sample-type.php"><i class="fa fa-caret-right"></i>Covid19-Sample Type</a>
+											</li>
+											<li class="allMenu reference-symptoms">
+												<a href="/covid-19/reference/covid19-symptoms.php"><i class="fa fa-caret-right"></i>Covid19-Symptom</a>
 											</li>
 										</ul>
 									</li>
