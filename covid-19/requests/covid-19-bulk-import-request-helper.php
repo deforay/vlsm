@@ -43,7 +43,7 @@ try {
                     $facility = $general->getDublicateDataFromField('facility_details', 'facility_name', $rowData['B']);
                     $testReason = $general->getDublicateDataFromField('r_covid19_test_reasons', 'test_reason_name', $rowData['P']);
                     $sampleType = $general->getDublicateDataFromField('r_covid19_sample_type', 'sample_name', $rowData['R']);
-                    $labName = $general->getDublicateDataFromField('facility_details', 'facility_name', $rowData['T'], 'facility_type');
+                    $labName = $general->getDublicateDataFromField('facility_details', 'facility_name', $rowData['U'], 'facility_type');
                     $rejectionReason = $general->getDublicateDataFromField('r_covid19_sample_rejection_reasons', 'rejection_reason_name', $rowData['W']);
 
                     $result = $general->getDublicateDataFromField('r_covid19_results', 'result', $rowData['AG']);
@@ -68,7 +68,7 @@ try {
                         'facility_id'                           => isset($facility['facility_id'])?$facility['facility_id']:null,
                         'patient_name'                          => $rowData['C'],
                         'patient_id'                            => $rowData['D'],
-                        'serial_no'                             => $rowData['E'],
+                        'external_sample_code'                  => $rowData['E'],
                         'patient_dob'                           => date('Y-m-d',strtotime($rowData['F'])),
                         'patient_age'                           => $rowData['G'],
                         'patient_gender'                        => strtolower($rowData['H']),
@@ -95,7 +95,7 @@ try {
                         'last_modified_datetime'                => $general->getDateTime(),
                         'last_modified_by'                      => $_SESSION['userId'],
                         'result_status'                         => isset($resultStatus['status_id'])?$resultStatus['status_id']:null,
-                        'sample_condition'                      => strtolower($rowData['ALK']),
+                        'sample_condition'                      => strtolower($rowData['AL']),
                         'patient_passport_number'               => $rowData['AM'],
                         'lab_technician'                        => isset($labTechnician)?$labTechnician:null,
                     );
