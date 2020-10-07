@@ -135,19 +135,19 @@ $sampleSuggestionDisplay = 'display:none;';
                                         <?php } ?>
                                     </tr>
                                     <tr>
-                                        <td><label for="province">State </label><span class="mandatory">*</span></td>
+                                        <td><label for="province">Health Facility/POE State </label><span class="mandatory">*</span></td>
                                         <td>
                                             <select class="form-control" name="province" id="province" title="Please choose State" style="width:100%;">
                                                 <?php echo $province; ?>
                                             </select>
                                         </td>
-                                        <td><label for="district">County </label><span class="mandatory">*</span></td>
+                                        <td><label for="district">Health Facility/POE County </label><span class="mandatory">*</span></td>
                                         <td>
                                             <select class="form-control" name="district" id="district" title="Please choose County" style="width:100%;">
                                                 <option value=""> -- Select -- </option>
                                             </select>
                                         </td>
-                                        <td><label for="facilityId">Health Facility </label><span class="mandatory">*</span></td>
+                                        <td><label for="facilityId">Health Facility/POE </label><span class="mandatory">*</span></td>
                                         <td>
                                             <select class="form-control " name="facilityId" id="facilityId" title="Please choose service provider" style="width:100%;" onchange="getfacilityProvinceDetails(this);">
                                                 <?php echo $facility; ?>
@@ -260,10 +260,10 @@ $sampleSuggestionDisplay = 'display:none;';
                                         <th>Type of Test Request</th>
                                         <td>
                                             <select name="testTypeRequested" id="testTypeRequested" class="form-control" title="Please choose type of test request" style="width:100%">
-                                                <option value="">-- Select --</option>
-                                                <option value="PCR" <?php echo (isset($covid19Info['type_of_test_requested']) && $covid19Info['type_of_test_requested'] == 'PCR') ? "selected='selected'" : ""; ?>>PCR</option>
-                                                <option value="GeneXpert" <?php echo (isset($covid19Info['type_of_test_requested']) && $covid19Info['type_of_test_requested'] == 'GeneXpert') ? "selected='selected'" : ""; ?>>GeneXpert</option>
-                                                <option value="RDT" <?php echo (isset($covid19Info['type_of_test_requested']) && $covid19Info['type_of_test_requested'] == 'RDT') ? "selected='selected'" : ""; ?>>RDT</option>
+                                            <option value="">-- Select --</option>
+                                                <option value="Real Time RT-PCR" <?php echo (isset($covid19Info['type_of_test_requested']) && $covid19Info['type_of_test_requested'] == 'Real Time RT-PCR') ? "selected='selected'" : ""; ?>>Real Time RT-PCR</option>
+                                                <option value="RDT-Antibody" <?php echo (isset($covid19Info['type_of_test_requested']) && $covid19Info['type_of_test_requested'] == 'RDT-Antibody') ? "selected='selected'" : ""; ?>>RDT-Antibody</option>
+                                                <option value="RDT-Antigen" <?php echo (isset($covid19Info['type_of_test_requested']) && $covid19Info['type_of_test_requested'] == 'RDT-Antigen') ? "selected='selected'" : ""; ?>>RDT-Antigen</option>
                                                 <option value="ELISA" <?php echo (isset($covid19Info['type_of_test_requested']) && $covid19Info['type_of_test_requested'] == 'ELISA') ? "selected='selected'" : ""; ?>>ELISA</option>
                                             </select>
                                             </select>
@@ -279,7 +279,7 @@ $sampleSuggestionDisplay = 'display:none;';
                                     <tr>
                                         <th style="width:15% !important">Sample Collection Date <span class="mandatory">*</span> </th>
                                         <td style="width:35% !important;">
-                                            <input class="form-control" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" value="<?php echo ($covid19Info['sample_collection_date']); ?>" />
+                                            <input class="form-control" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" value="<?php echo $general->humanDateFormat($covid19Info['sample_collection_date']); ?>" />
                                         </td>
                                         <th>Specimen Type <span class="mandatory">*</span></th>
                                         <td>
@@ -408,7 +408,7 @@ $sampleSuggestionDisplay = 'display:none;';
                                                                     <td>
                                                                         <?php
                                                                         $value = '';
-                                                                        if (!in_array($covid19TestInfo[$indexKey]['test_name'], array('PCR', 'GeneXpert', 'RDT', 'ELISA', 'other'))) {
+                                                                        if (!in_array($covid19TestInfo[$indexKey]['test_name'], array('Real Time RT-PCR', 'RDT-Antibody', 'RDT-Antigen', 'ELISA', 'other'))) {
                                                                             $value = 'value="' . $covid19TestInfo[$indexKey]['test_name'] . '"';
                                                                             $show =  "block";
                                                                         } else {
@@ -416,9 +416,9 @@ $sampleSuggestionDisplay = 'display:none;';
                                                                         } ?>
                                                                         <select onchange="otherCovidTestName(this.value,<?php echo ($indexKey + 1); ?>)" class="form-control test-name-table-input" id="testName<?php echo ($indexKey + 1); ?>" name="testName[]" title="Please enter the name of the Testkit (or) Test Method used">
                                                                             <option value="">--Select--</option>
-                                                                            <option value="PCR" <?php echo (isset($covid19TestInfo[$indexKey]['test_name']) && $covid19TestInfo[$indexKey]['test_name'] == 'PCR') ? "selected='selected'" : ""; ?>>PCR</option>
-                                                                            <option value="GeneXpert" <?php echo (isset($covid19TestInfo[$indexKey]['test_name']) && $covid19TestInfo[$indexKey]['test_name'] == 'GeneXpert') ? "selected='selected'" : ""; ?>>GeneXpert</option>
-                                                                            <option value="RDT" <?php echo (isset($covid19TestInfo[$indexKey]['test_name']) && $covid19TestInfo[$indexKey]['test_name'] == 'RDT') ? "selected='selected'" : ""; ?>>RDT</option>
+                                                                            <option value="Real Time RT-PCR" <?php echo (isset($covid19TestInfo[$indexKey]['test_name']) && $covid19TestInfo[$indexKey]['test_name'] == 'Real Time RT-PCR') ? "selected='selected'" : ""; ?>>Real Time RT-PCR</option>
+                                                                            <option value="RDT-Antibody" <?php echo (isset($covid19TestInfo[$indexKey]['test_name']) && $covid19TestInfo[$indexKey]['test_name'] == 'RDT-Antibody') ? "selected='selected'" : ""; ?>>RDT-Antibody</option>
+                                                                            <option value="RDT-Antigen" <?php echo (isset($covid19TestInfo[$indexKey]['test_name']) && $covid19TestInfo[$indexKey]['test_name'] == 'RDT-Antigen') ? "selected='selected'" : ""; ?>>RDT-Antigen</option>
                                                                             <option value="ELISA" <?php echo (isset($covid19TestInfo[$indexKey]['test_name']) && $covid19TestInfo[$indexKey]['test_name'] == 'ELISA') ? "selected='selected'" : ""; ?>>ELISA</option>
                                                                             <option value="other" <?php echo (isset($show) && $show == 'block') ? "selected='selected'" : ""; ?>>Others</option>
                                                                         </select>
@@ -593,10 +593,12 @@ $sampleSuggestionDisplay = 'display:none;';
     }
 
     $(document).ready(function() {
-        $('.result-focus').change(function(e) {
-            $('.change-reason').show(500);
-            $('#reasonForChanging').addClass('isRequired');
-        });
+        <?php if (isset($covid19TestInfo) && count($covid19TestInfo) > 0) {?>
+            $('.result-focus').change(function(e) {
+                $('.change-reason').show(500);
+                $('#reasonForChanging').addClass('isRequired');
+            });
+        <?php } ?>
 
         $('#facilityId').select2({
             placeholder: "Select Clinic/Health Center"
@@ -653,9 +655,9 @@ $sampleSuggestionDisplay = 'display:none;';
                     <td>
                     <select onchange="otherCovidTestName(this.value,${testCounter})" class="form-control test-name-table-input" id="testName${testCounter}" name="testName[]" title="Please enter the name of the Testkit (or) Test Method used">
                     <option value="">--Select--</option>
-                    <option value="PCR">PCR</option>
-                    <option value="GeneXpert">GeneXpert</option>
-                    <option value="RDT">RDT</option>
+                    <option value="Real Time RT-PCR">Real Time RT-PCR</option>
+                    <option value="RDT-Antibody">RDT-Antibody</option>
+                    <option value="RDT-Antigen">RDT-Antigen</option>
                     <option value="ELISA">ELISA</option>
                     <option value="other">Others</option>
                 </select>

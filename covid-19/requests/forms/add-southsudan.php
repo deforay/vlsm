@@ -118,19 +118,19 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         <td></td>
                                     </tr>
                                     <tr>
-                                        <td><label for="province">Health Faclility State </label><span class="mandatory">*</span></td>
+                                        <td><label for="province">Health Facility/POE State </label><span class="mandatory">*</span></td>
                                         <td>
                                             <select class="form-control isRequired" name="province" id="province" title="Please choose State" onchange="getfacilityDetails(this);" style="width:100%;">
                                                 <?php echo $province; ?>
                                             </select>
                                         </td>
-                                        <td><label for="district">Health Facility County </label><span class="mandatory">*</span></td>
+                                        <td><label for="district">Health Facility/POE County </label><span class="mandatory">*</span></td>
                                         <td>
                                             <select class="form-control isRequired" name="district" id="district" title="Please choose County" style="width:100%;" onchange="getfacilityDistrictwise(this);">
                                                 <option value=""> -- Select -- </option>
                                             </select>
                                         </td>
-                                        <td><label for="facilityId">Health Facility </label><span class="mandatory">*</span></td>
+                                        <td><label for="facilityId">Health Facility/POE </label><span class="mandatory">*</span></td>
                                         <td>
                                             <select class="form-control isRequired " name="facilityId" id="facilityId" title="Please choose service provider" style="width:100%;" onchange="getfacilityProvinceDetails(this);">
                                                 <?php echo $facility; ?>
@@ -185,7 +185,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         <td style="width:35% !important">
                                             <input type="text" class="form-control isRequired" id="patientId" name="patientId" placeholder="Case Identification" title="Please enter Case ID" style="width:100%;" onchange="" />
                                         </td>
-                                        <th style="width:15% !important"><label for="externalSampleCode">DHIS2 Case ID <span class="mandatory">*</span> </label></th>
+                                        <th style="width:15% !important"><label for="externalSampleCode">DHIS2 Case ID </label></th>
                                         <td style="width:35% !important"><input type="text" class="form-control" id="externalSampleCode" name="externalSampleCode" placeholder="DHIS2 Case ID" title="Please enter DHIS2 Case ID" style="width:100%;" /></td>
                                     </tr>
                                     <tr>
@@ -263,9 +263,9 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         <td>
                                             <select name="testTypeRequested" id="testTypeRequested" class="form-control" title="Please choose type of test request" style="width:100%">
                                                 <option value="">-- Select --</option>
-                                                <option value="PCR">PCR</option>
-                                                <option value="GeneXpert">GeneXpert</option>
-                                                <option value="RDT">RDT</option>
+                                                <option value="Real Time RT-PCR">Real Time RT-PCR</option>
+                                                <option value="RDT-Antibody">RDT-Antibody</option>
+                                                <option value="RDT-Antigen">RDT-Antigen</option>
                                                 <option value="ELISA">ELISA</option>
                                             </select>
                                             </select>
@@ -307,7 +307,8 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                             </div>
                         </div>
                         <?php if ($sarr['user_type'] != 'remoteuser') { ?>
-                        <?php // if (false) { ?>
+                            <?php // if (false) { 
+                            ?>
                             <div class="box box-primary">
                                 <div class="box-body">
                                     <div class="box-header with-border">
@@ -393,10 +394,10 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                             <td class="text-center">1</td>
                                                             <td>
                                                                 <select onchange="otherCovidTestName(this.value,1)" class="form-control test-name-table-input" id="testName1" name="testName[]" title="Please enter the name of the Testkit (or) Test Method used">
-                                                                    <option value="">--Select--</option>
-                                                                    <option value="PCR">PCR</option>
-                                                                    <option value="GeneXpert">GeneXpert</option>
-                                                                    <option value="RDT">RDT</option>
+                                                                    <option value="">-- Select --</option>
+                                                                    <option value="Real Time RT-PCR">Real Time RT-PCR</option>
+                                                                    <option value="RDT-Antibody">RDT-Antibody</option>
+                                                                    <option value="RDT-Antigen">RDT-Antigen</option>
                                                                     <option value="ELISA">ELISA</option>
                                                                     <option value="other">Others</option>
                                                                 </select>
@@ -674,10 +675,10 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                     <td class="text-center">${testCounter}</td>
                     <td>
                     <select onchange="otherCovidTestName(this.value,${testCounter})" class="form-control test-name-table-input" id="testName${testCounter}" name="testName[]" title="Please enter the name of the Testkit (or) Test Method used">
-                    <option value="">--Select--</option>
-                    <option value="PCR">PCR</option>
-                    <option value="GeneXpert">GeneXpert</option>
-                    <option value="RDT">RDT</option>
+                    <option value="">-- Select --</option>
+                    <option value="Real Time RT-PCR">Real Time RT-PCR</option>
+                    <option value="RDT-Antibody">RDT-Antibody</option>
+                    <option value="RDT-Antigen">RDT-Antigen</option>
                     <option value="ELISA">ELISA</option>
                     <option value="other">Others</option>
                 </select>
