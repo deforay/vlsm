@@ -2,18 +2,17 @@
 ob_start();
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-$id = base64_decode($_GET['id']);
-$sampleQuery = "SELECT * from r_covid19_sample_type where sample_id=$id";
-$sampleInfo = $db->query($sampleQuery);
+$rejQuery = "SELECT * from r_covid19_symptoms WHERE symptom_status ='active'";
+$rejInfo = $db->query($rejQuery);
 ?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
-    <h1><i class="fa fa-gears"></i> Edit Covid-19 Sample Type</h1>
+    <h1><i class="fa fa-gears"></i> Add Covid-19 Symptoms</h1>
     <ol class="breadcrumb">
       <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li class="active">Covid-19 Sample Type</li>
+      <li class="active">Covid-19 Symptoms</li>
     </ol>
   </section>
 
@@ -27,25 +26,41 @@ $sampleInfo = $db->query($sampleQuery);
       <!-- /.box-header -->
       <div class="box-body">
         <!-- form start -->
-        <form class="form-horizontal" method='post' name='editSampleForm' id='editSampleForm' autocomplete="off" enctype="multipart/form-data" action="edit-sample-type-helper.php">
+        <form class="form-horizontal" method='post' name='addSympForm' id='addSympForm' autocomplete="off" enctype="multipart/form-data" action="add-symptoms-helper.php">
           <div class="box-body">
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="sampleName" class="col-lg-4 control-label">Sample Name <span class="mandatory">*</span></label>
+                  <label for="symptomsName" class="col-lg-4 control-label">Symptom Name <span class="mandatory">*</span></label>
                   <div class="col-lg-7">
-                    <input type="text" class="form-control isRequired" id="sampleName" name="sampleName" placeholder="sample Name" title="Please enter Sample name" value="<?php echo $sampleInfo[0]['sample_name']; ?>" onblur="checkNameValidation('sample_details','sample_name',this,'<?php echo "sample_id##" . $sampleInfo[0]['sample_id']; ?>','The sample name that you entered already exists.Enter another name',null)" />
-                    <input type="hidden" class="form-control isRequired" id="sampleId" name="sampleId" value="<?php echo base64_encode($sampleInfo[0]['sample_id']); ?>" />
+                    <input type="text" class="form-control isRequired" id="symptomsName" name="symptomsName" placeholder="Symptom Name" title="Please enter Symptom name" onblur="checkNameValidation('r_covid19_symptoms','symptom_name',this,null,'The Symptom name that you entered already exists.Enter another name',null)" />
                   </div>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="sampleStatus" class="col-lg-4 control-label">Sample Status</label>
+                  <label for="parentSymptom" class="col-lg-4 control-label">Parent Symptom</label>
                   <div class="col-lg-7">
-                    <select class="form-control isRequired" id="sampleStatus" name="sampleStatus" placeholder="Sample Status" title="Please enter Sample Status"  >
-                      <option value="active" <?php echo($sampleInfo[0]['sample_status']=="active" ? 'selected':''); ?> >Active</option>
-                      <option value="inactive" <?php echo($sampleInfo[0]['sample_status']=="inactive" ? 'selected':''); ?> >Inactive</option>
+                    <select class="form-control isRequired" id="parentSymptom" name="parentSymptom" placeholder="Parent Symptom" title="Please enter Parent Symptom"  >
+                        <option value=""> -- Select -- </option>
+                        <?php
+                        foreach ($rejInfo as $type) {
+                        ?>
+                            <option value="<?php echo $type['symptom_id']; ?>"><?php echo ucwords($type['symptom_name']); ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="symptomsStatus" class="col-lg-4 control-label">Symptom Status</label>
+                  <div class="col-lg-7">
+                    <select class="form-control isRequired" id="symptomsStatus" name="symptomsStatus" placeholder="Symptom Status" title="Please enter Symptom Status"  >
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
                     </select>
                   </div>
                 </div>
@@ -58,7 +73,7 @@ $sampleInfo = $db->query($sampleQuery);
           <!-- /.box-body -->
           <div class="box-footer">
             <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
-            <a href="covid19-sample-type.php" class="btn btn-default"> Cancel</a>
+            <a href="covid19-symptoms.php" class="btn btn-default"> Cancel</a>
           </div>
           <!-- /.box-footer -->
         </form>
@@ -75,12 +90,12 @@ $sampleInfo = $db->query($sampleQuery);
   function validateNow() {
    
     flag = deforayValidator.init({
-      formId: 'editSampleForm'
+      formId: 'addSympForm'
     });
 
     if (flag) {
       $.blockUI();
-      document.getElementById('editSampleForm').submit();
+      document.getElementById('addSympForm').submit();
     }
   }
 
