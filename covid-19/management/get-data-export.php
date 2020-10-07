@@ -136,6 +136,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                         vl.result,
                         vl.is_result_authorised,
                         vl.approver_comments,
+                        rtr.test_reason_name,
                         b.batch_code,
                         ts.status_name,
                         rst.sample_name,
@@ -160,6 +161,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                         LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by 
                         LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by 
                         LEFT JOIN user_details as lt_u_d ON lt_u_d.user_id=vl.lab_technician 
+                        LEFT JOIN r_covid19_test_reasons as rtr ON rtr.test_reason_id=vl.reason_for_covid19_test 
                         LEFT JOIN r_covid19_sample_type as rst ON rst.sample_id=vl.specimen_type 
                         LEFT JOIN r_covid19_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection 
                         LEFT JOIN r_funding_sources as r_f_s ON r_f_s.funding_source_id=vl.funding_source 
