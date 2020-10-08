@@ -5,7 +5,7 @@ if (session_status() == PHP_SESSION_NONE) {
 ob_start();
 #require_once('../../startup.php');
 
-echo "<pre>";var_dump($_POST);die;
+//echo "<pre>";var_dump($_POST);die;
 $general = new \Vlsm\Models\General($db);
 $tableName = "vl_request_form";
 $tableName1 = "activity_log";
@@ -177,8 +177,10 @@ try {
     if (isset($_POST['vlResult']) && trim($_POST['vlResult']) != '') {
         $_POST['result'] = $_POST['vlResult'];
     } else if (isset($_POST['vlLog']) && trim($_POST['vlLog']) != '') {
-        $_POST['result'] = $_POST['vlLog'];
+        $_POST['result_value_log'] = $_POST['vlLog'];
     }
+
+    
 
     $reasonForChanges = '';
     $allChange = '';
@@ -276,7 +278,7 @@ try {
         'is_sample_rejected' => (isset($_POST['noResult']) && $_POST['noResult'] != '') ? $_POST['noResult'] : NULL,
         'reason_for_sample_rejection' => (isset($_POST['rejectionReason']) && $_POST['rejectionReason'] != '') ? $_POST['rejectionReason'] : NULL,
         'result_value_log' => (isset($_POST['vlLog']) && $_POST['vlLog'] != '') ? $_POST['vlLog'] : NULL,
-        'result_value_absolute' => (isset($_POST['vlResult']) && $_POST['vlResult'] != '' && ($_POST['vlResult'] != 'Target Not Detected' && $_POST['vlResult'] != 'Below Detection Level')) ? $_POST['vlResult'] : NULL,
+        'result_value_absolute' => !empty($_POST['vlResult']) ? $_POST['vlResult'] : NULL,
         'result_value_text' => NULL,
         'result_value_absolute_decimal' => (isset($_POST['vlResult']) && $_POST['vlResult'] != '' && ($_POST['vlResult'] != 'Target Not Detected'  && $_POST['vlResult'] != 'Below Detection Level')) ? number_format((float)$_POST['vlResult'], 2, '.', '') : NULL,
         'result' => (isset($_POST['result']) && $_POST['result'] != '') ? $_POST['result'] : NULL,
@@ -335,6 +337,8 @@ try {
         }
     }
     $vldata['patient_first_name'] = $general->crypto('encrypt', $_POST['patientFirstName'], $vldata['patient_art_no']);
+
+    //var_dump($vldata);die;
 
     $db = $db->where('vl_sample_id', $_POST['vlSampleId']);
     $id = $db->update($tableName, $vldata);
