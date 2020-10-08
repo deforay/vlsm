@@ -1244,7 +1244,7 @@ INSERT INTO `countries` (`id`, `iso_name`, `iso2`, `iso3`, `numeric_code`) VALUE
 (52, 'Congo, the Democratic Republic of the', 'CD', 'COD', 180),
 (53, 'Cook Islands', 'CK', 'COK', 184),
 (54, 'Costa Rica', 'CR', 'CRI', 188),
-(55, 'Cote d\'Ivoire', 'CI', 'CIV', 384),
+(55, "Cote d\'Ivoire", 'CI', 'CIV', 384),
 (56, 'Croatia', 'HR', 'HRV', 191),
 (57, 'Cuba', 'CU', 'CUB', 192),
 (58, 'Cura', 'CW', 'CUW', 531),
@@ -1307,11 +1307,11 @@ INSERT INTO `countries` (`id`, `iso_name`, `iso2`, `iso3`, `numeric_code`) VALUE
 (115, 'Kazakhstan', 'KZ', 'KAZ', 398),
 (116, 'Kenya', 'KE', 'KEN', 404),
 (117, 'Kiribati', 'KI', 'KIR', 296),
-(118, 'Korea, Democratic People\'s Republic of', 'KP', 'PRK', 408),
+(118, "Korea, Democratic People\'s Republic of", 'KP', 'PRK', 408),
 (119, 'Korea, Republic of', 'KR', 'KOR', 410),
 (120, 'Kuwait', 'KW', 'KWT', 414),
 (121, 'Kyrgyzstan', 'KG', 'KGZ', 417),
-(122, 'Lao People\'s Democratic Republic', 'LA', 'LAO', 418),
+(122, "Lao People\'s Democratic Republic", 'LA', 'LAO', 418),
 (123, 'Latvia', 'LV', 'LVA', 428),
 (124, 'Lebanon', 'LB', 'LBN', 422),
 (125, 'Lesotho', 'LS', 'LSO', 426),
@@ -1439,3 +1439,46 @@ INSERT INTO `countries` (`id`, `iso_name`, `iso2`, `iso3`, `numeric_code`) VALUE
 (247, 'Yemen', 'YE', 'YEM', 887),
 (248, 'Zambia', 'ZM', 'ZMB', 894),
 (249, 'Zimbabwe', 'ZW', 'ZWE', 716);
+
+
+-- Amit 08 Oct 2020
+
+UPDATE `resources` SET `module` = 'covid19' WHERE `resources`.`module` = 'covid-19';
+UPDATE `resources` SET `module` = 'admin' WHERE `resources`.`resource_id` = 1; UPDATE `resources` SET `module` = 'admin' WHERE `resources`.`resource_id` = 2; UPDATE `resources` SET `module` = 'admin' WHERE `resources`.`resource_id` = 3; UPDATE `resources` SET `module` = 'admin' WHERE `resources`.`resource_id` = 4; UPDATE `resources` SET `module` = 'admin' WHERE `resources`.`resource_id` = 5; UPDATE `resources` SET `module` = 'admin' WHERE `resources`.`resource_id` = 14; UPDATE `resources` SET `module` = 'admin' WHERE `resources`.`resource_id` = 17; UPDATE `resources` SET `module` = 'admin' WHERE `resources`.`resource_id` = 21;
+UPDATE `resources` SET `module` = 'common' WHERE `resources`.`resource_id` = 13;
+UPDATE `resources` SET `module` = 'common' WHERE `resources`.`resource_id` = 24;
+UPDATE `resources` SET `display_name` = 'Dashboard' WHERE `resources`.`resource_id` = 13;
+UPDATE `resources` SET `display_name` = 'Import VL Test Results' WHERE `resources`.`resource_id` = 8;
+UPDATE `resources` SET `display_name` = 'Manage VL Batch' WHERE `resources`.`resource_id` = 7;
+UPDATE `resources` SET `display_name` = 'Enter VL Result Manually' WHERE `resources`.`resource_id` = 10;
+UPDATE `resources` SET `display_name` = 'Print VL Result' WHERE `resources`.`resource_id` = 9;
+UPDATE `resources` SET `display_name` = 'VL Requests' WHERE `resources`.`resource_id` = 6;
+UPDATE `resources` SET `display_name` = 'Export VL Data' WHERE `resources`.`resource_id` = 12;
+UPDATE `resources` SET `display_name` = 'VL Sample Status Report' WHERE `resources`.`resource_id` = 11;
+UPDATE `resources` SET `display_name` = 'Covid-19 Reference Tables' WHERE `resources`.`resource_id` = 33;
+
+DELETE FROM `roles_privileges_map` WHERE privilege_id in (60,61);
+DELETE FROM `privileges` WHERE `privileges`.`privilege_id` = 60;
+DELETE FROM `privileges` WHERE `privileges`.`privilege_id` = 61;
+DELETE FROM resources WHERE resource_id = 21;
+
+UPDATE `resources` SET `display_name` = 'VL Reports', `resource_name` = 'vl_reports' WHERE `resources`.`resource_id` = 11;
+UPDATE `resources` SET `display_name` = 'VL Results', `resource_name` = 'vl_results' WHERE `resources`.`resource_id` = 10;
+
+UPDATE `privileges` SET `resource_id`= 11 where resource_id in (11, 12, 16,18,19,20,22);
+UPDATE `privileges` SET `resource_id`= 10 where resource_id in (8, 9, 10,15);
+
+
+
+DELETE FROM `roles_privileges_map` WHERE privilege_id in (32);
+DELETE FROM `privileges` WHERE `privileges`.`privilege_id` = 32;
+
+
+UPDATE `privileges` SET `display_name` = 'Contact Notes (High VL Reports)' WHERE `privileges`.`privilege_id` = 34; UPDATE `privileges` SET `display_name` = 'High VL Report' WHERE `privileges`.`privilege_id` = 33; UPDATE `privileges` SET `display_name` = 'Sample Rejection Report' WHERE `privileges`.`privilege_id` = 57; UPDATE `privileges` SET `display_name` = 'Sample Status Report' WHERE `privileges`.`privilege_id` = 22; UPDATE `privileges` SET `display_name` = 'Controls Report' WHERE `privileges`.`privilege_id` = 63; UPDATE `privileges` SET `display_name` = 'Access Export VL Data' WHERE `privileges`.`privilege_id` = 23; UPDATE `privileges` SET `display_name` = 'Export VL Data in Excel' WHERE `privileges`.`privilege_id` = 70; UPDATE `privileges` SET `display_name` = 'Dashboard' WHERE `privileges`.`privilege_id` = 40; UPDATE `privileges` SET `display_name` = 'VL Weekly Report' WHERE `privileges`.`privilege_id` = 56;
+UPDATE `privileges` SET `display_name` = 'Import VL Results from File' WHERE `privileges`.`privilege_id` = 19; UPDATE `privileges` SET `display_name` = 'Print Result PDF' WHERE `privileges`.`privilege_id` = 20; UPDATE `privileges` SET `display_name` = 'Manage VL Result Status (Approve/Reject)' WHERE `privileges`.`privilege_id` = 31;
+
+DELETE FROM `resources` WHERE resource_id not in (SELECT DISTINCT resource_id FROM privileges);
+
+
+UPDATE `system_config` SET `value` = '4.2.3' WHERE `system_config`.`name` = 'version';
+-- Version 4.2.3 -- Amit -- 8-Oct-2020
