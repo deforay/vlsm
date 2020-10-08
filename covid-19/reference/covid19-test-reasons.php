@@ -25,7 +25,7 @@ include_once(APPLICATION_PATH . '/header.php');
         <div class="box">
           <div class="box-header with-border">
             <?php if (isset($_SESSION['privileges']) && in_array("covid19-sample-type.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) { ?>
-              <a href="add-covid19-test-reasons.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Covid 19-Test-Reasons</a>
+              <a href="add-covid19-test-reasons.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Covid-19 Test Reasons</a>
             <?php } ?>
             <!--<button class="btn btn-primary pull-right" style="margin-right: 1%;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>-->
           </div>

@@ -1,5 +1,5 @@
 <?php
-$title = "Covid-19 Comorbidities";
+$title = "Covid-19 Co-morbidities";
 #require_once('../startup.php'); 
 include_once(APPLICATION_PATH . '/header.php');
 
@@ -11,10 +11,10 @@ include_once(APPLICATION_PATH . '/header.php');
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
-    <h1><i class="fa fa-gears"></i> Covid-19 Comorbidities</h1>
+    <h1><i class="fa fa-gears"></i> Covid-19 Co-morbidities</h1>
     <ol class="breadcrumb">
       <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li class="active">Covid-19 Comorbidities</li>
+      <li class="active">Covid-19 Co-morbidities</li>
     </ol>
   </section>
 
@@ -43,7 +43,7 @@ include_once(APPLICATION_PATH . '/header.php');
           </span>
           <div class="box-header with-border">
             <?php if (isset($_SESSION['privileges']) && in_array("covid19-sample-type.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) { ?>
-              <a href="add-covid19-comorbidities.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Covid 19-Comorbidities</a>
+              <a href="add-covid19-comorbidities.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Covid-19 Co-morbidities</a>
             <?php } ?>
             <!--<button class="btn btn-primary pull-right" style="margin-right: 1%;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>-->
           </div>

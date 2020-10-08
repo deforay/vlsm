@@ -104,7 +104,7 @@ if (sizeof($requestResult) > 0) {
         }
         // create new PDF document
         $pdf = new SouthSudan_PDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->setHeading($arr['logo'], $arr['header'], $result['labName'], $title = 'COVID 19 PATIENT REPORT',$labFacilityId = null, $formId = $arr['vl_form']);
+        $pdf->setHeading($arr['logo'], $arr['header'], $result['labName'], $title = 'COVID-19 PATIENT REPORT',$labFacilityId = null, $formId = $arr['vl_form']);
         // set document information
         $pdf->SetCreator('VLSM');
         $pdf->SetTitle('Covid-19 Patient Report');
