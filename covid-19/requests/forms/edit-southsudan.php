@@ -10,8 +10,7 @@ $fundingSourceQry = "SELECT * FROM r_funding_sources WHERE funding_source_status
 $fundingSourceList = $db->query($fundingSourceQry);
 
 /* To get testing platform names */
-$testPlatformQry = "SELECT * FROM `import_config` WHERE (JSON_SEARCH(supported_tests, 'all', 'covid19') IS NOT NULL) AND `status` = 'active' ORDER BY `machine_name` ASC";
-$testPlatformResult = $db->query($testPlatformQry);
+$testPlatformResult = $general->getTestingPlatforms('covid19');
 // Nationality
 $nationalityQry = "SELECT * FROM `countries` ORDER BY `iso_name` ASC";
 $nationalityResult = $db->query($nationalityQry);

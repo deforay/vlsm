@@ -430,6 +430,17 @@ class General
         }
     }
 
+    public function getTestingPlatforms($testType = null)
+    {
+
+        if(!empty($testType)){
+            $this->db->where("(JSON_SEARCH(supported_tests, 'all', '$testType') IS NOT NULL) OR (supported_tests IS NULL)");
+        }
+        $this->db->where("status", "active");
+        $this->db->orderBy('machine_name', "ASC");
+        return $this->db->get('import_config');
+    }
+
     public function getDublicateDataFromField($tablename, $fieldname, $fieldValue, $lab = "")
     {
         $query = "SELECT * FROM $tablename WHERE $fieldname =  '$fieldValue'";
@@ -440,17 +451,18 @@ class General
         return $this->db->rawQueryOne($query);
     }
 
-    function random_color_part()
+    public function random_color_part()
     {
         return str_pad(dechex(mt_rand(0, 255)), 2, '0', STR_PAD_LEFT);
     }
 
-    function random_color()
+    public function random_color()
     {
         return $this->random_color_part() . $this->random_color_part() . $this->random_color_part();
     }
 
-    function ageInMonth($date){
+    public function ageInMonth($date)
+    {
         $birthday = new \DateTime($date);
         $diff = $birthday->diff(new \DateTime());
         return $diff->format('%m') + 12 * $diff->format('%y');

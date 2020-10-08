@@ -6,9 +6,11 @@ $title = "Edit Batch";
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 
+
 $general = new \Vlsm\Models\General($db);
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
 $healthFacilites = $facilitiesDb->getHealthFacilities('covid19');
+//$formId = $general->getGlobalConfig('vl_form');
 
 $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
 
@@ -17,18 +19,18 @@ $id = base64_decode($_GET['id']);
 
 $batchQuery = "SELECT * from batch_details as b_d LEFT JOIN import_config as i_c ON i_c.config_id=b_d.machine where batch_id=$id";
 $batchInfo = $db->query($batchQuery);
-$bQuery = "SELECT vl.sample_code,vl.sample_batch_id,vl.covid19_id,vl.facility_id,vl.result,vl.result_status,f.facility_name,f.facility_code FROM form_covid19 as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE  (vl.is_sample_rejected IS NULL OR vl.is_sample_rejected = '' OR vl.is_sample_rejected = 'no') AND (vl.reason_for_sample_rejection IS NULL OR vl.reason_for_sample_rejection ='' OR vl.reason_for_sample_rejection = 0) AND vlsm_country_id = '" . $configResult[0]['value'] . "' AND vl.sample_code!='' AND vl.sample_batch_id = $id ORDER BY vl.last_modified_datetime ASC";
+$bQuery = "SELECT vl.sample_code,vl.sample_batch_id,vl.covid19_id,vl.facility_id,vl.result,vl.result_status,f.facility_name,f.facility_code FROM form_covid19 as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE  (vl.is_sample_rejected IS NULL OR vl.is_sample_rejected = '' OR vl.is_sample_rejected = 'no') AND (vl.reason_for_sample_rejection IS NULL OR vl.reason_for_sample_rejection ='' OR vl.reason_for_sample_rejection = 0) AND vl.sample_code!='' AND vl.sample_batch_id = $id ORDER BY vl.last_modified_datetime ASC";
 //error_log($bQuery);die;
 $batchResultresult = $db->rawQuery($bQuery);
 
-$query = "SELECT vl.sample_code,vl.sample_batch_id,vl.covid19_id,vl.facility_id,vl.result,vl.result_status,f.facility_name,f.facility_code FROM form_covid19 as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE (vl.sample_batch_id IS NULL OR vl.sample_batch_id = '') AND (vl.is_sample_rejected IS NULL OR vl.is_sample_rejected = '' OR vl.is_sample_rejected = 'no') AND (vl.reason_for_sample_rejection IS NULL OR vl.reason_for_sample_rejection ='' OR vl.reason_for_sample_rejection = 0) AND (vl.result is NULL or vl.result = '') AND vlsm_country_id = '" . $configResult[0]['value'] . "' AND vl.sample_code!='' ORDER BY vl.last_modified_datetime ASC";
+$query = "SELECT vl.sample_code,vl.sample_batch_id,vl.covid19_id,vl.facility_id,vl.result,vl.result_status,f.facility_name,f.facility_code FROM form_covid19 as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE (vl.sample_batch_id IS NULL OR vl.sample_batch_id = '') AND (vl.is_sample_rejected IS NULL OR vl.is_sample_rejected = '' OR vl.is_sample_rejected = 'no') AND (vl.reason_for_sample_rejection IS NULL OR vl.reason_for_sample_rejection ='' OR vl.reason_for_sample_rejection = 0) AND (vl.result is NULL or vl.result = '') AND vl.sample_code!='' ORDER BY vl.last_modified_datetime ASC";
 //error_log($query);die;
 $result = $db->rawQuery($query);
 $result = array_merge($batchResultresult, $result);
 
 //Get active machines
-$importConfigQuery = "SELECT * FROM import_config WHERE status ='active'";
-$importConfigResult = $db->rawQuery($importConfigQuery);
+
+$testPlatformResult = $general->getTestingPlatforms('covid19');
 // $machinesLabelOrder = array();
 ?>
 <link href="/assets/css/multi-select.css" rel="stylesheet" />
@@ -83,26 +85,15 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
 			</div>
 			<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 100%;">
 				<tr>
-					<th>Testing Platform&nbsp;<span class="mandatory">*</span> </th>
-					<td>
-						<select name="machine" id="machine" class="form-control isRequired" title="Please choose machine" style="width:280px;">
-							<option value=""> -- Select -- </option>
-							<?php
-							if (count($importConfigResult) > 0) {
-								foreach ($importConfigResult as $machine) {
-									// $labelOrder = $machinesLabelOrder[$machine['config_id']]; 
-							?>
-									<option value="<?php echo $machine['config_id']; ?>" data-no-of-samples="<?php echo $machine['max_no_of_samples_in_a_batch']; ?>"><?php echo ucwords($machine['machine_name']); ?></option>
-							<?php }
-							} ?>
-						</select>
-					</td>
+					
 					<th>Facility</th>
 					<td>
 						<select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple">
 							<?= $facilitiesDropdown; ?>
 						</select>
 					</td>
+					<th></th>
+					<td></td>
 				</tr>
 				<tr>
 					<th>Sample Collection Date</th>
@@ -140,12 +131,12 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
-									<label for="machine" class="col-lg-4 control-label">Choose Machine <span class="mandatory">*</span></label>
+									<label for="machine" class="col-lg-4 control-label">Testing Platform <span class="mandatory">*</span></label>
 									<div class="col-lg-7" style="margin-left:3%;">
 										<select name="machine" id="machine" class="form-control isRequired" title="Please choose machine">
 											<option value=""> -- Select -- </option>
 											<?php
-											foreach ($importConfigResult as $machine) {
+											foreach ($testPlatformResult as $machine) {
 											?>
 												<option value="<?php echo $machine['config_id']; ?>" data-no-of-samples="<?php echo $machine['max_no_of_samples_in_a_batch']; ?>" <?php echo ($batchInfo[0]['machine'] == $machine['config_id']) ? 'selected="selected"' : ''; ?>><?php echo ucwords($machine['machine_name']); ?></option>
 											<?php } ?>
