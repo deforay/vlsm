@@ -71,6 +71,7 @@ if (isset($vlQueryInfo['reason_for_vl_result_changes']) && $vlQueryInfo['reason_
   $rch .= '</table>';
 }
 $disable = "disabled = 'disabled'";
+
 ?>
 <style>
   .table>tbody>tr>td {
@@ -783,8 +784,7 @@ $disable = "disabled = 'disabled'";
   });
 
 
-
-  if ($(".specialResults:checked")) {
+  if ($(".specialResults:checked").length > 0) {
     $('#vlResult, #vlLog').val('');
     $('#vlResult,#vlLog').attr('readonly', true);
     $('#vlResult, #vlLog').removeClass('isRequired');

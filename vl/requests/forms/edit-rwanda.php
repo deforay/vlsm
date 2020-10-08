@@ -768,8 +768,8 @@ if (isset($vlQueryInfo['reason_for_vl_result_changes']) && $vlQueryInfo['reason_
      $(document).ready(function() {
 
 
-
-          if ($(".specialResults:checked")) {
+          
+          if ($(".specialResults:checked").length > 0) {
                $('#vlResult, #vlLog').val('');
                $('#vlResult,#vlLog').attr('readonly', true);
                $('#vlResult, #vlLog').removeClass('isRequired');
