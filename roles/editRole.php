@@ -6,8 +6,23 @@ include_once(APPLICATION_PATH . '/header.php');
 $id = base64_decode($_GET['id']);
 $roleQuery = "SELECT * from roles where role_id=$id";
 $roleInfo = $db->query($roleQuery);
-$resourcesQuery = "SELECT * from resources";
+
+$activeModules = array('admin', 'common');
+
+if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) {
+  $activeModules[] = 'vl';
+}
+if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) {
+  $activeModules[] = 'eid';
+}
+if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) {
+  $activeModules[] = 'covid19';
+}
+
+
+$resourcesQuery = "SELECT module, GROUP_CONCAT( DISTINCT CONCAT(resources.resource_id,',',resources.display_name) ORDER BY resources.display_name SEPARATOR '##' ) as 'module_resources' FROM `resources` WHERE `module` IN ('" . implode("','", $activeModules) . "') GROUP BY `module` ORDER BY `module` ASC";
 $rInfo = $db->query($resourcesQuery);
+
 $priQuery = "SELECT * from roles_privileges_map where role_id=$id";
 $priInfo = $db->query($priQuery);
 $priId = array();
@@ -35,7 +50,7 @@ if ($priInfo) {
 
   <!-- Main content -->
   <section class="content">
-    
+
     <div class="box box-default">
       <div class="box-header with-border">
         <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
@@ -105,32 +120,52 @@ if ($priInfo) {
               </div>
               <table class="table table-striped table-hover responsive-utilities jambo_table">
                 <?php
-                foreach ($rInfo as $value) {
+                foreach ($rInfo as $moduleRow) {
+                  echo "<table class='table table-striped responsive-utilities jambo_table'>";
+                  echo "<tr><th class='bg-primary'><h3>" . strtoupper($moduleRow['module']) . "</h3></th></tr>";
 
-                  echo "<tr class=''>";
-                  echo "<td style='vertical-align:middle;'><strong>" . ucwords($value['display_name']) . "</strong></td>";
-                  $pQuery = "SELECT * from privileges where resource_id='" . $value['resource_id'] . "'";
-                  $pInfo = $db->query($pQuery);
-                  echo "<td style='text-align:center;vertical-align:middle;'>";
-                  foreach ($pInfo as $privilege) {
-                    if (in_array($privilege['privilege_id'], $priId)) {
-                      $allowChecked = " checked='' ";
-                      $denyChecked = "";
-                    } else {
-                      $denyChecked = " checked='' ";
-                      $allowChecked = "";
-                    }
-                    echo "<div class='col-lg-3' style='margin-top:5px;border:1px solid #eee;padding:10px;'>
+                  $moduleResources = explode("##", $moduleRow['module_resources']);
+
+                  foreach ($moduleResources as $mRes) {
+
+                    $mRes = explode(",", $mRes);
+
+                    echo "<tr>";
+                    echo "<th><h4>";
+                    echo ($mRes[1]);
+                ?>
+                    <small class="pull-right toggler">
+                      &nbsp;&nbsp;&nbsp;<input type='radio' class='' name='<?= $mRes[1]; ?>' onclick='togglePrivilegesForThisResource(<?= $mRes[0]; ?>,true);'> All
+                      &nbsp;&nbsp;&nbsp;<input type='radio' class='' name='<?= $mRes[1]; ?>' onclick='togglePrivilegesForThisResource(<?= $mRes[0]; ?>,false);'> None
+                    </small>
+                <?php
+                    echo "</h4></td>";
+                    echo "</tr>";
+                    echo "<tr class=''>";
+                    $pQuery = "SELECT * FROM privileges WHERE resource_id='" . $mRes[0] . "' order by display_name ASC";
+                    $pInfo = $db->query($pQuery);
+                    echo "<td style='text-align:center;vertical-align:middle;' class='privilegesNode' id='" . $mRes[0] . "'>";
+                    foreach ($pInfo as $privilege) {
+                      if (in_array($privilege['privilege_id'], $priId)) {
+                        $allowChecked = " checked='' ";
+                        $denyChecked = "";
+                      } else {
+                        $denyChecked = " checked='' ";
+                        $allowChecked = "";
+                      }
+                      echo "<div class='col-lg-3' style='margin-top:5px;border:1px solid #eee;padding:10px;'>
                               <label class='labelName'>" . ucwords($privilege['display_name']) . "</label>
                               <br>
                               <input type='radio' class='cekAll layCek'  name='resource[" . $privilege['privilege_id'] . "]" . "' value='allow' $allowChecked> <i class='fa fa-check'></i>
                               <input type='radio' class='unCekAll layCek'  name='resource[" . $privilege['privilege_id'] . "]" . "' value='deny' $denyChecked>  <i class='fa fa-times'></i>
                           </div>";
+                    }
+                    echo "</td></tr>";
                   }
-                  echo "</td></tr>";
+                  echo "</table>";
                 }
                 ?>
-              </table>
+
             </fieldset>
 
 
@@ -173,6 +208,16 @@ if ($priInfo) {
     $('.unCekAll').prop('checked', true);
 
   });
+
+  function togglePrivilegesForThisResource(obj, checked) {
+    if (checked == true) {
+      $("#" + obj).find('.cekAll').prop('checked', true);
+      $("#" + obj).find('.unCekAll').prop('checked', false);
+    } else if (checked == false) {
+      $("#" + obj).find('.cekAll').prop('checked', false);
+      $("#" + obj).find('.unCekAll').prop('checked', true);
+    }
+  }
 
   function checkNameValidation(tableName, fieldName, obj, fnct, alrt, callback) {
     var removeDots = obj.value.replace(/\./g, "");

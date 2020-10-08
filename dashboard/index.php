@@ -216,7 +216,7 @@ $facilityCount = $facilityTotal[0]['total'];
 
 		$("#myTab li:first-child").addClass("active");
 		$("#myTabContent div:first-child").addClass("active");
-		$("#myTabContent div:first-child table.searchTable .searchBtn").trigger( "click" );
+		$("#myTabContent div:first-child table.searchTable .searchBtn").trigger("click");
 
 
 		$('#vlSampleCollectionDate,#eidSampleCollectionDate,#covid19SampleCollectionDate,#recencySampleCollectionDate').daterangepicker({
