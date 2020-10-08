@@ -11,14 +11,14 @@ $healthFacilites = $facilitiesDb->getHealthFacilities('vl');
 
 $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
 
+$testPlatformResult = $general->getTestingPlatforms('vl');
 
 //global config
 // $configQuery = "SELECT `value` FROM global_config WHERE name ='vl_form'";
 // $configResult = $db->query($configQuery);
 // $showUrgency = ($configResult[0]['value'] == 1 || $configResult[0]['value'] == 2) ? true : false;
 //Get active machines
-$importConfigQuery = "SELECT * FROM import_config WHERE status ='active'";
-$importConfigResult = $db->rawQuery($importConfigQuery);
+
 $query = "SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where sample_batch_id is NULL OR sample_batch_id='' ORDER BY f.facility_name ASC";
 $result = $db->rawQuery($query);
 
@@ -45,7 +45,7 @@ if ($batchResult[0]['MAX(batch_code_key)'] != '' && $batchResult[0]['MAX(batch_c
 }
 //Set last machine label order
 $machinesLabelOrder = array();
-foreach ($importConfigResult as $machine) {
+foreach ($testPlatformResult as $machine) {
 	$lastOrderQuery = "SELECT label_order from batch_details WHERE machine ='" . $machine['config_id'] . "' ORDER BY request_created_datetime DESC";
 	$lastOrderInfo = $db->query($lastOrderQuery);
 	if (isset($lastOrderInfo[0]['label_order']) && trim($lastOrderInfo[0]['label_order']) != '') {
@@ -112,7 +112,7 @@ foreach ($importConfigResult as $machine) {
 						<select name="machine" id="machine" class="form-control isRequired" title="Please choose machine" style="width:280px;">
 							<option value=""> -- Select -- </option>
 							<?php
-							foreach ($importConfigResult as $machine) {
+							foreach ($testPlatformResult as $machine) {
 								$labelOrder = $machinesLabelOrder[$machine['config_id']];
 							?>
 								<option value="<?php echo $machine['config_id']; ?>" data-no-of-samples="<?php echo $machine['max_no_of_samples_in_a_batch']; ?>"><?php echo ucwords($machine['machine_name']); ?></option>
