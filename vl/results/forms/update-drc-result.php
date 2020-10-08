@@ -780,7 +780,7 @@ $disable = "disabled = 'disabled'";
 
 
 
-    if ($(".specialResults").is(':checked')) {
+    if ($(".specialResults:checked").length > 0) {
       $('#vlResult, #vlLog').val('');
       $('#vlResult,#vlLog').attr('readonly', true);
       $('#vlResult, #vlLog').removeClass('isRequired');
