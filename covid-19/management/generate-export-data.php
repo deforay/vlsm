@@ -22,7 +22,7 @@ if (isset($_SESSION['covid19ResultQuery']) && trim($_SESSION['covid19ResultQuery
 	$output = array();
 	$sheet = $excel->getActiveSheet();
 	if($arr['vl_form'] == 1){
-		$headings = array("S. No.", "Sample Code", "Testing Lab Name", "Testing Point", "Lab staff Assigned", "Health Facility/POE County", "Health Facility/POE State", "Health Facility/POE", "Case ID", "Patient Name", "Patient DoB", "Patient Age", "Patient Gender", "Nationality", "Patient State", "Patient County", "Patient City/Village", "Date specimen collected", "Reason for Test Request",  "Date specimen Received", "Date specimen Entered", "Specimen Condition", "Specimen Status", "Specimen Type", "Date specimen Tested", "Testing Platform", "Test Method", "Result", "Date result released");
+		$headings = array("S. No.", "Sample Code", "Testing Lab Name", "Testing Point", "Lab staff Assigned", "Source Of Alert / POE", "Health Facility/POE County", "Health Facility/POE State", "Health Facility/POE", "Case ID", "Patient Name", "Patient DoB", "Patient Age", "Patient Gender", "Nationality", "Patient State", "Patient County", "Patient City/Village", "Date specimen collected", "Reason for Test Request",  "Date specimen Received", "Date specimen Entered", "Specimen Condition", "Specimen Status", "Specimen Type", "Date specimen Tested", "Testing Platform", "Test Method", "Result", "Date result released");
 	} else{
 		$headings = array("S. No.", "Sample Code", "Health Facility Name", "Health Facility Code", "District/County", "Province/State", "Patient ID", "Patient Name", "Patient DoB", "Patient Age", "Patient Gender", "Sample Collection Date","Date of Symptom Onset", "Has the patient had contact with a confirmed case?", "Has the patient had a recent history of travelling to an affected area?", "If Yes, Country Name(s)", "Return Date", "Is Sample Rejected?", "Sample Tested On", "Result", "Sample Received On", "Date Result Dispatched", "Comments", "Funding Source", "Implementing Partner");
 	}
@@ -147,6 +147,13 @@ if (isset($_SESSION['covid19ResultQuery']) && trim($_SESSION['covid19ResultQuery
 		} else {
 			$patientLname = '';
 		}
+
+		if(isset($aRow['source_of_alert']) && $aRow['source_of_alert'] != "others"){
+			$sourceOfArtPOE = str_replace("-", " ", $aRow['source_of_alert']) ;
+		} else{
+			$sourceOfArtPOE = $aRow['source_of_alert_other'];
+		}
+		
 		if($arr['vl_form'] == 1){
 
 			$row[] = $no;
@@ -154,6 +161,7 @@ if (isset($_SESSION['covid19ResultQuery']) && trim($_SESSION['covid19ResultQuery
 			$row[] = ucwords($aRow['labName']);
 			$row[] = ucwords($aRow['testing_point']);
 			$row[] = ucwords($aRow['labTechnician']);
+			$row[] = ucwords($sourceOfArtPOE);
 			$row[] = ucwords($aRow['facility_district']);
 			$row[] = ucwords($aRow['facility_state']);
 			$row[] = ucwords($aRow['facility_name']);

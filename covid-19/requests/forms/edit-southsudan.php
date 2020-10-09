@@ -138,16 +138,34 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                                     <tr>
                                         <?php if ($sarr['user_type'] == 'remoteuser') { ?>
                                             <td><label for="sampleCode">Sample ID </label> </td>
-                                            <td colspan="5">
-                                                <span id="sampleCodeInText" style="width:30%;border-bottom:1px solid #333;"><?php echo $covid19Info[$sampleCode]; ?></span>
+                                            <td>
+                                                <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"><?php echo $covid19Info[$sampleCode]; ?></span>
                                                 <input type="hidden" class="<?php echo $sampleClass; ?>" id="sampleCode" name="sampleCode" value="<?php echo $covid19Info[$sampleCode]; ?>" />
                                             </td>
                                         <?php } else { ?>
                                             <td><label for="sampleCode">Sample ID </label><span class="mandatory">*</span> </td>
-                                            <td colspan="5">
-                                                <input type="text" readonly value="<?php echo $covid19Info[$sampleCode]; ?>" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Sample ID" title="Please enter Sample ID" style="width:30%;" onchange="" />
+                                            <td>
+                                                <input type="text" readonly value="<?php echo $covid19Info[$sampleCode]; ?>" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Sample ID" title="Please enter Sample ID" style="width:100%;" onchange="" />
                                             </td>
                                         <?php } ?>
+                                        <td><label for="sourceOfAlertPOE">Source of Alert / POE</label></td>
+                                        <td>
+                                            <select class="form-control" name="sourceOfAlertPOE" id="sourceOfAlertPOE" title="Please choose source of Alert / POE" style="width:100%;">
+                                                <option value=""> -- Select -- </option>
+                                                <option value="hotline" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'hotline')?"selected='selected'":"";?>>Hotline</option>
+                                                <option value="community-surveillance" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'community-surveillance')?"selected='selected'":"";?>>Community Surveillance</option>
+                                                <option value="poe" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'poe')?"selected='selected'":"";?>>POE</option>
+                                                <option value="contact-tracing" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'contact-tracing')?"selected='selected'":"";?>>Contact Tracing</option>
+                                                <option value="clinic" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'clinic')?"selected='selected'":"";?>>Clinic</option>
+                                                <option value="sentinel-site" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'sentinel-site')?"selected='selected'":"";?>>Sentinel Site</option>
+                                                <option value="screening" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'screening')?"selected='selected'":"";?>>Screening</option>
+                                                <option value="others" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'others')?"selected='selected'":"";?>>Others</option>
+                                            </select>
+                                        </td>
+                                        <td class="show-alert-poe" style="<?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'others')?"":"display:none;";?>"><label for="sourceOfAlertPOE">Source of Alert / POE Others<span class="mandatory">*</span></label></td>
+                                        <td class="show-alert-poe" style="<?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'others')?"":"display:none;";?>">
+                                            <input type="text" value="<?php echo $covid19Info['source_of_alert_other'];?>" class="form-control" name="alertPoeOthers" id="alertPoeOthers" placeholder="Source of Alert / POE Others" title="Please choose source of Alert / POE" style="width:100%;">
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><label for="province">Health Facility/POE State </label><span class="mandatory">*</span></td>
@@ -206,26 +224,6 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                                             <th></th>
                                             <td></td>
                                         <?php } ?>
-                                    </tr>
-                                    <tr>
-                                        <td><label for="sourceOfAlertPOE">Source of Alert / POE</label></td>
-                                        <td>
-                                            <select class="form-control" name="sourceOfAlertPOE" id="sourceOfAlertPOE" title="Please choose source of Alert / POE" style="width:100%;">
-                                                <option value=""> -- Select -- </option>
-                                                <option value="hotline" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'hotline')?"selected='selected'":"";?>>Hotline</option>
-                                                <option value="community-surveillance" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'community-surveillance')?"selected='selected'":"";?>>Community Surveillance</option>
-                                                <option value="poe" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'poe')?"selected='selected'":"";?>>POE</option>
-                                                <option value="contact-tracing" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'contact-tracing')?"selected='selected'":"";?>>Contact Tracing</option>
-                                                <option value="clinic" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'clinic')?"selected='selected'":"";?>>Clinic</option>
-                                                <option value="sentinel-site" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'sentinel-site')?"selected='selected'":"";?>>Sentinel Site</option>
-                                                <option value="screening" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'screening')?"selected='selected'":"";?>>Screening</option>
-                                                <option value="others" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'others')?"selected='selected'":"";?>>Others</option>
-                                            </select>
-                                        </td>
-                                        <td class="show-alert-poe" style="<?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'others')?"":"display:none;";?>"><label for="sourceOfAlertPOE">Source of Alert / POE Others<span class="mandatory">*</span></label></td>
-                                        <td class="show-alert-poe" style="<?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'others')?"":"display:none;";?>">
-                                            <input type="text" value="<?php echo $covid19Info['source_of_alert_other'];?>" class="form-control" name="alertPoeOthers" id="alertPoeOthers" placeholder="Source of Alert / POE Others" title="Please choose source of Alert / POE" style="width:100%;">
-                                        </td>
                                     </tr>
                                 </table>
 
