@@ -145,7 +145,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                 <?php } ?>
                                             </select>
                                         </td>
-                                        <?php if ($sarr['user_type'] == 'remoteuser') { ?>
+                                        
                                             <!-- <tr> -->
                                             <td><label for="labId">Testing Laboratory <span class="mandatory">*</span></label> </td>
                                             <td>
@@ -154,7 +154,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                 </select>
                                             </td>
                                             <!-- </tr> -->
-                                        <?php } ?>
+                                        
                                     </tr>
                                 </table>
                                 <br>
@@ -358,12 +358,8 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             <td>
                                                 <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;" />
                                             </td>
-                                            <td><label for="labId">Testing Laboratory </label> </td>
-                                            <td>
-                                                <select name="labId" id="labId" class="form-control" title="Please select Testing Testing Laboratory" style="width:100%;">
-                                                    <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
-                                                </select>
-                                            </td>
+                                            <td></td>
+                                            <td></td>
                                         <tr>
                                             <th>Is Sample Rejected ?</th>
                                             <td>
