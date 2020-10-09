@@ -33,7 +33,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 
 
 $covid19Results = $general->getCovid19Results();
-if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda')){
+if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda' && $arr['vl_form'] != 1)){
 	$reportType = 'generate-export-rwanda.php';
 }else{
 	$reportType = 'generate-export-data.php';
