@@ -1482,3 +1482,8 @@ DELETE FROM `resources` WHERE resource_id not in (SELECT DISTINCT resource_id FR
 
 UPDATE `system_config` SET `value` = '4.2.3' WHERE `system_config`.`name` = 'version';
 -- Version 4.2.3 -- Amit -- 8-Oct-2020
+
+-- Thana 09-Oct-2020
+INSERT INTO `resources` (`resource_id`, `module`, `resource_name`, `display_name`) VALUES (NULL, 'vl', 'vl-reference', 'VL Reference Management'), (NULL, 'eid', 'eid-reference', 'EID Reference Management');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '34', 'vl-art-code-details.php', 'Manage Reference'), (NULL, '35', 'eid-sample-type.php', 'Manage Reference');
+UPDATE `resources` SET `module`='covid19' WHERE `module`='covid-19';
