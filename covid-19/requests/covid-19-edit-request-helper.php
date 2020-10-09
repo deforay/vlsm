@@ -107,6 +107,8 @@ try {
 		'lab_id'                              => isset($_POST['labId']) ? $_POST['labId'] : null,
 		'testing_point'                       => isset($_POST['testingPoint']) ? $_POST['testingPoint'] : null,
 		'implementing_partner'                => isset($_POST['implementingPartner']) ? $_POST['implementingPartner'] : null,
+		'source_of_alert'                	  => isset($_POST['sourceOfAlertPOE']) ? $_POST['sourceOfAlertPOE'] : null,
+		'source_of_alert_other'               => (isset($_POST['sourceOfAlertPOE']) && $_POST['sourceOfAlertPOE']== 'others') ? $_POST['alertPoeOthers'] : null,
 		'funding_source'                      => isset($_POST['fundingSource']) ? $_POST['fundingSource'] : null,
 		'patient_id'                          => isset($_POST['patientId']) ? $_POST['patientId'] : null,
 		'patient_name'                        => isset($_POST['firstName']) ? $_POST['firstName'] : null,

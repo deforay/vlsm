@@ -155,7 +155,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         </td>
                                         <td><label for="fundingSource">Funding Partner</label></td>
                                         <td>
-                                            <select class="form-control" name="fundingSource" id="fundingSource" title="Please choose source de financement" style="width:100%;">
+                                            <select class="form-control" name="fundingSource" id="fundingSource" title="Please choose source of financement" style="width:100%;">
                                                 <option value=""> -- Select -- </option>
                                                 <?php
                                                 foreach ($fundingSourceList as $fundingSource) {
@@ -173,7 +173,30 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                 </select>
                                             </td>
                                             <!-- </tr> -->
+                                        <?php } else{ ?>
+                                            <th></th>
+                                            <td></td>
                                         <?php } ?>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="sourceOfAlertPOE">Source of Alert / POE</label></td>
+                                        <td>
+                                            <select class="form-control" name="sourceOfAlertPOE" id="sourceOfAlertPOE" title="Please choose source of Alert / POE" style="width:100%;">
+                                                <option value=""> -- Select -- </option>
+                                                <option value="hotline">Hotline</option>
+                                                <option value="community-surveillance">Community Surveillance</option>
+                                                <option value="poe">POE</option>
+                                                <option value="contact-tracing">Contact Tracing</option>
+                                                <option value="clinic">Clinic</option>
+                                                <option value="sentinel-site">Sentinel Site</option>
+                                                <option value="screening">Screening</option>
+                                                <option value="others">Others</option>
+                                            </select>
+                                        </td>
+                                        <td class="show-alert-poe" style="display: none;"><label for="sourceOfAlertPOE">Source of Alert / POE Others<span class="mandatory">*</span></label></td>
+                                        <td class="show-alert-poe" style="display: none;">
+                                            <input type="text" class="form-control" name="alertPoeOthers" id="alertPoeOthers" placeholder="Source of Alert / POE Others" title="Please choose source of Alert / POE" style="width:100%;">
+                                        </td>
                                     </tr>
                                 </table>
 
@@ -667,6 +690,16 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
 
         $('#isResultAuthorized').change(function(e) {
             checkIsResultAuthorized();
+        });
+        
+        $('#sourceOfAlertPOE').change(function(e) {
+            if(this.value == 'others'){
+                $('.show-alert-poe').show();
+                $('#alertPoeOthers').addClass('isRequired');
+            } else{
+                $('.show-alert-poe').hide();
+                $('#alertPoeOthers').removeClass('isRequired');
+            }
         });
         <?php if (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes') { ?>
             $(document).on('change', '.test-result, #result', function(e) {
