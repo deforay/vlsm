@@ -63,7 +63,7 @@ class Facilities
 
     // $testType = vl, eid, covid19 or any other tests that might be there. 
     // Default $testType is null and returns all facilities
-    // $byPassFacilityMap = true -> bypass faciliy map check, false -> do not bypass facility map check
+    // $byPassFacilityMap = true -> bypass facility map check, false -> do not bypass facility map check
     // $condition = WHERE condition (for eg. "facility_state = 1")
     // $allColumns = (false -> only facility_id and facility_name, true -> all columns)
     // $onlyActive = true/false
