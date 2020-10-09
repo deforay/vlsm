@@ -253,16 +253,10 @@ if (sizeof($requestResult) > 0) {
         $html .= '<table style="padding:0px 2px 2px 2px;">';
 
             $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">FULL NAME</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SEX</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">AGE</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">NATIONALITY</td>';
-            $html .= '</tr>';
-            $html .= '<tr>';
+                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">FULL NAME : </td>';
                 $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $patientFname . ' ' . $patientLname . '</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords(str_replace("_", " ", $result['patient_gender'])) . '</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['patient_age'] . '</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['patient_nationality'] . '</td>';
+                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
+                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
             $html .= '</tr>';
         
             $html .= '<tr>';
@@ -270,34 +264,49 @@ if (sizeof($requestResult) > 0) {
             $html .= '</tr>';
             
             $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">PASSPORT NUMBER / NN</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">HEALTH FACILITY/POE</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">HEALTH FACILITY/POE STATE</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">HEALTH FACILITY/POE COUNTY</td>';
+                $html .= '<td  style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SEX :</td>';
+                $html .= '<td  style="line-height:11px;font-size:11px;text-align:left;">' . ucwords(str_replace("_", " ", $result['patient_gender'])) . '</td>';
+                $html .= '<td  style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">HEALTH FACILITY/POE :</td>';
+                $html .= '<td  style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['facility_name']) . '('.ucwords($result['facility_code']).')</td>';
             $html .= '</tr>';
+                
             $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['patient_passport_number'] . '</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['facility_name']) . '('.ucwords($result['facility_code']).')</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['facility_state']) . '</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['facility_district']) . '</td>';
+                $html .= '<td  style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">AGE : </td>';
+                $html .= '<td  style="line-height:11px;font-size:11px;text-align:left;">' . $result['patient_age'] . '</td>';
+                $html .= '<td  style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">HEALTH FACILITY/POE STATE : </td>';
+                $html .= '<td  style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['facility_state']) . '</td>';
+            $html .= '</tr>';
+                
+            $html .= '<tr>';
+                $html .= '<td  style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">NATIONALITY : </td>';
+                $html .= '<td  style="line-height:11px;font-size:11px;text-align:left;">' . $result['patient_nationality'] . '</td>';
+                $html .= '<td  style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">TEST METHOD : </td>';
+                $html .= '<td  style="line-height:11px;font-size:11px;text-align:left;">' . $testMethod . '</td>';
             $html .= '</tr>';
             
+            $html .= '<tr>';
+                $html .= '<td  style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">PASSPORT NUMBER / NN : </td>';
+                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['patient_passport_number'] . '</td>';
+                $html .= '<td  style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">TEST PLATFORM : </td>';
+                $html .= '<td  style="line-height:11px;font-size:11px;text-align:left;">' . $testPlatform . '</td>';
+            $html .= '</tr>';
+
             $html .= '<tr>';
                 $html .= '<td colspan="4" style="line-height:5px;"></td>';
             $html .= '</tr>';
             
-            $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">TEST PLATFORM</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">TEST METHOD</td>';
+            /* $html .= '<tr>';
+                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">HEALTH FACILITY/POE COUNTY</td>';
+                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
                 $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
                 $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
             $html .= '</tr>';
             $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $testPlatform . '</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $testMethod . '</td>';
+                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['facility_district']) . '</td>';
                 $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
                 $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
-            $html .= '</tr>';
+                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+            $html .= '</tr>'; */
 
             $html .= '<tr>';
             $html .= '<td colspan="4" style="line-height:5px;"></td>';
