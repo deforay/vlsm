@@ -101,8 +101,11 @@ $batResult = $db->rawQuery($batQuery);
 							<td colspan="4">
 								<?php if (isset($_SESSION['privileges']) && in_array("covid-19-add-request.php", $_SESSION['privileges'])) { ?>
 									<a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-add-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Add new Covid-19 Request</a>
-									<?php if($arr['vl_form'] == 1){ ?>
+									<?php if($arr['vl_form'] == 1 && $sarr['user_type'] != 'remoteuser'){ ?>
 										<a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-bulk-import-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Bulk Import Covid-19 Request</a>
+									<?php } 
+									if ($formId == 1 && $sarr['user_type'] != 'remoteuser') { ?>
+										<a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-quick-add.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Quick Add Covid-19 Request</a>
 									<?php }
 								} ?>
 							</td>
@@ -114,12 +117,12 @@ $batResult = $db->rawQuery($batQuery);
 
 								<?php
 								if (isset($_SESSION['privileges']) && in_array("covid-19-add-request.php", $_SESSION['privileges'])) { ?>
-									<?php if ($formId == 1) { ?>
+									<?php if ($formId == 1 && $sarr['user_type'] != 'remoteuser') { ?>
 										<a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-quick-add.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Quick Add Covid-19 Request</a>
 									<?php } ?>
 
 									<a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-add-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Add new Covid-19 Request</a>
-									<?php if($arr['vl_form'] == 1){ ?>
+									<?php if($arr['vl_form'] == 1 && $sarr['user_type'] != 'remoteuser'){ ?>
 									<a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-bulk-import-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Bulk Import Covid-19 Request</a>
 									<?php }
 								} ?>
