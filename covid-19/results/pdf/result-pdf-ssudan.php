@@ -279,7 +279,7 @@ if (sizeof($requestResult) > 0) {
                 
             $html .= '<tr>';
                 $html .= '<td  style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">NATIONALITY : </td>';
-                $html .= '<td  style="line-height:11px;font-size:11px;text-align:left;">' . $result['patient_nationality'] . '</td>';
+                $html .= '<td  style="line-height:11px;font-size:11px;text-align:left;">' . $result['nationality'] . '</td>';
                 $html .= '<td  style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">TEST METHOD : </td>';
                 $html .= '<td  style="line-height:11px;font-size:11px;text-align:left;">' . $testMethod . '</td>';
             $html .= '</tr>';
