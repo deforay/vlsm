@@ -115,10 +115,24 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                 <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" readonly="readonly" placeholder="Sample ID" title="Please enter sample code" style="width:100%;" onchange="checkSampleNameValidation('form_covid19','<?php echo $sampleCode; ?>',this.id,null,'The sample id that you entered already exists. Please try another sample id',null)" />
                                             </td>
                                         <?php } ?>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td><label for="sourceOfAlertPOE">Source of Alert / POE</label></td>
+                                        <td>
+                                            <select class="form-control" name="sourceOfAlertPOE" id="sourceOfAlertPOE" title="Please choose source of Alert / POE" style="width:100%;">
+                                                <option value=""> -- Select -- </option>
+                                                <option value="hotline">Hotline</option>
+                                                <option value="community-surveillance">Community Surveillance</option>
+                                                <option value="poe">POE</option>
+                                                <option value="contact-tracing">Contact Tracing</option>
+                                                <option value="clinic">Clinic</option>
+                                                <option value="sentinel-site">Sentinel Site</option>
+                                                <option value="screening">Screening</option>
+                                                <option value="others">Others</option>
+                                            </select>
+                                        </td>
+                                        <td class="show-alert-poe" style="display: none;"><label for="sourceOfAlertPOE">Source of Alert / POE Others<span class="mandatory">*</span></label></td>
+                                        <td class="show-alert-poe" style="display: none;">
+                                            <input type="text" class="form-control" name="alertPoeOthers" id="alertPoeOthers" placeholder="Source of Alert / POE Others" title="Please choose source of Alert / POE" style="width:100%;">
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><label for="province">Health Facility/POE State </label><span class="mandatory">*</span></td>
@@ -177,26 +191,6 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             <th></th>
                                             <td></td>
                                         <?php } ?>
-                                    </tr>
-                                    <tr>
-                                        <td><label for="sourceOfAlertPOE">Source of Alert / POE</label></td>
-                                        <td>
-                                            <select class="form-control" name="sourceOfAlertPOE" id="sourceOfAlertPOE" title="Please choose source of Alert / POE" style="width:100%;">
-                                                <option value=""> -- Select -- </option>
-                                                <option value="hotline">Hotline</option>
-                                                <option value="community-surveillance">Community Surveillance</option>
-                                                <option value="poe">POE</option>
-                                                <option value="contact-tracing">Contact Tracing</option>
-                                                <option value="clinic">Clinic</option>
-                                                <option value="sentinel-site">Sentinel Site</option>
-                                                <option value="screening">Screening</option>
-                                                <option value="others">Others</option>
-                                            </select>
-                                        </td>
-                                        <td class="show-alert-poe" style="display: none;"><label for="sourceOfAlertPOE">Source of Alert / POE Others<span class="mandatory">*</span></label></td>
-                                        <td class="show-alert-poe" style="display: none;">
-                                            <input type="text" class="form-control" name="alertPoeOthers" id="alertPoeOthers" placeholder="Source of Alert / POE Others" title="Please choose source of Alert / POE" style="width:100%;">
-                                        </td>
                                     </tr>
                                 </table>
 

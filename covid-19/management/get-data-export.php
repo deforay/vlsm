@@ -143,6 +143,8 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                         vl.request_created_datetime,
                         vl.result_printed_datetime,
                         vl.testing_point,
+                        vl.source_of_alert,
+                        vl.source_of_alert_other,
                         rtr.test_reason_name,
                         b.batch_code,
                         ts.status_name,
