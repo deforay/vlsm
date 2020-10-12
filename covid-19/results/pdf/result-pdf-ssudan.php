@@ -434,7 +434,7 @@ if (sizeof($requestResult) > 0) {
                 $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SIGNATURE</td>';
                 $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">DATE</td>';
             $html .= '</tr>';
-            $lmSign = "/files/covid-19/{$countryFormId}/pdf/lm.png";
+            $lmSign = "/uploads/covid-19/{$countryFormId}/pdf/lm.png";
             $html .= '<tr>';
                 $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">James Ayei  Maror</td>';
                 $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"><img src="'.$lmSign.'" style="width:70px;"></td>';
@@ -446,7 +446,7 @@ if (sizeof($requestResult) > 0) {
                 $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SIGNATURE</td>';
                 $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">DATE</td>';
             $html .= '</tr>';
-            $lqSign = "/files/covid-19/{$countryFormId}/pdf/lq.png";
+            $lqSign = "/uploads/covid-19/{$countryFormId}/pdf/lq.png";
             $html .= '<tr>';
                 $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">Abe Gordon Abias</td>';
                 $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"><img src="'.$lqSign.'" style="width:70px;"></td>';
@@ -458,7 +458,7 @@ if (sizeof($requestResult) > 0) {
                 $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SIGNATURE</td>';
                 $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">DATE</td>';
             $html .= '</tr>';
-            $lsSign = "/files/covid-19/{$countryFormId}/pdf/ls.png";
+            $lsSign = "/uploads/covid-19/{$countryFormId}/pdf/ls.png";
             $html .= '<tr>';
                 $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">Dr. Simon Deng Nyicar</td>';
                 $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"><img src="'.$lsSign.'" style="width:70px;"></td>';
