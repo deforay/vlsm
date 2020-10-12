@@ -99,6 +99,8 @@ $sharedPrivileges = array(
 	'vl-sample-type.php'						=> 'vl-art-code-details.php',
 	'add-vl-art-code-details.php'				=> 'vl-art-code-details.php',
 	'edit-vl-art-code-details.php'				=> 'vl-art-code-details.php',
+	'add-vl-sample-rejection-reasons.php'		=> 'vl-art-code-details.php',
+	'edit-vl-sample-rejection-reasons.php'		=> 'vl-art-code-details.php',
 	'eid-sample-rejection-reasons.php'			=> 'eid-sample-type.php',
 );
 // Does the current file share privileges with another privilege ?

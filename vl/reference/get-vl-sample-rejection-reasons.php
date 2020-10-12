@@ -96,7 +96,7 @@ for ($i = 0; $i < count($aColumns); $i++) {
          * Get data to display
         */
 
-$sQuery = "SELECT * FROM r_covid19_sample_rejection_reasons";
+$sQuery = "SELECT * FROM $tableName";
 
 if (isset($sWhere) && $sWhere != "") {
     $sWhere = ' where ' . $sWhere;
@@ -117,11 +117,11 @@ $rResult = $db->rawQuery($sQuery);
 // print_r($rResult);
 /* Data set length after filtering */
 
-$aResultFilterTotal = $db->rawQuery("SELECT * FROM r_covid19_sample_rejection_reasons $sWhere order by $sOrder");
+$aResultFilterTotal = $db->rawQuery("SELECT * FROM $tableName $sWhere order by $sOrder");
 $iFilteredTotal = count($aResultFilterTotal);
 
 /* Total data set length */
-$aResultTotal =  $db->rawQuery("select COUNT(rejection_reason_id) as total FROM r_covid19_sample_rejection_reasons");
+$aResultTotal =  $db->rawQuery("select COUNT($primaryKey) as total FROM $tableName");
 // $aResultTotal = $countResult->fetch_row();
 //print_r($aResultTotal);
 $iTotal = $aResultTotal[0]['total'];
@@ -142,8 +142,8 @@ foreach ($rResult as $aRow) {
     $row[] = ucwords($aRow['rejection_type']);
     $row[] = ucwords($aRow['rejection_reason_code']);
     $row[] = ucwords($aRow['rejection_reason_status']);
-    if (isset($_SESSION['privileges']) && in_array("covid19-sample-type.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) {
-        $row[] = '<a href="edit-covid19-sample-rejection-reason.php?id=' . base64_encode($aRow['rejection_reason_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
+    if (isset($_SESSION['privileges']) && in_array("vl-art-code-details.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) {
+        $row[] = '<a href="edit-vl-sample-rejection-reasons.php?id=' . base64_encode($aRow[$primaryKey]) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
     }
     $output['aaData'][] = $row;
 }
