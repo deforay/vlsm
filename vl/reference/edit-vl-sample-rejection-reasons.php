@@ -2,10 +2,14 @@
 ob_start();
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-$rejQuery = "SELECT DISTINCT rejection_type from r_covid19_sample_rejection_reasons";
+$rejQuery = "SELECT DISTINCT rejection_type from r_sample_rejection_reasons";
 $rejInfo = $db->query($rejQuery);
+foreach ($rejInfo as $rej) {
+	$rejParent[$rej['rejection_type']] = ucwords($rej['rejection_type']);
+}
+
 $id = base64_decode($_GET['id']);
-$rsnQuery = "SELECT * from r_covid19_sample_rejection_reasons where rejection_reason_id=$id";
+$rsnQuery = "SELECT * from r_sample_rejection_reasons where rejection_reason_id = $id";
 $rsnInfo = $db->query($rsnQuery);
 ?>
 <!-- Content Wrapper. Contains page content -->
@@ -29,7 +33,7 @@ $rsnInfo = $db->query($rsnQuery);
 			<!-- /.box-header -->
 			<div class="box-body">
 				<!-- form start -->
-				<form class="form-horizontal" method='post' name='addSampleRejcForm' id='addSampleRejcForm' autocomplete="off" enctype="multipart/form-data" action="edit-rejection-reason-helper.php">
+				<form class="form-horizontal" method='post' name='addSampleRejcForm' id='addSampleRejcForm' autocomplete="off" enctype="multipart/form-data" action="save-vl-sample-rejection-reasons-helper.php">
 					<div class="box-body">
 						<div class="row">
 							<div class="col-md-6">
@@ -37,7 +41,7 @@ $rsnInfo = $db->query($rsnQuery);
 									<label for="rejectionReasonName" class="col-lg-4 control-label">Rejection Reason Name <span class="mandatory">*</span></label>
 									<div class="col-lg-7">
 										<input type="text" class="form-control isRequired" id="rejectionReasonName" name="rejectionReasonName" value="<?php echo $rsnInfo[0]['rejection_reason_name']; ?>" placeholder="Rejection Reason Name" title="Please enter Rejection Reason name" />
-										<input type="hidden" class="form-control isRequired" id="rejectionReasonId" name="rejectionReasonId" value="<?php echo base64_encode($rsnInfo[0]['rejection_reason_id']); ?>" />
+										<input type="hidden" class="form-control isRequired" id="rejectionReasonId" name="rejectionReasonId" value="<?php echo $_GET['id']; ?>" />
 									</div>
 								</div>
 							</div>
@@ -46,10 +50,7 @@ $rsnInfo = $db->query($rsnQuery);
 									<label for="rejectionType" class="col-lg-4 control-label">Rejection Type</label>
 									<div class="col-lg-7">
 										<select class="form-control select2 isRequired" id="rejectionType" name="rejectionType" placeholder="Rejection Type" title="Please enter Rejection Type" >
-											<option value=""> -- Select -- </option>
-											<?php foreach ($rejInfo as $type) { ?>
-												<option value="<?php echo $type['rejection_type']; ?>" <?php echo (strtolower($rsnInfo[0]['rejection_type']) == strtolower($type['rejection_type']))?"selected":"";?>><?php echo ucwords($type['rejection_type']); ?></option>
-											<?php } ?>
+											<?= $general->generateSelectOptions($rejParent, strtolower($rsnInfo[0]['rejection_type']), '-- Select --'); ?>
 										</select>
 									</div>
 								</div>

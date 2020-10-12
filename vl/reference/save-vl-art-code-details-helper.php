@@ -20,13 +20,13 @@ try {
 			'parent_art'        => (isset($_POST['parentArtCode']) && $_POST['parentArtCode'] != "")?$_POST['parentArtCode']:0,
 			'headings'          => $_POST['heading'],
 			'art_status'        => $_POST['artStatus'],
-			'updated_datetime'  => $general->getDateTime(),
-			'data_sync'         => '0'
+			'updated_datetime'  => $general->getDateTime()
 		);
 		if(isset($_POST['artCodeId']) && $_POST['artCodeId'] != ""){
 			$db = $db->where($primaryKey, base64_decode($_POST['artCodeId']));
         	$lastId = $db->update($tableName, $data);
 		} else{
+			$data['data_sync'] = 0;
 			$db->insert($tableName, $data);
 			$lastId = $db->getInsertId();
 		}
