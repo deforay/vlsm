@@ -95,6 +95,11 @@ $sharedPrivileges = array(
 	'covid19-test-reasons.php'					=> 'covid19-sample-type.php',
 	'add-covid19-test-reasons.php'				=> 'covid19-sample-type.php',
 	'edit-covid19-test-reasons.php'				=> 'covid19-sample-type.php',
+	'vl-sample-rejection-reasons.php'			=> 'vl-art-code-details.php',
+	'vl-sample-type.php'						=> 'vl-art-code-details.php',
+	'add-vl-art-code-details.php'				=> 'vl-art-code-details.php',
+	'edit-vl-art-code-details.php'				=> 'vl-art-code-details.php',
+	'eid-sample-rejection-reasons.php'			=> 'eid-sample-type.php',
 );
 // Does the current file share privileges with another privilege ?
 $currentFileName = isset($sharedPrivileges[$currentFileName]) ? $sharedPrivileges[$currentFileName] : $currentFileName;
