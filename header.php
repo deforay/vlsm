@@ -449,19 +449,19 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 										</a>
 
 										<ul class="treeview-menu">
-											<li class="allMenu reference-comorbidities">
+											<li class="allMenu vl-art-code-details">
 												<a href="/vl/reference/vl-art-code-details.php"><i class="fa fa-caret-right"></i>Art Code Details</a>
 											</li>
-											<li class="allMenu reference-sample-rejection-reasons">
+											<li class="allMenu vl-sample-rejection-reasons">
 												<a href="/vl/reference/vl-sample-rejection-reasons.php"><i class="fa fa-caret-right"></i>Rejection Reasons</a>
 											</li>
-											<li class="allMenu reference-sample-type">
+											<li class="allMenu vl-sample-type">
 												<a href="/vl/reference/vl-sample-type.php"><i class="fa fa-caret-right"></i>Sample Type</a>
 											</li>
 										</ul>
 									</li>
 								<?php } if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true && isset($_SESSION['privileges']) && in_array("eid-sample-type.php", $_SESSION['privileges'])) { ?>
-									<li class="treeview covid19-reference-manage">
+									<li class="treeview eid-reference-manage">
 										<a href="#"><i class="fa fa-child"></i>EID
 											<span class="pull-right-container">
 												<i class="fa fa-angle-left pull-right"></i>
@@ -469,10 +469,10 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 										</a>
 
 										<ul class="treeview-menu">
-											<li class="allMenu reference-sample-rejection-reasons">
+											<li class="allMenu eid-sample-rejection-reasons">
 												<a href="/eid/reference/eid-sample-rejection-reasons.php"><i class="fa fa-caret-right"></i>Rejection Reasons</a>
 											</li>
-											<li class="allMenu reference-comorbidities">
+											<li class="allMenu eid-sample-type">
 												<a href="/eid/reference/eid-sample-type.php"><i class="fa fa-caret-right"></i>Sample Type</a>
 											</li>
 										</ul>
@@ -487,19 +487,19 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 										</a>
 
 										<ul class="treeview-menu">
-											<li class="allMenu reference-comorbidities">
+											<li class="allMenu covid19-comorbidities">
 												<a href="/covid-19/reference/covid19-comorbidities.php"><i class="fa fa-caret-right"></i>Co-morbidities</a>
 											</li>
-											<li class="allMenu reference-sample-rejection-reasons">
+											<li class="allMenu covid19-sample-rejection-reasons">
 												<a href="/covid-19/reference/covid19-sample-rejection-reasons.php"><i class="fa fa-caret-right"></i>Rejection Reasons</a>
 											</li>
-											<li class="allMenu reference-sample-type">
+											<li class="allMenu covid19-sample-type">
 												<a href="/covid-19/reference/covid19-sample-type.php"><i class="fa fa-caret-right"></i>Sample Type</a>
 											</li>
-											<li class="allMenu reference-symptoms">
+											<li class="allMenu covid19-symptoms">
 												<a href="/covid-19/reference/covid19-symptoms.php"><i class="fa fa-caret-right"></i>Symptom</a>
 											</li>
-											<li class="allMenu reference-test-reasons">
+											<li class="allMenu covid19-test-reasons">
 												<a href="/covid-19/reference/covid19-test-reasons.php"><i class="fa fa-caret-right"></i>Test-Reasons</a>
 											</li>
 										</ul>
