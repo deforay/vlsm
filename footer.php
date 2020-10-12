@@ -363,14 +363,22 @@
 		$(".allMenu").removeClass('active');
 		$(".eidProgramMenu").addClass('active');
 		$(".eidPrintResults").addClass('active');
-	} else if (splitsUrl == 'eid-clinic-report.php') {
+	} else if (splitsUrl == 'eid-print-results.php') {
 		$(".allMenu").removeClass('active');
 		$(".eidProgramMenu").addClass('active');
-		$(".eidClinicReport").addClass('active');
+		$(".eidPrintResults").addClass('active');
+	} else if (splitsUrl == 'eid-export-data.php') {
+		$(".allMenu").removeClass('active');
+		$(".eidProgramMenu").addClass('active');
+		$(".eidExportResult").addClass('active');
 	} else if (splitsUrl == 'eid-sample-rejection-report.php') {
 		$(".allMenu").removeClass('active');
 		$(".eidProgramMenu").addClass('active');
 		$(".eidSampleRejectionReport").addClass('active');
+	} else if (splitsUrl == 'eid-clinic-report.php') {
+		$(".allMenu").removeClass('active');
+		$(".eidProgramMenu").addClass('active');
+		$(".eidClinicReport").addClass('active');
 	} else if (splitsUrl == 'covid-19-requests.php' || splitsUrl == 'covid-19-edit-request.php') {
 		$(".allMenu").removeClass('active');
 		$(".covid19Request").addClass('active');
@@ -427,31 +435,56 @@
 		$(".allMenu").removeClass('active');
 		$(".covid19ProgramMenu").addClass('active');
 		$(".covid19ClinicReportMenu").addClass('active');
+	} else if (splitsUrl == 'vl-art-code-details.php') {
+		$(".manage").addClass('active');
+		$(".vl-reference-manage").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".vl-art-code-details").addClass('active');
+	} else if (splitsUrl == 'vl-sample-rejection-reasons.php') {
+		$(".manage").addClass('active');
+		$(".vl-reference-manage").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".vl-sample-rejection-reasons").addClass('active');
+	} else if (splitsUrl == 'vl-sample-type.php') {
+		$(".manage").addClass('active');
+		$(".vl-reference-manage").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".vl-sample-type").addClass('active');
+	} else if (splitsUrl == 'eid-sample-rejection-reasons.php') {
+		$(".manage").addClass('active');
+		$(".eid-reference-manage").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".eid-sample-rejection-reasons").addClass('active');
+	} else if (splitsUrl == 'eid-sample-type.php') {
+		$(".manage").addClass('active');
+		$(".eid-reference-manage").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".eid-sample-type").addClass('active');
 	} else if (splitsUrl == 'covid19-comorbidities.php') {
 		$(".manage").addClass('active');
 		$(".covid19-reference-manage").addClass('active');
 		$(".allMenu").removeClass('active');
-		$(".reference-comorbidities").addClass('active');
+		$(".covid19-comorbidities").addClass('active');
 	} else if (splitsUrl == 'covid19-sample-rejection-reasons.php') {
 		$(".manage").addClass('active');
 		$(".covid19-reference-manage").addClass('active');
 		$(".allMenu").removeClass('active');
-		$(".reference-sample-rejection-reasons").addClass('active');
+		$(".covid19-sample-rejection-reasons").addClass('active');
 	} else if (splitsUrl == 'covid19-sample-type.php') {
 		$(".manage").addClass('active');
 		$(".covid19-reference-manage").addClass('active');
 		$(".allMenu").removeClass('active');
-		$(".reference-sample-type").addClass('active');
+		$(".covid19-sample-type").addClass('active');
 	} else if (splitsUrl == 'covid19-symptoms.php') {
 		$(".manage").addClass('active');
 		$(".covid19-reference-manage").addClass('active');
 		$(".allMenu").removeClass('active');
-		$(".reference-symptoms").addClass('active');
+		$(".covid19-symptoms").addClass('active');
 	} else if (splitsUrl == 'covid19-test-reasons.php') {
 		$(".manage").addClass('active');
 		$(".covid19-reference-manage").addClass('active');
 		$(".allMenu").removeClass('active');
-		$(".reference-test-reasons").addClass('active');
+		$(".covid19-test-reasons").addClass('active');
 	} else {
 		$(".allMenu").removeClass('active');
 		$(".dashboardMenu").addClass('active');
