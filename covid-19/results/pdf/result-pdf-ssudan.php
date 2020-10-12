@@ -69,7 +69,7 @@ class SouthSudan_PDF extends MYPDF
 
 $covid19Results = $general->getCovid19Results();
 
-
+$countryFormId = $general->getGlobalConfig('vl_form');
 $resultFilename = '';
 
 if (sizeof($requestResult) > 0) {
@@ -449,6 +449,12 @@ if (sizeof($requestResult) > 0) {
                 $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SIGNATURE</td>';
                 $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">DATE</td>';
             $html .= '</tr>';
+            $lmSign = "/files/covid-19/{$countryFormId}/pdf/lm.png";
+            $html .= '<tr>';
+                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">James Ayei  Maror</td>';
+                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"><img src="'.$lmSign.'" style="width:70px;"></td>';
+                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">'.date('d-M-Y H:i:s a').'</td>';
+            $html .= '</tr>';
 
             $html .= '<tr>';
             $html .= '<td colspan="3" style="line-height:8px;"></td>';
@@ -459,6 +465,12 @@ if (sizeof($requestResult) > 0) {
                 $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SIGNATURE</td>';
                 $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">DATE</td>';
             $html .= '</tr>';
+            $lqSign = "/files/covid-19/{$countryFormId}/pdf/lq.png";
+            $html .= '<tr>';
+                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">Abe Gordon Abias</td>';
+                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"><img src="'.$lqSign.'" style="width:70px;"></td>';
+                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">'.date('d-M-Y H:i:s a').'</td>';
+            $html .= '</tr>';
 
             $html .= '<tr>';
             $html .= '<td colspan="3" style="line-height:8px;"></td>';
@@ -468,6 +480,12 @@ if (sizeof($requestResult) > 0) {
                 $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">LABORATORY SUPERVISOR</td>';
                 $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SIGNATURE</td>';
                 $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">DATE</td>';
+            $html .= '</tr>';
+            $lsSign = "/files/covid-19/{$countryFormId}/pdf/ls.png";
+            $html .= '<tr>';
+                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">Dr. Simon Deng Nyicar</td>';
+                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"><img src="'.$lsSign.'" style="width:70px;"></td>';
+                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">'.date('d-M-Y H:i:s a').'</td>';
             $html .= '</tr>';
 
            /*  $html .= '<tr>';
