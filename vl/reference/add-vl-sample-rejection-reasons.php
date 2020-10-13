@@ -2,11 +2,7 @@
 ob_start();
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-$rejQuery = "SELECT DISTINCT rejection_type FROM r_sample_rejection_reasons";
-$rejInfo = $db->query($rejQuery);
-foreach ($rejInfo as $rej) {
-	$rejParent[$rej['rejection_type']] = ucwords($rej['rejection_type']);
-}
+$rejReaons = $general->getRejectionReasons('vl');
 ?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -45,7 +41,7 @@ foreach ($rejInfo as $rej) {
 									<label for="rejectionType" class="col-lg-4 control-label">Rejection Type</label>
 									<div class="col-lg-7">
 										<select class="form-control select2" id="rejectionType" name="rejectionType" placeholder="Rejection Type" title="Please enter Rejection Type">
-											<?= $general->generateSelectOptions($rejParent, null, '-- Select --'); ?>
+											<?= $general->generateSelectOptions($rejReaons, null, '-- Select --'); ?>
 										</select>
 									</div>
 								</div>

@@ -2,22 +2,22 @@
 ob_start();
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-$rejReaons = $general->getRejectionReasons('covid19');
+$rejReaons = $general->getRejectionReasons('eid');
 ?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
-    <h1><i class="fa fa-gears"></i> Add Covid-19 Sample Rejection Reasons</h1>
+    <h1><i class="fa fa-gears"></i> Add EID Sample Rejection Reasons</h1>
     <ol class="breadcrumb">
       <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li class="active">Covid-19 Sample Rejection Reasons</li>
+      <li class="active">EID Sample Rejection Reasons</li>
     </ol>
   </section>
 
   <!-- Main content -->
   <section class="content">
-
+    
     <div class="box box-default">
       <div class="box-header with-border">
         <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
@@ -25,12 +25,12 @@ $rejReaons = $general->getRejectionReasons('covid19');
       <!-- /.box-header -->
       <div class="box-body">
         <!-- form start -->
-        <form class="form-horizontal" method='post' name='addSampleRejcForm' id='addSampleRejcForm' autocomplete="off" enctype="multipart/form-data" action="add-rejection-reason-helper.php">
+        <form class="form-horizontal" method='post' name='addSampleRejcForm' id='addSampleRejcForm' autocomplete="off" enctype="multipart/form-data" action="save-eid-sample-rejection-reasons-helper.php">
           <div class="box-body">
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="rejectionReasonName" class="col-lg-4 control-label">Rejection Reason Name <span class="mandatory">*</span></label>
+                  <label for="rejectionReasonName" class="col-lg-4 control-label">Rejection Reason Name<span class="mandatory">*</span></label>
                   <div class="col-lg-7">
                     <input type="text" class="form-control isRequired" id="rejectionReasonName" name="rejectionReasonName" placeholder="Rejection Reason Name" title="Please enter Rejection Reason name" />
                   </div>
@@ -38,9 +38,9 @@ $rejReaons = $general->getRejectionReasons('covid19');
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="rejectionType" class="col-lg-4 control-label">Rejection Type</label>
+                  <label for="rejectionType" class="col-lg-4 control-label">Rejection Type <span class="mandatory">*</span></label>
                   <div class="col-lg-7">
-                    <select class="form-control isRequired select2" id="rejectionType" name="rejectionType" placeholder="Rejection Type" title="Please enter Rejection Type">
+                    <select class="form-control isRequired select2" id="rejectionType" name="rejectionType" placeholder="Rejection Type" title="Please enter Rejection Type" >
                       <?= $general->generateSelectOptions($rejReaons, null, '-- Select --'); ?>
                     </select>
                   </div>
@@ -50,7 +50,7 @@ $rejReaons = $general->getRejectionReasons('covid19');
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="rejectionReasonCode" class="col-lg-4 control-label">Rejection Reason Code <span class="mandatory">*</span></label>
+                  <label for="rejectionReasonCode" class="col-lg-4 control-label">Rejection Reason Code<span class="mandatory">*</span></label>
                   <div class="col-lg-7">
                     <input type="text" class="form-control isRequired" id="rejectionReasonCode" name="rejectionReasonCode" placeholder="Rejection Reason Code" title="Please enter Rejection Reason Code" />
                   </div>
@@ -58,11 +58,11 @@ $rejReaons = $general->getRejectionReasons('covid19');
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="rejectionReasonStatus" class="col-lg-4 control-label">Rejection Reason Status</label>
+                  <label for="rejectionReasonStatus" class="col-lg-4 control-label">Rejection Reason Status<span class="mandatory">*</span></label>
                   <div class="col-lg-7">
-                    <select class="form-control isRequired" id="rejectionReasonStatus" name="rejectionReasonStatus" placeholder="Rejection Reason Status" title="Please enter Rejection Reason Status">
-                      <option value="active">Active</option>
-                      <option value="inactive">Inactive</option>
+                    <select class="form-control isRequired" id="rejectionReasonStatus" name="rejectionReasonStatus" placeholder="Rejection Reason Status" title="Please enter Rejection Reason Status"  >
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
                     </select>
                   </div>
                 </div>
@@ -74,7 +74,7 @@ $rejReaons = $general->getRejectionReasons('covid19');
           <!-- /.box-body -->
           <div class="box-footer">
             <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
-            <a href="covid19-sample-rejection-reasons.php" class="btn btn-default"> Cancel</a>
+            <a href="eid-sample-rejection-reasons.php" class="btn btn-default"> Cancel</a>
           </div>
           <!-- /.box-footer -->
         </form>
@@ -88,15 +88,14 @@ $rejReaons = $general->getRejectionReasons('covid19');
 </div>
 
 <script type="text/javascript">
-  $(document).ready(function() {
-    $(".select2").select2();
-    $(".select2").select2({
-      tags: true
-    });
+$(document).ready(function() {
+  $(".select2").select2();
+  $(".select2").select2({
+    tags: true
   });
-
+});
   function validateNow() {
-
+   
     flag = deforayValidator.init({
       formId: 'addSampleRejcForm'
     });
@@ -128,18 +127,20 @@ $rejReaons = $general->getRejectionReasons('covid19');
       });
   }
 
-  function addNewRejectionType(id) {
-    checkValue = $("#" + id + " option:selected").html();
-    if (checkValue != '') {
+  function addNewRejectionType(id){
+    checkValue = $("#"+id+" option:selected").html();
+    if(checkValue!='')
+    {
       $.post("/includes/addNewField.php", {
-          value: checkValue,
-          mode: 'addNewRejectionType'
-        },
-        function(data) {
-          console.log(data)
-        });
+        value: checkValue,
+        mode:'addNewRejectionType'
+      },
+      function(data) {
+        console.log(data)
+      });
     }
   }
+
 </script>
 
 <?php

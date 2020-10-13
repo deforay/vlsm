@@ -41,7 +41,7 @@ $rejInfo = $db->query($rejQuery);
                 <div class="form-group">
                   <label for="parentSymptom" class="col-lg-4 control-label">Parent Symptom</label>
                   <div class="col-lg-7">
-                    <select class="form-control isRequired" id="parentSymptom" name="parentSymptom" placeholder="Parent Symptom" title="Please enter Parent Symptom"  >
+                    <select class="form-control" id="parentSymptom" name="parentSymptom" placeholder="Parent Symptom" title="Please enter Parent Symptom"  >
                         <option value=""> -- Select -- </option>
                         <?php
                         foreach ($rejInfo as $type) {

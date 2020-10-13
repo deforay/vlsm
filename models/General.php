@@ -467,4 +467,22 @@ class General
         $diff = $birthday->diff(new \DateTime());
         return $diff->format('%m') + 12 * $diff->format('%y');
     }
+    
+    public function getRejectionReasons($testType)
+    {
+        $rejArray = array('general', 'whole blood', 'plasma', 'dbs', 'testing');
+        if($testType == "vl"){
+            $rejArray = array('general', 'whole blood', 'plasma', 'dbs', 'testing');
+        }
+        if($testType == "eid"){
+            $rejArray = array('general', 'whole blood', 'plasma', 'dbs', 'testing');
+        }
+        if($testType == "covid19"){
+            $rejArray = array('general', 'whole blood', 'plasma', 'dbs', 'testing');
+        }
+        foreach($rejArray as $rej){
+            $rejReaons[$rej] = ucwords($rej);
+        }
+        return $rejReaons;
+    }
 }
