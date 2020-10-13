@@ -1496,3 +1496,5 @@ ALTER TABLE `r_vl_test_reasons` ADD `parent_reason` INT(11) NULL DEFAULT '0' AFT
 ALTER TABLE `r_vl_test_reasons` ADD `data_sync` INT NULL DEFAULT '0' AFTER `updated_datetime`;
 INSERT INTO `resources` (`resource_id`, `module`, `resource_name`, `display_name`) VALUES (NULL, 'vl', 'common-reference', 'Common Reference');
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '36', 'province-details.php', 'Manage common Reference');
+ALTER TABLE `r_implementation_partners` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `i_partner_status`, ADD `data_sync` INT(11) NULL DEFAULT '0' AFTER `updated_datetime`;
+ALTER TABLE `r_funding_sources` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `funding_source_status`, ADD `data_sync` INT(11) NULL DEFAULT '0' AFTER `updated_datetime`;
