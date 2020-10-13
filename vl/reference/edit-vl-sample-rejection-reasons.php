@@ -5,7 +5,7 @@ include_once(APPLICATION_PATH . '/header.php');
 $rejReaons = $general->getRejectionReasons('vl');
 
 $id = base64_decode($_GET['id']);
-$rsnQuery = "SELECT * from r_sample_rejection_reasons where rejection_reason_id = $id";
+$rsnQuery = "SELECT * from r_vl_sample_rejection_reasons where rejection_reason_id = $id";
 $rsnInfo = $db->query($rsnQuery);
 ?>
 <!-- Content Wrapper. Contains page content -->

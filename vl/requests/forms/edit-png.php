@@ -45,7 +45,7 @@ if ($sarr['user_type'] == 'remoteuser') {
   }
 }
 //sample rejection reason
-$rejectionQuery = "SELECT * FROM r_sample_rejection_reasons";
+$rejectionQuery = "SELECT * FROM r_vl_sample_rejection_reasons";
 $rejectionResult = $db->rawQuery($rejectionQuery);
 
 $bQuery = "SELECT * FROM batch_details";
@@ -54,7 +54,7 @@ $bResult = $db->rawQuery($bQuery);
 $importQuery = "SELECT * FROM import_config WHERE status = 'active'";
 $importResult = $db->query($importQuery);
 
-$aQuery = "SELECT * from r_art_code_details where nation_identifier='png'";
+$aQuery = "SELECT * from r_vl_art_regimen where nation_identifier='png'";
 $aResult = $db->query($aQuery);
 
 $sQuery = "SELECT * from r_vl_sample_type where status='active'";

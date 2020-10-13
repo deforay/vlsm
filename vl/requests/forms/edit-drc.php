@@ -44,7 +44,7 @@ if (!isset($provinceResult[0]['province_code']) || $provinceResult[0]['province_
   $provinceResult[0]['province_code'] = "";
 }
 //get ART list
-$aQuery = "SELECT * FROM r_art_code_details";
+$aQuery = "SELECT * FROM r_vl_art_regimen";
 $aResult = $db->query($aQuery);
 
 

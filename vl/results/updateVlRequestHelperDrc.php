@@ -26,7 +26,7 @@ try {
                     'rejection_reason_name' => $_POST['newRejectionReason'],
                     'rejection_reason_status' => 'active'
                 );
-                $id = $db->insert('r_sample_rejection_reasons', $data);
+                $id = $db->insert('r_vl_sample_rejection_reasons', $data);
                 $_POST['rejectionReason'] = $id;
             }
         } else {

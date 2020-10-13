@@ -18,7 +18,7 @@ if ($data['Key'] == 'vlsm-get-remote') {
         if (isset($data['vlRejectionReasonsLastModified']) && !empty($data['vlRejectionReasonsLastModified'])) {
             $condition = "updated_datetime > '" . $data['vlRejectionReasonsLastModified'] . "'";
         }
-        $response['vlRejectionReasons'] = $general->fetchDataFromTable('r_sample_rejection_reasons', $condition);
+        $response['vlRejectionReasons'] = $general->fetchDataFromTable('r_vl_sample_rejection_reasons', $condition);
 
 
         $condition = null;
@@ -31,7 +31,7 @@ if ($data['Key'] == 'vlsm-get-remote') {
         if (isset($data['vlArtCodesLastModified']) && !empty($data['vlArtCodesLastModified'])) {
             $condition = "updated_datetime > '" . $data['vlArtCodesLastModified'] . "'";
         }
-        $response['vlArtCodes'] = $general->fetchDataFromTable('r_art_code_details', $condition);
+        $response['vlArtCodes'] = $general->fetchDataFromTable('r_vl_art_regimen', $condition);
     }
 
 

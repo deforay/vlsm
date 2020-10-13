@@ -23,8 +23,8 @@ if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == t
     $vlTables = array(
         'r_vl_sample_type',
         'r_vl_test_reasons',
-        'r_art_code_details',
-        'r_sample_rejection_reasons',
+        'r_vl_art_regimen',
+        'r_vl_sample_rejection_reasons',
     );
 
     $referenceTables = array_merge($referenceTables, $vlTables);

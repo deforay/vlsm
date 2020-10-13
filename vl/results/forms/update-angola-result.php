@@ -1,6 +1,6 @@
 <?php
 ob_start();
-$artRegimenQuery = "SELECT DISTINCT headings FROM r_art_code_details WHERE nation_identifier ='ang'";
+$artRegimenQuery = "SELECT DISTINCT headings FROM r_vl_art_regimen WHERE nation_identifier ='ang'";
 $artRegimenResult = $db->rawQuery($artRegimenQuery);
 $province = "";
 $province .= "<option value=''> -- Selecione -- </option>";
@@ -24,7 +24,7 @@ if (!isset($provinceResult[0]['province_code']) || $provinceResult[0]['province_
 }
 
 //get ART list
-$aQuery = "SELECT * from r_art_code_details"; // where nation_identifier='drc'";
+$aQuery = "SELECT * from r_vl_art_regimen"; // where nation_identifier='drc'";
 $aResult = $db->query($aQuery);
 
 //Set Dispatched From Clinic To Lab Date

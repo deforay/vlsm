@@ -61,7 +61,7 @@ if (isset($_POST['id']) && trim($_POST['id']) != '') {
                   LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by
                   LEFT JOIN facility_details as l ON l.facility_id=vl.lab_id 
                   LEFT JOIN r_implementation_partners as imp ON imp.i_partner_id=vl.implementing_partner
-                  LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection 
+                  LEFT JOIN r_vl_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection 
                   WHERE vl.vl_sample_id IN(" . $_POST['id'] . ")";
   //}else{
   //  $searchQuery = $query." and vl.vl_sample_id IN(".$_POST['id'].")";

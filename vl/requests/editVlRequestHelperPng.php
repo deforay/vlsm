@@ -105,7 +105,7 @@ try {
                'parent_art' => '5',
                'nation_identifier' => 'png'
           );
-          $result = $db->insert('r_art_code_details', $data);
+          $result = $db->insert('r_vl_art_regimen', $data);
           $_POST['currentRegimen'] = $_POST['newArtRegimen'];
      }
      if (isset($_POST['sampleQuality']) && trim($_POST['sampleQuality']) == 'no') {

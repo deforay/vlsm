@@ -44,10 +44,10 @@ foreach ($pdResult as $provinceName) {
 $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select --');
 
 //regimen heading
-$artRegimenQuery = "SELECT DISTINCT headings FROM r_art_code_details WHERE nation_identifier ='rwd'";
+$artRegimenQuery = "SELECT DISTINCT headings FROM r_vl_art_regimen WHERE nation_identifier ='rwd'";
 $artRegimenResult = $db->rawQuery($artRegimenQuery);
 
-$aQuery = "SELECT * from r_art_code_details where nation_identifier='rwd' AND art_status ='active'";
+$aQuery = "SELECT * from r_vl_art_regimen where nation_identifier='rwd' AND art_status ='active'";
 $aResult = $db->query($aQuery);
 
 

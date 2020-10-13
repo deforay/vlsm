@@ -1673,3 +1673,91 @@ ADD FOREIGN KEY (privilege_id) REFERENCES privileges(privilege_id);
 
 
 
+-- Amit 14 Oct 2020
+RENAME TABLE `form_details` TO `s_available_country_forms`;
+RENAME TABLE `countries` TO `r_countries`;
+RENAME TABLE `r_art_code_details` TO `r_vl_art_regimen`;
+RENAME TABLE `r_sample_rejection_reasons` TO `r_vl_sample_rejection_reasons`;
+
+
+CREATE TABLE `form_hepatitis` (
+  `hepatitis_id` int(11) NOT NULL,
+  `vlsm_instance_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `vlsm_country_id` int(11) NOT NULL,
+  `sample_code_key` int(11) DEFAULT NULL,
+  `sample_code_format` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `sample_code` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `external_sample_code` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `remote_sample` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'no',
+  `remote_sample_code_key` int(11) DEFAULT NULL,
+  `remote_sample_code_format` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `remote_sample_code` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `sample_collection_date` datetime NOT NULL,
+  `sample_received_at_hub_datetime` datetime DEFAULT NULL,
+  `sample_received_at_vl_lab_datetime` datetime DEFAULT NULL,
+  `sample_tested_datetime` datetime DEFAULT NULL,
+  `funding_source` int(11) DEFAULT NULL,
+  `implementing_partner` int(11) DEFAULT NULL,
+  `facility_id` int(11) DEFAULT NULL,
+  `province_id` int(11) DEFAULT NULL,
+  `patient_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `patient_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `patient_surname` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `patient_dob` date DEFAULT NULL,
+  `patient_age` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `patient_gender` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `patient_phone_number` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `patient_nationality` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `patient_address` varchar(1000) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `is_sample_collected` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `reason_for_testing` int(11) DEFAULT NULL,
+  `patient_province` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `patient_district` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `patient_city` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `specimen_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `lab_id` int(11) DEFAULT NULL,
+  `testing_point` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `lab_technician` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `lab_reception_person` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `test_platform` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `result_status` int(11) DEFAULT NULL,
+  `is_sample_rejected` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'no',
+  `reason_for_sample_rejection` varchar(500) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `rejection_on` date DEFAULT NULL,
+  `result` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `is_result_authorised` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `authorized_by` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `authorized_on` date DEFAULT NULL,
+  `reason_for_changing` text COLLATE utf8_unicode_ci,
+  `result_reviewed_datetime` datetime DEFAULT NULL,
+  `result_reviewed_by` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `result_approved_datetime` datetime DEFAULT NULL,
+  `result_approved_by` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `approver_comments` varchar(1000) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `result_dispatched_datetime` datetime DEFAULT NULL,
+  `result_mail_datetime` datetime DEFAULT NULL,
+  `manual_result_entry` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'no',
+  `import_machine_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `import_machine_file_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `result_printed_datetime` datetime DEFAULT NULL,
+  `request_created_datetime` datetime DEFAULT NULL,
+  `request_created_by` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `sample_registered_at_lab` datetime DEFAULT NULL,
+  `sample_batch_id` int(11) DEFAULT NULL,
+  `sample_package_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `sample_package_code` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `is_result_mail_sent` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'no',
+  `last_modified_datetime` datetime DEFAULT NULL,
+  `last_modified_by` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `data_sync` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `form_hepatitis`
+  ADD PRIMARY KEY (`hepatitis_id`),
+  ADD KEY `sample_code_key` (`sample_code_key`),
+  ADD KEY `remote_sample_code_key` (`remote_sample_code_key`);
+
+ALTER TABLE `form_hepatitis`
+  MODIFY `hepatitis_id` int(11) NOT NULL AUTO_INCREMENT;
+
+

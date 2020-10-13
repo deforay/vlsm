@@ -11,7 +11,7 @@ if ($sarr['user_type'] == 'remoteuser') {
   $sampleCode = 'sample_code';
   $pdQuery = "SELECT * FROM province_details";
 }
-$artRegimenQuery = "SELECT DISTINCT headings FROM r_art_code_details WHERE nation_identifier ='ang'";
+$artRegimenQuery = "SELECT DISTINCT headings FROM r_vl_art_regimen WHERE nation_identifier ='ang'";
 $artRegimenResult = $db->rawQuery($artRegimenQuery);
 $province = "";
 $province .= "<option value=''> -- Selecione -- </option>";
@@ -24,7 +24,7 @@ foreach ($fResult as $fDetails) {
   $facility .= "<option value='" . $fDetails['facility_id'] . "'>" . ucwords($fDetails['facility_name']) . ' - ' . $fDetails['facility_code'] . "</option>";
 }
 //get ART list
-$aQuery = "SELECT * from r_art_code_details"; // where nation_identifier='drc'";
+$aQuery = "SELECT * from r_vl_art_regimen"; // where nation_identifier='drc'";
 $aResult = $db->query($aQuery);
 
 $sKey = '';

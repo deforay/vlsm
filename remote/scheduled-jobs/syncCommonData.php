@@ -32,8 +32,8 @@ $data = array(
 );
 
 if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) {
-    $data['vlArtCodesLastModified'] = $general->getLastModifiedDateTime('r_art_code_details');
-    $data['vlRejectionReasonsLastModified'] = $general->getLastModifiedDateTime('r_sample_rejection_reasons');
+    $data['vlArtCodesLastModified'] = $general->getLastModifiedDateTime('r_vl_art_regimen');
+    $data['vlRejectionReasonsLastModified'] = $general->getLastModifiedDateTime('r_vl_sample_rejection_reasons');
     $data['vlSampleTypesLastModified'] = $general->getLastModifiedDateTime('r_vl_sample_type');
 }
 
@@ -101,10 +101,10 @@ if (!empty($result['vlArtCodes']) && count($result['vlArtCodes']) > 0) {
     // this way any additional rows in local that are not on remote
     // become inactive.
 
-    //$db->update('r_art_code_details',array('art_status'=>'inactive'));    
+    //$db->update('r_vl_art_regimen',array('art_status'=>'inactive'));    
 
     foreach ($result['vlArtCodes'] as $artCode) {
-        $artCodeQuery = "SELECT art_id FROM r_art_code_details WHERE art_id=" . $artCode['art_id'];
+        $artCodeQuery = "SELECT art_id FROM r_vl_art_regimen WHERE art_id=" . $artCode['art_id'];
         $artCodeLocalResult = $db->query($artCodeQuery);
         $artCodeData = array(
             'art_code' => $artCode['art_code'],
@@ -118,10 +118,10 @@ if (!empty($result['vlArtCodes']) && count($result['vlArtCodes']) > 0) {
         $lastId = 0;
         if ($artCodeLocalResult) {
             $db = $db->where('art_id', $artCode['art_id']);
-            $lastId = $db->update('r_art_code_details', $artCodeData);
+            $lastId = $db->update('r_vl_art_regimen', $artCodeData);
         } else {
             $artCodeData['art_id'] = $artCode['art_id'];
-            $db->insert('r_art_code_details', $artCodeData);
+            $db->insert('r_vl_art_regimen', $artCodeData);
             $lastId = $db->getInsertId();
         }
     }
@@ -134,10 +134,10 @@ if (!empty($result['vlRejectionReasons']) && count($result['vlRejectionReasons']
     // this way any additional rows in local that are not on remote
     // become inactive.
 
-    //$db->update('r_sample_rejection_reasons',array('rejection_reason_status'=>'inactive'));    
+    //$db->update('r_vl_sample_rejection_reasons',array('rejection_reason_status'=>'inactive'));    
 
     foreach ($result['vlRejectionReasons'] as $reason) {
-        $rejectQuery = "SELECT rejection_reason_id FROM r_sample_rejection_reasons WHERE rejection_reason_id=" . $reason['rejection_reason_id'];
+        $rejectQuery = "SELECT rejection_reason_id FROM r_vl_sample_rejection_reasons WHERE rejection_reason_id=" . $reason['rejection_reason_id'];
         $rejectLocalResult = $db->query($rejectQuery);
         $rejectResultData = array(
             'rejection_reason_name' => $reason['rejection_reason_name'],
@@ -150,10 +150,10 @@ if (!empty($result['vlRejectionReasons']) && count($result['vlRejectionReasons']
         $lastId = 0;
         if ($rejectLocalResult) {
             $db = $db->where('rejection_reason_id', $reason['rejection_reason_id']);
-            $lastId = $db->update('r_sample_rejection_reasons', $rejectResultData);
+            $lastId = $db->update('r_vl_sample_rejection_reasons', $rejectResultData);
         } else {
             $rejectResultData['rejection_reason_id'] = $reason['rejection_reason_id'];
-            $db->insert('r_sample_rejection_reasons', $rejectResultData);
+            $db->insert('r_vl_sample_rejection_reasons', $rejectResultData);
             $lastId = $db->getInsertId();
         }
     }

@@ -20,10 +20,10 @@ $userResult = $general->fetchDataFromTable('user_details', $condition);
 
 //sample rejection reason
 $condition = "rejection_reason_status ='active'";
-$rejectionResult = $general->fetchDataFromTable('r_sample_rejection_reasons', $condition);
+$rejectionResult = $general->fetchDataFromTable('r_vl_sample_rejection_reasons', $condition);
 
 //rejection type
-$rejectionTypeQuery = "SELECT DISTINCT rejection_type FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
+$rejectionTypeQuery = "SELECT DISTINCT rejection_type FROM r_vl_sample_rejection_reasons WHERE rejection_reason_status ='active'";
 $rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
 
 //get active sample types
