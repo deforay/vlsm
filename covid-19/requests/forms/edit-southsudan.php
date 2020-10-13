@@ -12,7 +12,7 @@ $fundingSourceList = $db->query($fundingSourceQry);
 /* To get testing platform names */
 $testPlatformResult = $general->getTestingPlatforms('covid19');
 // Nationality
-$nationalityQry = "SELECT * FROM `countries` ORDER BY `iso_name` ASC";
+$nationalityQry = "SELECT * FROM `r_countries` ORDER BY `iso_name` ASC";
 $nationalityResult = $db->query($nationalityQry);
 
 foreach ($nationalityResult as $nrow) {

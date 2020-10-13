@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 #require_once('../startup.php');  
 
-$tableName = "r_art_code_details";
+$tableName = "r_vl_art_regimen";
 $primaryKey = "art_id";
 //system config
 $systemConfigQuery = "SELECT * from system_config";

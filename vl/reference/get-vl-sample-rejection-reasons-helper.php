@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 #require_once('../startup.php');  
 
-$tableName = "r_sample_rejection_reasons";
+$tableName = "r_vl_sample_rejection_reasons";
 $primaryKey = "rejection_reason_id";
 //system config
 $systemConfigQuery = "SELECT * from system_config";

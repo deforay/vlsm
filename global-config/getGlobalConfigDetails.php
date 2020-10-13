@@ -139,7 +139,7 @@ foreach ($rResult as $aRow) {
         $aRow['value'] = 'Full Date';
     }
     if ($aRow['name'] == 'vl_form' && trim($aRow['value']) != '') {
-        $query = "SELECT * from form_details where vlsm_country_id=" . $aRow['value'];
+        $query = "SELECT * FROM s_available_country_forms WHERE vlsm_country_id=" . $aRow['value'];
         $formResult = $db->query($query);
         $aRow['value'] = $formResult[0]['form_name'];
     }

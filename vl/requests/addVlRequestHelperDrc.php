@@ -91,7 +91,7 @@ try {
             'updated_datetime' => $general->getDateTime(),
         );
 
-        $result = $db->insert('r_art_code_details', $data);
+        $result = $db->insert('r_vl_art_regimen', $data);
         $_POST['artRegimen'] = $_POST['newArtRegimen'];
     }
     //Regimen change section
@@ -169,7 +169,7 @@ try {
                     'rejection_reason_status' => 'active',
                     'updated_datetime' => $general->getDateTime(),
                 );
-                $id = $db->insert('r_sample_rejection_reasons', $data);
+                $id = $db->insert('r_vl_sample_rejection_reasons', $data);
                 $_POST['rejectionReason'] = $id;
             } else {
                 $_POST['rejectionReason'] = NULL;

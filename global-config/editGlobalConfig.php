@@ -10,7 +10,7 @@ $instanceResult = $db->query($instanceQuery);
 $fType = "SELECT * FROM facility_type";
 $fTypeResult = $db->rawQuery($fType);
 
-$formQuery = "SELECT * from form_details";
+$formQuery = "SELECT * FROM s_available_country_forms";
 $formResult = $db->query($formQuery);
 $globalConfigQuery = "SELECT * from global_config";
 $configResult = $db->query($globalConfigQuery);

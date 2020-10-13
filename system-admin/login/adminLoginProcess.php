@@ -17,7 +17,7 @@ try {
             header("location:/edit-config/index.php");
         }else{
             header("location:/login.php");
-            $_SESSION['alertMsg']="Please check login credential";
+            $_SESSION['alertMsg']="Please check your login credentials";
         }
     }else{
         header("location:/login.php");

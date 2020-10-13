@@ -2,7 +2,7 @@
 ob_start();
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-$artQuery = "SELECT DISTINCT art_code, art_id FROM `r_art_code_details` WHERE parent_art = 0";
+$artQuery = "SELECT DISTINCT art_code, art_id FROM `r_vl_art_regimen` WHERE parent_art = 0";
 $artInfo = $db->query($artQuery);
 
 foreach($artInfo as $art){
@@ -37,7 +37,7 @@ foreach($artInfo as $art){
 								<div class="form-group">
 									<label for="artCode" class="col-lg-4 control-label">Art Code <span class="mandatory">*</span></label>
 									<div class="col-lg-7">
-										<input type="text" class="form-control isRequired" id="artCode" name="artCode" placeholder="Enter art code" title="Please enter art code" onblur="checkNameValidation('r_art_code_details','art_code',this,null,'This art code that you entered already exists.Try another art code',null)"/>
+										<input type="text" class="form-control isRequired" id="artCode" name="artCode" placeholder="Enter art code" title="Please enter art code" onblur="checkNameValidation('r_vl_art_regimen','art_code',this,null,'This art code that you entered already exists.Try another art code',null)"/>
 									</div>
 								</div>
 							</div>

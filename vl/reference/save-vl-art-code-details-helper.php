@@ -8,7 +8,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
 $general = new \Vlsm\Models\General($db);
 
-$tableName = "r_art_code_details";
+$tableName = "r_vl_art_regimen";
 $primaryKey = "art_id";
 
 try {

@@ -214,9 +214,9 @@ if (isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringR
             $checkEmptySampleResult[$sample['sample_name']] = $db->rawQuery($checkEmptyResultSampleQuery);
         }
     }
-    //get country name
-    $countryName = "Select * from form_details where vlsm_country_id=" . $arr['vl_form'];
-    $countryResult = $db->rawQuery($countryName);
+    // //get country name
+    // $countryName = "SELECT * FROM s_available_country_forms WHERE vlsm_country_id=" . $arr['vl_form'];
+    // $countryResult = $db->rawQuery($countryName);
 
     //question three
 
@@ -370,7 +370,7 @@ if (isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringR
         $_POST['fyName'] = '';
     }
     $atomcolumns = '';
-    $atomcolumns .= "Country:" . ucwords($countryResult[0]['form_name']) . "&nbsp;&nbsp;&nbsp;";
+    //$atomcolumns .= "Country:" . ucwords($countryResult[0]['form_name']) . "&nbsp;&nbsp;&nbsp;";
     $atomcolumns .= "Region/Province:" . ucwords($_POST['state']) . "&nbsp;&nbsp;&nbsp;";
     $atomcolumns .= "City:" . ucwords($_POST['district']) . "\n\n";
     $atomcolumns .= "Laboratory Name:" . ucwords($_POST['fyName']) . "\n\n";

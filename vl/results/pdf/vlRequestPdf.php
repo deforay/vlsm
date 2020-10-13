@@ -152,7 +152,7 @@ if (isset($result[0]['sample_tested_datetime']) && trim($result[0]['sample_teste
 }
 
 if (trim($result[0]['current_regimen']) != '') {
-  $aQuery = "SELECT * from r_art_code_details where art_id=" . $result[0]['current_regimen'];
+  $aQuery = "SELECT * from r_vl_art_regimen where art_id=" . $result[0]['current_regimen'];
   $aResult = $db->query($aQuery);
 } else {
   $aResult[0]['art_code'] = '';
@@ -203,7 +203,7 @@ if ($result[0]['switch_to_tdf_sample_type'] != '') {
 $rejectionfQuery = "SELECT * FROM facility_details where facility_id='" . $result[0]['sample_rejection_facility'] . "'";
 $rejectionfResult = $db->rawQuery($rejectionfQuery);
 
-$rejectionrQuery = "SELECT * FROM r_sample_rejection_reasons where rejection_reason_id='" . $result[0]['reason_for_sample_rejection'] . "'";
+$rejectionrQuery = "SELECT * FROM r_vl_sample_rejection_reasons where rejection_reason_id='" . $result[0]['reason_for_sample_rejection'] . "'";
 $rejectionrResult = $db->rawQuery($rejectionrQuery);
 
 //set sample type

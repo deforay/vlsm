@@ -77,7 +77,7 @@ try {
     }
 
     if (isset($_POST['newArtRegimen']) && trim($_POST['newArtRegimen']) != "") {
-        $artQuery = "SELECT art_id,art_code FROM r_art_code_details where (art_code='" . $_POST['newArtRegimen'] . "' OR art_code='" . strtolower($_POST['newArtRegimen']) . "' OR art_code='" . ucfirst(strtolower($_POST['newArtRegimen'])) . "') AND nation_identifier='rwd'";
+        $artQuery = "SELECT art_id,art_code FROM r_vl_art_regimen where (art_code='" . $_POST['newArtRegimen'] . "' OR art_code='" . strtolower($_POST['newArtRegimen']) . "' OR art_code='" . ucfirst(strtolower($_POST['newArtRegimen'])) . "') AND nation_identifier='rwd'";
         $artResult = $db->rawQuery($artQuery);
         if (!isset($artResult[0]['art_id'])) {
             $data = array(
@@ -86,7 +86,7 @@ try {
                 'parent_art' => '7',
                 'updated_datetime' => $general->getDateTime(),
             );
-            $result = $db->insert('r_art_code_details', $data);
+            $result = $db->insert('r_vl_art_regimen', $data);
             $_POST['artRegimen'] = $_POST['newArtRegimen'];
         } else {
             $_POST['artRegimen'] = $artResult[0]['art_code'];
@@ -138,7 +138,7 @@ try {
     }
 
     if (isset($_POST['newRejectionReason']) && trim($_POST['newRejectionReason']) != "") {
-        $rejectionReasonQuery = "SELECT rejection_reason_id FROM r_sample_rejection_reasons where rejection_reason_name='" . $_POST['newRejectionReason'] . "' OR rejection_reason_name='" . strtolower($_POST['newRejectionReason']) . "' OR rejection_reason_name='" . ucfirst(strtolower($_POST['newRejectionReason'])) . "'";
+        $rejectionReasonQuery = "SELECT rejection_reason_id FROM r_vl_sample_rejection_reasons where rejection_reason_name='" . $_POST['newRejectionReason'] . "' OR rejection_reason_name='" . strtolower($_POST['newRejectionReason']) . "' OR rejection_reason_name='" . ucfirst(strtolower($_POST['newRejectionReason'])) . "'";
         $rejectionResult = $db->rawQuery($rejectionReasonQuery);
         if (!isset($rejectionResult[0]['rejection_reason_id'])) {
             $data = array(
@@ -147,7 +147,7 @@ try {
                 'rejection_reason_status' => 'active',
                 'updated_datetime' => $general->getDateTime(),
             );
-            $id = $db->insert('r_sample_rejection_reasons', $data);
+            $id = $db->insert('r_vl_sample_rejection_reasons', $data);
             $_POST['rejectionReason'] = $id;
         } else {
             $_POST['rejectionReason'] = $rejectionResult[0]['rejection_reason_id'];
