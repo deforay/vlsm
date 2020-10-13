@@ -257,6 +257,9 @@ try {
 
             $printSampleCode[] = "'" . $accResult[$i]['sample_code'] . "'";
             if (file_exists(TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $accResult[$i]['import_machine_file_name'])) {
+                if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "import-result")) {
+                    mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "import-result", 0777, true);
+                }
                 copy(TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $accResult[$i]['import_machine_file_name'], UPLOAD_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $accResult[$i]['import_machine_file_name']);
             }
             $db = $db->where('temp_sample_id', $accResult[$i]['temp_sample_id']);

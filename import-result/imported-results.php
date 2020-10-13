@@ -5,7 +5,7 @@ $tsQuery = "SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
 $userQuery = "SELECT * FROM user_details where status='active'";
 $userResult = $db->rawQuery($userQuery);
-$tQuery = "select module, sample_review_by from temp_sample_import where imported_by ='" . $_SESSION['userId'] . "' limit 0,1";
+$tQuery = "SELECT module, sample_review_by FROM temp_sample_import WHERE imported_by ='" . $_SESSION['userId'] . "' limit 1";
 
 $tResult = $db->rawQueryOne($tQuery);
 if (!empty($tResult['sample_review_by'])) {
@@ -17,15 +17,8 @@ if (!empty($tResult['sample_review_by'])) {
 $module = $tResult['module'];
 
 
-//global config
-$cSampleQuery = "SELECT * FROM global_config";
-$cSampleResult = $db->query($cSampleQuery);
-$arr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($cSampleResult); $i++) {
-	$arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
-}
-
+$general = new \Vlsm\Models\General($db);
+$arr = $general->getGlobalConfig();
 
 if ($module == 'vl') {
 
@@ -148,7 +141,7 @@ foreach ($rejectionTypeResult as $type) {
 								<li><i class="fa fa-square" aria-hidden="true" style="color:#7d8388;"></i> - Control</li>
 							</ul>
 						</div>
-						<span><b style="color: #f03033;">Note:-</b>When you leave from this page, these temporary records will be deleted from the system.</span>
+						<span><b style="color: #f03033;">Note:-</b>When you leave this page, these temporary records will be deleted from the system.</span>
 					</div>
 					<!-- /.box-header -->
 					<div class="box-body">
