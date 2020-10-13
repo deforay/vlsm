@@ -1,7 +1,7 @@
 <?php
 ob_start();
 $title = "Edit user";
-include_once '../startup.php';
+#include_once '../startup.php';
 include_once APPLICATION_PATH . '/header.php';
 $id = base64_decode($_GET['id']);
 $userQuery = "SELECT * from user_details where user_id='" . $id . "'";
