@@ -116,6 +116,12 @@ $sharedPrivileges = array(
 	'edit-eid-test-reasons.php'					=> 'eid-sample-type.php',
 	'add-province.php'							=> 'province-details.php',
 	'edit-province.php'							=> 'province-details.php',
+	'implementation-partners.php'				=> 'province-details.php',
+	'add-implementation-partners.php'			=> 'province-details.php',
+	'edit-implementation-partners.php'			=> 'province-details.php',
+	'funding-sources.php'						=> 'province-details.php',
+	'add-funding-sources.php'					=> 'province-details.php',
+	'edit-funding-sources.php'					=> 'province-details.php',
 );
 // Does the current file share privileges with another privilege ?
 $currentFileName = isset($sharedPrivileges[$currentFileName]) ? $sharedPrivileges[$currentFileName] : $currentFileName;
