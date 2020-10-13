@@ -92,20 +92,26 @@ try {
                     //Changing date to European format for strtotime - https://stackoverflow.com/a/5736255
                     $sheetData[$testDateCol] = str_replace("/", "-", $sheetData[$testDateCol]);
                     $testingDate = date('Y-m-d H:i', strtotime($sheetData[$testDateCol]));
-
-                    if (strpos($sheetData[$resultCol], 'Copies / mL') !== false) {
-                        $absVal = str_replace("Copies / mL", "", $sheetData[$resultCol]);
-                        $absVal = str_replace(",", "", $sheetData[$resultCol]);
-                        preg_match_all('!\d+!', $absVal, $absDecimalVal);
-                        $absVal = $absDecimalVal = implode("", $absDecimalVal[0]);
-                    } else if (strpos($sheetData[$resultCol], 'Log (IU/mL)') !== false) {
-                        $logVal = str_replace("Log (IU/mL)", "", $sheetData[$resultCol]);
-                        $logVal = str_replace(",", ".", $logVal);
+                    if (strpos($sheetData[$resultCol], 'Log') !== false) {
+                        $sheetData[$resultCol] = str_replace(",", ".", $sheetData[$resultCol]); // in case they are using european decimal format
+                        $logVal = ((float) filter_var($sheetData[$resultCol], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION));
+                        $absDecimalVal = round((float) round(pow(10, $logVal) * 100) / 100);
+                        if (strpos($sheetData[$resultCol], "<") !== false) {
+                            $txtVal = $absVal = "< " . trim($absDecimalVal);
+                        } else {
+                            $txtVal = null;
+                            $absVal = $absDecimalVal;
+                        }
+                    } else if (strpos($sheetData[$resultCol], 'Copies') !== false) {
+                        $absDecimalVal = abs((int) filter_var($sheetData[$resultCol], FILTER_SANITIZE_NUMBER_INT));
+                        if (strpos($sheetData[$resultCol], "<") !== false) {
+                            $txtVal = $absVal = "< " . trim($absDecimalVal);
+                        } else {
+                            $txtVal = null;
+                            $absVal = $absDecimalVal;
+                        }
                     } else if (strpos($sheetData[$resultCol], 'IU/mL') !== false) {
-                        $absVal = str_replace("IU/mL", "", $sheetData[$resultCol]);
-                        $absVal = str_replace(" ", "", $sheetData[$resultCol]);
-                        preg_match_all('!\d+!', $absVal, $absDecimalVal);
-                        $absVal = $absDecimalVal = implode("", $absDecimalVal[0]);
+                        $absVal = $absDecimalVal = abs((int) filter_var($sheetData[$resultCol], FILTER_SANITIZE_NUMBER_INT));
                     } else {
                         if ($sheetData[$resultCol] == "" || $sheetData[$resultCol] == null) {
                             //$txtVal =  $sheetData[$flagCol];
@@ -124,11 +130,11 @@ try {
                     if ($sampleType == 'Patient') {
                         $sampleType = 'S';
                     } else if ($sampleType == 'Control') {
-                        if($sampleType == 'HIV_HIPOS'){
+                        if ($sampleType == 'HIV_HIPOS') {
                             $sampleType = 'HPC';
-                        } else if($sampleType == 'HIV_LOPOS'){
+                        } else if ($sampleType == 'HIV_LOPOS') {
                             $sampleType = 'LPC';
-                        } else if($sampleType == 'HIV_NEG'){
+                        } else if ($sampleType == 'HIV_NEG') {
                             $sampleType = 'NC';
                         }
                     }
@@ -167,7 +173,6 @@ try {
                     }
 
                     $m++;
-
                 }
             }
         }
@@ -280,7 +285,6 @@ try {
         $db->insert("log_result_updates", $data);
     }
     header("location:/import-result/imported-results.php");
-
 } catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());
