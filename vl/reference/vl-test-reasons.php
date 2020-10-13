@@ -1,5 +1,5 @@
 <?php
-$title = "Viral Load Art Code Details";
+$title = "VL Test Reasons";
 #require_once('../startup.php'); 
 include_once(APPLICATION_PATH . '/header.php');
 ?>
@@ -7,10 +7,10 @@ include_once(APPLICATION_PATH . '/header.php');
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<h1><i class="fa fa-gears"></i> Viral Load Art Code Details</h1>
+		<h1><i class="fa fa-gears"></i> VL Test Reasons</h1>
 		<ol class="breadcrumb">
 			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-			<li class="active">VL Art Code Details</li>
+			<li class="active">VL Test Reasons</li>
 		</ol>
 	</section>
 
@@ -21,16 +21,16 @@ include_once(APPLICATION_PATH . '/header.php');
 				<div class="box">
 					<div class="box-header with-border">
 						<?php if (isset($_SESSION['privileges']) && in_array("vl-art-code-details.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) { ?>
-							<a href="add-vl-art-code-details.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add VL Art Code Details</a>
+							<a href="add-vl-test-reasons.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add VL Test Reasons</a>
 						<?php } ?>
+						<!--<button class="btn btn-primary pull-right" style="margin-right: 1%;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>-->
 					</div>
 					<!-- /.box-header -->
 					<div class="box-body">
-						<table id="comorbiditiesDataTable" class="table table-bordered table-striped">
+						<table id="testReasonDataTable" class="table table-bordered table-striped">
 							<thead>
 								<tr>
-									<th>Art Code</th>
-									<th>Headings</th>
+									<th>Test Reason</th>
 									<th>Status</th>
 									<?php if (isset($_SESSION['privileges']) && in_array("vl-art-code-details.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) { ?>
 										<th>Action</th>
@@ -39,7 +39,7 @@ include_once(APPLICATION_PATH . '/header.php');
 							</thead>
 							<tbody>
 								<tr>
-									<td colspan="4" class="dataTables_empty">Loading data from server</td>
+									<td colspan="3" class="dataTables_empty">Loading data from server</td>
 								</tr>
 							</tbody>
 
@@ -58,10 +58,11 @@ include_once(APPLICATION_PATH . '/header.php');
 <script>
 	var oTable = null;
 	$(function() {
+		//$("#example1").DataTable();
 	});
 	$(document).ready(function() {
 		$.blockUI();
-		oTable = $('#comorbiditiesDataTable').dataTable({
+		oTable = $('#testReasonDataTable').dataTable({
 			"oLanguage": {
 				"sLengthMenu": "_MENU_ records per page"
 			},
@@ -72,9 +73,6 @@ include_once(APPLICATION_PATH . '/header.php');
 			"bStateSave": true,
 			"bRetrieve": true,
 			"aoColumns": [{
-					"sClass": "center"
-				},
-				{
 					"sClass": "center"
 				},
 				{
@@ -91,7 +89,7 @@ include_once(APPLICATION_PATH . '/header.php');
 			],
 			"bProcessing": true,
 			"bServerSide": true,
-			"sAjaxSource": "get-vl-art-code-details-helper.php",
+			"sAjaxSource": "get-vl-test-reasons-helper.php",
 			"fnServerData": function(sSource, aoData, fnCallback) {
 				$.ajax({
 					"dataType": 'json',

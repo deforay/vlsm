@@ -1489,3 +1489,8 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 UPDATE `resources` SET `module`='covid19' WHERE `module`='covid-19';
 
 ALTER TABLE `form_covid19` ADD `source_of_alert` VARCHAR(255) NULL DEFAULT NULL AFTER `implementing_partner`, ADD `source_of_alert_other` VARCHAR(255) NULL DEFAULT NULL AFTER `source_of_alert`;
+-- Thana 13-Oct-2020
+ALTER TABLE `r_eid_test_reasons` ADD `parent_reason` INT NULL DEFAULT '0' AFTER `test_reason_name`;
+ALTER TABLE `r_eid_test_reasons` ADD `data_sync` INT NULL DEFAULT '0' AFTER `updated_datetime`;
+ALTER TABLE `r_vl_test_reasons` ADD `parent_reason` INT(11) NULL DEFAULT '0' AFTER `test_reason_name`;
+ALTER TABLE `r_vl_test_reasons` ADD `data_sync` INT NULL DEFAULT '0' AFTER `updated_datetime`;

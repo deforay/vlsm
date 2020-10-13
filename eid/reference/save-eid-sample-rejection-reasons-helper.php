@@ -3,10 +3,9 @@ ob_start();
 if (session_status() == PHP_SESSION_NONE) {
 	session_start();
 }
-// echo "<pre>";print_r($_POST);die;
 #require_once('../startup.php');  
 $general = new \Vlsm\Models\General($db);
-$tableName = "r_sample_rejection_reasons";
+$tableName = "r_eid_sample_rejection_reasons";
 $primaryKey = "rejection_reason_id";
 
 try {
@@ -15,8 +14,8 @@ try {
 		$data = array(
 			'rejection_reason_name' 	=> $_POST['rejectionReasonName'],
             'rejection_type' 			=> $_POST['rejectionType'],
-            'rejection_reason_status'	=> $_POST['rejectionReasonCode'],
-            'rejection_reason_code' 	=> $_POST['rejectionReasonStatus'],
+            'rejection_reason_status'	=> $_POST['rejectionReasonStatus'],
+            'rejection_reason_code' 	=> $_POST['rejectionReasonCode'],
 			'updated_datetime' 			=> $general->getDateTime()
 		);
 
@@ -29,11 +28,11 @@ try {
 			$lastId = $db->getInsertId();
 		}
         if($lastId > 0){
-			$_SESSION['alertMsg'] = "VL Sample Rejection Reasons details added successfully";
-			$general->activityLog('VL Sample Rejection Reasons For VL', $_SESSION['userName'] . ' added new reference Sample Rejection Reasons for VL  ' . $_POST['rejectionReasonName'], 'vl-reference');
+			$_SESSION['alertMsg'] = "EID Sample Rejection Reasons details added successfully";
+			$general->activityLog('EID Sample Rejection Reasons', $_SESSION['userName'] . ' added new reference Sample Rejection Reasons for  ' . $_POST['rejectionReasonName'], 'eid-reference');
 		}
 	}
-	header("location:vl-sample-rejection-reasons.php");
+	header("location:eid-sample-rejection-reasons.php");
 } catch (Exception $exc) {
 	error_log($exc->getMessage());
 	error_log($exc->getTraceAsString());

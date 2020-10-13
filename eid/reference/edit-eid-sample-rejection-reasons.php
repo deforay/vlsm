@@ -2,10 +2,9 @@
 ob_start();
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-$rejReaons = $general->getRejectionReasons('vl');
-
+$rejReaons = $general->getRejectionReasons('eid');
 $id = base64_decode($_GET['id']);
-$rsnQuery = "SELECT * from r_sample_rejection_reasons where rejection_reason_id = $id";
+$rsnQuery = "SELECT * from r_covid19_sample_rejection_reasons where rejection_reason_id=$id";
 $rsnInfo = $db->query($rsnQuery);
 ?>
 <!-- Content Wrapper. Contains page content -->
@@ -29,7 +28,7 @@ $rsnInfo = $db->query($rsnQuery);
 			<!-- /.box-header -->
 			<div class="box-body">
 				<!-- form start -->
-				<form class="form-horizontal" method='post' name='addSampleRejcForm' id='addSampleRejcForm' autocomplete="off" enctype="multipart/form-data" action="save-vl-sample-rejection-reasons-helper.php">
+				<form class="form-horizontal" method='post' name='addSampleRejcForm' id='addSampleRejcForm' autocomplete="off" enctype="multipart/form-data" action="save-eid-sample-rejection-reasons-helper.php">
 					<div class="box-body">
 						<div class="row">
 							<div class="col-md-6">
@@ -37,7 +36,7 @@ $rsnInfo = $db->query($rsnQuery);
 									<label for="rejectionReasonName" class="col-lg-4 control-label">Rejection Reason Name <span class="mandatory">*</span></label>
 									<div class="col-lg-7">
 										<input type="text" class="form-control isRequired" id="rejectionReasonName" name="rejectionReasonName" value="<?php echo $rsnInfo[0]['rejection_reason_name']; ?>" placeholder="Rejection Reason Name" title="Please enter Rejection Reason name" />
-										<input type="hidden" class="form-control isRequired" id="rejectionReasonId" name="rejectionReasonId" value="<?php echo $_GET['id']; ?>" />
+										<input type="hidden" class="form-control isRequired" id="rejectionReasonId" name="rejectionReasonId" value="<?php echo base64_encode($rsnInfo[0]['rejection_reason_id']); ?>" />
 									</div>
 								</div>
 							</div>
@@ -66,6 +65,7 @@ $rsnInfo = $db->query($rsnQuery);
 									<label for="rejectionReasonStatus" class="col-lg-4 control-label">Rejection Reason Status</label>
 									<div class="col-lg-7">
 										<select class="form-control isRequired" id="rejectionReasonStatus" name="rejectionReasonStatus" placeholder="Rejection Reason Status" title="Please enter Rejection Reason Status">
+											<option value="">--Select--</option>
 											<option value="active" <?php echo ($rsnInfo[0]['rejection_reason_status'] == "active" ? 'selected' : ''); ?>>Active</option>
 											<option value="inactive" <?php echo ($rsnInfo[0]['rejection_reason_status'] == "inactive" ? 'selected' : ''); ?>>Inactive</option>
 										</select>
@@ -137,12 +137,12 @@ $rsnInfo = $db->query($rsnQuery);
 		checkValue = $("#" + id + " option:selected").html();
 		if (checkValue != '') {
 			$.post("/includes/addNewField.php", {
-					value: checkValue,
-					mode: 'addNewRejectionType'
-				},
-				function(data) {
-					console.log(data)
-				});
+				value: checkValue,
+				mode: 'addNewRejectionType'
+			},
+			function(data) {
+				console.log(data)
+			});
 		}
 	}
 </script>
