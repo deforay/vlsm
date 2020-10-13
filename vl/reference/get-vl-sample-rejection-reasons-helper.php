@@ -142,7 +142,7 @@ foreach ($rResult as $aRow) {
     $row[] = ucwords($aRow['rejection_type']);
     $row[] = ucwords($aRow['rejection_reason_code']);
     $row[] = ucwords($aRow['rejection_reason_status']);
-    if (isset($_SESSION['privileges']) && in_array("vl-art-code-details.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) {
+    if (isset($_SESSION['privileges']) && in_array("vl-art-code-details.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') {
         $row[] = '<a href="edit-vl-sample-rejection-reasons.php?id=' . base64_encode($aRow[$primaryKey]) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
     }
     $output['aaData'][] = $row;

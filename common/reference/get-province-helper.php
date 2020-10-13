@@ -4,8 +4,8 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 #require_once('../startup.php');  
 
-$tableName = "r_vl_sample_type";
-$primaryKey = "sample_id";
+$tableName = "province_details";
+$primaryKey = "province_id";
 //system config
 $systemConfigQuery = "SELECT * from system_config";
 $systemConfigResult = $db->query($systemConfigQuery);
@@ -18,7 +18,7 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
          * you want to insert a non-database field (for example a counter or static image)
         */
 
-$aColumns = array('sample_name', 'status');
+$aColumns = array('province_name', 'province_code');
 
 /* Indexed column (used for fast and accurate table cardinality) */
 $sIndexColumn = $primaryKey;
@@ -138,10 +138,10 @@ $output = array(
 
 foreach ($rResult as $aRow) {
     $row = array();
-    $row[] = ucwords($aRow['sample_name']);
-    $row[] = ucwords($aRow['status']);
-    if (isset($_SESSION['privileges']) && in_array("vl-art-code-details.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') {
-        $row[] = '<a href="edit-vl-sample-type.php?id=' . base64_encode($aRow['sample_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
+    $row[] = ucwords($aRow['province_name']);
+    $row[] = ucwords($aRow['province_code']);
+    if (isset($_SESSION['privileges']) && in_array("province-details.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') {
+        $row[] = '<a href="edit-province.php?id=' . base64_encode($aRow['province_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
     }
     $output['aaData'][] = $row;
 }

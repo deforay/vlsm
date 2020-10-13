@@ -20,7 +20,7 @@ include_once(APPLICATION_PATH . '/header.php');
 			<div class="col-xs-12">
 				<div class="box">
 					<div class="box-header with-border">
-						<?php if (isset($_SESSION['privileges']) && in_array("vl-art-code-details.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) { ?>
+						<?php if (isset($_SESSION['privileges']) && in_array("vl-art-code-details.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') { ?>
 							<a href="add-vl-art-code-details.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add VL Art Code Details</a>
 						<?php } ?>
 					</div>
@@ -32,7 +32,7 @@ include_once(APPLICATION_PATH . '/header.php');
 									<th>Art Code</th>
 									<th>Headings</th>
 									<th>Status</th>
-									<?php if (isset($_SESSION['privileges']) && in_array("vl-art-code-details.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) { ?>
+									<?php if (isset($_SESSION['privileges']) && in_array("vl-art-code-details.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') { ?>
 										<th>Action</th>
 									<?php } ?>
 								</tr>
@@ -80,7 +80,7 @@ include_once(APPLICATION_PATH . '/header.php');
 				{
 					"sClass": "center"
 				},
-				<?php if (isset($_SESSION['privileges']) && in_array("vl-art-code-details.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) { ?> {
+				<?php if (isset($_SESSION['privileges']) && in_array("vl-art-code-details.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') { ?> {
 						"sClass": "center",
 						"bSortable": false
 					},
