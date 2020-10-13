@@ -1,16 +1,17 @@
 <?php
-$title = "VL Test Reasons";
+$title = "Province Details";
 #require_once('../startup.php'); 
 include_once(APPLICATION_PATH . '/header.php');
+
 ?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<h1><i class="fa fa-gears"></i> VL Test Reasons</h1>
+		<h1><i class="fa fa-gears"></i> Province Details</h1>
 		<ol class="breadcrumb">
 			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-			<li class="active">VL Test Reasons</li>
+			<li class="active">Province Details</li>
 		</ol>
 	</section>
 
@@ -20,19 +21,18 @@ include_once(APPLICATION_PATH . '/header.php');
 			<div class="col-xs-12">
 				<div class="box">
 					<div class="box-header with-border">
-						<?php if (isset($_SESSION['privileges']) && in_array("vl-art-code-details.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') { ?>
-							<a href="add-vl-test-reasons.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add VL Test Reasons</a>
+						<?php if (isset($_SESSION['privileges']) && in_array("province-details.php", $_SESSION['privileges']) && $sarr['user_type'] != 'vluser') { ?>
+							<a href="add-province.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Province Details</a>
 						<?php } ?>
-						<!--<button class="btn btn-primary pull-right" style="margin-right: 1%;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>-->
 					</div>
 					<!-- /.box-header -->
 					<div class="box-body">
-						<table id="testReasonDataTable" class="table table-bordered table-striped">
+						<table id="samTypDataTable" class="table table-bordered table-striped">
 							<thead>
 								<tr>
-									<th>Test Reason</th>
-									<th>Status</th>
-									<?php if (isset($_SESSION['privileges']) && in_array("vl-art-code-details.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') { ?>
+									<th>Province Name</th>
+									<th>Province Code</th>
+									<?php if (isset($_SESSION['privileges']) && in_array("province-details.php", $_SESSION['privileges']) && $sarr['user_type'] != 'vluser') { ?>
 										<th>Action</th>
 									<?php } ?>
 								</tr>
@@ -62,7 +62,7 @@ include_once(APPLICATION_PATH . '/header.php');
 	});
 	$(document).ready(function() {
 		$.blockUI();
-		oTable = $('#testReasonDataTable').dataTable({
+		oTable = $('#samTypDataTable').dataTable({
 			"oLanguage": {
 				"sLengthMenu": "_MENU_ records per page"
 			},
@@ -78,7 +78,7 @@ include_once(APPLICATION_PATH . '/header.php');
 				{
 					"sClass": "center"
 				},
-				<?php if (isset($_SESSION['privileges']) && in_array("vl-art-code-details.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') { ?> {
+				<?php if (isset($_SESSION['privileges']) && in_array("province-details.php", $_SESSION['privileges']) && $sarr['user_type'] != 'vluser') { ?> {
 						"sClass": "center",
 						"bSortable": false
 					},
@@ -89,7 +89,7 @@ include_once(APPLICATION_PATH . '/header.php');
 			],
 			"bProcessing": true,
 			"bServerSide": true,
-			"sAjaxSource": "get-vl-test-reasons-helper.php",
+			"sAjaxSource": "get-province-helper.php",
 			"fnServerData": function(sSource, aoData, fnCallback) {
 				$.ajax({
 					"dataType": 'json',
