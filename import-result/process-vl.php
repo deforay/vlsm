@@ -10,7 +10,7 @@ try {
 
     $arr = $general->getGlobalConfig();
     $printSampleCode = array();
-    
+
     $importNonMatching = (isset($arr['import_non_matching_sample']) && $arr['import_non_matching_sample'] == 'no') ? false : true;
     $instanceQuery = "SELECT * FROM s_vlsm_instance";
     $instanceResult = $db->query($instanceQuery);
@@ -75,7 +75,7 @@ try {
                 if ($bvlResult) {
                     $data['batch_id'] = $bvlResult[0]['batch_id'];
                 } else {
-                    $batchResult = $db->insert('batch_details', array('test_type' => 'vl','batch_code' => $rResult[0]['batch_code'], 'batch_code_key' => $rResult[0]['batch_code_key'], 'sent_mail' => 'no', 'request_created_datetime' => $general->getDateTime()));
+                    $batchResult = $db->insert('batch_details', array('test_type' => 'vl', 'batch_code' => $rResult[0]['batch_code'], 'batch_code_key' => $rResult[0]['batch_code_key'], 'sent_mail' => 'no', 'request_created_datetime' => $general->getDateTime()));
                     $data['batch_id'] = $db->getInsertId();
                 }
 
@@ -281,7 +281,6 @@ try {
     //}
 
     echo "importedStatistics.php";
-    
 } catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());

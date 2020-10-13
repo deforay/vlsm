@@ -1,5 +1,8 @@
 <?php
 ob_start();
+
+$type = base64_decode($_GET['t']);
+
 $title = "Import " . strtoupper($type) . " Test Results From File";
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
@@ -14,7 +17,7 @@ $fResult = $db->rawQuery($fQuery);
 $lastQuery = "SELECT * FROM vl_request_form ORDER BY vl_sample_id DESC LIMIT 1";
 $lastResult = $db->rawQuery($lastQuery);
 
-$type = base64_decode($_GET['t']);
+
 
 ?>
 <!-- Content Wrapper. Contains page content -->
