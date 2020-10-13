@@ -435,6 +435,21 @@
 		$(".allMenu").removeClass('active');
 		$(".covid19ProgramMenu").addClass('active');
 		$(".covid19ClinicReportMenu").addClass('active');
+	} else if (splitsUrl == 'province-details.php' || splitsUrl == 'add-province.php' || splitsUrl == 'edit-province.php') {
+		$(".manage").addClass('active');
+		$(".common-reference-manage").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".common-reference-province").addClass('active');
+	} else if (splitsUrl == 'implementation-partners.php' || splitsUrl == 'add-implementation-partners.php' || splitsUrl == 'edit-implementation-partners.php') {
+		$(".manage").addClass('active');
+		$(".common-reference-manage").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".common-reference-implementation-partners").addClass('active');
+	} else if (splitsUrl == 'funding-sources.php' || splitsUrl == 'add-funding-sources.php' || splitsUrl == 'edit-funding-sources.php') {
+		$(".manage").addClass('active');
+		$(".common-reference-manage").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".common-reference-funding-sources").addClass('active');
 	} else if (splitsUrl == 'vl-art-code-details.php' || splitsUrl == 'add-vl-art-code-details.php' || splitsUrl == 'edit-vl-art-code-details.php') {
 		$(".manage").addClass('active');
 		$(".vl-reference-manage").addClass('active');

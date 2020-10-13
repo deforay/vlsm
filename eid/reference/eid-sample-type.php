@@ -20,7 +20,7 @@ include_once(APPLICATION_PATH . '/header.php');
 			<div class="col-xs-12">
 				<div class="box">
 					<div class="box-header with-border">
-						<?php if (isset($_SESSION['privileges']) && in_array("eid-sample-type.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) { ?>
+						<?php if (isset($_SESSION['privileges']) && in_array("eid-sample-type.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') { ?>
 							<a href="add-eid-sample-type.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Covid-19 Co-morbidities</a>
 						<?php } ?>
 					</div>
@@ -31,7 +31,7 @@ include_once(APPLICATION_PATH . '/header.php');
 								<tr>
 									<th>Sample Name</th>
 									<th>Status</th>
-									<?php if (isset($_SESSION['privileges']) && in_array("eid-sample-type.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) { ?>
+									<?php if (isset($_SESSION['privileges']) && in_array("eid-sample-type.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') { ?>
 										<th>Action</th>
 									<?php } ?>
 								</tr>
@@ -77,7 +77,7 @@ include_once(APPLICATION_PATH . '/header.php');
 				{
 					"sClass": "center"
 				},
-				<?php if (isset($_SESSION['privileges']) && in_array("eid-sample-type.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) { ?> {
+				<?php if (isset($_SESSION['privileges']) && in_array("eid-sample-type.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') { ?> {
 						"sClass": "center",
 						"bSortable": false
 					},

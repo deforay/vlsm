@@ -24,7 +24,7 @@ include_once(APPLICATION_PATH . '/header.php');
       <div class="col-xs-12">
         <div class="box">
           <div class="box-header with-border">
-            <?php if (isset($_SESSION['privileges']) && in_array("covid19-sample-type.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) { ?>
+            <?php if (isset($_SESSION['privileges']) && in_array("covid19-sample-type.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') { ?>
               <a href="add-covid19-test-reasons.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Covid-19 Test Reasons</a>
             <?php } ?>
             <!--<button class="btn btn-primary pull-right" style="margin-right: 1%;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>-->
@@ -36,7 +36,7 @@ include_once(APPLICATION_PATH . '/header.php');
                 <tr>
                   <th>Test Reason</th>
                   <th>Test Reason Status</th>
-                  <?php if (isset($_SESSION['privileges']) && in_array("covid19-sample-type.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) { ?>
+                  <?php if (isset($_SESSION['privileges']) && in_array("covid19-sample-type.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') { ?>
                     <th>Action</th>
                   <?php } ?>
                 </tr>
@@ -82,7 +82,7 @@ include_once(APPLICATION_PATH . '/header.php');
         {
           "sClass": "center"
         },
-        <?php if (isset($_SESSION['privileges']) && in_array("covid19-sample-type.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) { ?> {
+        <?php if (isset($_SESSION['privileges']) && in_array("covid19-sample-type.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') { ?> {
             "sClass": "center",
             "bSortable": false
           },
