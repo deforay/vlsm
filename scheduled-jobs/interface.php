@@ -57,7 +57,7 @@ if (count($interfaceInfo) > 0) {
                 $vlResult = trim($result['results']);
                 $unit = trim($result['test_unit']);
 
-                if (strpos($unit, 'Log (Copies / mL)') !== false) {
+                if (strpos($unit, 'Log') !== false) {
                     if (is_numeric($vlResult)) {
                         $logVal = $vlResult;
                         $vlResult = $absVal = $absDecimalVal = round((float) round(pow(10, $logVal) * 100) / 100);

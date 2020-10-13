@@ -70,14 +70,14 @@ try {
                     $num = count($sheetData);
                     $row++;
                     if ($row < $skip) {
-                        if($row == 8){                           
+                        if ($row == 8) {
                             $timestamp = DateTime::createFromFormat('!m/d/Y h:i:s A', $sheetData[1]);
-                            if(!empty($timestamp)){
+                            if (!empty($timestamp)) {
                                 $timestamp = $timestamp->getTimestamp();
                                 $testingDate = date('Y-m-d H:i', ($timestamp));
-                            }else{
+                            } else {
                                 $testingDate = null;
-                            }                            
+                            }
                         }
                         continue;
                     }
@@ -101,28 +101,29 @@ try {
                     // $sheetData[$testDateCol] = str_replace("/", "-", $sheetData[$testDateCol]);
                     // $testingDate = date('Y-m-d H:i', strtotime($sheetData[$testDateCol]));
 
-                    if (strpos($sheetData[$resultCol], 'Copies / mL') !== false) {
-                        if(strpos($sheetData[$resultCol], '< 839') !== false || $sheetData[$resultCol] == '839 Copies / mL'){
+                    if (strpos($sheetData[$resultCol], 'Log') !== false) {
+                        $sheetData[$resultCol] = str_replace(",", ".", $sheetData[$resultCol]); // in case they are using european decimal format
+                        $logVal = ((float) filter_var($sheetData[$resultCol], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION));
+                        $absDecimalVal = round((float) round(pow(10, $logVal) * 100) / 100);
+                        if (strpos($sheetData[$resultCol], "<") !== false) {
+                            $txtVal = $absVal = "< " . trim($absDecimalVal);
+                        } else {
+                            $txtVal = null;
+                            $absVal = $absDecimalVal;
+                        }
+                    } else if (strpos($sheetData[$resultCol], 'Copies') !== false) {
+                        if (strpos($sheetData[$resultCol], '<') !== false || $sheetData[$resultCol] == '839 Copies / mL') {
                             $txtVal = "Below Detection Level";
                             $resultFlag = "";
                             $absVal = "";
                             $logVal = "";
-                        }else{
-                            $absVal = str_replace("Copies / mL", "", $sheetData[$resultCol]);
-                            $absVal = str_replace(",", "", $sheetData[$resultCol]);
-                            preg_match_all('!\d+!', $absVal, $absDecimalVal);
-                            $absVal = $absDecimalVal = implode("", $absDecimalVal[0]);
+                        } else {
+                            $absVal = $absDecimalVal = abs((int) filter_var($sheetData[$resultCol], FILTER_SANITIZE_NUMBER_INT));
                         }
-                    } else if (strpos($sheetData[$resultCol], 'Log (IU/mL)') !== false) {
-                        $logVal = str_replace("Log (IU/mL)", "", $sheetData[$resultCol]);
-                        $logVal = str_replace(",", ".", $logVal);
                     } else if (strpos($sheetData[$resultCol], 'IU/mL') !== false) {
-                        $absVal = str_replace("IU/mL", "", $sheetData[$resultCol]);
-                        $absVal = str_replace(" ", "", $sheetData[$resultCol]);
-                        preg_match_all('!\d+!', $absVal, $absDecimalVal);
-                        $absVal = $absDecimalVal = implode("", $absDecimalVal[0]);
+                        $absVal = $absDecimalVal = abs((int) filter_var($sheetData[$resultCol], FILTER_SANITIZE_NUMBER_INT));
                     } else {
-                        if(strpos(strtolower($sheetData[$resultCol]), 'not detected') !== false || strtolower($sheetData[$resultCol]) == 'target not detected'){
+                        if (strpos(strtolower($sheetData[$resultCol]), 'not detected') !== false || strtolower($sheetData[$resultCol]) == 'target not detected') {
                             $txtVal = "Below Detection Level";
                             $resultFlag = "";
                             $absVal = "";
@@ -143,28 +144,28 @@ try {
                     $lotNumberVal = $sheetData[$lotNumberCol];
                     if (trim($sheetData[$lotExpirationDateCol]) != '') {
                         $timestamp = DateTime::createFromFormat('!m/d/Y', $sheetData[$lotExpirationDateCol]);
-                        if(!empty($timestamp)){
+                        if (!empty($timestamp)) {
                             $timestamp = $timestamp->getTimestamp();
                             $lotExpirationDateVal = date('Y-m-d H:i', $timestamp);
-                        }else{
+                        } else {
                             $lotExpirationDateVal = null;
                         }
-                    }                    
+                    }
 
                     $sampleType = $sheetData[$sampleTypeCol];
                     if ($sampleType == 'Patient') {
                         $sampleType = 'S';
                     } else if ($sampleType == 'Control') {
-                        
-                        if($sampleCode == 'HIV_HIPOS'){
+
+                        if ($sampleCode == 'HIV_HIPOS') {
                             $sampleType = 'HPC';
-                            $sampleCode = $sampleCode.'-'.$lotNumberVal;
-                        } else if($sampleCode == 'HIV_LOPOS'){
+                            $sampleCode = $sampleCode . '-' . $lotNumberVal;
+                        } else if ($sampleCode == 'HIV_LOPOS') {
                             $sampleType = 'LPC';
-                            $sampleCode = $sampleCode.'-'.$lotNumberVal;
-                        } else if($sampleCode == 'HIV_NEG'){
+                            $sampleCode = $sampleCode . '-' . $lotNumberVal;
+                        } else if ($sampleCode == 'HIV_NEG') {
                             $sampleType = 'NC';
-                            $sampleCode = $sampleCode.'-'.$lotNumberVal;
+                            $sampleCode = $sampleCode . '-' . $lotNumberVal;
                         }
                     }
 
@@ -196,7 +197,6 @@ try {
                     }
 
                     $m++;
-
                 }
             }
         }
@@ -309,7 +309,6 @@ try {
         $db->insert("log_result_updates", $data);
     }
     header("location:/import-result/imported-results.php");
-
 } catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());
