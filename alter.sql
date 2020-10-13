@@ -1761,3 +1761,5 @@ ALTER TABLE `form_hepatitis`
   MODIFY `hepatitis_id` int(11) NOT NULL AUTO_INCREMENT;
 
 
+UPDATE `system_config` SET `value` = '4.2.4' WHERE `system_config`.`name` = 'version';
+-- Version 4.2.4 -- Amit -- 14-Oct-2020
