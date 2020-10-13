@@ -1156,7 +1156,7 @@ ALTER TABLE `covid19_patient_symptoms` ADD `symptom_details` TEXT NULL DEFAULT N
 
 -- Amit 27 Sep 2020
 
--- You may have to disable "Enable foreign key checks" checkbox on phpMyAdmin
+-- You may have to uncheck "Enable foreign key checks" checkbox on phpMyAdmin
 SET FOREIGN_KEY_CHECKS=0;
 DELETE FROM privileges WHERE privilege_id IN (
   SELECT calc_id FROM ( SELECT MAX(privilege_id) AS calc_id FROM privileges GROUP BY `resource_id`, `privilege_name` HAVING COUNT(privilege_id) > 1 ) as temp_privileges
@@ -1498,3 +1498,178 @@ INSERT INTO `resources` (`resource_id`, `module`, `resource_name`, `display_name
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '36', 'province-details.php', 'Manage common Reference');
 ALTER TABLE `r_implementation_partners` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `i_partner_status`, ADD `data_sync` INT(11) NULL DEFAULT '0' AFTER `updated_datetime`;
 ALTER TABLE `r_funding_sources` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `funding_source_status`, ADD `data_sync` INT(11) NULL DEFAULT '0' AFTER `updated_datetime`;
+
+
+-- AMIT 13-OCT-2020
+
+-- You may have to uncheck "Enable foreign key checks" checkbox on phpMyAdmin
+SET FOREIGN_KEY_CHECKS=0;
+DROP TABLE privileges;
+DROP TABLE resources;
+SET FOREIGN_KEY_CHECKS=1;
+
+ALTER TABLE roles_privileges_map DROP FOREIGN KEY roles_privileges_map_ibfk_2;
+
+CREATE TABLE `privileges` (
+  `privilege_id` int(11) NOT NULL,
+  `resource_id` varchar(255) NOT NULL,
+  `privilege_name` varchar(255) DEFAULT NULL,
+  `display_name` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES
+(1, 'users', 'users.php', 'Access'),
+(2, 'users', 'addUser.php', 'Add'),
+(3, 'users', 'editUser.php', 'Edit'),
+(4, 'facility', 'facilities.php', 'Access'),
+(5, 'facility', 'addFacility.php', 'Add'),
+(6, 'facility', 'editFacility.php', 'Edit'),
+(7, 'global-config', 'globalConfig.php', 'Access'),
+(8, 'global-config', 'editGlobalConfig.php', 'Edit'),
+(9, 'import-config', 'importConfig.php', 'Access'),
+(10, 'import-config', 'addImportConfig.php', 'Add'),
+(11, 'import-config', 'editImportConfig.php', 'Edit'),
+(12, 'vl-test-request', 'vlRequest.php', 'Access'),
+(13, 'vl-test-request', 'addVlRequest.php', 'Add'),
+(14, 'vl-test-request', 'editVlRequest.php', 'Edit'),
+(15, 'vl-test-request', 'viewVlRequest.php', 'View Vl Request'),
+(16, 'vl-batch', 'batchcode.php', 'Access'),
+(17, 'vl-batch', 'addBatch.php', 'Add'),
+(18, 'vl-batch', 'editBatch.php', 'Edit'),
+(19, 'vl-results', 'addImportResult.php', 'Import VL Results from File'),
+(20, 'vl-results', 'vlPrintResult.php', 'Print Result PDF'),
+(21, 'vl-results', 'vlTestResult.php', 'Access'),
+(22, 'vl-reports', 'vl-sample-status.php', 'Sample Status Report'),
+(23, 'vl-reports', 'vlResult.php', 'Access Export VL Data'),
+(24, 'home', 'index.php', 'Access'),
+(25, 'roles', 'roles.php', 'Access'),
+(26, 'roles', 'editRole.php', 'Edit'),
+(27, 'vl-test-request', 'vlRequestMail.php', 'Email Test Request'),
+(28, 'test-request-email-config', 'testRequestEmailConfig.php', 'Access'),
+(29, 'vl-test-request', 'sendRequestToMail.php', 'Send Request to Mail'),
+(31, 'vl-results', 'vlResultApproval.php', 'Manage VL Result Status (Approve/Reject)'),
+(33, 'vl-reports', 'highViralLoad.php', 'High VL Report'),
+(34, 'vl-reports', 'addContactNotes.php', 'Contact Notes (High VL Reports)'),
+(39, 'roles', 'addRole.php', 'Add'),
+(40, 'vl-reports', 'vlTestResultStatus.php', 'Dashboard'),
+(41, 'vl-test-request', 'patientList.php', 'Export Patient List'),
+(43, 'test-request-email-config', 'editTestRequestEmailConfig.php', 'Edit'),
+(45, 'vl-test-request', 'vlResultMail.php', 'Email Test Result'),
+(46, 'vl-batch', 'editBatchControlsPosition.php', 'Edit Controls Position'),
+(47, 'vl-batch', 'addBatchControlsPosition.php', 'Add Controls Position'),
+(48, 'test-result-email-config', 'testResultEmailConfig.php', 'Access'),
+(49, 'test-result-email-config', 'editTestResultEmailConfig.php', 'Edit'),
+(50, 'vl-test-request', 'vlRequestMailConfirm.php', 'Email Test Request Confirm'),
+(51, 'vl-test-request', 'vlResultMailConfirm.php', 'Email Test Result Confirm'),
+(56, 'vl-reports', 'vlWeeklyReport.php', 'VL Weekly Report'),
+(57, 'vl-reports', 'sampleRejectionReport.php', 'Sample Rejection Report'),
+(59, 'vl-reports', 'vlMonitoringReport.php', 'Sample Monitoring Report'),
+(62, 'vl-reports', 'vlRequestRwdForm.php', 'Manage QR Code Rwd Form'),
+(63, 'vl-reports', 'vlControlReport.php', 'Controls Report'),
+(64, 'facility', 'addVlFacilityMap.php', 'Add Facility Map'),
+(65, 'facility', 'facilityMap.php', 'Access Facility Map'),
+(66, 'facility', 'editVlFacilityMap.php', 'Edit Facility Map'),
+(67, 'specimen-referral-manifest', 'addSpecimenReferralManifest.php', 'Add'),
+(68, 'specimen-referral-manifest', 'editSpecimenReferralManifest.php', 'Edit'),
+(69, 'specimen-referral-manifest', 'specimenReferralManifestList.php', 'Access'),
+(70, 'vl-reports', 'vlResultAllFieldExportInExcel.php', 'Export VL Data in Excel'),
+(71, 'move-samples', 'sampleList.php', 'Access'),
+(72, 'move-samples', 'addSampleList.php', 'Add Samples List'),
+(73, 'move-samples', 'editSampleList.php', 'Edit Sample List'),
+(74, 'eid-requests', 'eid-add-request.php', 'Add Request'),
+(75, 'eid-requests', 'eid-edit-request.php', 'Edit Request'),
+(76, 'eid-requests', 'eid-requests.php', 'View Requests'),
+(77, 'eid-batches', 'eid-batches.php', 'View Batches'),
+(78, 'eid-batches', 'eid-add-batch.php', 'Add Batch'),
+(79, 'eid-batches', 'eid-edit-batch.php', 'Edit Batch'),
+(80, 'eid-results', 'eid-manual-results.php', 'Enter Result'),
+(81, 'eid-results', 'eid-import-result.php', 'Import Result File'),
+(84, 'eid-results', 'eid-result-status.php', 'Manage Result Status'),
+(85, 'eid-results', 'eid-print-results.php', 'Print Results'),
+(86, 'eid-management', 'eid-export-data.php', 'Export Data'),
+(87, 'eid-management', 'eid-sample-rejection-report.php', 'Sample Rejection Report'),
+(88, 'eid-management', 'eid-sample-status.php', 'Sample Status Report'),
+(89, 'vl-test-request', 'addSamplesFromManifest.php', 'Add Samples from Manifest'),
+(91, 'eid-requests', 'addSamplesFromManifest.php', 'Add Samples from Manifest'),
+(95, 'covid-19-requests', 'covid-19-add-request.php', 'Add Request'),
+(96, 'covid-19-requests', 'covid-19-edit-request.php', 'Edit Request'),
+(97, 'covid-19-requests', 'covid-19-requests.php', 'View Requests'),
+(98, 'covid-19-requests', 'covid-19-result-status.php', 'Manage Result Status'),
+(99, 'covid-19-requests', 'covid-19-print-results.php', 'Print Results'),
+(100, 'covid-19-batches', 'covid-19-batches.php', 'View Batches'),
+(101, 'covid-19-batches', 'covid-19-add-batch.php', 'Add Batch'),
+(102, 'covid-19-batches', 'covid-19-edit-batch.php', 'Edit Batch'),
+(103, 'covid-19-results', 'covid-19-manual-results.php', 'Enter Result Manually'),
+(104, 'covid-19-results', 'covid-19-import-result.php', 'Import Result File'),
+(105, 'covid-19-management', 'covid-19-export-data.php', 'Export Data'),
+(106, 'covid-19-management', 'covid-19-sample-rejection-report.php', 'Sample Rejection Report'),
+(107, 'covid-19-management', 'covid-19-sample-status.php', 'Sample Status Report'),
+(108, 'covid-19-requests', 'record-final-result.php', 'Record Final Result'),
+(109, 'covid-19-requests', 'can-record-confirmatory-tests.php', 'Can Record Confirmatory Tests'),
+(110, 'covid-19-requests', 'update-record-confirmatory-tests.php', 'Update Record Confirmatory Tests'),
+(111, 'covid-19-batches', 'covid-19-confirmation-manifest.php', 'Covid-19 Confirmation Manifest'),
+(112, 'covid-19-batches', 'covid-19-add-confirmation-manifest.php', 'Add New Confirmation Manifest'),
+(113, 'covid-19-batches', 'generate-confirmation-manifest.php', 'Generate Positive Confirmation Manifest'),
+(114, 'covid-19-batches', 'covid-19-edit-confirmation-manifest.php', 'Edit Positive Confirmation Manifest'),
+(121, 'eid-management', 'eid-clinic-report.php', 'EID Clinic Reports'),
+(122, 'covid-19-management', 'covid-19-clinic-report.php', 'Covid-19 Clinic Reports'),
+(123, 'covid-19-reference', 'covid19-sample-type.php', 'Manage Reference'),
+(124, 'covid-19-reference', 'covid19-comorbidities.php', 'Manage Comorbidities'),
+(125, 'covid-19-reference', 'addCovid19Comorbidities.php', 'Add Comorbidities'),
+(126, 'covid-19-reference', 'editCovid19Comorbidities.php', 'Edit Comorbidities'),
+(127, 'covid-19-reference', 'covid19-sample-rejection-reasons.php', 'Manage Sample Rejection Reasons'),
+(128, 'covid-19-reference', 'addCovid19SampleRejectionReason.php', 'Add Sample Rejection Reason'),
+(129, 'covid-19-reference', 'editCovid19SampleRejectionReason.php', 'Edit Sample Rejection Reason'),
+(130, 'vl-reference', 'vl-art-code-details.php', 'Manage VL Reference Tables'),
+(131, 'eid-reference', 'eid-sample-type.php', 'Manage EID Reference Tables'),
+(139, 'common-reference', 'province-details.php', 'Manage Common Reference Tables');
+
+ALTER TABLE `privileges`
+  ADD PRIMARY KEY (`privilege_id`),
+  ADD UNIQUE KEY `resource` (`resource_id`,`privilege_name`);
+
+CREATE TABLE `resources` (
+  `resource_id` varchar(255) NOT NULL,
+  `module` varchar(255) NOT NULL,
+  `display_name` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `resources` (`resource_id`, `module`, `display_name`) VALUES
+('common-reference', 'admin', 'Common Reference Tables'),
+('covid-19-batches', 'covid19', 'Covid-19 Batch Management'),
+('covid-19-management', 'covid19', 'Covid-19 Reports'),
+('covid-19-reference', 'admin', 'Covid-19 Reference Tables'),
+('covid-19-requests', 'covid19', 'Covid-19 Request Management'),
+('covid-19-results', 'covid19', 'Covid-19 Result Management'),
+('eid-batches', 'eid', 'EID Batch Management'),
+('eid-management', 'eid', 'EID Reports'),
+('eid-reference', 'admin', 'EID Reference Management'),
+('eid-requests', 'eid', 'EID Request Management'),
+('eid-results', 'eid', 'EID Result Management'),
+('facility', 'admin', 'Manage Facility'),
+('global-config', 'admin', 'Manage General Config'),
+('home', 'common', 'Dashboard'),
+('import-config', 'admin', 'Manage Import Config'),
+('move-samples', 'common', 'Move Samples'),
+('roles', 'admin', 'Manage Roles'),
+('specimen-referral-manifest', 'vl', 'Manage Specimen Referral Manifests'),
+('test-request-email-config', 'admin', 'Manage Test Request Email Config'),
+('test-result-email-config', 'admin', 'Manage Test Result Email Config'),
+('users', 'admin', 'Manage Users'),
+('vl-batch', 'vl', 'Manage VL Batch'),
+('vl-reference', 'admin', 'VL Reference Management'),
+('vl-reports', 'vl', 'VL Reports'),
+('vl-results', 'vl', 'VL Results'),
+('vl-test-request', 'vl', 'VL Requests');
+
+ALTER TABLE `resources`
+  ADD PRIMARY KEY (`resource_id`);
+
+ALTER TABLE `privileges`
+  MODIFY `privilege_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=140;
+
+ALTER TABLE roles_privileges_map
+ADD FOREIGN KEY (privilege_id) REFERENCES privileges(privilege_id);
+
+
+
