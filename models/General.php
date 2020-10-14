@@ -468,6 +468,15 @@ class General
         return $diff->format('%m') + 12 * $diff->format('%y');
     }
     
+    public function ageInYearMonthDays($date)
+    {
+        $bday = new \DateTime($date); // Your date of birth
+        $today = new \Datetime(date('m.d.y'));
+        $diff = $today->diff($bday);
+        // printf(' Your age : %d years, %d month, %d days', $diff->y, $diff->m, $diff->d);
+        return array("year" => $diff->y, "months" => $diff->m, "days" => $diff->d);
+    }
+    
     public function getRejectionReasons($testType)
     {
         $rejArray = array('general', 'whole blood', 'plasma', 'dbs', 'testing');

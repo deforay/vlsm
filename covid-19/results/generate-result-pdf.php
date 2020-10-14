@@ -1,6 +1,6 @@
 <?php
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+	session_start();
 }
 ob_start();
 
@@ -27,7 +27,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
 if (isset($arr['default_time_zone']) && $arr['default_time_zone'] != '') {
 	date_default_timezone_set($arr['default_time_zone']);
 } else {
-	date_default_timezone_set(!empty(date_default_timezone_get()) ?  date_default_timezone_get() : "UTC"); 
+	date_default_timezone_set(!empty(date_default_timezone_get()) ?  date_default_timezone_get() : "UTC");
 }
 //set mField Array
 $mFieldArray = array();
@@ -49,26 +49,29 @@ if (isset($_POST['newData']) && $_POST['newData'] != '') {
 }
 if (isset($_POST['id']) && trim($_POST['id']) != '') {
 
-	$searchQuery = "SELECT vl.*,f.*,l.facility_name as labName,
-                  l.facility_logo as facilityLogo,
-                  rip.i_partner_name,
-                  rsrr.rejection_reason_name ,
-                  u_d.user_name as reviewedBy,
-                  a_u_d.user_name as approvedBy,
-				  rfs.funding_source_name,
-				  c.iso_name as nationality,
-				  rst.sample_name
-                  FROM form_covid19 as vl
-				  LEFT JOIN r_countries as c ON vl.patient_nationality=c.id
-                  LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id
-                  LEFT JOIN facility_details as l ON l.facility_id=vl.lab_id 
-                  LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by 
-                  LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by 
-                  LEFT JOIN r_covid19_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection 
-                  LEFT JOIN r_implementation_partners as rip ON rip.i_partner_id=vl.implementing_partner
-				  LEFT JOIN r_funding_sources as rfs ON rfs.funding_source_id=vl.funding_source 
-				  LEFT JOIN r_covid19_sample_type as rst ON rst.sample_id=vl.specimen_type 
-                  WHERE vl.covid19_id IN(" . $_POST['id'] . ")";
+	$searchQuery = "SELECT vl.*,f.*,
+				l.facility_name as labName,
+				l.facility_state as labState,
+				l.facility_district as labCounty,
+				l.facility_logo as facilityLogo,
+				rip.i_partner_name,
+				rsrr.rejection_reason_name ,
+				u_d.user_name as reviewedBy,
+				a_u_d.user_name as approvedBy,
+				rfs.funding_source_name,
+				c.iso_name as nationality,
+				rst.sample_name
+				FROM form_covid19 as vl
+				LEFT JOIN r_countries as c ON vl.patient_nationality=c.id
+				LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id
+				LEFT JOIN facility_details as l ON l.facility_id=vl.lab_id 
+				LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by 
+				LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by 
+				LEFT JOIN r_covid19_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection 
+				LEFT JOIN r_implementation_partners as rip ON rip.i_partner_id=vl.implementing_partner
+				LEFT JOIN r_funding_sources as rfs ON rfs.funding_source_id=vl.funding_source 
+				LEFT JOIN r_covid19_sample_type as rst ON rst.sample_id=vl.specimen_type 
+				WHERE vl.covid19_id IN(" . $_POST['id'] . ")";
 } else {
 	$searchQuery = $allQuery;
 }
@@ -123,7 +126,7 @@ class MYPDF extends TCPDF
 				$this->SetFont('helvetica', 'u', 10);
 				$this->writeHTMLCell(0, 0, 10, 40, 'TESTES AU COVID-19 PAR RT-PCR en temps réel N°', 0, 0, 0, true, 'C', true);
 				$this->writeHTMLCell(0, 0, 15, 48, '<hr>', 0, 0, 0, true, 'C', true);
-			} else{
+			} else {
 				$this->SetFont('helvetica', 'B', 16);
 				$this->writeHTMLCell(0, 0, 10, 18, $this->text, 0, 0, 0, true, 'C', true);
 				if (trim($this->lab) != '') {
