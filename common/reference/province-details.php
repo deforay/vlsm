@@ -1,5 +1,5 @@
 <?php
-$title = "Province Details";
+$title = "Province";
 #require_once('../startup.php'); 
 include_once(APPLICATION_PATH . '/header.php');
 
@@ -8,10 +8,10 @@ include_once(APPLICATION_PATH . '/header.php');
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<h1><i class="fa fa-gears"></i> Province Details</h1>
+		<h1><i class="fa fa-gears"></i> Province</h1>
 		<ol class="breadcrumb">
 			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-			<li class="active">Province Details</li>
+			<li class="active">Province</li>
 		</ol>
 	</section>
 
@@ -22,7 +22,7 @@ include_once(APPLICATION_PATH . '/header.php');
 				<div class="box">
 					<div class="box-header with-border">
 						<?php if (isset($_SESSION['privileges']) && in_array("province-details.php", $_SESSION['privileges']) && $sarr['user_type'] != 'vluser') { ?>
-							<a href="add-province.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Province Details</a>
+							<a href="add-province.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add New Province</a>
 						<?php } ?>
 					</div>
 					<!-- /.box-header -->
