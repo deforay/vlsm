@@ -96,12 +96,13 @@ try {
 
             $redirect = '/error/401.php';
             //set role and privileges
-            $priQuery = "SELECT p.privilege_name,rp.privilege_id FROM roles_privileges_map as rp INNER JOIN privileges as p ON p.privilege_id=rp.privilege_id  where rp.role_id='" . $admin[0]['role_id'] . "'";
+            $priQuery = "SELECT p.privilege_name, rp.privilege_id, r.module FROM roles_privileges_map as rp INNER JOIN privileges as p ON p.privilege_id=rp.privilege_id INNER JOIN resources as r ON r.resource_id=p.resource_id  where rp.role_id='" . $admin[0]['role_id'] . "'";
             $priInfo = $db->query($priQuery);
             $priId = array();
             if ($priInfo) {
                 foreach ($priInfo as $id) {
                     $priId[] = $id['privilege_name'];
+                    $module[$id['module']] = $id['module'];
                 }
 
                 if ($admin[0]['landing_page'] != '') {
@@ -119,8 +120,9 @@ try {
                 }
             }
             //check clinic or lab user
-            $_SESSION['userType'] = '';
+            $_SESSION['userType']   = '';
             $_SESSION['privileges'] = $priId;
+            $_SESSION['module']     = $module;
 
 
             if ($systemType != null && $systemType == 'vluser' && $systemLabId != '' && $systemLabId != null) {
