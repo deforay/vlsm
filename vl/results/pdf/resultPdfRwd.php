@@ -151,64 +151,61 @@ if (sizeof($requestResult) > 0) {
           $tndMessage = '';
           $messageTextSize = '12px';
           if ($result['result'] != NULL && trim($result['result']) != '') {
-               $resultType = is_numeric($result['result']);
-               if (in_array(strtolower(trim($result['result'])), array("tnd", "target not detected"))) {
-                    $vlResult = 'TND*';
-                    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_smile.png" alt="smile_face"/>';
-                    $showMessage = ucfirst($arr['l_vl_msg']);
-                    $tndMessage = 'TND* - Target not Detected';
-               } else if (in_array(strtolower(trim($result['result'])), array("failed", "fail", "no_sample", "invalid"))) {
-                    $vlResult = $result['result'];
-                    $smileyContent = '';
-                    $showMessage = '';
-                    $messageTextSize = '14px';
-               } else if (trim($result['result']) > 1000 && $result['result'] <= 10000000) {
-                    $vlResult = $result['result'];
-                    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_frown.png" alt="frown_face"/>';
-                    $showMessage = ucfirst($arr['h_vl_msg']);
-                    $messageTextSize = '15px';
-               } else if (trim($result['result']) <= 1000 && $result['result'] >= 20) {
-                    $vlResult = $result['result'];
-                    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_smile.png" alt="smile_face"/>';
-                    $showMessage = ucfirst($arr['l_vl_msg']);
-               } else if (trim($result['result'] > 10000000) && $resultType) {
-                    $vlResult = $result['result'];
-                    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_frown.png" alt="frown_face"/>';
-                    //$showMessage = 'Value outside machine detection limit';
-               } else if (trim($result['result'] < 20) && $resultType) {
-                    $vlResult = $result['result'];
-                    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_smile.png" alt="smile_face"/>';
-                    //$showMessage = 'Value outside machine detection limit';
-               } else if (trim($result['result']) == '<20' || trim($result['result']) == '< 20') {
-                    $vlResult = '&lt;20';
-                    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_smile.png" alt="smile_face"/>';
-                    $showMessage = ucfirst($arr['l_vl_msg']);
-               } else if (trim($result['result']) == '>10000000' || trim($result['result']) == '> 10000000') {
-                    $vlResult = $result['result'];
-                    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_frown.png" alt="frown_face"/>';
-                    $showMessage = ucfirst($arr['h_vl_msg']);
-               } else if ($result['vl_test_platform'] == 'Roche') {
-                    $chkSign = '';
-                    $smileyShow = '';
-                    $chkSign = strchr($result['result'], '>');
-                    if ($chkSign != '') {
-                         $smileyShow = str_replace(">", "", $result['result']);
-                         $vlResult = $result['result'];
-                         //$showMessage = 'Invalid value';
-                    }
-                    $chkSign = '';
-                    $chkSign = strchr($result['result'], '<');
-                    if ($chkSign != '') {
-                         $smileyShow = str_replace("<", "", $result['result']);
-                         $vlResult = str_replace("<", "&lt;", $result['result']);
-                         //$showMessage = 'Invalid value';
-                    }
-                    if ($smileyShow != '' && $smileyShow <= $arr['viral_load_threshold_limit']) {
-                         $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_smile.png" alt="smile_face"/>';
-                    } else if ($smileyShow != '' && $smileyShow > $arr['viral_load_threshold_limit']) {
+               $vlResult = trim($result['result']);
+               $isResultNumeric = is_numeric($vlResult);
+
+               if ($isResultNumeric) {
+                    if ($vlResult > 1000) {
                          $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_frown.png" alt="frown_face"/>';
+                         $showMessage = ($arr['h_vl_msg']);
+                         $messageTextSize = '15px';
+                    } else if ($vlResult <= 1000) {
+                         $vlResult = $result['result'];
+                         $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_smile.png" alt="smile_face"/>';
+                         $showMessage = ($arr['l_vl_msg']);
+                    }
+               } else {
+                    if (in_array(strtolower($vlResult), array("tnd", "target not detected"))) {
+                         $vlResult = 'TND*';
+                         $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_smile.png" alt="smile_face"/>';
+                         $showMessage = ($arr['l_vl_msg']);
+                         $tndMessage = 'TND* - Target not Detected';
+                    } else if (in_array(strtolower($vlResult), array("failed", "fail", "no_sample", "invalid"))) {
+                         $smileyContent = '';
+                         $showMessage = '';
+                         $messageTextSize = '14px';
+                    
+                    } else if (in_array($vlResult, array("<20", "< 20", "<40", "< 40"))) {
+                         $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_smile.png" alt="smile_face"/>';
+                         $showMessage = ($arr['l_vl_msg']);
+                    } else if ($vlResult == '>10000000' || $vlResult == '> 10000000') {
+                         $vlResult = $result['result'];
+                         $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_frown.png" alt="frown_face"/>';
+                         $showMessage = ($arr['h_vl_msg']);
                     }
                }
+
+               // if ($result['vl_test_platform'] == 'Roche') {
+               //      $chkSign = '';
+               //      $smileyShow = '';
+               //      $chkSign = strchr($vlResult, '>');
+               //      if ($chkSign != '') {
+               //           $smileyShow = str_replace(">", "", $vlResult);
+               //           //$showMessage = 'Invalid value';
+               //      }
+               //      $chkSign = '';
+               //      $chkSign = strchr($result['result'], '<');
+               //      if ($chkSign != '') {
+               //           $smileyShow = str_replace("<", "", $vlResult);
+               //           $vlResult = str_replace("<", "&lt;", $vlResult);
+               //           //$showMessage = 'Invalid value';
+               //      }
+               //      if ($smileyShow != '' && $smileyShow <= $arr['viral_load_threshold_limit']) {
+               //           $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_smile.png" alt="smile_face"/>';
+               //      } else if ($smileyShow != '' && $smileyShow > $arr['viral_load_threshold_limit']) {
+               //           $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_frown.png" alt="frown_face"/>';
+               //      }
+               // }
           }
           if (isset($arr['show_smiley']) && trim($arr['show_smiley']) == "no") {
                $smileyContent = '';
