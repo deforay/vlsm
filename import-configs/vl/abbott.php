@@ -90,7 +90,7 @@ try {
                     //$reviewBy = $sheetData[$reviewByCol];
 
                     //Changing date to European format for strtotime - https://stackoverflow.com/a/5736255
-                    $sheetData[$testDateCol] = str_replace("/", "-", $sheetData[$testDateCol]);
+                    //$sheetData[$testDateCol] = str_replace("/", "-", $sheetData[$testDateCol]);
                     $testingDate = date('Y-m-d H:i', strtotime($sheetData[$testDateCol]));
                     if (strpos($sheetData[$resultCol], 'Log') !== false) {
                         $sheetData[$resultCol] = str_replace(",", ".", $sheetData[$resultCol]); // in case they are using european decimal format
