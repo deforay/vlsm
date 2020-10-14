@@ -38,7 +38,7 @@ class SouthSudan_PDF extends MYPDF
                 $this->SetFont('helvetica', 'B', 9);
                 $this->writeHTMLCell(0, 0, 20, 30, 'COVID-19 (SARS-COV-2) Individual Lab Test Results Report Form', 0, 0, 0, true, 'C', true);
     
-                $this->writeHTMLCell(0, 0, 25, 35, '<hr>', 0, 0, 0, true, 'C', true);
+                // $this->writeHTMLCell(0, 0, 25, 35, '<hr>', 0, 0, 0, true, 'C', true);
             }else{
                 if (trim($this->logo) != '') {
                     if (file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'logo' . DIRECTORY_SEPARATOR . $this->logo)) {
@@ -122,7 +122,7 @@ if (sizeof($requestResult) > 0) {
         $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
         // set margins
-        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP + 14, PDF_MARGIN_RIGHT);
+        $pdf->SetMargins(10, PDF_MARGIN_TOP + 14, 10);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
@@ -162,11 +162,7 @@ if (sizeof($requestResult) > 0) {
         //Set Age
         $age = 'Unknown';
         if (isset($result['patient_dob']) && trim($result['patient_dob']) != '' && $result['patient_dob'] != '0000-00-00') {
-            $todayDate = strtotime(date('Y-m-d'));
-            $dob = strtotime($result['patient_dob']);
-            $difference = $todayDate - $dob;
-            $seconds_per_year = 60 * 60 * 24 * 365;
-            $age = round($difference / $seconds_per_year);
+            $ageCalc = $general->ageInYearMonthDays($result['patient_dob']);
         } elseif (isset($result['patient_age']) && trim($result['patient_age']) != '' && trim($result['patient_age']) > 0) {
             $age = $result['patient_age'];
         }
@@ -250,237 +246,205 @@ if (sizeof($requestResult) > 0) {
             $testMethod = $rows['test_name'];
         }
         $html = '';
-        $html .= '<table style="padding:0px 2px 2px 2px;">';
-
+        $html .= '<table border="1" style="padding:3px">';
             $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">FULL NAME : </td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $patientFname . ' ' . $patientLname . '</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
+                $html .= '<td colspan="2" style="line-height:17px;font-size:13px;font-weight:bold;text-align:left;">CLIENTS IDENTIFICATION DETAILS</td>';
+                $html .= '<td colspan="2" style="line-height:17px;font-size:13px;font-weight:bold;text-align:left;">TESTING LAB INFORMATION</td>';
+            $html .= '</tr>';
+            
+            $html .= '<tr>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">FULL NAME </td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">' . $patientFname . ' ' . $patientLname . '</td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">LABORATORY NAME</td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">' . ucwords($result['labName']) . '('.ucwords($result['facility_code']).')</td>';
             $html .= '</tr>';
         
             $html .= '<tr>';
-                $html .= '<td colspan="4" style="line-height:5px;"></td>';
-            $html .= '</tr>';
-            
-            $html .= '<tr>';
-                $html .= '<td  style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SEX :</td>';
-                $html .= '<td  style="line-height:11px;font-size:11px;text-align:left;">' . ucwords(str_replace("_", " ", $result['patient_gender'])) . '</td>';
-                $html .= '<td  style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">HEALTH FACILITY/POE :</td>';
-                $html .= '<td  style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['facility_name']) . '('.ucwords($result['facility_code']).')</td>';
-            $html .= '</tr>';
-
-            $html .= '<tr>';
-                $html .= '<td colspan="4" style="line-height:5px;"></td>';
-            $html .= '</tr>';
-            
-            $html .= '<tr>';
-                $html .= '<td  style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">AGE : </td>';
-                $html .= '<td  style="line-height:11px;font-size:11px;text-align:left;">' . $result['patient_age'] . '</td>';
-                $html .= '<td  style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">HEALTH FACILITY/POE STATE : </td>';
-                $html .= '<td  style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['facility_state']) . '</td>';
-            $html .= '</tr>';
-            
-            $html .= '<tr>';
-                $html .= '<td colspan="4" style="line-height:5px;"></td>';
-            $html .= '</tr>';   
-            
-            $html .= '<tr>';
-                $html .= '<td  style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">NATIONALITY : </td>';
-                $html .= '<td  style="line-height:11px;font-size:11px;text-align:left;">' . $result['nationality'] . '</td>';
-                $html .= '<td  style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">TEST METHOD : </td>';
-                $html .= '<td  style="line-height:11px;font-size:11px;text-align:left;">' . $testMethod . '</td>';
-            $html .= '</tr>';
-
-            $html .= '<tr>';
-                $html .= '<td colspan="4" style="line-height:5px;"></td>';
-            $html .= '</tr>';
-            
-            $html .= '<tr>';
-                $html .= '<td  style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">PASSPORT NUMBER / NN : </td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['patient_passport_number'] . '</td>';
-                $html .= '<td  style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">TEST PLATFORM : </td>';
-                $html .= '<td  style="line-height:11px;font-size:11px;text-align:left;">' . $testPlatform . '</td>';
-            $html .= '</tr>';
-
-            $html .= '<tr>';
-                $html .= '<td colspan="4" style="line-height:5px;"></td>';
-            $html .= '</tr>';
-            
-            /* $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">HEALTH FACILITY/POE COUNTY</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
-            $html .= '</tr>';
-            $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['facility_district']) . '</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
-            $html .= '</tr>'; */
-
-            $html .= '<tr>';
-            $html .= '<td colspan="4" style="line-height:5px;"></td>';
-            $html .= '</tr>';
-        $html .= '</table>';
-
-        $html .= '<table style="padding:8px 2px 2px 2px;">';
-            $html .= '<tr>';
-            $html .= '<td colspan="3" style="line-height:2px;border-bottom:1px solid #d3d3d3;"></td>';
-            $html .= '</tr>';
-
-            $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">LAB SPECIMEN ID</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SPECIMEN TYPE</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SPECIMEN QUALITY</td>';
-            $html .= '</tr>';
-            $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['sample_code'] . '</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['sample_name']) . '</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['sample_condition']) . '</td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">SEX</td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">' . ucwords(str_replace("_", " ", $result['patient_gender'])) . '</td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">STATE</td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">' . ucwords($result['labState']) . '</td>';
                 
             $html .= '</tr>';
 
             $html .= '<tr>';
-            $html .= '<td colspan="3" style="line-height:1px;"></td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">AGE</td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">' . $ageCalc['year'] . 'Year(s) '.$ageCalc['months'].'Months</td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">COUNTY</td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">' . ucwords($result['labCounty']) . '</td>';
             $html .= '</tr>';
-
-            $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">DATE SPECIMEN COLLECTED</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SAMPLE RECEIPT DATE</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SAMPLE TEST DATE</td>';
-            $html .= '</tr>';
-            $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['sample_collection_date'] . " " . $sampleCollectionTime . '</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $sampleReceivedDate . " " . $sampleReceivedTime . '</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['sample_tested_datetime'] . '</td>';
-            $html .= '</tr>';
-
-            $html .= '<tr>';
-                $html .= '<td colspan="3" style="line-height:2px;border-bottom:1px solid #d3d3d3;"></td>';
-            $html .= '</tr>';
-            $html .= '<tr>';
-                $html .= '<td colspan="3">';
-                    $html .= '<table style="padding:8px 2px 2px 2px;">';
-                        $html .= '<tr>';
-                        $html .= '<td colspan="3" style="line-height:40px;font-size:12px;font-weight:normal;">';
-                        if (isset($covid19TestInfo) && count($covid19TestInfo) > 0 && $arr['covid19_tests_table_in_results_pdf'] == 'yes') {
-                            /* Test Result Section */
-                            $html .= '<table border="1">
-                                        <tr>
-                                            <td align="center" width="10%"><b>S. No.</b></td>
-                                            <td align="center" width="25%"><b>Test Method</b></td>
-                                            <td align="center" width="25%"><b>Test Platform</b></td>
-                                            <td align="center" width="20%"><b>Date of Testing</b></td>
-                                            <td align="center" width="15%"><b>Test Result</b></td>
-                                        </tr>';
-
-                            foreach ($covid19TestInfo as $indexKey => $rows) {
-                                $html .= '<tr>
-                                            <td align="center">' . ($indexKey + 1) . '</td>
-                                            <td align="center">' . $covid19TestInfo[$indexKey]['test_name'] . '</td>
-                                            <td align="center">' . $covid19TestInfo[$indexKey]['testing_platform'] . '</td>
-                                            <td align="center">' . $general->humanDateFormat($covid19TestInfo[$indexKey]['sample_tested_datetime'], false) . '</td>
-                                            <td align="center">' . ucwords($covid19TestInfo[$indexKey]['result']) . '</td>
-                                        </tr>';
-                            }
-                            $html .= '</table>';
-                        }
             
-                    $html .= '<table style="padding:8px 2px 2px 2px;">
-                        <tr>
-                            <td colspan="2" style="line-height:10px;"></td>
-                        </tr>
-                        <tr style="background-color:#f3f3f3;">
-                            <td style="line-height:70px;font-size:18px;font-weight:normal;"><br>&nbsp;&nbsp;Test Result &nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . $covid19Results[$result['result']] . '</td>
-                            <td align="center"><br></td>
-                        </tr>
-                    </table>';
-            $html .= '</td>';
-            $html .= '</tr>';
-            //$html .= '<tr style="background-color:#dbdbdb;"><td colspan="2" style="line-height:70px;font-size:18px;font-weight:normal;">&nbsp;&nbsp;Result &nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . ucfirst($result['result']) . '</td><td style="">' . $smileyContent . '</td></tr>';
-            if ($result['reason_for_sample_rejection'] != '') {
-                $html .= '<tr><td colspan="3" style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;">&nbsp;&nbsp;Rejection Reason&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . $result['rejection_reason_name'] . '</td></tr>';
-            }
-            // $html .= '<tr><td colspan="3"></td></tr>';
-            $html .= '</table>';
-            $html .= '</td>';
+            $html .= '<tr>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">NATIONALITY</td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">' . $result['nationality'] . '</td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;"></td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;"></td>';
             $html .= '</tr>';
 
+            $html .= '<tr>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">PASSPORT NUMBER / NN </td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">' . $result['patient_passport_number'] . '</td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;"></td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;"></td>';
+            $html .= '</tr>';
+
+            $html .= '<tr>';
+                $html .= '<td colspan="4" style="line-height:17px;font-size:13px;font-weight:bold;text-align:left;">SPECIMEN INFORMATION DETAILS</td>';
+            $html .= '</tr>';
+            
+            $html .= '<tr>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">LAB SPECIMEN ID</td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">' . $result['sample_code'] . '</td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">DATE SPECIMEN COLLECTED</td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">' . $result['sample_collection_date'] . " " . $sampleCollectionTime . '</td>';
+            $html .= '</tr>';
+            $html .= '<tr>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">SPECIMEN TYPE</td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">' . ucwords($result['sample_name']) . '</td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">SAMPLE RECEIPT DATE</td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">' . $sampleReceivedDate . " " . $sampleReceivedTime . '</td>';
+            $html .= '</tr>';
+            
+            $html .= '<tr>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">LAB SPECIMEN ID</td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">' . $result['sample_code'] . '</td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">DATE SPECIMEN COLLECTED</td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">' . $result['sample_collection_date'] . " " . $sampleCollectionTime . '</td>';
+            $html .= '</tr>';
+            $html .= '<tr>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">SPECIMEN QUALITY</td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">' . ucwords($result['sample_condition']) . '</td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">SAMPLE TEST DATE</td>';
+                $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-right-color: white !important;border-left-color: white !important;">' . $result['sample_tested_datetime'] . '</td>';
+            $html .= '</tr>';
+            
+            $html .= '<tr>';
+                $html .= '<td colspan="4" style="line-height:17px;font-size:13px;font-weight:bold;text-align:left;">COVID 19 TESTS RESULTS</td>';
+            $html .= '</tr>';
+            
+            $html .= '<tr>';
+                $html .= '<td colspan="4" style="line-height:20px;font-size:11px;text-align:left;border-color: white !important;">TEST METHOD : '.$testMethod.'</td>';
+            $html .= '</tr>';
+            
+            $html .= '<tr>';
+                $html .= '<td colspan="4" style="line-height:20px;font-size:11px;text-align:left;border-color: white !important;">TEST PLATFORM : ' . $testPlatform . '</td>';
+            $html .= '</tr>';
+                
+            if (isset($covid19TestInfo) && count($covid19TestInfo) > 0 && $arr['covid19_tests_table_in_results_pdf'] == 'yes') {
+                /* Test Result Section */
+                $html .= '<tr>';
+                    $html .= '<td colspan="4" style="border-color: white !important;" >';
+                        $html .= '<table border="1"style="padding:2px;">
+                                    <tr>
+                                        <td align="center" width="10%" style="line-height:20px;font-size:11px;font-weight:bold;">S. No.</td>
+                                        <td align="center" width="25%" style="line-height:20px;font-size:11px;font-weight:bold;">Test Method</td>
+                                        <td align="center" width="25%" style="line-height:20px;font-size:11px;font-weight:bold;">Test Platform</td>
+                                        <td align="center" width="20%" style="line-height:20px;font-size:11px;font-weight:bold;">Date of Testing</td>
+                                        <td align="center" width="20%" style="line-height:20px;font-size:11px;font-weight:bold;">Test Result</td>
+                                    </tr>';
+
+                        foreach ($covid19TestInfo as $indexKey => $rows) {
+                            $html .= '<tr>
+                                        <td align="center" style="line-height:20px;font-size:11px;border-right-color: white !important;border-left-color: white !important;">' . ($indexKey + 1) . '</td>
+                                        <td align="center" style="line-height:20px;font-size:11px;border-right-color: white !important;border-left-color: white !important;">' . $covid19TestInfo[$indexKey]['test_name'] . '</td>
+                                        <td align="center" style="line-height:20px;font-size:11px;border-right-color: white !important;border-left-color: white !important;">' . $covid19TestInfo[$indexKey]['testing_platform'] . '</td>
+                                        <td align="center" style="line-height:20px;font-size:11px;border-right-color: white !important;border-left-color: white !important;">' . date("d-M-Y H:i:s", strtotime($covid19TestInfo[$indexKey]['sample_tested_datetime'])) . '</td>
+                                        <td align="center" style="line-height:20px;font-size:11px;border-right-color: white !important;border-left-color: white !important;">' . ucwords($covid19TestInfo[$indexKey]['result']) . '</td>
+                                    </tr>';
+                        }
+                        $html .= '</table>';
+                    $html .= '</td>';
+                $html .= '</tr>';
+            }
+            /* Result print here */
+            $resultFlag = "";
+            if(isset($result['result']) && $result['result'] == "negative"){
+                $resultFlag = "(-)";
+            } else if(isset($result['result']) && $result['result'] == "postive"){
+                $resultFlag = "(+)";
+            }
+
+            $html .= '<tr>';
+                $html .= '<td colspan="4" style="line-height:25px;font-size:18px;font-weight:bold;font-weight:normal;border-color: white !important;"><br>&nbsp;Result &nbsp;:&nbsp;' . $covid19Results[$result['result']] .' '.$resultFlag.'</td>';
+            $html .= '</tr>';
+
+            $html .= '<tr>';
+                $html .= '<td colspan="4" style="line-height:17px;font-size:11px;text-align:left;border-color: white !important;">DATE RESULTS RELEASED : ' . $sampleDisbatchDate . " " . $sampleDisbatchTime . '</td>';
+            $html .= '</tr>';
+
+            if ($result['reason_for_sample_rejection'] != '') {
+                $html .= '<tr>';
+                    $html .= '<td colspan="4" style="line-height:20px;font-size:11px;text-align:left;font-weight:bold;">REJECTION REASON : <span style="font-weight:normal;">' . $result['rejection_reason_name'] . '</span></td>';
+                $html .= '</tr>';
+            }
             if (trim($result['approver_comments']) != '') {
                 $html .= '<tr>';
-                $html .= '<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">LAB COMMENTS&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">' . ucfirst($result['approver_comments']) . '</span></td>';
-                $html .= '</tr>';
-
-                $html .= '<tr>';
-                $html .= '<td colspan="3" style="line-height:10px;"></td>';
+                    $html .= '<td colspan="4" style="line-height:17px;font-size:11px;font-weight:bold;">LAB COMMENTS : <span style="font-weight:normal;">' . ucfirst($result['approver_comments']) . '</span></td>';
                 $html .= '</tr>';
             }
+        $html .= '</table>';
+        
+        $html .= '<table>';
             $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">DATE RESULTS RELEASED</td>';
+                $html .= '<td colspan="2" style="line-height:20px;"></td>';
             $html .= '</tr>';
+        $html .= '</table>';
 
+        $html .= '<table align="center">';
             $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $sampleDisbatchDate . " " . $sampleDisbatchTime . '</td>';
-            $html .= '</tr>';
-
-            $html .= '<tr>';
-            $html .= '<td colspan="3" style="line-height:2px;border-bottom:1px solid #d3d3d3;"></td>';
-            $html .= '</tr>';
-
-            $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">LABORATORY MANAGER</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SIGNATURE</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">DATE</td>';
-            $html .= '</tr>';
-            $lmSign = "/uploads/covid-19/{$countryFormId}/pdf/lm.png";
-            $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">James Ayei  Maror</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"><img src="'.$lmSign.'" style="width:70px;"></td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">'.date('d-M-Y H:i:s a').'</td>';
-            $html .= '</tr>';
-
-            $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">LABORATORY QUALITY MANAGER</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SIGNATURE</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">DATE</td>';
-            $html .= '</tr>';
-            $lqSign = "/uploads/covid-19/{$countryFormId}/pdf/lq.png";
-            $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">Abe Gordon Abias</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"><img src="'.$lqSign.'" style="width:70px;"></td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">'.date('d-M-Y H:i:s a').'</td>';
-            $html .= '</tr>';
-
-            $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">LABORATORY SUPERVISOR</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SIGNATURE</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">DATE</td>';
-            $html .= '</tr>';
-            $lsSign = "/uploads/covid-19/{$countryFormId}/pdf/ls.png";
-            $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">Dr. Simon Deng Nyicar</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"><img src="'.$lsSign.'" style="width:70px;"></td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">'.date('d-M-Y H:i:s a').'</td>';
-            $html .= '</tr>';
-
-            $html .= '<tr>';
-                $html .= '<td colspan="3" style="line-height:20px;border-bottom:2px solid #d3d3d3;"></td>';
-            $html .= '</tr>';
-
-            $html .= '<tr>';
-                $html .= '<td colspan="3">';
-                    $html .= '<table>';
+                $html .= '<td  colspan="4" style="text-align:center;" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                    $html .= '<table border="1" style="width:90%;padding:3px;">';
                         $html .= '<tr>';
-                            $html .= '<td style="font-size:10px;text-align:left;">Printed on : ' . $printDate . '&nbsp;&nbsp;' . $printDateTime . '</td>';
-                            $html .= '<td style="font-size:10px;text-align:left;width:60%;"></td>';
+                            $html .= '<td style="line-height:17px;font-size:13px;font-weight:bold;text-align:left;">AUTHORISED BY</td>';
+                            $html .= '<td style="line-height:17px;font-size:13px;font-weight:bold;text-align:left;">PRINT NAME</td>';
+                            $html .= '<td style="line-height:17px;font-size:13px;font-weight:bold;text-align:left;">SIGNATURE</td>';
+                            $html .= '<td style="line-height:17px;font-size:13px;font-weight:bold;text-align:left;">DATE & TIME</td>';
                         $html .= '</tr>';
+
+                        $lmSign = "/uploads/covid-19/{$countryFormId}/pdf/lm.png";
                         $html .= '<tr>';
-                            $html .= '<td colspan="2" style="font-size:10px;text-align:left;width:60%;"></td>';
+                            $html .= '<td style="line-height:17px;font-size:11px;text-align:left;">LABORATORY MANAGER</td>';
+                            $html .= '<td style="line-height:17px;font-size:11px;text-align:left;">James Ayei  Maror</td>';
+                            $html .= '<td style="line-height:17px;font-size:11px;text-align:left;"><img src="'.$lmSign.'" style="width:70px;"></td>';
+                            $html .= '<td style="line-height:17px;font-size:11px;text-align:left;">'.date('d-M-Y H:i:s a').'</td>';
+                        $html .= '</tr>';
+
+                        $lqSign = "/uploads/covid-19/{$countryFormId}/pdf/lq.png";
+                        $html .= '<tr>';
+                            $html .= '<td style="line-height:17px;font-size:11px;text-align:left;">LABORATORY QUALITY MANAGER</td>';
+                            $html .= '<td style="line-height:17px;font-size:11px;text-align:left;">Abe Gordon Abias</td>';
+                            $html .= '<td style="line-height:17px;font-size:11px;text-align:left;"><img src="'.$lqSign.'" style="width:70px;"></td>';
+                            $html .= '<td style="line-height:17px;font-size:11px;text-align:left;">'.date('d-M-Y H:i:s a').'</td>';
+                        $html .= '</tr>';
+
+                        $lsSign = "/uploads/covid-19/{$countryFormId}/pdf/ls.png";
+                        $html .= '<tr>';
+                            $html .= '<td style="line-height:17px;font-size:11px;text-align:left;">LABORATORY SUPERVISOR</td>';
+                            $html .= '<td style="line-height:17px;font-size:11px;text-align:left;">Dr. Simon Deng Nyicar</td>';
+                            $html .= '<td style="line-height:17px;font-size:11px;text-align:left;"><img src="'.$lsSign.'" style="width:70px;"></td>';
+                            $html .= '<td style="line-height:17px;font-size:11px;text-align:left;">'.date('d-M-Y H:i:s a').'</td>';
                         $html .= '</tr>';
                     $html .= '</table>';
                 $html .= '</td>';
+            $html .= '</tr>';
+        $html .= '</table>';
+
+        $html .= '<table>';
+            $html .= '<tr>';
+                $html .= '<td colspan="2" style="line-height:20px;border-bottom:2px solid #d3d3d3;"></td>';
+            $html .= '</tr>';
+            
+            $html .= '<tr>';
+                $html .= '<td colspan="2" style="font-size:10px;text-align:left;width:60%;"></td>';
+            $html .= '</tr>';
+
+            $html .= '<tr>';
+                $html .= '<td style="font-size:10px;text-align:left;">Printed on : ' . $printDate . '&nbsp;&nbsp;' . $printDateTime . '</td>';
+                $html .= '<td style="font-size:10px;text-align:left;width:60%;"></td>';
+            $html .= '</tr>';
+            
+            $html .= '<tr>';
+                $html .= '<td colspan="2" style="font-size:10px;text-align:left;width:60%;"></td>';
             $html .= '</tr>';
         $html .= '</table>';
         if ($result['result'] != '' || ($result['result'] == '' && $result['result_status'] == '4')) {
