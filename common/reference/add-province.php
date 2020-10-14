@@ -1,6 +1,6 @@
 <?php
 ob_start();
-$title = "Province Details";
+$title = "Province";
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 ?>
@@ -8,10 +8,10 @@ include_once(APPLICATION_PATH . '/header.php');
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <h1><i class="fa fa-gears"></i> Add Province Details</h1>
+        <h1><i class="fa fa-gears"></i> Add Province</h1>
         <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">Province Details</li>
+            <li class="active">Add Province</li>
         </ol>
     </section>
 
