@@ -142,6 +142,9 @@ if (!in_array($currentFileName, $skipPrivilegeCheckFiles)) {
 //       unset($_SESSION['controllertrack']);
 //   }
 // }
+
+/* echo "<pre>";print_r($_SESSION['privileges']);
+echo "<pre>";print_r($_SESSION['module']);die; */
 if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('roles.php', 'users.php', 'facilities.php', 'globalConfig.php', 'importConfig.php', 'otherConfig.php'))) {
 	$allAdminMenuAccess = true;
 } else {
@@ -181,12 +184,8 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 } else {
 	$eidManagementMenuAccess = false;
 }
-if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('readQRCode.php', 'generate.php'))) {
-	$grCodeMenuAccess = true;
-} else {
-	$grCodeMenuAccess = false;
-}
-if (isset($_SESSION['privileges']) && in_array(('index.php'), $_SESSION['privileges'])) {
+
+if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('index.php'))) {
 	$dashBoardMenuAccess = true;
 } else {
 	$dashBoardMenuAccess = false;
@@ -416,7 +415,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 							</a>
 						</li>
 					<?php }
-					if ($allAdminMenuAccess == true) { ?>
+					if ($allAdminMenuAccess == true && array_intersect($_SESSION['module'], array('admin'))) { ?>
 						<li class="treeview manage">
 							<a href="#">
 								<i class="fa fa-gears"></i>
@@ -562,7 +561,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 					<?php } ?>
 
 					<?php
-					if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true && ($vlRequestMenuAccess == true || $vlTestResultMenuAccess == true || $vlManagementMenuAccess == true)) { ?>
+					if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true  && array_intersect($_SESSION['module'], array('vl'))) { ?>
 						<li class="header">VIRAL LOAD</li>
 						<?php if ($vlRequestMenuAccess == true) { ?>
 							<li class="treeview request" style="<?php echo $hideRequest; ?>">
@@ -704,7 +703,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 						<?php } 
 					} 
 					
-					if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true && ($eidTestRequestMenuAccess == true || $eidTestResultMenuAccess == true || $eidManagementMenuAccess == true)) {  ?>
+					if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true && array_intersect($_SESSION['module'], array('eid'))) {  ?>
 						<li class="header">EARLY INFANT DIAGNOSIS (EID)</li>
 						<?php if($eidTestRequestMenuAccess == true){ ?>
 							<li class="treeview eidRequest" style="<?php echo $hideRequest; ?>">
@@ -744,61 +743,60 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 								</ul>
 							</li>
 						<?php }
-					}
-					if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true && $eidTestResultMenuAccess == true) { ?>
-						<li class="treeview eidResults" style="<?php echo $hideResult; ?>">
-							<a href="#">
-								<i class="fa fa-tasks"></i>
-								<span>Test Result Management</span>
-								<span class="pull-right-container">
-									<i class="fa fa-angle-left pull-right"></i>
-								</span>
-							</a>
-							<ul class="treeview-menu">
-								<?php if (isset($_SESSION['privileges']) && in_array("addImportResult.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu eidImportResultMenu"><a href="/import-result/addImportResult.php?t=<?php echo base64_encode('eid'); ?>"><i class="fa fa-circle-o"></i> Import Result From File</a></li>
-								<?php }
-								if (isset($_SESSION['privileges']) && in_array("eid-manual-results.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu eidResultsMenu"><a href="/eid/results/eid-manual-results.php"><i class="fa fa-circle-o"></i> Enter Result Manually</a></li>
-								<?php }
-								if (isset($_SESSION['privileges']) && in_array("eid-result-status.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu eidResultStatus"><a href="/eid/results/eid-result-status.php"><i class="fa fa-circle-o"></i> Manage Results Status</a></li>
-								<?php } ?>
-							</ul>
-						</li>
-					<?php }
-					if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true && $eidManagementMenuAccess == true) { ?>
-						<li class="treeview eidProgramMenu">
-							<a href="#">
-								<i class="fa fa-book"></i>
-								<span>Management</span>
-								<span class="pull-right-container">
-									<i class="fa fa-angle-left pull-right"></i>
-								</span>
-							</a>
-							<ul class="treeview-menu">
-								<?php if (isset($_SESSION['privileges']) && in_array("eid-sample-status.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu eidSampleStatus"><a href="/eid/management/eid-sample-status.php"><i class="fa fa-circle-o"></i> Sample Status Report</a></li>
-								<?php }
-								if (isset($_SESSION['privileges']) && in_array("eid-export-data.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu eidExportResult"><a href="/eid/management/eid-export-data.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
-								<?php }
-								if (isset($_SESSION['privileges']) && in_array("eid-print-results.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu eidPrintResults"><a href="/eid/results/eid-print-results.php"><i class="fa fa-circle-o"></i> Print Result</a></li>
-								<?php }
-								if (isset($_SESSION['privileges']) && in_array("eid-sample-rejection-report.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu eidSampleRejectionReport"><a href="/eid/management/eid-sample-rejection-report.php"><i class="fa fa-circle-o"></i> Sample Rejection Report</a></li>
-								<?php }
-								if (isset($_SESSION['privileges']) && in_array("eid-clinic-report.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu eidClinicReport"><a href="/eid/management/eid-clinic-report.php"><i class="fa fa-circle-o"></i> Clinic Report</a></li>
-								<?php } ?>
-							</ul>
-						</li>
-					<?php
+						if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true && $eidTestResultMenuAccess == true) { ?>
+							<li class="treeview eidResults" style="<?php echo $hideResult; ?>">
+								<a href="#">
+									<i class="fa fa-tasks"></i>
+									<span>Test Result Management</span>
+									<span class="pull-right-container">
+										<i class="fa fa-angle-left pull-right"></i>
+									</span>
+								</a>
+								<ul class="treeview-menu">
+									<?php if (isset($_SESSION['privileges']) && in_array("addImportResult.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu eidImportResultMenu"><a href="/import-result/addImportResult.php?t=<?php echo base64_encode('eid'); ?>"><i class="fa fa-circle-o"></i> Import Result From File</a></li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("eid-manual-results.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu eidResultsMenu"><a href="/eid/results/eid-manual-results.php"><i class="fa fa-circle-o"></i> Enter Result Manually</a></li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("eid-result-status.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu eidResultStatus"><a href="/eid/results/eid-result-status.php"><i class="fa fa-circle-o"></i> Manage Results Status</a></li>
+									<?php } ?>
+								</ul>
+							</li>
+						<?php }
+						if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true && $eidManagementMenuAccess == true) { ?>
+							<li class="treeview eidProgramMenu">
+								<a href="#">
+									<i class="fa fa-book"></i>
+									<span>Management</span>
+									<span class="pull-right-container">
+										<i class="fa fa-angle-left pull-right"></i>
+									</span>
+								</a>
+								<ul class="treeview-menu">
+									<?php if (isset($_SESSION['privileges']) && in_array("eid-sample-status.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu eidSampleStatus"><a href="/eid/management/eid-sample-status.php"><i class="fa fa-circle-o"></i> Sample Status Report</a></li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("eid-export-data.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu eidExportResult"><a href="/eid/management/eid-export-data.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("eid-print-results.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu eidPrintResults"><a href="/eid/results/eid-print-results.php"><i class="fa fa-circle-o"></i> Print Result</a></li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("eid-sample-rejection-report.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu eidSampleRejectionReport"><a href="/eid/management/eid-sample-rejection-report.php"><i class="fa fa-circle-o"></i> Sample Rejection Report</a></li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("eid-clinic-report.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu eidClinicReport"><a href="/eid/management/eid-clinic-report.php"><i class="fa fa-circle-o"></i> Clinic Report</a></li>
+									<?php } ?>
+								</ul>
+							</li>
+						<?php }
 					} ?>
 
 					<!-- COVID-19 START -->
-					<?php if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true && ($covid19TestRequestMenuAccess == true || $covid19TestResultMenuAccess == true || $covid19ManagementMenuAccess == true)) {  ?>
+					<?php if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true && array_intersect($_SESSION['module'], array('covid19'))) {  ?>
 						<li class="header">COVID-19</li>
 						<?php if ($covid19TestRequestMenuAccess == true) { ?>
 							<li class="treeview covid19Request" style="<?php echo $hideRequest; ?>">
@@ -838,66 +836,65 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 								</ul>
 							</li>
 						<?php }
-					}
-					if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true && $covid19TestResultMenuAccess == true) { ?>
-						<li class="treeview covid19Results" style="<?php echo $hideResult; ?>">
-							<a href="#">
-								<i class="fa fa-tasks"></i>
-								<span>Test Result Management</span>
-								<span class="pull-right-container">
-									<i class="fa fa-angle-left pull-right"></i>
-								</span>
-							</a>
-							<ul class="treeview-menu">
-								<?php if (isset($_SESSION['privileges']) && in_array("addImportResult.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu covid19ImportResultMenu"><a href="/import-result/addImportResult.php?t=<?php echo base64_encode('covid19'); ?>"><i class="fa fa-circle-o"></i> Import Result From File</a></li>
-								<?php }
-								if (isset($_SESSION['privileges']) && in_array("covid-19-manual-results.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu covid19ResultsMenu"><a href="/covid-19/results/covid-19-manual-results.php"><i class="fa fa-circle-o"></i> Enter Result Manually</a></li>
-								<?php }
-								if ($arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes' && isset($_SESSION['privileges']) && in_array("covid-19-confirmation-manifest.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu covid19ResultsConfirmationMenu"><a href="/covid-19/results/covid-19-confirmation-manifest.php"><i class="fa fa-circle-o"></i> Confirmation Manifest</a></li>
-								<?php }
-								if ($arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes' && isset($_SESSION['privileges']) && in_array("can-record-confirmatory-tests.php", $_SESSION['privileges']) && ($sarr['user_type'] != 'remoteuser')) { ?>
-									<li class="allMenu canRecordConfirmatoryTestsCovid19Menu"><a href="/covid-19/results/can-record-confirmatory-tests.php"><i class="fa fa-circle-o"></i> Record Confirmatory Tests</a></li>
-								<?php }
-								if (isset($_SESSION['privileges']) && in_array("covid-19-result-status.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu covid19ResultStatus"><a href="/covid-19/results/covid-19-result-status.php"><i class="fa fa-circle-o"></i> Manage Results Status</a></li>
-								<?php }
-								if (isset($_SESSION['privileges']) && in_array("covid-19-print-results.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu covid19ResultMailMenu"><a href="/covid-19/mail/mail-covid-19-results.php"><i class="fa fa-circle-o"></i> E-mail Test Result</a></li>
-								<?php }  ?>
-							</ul>
-						</li>
-					<?php } 
-					if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true && $covid19ManagementMenuAccess == true) { ?>
-						<li class="treeview covid19ProgramMenu">
-							<a href="#">
-								<i class="fa fa-book"></i>
-								<span>Management</span>
-								<span class="pull-right-container">
-									<i class="fa fa-angle-left pull-right"></i>
-								</span>
-							</a>
-							<ul class="treeview-menu">
-								<?php if (isset($_SESSION['privileges']) && in_array("covid-19-sample-status.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu covid19SampleStatus"><a href="/covid-19/management/covid-19-sample-status.php"><i class="fa fa-circle-o"></i> Sample Status Report</a></li>
-								<?php }
-								if (isset($_SESSION['privileges']) && in_array("covid-19-export-data.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu covid19ExportResult"><a href="/covid-19/management/covid-19-export-data.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
-								<?php }
-								if (isset($_SESSION['privileges']) && in_array("covid-19-print-results.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu covid19PrintResults"><a href="/covid-19/results/covid-19-print-results.php"><i class="fa fa-circle-o"></i> Print Result</a></li>
-								<?php }
-								if (isset($_SESSION['privileges']) && in_array("covid-19-sample-rejection-report.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu covid19SampleRejectionReport"><a href="/covid-19/management/covid-19-sample-rejection-report.php"><i class="fa fa-circle-o"></i> Sample Rejection Report</a></li>
-								<?php }
-								if (isset($_SESSION['privileges']) && in_array("covid-19-clinic-report.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu covid19ClinicReportMenu"><a href="/covid-19/management/covid-19-clinic-report.php"><i class="fa fa-circle-o"></i> Clinic Report</a></li>
-								<?php } ?>
-							</ul>
-						</li>
-					<?php
+						if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true && $covid19TestResultMenuAccess == true) { ?>
+							<li class="treeview covid19Results" style="<?php echo $hideResult; ?>">
+								<a href="#">
+									<i class="fa fa-tasks"></i>
+									<span>Test Result Management</span>
+									<span class="pull-right-container">
+										<i class="fa fa-angle-left pull-right"></i>
+									</span>
+								</a>
+								<ul class="treeview-menu">
+									<?php if (isset($_SESSION['privileges']) && in_array("addImportResult.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu covid19ImportResultMenu"><a href="/import-result/addImportResult.php?t=<?php echo base64_encode('covid19'); ?>"><i class="fa fa-circle-o"></i> Import Result From File</a></li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("covid-19-manual-results.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu covid19ResultsMenu"><a href="/covid-19/results/covid-19-manual-results.php"><i class="fa fa-circle-o"></i> Enter Result Manually</a></li>
+									<?php }
+									if ($arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes' && isset($_SESSION['privileges']) && in_array("covid-19-confirmation-manifest.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu covid19ResultsConfirmationMenu"><a href="/covid-19/results/covid-19-confirmation-manifest.php"><i class="fa fa-circle-o"></i> Confirmation Manifest</a></li>
+									<?php }
+									if ($arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes' && isset($_SESSION['privileges']) && in_array("can-record-confirmatory-tests.php", $_SESSION['privileges']) && ($sarr['user_type'] != 'remoteuser')) { ?>
+										<li class="allMenu canRecordConfirmatoryTestsCovid19Menu"><a href="/covid-19/results/can-record-confirmatory-tests.php"><i class="fa fa-circle-o"></i> Record Confirmatory Tests</a></li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("covid-19-result-status.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu covid19ResultStatus"><a href="/covid-19/results/covid-19-result-status.php"><i class="fa fa-circle-o"></i> Manage Results Status</a></li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("covid-19-print-results.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu covid19ResultMailMenu"><a href="/covid-19/mail/mail-covid-19-results.php"><i class="fa fa-circle-o"></i> E-mail Test Result</a></li>
+									<?php }  ?>
+								</ul>
+							</li>
+						<?php } 
+						if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true && $covid19ManagementMenuAccess == true) { ?>
+							<li class="treeview covid19ProgramMenu">
+								<a href="#">
+									<i class="fa fa-book"></i>
+									<span>Management</span>
+									<span class="pull-right-container">
+										<i class="fa fa-angle-left pull-right"></i>
+									</span>
+								</a>
+								<ul class="treeview-menu">
+									<?php if (isset($_SESSION['privileges']) && in_array("covid-19-sample-status.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu covid19SampleStatus"><a href="/covid-19/management/covid-19-sample-status.php"><i class="fa fa-circle-o"></i> Sample Status Report</a></li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("covid-19-export-data.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu covid19ExportResult"><a href="/covid-19/management/covid-19-export-data.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("covid-19-print-results.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu covid19PrintResults"><a href="/covid-19/results/covid-19-print-results.php"><i class="fa fa-circle-o"></i> Print Result</a></li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("covid-19-sample-rejection-report.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu covid19SampleRejectionReport"><a href="/covid-19/management/covid-19-sample-rejection-report.php"><i class="fa fa-circle-o"></i> Sample Rejection Report</a></li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("covid-19-clinic-report.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu covid19ClinicReportMenu"><a href="/covid-19/management/covid-19-clinic-report.php"><i class="fa fa-circle-o"></i> Clinic Report</a></li>
+									<?php } ?>
+								</ul>
+							</li>
+						<?php }
 					} ?>
 					<!-- COVID-19 END -->
 
