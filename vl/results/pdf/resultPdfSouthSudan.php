@@ -168,76 +168,49 @@ if (sizeof($requestResult) > 0) {
                $result['patient_gender'] = 'not reported';
           }
 
-          $vlResult = '';
           $smileyContent = '';
           $showMessage = '';
           $tndMessage = '';
           $messageTextSize = '12px';
-          if ($result['result'] != NULL && trim($result['result']) != '') {
-               $resultType = is_numeric($result['result']);
-               if (in_array(strtolower(trim($result['result'])), array("below detection limit", "below detection level", 'bdl', 'BDL'))) {
-                    $vlResult = $result['result'];
-                    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_smile.png" alt="smile_face"/>';
-                    $showMessage = ucfirst($arr['l_vl_msg']);
-               } else if (in_array(strtolower(trim($result['result'])), array("tnd", "target not detected", 'ldl', 'LDL'))) {
-                    if (trim($result['result']) == 'ldl' || trim($result['result']) == 'LDL') {
-                         $vlResult = 'LDL';
-                    } else {
-                         $vlResult = 'TND*';
-                         $tndMessage = 'TND* - Target not Detected';
+          $vlResult = trim($result['result']);
+          if (!empty($vlResult)) {
+               $isResultNumeric = is_numeric($vlResult);
+               if ($isResultNumeric) {
+                    if ($vlResult > 1000) {
+                         $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_frown.png" alt="frown_face"/>';
+                         $showMessage = ($arr['h_vl_msg']);
+                         $messageTextSize = '15px';
+                    } else if ($vlResult <= 1000) {
+                         $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_smile.png" alt="smile_face"/>';
+                         $showMessage = ($arr['l_vl_msg']);
                     }
-                    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_smile.png" alt="smile_face"/>';
-                    $showMessage = ucfirst($arr['l_vl_msg']);
-               } else if (in_array(strtolower(trim($result['result'])), array("failed", "fail", "no_sample", "invalid"))) {
-                    $vlResult = $result['result'];
-                    $smileyContent = '';
-                    $showMessage = '';
-                    $messageTextSize = '14px';
-               } else if (trim($result['result']) > 1000 && $result['result'] <= 10000000) {
-                    $vlResult = $result['result'];
-                    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_frown.png" alt="frown_face"/>';
-                    $showMessage = ucfirst($arr['h_vl_msg']);
-                    $messageTextSize = '15px';
-               } else if (trim($result['result']) <= 1000 && $result['result'] >= 20) {
-                    $vlResult = $result['result'];
-                    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_smile.png" alt="smile_face"/>';
-                    $showMessage = ucfirst($arr['l_vl_msg']);
-               } else if (trim($result['result'] > 10000000) && $resultType) {
-                    $vlResult = $result['result'];
-                    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_frown.png" alt="frown_face"/>';
-                    //$showMessage = 'Value outside machine detection limit';
-               } else if (trim($result['result'] < 20) && $resultType) {
-                    $vlResult = $result['result'];
-                    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_smile.png" alt="smile_face"/>';
-                    //$showMessage = 'Value outside machine detection limit';
-               } else if (trim($result['result']) == '<20') {
-                    $vlResult = '&lt;20';
-                    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_smile.png" alt="smile_face"/>';
-                    $showMessage = ucfirst($arr['l_vl_msg']);
-               } else if (trim($result['result']) == '>10000000') {
-                    $vlResult = $result['result'];
-                    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_frown.png" alt="frown_face"/>';
-                    $showMessage = ucfirst($arr['h_vl_msg']);
-               } else if ($result['vl_test_platform'] == 'Roche') {
-                    $chkSign = '';
-                    $smileyShow = '';
-                    $chkSign = strchr($result['result'], '>');
-                    if ($chkSign != '') {
-                         $smileyShow = str_replace(">", "", $result['result']);
-                         $vlResult = $result['result'];
-                         //$showMessage = 'Invalid value';
-                    }
-                    $chkSign = '';
-                    $chkSign = strchr($result['result'], '<');
-                    if ($chkSign != '') {
-                         $smileyShow = str_replace("<", "", $result['result']);
-                         $vlResult = str_replace("<", "&lt;", $result['result']);
-                         //$showMessage = 'Invalid value';
-                    }
-                    if ($smileyShow != '' && $smileyShow <= $arr['viral_load_threshold_limit']) {
+               } else {
+                    if (in_array(strtolower($vlResult), array("below detection limit", "below detection level", 'bdl', 'BDL'))) {
                          $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_smile.png" alt="smile_face"/>';
-                    } else if ($smileyShow != '' && $smileyShow > $arr['viral_load_threshold_limit']) {
-                         $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_frown.png" alt="frown_face"/>';
+                         $showMessage = ucfirst($arr['l_vl_msg']);
+                    } else if (in_array(strtolower($vlResult), array("tnd", "target not detected", 'ldl'))) {
+                         if ($vlResult == 'ldl' || $vlResult == 'LDL') {
+                              $vlResult = 'LDL';
+                         } else {
+                              $vlResult = 'TND*';
+                              $tndMessage = 'TND* - Target not Detected';
+                         }
+                         $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_smile.png" alt="smile_face"/>';
+                         $showMessage = ($arr['l_vl_msg']);
+                         $tndMessage = 'TND* - Target not Detected';
+                    } else if (in_array(strtolower($vlResult), array("failed", "fail", "no_sample", "invalid"))) {
+                         $vlResult = ucwords($vlResult);
+                         $smileyContent = '';
+                         $showMessage = '';
+                         $messageTextSize = '14px';
+                    } else if (in_array($vlResult, array("<20", "< 20", "<40", "< 40"))) {
+                         $vlResult = str_replace("<", "&lt;", $vlResult);
+                         $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_smile.png" alt="smile_face"/>';
+                         $showMessage = ($arr['l_vl_msg']);
+                    } else if ($vlResult == '>10000000' || $vlResult == '> 10000000') {
+                         $vlResult = str_replace(">", "&gt;", $vlResult);
+                         $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_frown.png" alt="frown_face"/>';
+                         $showMessage = ($arr['h_vl_msg']);
                     }
                }
           }
@@ -372,20 +345,20 @@ if (sizeof($requestResult) > 0) {
           $html .= '<table style="padding:12px 2px 2px 2px;">';
           $logValue = '';
           if ($result['result_value_log'] != '' && $result['result_value_log'] != null && ($result['reason_for_sample_rejection'] == '' || $result['reason_for_sample_rejection'] == null)) {
-               $logValue = '<br/>&nbsp;&nbsp;Log Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . $result['result_value_log'];
+               $logValue = '&nbsp;&nbsp;Log Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . $result['result_value_log'];
           } else {
-               if ($resultType) {
-                    $logV = round(log10($result['result']), 2);
-                    $logValue = '<br/>&nbsp;&nbsp;Log Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . $logV;
+               if ($isResultNumeric) {
+                    $logV = round(log10($vlResult), 2);
+                    $logValue = '&nbsp;&nbsp;Log Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . $logV;
                } else {
-                    $logValue = '<br/>&nbsp;&nbsp;Log Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;0.0';
+                    $logValue = '&nbsp;&nbsp;Log Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;0.0';
                }
           }
-          $html .= '<tr style="background-color:#dbdbdb;"><td colspan="2" style="line-height:26px;font-size:12px;font-weight:bold;">&nbsp;&nbsp;Viral Load Result (copies/ml)&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . $result['result'] . $logValue . '</td><td style="">' . $smileyContent . '</td></tr>';
+          $html .= '<tr style="background-color:#dbdbdb;"><td colspan="2" style="line-height:26px;font-size:12px;font-weight:bold;">&nbsp;&nbsp;Viral Load Result (copies/ml)&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . $vlResult . '<br>' . $logValue . '</td><td style="">' . $smileyContent . '</td></tr>';
           if ($result['reason_for_sample_rejection'] != '') {
                $html .= '<tr><td colspan="3" style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;">&nbsp;&nbsp;Rejection Reason&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . $result['rejection_reason_name'] . '</td></tr>';
           }
-          if (strtolower($result['vl_test_platform']) == 'abbott') {
+          if (strpos(strtolower($result['vl_test_platform']), 'abbott') !== false) {
                $html .= '<tr>';
                $html .= '<td colspan="3" style="line-height:8px;font-size:10px;padding-top:10px;">Abbott Linear Detection range: 839 copies/ml - 10 million copies/ml</td>';
                $html .= '</tr>';
@@ -499,7 +472,7 @@ if (sizeof($requestResult) > 0) {
           $html .= '</td>';
           $html .= '</tr>';
           $html .= '</table>';
-          if ($result['result'] != '' || ($result['result'] == '' && $result['result_status'] == '4')) {
+          if ($vlResult != '' || ($vlResult == '' && $result['result_status'] == '4')) {
                $pdf->writeHTML($html);
                $pdf->lastPage();
                $filename = $pathFront . DIRECTORY_SEPARATOR . 'p' . $page . '.pdf';

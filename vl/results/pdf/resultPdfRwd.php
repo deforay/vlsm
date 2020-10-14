@@ -145,13 +145,14 @@ if (sizeof($requestResult) > 0) {
           if (!empty($userRes['user_signature'])) {
                $userSignaturePath = UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature" . DIRECTORY_SEPARATOR . $userRes['user_signature'];
           }
-          $vlResult = '';
+          
           $smileyContent = '';
           $showMessage = '';
           $tndMessage = '';
           $messageTextSize = '12px';
-          if ($result['result'] != NULL && trim($result['result']) != '') {
-               $vlResult = trim($result['result']);
+          $vlResult = trim($result['result']);
+          if (!empty($vlResult)) {
+               
                $isResultNumeric = is_numeric($vlResult);
 
                if ($isResultNumeric) {
@@ -160,7 +161,7 @@ if (sizeof($requestResult) > 0) {
                          $showMessage = ($arr['h_vl_msg']);
                          $messageTextSize = '15px';
                     } else if ($vlResult <= 1000) {
-                         $vlResult = $result['result'];
+                         $vlResult = $vlResult;
                          $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_smile.png" alt="smile_face"/>';
                          $showMessage = ($arr['l_vl_msg']);
                     }
@@ -174,12 +175,12 @@ if (sizeof($requestResult) > 0) {
                          $smileyContent = '';
                          $showMessage = '';
                          $messageTextSize = '14px';
-                    
                     } else if (in_array($vlResult, array("<20", "< 20", "<40", "< 40"))) {
+                         $vlResult = str_replace("<", "&lt;", $vlResult);
                          $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_smile.png" alt="smile_face"/>';
                          $showMessage = ($arr['l_vl_msg']);
                     } else if ($vlResult == '>10000000' || $vlResult == '> 10000000') {
-                         $vlResult = $result['result'];
+                         $vlResult = str_replace(">", "&gt;", $vlResult);
                          $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_frown.png" alt="frown_face"/>';
                          $showMessage = ($arr['h_vl_msg']);
                     }
@@ -194,7 +195,7 @@ if (sizeof($requestResult) > 0) {
                //           //$showMessage = 'Invalid value';
                //      }
                //      $chkSign = '';
-               //      $chkSign = strchr($result['result'], '<');
+               //      $chkSign = strchr($vlResult, '<');
                //      if ($chkSign != '') {
                //           $smileyShow = str_replace("<", "", $vlResult);
                //           $vlResult = str_replace("<", "&lt;", $vlResult);
@@ -426,7 +427,7 @@ if (sizeof($requestResult) > 0) {
           $html .= '</td>';
           $html .= '</tr>';
           $html .= '</table>';
-          if ($result['result'] != '') {
+          if ($vlResult != '') {
                $pdf->writeHTML($html);
                $pdf->lastPage();
                $filename = $pathFront . DIRECTORY_SEPARATOR . 'p' . $page . '.pdf';
