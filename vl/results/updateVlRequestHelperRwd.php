@@ -84,6 +84,10 @@ try {
         $_POST['vlResult'] = 'Failed';
         $_POST['vlLog'] = '';
     }
+    if (isset($_POST['invalid']) && $_POST['invalid'] == 'yes' && $isRejection == false) {
+        $_POST['vlResult'] = 'Invalid';
+        $_POST['vlLog'] = '';
+    }
 
     if (isset($_POST['vlResult']) && trim($_POST['vlResult']) != '') {
         $_POST['result'] = $_POST['vlResult'];
