@@ -100,7 +100,7 @@ $ftResult = $db->rawQuery($fQuery);
                                         <div class="form-group">
                                              <label for="authToken" class="col-lg-4 control-label">AuthToken <span class="mandatory">*</span></label>
                                              <div class="col-lg-7">
-                                                  <input type="text" class="form-control isRequired" id="authToken" name="authToken" placeholder="Auth Token" title="Please Generate the auth token" readonly>
+                                                  <input type="text" class="form-control" id="authToken" name="authToken" placeholder="Auth Token" title="Please Generate the auth token" readonly>
                                              </div>
                                         </div>
                                    </div>
