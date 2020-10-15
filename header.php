@@ -476,7 +476,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 
 										<ul class="treeview-menu">
 											<li class="allMenu common-reference-province">
-												<a href="/common/reference/province-details.php"><i class="fa fa-caret-right"></i>province</a>
+												<a href="/common/reference/province-details.php"><i class="fa fa-caret-right"></i>Provinces</a>
 											</li>
 											<li class="allMenu common-reference-implementation-partners">
 												<a href="/common/reference/implementation-partners.php"><i class="fa fa-caret-right"></i>Implementation Partners</a>
