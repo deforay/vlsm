@@ -53,6 +53,12 @@ if (!empty($facilityIdRequested)) {
   $provinceOptions = getProvinceDropdown($facilityInfo['facility_state']);
   $districtOptions = getDistrictDropdown($facilityInfo['facility_state'], $facilityInfo['facility_district']);
   echo $provinceOptions . "###" . $districtOptions . "###" . $facilityInfo['contact_person'];
+} else if (!empty($provinceRequested) && !empty($districtRequested) && $_POST['requestType'] == 'patient') {
+
+  $provinceName = explode("##", $provinceRequested);
+  $districtOptions = getDistrictDropdown($provinceName[0], $districtRequested);
+
+  echo '' . "###" . $districtOptions . "###" . '';
 } else if (!empty($provinceRequested)) {
 
   $provinceName = explode("##", $provinceRequested);
