@@ -68,12 +68,20 @@ try {
         $_POST['vlResult'] = '<20';
         $_POST['vlLog'] = '';
     }
+    if (isset($_POST['lt20']) && $_POST['lt40'] == 'yes' && $isRejection == false) {
+        $_POST['vlResult'] = '<40';
+        $_POST['vlLog'] = '';
+    }
     if (isset($_POST['tnd']) && $_POST['tnd'] == 'yes' && $isRejection == false) {
         $_POST['vlResult'] = $textValue = 'Target Not Detected';
         $_POST['vlLog'] = '';
     }
     if (isset($_POST['bdl']) && $_POST['bdl'] == 'yes' && $isRejection == false) {
-        $_POST['vlResult'] = $textValue = 'Below Detection Level';
+        $_POST['vlResult'] = 'Below Detection Level';
+        $_POST['vlLog'] = '';
+    }
+    if (isset($_POST['failed']) && $_POST['failed'] == 'yes' && $isRejection == false) {
+        $_POST['vlResult'] = 'Failed';
         $_POST['vlLog'] = '';
     }
 

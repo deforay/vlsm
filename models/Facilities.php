@@ -80,7 +80,8 @@ class Facilities
         if (!empty($testType)) {
             // subquery
             $healthFacilities = $this->db->subQuery();
-            $healthFacilities->where("test_type like '$testType'");
+            // we want to fetch facilities that have test type is not specified as well as this specific test type
+            $healthFacilities->where("test_type is null or test_type like '$testType'");
             $healthFacilities->get("health_facilities", null, "facility_id");
 
             $this->db->where("facility_id", $healthFacilities, 'IN');
@@ -133,7 +134,8 @@ class Facilities
         if (!empty($testType)) {
             // subquery
             $testingLabs = $this->db->subQuery();
-            $testingLabs->where("test_type like '$testType'");
+            // we want to fetch facilities that have test type is not specified as well as this specific test type
+            $testingLabs->where("test_type is null or test_type like '$testType'");
             $testingLabs->get("testing_labs", null, "facility_id");
 
             $this->db->where("facility_id", $testingLabs, 'IN');
