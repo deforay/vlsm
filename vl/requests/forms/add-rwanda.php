@@ -579,13 +579,14 @@ $sFormat = '';
                                                                                 <label class="col-lg-5 control-label" for="vlResult">Viral Load Result (copiesl/ml) </label>
                                                                                 <div class="col-lg-7">
                                                                                      <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" <?php echo $labFieldDisabled; ?> style="width:100%;" onchange="calculateLogValue(this)" />
-                                                                                     <input type="checkbox" class="labSection specialResults" id="lt20" name="lt20" value="yes" title="Please check <20">
+                                                                                     <input type="checkbox" class="labSection specialResults" name="lt20" value="yes" title="Please check <20">
                                                                                      &lt; 20<br>
-                                                                                     <input type="checkbox" class="labSection specialResults" id="lt40" name="lt40" value="yes" title="Please check <40">
+                                                                                     <input type="checkbox" class="labSection specialResults" name="lt40" value="yes" title="Please check <40">
                                                                                      &lt; 40<br>
-                                                                                     <input type="checkbox" class="specialResults" id="tnd" name="tnd" value="yes" title="Please check tnd" <?php echo $labFieldDisabled; ?>> Target Not Detected<br>
-                                                                                     <input type="checkbox" class="specialResults" id="bdl" name="bdl" value="yes" title="Please check bdl" <?php echo $labFieldDisabled; ?>> Below Detection Level
-                                                                                     <input type="checkbox" class="specialResults" id="failed" name="failed" value="yes" title="Please check failed" <?php echo $labFieldDisabled; ?>> Failed
+                                                                                     <input type="checkbox" class="specialResults" name="tnd" value="yes" title="Please check tnd" <?php echo $labFieldDisabled; ?>> Target Not Detected<br>
+                                                                                     <input type="checkbox" class="specialResults" name="bdl" value="yes" title="Please check bdl" <?php echo $labFieldDisabled; ?>> Below Detection Level
+                                                                                     <input type="checkbox" class="specialResults" name="failed" value="yes" title="Please check failed" <?php echo $labFieldDisabled; ?>> Failed
+                                                                                     <input type="checkbox" class="specialResults" name="invalid" value="yes" title="Please check invalid" <?php echo $labFieldDisabled; ?>> Invalid
                                                                                 </div>
                                                                            </div>
                                                                            <div class="col-md-4 vlResult">
