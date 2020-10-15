@@ -4,6 +4,7 @@ ob_start();
 include_once(APPLICATION_PATH . '/header.php');
 $query = "SELECT * FROM roles where status='active'";
 $result = $db->rawQuery($query);
+
 $fResult = array();
 $display = 'display:none';
 if ($sarr['user_type'] == 'remoteuser') {
@@ -85,23 +86,32 @@ $ftResult = $db->rawQuery($fQuery);
                                              <label for="role" class="col-lg-4 control-label">Role <span class="mandatory">*</span></label>
                                              <div class="col-lg-7">
                                                   <select class="form-control isRequired" name='role' id='role' title="Please select the role">
-                                                       <option value=""> -- Select -- </option>
-                                                       <?php
-                                                       foreach ($result as $row) {
-                                                       ?>
-                                                            <option value="<?php echo $row['role_id']; ?>"><?php echo $row['role_name']; ?></option>
-                                                       <?php
-                                                       }
-                                                       ?>
+                                                       <option value="">--Select--</option>
+                                                       <?php foreach ($result as $row) { ?>
+                                                            <option value="<?php echo $row['role_id'];?>" data-code="<?php echo $row['role_code'];?>"><?php echo ucwords(($row['role_name']));?></option>
+                                                       <?php } ?>
                                                   </select>
                                              </div>
                                         </div>
                                    </div>
                               </div>
+                              <div class="row show-token" style="display: none;">
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="authToken" class="col-lg-4 control-label">AuthToken <span class="mandatory">*</span></label>
+                                             <div class="col-lg-7">
+                                                  <input type="text" class="form-control isRequired" id="authToken" name="authToken" placeholder="Auth Token" title="Please Generate the auth token" readonly>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="generateToken('authToken');">Generate Token</a>
+                                        </div>
+                                   </div>
+                              </div>
 
                               <div class="row">
-
-
                                    <div class="col-md-6">
                                         <div class="form-group">
                                              <label for="" class="col-lg-4 control-label">Signature <br>(Used to embed in Result PDF)</label>
@@ -280,6 +290,18 @@ $ftResult = $db->rawQuery($fQuery);
                $("#facilityFilter,#hideFilter").hide();
                $("#showFilter").fadeIn();
           });
+
+          $('#role').change(function(e) {
+               $('#authToken').val('');
+               var selectedText = $(this).find("option:selected").attr('data-code');
+               if(selectedText == "API"){
+                    $('.show-token').show();
+                    $('#authToken').addClass('isRequired');
+               } else{
+                    $('.show-token').hide();
+                    $('#authToken').removeClass('isRequired');
+               }
+          });
      });
 
      function validateNow() {
@@ -388,6 +410,17 @@ $ftResult = $db->rawQuery($fQuery);
                     });
           }
           $.unblockUI();
+     }
+
+     function generateToken(id){
+          $.post("/includes/generate-auth-token.php", {
+               size:16
+          },
+          function(data) {
+               if (data != "") {
+                    $("#"+id).val(data);
+               }
+          });
      }
 </script>
 <?php

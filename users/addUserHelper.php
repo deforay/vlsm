@@ -38,17 +38,22 @@ try {
         $idFour = $general->generateRandomString(4);
         $idFive = $general->generateRandomString(12);
         $data = array(
-            'user_id' => $idOne . "-" . $idTwo . "-" . $idThree . "-" . $idFour . "-" . $idFive,
+            'user_id'       => $idOne . "-" . $idTwo . "-" . $idThree . "-" . $idFour . "-" . $idFive,
             //'user_alpnum_id'=>$idOne."-".$idTwo."-".$idThree."-".$idFour."-".$idFive,
-            'user_name' => $_POST['userName'],
-            'email' => $_POST['email'],
-            'login_id' => $_POST['loginId'],
-            'phone_number' => $_POST['phoneNo'],
-            'password' => $password,
-            'role_id' => $_POST['role'],
-            'status' => 'active',
+            'user_name'     => $_POST['userName'],
+            'email'         => $_POST['email'],
+            'login_id'      => $_POST['loginId'],
+            'phone_number'  => $_POST['phoneNo'],
+            'password'      => $password,
+            'role_id'       => $_POST['role'],
+            'status'        => 'active',
+            'user_signature' => $imageName,
         );
-        $data['user_signature'] = $imageName;
+        if (isset($_POST['authToken']) && !empty($_POST['authToken'])) {
+            $data['api_token'] = $_POST['authToken'];
+            $data['api_token_generated_datetime'] = $general->getDateTime();
+        }
+
         $id = $db->insert($tableName, $data);
         if ($id > 0 && trim($_POST['selectedFacility']) != '') {
             if ($id > 0 && trim($_POST['selectedFacility']) != '') {
