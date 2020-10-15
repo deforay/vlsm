@@ -10,12 +10,7 @@ session_unset(); // no need of session in json response
 ini_set('memory_limit', -1);
 header('Content-Type: application/json');
 
-
-
-
-
 $general = new \Vlsm\Models\General($db);
-
 
 // The request has to send an Authorization Bearer token 
 
@@ -23,9 +18,10 @@ $general = new \Vlsm\Models\General($db);
 $expectedBearerToken = 'FR4kewpuHaRBAm8aUmCWt4xF7QkktV36';
 $auth = $general->getHeader('Authorization');
 
+$user = $general->getAuthToken($_REQUEST['token']);
 // If Auth header is empty or if it does not match the expected string
 // then do not proceed.
-if (empty($auth) || !preg_match("/\b$expectedBearerToken\b/", $auth)) {
+if (empty($auth) || isset($user['user_id']) && $user['user_id'] != "") {
     $response = array(
         'status' => 'failed',
         'timestamp' => time(),
@@ -74,15 +70,15 @@ try {
                     testreason.test_reason_name as `reason_for_testing`,
                     rejreason.rejection_reason_name as `rejection_reason`
 
-                        FROM vl_request_form as vl 
-                        LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
-                        LEFT JOIN facility_details as lab ON vl.lab_id=lab.facility_id 
-                        LEFT JOIN r_vl_sample_type as samptype ON samptype.sample_id=vl.sample_type 
-                        INNER JOIN r_sample_status as sampstatus ON sampstatus.status_id=vl.result_status 
-                        LEFT JOIN r_vl_test_reasons as testreason ON testreason.test_reason_id=vl.reason_for_vl_testing 
-                        LEFT JOIN r_vl_sample_rejection_reasons as rejreason ON rejreason.rejection_reason_id=vl.reason_for_sample_rejection
-                        
-                        WHERE (serial_no is not null)";
+                    FROM vl_request_form as vl 
+                    LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
+                    LEFT JOIN facility_details as lab ON vl.lab_id=lab.facility_id 
+                    LEFT JOIN r_vl_sample_type as samptype ON samptype.sample_id=vl.sample_type 
+                    INNER JOIN r_sample_status as sampstatus ON sampstatus.status_id=vl.result_status 
+                    LEFT JOIN r_vl_test_reasons as testreason ON testreason.test_reason_id=vl.reason_for_vl_testing 
+                    LEFT JOIN r_vl_sample_rejection_reasons as rejreason ON rejreason.rejection_reason_id=vl.reason_for_sample_rejection
+                    
+                    WHERE (serial_no is not null)";
 
 
 

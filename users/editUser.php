@@ -6,8 +6,11 @@ include_once APPLICATION_PATH . '/header.php';
 $id = base64_decode($_GET['id']);
 $userQuery = "SELECT * from user_details where user_id='" . $id . "'";
 $userInfo = $db->query($userQuery);
+
 $query = "SELECT * FROM roles where status='active'";
 $result = $db->rawQuery($query);
+
+
 $fResult = array();
 $display = 'display:none';
 if ($sarr['user_type'] == 'remoteuser') {
@@ -93,22 +96,35 @@ $ftResult = $db->rawQuery($fQuery);
                                              <label for="role" class="col-lg-4 control-label">Role <span class="mandatory">*</span></label>
                                              <div class="col-lg-7">
                                                   <select class="form-control isRequired" name='role' id='role' title="Please select the role">
-                                                       <option value=""> -- Select -- </option>
-                                                       <?php
-                                                       foreach ($result as $row) {
-                                                       ?>
-                                                            <option value="<?php echo $row['role_id']; ?>" <?php echo ($userInfo[0]['role_id'] == $row['role_id']) ? "selected='selected'" : "" ?>><?php echo ucwords($row['role_name']); ?></option>
-                                                       <?php
-                                                       }
-                                                       ?>
+                                                       <option value="">--Select--</option>
+                                                       <?php foreach ($result as $row) { 
+                                                            $roleCode = (isset($userInfo[0]['role_id']) && $userInfo[0]['role_id'] == $row['role_id'])? $row['role_code']:""
+                                                            ?>
+                                                            <option value="<?php echo $row['role_id'];?>" data-code="<?php echo $row['role_code'];?>" <?php echo (isset($userInfo[0]['role_id']) && $userInfo[0]['role_id'] == $row['role_id'])? "selected='selected'":"";?>><?php echo ucwords(($row['role_name']));?></option>
+                                                       <?php } ?>
                                                   </select>
                                              </div>
                                         </div>
                                    </div>
                               </div>
+                              
+                              <div class="row show-token" style="display: <?php echo ($roleCode != "" && $roleCode == "API")?'display':'none';?>;">
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="authToken" class="col-lg-4 control-label">AuthToken <span class="mandatory">*</span></label>
+                                             <div class="col-lg-7">
+                                                  <input type="text" value="<?php echo $userInfo[0]['api_token']; ?>" class="form-control isRequired" id="authToken" name="authToken" placeholder="Auth Token" title="Please Generate the auth token" readonly>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="generateToken('authToken');">Generate Token</a>
+                                        </div>
+                                   </div>
+                              </div>
 
                               <div class="row">
-
                                    <div class="col-md-6">
                                         <div class="form-group">
                                              <label for="" class="col-lg-4 control-label">Signature <br>(Used to embed in Result PDF)</label>
@@ -324,6 +340,17 @@ $ftResult = $db->rawQuery($fQuery);
                $("#facilityFilter,#hideFilter").hide();
                $("#showFilter").fadeIn();
           });
+
+          $('#role').change(function(e) {
+               var selectedText = $(this).find("option:selected").attr('data-code');
+               if(selectedText == "API"){
+                    $('.show-token').show();
+                    $('#authToken').addClass('isRequired');
+               } else{
+                    $('.show-token').hide();
+                    $('#authToken').removeClass('isRequired');
+               }
+          });
      });
      pwdflag = true;
 
@@ -436,6 +463,17 @@ $ftResult = $db->rawQuery($fQuery);
                     });
           }
           $.unblockUI();
+     }
+
+     function generateToken(id){
+          $.post("/includes/generate-auth-token.php", {
+               size:16
+          },
+          function(data) {
+               if (data != "") {
+                    $("#"+id).val(data);
+               }
+          });
      }
 </script>
 <?php

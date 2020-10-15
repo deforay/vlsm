@@ -1763,3 +1763,7 @@ ALTER TABLE `form_hepatitis`
 
 UPDATE `system_config` SET `value` = '4.2.4' WHERE `system_config`.`name` = 'version';
 -- Version 4.2.4 -- Amit -- 14-Oct-2020
+
+-- Thana 15-Oct-2020
+INSERT INTO `roles` (`role_id`, `role_name`, `role_code`, `status`, `landing_page`) VALUES (NULL, 'API User', 'API', 'active', NULL);
+ALTER TABLE `user_details` ADD `api_token` TEXT NULL DEFAULT NULL AFTER `user_signature`, ADD `api_token_generated_datetime` DATETIME NULL DEFAULT NULL AFTER `api_token`;
