@@ -62,9 +62,9 @@ class Users
 
         $query = "SELECT * FROM $this->table WHERE api_token = '$token' LIMIT 1";
         $result = $this->db->rawQueryOne($query);
-        if($result['api_token_generated_datetime'] < date('Y-m-d',strtotime('-6 MONTHS'))){
+        if($result['api_token_generated_datetime'] < date('Y-m-d H:i:s',strtotime('-2 month'))){
             $general = new \Vlsm\Models\General($this->db);
-            $token = $general->generateRandomString(32);
+            $token = bin2hex(random_bytes(16));
             $data['api_token'] = $token;
             $data['api_token_generated_datetime'] = $general->getDateTime();
             

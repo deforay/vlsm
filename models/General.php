@@ -18,43 +18,32 @@ class General
         $this->db = $db;
     }
 
-    public static function generateRandomString($length = 8, $seeds = 'alphanum')
+    public static function generateRandomString($length = 8, $type = 'alphanum')
     {
+
         // Possible seeds
-        $seedings['alpha'] = 'abcdefghijklmnopqrstuvwqyzabcdefghijklmnopqrstuvwqyzabcdefghijklmnopqrstuvwqyz';
-        $seedings['numeric'] = '012345678901234567890123456789';
-        $seedings['alphanum'] = 'abcdefghijklmnopqrstuvwqyz0123456789abcdefghijklmnopqrstuvwqyz0123456789abcdefghijklmnopqrstuvwqyz0123456789';
-        $seedings['hexidec'] = '0123456789abcdef';
+        $seeds['alpha'] = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwqyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwqyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwqyz';
+        $seeds['numeric'] = '01234567890123456789012345678901234567890123456789';
+        $seeds['alphanum'] = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwqyz0123456789abcdefghijklmnopqrstuvwqyz0123456789abcdefghijklmnopqrstuvwqyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $seeds['hexidec'] = '0123456789abcdef';
 
-        // Choose seed
-        if (isset($seedings[$seeds])) {
-            $seeds = $seedings[$seeds];
+        if (isset($seeds[$type])) {
+            $keyspace = $seeds[$type];
         }
 
-        // Seed generator
-        list($usec, $sec) = explode(' ', microtime());
-        $seed = (float) $sec + ((float) $usec * 100000);
-        mt_srand($seed);
-
-        // Generate
-        $str = '';
-        $seeds_count = strlen($seeds);
-
-        for ($i = 0; $length > $i; $i++) {
-            $str .= $seeds[mt_rand(0, $seeds_count - 1)];
+        $pieces = [];
+        $max = mb_strlen($keyspace, '8bit') - 1;
+        for ($i = 0; $i < $length; ++$i) {
+            $pieces[] = $keyspace[random_int(0, $max)];
         }
+        return implode('', $pieces);
 
-        return $str;
+        
     }
 
-    public function generateUserID()
+    public function generateUserID($length = 16)
     {
-        $idOne = $this->generateRandomString(8);
-        $idTwo = $this->generateRandomString(4);
-        $idThree = $this->generateRandomString(4);
-        $idFour = $this->generateRandomString(4);
-        $idFive = $this->generateRandomString(12);
-        return $idOne . "-" . $idTwo . "-" . $idThree . "-" . $idFour . "-" . $idFive;
+        return bin2hex(random_bytes($length));
     }
 
     /**
@@ -433,7 +422,7 @@ class General
     public function getTestingPlatforms($testType = null)
     {
 
-        if(!empty($testType)){
+        if (!empty($testType)) {
             $this->db->where("(JSON_SEARCH(supported_tests, 'all', '$testType') IS NOT NULL) OR (supported_tests IS NULL)");
         }
         $this->db->where("status", "active");
@@ -467,7 +456,7 @@ class General
         $diff = $birthday->diff(new \DateTime());
         return $diff->format('%m') + 12 * $diff->format('%y');
     }
-    
+
     public function ageInYearMonthDays($date)
     {
         $bday = new \DateTime($date); // Your date of birth
@@ -476,20 +465,20 @@ class General
         // printf(' Your age : %d years, %d month, %d days', $diff->y, $diff->m, $diff->d);
         return array("year" => $diff->y, "months" => $diff->m, "days" => $diff->d);
     }
-    
+
     public function getRejectionReasons($testType)
     {
         $rejArray = array('general', 'whole blood', 'plasma', 'dbs', 'testing');
-        if($testType == "vl"){
+        if ($testType == "vl") {
             $rejArray = array('general', 'whole blood', 'plasma', 'dbs', 'testing');
         }
-        if($testType == "eid"){
+        if ($testType == "eid") {
             $rejArray = array('general', 'whole blood', 'plasma', 'dbs', 'testing');
         }
-        if($testType == "covid19"){
+        if ($testType == "covid19") {
             $rejArray = array('general', 'whole blood', 'plasma', 'dbs', 'testing');
         }
-        foreach($rejArray as $rej){
+        foreach ($rejArray as $rej) {
             $rejReaons[$rej] = ucwords($rej);
         }
         return $rejReaons;
