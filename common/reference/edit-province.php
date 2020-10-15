@@ -41,6 +41,7 @@ $provinceInfo = $db->query($query);
                                     <label for="provinceName" class="col-lg-4 control-label">Province Name <span class="mandatory">*</span></label>
                                     <div class="col-lg-7">
                                         <input type="text" value="<?php echo $provinceInfo[0]['province_name'];?>" class="form-control isRequired" id="provinceName" name="provinceName" placeholder="Province Name" title="Please enter Province name" onblur="checkNameValidation('province_details','province_name',this,'<?php echo "province_id##" . $id; ?>','The province name that you entered already exists.Enter another name',null)" />
+                                        <input type="hidden" value="<?php echo $provinceInfo[0]['province_name'];?>" class="form-control" id="provinceNameOld" name="provinceNameOld">
                                     </div>
                                 </div>
                             </div>
