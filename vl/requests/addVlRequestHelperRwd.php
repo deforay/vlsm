@@ -149,7 +149,7 @@ try {
         $_POST['vlResult'] = '<20';
         $_POST['vlLog'] = '';
     }
-    if (isset($_POST['lt20']) && $_POST['lt40'] == 'yes' && $isRejection == false) {
+    if (isset($_POST['lt40']) && $_POST['lt40'] == 'yes' && $isRejection == false) {
         $_POST['vlResult'] = '<40';
         $_POST['vlLog'] = '';
     }
