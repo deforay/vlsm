@@ -9,6 +9,7 @@ if (session_status() == PHP_SESSION_NONE) {
 $general = new \Vlsm\Models\General($db);
 
 $tableName = "province_details";
+$facilityTable = "facility_details";
 $primaryKey = "province_id";
 
 try {
@@ -20,6 +21,17 @@ try {
 			'updated_datetime'	=> $general->getDateTime()
 		);
 		if(isset($_POST['provinceId']) && $_POST['provinceId'] != ""){
+			/* Update facility state */
+			$facilityQuery = "SELECT facility_id, facility_state from $facilityTable where facility_state='" . $_POST['provinceNameOld'] . "' LIMIT 1";
+			$facilityInfo = $db->query($facilityQuery);
+			if (isset($facilityInfo[0]['facility_state']) && $facilityInfo[0]['facility_state'] != "") {
+				$db = $db->where('facility_id', $facilityInfo[0]['facility_id']);
+				$lastId = $db->update($facilityTable, array(
+					'facility_state'	=> $_POST['provinceName'],
+					'updated_datetime'	=> $general->getDateTime()
+				));
+			}
+			/* Update province details */
 			$db = $db->where($primaryKey, base64_decode($_POST['provinceId']));
         	$lastId = $db->update($tableName, $data);
 		} else{
