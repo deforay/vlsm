@@ -61,13 +61,8 @@ try {
     }
 
     $password = sha1($post->password . $systemConfig['passwordSalt']);
-    $idOne = $general->generateRandomString(8);
-    $idTwo = $general->generateRandomString(4);
-    $idThree = $general->generateRandomString(4);
-    $idFour = $general->generateRandomString(4);
-    $idFive = $general->generateRandomString(12);
     $data = array(
-        'user_id' => $idOne . "-" . $idTwo . "-" . $idThree . "-" . $idFour . "-" . $idFive,
+        'user_id' => $general->generateUserID(),
         'user_name' => $post->userName,
         'email' => $post->email,
         'login_id' => $post->loginId,

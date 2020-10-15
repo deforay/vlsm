@@ -32,13 +32,8 @@ try {
         }
 
         $password = sha1($_POST['password'] . $systemConfig['passwordSalt']);
-        $idOne = $general->generateRandomString(8);
-        $idTwo = $general->generateRandomString(4);
-        $idThree = $general->generateRandomString(4);
-        $idFour = $general->generateRandomString(4);
-        $idFive = $general->generateRandomString(12);
         $data = array(
-            'user_id'       => $idOne . "-" . $idTwo . "-" . $idThree . "-" . $idFour . "-" . $idFive,
+            'user_id'       => $general->generateUserID(),
             //'user_alpnum_id'=>$idOne."-".$idTwo."-".$idThree."-".$idFour."-".$idFive,
             'user_name'     => $_POST['userName'],
             'email'         => $_POST['email'],
