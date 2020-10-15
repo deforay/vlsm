@@ -117,7 +117,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         <?php } ?>
                                         <td><label for="sourceOfAlertPOE">Source of Alert / POE</label></td>
                                         <td>
-                                            <select class="form-control" name="sourceOfAlertPOE" id="sourceOfAlertPOE" title="Please choose source of Alert / POE" style="width:100%;">
+                                            <select class="form-control select2" name="sourceOfAlertPOE" id="sourceOfAlertPOE" title="Please choose source of Alert / POE" style="width:100%;">
                                                 <option value=""> -- Select -- </option>
                                                 <option value="hotline">Hotline</option>
                                                 <option value="community-surveillance">Community Surveillance</option>
@@ -137,13 +137,13 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                     <tr>
                                         <td><label for="province">Health Facility/POE State </label><span class="mandatory">*</span></td>
                                         <td>
-                                            <select class="form-control isRequired" name="province" id="province" title="Please choose State" onchange="getfacilityDetails(this);" style="width:100%;">
+                                            <select class="form-control select2 isRequired" name="province" id="province" title="Please choose State" onchange="getfacilityDetails(this);" style="width:100%;">
                                                 <?php echo $province; ?>
                                             </select>
                                         </td>
                                         <td><label for="district">Health Facility/POE County </label><span class="mandatory">*</span></td>
                                         <td>
-                                            <select class="form-control isRequired" name="district" id="district" title="Please choose County" style="width:100%;" onchange="getfacilityDistrictwise(this);">
+                                            <select class="form-control select2 isRequired" name="district" id="district" title="Please choose County" style="width:100%;" onchange="getfacilityDistrictwise(this);">
                                                 <option value=""> -- Select -- </option>
                                             </select>
                                         </td>
@@ -158,7 +158,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         <td><label for="supportPartner">Implementing Partner </label></td>
                                         <td>
                                             <!-- <input type="text" class="form-control" id="supportPartner" name="supportPartner" placeholder="Partenaire dappui" title="Please enter partenaire dappui" style="width:100%;"/> -->
-                                            <select class="form-control" name="implementingPartner" id="implementingPartner" title="Please choose partenaire de mise en œuvre" style="width:100%;">
+                                            <select class="form-control select2" name="implementingPartner" id="implementingPartner" title="Please choose partenaire de mise en œuvre" style="width:100%;">
                                                 <option value=""> -- Select -- </option>
                                                 <?php
                                                 foreach ($implementingPartnerList as $implementingPartner) {
@@ -169,7 +169,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         </td>
                                         <td><label for="fundingSource">Funding Partner</label></td>
                                         <td>
-                                            <select class="form-control" name="fundingSource" id="fundingSource" title="Please choose source of financement" style="width:100%;">
+                                            <select class="form-control select2" name="fundingSource" id="fundingSource" title="Please choose source of financement" style="width:100%;">
                                                 <option value=""> -- Select -- </option>
                                                 <?php
                                                 foreach ($fundingSourceList as $fundingSource) {
@@ -182,7 +182,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             <!-- <tr> -->
                                             <td><label for="labId">Testing Laboratory <span class="mandatory">*</span></label> </td>
                                             <td>
-                                                <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Testing Laboratory" style="width:100%;">
+                                                <select name="labId" id="labId" class="form-control select2 isRequired" title="Please select Testing Testing Laboratory" style="width:100%;">
                                                     <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
                                                 </select>
                                             </td>
@@ -246,11 +246,19 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         <td><textarea class="form-control " id="patientAddress" name="patientAddress" placeholder="Address" title="Case Address" style="width:100%;" onchange=""></textarea></td>
 
                                         <th>State</th>
-                                        <td><input type="text" class="form-control " id="patientProvince" name="patientProvince" placeholder="State" title="Please enter the Case State" style="width:100%;" /></td>
+                                        <td>
+                                            <select class="form-control select2" name="patientProvince" id="patientProvince" title="Please Case State" onchange="getPatientDistrictDetails(this);" style="width:100%;">
+                                                <?php echo $province; ?>
+                                            </select>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>County</th>
-                                        <td><input class="form-control" id="patientDistrict" name="patientDistrict" placeholder="County" title="Please enter the Case County" style="width:100%;"></td>
+                                        <td>
+                                            <select class="form-control select2" name="patientDistrict" id="patientDistrict" title="Please Case County" style="width:100%;">
+                                                <option value=""> -- Select -- </option>
+                                            </select>
+                                        </td>
 
                                         <th>City/Village</th>
                                         <td><input class="form-control" id="patientCity" name="patientCity" placeholder="Case City/Village" title="Please enter the Case City/Village" style="width:100%;"></td>
@@ -575,6 +583,28 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
         }
         $.unblockUI();
     }
+    
+    function getPatientDistrictDetails(obj) {
+
+        $.blockUI();
+        var pName = obj.value;
+        if ($.trim(pName) != '') {
+            $.post("/includes/siteInformationDropdownOptions.php", {
+                    pName: pName,
+                    testType: 'covid19'
+                },
+                function(data) {
+                    if (data != "") {
+                        details = data.split("###");
+                        $("#patientDistrict").html(details[1]);
+                    }
+                });
+        } else if (pName == '') {
+            $(obj).html("<?php echo $province; ?>");
+            $("#patientDistrict").html("<option value=''> -- Select -- </option>");
+        }
+        $.unblockUI();
+    }
 
     function sampleCodeGeneration() {
         var pName = $("#province").val();
@@ -670,7 +700,10 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
     }
 
     $(document).ready(function() {
-
+        $(".select2").select2();
+		$(".select2").select2({
+			tags: true
+		});
         $('#facilityId').select2({
             placeholder: "Select Clinic/Health Center"
         });

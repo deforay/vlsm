@@ -15,9 +15,9 @@ $nationalityQry = "SELECT * FROM `r_countries` ORDER BY `iso_name` ASC";
 $nationalityResult = $db->query($nationalityQry);
 
 foreach ($nationalityResult as $nrow) {
-    $nationalityList[$nrow['id']] = ucwords($nrow['iso_name']) . ' ('.$nrow['iso3'].')';
+    $nationalityList[$nrow['id']] = ucwords($nrow['iso_name']) . ' (' . $nrow['iso3'] . ')';
 }
-foreach($testPlatformResult as $row){
+foreach ($testPlatformResult as $row) {
     $testPlatformList[$row['machine_name']] = $row['machine_name'];
 }
 
@@ -63,6 +63,11 @@ if ($sarr['user_type'] == 'remoteuser') {
     $rKey = '';
 }
 $pdResult = $db->query($pdQuery);
+$provinceInfo = array();
+foreach($pdResult as $state){
+    $provinceInfo[$state['province_name']] = ucwords($state['province_name']);
+}
+
 $province = "";
 $province .= "<option value=''> -- Select -- </option>";
 foreach ($pdResult as $provinceName) {
@@ -91,7 +96,7 @@ $sampleSuggestionDisplay = 'display:none;';
     </section>
     <!-- Main content -->
     <section class="content">
-        
+
         <div class="box box-default">
             <div class="box-header with-border">
                 <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
@@ -123,7 +128,7 @@ $sampleSuggestionDisplay = 'display:none;';
                                                 <td colspan="4"> <label for="sampleSuggest">Sample ID (might change while submitting the form)</label></td>
                                                 <td colspan="2" align="left"> <?php echo $sampleSuggestion; ?></td>
                                             <?php } ?>
-                                            
+
                                         </tr>
                                     <?php } ?>
                                     <tr>
@@ -139,41 +144,41 @@ $sampleSuggestionDisplay = 'display:none;';
                                                 <input type="text" readonly value="<?php echo $covid19Info[$sampleCode]; ?>" class="form-control" id="sampleCode" name="sampleCode" placeholder="Sample ID" title="Please enter Sample ID" style="width:100%;" onchange="" />
                                             </td>
                                         <?php } ?>
-                                            <td><label for="sourceOfAlertPOE">Source of Alert / POE</label></td>
-                                            <td>
-                                                <select class="form-control" name="sourceOfAlertPOE" id="sourceOfAlertPOE" title="Please choose source of Alert / POE" style="width:100%;">
-                                                    <option value=""> -- Select -- </option>
-                                                    <option value="hotline" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'hotline')?"selected='selected'":"";?>>Hotline</option>
-                                                    <option value="community-surveillance" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'community-surveillance')?"selected='selected'":"";?>>Community Surveillance</option>
-                                                    <option value="poe" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'poe')?"selected='selected'":"";?>>POE</option>
-                                                    <option value="contact-tracing" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'contact-tracing')?"selected='selected'":"";?>>Contact Tracing</option>
-                                                    <option value="clinic" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'clinic')?"selected='selected'":"";?>>Clinic</option>
-                                                    <option value="sentinel-site" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'sentinel-site')?"selected='selected'":"";?>>Sentinel Site</option>
-                                                    <option value="screening" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'screening')?"selected='selected'":"";?>>Screening</option>
-                                                    <option value="others" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'others')?"selected='selected'":"";?>>Others</option>
-                                                </select>
-                                            </td>
-                                            <td class="show-alert-poe" style="<?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'others')?"":"display:none;";?>"><label for="sourceOfAlertPOE">Source of Alert / POE Others</label></td>
-                                            <td class="show-alert-poe" style="<?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'others')?"":"display:none;";?>">
-                                                <input type="text" value="<?php echo $covid19Info['source_of_alert_other'];?>" class="form-control" name="alertPoeOthers" id="alertPoeOthers" placeholder="Source of Alert / POE Others" title="Please choose source of Alert / POE" style="width:100%;">
-                                            </td>
+                                        <td><label for="sourceOfAlertPOE">Source of Alert / POE</label></td>
+                                        <td>
+                                            <select class="form-control select2" name="sourceOfAlertPOE" id="sourceOfAlertPOE" title="Please choose source of Alert / POE" style="width:100%;">
+                                                <option value=""> -- Select -- </option>
+                                                <option value="hotline" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'hotline') ? "selected='selected'" : ""; ?>>Hotline</option>
+                                                <option value="community-surveillance" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'community-surveillance') ? "selected='selected'" : ""; ?>>Community Surveillance</option>
+                                                <option value="poe" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'poe') ? "selected='selected'" : ""; ?>>POE</option>
+                                                <option value="contact-tracing" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'contact-tracing') ? "selected='selected'" : ""; ?>>Contact Tracing</option>
+                                                <option value="clinic" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'clinic') ? "selected='selected'" : ""; ?>>Clinic</option>
+                                                <option value="sentinel-site" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'sentinel-site') ? "selected='selected'" : ""; ?>>Sentinel Site</option>
+                                                <option value="screening" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'screening') ? "selected='selected'" : ""; ?>>Screening</option>
+                                                <option value="others" <?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'others') ? "selected='selected'" : ""; ?>>Others</option>
+                                            </select>
+                                        </td>
+                                        <td class="show-alert-poe" style="<?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'others') ? "" : "display:none;"; ?>"><label for="sourceOfAlertPOE">Source of Alert / POE Others</label></td>
+                                        <td class="show-alert-poe" style="<?php echo (isset($covid19Info['source_of_alert']) && $covid19Info['source_of_alert'] == 'others') ? "" : "display:none;"; ?>">
+                                            <input type="text" value="<?php echo $covid19Info['source_of_alert_other']; ?>" class="form-control" name="alertPoeOthers" id="alertPoeOthers" placeholder="Source of Alert / POE Others" title="Please choose source of Alert / POE" style="width:100%;">
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><label for="province">Health Facility/POE State </label><span class="mandatory">*</span></td>
                                         <td>
-                                            <select class="form-control" name="province" id="province" title="Please choose State" style="width:100%;">
+                                            <select class="form-control select2" name="province" id="province" title="Please choose State" style="width:100%;">
                                                 <?php echo $province; ?>
                                             </select>
                                         </td>
                                         <td><label for="district">Health Facility/POE County </label><span class="mandatory">*</span></td>
                                         <td>
-                                            <select class="form-control" name="district" id="district" title="Please choose County" style="width:100%;">
+                                            <select class="form-control select2" name="district" id="district" title="Please choose County" style="width:100%;">
                                                 <option value=""> -- Select -- </option>
                                             </select>
                                         </td>
                                         <td><label for="facilityId">Health Facility/POE </label><span class="mandatory">*</span></td>
                                         <td>
-                                            <select class="form-control " name="facilityId" id="facilityId" title="Please choose service provider" style="width:100%;" onchange="getfacilityProvinceDetails(this);">
+                                            <select class="form-control select2" name="facilityId" id="facilityId" title="Please choose service provider" style="width:100%;" onchange="getfacilityProvinceDetails(this);">
                                                 <?php echo $facility; ?>
                                             </select>
                                         </td>
@@ -182,7 +187,7 @@ $sampleSuggestionDisplay = 'display:none;';
                                         <td><label for="supportPartner">Implementing Partner </label></td>
                                         <td>
 
-                                            <select class="form-control" name="implementingPartner" id="implementingPartner" title="Please choose implementing partner" style="width:100%;">
+                                            <select class="form-control select2" name="implementingPartner" id="implementingPartner" title="Please choose implementing partner" style="width:100%;">
                                                 <option value=""> -- Select -- </option>
                                                 <?php
                                                 foreach ($implementingPartnerList as $implementingPartner) {
@@ -193,7 +198,7 @@ $sampleSuggestionDisplay = 'display:none;';
                                         </td>
                                         <td><label for="fundingSource">Funding Partner</label></td>
                                         <td>
-                                            <select class="form-control" name="fundingSource" id="fundingSource" title="Please choose funding source" style="width:100%;">
+                                            <select class="form-control select2" name="fundingSource" id="fundingSource" title="Please choose funding source" style="width:100%;">
                                                 <option value=""> -- Select -- </option>
                                                 <?php
                                                 foreach ($fundingSourceList as $fundingSource) {
@@ -253,10 +258,18 @@ $sampleSuggestionDisplay = 'display:none;';
                                     </tr>
                                     <tr>
                                         <th>Case State</th>
-                                        <td><input type="text" value="<?php echo $covid19Info['patient_province']; ?>" class="form-control " id="patientProvince" name="patientProvince" placeholder="State" title="Please enter the State" style="width:100%;" /></td>
+                                        <td>
+                                            <select class="form-control select2" name="patientProvince" id="patientProvince" title="Please Case State" onchange="getPatientDistrictDetails(this.value);" style="width:100%;">
+                                                <?= $general->generateSelectOptions($provinceInfo, $covid19Info['patient_province'], '-- Select --'); ?>
+                                            </select>
+                                        </td>
 
                                         <th>County</th>
-                                        <td><input class="form-control" value="<?php echo $covid19Info['patient_district']; ?>" id="patientDistrict" name="patientDistrict" placeholder="County" title="Please enter the County" style="width:100%;"></td>
+                                        <td>
+                                            <select class="form-control select2" name="patientDistrict" id="patientDistrict" title="Please Case County" style="width:100%;">
+                                                <option value="">--Select--</option>
+                                            </select>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>City/Village</th>
@@ -288,7 +301,7 @@ $sampleSuggestionDisplay = 'display:none;';
                                         <th>Type of Test Request</th>
                                         <td>
                                             <select name="testTypeRequested" id="testTypeRequested" class="form-control" title="Please choose type of test request" style="width:100%">
-                                            <option value="">-- Select --</option>
+                                                <option value="">-- Select --</option>
                                                 <option value="Real Time RT-PCR" <?php echo (isset($covid19Info['type_of_test_requested']) && $covid19Info['type_of_test_requested'] == 'Real Time RT-PCR') ? "selected='selected'" : ""; ?>>Real Time RT-PCR</option>
                                                 <option value="RDT-Antibody" <?php echo (isset($covid19Info['type_of_test_requested']) && $covid19Info['type_of_test_requested'] == 'RDT-Antibody') ? "selected='selected'" : ""; ?>>RDT-Antibody</option>
                                                 <option value="RDT-Antigen" <?php echo (isset($covid19Info['type_of_test_requested']) && $covid19Info['type_of_test_requested'] == 'RDT-Antigen') ? "selected='selected'" : ""; ?>>RDT-Antigen</option>
@@ -358,8 +371,8 @@ $sampleSuggestionDisplay = 'display:none;';
                                             <td>
                                                 <select class="form-control" id="specimenQuality" name="specimenQuality" title="Please enter the specimen quality">
                                                     <option value="">--Select--</option>
-                                                    <option value="good" <?php echo (isset($covid19Info['sample_condition']) && $covid19Info['sample_condition'] == 'good')?"selected='selected'":"";?>>Good</option>
-                                                    <option value="poor" <?php echo (isset($covid19Info['sample_condition']) && $covid19Info['sample_condition'] == 'poor')?"selected='selected'":"";?>>Poor</option>
+                                                    <option value="good" <?php echo (isset($covid19Info['sample_condition']) && $covid19Info['sample_condition'] == 'good') ? "selected='selected'" : ""; ?>>Good</option>
+                                                    <option value="poor" <?php echo (isset($covid19Info['sample_condition']) && $covid19Info['sample_condition'] == 'poor') ? "selected='selected'" : ""; ?>>Poor</option>
                                                 </select>
                                             </td>
                                             <th><label for="labTechnician">Lab Technician </label></th>
@@ -400,10 +413,10 @@ $sampleSuggestionDisplay = 'display:none;';
                                                             <?php }
                                                             } ?>
                                                         </optgroup>
-                                                    <?php } 
-                                                    if($covid19Info['reason_for_sample_rejection'] == 9999){
+                                                    <?php }
+                                                    if ($covid19Info['reason_for_sample_rejection'] == 9999) {
                                                         echo '<option value="9999" selected="selected">Unspecified</option>';
-                                                    }?>
+                                                    } ?>
                                                 </select>
                                             </td>
                                         </tr>
@@ -504,11 +517,11 @@ $sampleSuggestionDisplay = 'display:none;';
                                                 </select>
                                             </td>
                                             <th>Authorized By</th>
-                                            <td><input type="text" value="<?php echo $covid19Info['authorized_by']; ?>" name="authorizedBy" id="authorizedBy" class="disabled-field form-control" placeholder="Authorized By" title="Please enter te Authorized By"/></td>
+                                            <td><input type="text" value="<?php echo $covid19Info['authorized_by']; ?>" name="authorizedBy" id="authorizedBy" class="disabled-field form-control" placeholder="Authorized By" title="Please enter te Authorized By" /></td>
                                         </tr>
                                         <tr>
                                             <th>Authorized on</td>
-                                            <td><input type="text" value="<?php echo $general->humanDateFormat($covid19Info['authorized_on']); ?>" name="authorizedOn" id="authorizedOn" class="disabled-field form-control date" placeholder="Authorized on" title="Please enter the Authorized on"/></td>
+                                            <td><input type="text" value="<?php echo $general->humanDateFormat($covid19Info['authorized_on']); ?>" name="authorizedOn" id="authorizedOn" class="disabled-field form-control date" placeholder="Authorized on" title="Please enter the Authorized on" /></td>
                                             <th></th>
                                             <td></td>
                                         </tr>
@@ -555,18 +568,18 @@ $sampleSuggestionDisplay = 'display:none;';
         var selectedTestingPoint = '<?php echo $covid19Info['covid19_id']; ?>';
         if (labId) {
             $.post("/includes/getTestingPoints.php", {
-                labId: labId,
-                selectedTestingPoint: selectedTestingPoint
-            },
-            function(data) {
-                if (data != "") {
-                    $(".testingPointField").show();
-                    $("#testingPoint").html(data);
-                } else {
-                    $(".testingPointField").hide();
-                    $("#testingPoint").html('');
-                }
-            });
+                    labId: labId,
+                    selectedTestingPoint: selectedTestingPoint
+                },
+                function(data) {
+                    if (data != "") {
+                        $(".testingPointField").show();
+                        $("#testingPoint").html(data);
+                    } else {
+                        $(".testingPointField").hide();
+                        $("#testingPoint").html('');
+                    }
+                });
         }
     }
 
@@ -603,7 +616,7 @@ $sampleSuggestionDisplay = 'display:none;';
     function validateNow() {
         if ($('#isResultAuthorized').val() != "yes" && $('#result').val() == "") {
             $('#authorizedBy,#authorizedOn').removeClass('isRequired');
-        } else{
+        } else {
             $('#isResultAuthorized').val('yes');
             $('#authorizedBy,#authorizedOn').addClass('isRequired');
         }
@@ -617,12 +630,37 @@ $sampleSuggestionDisplay = 'display:none;';
         }
     }
 
+    function getPatientDistrictDetails(val) {
+
+        $.blockUI();
+        var pName = val;
+        if ($.trim(pName) != '') {
+            $.post("/includes/siteInformationDropdownOptions.php", {
+                    pName: pName,
+                    requestType: 'patient',
+                    dName: '<?php echo $covid19Info['patient_district']; ?>',
+                    testType: 'covid19'
+
+                },
+                function(data) {
+                    if (data != "") {
+                        details = data.split("###");
+                        $("#patientDistrict").html(details[1]);
+                    }
+                });
+        } else if (pName == '') {
+            $(obj).html("<?php echo $province; ?>");
+            $("#patientDistrict").html("<option value=''> -- Select -- </option>");
+        }
+        $.unblockUI();
+    }
+
     $(document).ready(function() {
         $('#patientNationality').select2({
             placeholder: "Select Nationality"
         });
 
-        <?php if (isset($covid19TestInfo) && count($covid19TestInfo) > 0) {?>
+        <?php if (isset($covid19TestInfo) && count($covid19TestInfo) > 0) { ?>
             $('.result-focus').change(function(e) {
                 $('.change-reason').show(500);
                 $('#reasonForChanging').addClass('isRequired');
@@ -652,9 +690,9 @@ $sampleSuggestionDisplay = 'display:none;';
             checkIsResultAuthorized();
         });
         $('#sourceOfAlertPOE').change(function(e) {
-            if(this.value == 'others'){
+            if (this.value == 'others') {
                 $('.show-alert-poe').show();
-            } else{
+            } else {
                 $('.show-alert-poe').hide();
             }
         });
@@ -680,6 +718,7 @@ $sampleSuggestionDisplay = 'display:none;';
         if ($('#result').val() != "") {
             $('#isResultAuthorized').val('yes');
         }
+        getPatientDistrictDetails('<?php echo $covid19Info['patient_province'];?>');
     });
 
 
@@ -773,6 +812,7 @@ $sampleSuggestionDisplay = 'display:none;';
         }
     }
     <?php if (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes') { ?>
+
         function checkPostive() {
             var itemLength = document.getElementsByName("testResult[]");
             for (i = 0; i < itemLength.length; i++) {
