@@ -81,7 +81,7 @@ $sFormat = '';
      </section>
      <!-- Main content -->
      <section class="content">
-          
+
           <div class="box box-default">
                <div class="box-header with-border">
                     <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
@@ -579,9 +579,13 @@ $sFormat = '';
                                                                                 <label class="col-lg-5 control-label" for="vlResult">Viral Load Result (copiesl/ml) </label>
                                                                                 <div class="col-lg-7">
                                                                                      <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" <?php echo $labFieldDisabled; ?> style="width:100%;" onchange="calculateLogValue(this)" />
-                                                                                     <input type="checkbox" class="specialResults" id="lt20" name="lt20" value="yes" title="Please check tnd" <?php echo $labFieldDisabled; ?>> &lt;20 <br>
+                                                                                     <input type="checkbox" class="labSection specialResults" id="lt20" name="lt20" value="yes" title="Please check <20">
+                                                                                     &lt; 20<br>
+                                                                                     <input type="checkbox" class="labSection specialResults" id="lt40" name="lt40" value="yes" title="Please check <40">
+                                                                                     &lt; 40<br>
                                                                                      <input type="checkbox" class="specialResults" id="tnd" name="tnd" value="yes" title="Please check tnd" <?php echo $labFieldDisabled; ?>> Target Not Detected<br>
                                                                                      <input type="checkbox" class="specialResults" id="bdl" name="bdl" value="yes" title="Please check bdl" <?php echo $labFieldDisabled; ?>> Below Detection Level
+                                                                                     <input type="checkbox" class="specialResults" id="failed" name="failed" value="yes" title="Please check failed" <?php echo $labFieldDisabled; ?>> Failed
                                                                                 </div>
                                                                            </div>
                                                                            <div class="col-md-4 vlResult">
@@ -673,19 +677,6 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
      facilityName = true;
      $(document).ready(function() {
 
-          if ($(".specialResults:checked")) {
-               $('#vlResult, #vlLog').val('');
-               $('#vlResult,#vlLog').attr('readonly', true);
-               $('#vlResult, #vlLog').removeClass('isRequired');
-               $(".specialResults").attr('disabled', false);
-               $(".specialResults").not($(".specialResults:checked")).attr('disabled', true);
-               $('.specialResults').not($(".specialResults:checked")).prop('checked', false).removeAttr('checked');
-          }
-          if ($('#vlResult, #vlLog').val() != '') {
-               $('.specialResults').prop('checked', false).removeAttr('checked');
-               $(".specialResults").attr('disabled', true);
-               $('#vlResult').addClass('isRequired');
-          }
 
           $('#fName').select2({
                placeholder: "Select Clinic/Health Center"
@@ -698,14 +689,13 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
           ?>
           // BARCODESTUFF END
 
-          $("#vlResult").on('keyup keypress blur change paste', function() {
-               if ($('#vlResult').val() != '') {
-                    if ($('#vlResult').val() != $('#vlResult').val().replace(/[^\d\.]/g, "")) {
-                         $('#vlResult').val('');
+          $("#vlResult, #vlLog").on('keyup keypress blur change paste', function() {
+               if ($(this).val() != '') {
+                    if ($(this).val() != $(this).val().replace(/[^\d\.]/g, "")) {
+                         $(this).val('');
                          alert('Please enter only numeric values for Viral Load Result')
                     }
                }
-
           });
      });
 

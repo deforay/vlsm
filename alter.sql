@@ -1156,17 +1156,17 @@ ALTER TABLE `covid19_patient_symptoms` ADD `symptom_details` TEXT NULL DEFAULT N
 
 -- Amit 27 Sep 2020
 
--- You may have to uncheck "Enable foreign key checks" checkbox on phpMyAdmin
-SET FOREIGN_KEY_CHECKS=0;
-DELETE FROM privileges WHERE privilege_id IN (
-  SELECT calc_id FROM ( SELECT MAX(privilege_id) AS calc_id FROM privileges GROUP BY `resource_id`, `privilege_name` HAVING COUNT(privilege_id) > 1 ) as temp_privileges
-);
-SET FOREIGN_KEY_CHECKS=1;
+-- -- You may have to uncheck "Enable foreign key checks" checkbox on phpMyAdmin
+-- SET FOREIGN_KEY_CHECKS=0;
+-- DELETE FROM privileges WHERE privilege_id IN (
+--   SELECT calc_id FROM ( SELECT MAX(privilege_id) AS calc_id FROM privileges GROUP BY `resource_id`, `privilege_name` HAVING COUNT(privilege_id) > 1 ) as temp_privileges
+-- );
+-- SET FOREIGN_KEY_CHECKS=1;
 
-DELETE FROM roles_privileges_map WHERE privilege_id not in (select privilege_id from privileges);
+-- DELETE FROM roles_privileges_map WHERE privilege_id not in (select privilege_id from privileges);
 
-ALTER TABLE `privileges` ADD UNIQUE( `resource_id`, `privilege_name`);
-ALTER TABLE `resources` ADD UNIQUE( `module`, `resource_name`);
+-- ALTER TABLE `privileges` ADD UNIQUE( `resource_id`, `privilege_name`);
+-- ALTER TABLE `resources` ADD UNIQUE( `module`, `resource_name`);
 
 -- Amit 28-Sep-2020
 ALTER TABLE `form_covid19` ADD `external_sample_code` VARCHAR(255) NULL DEFAULT NULL AFTER `sample_code`;
@@ -1177,8 +1177,8 @@ UPDATE `system_config` SET `value` = '4.2.2' WHERE `system_config`.`name` = 'ver
 -- Version 4.2.2 -- Amit -- 30-Sep-2020
 
 -- Thana 01-Oct-2020
-INSERT INTO `resources` (`resource_id`, `module`, `resource_name`, `display_name`) VALUES (NULL, 'covid-19', 'covid-19-reference', 'Covid-19 Reference Management');
-INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '33', 'covid19-sample-type.php', 'Manage Reference');
+-- INSERT INTO `resources` (`resource_id`, `module`, `resource_name`, `display_name`) VALUES (NULL, 'covid-19', 'covid-19-reference', 'Covid-19 Reference Management');
+-- INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '33', 'covid19-sample-type.php', 'Manage Reference');
 CREATE TABLE `countries` (
  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
  `iso_name` varchar(255) CHARACTER SET utf8 NOT NULL,
@@ -1443,50 +1443,50 @@ INSERT INTO `countries` (`id`, `iso_name`, `iso2`, `iso3`, `numeric_code`) VALUE
 
 -- Amit 08 Oct 2020
 
-UPDATE `resources` SET `module` = 'covid19' WHERE `resources`.`module` = 'covid-19';
-UPDATE `resources` SET `module` = 'admin' WHERE `resources`.`resource_id` = 1; UPDATE `resources` SET `module` = 'admin' WHERE `resources`.`resource_id` = 2; UPDATE `resources` SET `module` = 'admin' WHERE `resources`.`resource_id` = 3; UPDATE `resources` SET `module` = 'admin' WHERE `resources`.`resource_id` = 4; UPDATE `resources` SET `module` = 'admin' WHERE `resources`.`resource_id` = 5; UPDATE `resources` SET `module` = 'admin' WHERE `resources`.`resource_id` = 14; UPDATE `resources` SET `module` = 'admin' WHERE `resources`.`resource_id` = 17; UPDATE `resources` SET `module` = 'admin' WHERE `resources`.`resource_id` = 21;
-UPDATE `resources` SET `module` = 'common' WHERE `resources`.`resource_id` = 13;
-UPDATE `resources` SET `module` = 'common' WHERE `resources`.`resource_id` = 24;
-UPDATE `resources` SET `display_name` = 'Dashboard' WHERE `resources`.`resource_id` = 13;
-UPDATE `resources` SET `display_name` = 'Import VL Test Results' WHERE `resources`.`resource_id` = 8;
-UPDATE `resources` SET `display_name` = 'Manage VL Batch' WHERE `resources`.`resource_id` = 7;
-UPDATE `resources` SET `display_name` = 'Enter VL Result Manually' WHERE `resources`.`resource_id` = 10;
-UPDATE `resources` SET `display_name` = 'Print VL Result' WHERE `resources`.`resource_id` = 9;
-UPDATE `resources` SET `display_name` = 'VL Requests' WHERE `resources`.`resource_id` = 6;
-UPDATE `resources` SET `display_name` = 'Export VL Data' WHERE `resources`.`resource_id` = 12;
-UPDATE `resources` SET `display_name` = 'VL Sample Status Report' WHERE `resources`.`resource_id` = 11;
-UPDATE `resources` SET `display_name` = 'Covid-19 Reference Tables' WHERE `resources`.`resource_id` = 33;
+-- UPDATE `resources` SET `module` = 'covid19' WHERE `resources`.`module` = 'covid-19';
+-- UPDATE `resources` SET `module` = 'admin' WHERE `resources`.`resource_id` = 1; UPDATE `resources` SET `module` = 'admin' WHERE `resources`.`resource_id` = 2; UPDATE `resources` SET `module` = 'admin' WHERE `resources`.`resource_id` = 3; UPDATE `resources` SET `module` = 'admin' WHERE `resources`.`resource_id` = 4; UPDATE `resources` SET `module` = 'admin' WHERE `resources`.`resource_id` = 5; UPDATE `resources` SET `module` = 'admin' WHERE `resources`.`resource_id` = 14; UPDATE `resources` SET `module` = 'admin' WHERE `resources`.`resource_id` = 17; UPDATE `resources` SET `module` = 'admin' WHERE `resources`.`resource_id` = 21;
+-- UPDATE `resources` SET `module` = 'common' WHERE `resources`.`resource_id` = 13;
+-- UPDATE `resources` SET `module` = 'common' WHERE `resources`.`resource_id` = 24;
+-- UPDATE `resources` SET `display_name` = 'Dashboard' WHERE `resources`.`resource_id` = 13;
+-- UPDATE `resources` SET `display_name` = 'Import VL Test Results' WHERE `resources`.`resource_id` = 8;
+-- UPDATE `resources` SET `display_name` = 'Manage VL Batch' WHERE `resources`.`resource_id` = 7;
+-- UPDATE `resources` SET `display_name` = 'Enter VL Result Manually' WHERE `resources`.`resource_id` = 10;
+-- UPDATE `resources` SET `display_name` = 'Print VL Result' WHERE `resources`.`resource_id` = 9;
+-- UPDATE `resources` SET `display_name` = 'VL Requests' WHERE `resources`.`resource_id` = 6;
+-- UPDATE `resources` SET `display_name` = 'Export VL Data' WHERE `resources`.`resource_id` = 12;
+-- UPDATE `resources` SET `display_name` = 'VL Sample Status Report' WHERE `resources`.`resource_id` = 11;
+-- UPDATE `resources` SET `display_name` = 'Covid-19 Reference Tables' WHERE `resources`.`resource_id` = 33;
 
-DELETE FROM `roles_privileges_map` WHERE privilege_id in (60,61);
-DELETE FROM `privileges` WHERE `privileges`.`privilege_id` = 60;
-DELETE FROM `privileges` WHERE `privileges`.`privilege_id` = 61;
-DELETE FROM resources WHERE resource_id = 21;
+-- DELETE FROM `roles_privileges_map` WHERE privilege_id in (60,61);
+-- DELETE FROM `privileges` WHERE `privileges`.`privilege_id` = 60;
+-- DELETE FROM `privileges` WHERE `privileges`.`privilege_id` = 61;
+-- DELETE FROM resources WHERE resource_id = 21;
 
-UPDATE `resources` SET `display_name` = 'VL Reports', `resource_name` = 'vl_reports' WHERE `resources`.`resource_id` = 11;
-UPDATE `resources` SET `display_name` = 'VL Results', `resource_name` = 'vl_results' WHERE `resources`.`resource_id` = 10;
+-- UPDATE `resources` SET `display_name` = 'VL Reports', `resource_name` = 'vl_reports' WHERE `resources`.`resource_id` = 11;
+-- UPDATE `resources` SET `display_name` = 'VL Results', `resource_name` = 'vl_results' WHERE `resources`.`resource_id` = 10;
 
-UPDATE `privileges` SET `resource_id`= 11 where resource_id in (11, 12, 16,18,19,20,22);
-UPDATE `privileges` SET `resource_id`= 10 where resource_id in (8, 9, 10,15);
-
-
-
-DELETE FROM `roles_privileges_map` WHERE privilege_id in (32);
-DELETE FROM `privileges` WHERE `privileges`.`privilege_id` = 32;
+-- UPDATE `privileges` SET `resource_id`= 11 where resource_id in (11, 12, 16,18,19,20,22);
+-- UPDATE `privileges` SET `resource_id`= 10 where resource_id in (8, 9, 10,15);
 
 
-UPDATE `privileges` SET `display_name` = 'Contact Notes (High VL Reports)' WHERE `privileges`.`privilege_id` = 34; UPDATE `privileges` SET `display_name` = 'High VL Report' WHERE `privileges`.`privilege_id` = 33; UPDATE `privileges` SET `display_name` = 'Sample Rejection Report' WHERE `privileges`.`privilege_id` = 57; UPDATE `privileges` SET `display_name` = 'Sample Status Report' WHERE `privileges`.`privilege_id` = 22; UPDATE `privileges` SET `display_name` = 'Controls Report' WHERE `privileges`.`privilege_id` = 63; UPDATE `privileges` SET `display_name` = 'Access Export VL Data' WHERE `privileges`.`privilege_id` = 23; UPDATE `privileges` SET `display_name` = 'Export VL Data in Excel' WHERE `privileges`.`privilege_id` = 70; UPDATE `privileges` SET `display_name` = 'Dashboard' WHERE `privileges`.`privilege_id` = 40; UPDATE `privileges` SET `display_name` = 'VL Weekly Report' WHERE `privileges`.`privilege_id` = 56;
-UPDATE `privileges` SET `display_name` = 'Import VL Results from File' WHERE `privileges`.`privilege_id` = 19; UPDATE `privileges` SET `display_name` = 'Print Result PDF' WHERE `privileges`.`privilege_id` = 20; UPDATE `privileges` SET `display_name` = 'Manage VL Result Status (Approve/Reject)' WHERE `privileges`.`privilege_id` = 31;
 
-DELETE FROM `resources` WHERE resource_id not in (SELECT DISTINCT resource_id FROM privileges);
+-- DELETE FROM `roles_privileges_map` WHERE privilege_id in (32);
+-- DELETE FROM `privileges` WHERE `privileges`.`privilege_id` = 32;
+
+
+-- UPDATE `privileges` SET `display_name` = 'Contact Notes (High VL Reports)' WHERE `privileges`.`privilege_id` = 34; UPDATE `privileges` SET `display_name` = 'High VL Report' WHERE `privileges`.`privilege_id` = 33; UPDATE `privileges` SET `display_name` = 'Sample Rejection Report' WHERE `privileges`.`privilege_id` = 57; UPDATE `privileges` SET `display_name` = 'Sample Status Report' WHERE `privileges`.`privilege_id` = 22; UPDATE `privileges` SET `display_name` = 'Controls Report' WHERE `privileges`.`privilege_id` = 63; UPDATE `privileges` SET `display_name` = 'Access Export VL Data' WHERE `privileges`.`privilege_id` = 23; UPDATE `privileges` SET `display_name` = 'Export VL Data in Excel' WHERE `privileges`.`privilege_id` = 70; UPDATE `privileges` SET `display_name` = 'Dashboard' WHERE `privileges`.`privilege_id` = 40; UPDATE `privileges` SET `display_name` = 'VL Weekly Report' WHERE `privileges`.`privilege_id` = 56;
+-- UPDATE `privileges` SET `display_name` = 'Import VL Results from File' WHERE `privileges`.`privilege_id` = 19; UPDATE `privileges` SET `display_name` = 'Print Result PDF' WHERE `privileges`.`privilege_id` = 20; UPDATE `privileges` SET `display_name` = 'Manage VL Result Status (Approve/Reject)' WHERE `privileges`.`privilege_id` = 31;
+
+-- DELETE FROM `resources` WHERE resource_id not in (SELECT DISTINCT resource_id FROM privileges);
 
 
 UPDATE `system_config` SET `value` = '4.2.3' WHERE `system_config`.`name` = 'version';
 -- Version 4.2.3 -- Amit -- 8-Oct-2020
 
 -- Thana 09-Oct-2020
-INSERT INTO `resources` (`resource_id`, `module`, `resource_name`, `display_name`) VALUES (NULL, 'vl', 'vl-reference', 'VL Reference Management'), (NULL, 'eid', 'eid-reference', 'EID Reference Management');
-INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '34', 'vl-art-code-details.php', 'Manage Reference'), (NULL, '35', 'eid-sample-type.php', 'Manage Reference');
-UPDATE `resources` SET `module`='covid19' WHERE `module`='covid-19';
+-- INSERT INTO `resources` (`resource_id`, `module`, `resource_name`, `display_name`) VALUES (NULL, 'vl', 'vl-reference', 'VL Reference Management'), (NULL, 'eid', 'eid-reference', 'EID Reference Management');
+-- INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '34', 'vl-art-code-details.php', 'Manage Reference'), (NULL, '35', 'eid-sample-type.php', 'Manage Reference');
+-- UPDATE `resources` SET `module`='covid19' WHERE `module`='covid-19';
 
 ALTER TABLE `form_covid19` ADD `source_of_alert` VARCHAR(255) NULL DEFAULT NULL AFTER `implementing_partner`, ADD `source_of_alert_other` VARCHAR(255) NULL DEFAULT NULL AFTER `source_of_alert`;
 -- Thana 13-Oct-2020
@@ -1494,8 +1494,8 @@ ALTER TABLE `r_eid_test_reasons` ADD `parent_reason` INT NULL DEFAULT '0' AFTER 
 ALTER TABLE `r_eid_test_reasons` ADD `data_sync` INT NULL DEFAULT '0' AFTER `updated_datetime`;
 ALTER TABLE `r_vl_test_reasons` ADD `parent_reason` INT(11) NULL DEFAULT '0' AFTER `test_reason_name`;
 ALTER TABLE `r_vl_test_reasons` ADD `data_sync` INT NULL DEFAULT '0' AFTER `updated_datetime`;
-INSERT INTO `resources` (`resource_id`, `module`, `resource_name`, `display_name`) VALUES (NULL, 'vl', 'common-reference', 'Common Reference');
-INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '36', 'province-details.php', 'Manage common Reference');
+-- INSERT INTO `resources` (`resource_id`, `module`, `resource_name`, `display_name`) VALUES (NULL, 'vl', 'common-reference', 'Common Reference');
+-- INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '36', 'province-details.php', 'Manage common Reference');
 ALTER TABLE `r_implementation_partners` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `i_partner_status`, ADD `data_sync` INT(11) NULL DEFAULT '0' AFTER `updated_datetime`;
 ALTER TABLE `r_funding_sources` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `funding_source_status`, ADD `data_sync` INT(11) NULL DEFAULT '0' AFTER `updated_datetime`;
 
