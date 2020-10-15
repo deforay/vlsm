@@ -60,7 +60,7 @@ class Users
     public function getAuthToken($token)
     {
 
-        $query = "SELECT * FROM $this->table WHERE api_token = '$token' LIMIT 1";
+        $query = "SELECT * FROM $this->table WHERE api_token = '$token' and `status` = 'active'";
         $result = $this->db->rawQueryOne($query);
         if ($result['api_token_generated_datetime'] < date('Y-m-d H:i:s', strtotime('-30 days'))) {
             $general = new \Vlsm\Models\General($this->db);
