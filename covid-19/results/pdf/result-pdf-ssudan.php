@@ -32,8 +32,10 @@ class SouthSudan_PDF extends MYPDF
                 $this->SetFont('helvetica', '', 9);
                 $this->writeHTMLCell(0, 0, 20, 28, 'E-mail : nphlsscovid19results@gmail.com&nbsp;&nbsp;|&nbsp;&nbsp;Phone : 0929310671', 0, 0, 0, true, 'C', true);
 
-                $this->SetFont('helvetica', 'B', 13);
-                $this->writeHTMLCell(0, 0, 20, 33, 'COVID-19 (SARS-COV-2) Individual Lab Test Results Report Form', 0, 0, 0, true, 'C', true);
+                
+                $this->writeHTMLCell(0, 0, 20, 33, '<hr>', 0, 0, 0, true, 'C', true);
+                $this->SetFont('helvetica', 'B', 12);
+                $this->writeHTMLCell(0, 0, 20, 35, 'COVID-19 (SARS-COV-2) Individual Lab Test Results Report Form', 0, 0, 0, true, 'C', true);
 
                 // $this->writeHTMLCell(0, 0, 25, 35, '<hr>', 0, 0, 0, true, 'C', true);
             } else {
@@ -241,8 +243,8 @@ if (sizeof($requestResult) > 0) {
             $testPlatform = $rows['testing_platform'];
             $testMethod = $rows['test_name'];
         }
-        $pdf->writeHTML("<hr>", true, false, false, false, '');
-        $html = '';
+        
+        $html = '<br><br>';
         $html .= '<table border="1" style="padding:3px">';
         $html .= '<tr>';
         $html .= '<td colspan="2" style="line-height:17px;font-size:13px;font-weight:bold;text-align:left;">CLIENT IDENTIFICATION DETAILS</td>';
