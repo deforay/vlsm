@@ -11,6 +11,7 @@ ini_set('memory_limit', -1);
 header('Content-Type: application/json');
 
 $general = new \Vlsm\Models\General($db);
+$user = new \Vlsm\Models\Users($db);
 
 // The request has to send an Authorization Bearer token 
 
@@ -18,10 +19,11 @@ $general = new \Vlsm\Models\General($db);
 $expectedBearerToken = 'FR4kewpuHaRBAm8aUmCWt4xF7QkktV36';
 $auth = $general->getHeader('Authorization');
 
-$user = $general->getAuthToken($_REQUEST['token']);
+/* Check API token exist */
+$user = $user->getAuthToken($_REQUEST['Token']);
 // If Auth header is empty or if it does not match the expected string
 // then do not proceed.
-if (empty($auth) || isset($user['user_id']) && $user['user_id'] != "") {
+if (empty($auth) || !isset($user['user_id']) && $user['user_id'] == "") {
     $response = array(
         'status' => 'failed',
         'timestamp' => time(),
