@@ -14,13 +14,11 @@ $general = new \Vlsm\Models\General($db);
 $user = new \Vlsm\Models\Users($db);
 
 // The request has to send an Authorization Bearer token 
-
-// This is hardcoded for now. We will make this dynamic later
-$expectedBearerToken = 'FR4kewpuHaRBAm8aUmCWt4xF7QkktV36';
 $auth = $general->getHeader('Authorization');
+$authToken = str_replace("Bearer ","",$auth);
 
 /* Check API token exist */
-$user = $user->getAuthToken($_REQUEST['Token']);
+$user = $user->getAuthToken($authToken);
 // If Auth header is empty or if it does not match the expected string
 // then do not proceed.
 if (empty($auth) || !isset($user['user_id']) && $user['user_id'] == "") {
@@ -49,6 +47,9 @@ if (!$sampleCode && !$recencyId && (!$from || !$to)) {
         'error' => 'Mandatory request params missing in request. Expected Recency ID(s) or a Date Range',
         'data' => array()
     );
+    if(isset($user['token-updated']) && $user['token-updated'] == true){
+        $response['token'] = $user['newToken'];
+    }
     http_response_code(400);
     echo json_encode($response);
     exit(0);
@@ -111,6 +112,9 @@ try {
             'data' => $rowData
 
         );
+        if(isset($user['token-updated']) && $user['token-updated'] == true){
+            $response['token'] = $user['newToken'];
+        }
         http_response_code(200);
         echo json_encode($response);
         exit(0);
@@ -121,6 +125,9 @@ try {
         'timestamp' => time(),
         'data' => $rowData
     );
+    if(isset($user['token-updated']) && $user['token-updated'] == true){
+        $payload['token'] = $user['newToken'];
+    }
 
     http_response_code(200);
     echo json_encode($payload);
@@ -133,6 +140,9 @@ try {
         'error' => $exc->getMessage(),
         'data' => array()
     );
+    if(isset($user['token-updated']) && $user['token-updated'] == true){
+        $payload['token'] = $user['newToken'];
+    }
 
     echo json_encode($payload);
 
