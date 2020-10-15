@@ -33,7 +33,7 @@ class SouthSudan_PDF extends MYPDF
                 $this->writeHTMLCell(0, 0, 20, 28, 'E-mail : nphlsscovid19results@gmail.com&nbsp;&nbsp;|&nbsp;&nbsp;Phone : 0929310671', 0, 0, 0, true, 'C', true);
 
                 
-                $this->writeHTMLCell(0, 0, 20, 33, '<hr>', 0, 0, 0, true, 'C', true);
+                $this->writeHTMLCell(0, 0, 20, 34, '<hr>', 0, 0, 0, true, 'C', true);
                 $this->SetFont('helvetica', 'B', 12);
                 $this->writeHTMLCell(0, 0, 20, 35, 'COVID-19 (SARS-COV-2) Individual Lab Test Results Report Form', 0, 0, 0, true, 'C', true);
 
