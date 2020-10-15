@@ -100,7 +100,6 @@ try {
     }
 
     $sQuery .= " ORDER BY last_modified_datetime ASC ";
-
     $rowData = $db->rawQuery($sQuery);
 
     // No data found
