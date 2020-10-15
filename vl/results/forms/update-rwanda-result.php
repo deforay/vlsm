@@ -99,7 +99,7 @@ $disable = "disabled = 'disabled'";
 
   <!-- Main content -->
   <section class="content">
-    
+
     <div class="box box-default">
       <div class="box-header with-border">
         <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
@@ -383,8 +383,8 @@ $disable = "disabled = 'disabled'";
                               <input type="text" class="form-control checkNum viralTestData" id="rmTestingVlValue" name="rmTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $vlValue; ?>" <?php echo $disable; ?> />
                               (copies/ml)<br>
                               <input type="checkbox" id="rmTestingVlCheckValuelt20" name="rmTestingVlCheckValue" <?php echo ($vlQueryInfo['last_vl_result_routine'] == '<20') ? 'checked="checked"' : ''; ?> value="<20" <?php echo $disable; ?> title="Please check VL value">
-                              < 20<br>
-                                <input type="checkbox" id="rmTestingVlCheckValueTnd" name="rmTestingVlCheckValue" <?php echo ($vlQueryInfo['last_vl_result_routine'] == 'tnd') ? 'checked="checked"' : ''; ?> value="tnd" <?php echo $disable; ?> title="Please check VL value"> Target Not Detected
+                              &lt; 20<br>
+                              <input type="checkbox" id="rmTestingVlCheckValueTnd" name="rmTestingVlCheckValue" <?php echo ($vlQueryInfo['last_vl_result_routine'] == 'tnd') ? 'checked="checked"' : ''; ?> value="tnd" <?php echo $disable; ?> title="Please check VL value"> Target Not Detected
                             </div>
                           </div>
                         </div>
@@ -634,14 +634,13 @@ $disable = "disabled = 'disabled'";
                               <label class="col-lg-5 control-label" for="vlResult">Viral Load Result<span class="mandatory">*</span> (copiesl/ml) </label>
                               <div class="col-lg-7">
                                 <input type="text" class="<?php echo ($vlQueryInfo['is_sample_rejected'] == 'no' && $vlQueryInfo['result'] != 'Target Not Detected' && $vlQueryInfo['result'] == 'Below Detection Level') ? 'isRequired' : ''; ?> vlResult checkNum form-control labSection" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" value="<?php echo $vlQueryInfo['result_value_absolute']; ?>" <?php echo ($vlQueryInfo['result'] == 'Target Not Detected' || $vlQueryInfo['result'] == 'Below Detection Level') ? 'readonly="readonly"' : ''; ?> style="width:100%;" onchange="calculateLogValue(this);" />
-
-                                <input type="checkbox" class="labSection specialResults" id="lt20" name="lt20" value="yes" <?php echo ($vlQueryInfo['result'] == '<20') ? 'checked="checked"' : '';
-                                                                                                                            echo ($vlQueryInfo['result'] == '<20' || $vlQueryInfo['result'] == '< 20') ? 'disabled="disabled"' : '' ?> title="Please check <20">
-                                <20<br>
-                                  <input type="checkbox" class="labSection specialResults" id="tnd" name="tnd" value="yes" <?php echo ($vlQueryInfo['result'] == 'Target Not Detected') ? 'checked="checked"' : '';
-                                                                                                                            echo ($vlQueryInfo['result'] == 'Below Detection Level') ? 'disabled="disabled"' : '' ?> title="Please check tnd"> Target Not Detected<br>
-                                  <input type="checkbox" class="labSection specialResults" id="bdl" name="bdl" value="yes" <?php echo ($vlQueryInfo['result'] == 'Below Detection Level') ? 'checked="checked"' : '';
-                                                                                                                            echo ($vlQueryInfo['result'] == 'Target Not Detected') ? 'disabled="disabled"' : '' ?> title="Please check bdl"> Below Detection Level
+                                <input type="checkbox" class="labSection specialResults" id="lt20" name="lt20" value="yes" title="Please check VL value" <?php echo ($vlQueryInfo['result'] == '< 20' || $vlQueryInfo['result'] == '<20') ? 'checked="checked"' : ''; ?>>
+                                &lt; 20<br>
+                                <input type="checkbox" class="labSection specialResults" id="lt40" name="lt40" value="yes" title="Please check VL value" <?php echo ($vlQueryInfo['result'] == '< 40' || $vlQueryInfo['result'] == '<40') ? 'checked="checked"' : ''; ?>>
+                                &lt; 40<br>
+                                <input type="checkbox" class="labSection specialResults" id="tnd" name="tnd" value="yes" <?php echo ($vlQueryInfo['result'] == 'Target Not Detected') ? 'checked="checked"' : ''; ?> title="Please check tnd"> Target Not Detected<br>
+                                <input type="checkbox" class="labSection specialResults" id="bdl" name="bdl" value="yes" <?php echo ($vlQueryInfo['result'] == 'Below Detection Level') ? 'checked="checked"' : ''; ?> title="Please check bdl"> Below Detection Level
+                                <input type="checkbox" class="labSection specialResults" id="bdl" name="bdl" value="yes" <?php echo ($vlQueryInfo['result'] == 'Failed') ? 'checked="checked"' : ''; ?> title="Please check bdl"> Failed
                               </div>
                             </div>
                             <div class="col-md-4 vlResult" style="visibility:<?php echo ($vlQueryInfo['is_sample_rejected'] == 'yes') ? 'hidden' : 'visible'; ?>;">
@@ -717,10 +716,10 @@ $disable = "disabled = 'disabled'";
 </div>
 <script>
   $(document).ready(function() {
-    $("#vlResult").on('keyup keypress blur change paste', function() {
-      if ($('#vlResult').val() != '') {
-        if ($('#vlResult').val() != $('#vlResult').val().replace(/[^\d\.]/g, "")) {
-          $('#vlResult').val('');
+    $("#vlResult, #vlLog").on('keyup keypress blur change paste', function() {
+      if ($(this).val() != '') {
+        if ($(this).val() != $(this).val().replace(/[^\d\.]/g, "")) {
+          $(this).val('');
           alert('Please enter only numeric values for Viral Load Result')
         }
       }
@@ -789,7 +788,7 @@ $disable = "disabled = 'disabled'";
     $('#vlResult,#vlLog').attr('readonly', true);
     $('#vlResult, #vlLog').removeClass('isRequired');
     $(".specialResults").attr('disabled', false);
-    $(".specialResults").not($(".specialResults:checked")).attr('disabled',true);
+    $(".specialResults").not($(".specialResults:checked")).attr('disabled', true);
     $('.specialResults').not($(".specialResults:checked")).prop('checked', false).removeAttr('checked');
   }
   if ($('#vlResult, #vlLog').val() != '') {
