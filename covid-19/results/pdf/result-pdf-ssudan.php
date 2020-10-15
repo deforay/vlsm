@@ -318,7 +318,7 @@ if (sizeof($requestResult) > 0) {
         $html .= '</tr>';
 
         $html .= '<tr>';
-        $html .= '<td colspan="4" style="line-height:17px;font-size:13px;font-weight:bold;text-align:left;">COVID 19 TESTS RESULTS</td>';
+        $html .= '<td colspan="4" style="line-height:17px;font-size:13px;font-weight:bold;text-align:left;">COVID-19 TESTS RESULTS</td>';
         $html .= '</tr>';
 
         $html .= '<tr>';
