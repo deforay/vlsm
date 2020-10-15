@@ -11,17 +11,18 @@ ini_set('memory_limit', -1);
 header('Content-Type: application/json');
 
 $general = new \Vlsm\Models\General($db);
-$user = new \Vlsm\Models\Users($db);
-
+$userDb = new \Vlsm\Models\Users($db);
+$user = null;
 // The request has to send an Authorization Bearer token 
 $auth = $general->getHeader('Authorization');
-$authToken = str_replace("Bearer ","",$auth);
+if (!empty($auth)) {
+    $authToken = str_replace("Bearer ", "", $auth);
+    /* Check if API token exists */
+    $user = $userDb->getAuthToken($authToken);
+}
 
-/* Check API token exist */
-$user = $user->getAuthToken($authToken);
-// If Auth header is empty or if it does not match the expected string
-// then do not proceed.
-if (empty($auth) || !isset($user['user_id']) && $user['user_id'] == "") {
+// If authentication fails then do not proceed
+if (empty($user) || empty($user['user_id'])) {
     $response = array(
         'status' => 'failed',
         'timestamp' => time(),
@@ -33,12 +34,10 @@ if (empty($auth) || !isset($user['user_id']) && $user['user_id'] == "") {
     exit(0);
 }
 
-
 $sampleCode = !empty($_REQUEST['s']) ? explode(",", filter_var($_REQUEST['s'], FILTER_SANITIZE_STRING)) : null;
 $recencyId = !empty($_REQUEST['r']) ? explode(",", filter_var($_REQUEST['r'], FILTER_SANITIZE_STRING)) : null;
 $from = !empty($_REQUEST['f']) ? filter_var($_REQUEST['f'], FILTER_SANITIZE_STRING) : null;
 $to = !empty($_REQUEST['t']) ? filter_var($_REQUEST['t'], FILTER_SANITIZE_STRING) : null;;
-
 
 if (!$sampleCode && !$recencyId && (!$from || !$to)) {
     $response = array(
@@ -47,7 +46,7 @@ if (!$sampleCode && !$recencyId && (!$from || !$to)) {
         'error' => 'Mandatory request params missing in request. Expected Recency ID(s) or a Date Range',
         'data' => array()
     );
-    if(isset($user['token-updated']) && $user['token-updated'] == true){
+    if (isset($user['token-updated']) && $user['token-updated'] == true) {
         $response['token'] = $user['newToken'];
     }
     http_response_code(400);
@@ -111,7 +110,7 @@ try {
             'data' => $rowData
 
         );
-        if(isset($user['token-updated']) && $user['token-updated'] == true){
+        if (isset($user['token-updated']) && $user['token-updated'] == true) {
             $response['token'] = $user['newToken'];
         }
         http_response_code(200);
@@ -124,7 +123,7 @@ try {
         'timestamp' => time(),
         'data' => $rowData
     );
-    if(isset($user['token-updated']) && $user['token-updated'] == true){
+    if (isset($user['token-updated']) && $user['token-updated'] == true) {
         $payload['token'] = $user['newToken'];
     }
 
@@ -133,13 +132,14 @@ try {
     exit(0);
 } catch (Exception $exc) {
 
+    http_response_code(500);
     $payload = array(
         'status' => 'failed',
         'timestamp' => time(),
         'error' => $exc->getMessage(),
         'data' => array()
     );
-    if(isset($user['token-updated']) && $user['token-updated'] == true){
+    if (isset($user['token-updated']) && $user['token-updated'] == true) {
         $payload['token'] = $user['newToken'];
     }
 
