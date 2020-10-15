@@ -494,4 +494,10 @@ class General
         }
         return $rejReaons;
     }
+
+    public function getAuthToken($token)
+    {
+        $query = "SELECT * FROM user_details WHERE api_token = '$token' LIMIT 1";
+        return $this->db->rawQueryOne($query);
+    }
 }
