@@ -54,4 +54,12 @@ class Users
 
         return $userId;
     }
+
+
+
+    public function getAuthToken($token)
+    {
+        $query = "SELECT * FROM $this->table WHERE api_token = '$token' LIMIT 1";
+        return $this->db->rawQueryOne($query);
+    }
 }
