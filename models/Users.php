@@ -59,7 +59,25 @@ class Users
 
     public function getAuthToken($token)
     {
+
         $query = "SELECT * FROM $this->table WHERE api_token = '$token' LIMIT 1";
-        return $this->db->rawQueryOne($query);
+        $result = $this->db->rawQueryOne($query);
+        if($result['api_token_generated_datetime'] < date('Y-m-d',strtotime('-6 MONTHS'))){
+            $general = new \Vlsm\Models\General($this->db);
+            $token = $general->generateRandomString(16);
+            $data['api_token'] = $token;
+            $data['api_token_generated_datetime'] = $general->getDateTime();
+            
+            $this->db = $this->db->where('user_id', $result['user_id']);
+            $id = $this->db->update($this->table, $data);
+            
+            if($id > 0){
+                $result['token-updated'] = true;
+            }else{
+                $result['token-updated'] = false;
+            }
+            $result['newToken'] = $token;
+        }
+        return $result;
     }
 }
