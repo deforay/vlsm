@@ -12,7 +12,10 @@ try {
     if (isset($_POST['packageCode']) && trim($_POST['packageCode']) != "" && count($_POST['sampleCode']) > 0) {
         $lastId = $_POST['packageId'];
         $db->where('package_id', $lastId);
-        $db->update($packageTable, array('package_status' => $_POST['packageStatus']));
+        $db->update($packageTable, array(
+            'lab_id'         => $_POST['testingLab'],
+            'package_status' => $_POST['packageStatus']
+        ));
 
         if ($lastId > 0) {
             $value = array('sample_package_id'   => null,

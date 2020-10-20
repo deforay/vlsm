@@ -1767,3 +1767,6 @@ UPDATE `system_config` SET `value` = '4.2.4' WHERE `system_config`.`name` = 'ver
 -- Thana 15-Oct-2020
 INSERT INTO `roles` (`role_id`, `role_name`, `role_code`, `status`, `landing_page`) VALUES (NULL, 'API User', 'API', 'active', NULL);
 ALTER TABLE `user_details` ADD `api_token` TEXT NULL DEFAULT NULL AFTER `user_signature`, ADD `api_token_generated_datetime` DATETIME NULL DEFAULT NULL AFTER `api_token`;
+
+-- Thana 20-Oct-2020
+ALTER TABLE `package_details` ADD `lab_id` INT(11) NULL DEFAULT NULL AFTER `module`;
