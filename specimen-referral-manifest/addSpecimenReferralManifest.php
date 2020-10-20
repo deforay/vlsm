@@ -1,9 +1,6 @@
 <?php
 ob_start();
 
-$module = isset($_GET['t']) ? base64_decode($_GET['t']) : 'vl';
-
-$module = ($module == 'covid19') ? 'C19' : $module;
 
 $title = "Add New Specimen Referral Manifest";
 #include_once '../startup.php';
@@ -12,8 +9,10 @@ include_once APPLICATION_PATH . '/header.php';
 $general = new \Vlsm\Models\General($db);
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
 
+$module = isset($_GET['t']) ? base64_decode($_GET['t']) : 'vl';
+$testingLabs = $facilitiesDb->getTestingLabs($module);
+$module = ($module == 'covid19') ? 'C19' : $module;
 $packageNo = strtoupper($module) . date('ymd') .  $general->generateRandomString(6);
-$testingLabs = $facilitiesDb->getTestingLabs('vl');
 
 ?>
 <link href="/assets/css/multi-select.css" rel="stylesheet" />

@@ -6,7 +6,6 @@ include_once(APPLICATION_PATH . '/header.php');
 
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
 $facilityMap = $facilitiesDb->getFacilityMap($_SESSION['userId']);
-$testingLabs = $facilitiesDb->getTestingLabs('vl');
 
 $id = base64_decode($_GET['id']);
 $pQuery = "SELECT * FROM package_details WHERE package_id=" . $id;
@@ -26,7 +25,12 @@ if ($module == 'vl') {
 	$query = "SELECT vl.sample_code,vl.remote_sample_code,vl.vl_sample_id,vl.sample_package_id FROM vl_request_form as vl where (vl.sample_code IS NOT NULL OR vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='' OR vl.sample_package_id=" . $id . ") ";
 } else if ($module == 'eid') {
 	$query = "SELECT vl.sample_code,vl.remote_sample_code,vl.eid_id,vl.sample_package_id FROM eid_form as vl where (vl.sample_code IS NOT NULL OR vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='' OR vl.sample_package_id=" . $id . ")";
+} else {
+	$query = "SELECT vl.sample_code,vl.remote_sample_code,vl.covid19_id,vl.sample_package_id FROM form_covid19 as vl where (vl.sample_code IS NOT NULL OR vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='' OR vl.sample_package_id=" . $id . ")";
 }
+$m = ($module == 'C19')?'covid19':$module;
+$testingLabs = $facilitiesDb->getTestingLabs($m);
+
 
 if (!empty($facilityMap)) {
 	$query = $query . " AND facility_id IN($facilityMap)";
