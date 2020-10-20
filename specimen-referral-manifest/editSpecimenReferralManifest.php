@@ -204,6 +204,13 @@ $global = $general->getGlobalConfig();
 
 	//$("#auditRndNo").multiselect({height: 100,minWidth: 150});
 	$(document).ready(function() {
+
+		$(".select2").select2();
+		$(".select2").select2({
+			tags: true
+		});
+
+		
 		$('.search').multiSelect({
 			selectableHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Sample Code'>",
 			selectionHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Sample Code'>",
