@@ -93,9 +93,6 @@ $testingLabs = $facilitiesDb->getTestingLabs('vl');
 								</div>
 							</div>
 						</div>
-					</div>
-					
-					<div class="box-body">
 						<div class="row">
 							<div class="col-md-12 text-center">
 								<div class="form-group">
@@ -105,6 +102,7 @@ $testingLabs = $facilitiesDb->getTestingLabs('vl');
 							</div>
 						</div>
 					</div>
+					
 					<br>
 					<div class="row" id="sampleDetails">
 						<div class="col-md-8">
@@ -141,14 +139,6 @@ $testingLabs = $facilitiesDb->getTestingLabs('vl');
 <script type="text/javascript">
 	noOfSamples = 100;
 	sortedTitle = [];
-	$(document).ready(function() {
-		$(".select2").select2();
-		$(".select2").select2({
-			tags: true
-		});
-
-		getSampleCodeDetails();
-	});
 
 	function validateNow() {
 		flag = deforayValidator.init({
@@ -161,7 +151,11 @@ $testingLabs = $facilitiesDb->getTestingLabs('vl');
 	}
 
 	$(document).ready(function() {
-		
+		$(".select2").select2();
+		$(".select2").select2({
+			tags: true
+		});
+
 		$('.search').multiSelect({
 			selectableHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Sample Code'>",
 			selectionHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Sample Code'>",
@@ -261,20 +255,24 @@ $testingLabs = $facilitiesDb->getTestingLabs('vl');
 	}
 
 	function getSampleCodeDetails() {
-		$.blockUI();
+		if($('#testingLab').val() != ''){
+			$.blockUI();
 
-		$.post("/specimen-referral-manifest/getSpecimenReferralManifestSampleCodeDetails.php", {
-				module: $("#module").val(),
-				testingLab : $('#testingLab').val()
-			},
-			function(data) {
-				if (data != "") {
-					$("#sampleDetails").html(data);
-					$("#packageSubmit").attr("disabled", true);
-					$("#packageSubmit").css("pointer-events", "none");
-				}
-			});
-		$.unblockUI();
+			$.post("/specimen-referral-manifest/getSpecimenReferralManifestSampleCodeDetails.php", {
+					module: $("#module").val(),
+					testingLab : $('#testingLab').val()
+				},
+				function(data) {
+					if (data != "") {
+						$("#sampleDetails").html(data);
+						$("#packageSubmit").attr("disabled", true);
+						$("#packageSubmit").css("pointer-events", "none");
+					}
+				});
+			$.unblockUI();
+		} else{
+			alert('Please select the testing lab');
+		}
 	}
 
 	function clearSelection(){
