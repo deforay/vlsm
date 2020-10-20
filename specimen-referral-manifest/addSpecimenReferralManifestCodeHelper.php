@@ -11,11 +11,12 @@ $packageTable = "package_details";
 try {
     if (isset($_POST['packageCode']) && trim($_POST['packageCode']) != "") {
         $data = array(
-            'package_code' => $_POST['packageCode'],
-            'module' => $_POST['module'],
-            'added_by' => $_SESSION['userId'],
-            'package_status' => 'pending',
-            'request_created_datetime' => $general->getDateTime()
+            'package_code'              => $_POST['packageCode'],
+            'module'                    => $_POST['module'],
+            'added_by'                  => $_SESSION['userId'],
+            'lab_id'                    => $_POST['testingLab'],
+            'package_status'            => 'pending',
+            'request_created_datetime'  => $general->getDateTime()
         );
         //var_dump($data);die;
         $db->insert($packageTable, $data);
