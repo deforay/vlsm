@@ -50,8 +50,6 @@ if (isset($_POST['testingLab']) && $_POST['testingLab'] != "") {
 
 $query .= " ORDER BY vl.request_created_datetime ASC";
 
-
-// echo "<pre>";print_r($query);die;
 $result = $db->rawQuery($query);
 
 ?>

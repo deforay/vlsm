@@ -4,7 +4,6 @@ $title = "Edit Specimen Referral Manifest";
 #require_once('../startup.php'); 
 include_once(APPLICATION_PATH . '/header.php');
 
-
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
 $facilityMap = $facilitiesDb->getFacilityMap($_SESSION['userId']);
 $testingLabs = $facilitiesDb->getTestingLabs('vl');
@@ -34,7 +33,7 @@ if (!empty($facilityMap)) {
 }
 
 $query = $query . " ORDER BY vl.request_created_datetime ASC";
-
+// echo $query;die;
 $result = $db->rawQuery($query);
 // if($sarr['user_type']=='remoteuser'){
 //   $sCode = 'remote_sample_code';
@@ -133,6 +132,14 @@ $global = $general->getGlobalConfig();
 									</div>
 								</div>
 							</div>
+							<div class="row">
+								<div class="col-md-12 text-center">
+									<div class="form-group">
+										<a class="btn btn-primary" href="javascript:void(0);" title="Please select testing lab" onclick="getSampleCodeDetails();return false;">Search </a>
+										<a href="javascript:void(0);" class="btn btn-default" onclick="clearSelection();"> Clear</a>
+									</div>
+								</div>
+							</div>
 						</div>
 						<div class="row" id="sampleDetails">
 							<div class="col-md-8">
@@ -150,7 +157,6 @@ $global = $general->getGlobalConfig();
 														$sampleId  = $sample['eid_id'];
 													}
 											?>
-
 													<option value="<?php echo $sampleId; ?>" <?php echo ($sample['sample_package_id'] == $id) ? 'selected="selected"' : ''; ?>><?php echo $sample[$sCode]; ?></option>
 											<?php }
 											} ?>
@@ -182,7 +188,7 @@ $global = $general->getGlobalConfig();
 <script type="text/javascript">
 	noOfSamples = 100;
 	$(document).ready(function() {
-		//getSampleCodeDetails();
+		// getSampleCodeDetails();
 	});
 
 	function validateNow() {
@@ -294,20 +300,24 @@ $global = $general->getGlobalConfig();
 	}
 
 	function getSampleCodeDetails() {
-		$.blockUI();
+		if($('#testingLab').val() != ''){
+			$.blockUI();
 
-		$.post("/specimen-referral-manifest/getSpecimenReferralManifestSampleCodeDetails.php", {
-				module: $("#module").val(),
-				testingLab : $('#testingLab').val()
-			},
-			function(data) {
-				if (data != "") {
-					$("#sampleDetails").html(data);
-					$("#packageSubmit").attr("disabled", true);
-					$("#packageSubmit").css("pointer-events", "none");
-				}
-			});
-		$.unblockUI();
+			$.post("/specimen-referral-manifest/getSpecimenReferralManifestSampleCodeDetails.php", {
+					module: $("#module").val(),
+					testingLab : $('#testingLab').val()
+				},
+				function(data) {
+					if (data != "") {
+						$("#sampleDetails").html(data);
+						$("#packageSubmit").attr("disabled", true);
+						$("#packageSubmit").css("pointer-events", "none");
+					}
+				});
+			$.unblockUI();
+		} else{
+			alert('Please select the testing lab');
+		}
 	}
 
 	function clearSelection(){
