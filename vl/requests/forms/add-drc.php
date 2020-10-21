@@ -86,7 +86,7 @@ $sFormat = '';
                 <table class="table" style="width:100%">
                   <tr>
                     <?php if ($sarr['user_type'] == 'remoteuser') { ?>
-                      <td><label for="sampleCode">Échantillon id </label></td>
+                      <td><label for="sampleCode">Échantillon ID </label></td>
                       <td>
                         <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"></span>
                         <input type="hidden" id="sampleCode" name="sampleCode" />

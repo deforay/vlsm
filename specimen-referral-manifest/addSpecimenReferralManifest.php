@@ -80,13 +80,13 @@ $packageNo = strtoupper($module) . date('ymd') .  $general->generateRandomString
 									</div>
 								</div>
 							</div>
-							
+
 							<div class="col-md-6">
 								<div class="form-group">
 									<label for="packageCode" class="col-lg-4 control-label">Testing Lab :</label>
 									<div class="col-lg-7" style="margin-left:3%;">
 										<select type="text" class="form-control select2" id="testingLab" name="testingLab" title="Choose one test lab">
-										<?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
+											<?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
 										</select>
 									</div>
 								</div>
@@ -101,7 +101,7 @@ $packageNo = strtoupper($module) . date('ymd') .  $general->generateRandomString
 							</div>
 						</div>
 					</div>
-					
+
 					<br>
 					<div class="row" id="sampleDetails">
 						<div class="col-md-8">
@@ -254,12 +254,12 @@ $packageNo = strtoupper($module) . date('ymd') .  $general->generateRandomString
 	}
 
 	function getSampleCodeDetails() {
-		if($('#testingLab').val() != ''){
+		if ($('#testingLab').val() != '') {
 			$.blockUI();
 
 			$.post("/specimen-referral-manifest/getSpecimenReferralManifestSampleCodeDetails.php", {
 					module: $("#module").val(),
-					testingLab : $('#testingLab').val()
+					testingLab: $('#testingLab').val()
 				},
 				function(data) {
 					if (data != "") {
@@ -269,12 +269,12 @@ $packageNo = strtoupper($module) . date('ymd') .  $general->generateRandomString
 					}
 				});
 			$.unblockUI();
-		} else{
+		} else {
 			alert('Please select the testing lab');
 		}
 	}
 
-	function clearSelection(){
+	function clearSelection() {
 		$('#testingLab').val('').trigger('change');
 		getSampleCodeDetails();
 	}

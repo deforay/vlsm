@@ -18,8 +18,10 @@ try {
         ));
 
         if ($lastId > 0) {
-            $value = array('sample_package_id'   => null,
-                           'sample_package_code' => null);
+            $value = array(
+                'sample_package_id'   => null,
+                'sample_package_code' => null
+            );
 
             if ($_POST['module'] == 'vl') {
                 $db = $db->where('sample_package_id', $lastId);
@@ -27,17 +29,26 @@ try {
             } else if ($_POST['module'] == 'eid') {
                 $db = $db->where('sample_package_id', $lastId);
                 $db->update('eid_form', $value);
+            } else if ($_POST['module'] == 'C19') {
+                $db = $db->where('covid19_id', $_POST['sampleCode'][$j]);
+                $db->update('form_covid19', $value);
             }
+
             for ($j = 0; $j < count($_POST['sampleCode']); $j++) {
-                $value = array('sample_package_id'   => $lastId,
-                               'sample_package_code' => $_POST['packageCode'],
-                                'data_sync' => 0);
+                $value = array(
+                    'sample_package_id'   => $lastId,
+                    'sample_package_code' => $_POST['packageCode'],
+                    'data_sync' => 0
+                );
                 if ($_POST['module'] == 'vl') {
                     $db = $db->where('vl_sample_id', $_POST['sampleCode'][$j]);
                     $db->update('vl_request_form', $value);
                 } else if ($_POST['module'] == 'eid') {
                     $db = $db->where('eid_id', $_POST['sampleCode'][$j]);
                     $db->update('eid_form', $value);
+                } else if ($_POST['module'] == 'C19') {
+                    $db = $db->where('covid19_id', $_POST['sampleCode'][$j]);
+                    $db->update('form_covid19', $value);
                 }
             }
             $_SESSION['alertMsg'] = "Manifest details updated successfully";

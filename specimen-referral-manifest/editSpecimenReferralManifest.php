@@ -28,7 +28,7 @@ if ($module == 'vl') {
 } else {
 	$query = "SELECT vl.sample_code,vl.remote_sample_code,vl.covid19_id,vl.sample_package_id FROM form_covid19 as vl where (vl.sample_code IS NOT NULL OR vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='' OR vl.sample_package_id=" . $id . ")";
 }
-$m = ($module == 'C19')?'covid19':$module;
+$m = ($module == 'C19') ? 'covid19' : $module;
 $testingLabs = $facilitiesDb->getTestingLabs($m);
 
 
@@ -111,13 +111,13 @@ $global = $general->getGlobalConfig();
 									</div>
 								</div>
 							</div>
-							
+
 							<div class="col-md-6">
 								<div class="form-group">
 									<label for="packageCode" class="col-lg-4 control-label">Testing Lab :</label>
 									<div class="col-lg-7" style="margin-left:3%;">
 										<select type="text" class="form-control select2" id="testingLab" name="testingLab" title="Choose one test lab">
-										<?= $general->generateSelectOptions($testingLabs, $pResult[0]['lab_id'], '-- Select --'); ?>
+											<?= $general->generateSelectOptions($testingLabs, $pResult[0]['lab_id'], '-- Select --'); ?>
 										</select>
 									</div>
 								</div>
@@ -214,7 +214,7 @@ $global = $general->getGlobalConfig();
 			tags: true
 		});
 
-		
+
 		$('.search').multiSelect({
 			selectableHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Sample Code'>",
 			selectionHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Sample Code'>",
@@ -311,12 +311,12 @@ $global = $general->getGlobalConfig();
 	}
 
 	function getSampleCodeDetails() {
-		if($('#testingLab').val() != ''){
+		if ($('#testingLab').val() != '') {
 			$.blockUI();
 
 			$.post("/specimen-referral-manifest/getSpecimenReferralManifestSampleCodeDetails.php", {
 					module: $("#module").val(),
-					testingLab : $('#testingLab').val()
+					testingLab: $('#testingLab').val()
 				},
 				function(data) {
 					if (data != "") {
@@ -326,12 +326,12 @@ $global = $general->getGlobalConfig();
 					}
 				});
 			$.unblockUI();
-		} else{
+		} else {
 			alert('Please select the testing lab');
 		}
 	}
 
-	function clearSelection(){
+	function clearSelection() {
 		$('#testingLab').val('').trigger('change');
 		getSampleCodeDetails();
 	}
