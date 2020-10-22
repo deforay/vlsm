@@ -1770,3 +1770,6 @@ ALTER TABLE `user_details` ADD `api_token` TEXT NULL DEFAULT NULL AFTER `user_si
 
 -- Thana 20-Oct-2020
 ALTER TABLE `package_details` ADD `lab_id` INT(11) NULL DEFAULT NULL AFTER `module`;
+
+UPDATE `system_config` SET `value` = '4.2.5' WHERE `system_config`.`name` = 'version';
+-- Version 4.2.4 -- Amit -- 22-Oct-2020
