@@ -203,12 +203,12 @@ try {
             );
 
             //echo "<pre>";var_dump($data);continue;
-            if ($d['absVal'] != "") {
+            if ($d['txtVal'] != "") {
+                $data['result'] = $d['txtVal'];
+            } else if ($d['absVal'] != "") {
                 $data['result'] = $d['absVal'];
             } else if ($d['logVal'] != "") {
                 $data['result'] = $d['logVal'];
-            } else if ($d['txtVal'] != "") {
-                $data['result'] = $d['txtVal'];
             } else {
                 $data['result'] = "";
             }
