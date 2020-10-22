@@ -227,12 +227,12 @@ try {
             );
 
             //echo "<pre>";var_dump($data);continue;
-            if ($d['absVal'] != "") {
+            if ($d['txtVal'] != "") {
+                $data['result'] = $d['txtVal'];
+            } else if ($d['absVal'] != "") {
                 $data['result'] = $d['absVal'];
             } else if ($d['logVal'] != "") {
                 $data['result'] = $d['logVal'];
-            } else if ($d['txtVal'] != "") {
-                $data['result'] = $d['txtVal'];
             } else {
                 $data['result'] = "";
             }
@@ -262,10 +262,10 @@ try {
                 }
             }
 
-            $query = "select facility_id,vl_sample_id,result,result_value_log,result_value_absolute,result_value_text,result_value_absolute_decimal from vl_request_form where sample_code='" . $sampleCode . "'";
+            $query = "SELECT facility_id,vl_sample_id,result,result_value_log,result_value_absolute,result_value_text,result_value_absolute_decimal FROM vl_request_form WHERE sample_code='" . $sampleCode . "'";
             $vlResult = $db->rawQuery($query);
             //insert sample controls
-            $scQuery = "select r_sample_control_name from r_sample_controls where r_sample_control_name='" . trim($d['sampleType']) . "'";
+            $scQuery = "SELECT r_sample_control_name FROM r_sample_controls where r_sample_control_name='" . trim($d['sampleType']) . "'";
             $scResult = $db->rawQuery($scQuery);
             if ($scResult == false) {
                 $scData = array('r_sample_control_name' => trim($d['sampleType']));
