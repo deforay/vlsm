@@ -230,7 +230,7 @@ $sampleSuggestionDisplay = 'display:none;';
                                         <td style="width:35% !important">
                                             <input type="text" class="form-control" id="patientId" name="patientId" placeholder="Identification" title="Please enter ID" style="width:100%;" value="<?php echo $covid19Info['patient_id']; ?>" />
                                         </td>
-                                        <th><label for="patientDob">Date of Birth <span class="mandatory">*</span> </label></th>
+                                        <th><label for="patientDob">Date of Birth </label></th>
                                         <td>
                                             <input type="text" class="form-control" id="patientDob" name="patientDob" placeholder="Date of Birth" title="Please enter Date of birth" style="width:100%;" onchange="calculateAgeInYears();" value="<?php echo $general->humanDateFormat($covid19Info['patient_dob']); ?>" />
                                         </td>
