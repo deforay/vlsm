@@ -253,9 +253,9 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th><label for="patientDob">Date of Birth <span class="mandatory">*</span> </label></th>
+                                        <th><label for="patientDob">Date of Birth </label></th>
                                         <td>
-                                            <input type="text" class="form-control isRequired" id="patientDob" name="patientDob" placeholder="Date of Birth" title="Please enter Date of birth" style="width:100%;" onchange="calculateAgeInYears();" value="<?php echo $general->humanDateFormat($covid19Info['patient_dob']); ?>" />
+                                            <input type="text" class="form-control" id="patientDob" name="patientDob" placeholder="Date of Birth" title="Please enter Date of birth" style="width:100%;" onchange="calculateAgeInYears();" value="<?php echo $general->humanDateFormat($covid19Info['patient_dob']); ?>" />
                                         </td>
                                         <th>Case Age (years)</th>
                                         <td><input type="number" max="150" maxlength="3" oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="patientAge" name="patientAge" placeholder="Age (in years)" title="Age" style="width:100%;" value="<?php echo $covid19Info['patient_age']; ?>" /></td>
