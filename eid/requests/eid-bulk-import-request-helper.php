@@ -12,6 +12,7 @@ $usersModel = new \Vlsm\Models\Users($db);
 $tableName = "eid_form";
 // echo "<pre>";print_r($_FILES);die;
 try {
+    $lock = $general->getGlobalConfig('lock_approved_eid_samples');
     $arr = $general->getGlobalConfig();
     //system config
     $systemConfigQuery = "SELECT * from system_config";
@@ -42,6 +43,7 @@ try {
 
         $resultArray = array_slice($sheetData,1);
         // echo "<pre>";print_r($resultArray);die;
+
         foreach ($resultArray as $rowIndex => $rowData) {
             if (isset($rowData['A']) && !empty($rowData['A'])) {
                 $sampleCode = $general->getDublicateDataFromField('eid_form', 'sample_code', $rowData['B']);
@@ -133,6 +135,9 @@ try {
                     'last_modified_by'                                  => $_SESSION['userId'],
                     'last_modified_datetime'                            => $general->getDateTime()
                 );
+	            if ($status == 7 && $lock == 'yes') {
+                    $eidData['locked'] = 'yes';
+                }
                 // echo "<pre>";print_r($sampleCode);die;
                 if (!$sampleCode) {
                     $lastId = $db->insert($tableName, $eidData);

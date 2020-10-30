@@ -324,6 +324,11 @@ $output = array(
 foreach ($rResult as $aRow) {
      $row = array();
      $print = '<a href="eid-update-result.php?id=' . base64_encode($aRow['eid_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Enter Result</a>';
+     if($aRow['result_status'] == 7 && $aRow['locked'] == 'yes'){
+          if( isset($_SESSION['privileges']) && !in_array("edit-locked-eid-samples", $_SESSION['privileges'])){
+               $print = '<a href="javascript:void(0);" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Locked" disabled><i class="fa fa-lock"> Locked</i></a>';
+          }
+     }
 
      $row[] = $aRow['sample_code'];
      if ($sarr['user_type'] != 'standalone') {

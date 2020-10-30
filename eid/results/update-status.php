@@ -6,6 +6,7 @@ ob_start();
 $general = new \Vlsm\Models\General($db);
 $tableName = "eid_form";
 try {
+    $lock = $general->getGlobalConfig('lock_approved_eid_samples');
     $id = explode(",", $_POST['id']);
     for ($i = 0; $i < count($id); $i++) {
         $status = array(
@@ -20,6 +21,9 @@ try {
         } else {
             $status['is_sample_rejected'] = 'no';
             $status['reason_for_sample_rejection'] = null;
+        }
+        if($status['result_status'] == 7 && $lock == 'yes'){
+            $status['locked'] = 'yes';
         }
         $db = $db->where('eid_id', $id[$i]);
         $db->update($tableName, $status);

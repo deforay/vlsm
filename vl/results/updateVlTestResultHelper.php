@@ -128,6 +128,10 @@ try {
         'manual_result_entry' => 'yes',
         'data_sync' => 0
     );
+    $lock = $general->getGlobalConfig('lock_approved_vl_samples');
+    if($_POST['status'] == 7 && $lock == 'yes'){
+        $vldata['locked'] = 'yes';
+    }
     //echo "<pre>";var_dump($vldata);die;
     $db = $db->where('vl_sample_id', $_POST['vlSampleId']);
     $id = $db->update($tableName, $vldata);

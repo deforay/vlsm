@@ -1,7 +1,6 @@
 <?php
 
 try {
-
     $db = $db->where('imported_by', $_SESSION['userId']);
     $db->delete('temp_sample_import');
     //set session for controller track id in hold_sample_record table

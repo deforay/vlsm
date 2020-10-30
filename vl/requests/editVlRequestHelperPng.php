@@ -207,7 +207,10 @@ try {
           'last_modified_datetime' => $general->getDateTime(),
           'data_sync' => 0
      );
-
+     $lock = $general->getGlobalConfig('lock_approved_vl_samples');
+     if($_POST['status'] == 7 && $lock == 'yes'){
+          $vldata['locked'] = 'yes';
+     }
 
 
 
