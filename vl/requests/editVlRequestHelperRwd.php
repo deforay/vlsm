@@ -303,7 +303,10 @@ try {
         'manual_result_entry' => 'yes',
         'data_sync' => 0
     );
-
+    $lock = $general->getGlobalConfig('lock_approved_vl_samples');
+    if($_POST['status'] == 7 && $lock == 'yes'){
+        $vldata['locked'] = 'yes';
+    }
     if ($sarr['user_type'] == 'remoteuser') {
         $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] : NULL;
     } else {

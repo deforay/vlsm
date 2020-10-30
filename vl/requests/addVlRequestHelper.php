@@ -258,7 +258,10 @@ try {
         'last_modified_datetime' => $general->getDateTime(),
         'manual_result_entry' => 'yes'
     );
-
+    $lock = $general->getGlobalConfig('lock_approved_vl_samples');
+    if($lock == 'yes' && $status == 7){
+        $vldata['locked'] = 'yes';
+    }
     $vldata['patient_first_name'] = $general->crypto('encrypt', $_POST['patientFirstName'], $vldata['patient_art_no']);
 
     if (isset($_POST['vlSampleId']) && $_POST['vlSampleId'] != '') {

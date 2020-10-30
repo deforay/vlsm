@@ -326,11 +326,17 @@ foreach ($rResult as $aRow) {
      $row[] = $aRow['result'];
      $row[] = $aRow['last_modified_datetime'];
      $row[] = ucwords($aRow['status_name']);
+     
      //$printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="printBarcode(\''.base64_encode($aRow['vl_sample_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
      //$enterResult='<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '\',900,520);"> Result</a>';
 
      if ($vlRequest) {
           $edit = '<a href="editVlRequest.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
+          if($aRow['result_status'] == 7 && $aRow['locked'] == 'yes'){
+               if( isset($_SESSION['privileges']) && !in_array("edit-locked-vl-samples", $_SESSION['privileges'])){
+                    $edit = '<a href="javascript:void(0);" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Locked" disabled><i class="fa fa-lock"> Locked</i></a>';
+               }
+          }
      }
 
      if ($vlView) {

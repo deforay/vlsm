@@ -111,6 +111,10 @@ try {
         'last_modified_datetime' => $general->getDateTime(),
         'data_sync' => 0
     );
+    $lock = $general->getGlobalConfig('lock_approved_vl_samples');
+    if($_POST['status'] == 7 && $lock == 'yes'){
+        $vldata['locked'] = 'yes';
+    }
     $db = $db->where('vl_sample_id', $_POST['vlSampleId']);
     $id = $db->update($tableName, $vldata);
     if ($id > 0) {

@@ -14,6 +14,7 @@ $testTableName = 'covid19_tests';
 // echo "<pre>";print_r($_FILES);die;
 try {
     $arr = $general->getGlobalConfig();
+    $lock = $general->getGlobalConfig('lock_approved_covid19_samples');
 
     $fileName = preg_replace('/[^A-Za-z0-9.]/', '-', $_FILES['requestFile']['name']);
     $fileName = str_replace(" ", "-", $fileName);
@@ -34,6 +35,7 @@ try {
         $sheetData   = $sheetData->toArray(null, true, true, true);
         $returnArray = array();
         $resultArray = array_slice($sheetData,1);
+
         foreach ($resultArray as $rowIndex => $rowData) {
             // echo "<pre>";print_r($rowData);die;
             if (isset($rowData['A']) && !empty($rowData['A'])) {
@@ -100,6 +102,9 @@ try {
                     'patient_passport_number'               => $rowData['A0'],
                     'lab_technician'                        => isset($labTechnician)?$labTechnician:null,
                 );
+                if($resultStatus['status_id'] == 7 && $lock == 'yes'){
+                    $data['locked'] = 'yes';
+                }
                 // echo "<pre>";print_r($data);die;
                 if (!$sampleCode) {
                     $lastId = $db->insert($tableName, $data);
