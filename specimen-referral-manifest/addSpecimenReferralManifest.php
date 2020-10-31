@@ -104,7 +104,7 @@ $packageNo = strtoupper($module) . date('ymd') .  $general->generateRandomString
 
 					<br>
 					<div class="row" id="sampleDetails">
-						<div class="col-md-8">
+						<div class="col-md-9 col-md-offset-1">
 							<div class="form-group">
 								<div class="col-md-12">
 									<div class="col-md-12">

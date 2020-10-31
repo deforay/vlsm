@@ -1,6 +1,6 @@
 <?php
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+	session_start();
 }
 #require_once('../../startup.php');
 
@@ -132,7 +132,6 @@ $sQuery = 	 "SELECT covid19_id,
 							vl.patient_surname,
 							f.facility_name, 
 							vl.result,
-							
 							vl.sample_received_at_hub_datetime,							
 							vl.sample_received_at_vl_lab_datetime,
 							vl.last_modified_datetime,
@@ -146,17 +145,19 @@ $sQuery = 	 "SELECT covid19_id,
 							ts.status_name,
 							imp.i_partner_name,
 							u_d.user_name as reviewedBy,
-            				a_u_d.user_name as approvedBy,
-            				rs.rejection_reason_name 
+							a_u_d.user_name as approvedBy,
+							rs.rejection_reason_name,
+							testres.test_reason_name as reasonForTesting
 							
-							FROM form_covid19 as vl 
-							LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id
-                            INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status
-                            LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id
-							LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by 
-            				LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by 
-            				LEFT JOIN r_covid19_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection 
-            				LEFT JOIN r_implementation_partners as imp ON imp.i_partner_id=vl.implementing_partner";
+							FROM form_covid19 as vl  
+							LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
+                            LEFT JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
+                            LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id 
+							LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by  
+							LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by 
+							LEFT JOIN r_covid19_test_reasons as testres ON testres.test_reason_id=vl.reason_for_covid19_test 
+							LEFT JOIN r_covid19_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection 
+							LEFT JOIN r_implementation_partners as imp ON imp.i_partner_id=vl.implementing_partner";
 $start_date = '';
 $end_date = '';
 $t_start_date = '';
@@ -317,15 +318,15 @@ foreach ($rResult as $aRow) {
 	if (isset($_POST['vlPrint']) && $_POST['vlPrint'] == 'print') {
 		$row[] = '<input type="checkbox" name="chkPrinted[]" class="checkPrintedRows" id="chkPrinted' . $aRow['covid19_id'] . '"  value="' . $aRow['covid19_id'] . '" onclick="checkedPrintedRow(this);"  />';
 		$print = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="resultPDF(' . $aRow['covid19_id'] . ',\'printData\');"><i class="fa fa-print"> Print</i></a>';
-	} 
+	}
 	if ($aRow['remote_sample'] == 'yes') {
 		$decrypt = 'remote_sample_code';
 	} else {
 		$decrypt = 'sample_code';
-    }
-    
+	}
+
 	$patientFname = $general->crypto('decrypt', $aRow['patient_name'], $aRow['patient_id']);
-    $patientLname = $general->crypto('decrypt', $aRow['patient_surname'], $aRow['patient_id']);
+	$patientLname = $general->crypto('decrypt', $aRow['patient_surname'], $aRow['patient_id']);
 
 	$row[] = $aRow['sample_code'];
 	if ($sarr['user_type'] != 'standalone') {
@@ -333,7 +334,7 @@ foreach ($rResult as $aRow) {
 	}
 	$row[] = $aRow['batch_code'];
 	$row[] = $aRow['patient_id'];
-	$row[] = $patientFname." ".$patientLname;
+	$row[] = $patientFname . " " . $patientLname;
 	$row[] = ($aRow['facility_name']);
 	$row[] = $covid19Results[$aRow['result']];
 	if (isset($aRow['last_modified_datetime']) && trim($aRow['last_modified_datetime']) != '' && $aRow['last_modified_datetime'] != '0000-00-00 00:00:00') {

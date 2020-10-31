@@ -60,13 +60,15 @@ if (isset($_POST['id']) && trim($_POST['id']) != '') {
 				a_u_d.user_name as approvedBy,
 				rfs.funding_source_name,
 				c.iso_name as nationality,
-				rst.sample_name
+				rst.sample_name,
+				testres.test_reason_name as reasonForTesting
 				FROM form_covid19 as vl
 				LEFT JOIN r_countries as c ON vl.patient_nationality=c.id
 				LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id
 				LEFT JOIN facility_details as l ON l.facility_id=vl.lab_id 
 				LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by 
 				LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by 
+				LEFT JOIN r_covid19_test_reasons as testres ON testres.test_reason_id=vl.reason_for_covid19_test 
 				LEFT JOIN r_covid19_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection 
 				LEFT JOIN r_implementation_partners as rip ON rip.i_partner_id=vl.implementing_partner
 				LEFT JOIN r_funding_sources as rfs ON rfs.funding_source_id=vl.funding_source 
@@ -75,7 +77,7 @@ if (isset($_POST['id']) && trim($_POST['id']) != '') {
 } else {
 	$searchQuery = $allQuery;
 }
-// echo($searchQuery);die;
+//echo($searchQuery);die;
 $requestResult = $db->query($searchQuery);
 /* Test Results */
 
