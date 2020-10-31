@@ -321,6 +321,10 @@ try {
             $vldata['reason_for_sample_rejection'] = $_POST['rejectionReason'];
         }
     }
+    $lock = $general->getGlobalConfig('lock_approved_vl_samples');
+    if($_POST['status'] == 7  && $lock == 'yes'){
+        $vldata['locked'] = 'yes';
+    }
     //var_dump($vldata);die;
     $db = $db->where('vl_sample_id', $_POST['vlSampleId']);
     $id = $db->update($tableName, $vldata);

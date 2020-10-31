@@ -151,6 +151,7 @@ vl.last_vl_date_cf,
 vl.last_vl_date_if,
 vl.lab_technician,
 vl.patient_gender,
+vl.locked,
 b.batch_code, 
 ts.status_name,
 imp.i_partner_name,
@@ -452,6 +453,11 @@ foreach ($rResult as $aRow) {
           //$row[] = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '\',900,520);"><i class="fa fa-pencil-square-o"></i> Enter Result</a>
           //         <a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertSearchResultToPdf('.$aRow['vl_sample_id'].');"><i class="fa fa-file-text"> Result PDF</i></a>';
           $print = '<a href="updateVlTestResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Enter Result</a>';
+          if($aRow['result_status'] == 7 && $aRow['locked'] == 'yes'){
+               if( isset($_SESSION['privileges']) && !in_array("edit-locked-vl-samples", $_SESSION['privileges'])){
+                    $print = '<a href="javascript:void(0);" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Locked" disabled><i class="fa fa-lock"> Locked</i></a>';
+               }
+          }
      }
 
      $patientFname = $general->crypto('decrypt', $aRow['patient_first_name'], $aRow['patient_art_no']);

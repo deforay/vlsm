@@ -42,6 +42,8 @@ $interfaceQuery = "SELECT * FROM orders WHERE result_status = 1 AND lims_sync_st
 $interfaceInfo = $interfacedb->query($interfaceQuery);
 $numberOfResults = 0;
 if (count($interfaceInfo) > 0) {
+    $vllock = $general->getGlobalConfig('lock_approved_vl_samples');
+    $eidlock = $general->getGlobalConfig('lock_approved_eid_samples');
     foreach ($interfaceInfo as $key => $result) {
         $vlQuery = "SELECT vl_sample_id FROM vl_request_form WHERE sample_code = '" . $result['test_id'] . "'";
         $vlInfo = $db->rawQueryOne($vlQuery);
@@ -135,7 +137,9 @@ if (count($interfaceInfo) > 0) {
                 'result_status' => 7,
                 'data_sync' => 0
             );
-
+            if ($vllock == 'yes' && $data['result_status'] == 7) {
+                $data['locked'] = 'yes';
+            }
             $db = $db->where('vl_sample_id', $vlInfo['vl_sample_id']);
             $vlUpdateId = $db->update('vl_request_form', $data);
             $numberOfResults++;
@@ -179,7 +183,9 @@ if (count($interfaceInfo) > 0) {
                     'result_status' => 7,
                     'data_sync' => 0
                 );
-
+                if ($eidlock['lock_approved_eid_samples'] == 'yes' && $data['result_status'] == 7) {
+                    $data['locked'] = 'yes';
+                }
                 $db = $db->where('eid_id', $eidInfo['eid_id']);
                 $eidUpdateId = $db->update('eid_form', $data);
                 $numberOfResults++;

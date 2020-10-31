@@ -163,6 +163,10 @@ try {
 		'last_modified_by'                    => $_SESSION['userId'],
 		'last_modified_datetime'              => $general->getDateTime()
 	);
+	$lock = $general->getGlobalConfig('lock_approved_covid19_samples');
+    if($status == 7 && $lock == 'yes'){
+		$covid19Data['locked'] = 'yes';
+	}
 	// echo "<pre>";
 	// print_r($covid19Data);die;
 

@@ -199,7 +199,10 @@ try {
           'last_modified_datetime' => $general->getDateTime(),
           'data_sync' => 0
      );
-
+     $lock = $general->getGlobalConfig('lock_approved_vl_samples');
+     if($status == 7  && $lock == 'yes'){
+          $vldata['locked'] = 'yes';
+     }
      //$vldata['patient_first_name'] = $general->crypto('encrypt', $_POST['patientFname'], $vldata['patient_art_no']);
      //$vldata['patient_last_name'] = $general->crypto('encrypt', $_POST['surName'], $vldata['patient_art_no']);
 

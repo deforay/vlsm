@@ -173,7 +173,10 @@ try {
 		'last_modified_by'                    => $_SESSION['userId'],
 		'last_modified_datetime'              => $general->getDateTime()
 	);
-
+	$lock = $general->getGlobalConfig('lock_approved_covid19_samples');
+    if($status == 7 && $lock == 'yes'){
+		$covid19Data['locked'] = 'yes';
+	}
 
 	// if ($sarr['user_type'] == 'remoteuser') {
 	// 	//$covid19Data['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] : NULL;

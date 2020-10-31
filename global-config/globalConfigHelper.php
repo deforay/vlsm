@@ -181,6 +181,22 @@ try {
         $db = $db->where('result_id', 'indeterminate');
         $db->update('r_eid_results', $data);
     }
+    /* For Lock approve sample updates */
+    if (isset($_POST['lockApprovedVlSamples']) && trim($_POST['lockApprovedVlSamples']) != "") {
+        $data = array('value' => trim($_POST['lockApprovedVlSamples']));
+        $db = $db->where('name', 'lock_approved_vl_samples');
+        $id = $db->update($tableName, $data);
+    }
+    if (isset($_POST['lockApprovedEidSamples']) && trim($_POST['lockApprovedEidSamples']) != "") {
+        $data = array('value' => trim($_POST['lockApprovedEidSamples']));
+        $db = $db->where('name', 'lock_approved_eid_samples');
+        $id = $db->update($tableName, $data);
+    }
+    if (isset($_POST['lockApprovedCovid19Samples']) && trim($_POST['lockApprovedCovid19Samples']) != "") {
+        $data = array('value' => trim($_POST['lockApprovedCovid19Samples']));
+        $db = $db->where('name', 'lock_approved_covid19_samples');
+        $id = $db->update($tableName, $data);
+    }
     
     if (isset($_POST['covid19ReportType']) && trim($_POST['covid19ReportType']) != "") {
         $data = array('value' => trim($_POST['covid19ReportType']));
