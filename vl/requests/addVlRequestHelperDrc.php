@@ -296,7 +296,10 @@ try {
         'last_modified_by' => $_SESSION['userId'],
         'last_modified_datetime' => $general->getDateTime()
     );
-
+    $lock = $general->getGlobalConfig('lock_approved_vl_samples');
+    if($_POST['status'] == 7 && $lock == 'yes'){
+        $vldata['locked'] = 'yes';
+    }
     if (isset($_POST['vlSampleId']) && $_POST['vlSampleId'] != '') {
         $db = $db->where('vl_sample_id', $_POST['vlSampleId']);
         $id = $db->update($tableName, $vldata);

@@ -324,6 +324,11 @@ $output = array(
 foreach ($rResult as $aRow) {
      $row = array();
      $print = '<a href="covid-19-update-result.php?id=' . base64_encode($aRow['covid19_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Enter Result</a>';
+     if($aRow['result_status'] == 7 && $aRow['locked'] == 'yes'){
+          if( isset($_SESSION['privileges']) && !in_array("edit-locked-covid19-samples", $_SESSION['privileges'])){
+               $print = '<a href="javascript:void(0);" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Locked" disabled><i class="fa fa-lock"> Locked</i></a>';
+          }
+     }
 
 
 

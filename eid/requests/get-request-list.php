@@ -321,6 +321,11 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                
                if($editRequest){
                     $edit='<a href="eid-edit-request.php?id=' . base64_encode($aRow['eid_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
+                    if($aRow['result_status'] == 7 && $aRow['locked'] == 'yes'){
+                         if( isset($_SESSION['privileges']) && !in_array("edit-locked-eid-samples", $_SESSION['privileges'])){
+                              $edit = '<a href="javascript:void(0);" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Locked" disabled><i class="fa fa-lock"> Locked</i></a>';
+                         }
+                    }
                }
                
                if($viewRequest){

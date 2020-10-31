@@ -1773,3 +1773,12 @@ ALTER TABLE `package_details` ADD `lab_id` INT(11) NULL DEFAULT NULL AFTER `modu
 
 UPDATE `system_config` SET `value` = '4.2.5' WHERE `system_config`.`name` = 'version';
 -- Version 4.2.4 -- Amit -- 22-Oct-2020
+
+-- Thana 30-Oct-2020
+INSERT INTO `global_config` (`display_name`, `name`, `value`, `category`, `remote_sync_needed`, `updated_on`, `updated_by`, `status`) VALUES ('Lock approved VL Samples', 'lock_approved_vl_samples', 'yes', 'vl', 'no', NULL, NULL, 'active'), ('Lock Approved EID Samples', 'lock_approved_eid_samples', 'yes', 'eid', 'no', NULL, NULL, 'active'), ('Lock Approved Covid19 Samples', 'lock_approved_covid19_samples', 'yes', 'covid19', 'no', NULL, NULL, 'active');
+
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'vl-test-request', 'edit-locked-vl-samples', 'Edit Locked VL Samples'), (NULL, 'eid-requests', 'edit-locked-eid-samples', 'Edit Locked EID Samples'), (NULL, 'covid-19-requests', 'edit-locked-covid19-samples', 'Edit Locked Covid19 Samples');
+
+ALTER TABLE `vl_request_form` ADD `locked` VARCHAR(50) NOT NULL DEFAULT 'no' AFTER `result_status`;
+ALTER TABLE `eid_form` ADD `locked` VARCHAR(50) NOT NULL DEFAULT 'no' AFTER `result_status`;
+ALTER TABLE `form_covid19` ADD `locked` VARCHAR(50) NOT NULL DEFAULT 'no' AFTER `result_status`;

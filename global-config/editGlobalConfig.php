@@ -410,6 +410,22 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 											</div>
 										</div>
 									</div>
+									<?php if (isset($arr['lock_approved_vl_samples']) && $arr['lock_approved_vl_samples'] != '') { ?>
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for="lockApprovedVlSamples" class="col-lg-2 control-label">Lock Approved VL Samples<span class="mandatory ">*</span></label>
+												<div class="col-lg-4">
+													<select id="lockApprovedVlSamples" name="lockApprovedVlSamples" type="text" class="form-control" title="Please select lock approved sample">
+													<option value="">--Select--</option>
+													<option value="yes" <?php echo (isset($arr['lock_approved_vl_samples']) && $arr == 'yes')?"selected='selected'":''; ?>>Yes</option>
+													<option value="no" <?php echo (isset($arr['lock_approved_vl_samples']) && $arr['lock_approved_vl_samples'] == 'no')?"selected='selected'":''; ?>>No</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+									<?php }?>
 								</div>
 							</div>
 						<?php } 
@@ -518,6 +534,22 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 											</div>
 										</div>
 									</div>
+									<?php if (isset($arr['lock_approved_eid_samples']) && $arr['lock_approved_eid_samples'] != '') { ?>
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for="lockApprovedEidSamples" class="col-lg-2 control-label">Lock Approved EID Samples<span class="mandatory ">*</span></label>
+												<div class="col-lg-4">
+													<select id="lockApprovedEidSamples" name="lockApprovedEidSamples" type="text" class="form-control" title="Please select lock approved sample">
+													<option value="">--Select--</option>
+													<option value="yes" <?php echo (isset($arr['lock_approved_eid_samples']) && $arr['lock_approved_eid_samples'] == 'yes')?"selected='selected'":''; ?>>Yes</option>
+													<option value="no" <?php echo (isset($arr['lock_approved_eid_samples']) && $arr['lock_approved_eid_samples'] == 'no')?"selected='selected'":''; ?>>No</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+									<?php }?>
 								</div>
 							</div>
 						<?php }
@@ -647,6 +679,18 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 													</div>
 												<?php }?>
 											</div>
+											<?php if (isset($arr['lock_approved_covid19_samples']) && $arr['lock_approved_covid19_samples'] != '') { ?>
+											<div class="form-group">
+													<label for="lockApprovedCovid19Samples" class="col-lg-2 control-label">Lock Approved Covid19 Samples<span class="mandatory ">*</span></label>
+													<div class="col-lg-4">
+														<select id="lockApprovedCovid19Samples" name="lockApprovedCovid19Samples" type="text" class="form-control" title="Please select lock approved sample">
+														<option value="">--Select--</option>
+														<option value="yes" <?php echo (isset($arr['lock_approved_covid19_samples']) && $arr['lock_approved_covid19_samples'] == 'yes')?"selected='selected'":''; ?>>Yes</option>
+														<option value="no" <?php echo (isset($arr['lock_approved_covid19_samples']) && $arr['lock_approved_covid19_samples'] == 'no')?"selected='selected'":''; ?>>No</option>
+														</select>
+													</div>
+											</div>
+											<?php }?>
 										</div>
 									</div>
 								</div>

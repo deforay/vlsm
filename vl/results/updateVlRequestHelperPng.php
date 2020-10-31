@@ -100,6 +100,10 @@ try {
     //print_r($vldata);die;
     if (isset($_POST['status']) && trim($_POST['status']) != '') {
         $vldata['result_status'] = $_POST['status'];
+        $lock = $general->getGlobalConfig('lock_approved_vl_samples');
+        if($_POST['status'] == 7 && $lock == 'yes'){
+            $vldata['locked'] = 'yes';
+        }
     }
     $db = $db->where('vl_sample_id', $_POST['vlSampleId']);
     $id = $db->update($tableName, $vldata);
