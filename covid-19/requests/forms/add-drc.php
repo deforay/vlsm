@@ -91,15 +91,15 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                 <table class="table" style="width:100%">
                                     <tr>
                                         <?php if ($sarr['user_type'] == 'remoteuser') { ?>
-                                            <td><label for="sampleCode">N°EPID </label></td>
+                                            <td><label for="sampleCode">Échantillon ID </label></td>
                                             <td>
                                                 <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"></span>
                                                 <input type="hidden" id="sampleCode" name="sampleCode" />
                                             </td>
                                         <?php } else { ?>
-                                            <td><label for="sampleCode">N°EPID </label><span class="mandatory">*</span></td>
+                                            <td><label for="sampleCode">Échantillon ID </label><span class="mandatory">*</span></td>
                                             <td>
-                                                <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" readonly="readonly" placeholder="N°EPID" title="N°EPID" style="width:100%;" onchange="checkSampleNameValidation('form_covid19','<?php echo $sampleCode; ?>',this.id,null,'The sample id that you entered already exists. Please try another sample id',null)" />
+                                                <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" readonly="readonly" placeholder="Échantillon ID" title="Échantillon ID" style="width:100%;" onchange="checkSampleNameValidation('form_covid19','<?php echo $sampleCode; ?>',this.id,null,'The sample id that you entered already exists. Please try another sample id',null)" />
                                             </td>
                                         <?php } ?>
                                         <th><label for="testNumber">Prélévement</label></th>
@@ -165,9 +165,9 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th style="width:15% !important"><label for="patientId">Code Patient <span class="mandatory">*</span> </label></th>
+                                        <th style="width:15% !important"><label for="patientId">N&deg; EPID <span class="mandatory">*</span> </label></th>
                                         <td style="width:35% !important">
-                                            <input type="text" class="form-control isRequired" id="patientId" name="patientId" placeholder="Code Patient" title="Code Patient" style="width:100%;" onchange="" />
+                                            <input type="text" class="form-control isRequired" id="patientId" name="patientId" placeholder="N&deg; EPID" title="N&deg; EPID" style="width:100%;" onchange="" />
                                         </td>
                                         <th><label for="patientDob">Date de naissance <span class="mandatory">*</span> </label></th>
                                         <td>

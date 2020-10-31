@@ -53,7 +53,7 @@ $query .= " ORDER BY vl.request_created_datetime ASC";
 $result = $db->rawQuery($query);
 
 ?>
-<div class="col-md-8">
+<div class="col-md-9 col-md-offset-1">
 	<div class="form-group">
 		<div class="col-md-12">
 			<div class="col-md-12">

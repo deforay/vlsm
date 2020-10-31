@@ -20,12 +20,13 @@ try {
     if(isset($_POST['mappedFacilities']) && count($_POST['mappedFacilities']) > 0){
         $db = $db->where('test_type', $testType);
         $id = $db->delete($tableName);
+        $currentDateTime = $general->getDateTime();
         
 		foreach($_POST['mappedFacilities'] as $facility){
 			$data=array(
 				'test_type'     =>$testType,
                 'facility_id'   => $facility,
-                'updated_datetime'  => $general->getDateTime()
+                'updated_datetime'  => $currentDateTime
             );
 			$db->insert($tableName,$data);
 		}

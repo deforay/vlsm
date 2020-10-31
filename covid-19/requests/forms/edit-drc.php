@@ -125,27 +125,27 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             <?php
                                             if ($covid19Info['sample_code'] != '') {
                                             ?>
-                                                <td colspan="4"> <label for="sampleSuggest" class="text-danger">&nbsp;&nbsp;&nbsp;Veuillez noter que cet exemple distant a déjà été importé avec VLSM N°EPID </td>
+                                                <td colspan="4"> <label for="sampleSuggest" class="text-danger">&nbsp;&nbsp;&nbsp;Veuillez noter que cet exemple distant a déjà été importé avec VLSM Échantillon ID </td>
                                                 <td colspan="4"  align="left"> <?php echo $covid19Info['sample_code']; ?></label> </td>
                                             <?php
                                             } else {
                                             ?>
-                                                <td colspan="4"> <label for="sampleSuggest">N°EPID (peut changer lors de la soumission du formulaire)</label></td>
+                                                <td colspan="4"> <label for="sampleSuggest">Échantillon ID (peut changer lors de la soumission du formulaire)</label></td>
                                                 <td colspan="4" align="left"> <?php echo $sampleSuggestion; ?></td>
                                             <?php } ?>
                                         </tr>
                                     <?php } ?>
                                     <tr>
                                         <?php if ($sarr['user_type'] == 'remoteuser') { ?>
-                                            <td><label for="sampleCode">N°EPID </label> </td>
+                                            <td><label for="sampleCode">Échantillon ID </label> </td>
                                             <td>
                                                 <span id="sampleCodeInText" style="width:30%;border-bottom:1px solid #333;"><?php echo ($sCode != '') ? $sCode : $covid19Info[$sampleCode]; ?></span>
                                                 <input type="hidden" class="<?php echo $sampleClass; ?>" id="sampleCode" name="sampleCode" value="<?php echo ($sCode != '') ? $sCode : $covid19Info[$sampleCode]; ?>" />
                                             </td>
                                         <?php } else { ?>
-                                            <td><label for="sampleCode">N°EPID </label><span class="mandatory">*</span> </td>
+                                            <td><label for="sampleCode">Échantillon ID </label><span class="mandatory">*</span> </td>
                                             <td>
-                                                <input type="text" readonly value="<?php echo ($sCode != '') ? $sCode : $covid19Info[$sampleCode]; ?>" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="N°EPID" title="N°EPID" style="width:100%;" onchange="" />
+                                                <input type="text" readonly value="<?php echo ($sCode != '') ? $sCode : $covid19Info[$sampleCode]; ?>" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Échantillon ID" title="Échantillon ID" style="width:100%;" onchange="" />
                                             </td>
                                         <?php } ?>
                                         <th><label for="testNumber">Prélévement</label></th>
@@ -211,9 +211,9 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th style="width:15% !important"><label for="patientId">Code Patient <span class="mandatory">*</span> </label></th>
+                                        <th style="width:15% !important"><label for="patientId">N&deg; EPID <span class="mandatory">*</span> </label></th>
                                         <td style="width:35% !important">
-                                            <input type="text" class="form-control isRequired" id="patientId" name="patientId" placeholder="Code Patient" title="Code Patient" style="width:100%;" value="<?php echo $covid19Info['patient_id']; ?>" />
+                                            <input type="text" class="form-control isRequired" id="patientId" name="patientId" placeholder="N&deg; EPID" title="N&deg; EPID" style="width:100%;" value="<?php echo $covid19Info['patient_id']; ?>" />
                                         </td>
                                         <th><label for="patientDob">Date de naissance <span class="mandatory">*</span> </label></th>
                                         <td>

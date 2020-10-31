@@ -146,7 +146,7 @@ $global = $general->getGlobalConfig();
 							</div>
 						</div>
 						<div class="row" id="sampleDetails">
-							<div class="col-md-8">
+							<div class="col-md-9 col-md-offset-1">
 								<div class="form-group">
 									<div class="col-md-12">
 										<div style="width:60%;margin:0 auto;clear:both;">
