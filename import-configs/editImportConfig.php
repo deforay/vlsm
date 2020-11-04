@@ -179,10 +179,11 @@ foreach ($configControlInfo as $info) {
 							<h3 class="box-title ">Machine Names</h3>
 						</div>
 						<div class="box-body">
-							<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed" style="width:60%;">
+							<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed" style="width:100%;">
 								<thead>
 									<tr>
 										<th style="text-align:center;">Machine Name <span class="mandatory">*</span></th>
+										<th style="text-align:center;">POC Device </th>
 										<th style="text-align:center;">Action</th>
 									</tr>
 								</thead>
@@ -191,11 +192,34 @@ foreach ($configControlInfo as $info) {
 									$i = 1;
 									if (count($configMachineInfo) > 0) {
 										foreach ($configMachineInfo as $machine) {
+											if(trim($machine['poc_device'] == 'yes'))
+											{
+												$style = "display:block";
+												$check = "checked";
+											}
+											else
+											{
+												$style = "display:none";
+												$check = "";
+											}
 									?>
 											<tr>
 												<td>
 													<input type="hidden" name="configMachineId[]" value="<?php echo $machine['config_machine_id']; ?>" />
 													<input type="text" name="configMachineName[]" id="configMachineName<?php echo $i; ?>" class="form-control configMachineName isRequired" placeholder="Machine Name" title="Please enter machine name" value="<?php echo $machine['config_machine_name']; ?>" onblur="checkMachineName(this);" ; />
+												</td>
+												<td>
+													<div class="col-md-3" >
+													<input type="checkbox" id="pocdevice<?php echo $i; ?>" name="pocdevice[]" value="" onclick="getLatiLongi(<?php echo $i; ?>);" <?php echo $check; ?>>
+													</div>
+													<div class="latLong<?php echo $i; ?> " style="<?php echo $style; ?>">
+														<div class="col-md-4">
+															<input type="text" name="latitude[]" id="latitude<?php echo $i; ?>" value="<?php echo $machine['latitude']; ?>" class="form-control " placeholder="Latitude" data-placement="bottom" title="Latitude"/> 
+														</div>
+														<div class="col-md-4">
+															<input type="text" name="longitude[]" id="longitude<?php echo $i; ?>" value="<?php echo $machine['longitude']; ?>" class="form-control " placeholder="Longitude" data-placement="bottom" title="Longitude"/>
+														</div>
+													</div>
 												</td>
 												<td align="center" style="vertical-align:middle;">
 													<a class="btn btn-xs btn-primary" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>
@@ -278,11 +302,23 @@ foreach ($configControlInfo as $info) {
 		a.setAttribute("style", "display:none");
 		var b = a.insertCell(0);
 		var c = a.insertCell(1);
-		c.setAttribute("align", "center");
-		c.setAttribute("style", "vertical-align:middle");
+		var d = a.insertCell(2);
+		d.setAttribute("align", "center");
+		d.setAttribute("style", "vertical-align:middle");
 
 		b.innerHTML = '<input type="text" name="configMachineName[]" id="configMachineName' + tableRowId + '"class="isRequired configMachineName form-control" placeholder="Machine Name" title="Please enter machine name" onblur="checkMachineName(this);"/ >';
-		c.innerHTML = '<a class="btn btn-xs btn-primary" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;&nbsp;<a class="btn btn-xs btn-default" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>';
+		c.innerHTML = '<div class="col-md-3" >\
+						<input type="checkbox" id="pocdevice' + tableRowId + '" name="pocdevice[]" value="" onclick="getLatiLongi(' + tableRowId + ');">\
+						</div>\
+						<div class="latLong' + tableRowId + ' " style="display:none">\
+							<div class="col-md-4">\
+								<input type="text" name="latitude[]" id="latitude' + tableRowId + '" class="form-control " placeholder="Latitude" data-placement="bottom" title="Latitude"/> \
+							</div>\
+							<div class="col-md-4">\
+								<input type="text" name="longitude[]" id="longitude' + tableRowId + '" class="form-control " placeholder="Longitude" data-placement="bottom" title="Longitude"/>\
+							</div>\
+						</div>';
+		d.innerHTML = '<a class="btn btn-xs btn-primary" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;&nbsp;<a class="btn btn-xs btn-default" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>';
 		$(a).fadeIn(800);
 		tableRowId++;
 	}
@@ -304,6 +340,18 @@ foreach ($configControlInfo as $info) {
 				alert('Duplicate value not allowed');
 				$('#' + obj.id).val('');
 			}
+		}
+	}
+	function getLatiLongi(id)
+	{
+		if($("#pocdevice"+id).is(':checked')){
+			$(".latLong"+id).css("display", "block");
+			// $("#pocdevice"+id).val('yes');
+		}
+		else
+		{
+			$(".latLong"+id).css("display", "none");
+			// $("#pocdevice"+id).val('no');
 		}
 	}
 </script>
