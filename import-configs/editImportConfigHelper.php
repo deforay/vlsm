@@ -14,6 +14,7 @@ $configId = (int) base64_decode($_POST['configId']);
 
 $configControlQuery = "SELECT * FROM import_config_controls WHERE config_id=$configId";
 $configControlInfo = $db->query($configControlQuery);
+// print_r($_POST);die;
 try {
     if (trim($_POST['configurationName']) != "") {
         $_POST['supportedTests'] = !empty($_POST['supportedTests']) ? json_encode($_POST['supportedTests']) : null;
@@ -34,12 +35,16 @@ try {
         if (count($_POST['configMachineName']) > 0) {
             for ($c = 0; $c < count($_POST['configMachineName']); $c++) {
                 if (trim($_POST['configMachineName'][$c]) != '') {
+                    $pocDev = 'no';
+                    if(trim($_POST['latitude'][$c]) != '' && trim($_POST['longitude'][$c]) != ''){
+                        $pocDev = 'yes';
+                    }
                     if (isset($_POST['configMachineId'][$c]) && $_POST['configMachineId'][$c] != '') {
-                        $configMachineData = array('config_machine_name' => $_POST['configMachineName'][$c]);
+                        $configMachineData = array('config_machine_name' => $_POST['configMachineName'][$c], 'poc_device' => $pocDev, 'latitude' => $_POST['latitude'][$c], 'longitude' => $_POST['longitude'][$c]);
                         $db = $db->where('config_machine_id', $_POST['configMachineId'][$c]);
                         $db->update($importMachineTable, $configMachineData);
                     } else {
-                        $configMachineData = array('config_id' => $configId, 'config_machine_name' => $_POST['configMachineName'][$c]);
+                        $configMachineData = array('config_id' => $configId, 'config_machine_name' => $_POST['configMachineName'][$c], 'poc_device' => $pocDev, 'latitude' => $_POST['latitude'][$c], 'longitude' => $_POST['longitude'][$c]);
                         $db->insert($importMachineTable, $configMachineData);
                     }
                 }
