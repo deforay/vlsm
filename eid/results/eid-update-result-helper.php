@@ -32,6 +32,7 @@ try {
 
   $eidData = array(
     'sample_received_at_vl_lab_datetime' => $_POST['sampleReceivedDate'],
+    'import_machine_name' => isset($_POST['machineName']) ? $_POST['machineName'] : null,
     'sample_tested_datetime' => $_POST['sampleTestedDateTime'],
     'is_sample_rejected' => isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
     'lab_id' => isset($_POST['labId']) ? $_POST['labId'] : null,

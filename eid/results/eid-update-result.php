@@ -97,6 +97,8 @@ $disable = "disabled = 'disabled'";
 </style>
 <?php
 
+$iResultQuery = "select * from  import_config_machines";
+$iResult = $db->rawQuery($iResultQuery);
 
 $fileArray = array(
   1 => 'forms/update-southsudan-result.php',
