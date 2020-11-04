@@ -1786,3 +1786,9 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 ALTER TABLE `vl_request_form` ADD `locked` VARCHAR(50) NOT NULL DEFAULT 'no' AFTER `result_status`;
 ALTER TABLE `eid_form` ADD `locked` VARCHAR(50) NOT NULL DEFAULT 'no' AFTER `result_status`;
 ALTER TABLE `form_covid19` ADD `locked` VARCHAR(50) NOT NULL DEFAULT 'no' AFTER `result_status`;
+
+-- Prasath 04-Nov-2020
+ALter table import_config_machines add column poc_device Varchar(255) NULL;
+ALter table import_config_machines add column latitude Varchar(255) NULL;
+ALter table import_config_machines add column longitude Varchar(255) NULL;
+

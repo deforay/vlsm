@@ -29,8 +29,12 @@ try {
         $id = $db->insert($tableName, $data);
         if ($id > 0 && count($_POST['configMachineName']) > 0) {
             for ($c = 0; $c < count($_POST['configMachineName']); $c++) {
+                $pocDev = 'no';
+                if(trim($_POST['latitude'][$c]) != '' && trim($_POST['longitude'][$c]) != ''){
+                    $pocDev = 'yes';
+                }
                 if (trim($_POST['configMachineName'][$c]) != '') {
-                    $configMachineData = array('config_id' => $id, 'config_machine_name' => $_POST['configMachineName'][$c]);
+                    $configMachineData = array('config_id' => $id, 'config_machine_name' => $_POST['configMachineName'][$c], 'poc_device' => $pocDev, 'latitude' => $_POST['latitude'][$c], 'longitude' => $_POST['longitude'][$c]);
                     $db->insert($importMachineTable, $configMachineData);
                 }
             }
