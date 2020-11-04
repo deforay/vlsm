@@ -51,7 +51,8 @@ foreach ($rejectionTypeResult as $type) {
     $rejectionReason .= '</optgroup>';
 }
 
-
+$iResultQuery = "select * from  import_config_machines";
+$iResult = $db->rawQuery($iResultQuery);
 $sampleResult = $general->fetchDataFromTable('r_eid_sample_type', "status = 'active'");
 
 $fileArray = array(

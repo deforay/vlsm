@@ -171,6 +171,7 @@ try {
 		'rapid_test_date' => isset($_POST['rapidtestDate']) ? $_POST['rapidtestDate'] : null,
 		'rapid_test_result' => isset($_POST['rapidTestResult']) ? $_POST['rapidTestResult'] : null,
 		'sample_received_at_vl_lab_datetime' => isset($_POST['sampleReceivedDate']) ? $_POST['sampleReceivedDate'] : null,
+		'import_machine_name' => isset($_POST['machineName']) ? $_POST['machineName'] : null,
 		'lab_reception_person' => isset($_POST['labReceptionPerson']) ? $_POST['labReceptionPerson'] : null,
 		'sample_tested_datetime' => isset($_POST['sampleTestedDateTime']) ? $_POST['sampleTestedDateTime'] : null,
 		'is_sample_rejected' => isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
@@ -189,7 +190,7 @@ try {
 		$eidData['locked'] = 'yes';
 	}
 
-
+	// var_dump($eidData);die;
 	// if ($sarr['user_type'] == 'remoteuser') {
 	//   //$eidData['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] : NULL;
 	// } else {

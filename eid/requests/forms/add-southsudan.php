@@ -358,8 +358,14 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             <td>
                                                 <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;" />
                                             </td>
-                                            <td></td>
-                                            <td></td>
+                                            <td><label for="">Testing Platform </label></td>
+                                            <td><select name="machineName" id="machineName" class="form-control isRequired" title="Please select the  machine name" ">
+                                            <option value=""> -- Select -- </option>
+                                            <?php foreach ($iResult as $val) {  ?>
+                                                <option value="<?php echo ($val['config_machine_id']); ?>"><?php echo ucwords($val['config_machine_name']); ?></option>
+                                            <?php } ?>
+                                            </select>
+                                            </td>
                                         <tr>
                                             <th>Is Sample Rejected ?</th>
                                             <td>

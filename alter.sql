@@ -1792,3 +1792,4 @@ ALter table import_config_machines add column poc_device Varchar(255) NULL;
 ALter table import_config_machines add column latitude Varchar(255) NULL;
 ALter table import_config_machines add column longitude Varchar(255) NULL;
 
+
