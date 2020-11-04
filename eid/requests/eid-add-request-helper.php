@@ -169,6 +169,7 @@ try {
 		'rapid_test_result' => isset($_POST['rapidTestResult']) ? $_POST['rapidTestResult'] : null,
 		'lab_reception_person' => isset($_POST['labReceptionPerson']) ? $_POST['labReceptionPerson'] : null,
 		'sample_received_at_vl_lab_datetime' => isset($_POST['sampleReceivedDate']) ? $_POST['sampleReceivedDate'] : null,
+		'import_machine_name' => isset($_POST['machineName']) ? $_POST['machineName'] : null,
 		'sample_tested_datetime' => isset($_POST['sampleTestedDateTime']) ? $_POST['sampleTestedDateTime'] : null,
 		'is_sample_rejected' => isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
 		'result' => isset($_POST['result']) ? $_POST['result'] : null,
@@ -187,7 +188,7 @@ try {
 	}
 
 	//echo "<pre>";
-	//var_dump($eidData);die;
+	// var_dump($eidData);die;
 
 	if (isset($_POST['eidSampleId']) && $_POST['eidSampleId'] != '') {
 		$db = $db->where('eid_id', $_POST['eidSampleId']);

@@ -367,8 +367,14 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             <td>
                                                 <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter sample receipt date" value="<?php echo $general->humanDateFormat($eidInfo['sample_received_at_vl_lab_datetime']) ?>" onchange="" style="width:100%;" />
                                             </td>
-                                            <td></td>
-                                            <td></td>
+                                            <td><label for="">Testing Platform </label></td>
+                                            <td><select name="machineName" id="machineName" class="form-control isRequired" title="Please select the  machine name" ">
+                                                <option value=""> -- Select -- </option>
+                                                <?php foreach ($iResult as $val) {  ?>
+                                                    <option value="<?php echo ($val['config_machine_id']); ?>" <?php echo ($eidInfo['import_machine_name'] == $val['config_machine_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($val['config_machine_name']); ?></option>
+                                                <?php } ?>
+                                                </select>
+                                            </td>
                                         <tr>
                                             <th>Is Sample Rejected ?</th>
                                             <td>
