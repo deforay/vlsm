@@ -54,6 +54,13 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
     $referenceTables = array_merge($referenceTables, $covid19Tables);
 }
 
+if (isset($systemConfig['modules']['common']) && $systemConfig['modules']['common'] == true) {
+    $commonTables = array(
+        'import_config_machines',
+    );
+    $referenceTables = array_merge($referenceTables, $commonTables);
+}
+// print_r($referenceTables);die;
 
 try {
 
@@ -67,26 +74,27 @@ try {
             $data[$table]['tableStructure'] .= "ALTER TABLE `$table` ENABLE KEYS ;" . PHP_EOL;
             $data[$table]['tableStructure'] .= "SET FOREIGN_KEY_CHECKS=1;" . PHP_EOL;
         }
-        $data[$table]['lastModifiedTime'] = $general->getLastModifiedDateTime($table);
+        if($table!='import_config_machines')
+            $data[$table]['lastModifiedTime'] = $general->getLastModifiedDateTime($table);
         $data[$table]['tableData'] = $db->get($table);
     }
-
-
-
+    
+    
+    
     $currentDate = $general->getDateTime();
 
-
+    
     $filename = 'reference-data-' . $currentDate . '.json';
     $fp = fopen(TEMP_PATH . DIRECTORY_SEPARATOR . $filename, 'w');
     fwrite($fp, json_encode($data));
     fclose($fp);
-
-
-
-
+    
+    
+    // print_r($data);die;
+    
     $vldashboardUrl = $general->getGlobalConfig('vldashboard_url');
     $vldashboardUrl = rtrim($vldashboardUrl, "/");
-    //$vldashboardUrl = "http://vldashboard";
+    // $vldashboardUrl = "http://vldashboard";
 
     $apiUrl = $vldashboardUrl . "/api/vlsm-reference-tables";
 
@@ -107,8 +115,8 @@ try {
     $result = curl_exec($ch);
     curl_close($ch);
 
+    // echo "<pre>";print_r($result);die;
     $response = json_decode($result, true);
-    // echo "<pre>";print_r($response);die;
 } catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());
