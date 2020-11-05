@@ -1791,5 +1791,6 @@ ALTER TABLE `form_covid19` ADD `locked` VARCHAR(50) NOT NULL DEFAULT 'no' AFTER 
 ALter table import_config_machines add column poc_device Varchar(255) NULL;
 ALter table import_config_machines add column latitude Varchar(255) NULL;
 ALter table import_config_machines add column longitude Varchar(255) NULL;
-
+-- Thana 05-Nov-2020
+ALTER TABLE `import_config_machines` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `longitude`;
 

@@ -74,8 +74,7 @@ try {
             $data[$table]['tableStructure'] .= "ALTER TABLE `$table` ENABLE KEYS ;" . PHP_EOL;
             $data[$table]['tableStructure'] .= "SET FOREIGN_KEY_CHECKS=1;" . PHP_EOL;
         }
-        if($table!='import_config_machines')
-            $data[$table]['lastModifiedTime'] = $general->getLastModifiedDateTime($table);
+        $data[$table]['lastModifiedTime'] = $general->getLastModifiedDateTime($table);
         $data[$table]['tableData'] = $db->get($table);
     }
     
