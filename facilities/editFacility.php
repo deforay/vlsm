@@ -28,8 +28,39 @@ if (isset($vlfmResult[0]['userId'])) {
 $uResult = $db->rawQuery($uQuery);
 $selectedQuery = "SELECT * FROM vl_user_facility_map as vlfm join user_details as ud ON ud.user_id=vlfm.user_id join facility_details as fd ON fd.facility_id=vlfm.facility_id where vlfm.facility_id = " . $id;
 $selectedResult = $db->rawQuery($selectedQuery);
+
+$testTypeQuery = "SELECT * from testing_labs where facility_id=$id";
+$testTypeInfo = $db->query($testTypeQuery);
+$editTestType = '';
+$div = '';
+if(count($testTypeInfo) > 0)
+{
+  $div.= '<table class="table table-bordered table-striped"><thead><th> Test Type</th> <th> Monthly Target <span class="mandatory">*</span></th> </thead><tbody>';
+  $tf = 0;
+  foreach($testTypeInfo as $test)
+  {
+    if($editTestType)
+      $editTestType = $editTestType.','.$test['test_type'];
+    else
+      $editTestType = $test['test_type'];
+
+      $testOrg = '';  
+        if($test['test_type'] == 'vl')
+          $testOrg = 'Viral Load';
+        else if($test['test_type'] == 'eid')
+          $testOrg = 'Early Infant Diagnosis';
+        else if($test['test_type'] == 'covid19')
+          $testOrg = 'Covid-19';
+      $div.='<tr><td>'.$testOrg.'<input type="hidden" name="testData[]" id ="testData'.$tf.'" value="'.$test['test_type'].'" /></td>';
+        $div.='<td><input type="text" class=" isRequired" name="monTar[]" id ="monTar'.$tf.'" value="'.$test['monthly_target'].'" title="Please enter monthly target"/></td></tr>';
+        $tf++;
+  }
+  $div.='</tbody></table>';
+}
+// print_r($editTestType);die;
 ?>
 <link href="/assets/css/jasny-bootstrap.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/css/jquery.multiselect.css" type="text/css" />
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
@@ -85,7 +116,7 @@ $selectedResult = $db->rawQuery($selectedQuery);
                 <div class="form-group">
                   <label for="facilityType" class="col-lg-4 control-label">Facility Type <span class="mandatory">*</span> </label>
                   <div class="col-lg-7">
-                    <select class="form-control isRequired" id="facilityType" name="facilityType" title="Please select facility type" onchange="<?php echo ($sarr['user_type'] == 'remoteuser') ? 'getFacilityUser()' : ''; ?>">
+                    <select class="form-control isRequired" id="facilityType" name="facilityType" title="Please select facility type" onchange="<?php echo ($sarr['user_type'] == 'remoteuser') ? 'getFacilityUser()' : ''; ?>;getTestType()">
                       <option value=""> -- Select -- </option>
                       <?php
                       $k = 10;
@@ -237,6 +268,21 @@ $selectedResult = $db->rawQuery($selectedQuery);
                 </div>
               </div>
             </div>
+            <div class="row" >
+            <div class="col-md-6">
+										<div class="form-group">
+											<label for="testType" class="col-lg-4 control-label">Test Type</label>
+											<div class="col-lg-7">
+												<select type="text" class="form-control" id="testType" name="testType" title="Choose one test type" onchange="getTestType();" multiple>
+													<option value="vl" <?php if(preg_match("/vl/i", $editTestType)) { echo "selected='selected'";}  ?>>Viral Load</option>
+													<option value="eid" <?php if(preg_match("/eid/i", $editTestType)) { echo "selected='selected'";}  ?>>Early Infant Diagnosis</option>
+													<option value="covid19" <?php if(preg_match("/covid19/i", $editTestType)) { echo "selected='selected'";}  ?>>Covid-19</option>
+												</select>
+											</div>
+										</div>
+									</div>
+            </div>
+            </div>
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
@@ -316,6 +362,9 @@ $selectedResult = $db->rawQuery($selectedQuery);
                 </div>
               <?php } ?>
             </div>
+            <div class="row" id="testDetails">
+                  <?php echo $div; ?>    
+            </div>
           </div>
           <!-- /.box-body -->
           <div class="box-footer">
@@ -335,26 +384,34 @@ $selectedResult = $db->rawQuery($selectedQuery);
   </section>
   <!-- /.content -->
 </div>
-<script type="text/javascript" src="/assets/js/multiselect.min.js"></script>
+<script type="text/javascript" src="/assets/js/jquery.multiselect.js"></script>
 <script type="text/javascript" src="/assets/js/jasny-bootstrap.js"></script>
 
 <script type="text/javascript">
+$(document).ready(function() {
+        $("#testType").multipleSelect({
+            placeholder: 'Select Test Type',
+            width: '100%'
+        });
+
+  });
   var selVal = [];
+  var first = 0;
   $('#search_to option').each(function(i, selected) {
     selVal[i] = $(selected).val();
   });
   $("#selectedUser").val(selVal);
-  jQuery(document).ready(function($) {
-    $('#search').multiselect({
-      search: {
-        left: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
-        right: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
-      },
-      fireSearch: function(value) {
-        return value.length > 3;
-      }
-    });
-  });
+  // jQuery(document).ready(function($) {
+  //   $('#search').multiselect({
+  //     search: {
+  //       left: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+  //       right: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+  //     },
+  //     fireSearch: function(value) {
+  //       return value.length > 3;
+  //     }
+  //   });
+  // });
 
   function validateNow() {
     var selVal = [];
@@ -446,6 +503,42 @@ $selectedResult = $db->rawQuery($selectedQuery);
   function getNewLabImage(img) {
     $("#clearLabImage").addClass("hide");
     $("#removedLabLogoImage").val(img);
+  }
+
+  function getTestType()
+  {
+    if(first == 1)
+    {
+      var facility = $("#facilityType").val();
+      var testType = $("#testType").val();
+      if(facility && (testType.length > 0) && facility == '2')
+      {
+        var  div = '<table class="table table-bordered table-striped"><thead><th> Test Type</th> <th> Monthly Target <span class="mandatory">*</span></th> </thead><tbody>';
+        for(var i =0; i < testType.length; i++)
+        {
+          var testOrg = '';  
+          if($('#monTar'+i).val())
+            var oldMonTar = $('#monTar'+i).val();
+          else
+            var oldMonTar ='';
+          if(testType[i] == 'vl')
+            testOrg = 'Viral Load';
+          else if(testType[i] == 'eid')
+            testOrg = 'Early Infant Diagnosis';
+          else if(testType[i] == 'covid19')
+            testOrg = 'Covid-19';
+          div+='<tr><td>'+testOrg+'<input type="hidden" name="testData[]" id ="testData'+i+'" value="'+testType[i]+'" /></td>';
+          div+='<td><input type="text" class=" isRequired" name="monTar[]" id ="monTar'+i+'" value="'+oldMonTar+'" title="Please enter monthly target"/></td></tr>';
+        }
+        div+='</tbody></table>';
+        $("#testDetails").html(div);
+      }
+      else
+      {
+        $("#testDetails").html('');
+      }
+    }
+    first = 1;
   }
 </script>
 <?php

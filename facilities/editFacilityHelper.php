@@ -12,6 +12,7 @@ $tableName = "facility_details";
 $facilityId = base64_decode($_POST['facilityId']);
 $tableName1 = "province_details";
 $tableName2 = "vl_user_facility_map";
+$tableName3 ="testing_labs";
 try {
 	if (isset($_POST['facilityName']) && trim($_POST['facilityName']) != "") {
 		if (trim($_POST['state']) != "") {
@@ -88,6 +89,19 @@ try {
 			}
 		}
 		$lastId = $facilityId;
+		$db = $db->where('facility_id', $facilityId);
+		$delId = $db->delete($tableName3);
+		if ($lastId > 0) {
+			for ($tf = 0; $tf < count($_POST['testData']); $tf++) {
+				$dataTest = array(
+					'test_type' => $_POST['testData'][$tf],
+					'facility_id' => $lastId,
+					'monthly_target' => $_POST['monTar'][$tf],
+					"updated_datetime" => $general->getDateTime()
+				);
+				$db->insert($tableName3, $dataTest);
+			}
+		}
 		if (isset($_POST['removedLabLogoImage']) && trim($_POST['removedLabLogoImage']) != "" && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "facility-logo" . DIRECTORY_SEPARATOR . $lastId . DIRECTORY_SEPARATOR . $_POST['removedLabLogoImage'])) {
 			unlink(UPLOAD_PATH . DIRECTORY_SEPARATOR . "facility-logo" . DIRECTORY_SEPARATOR . $lastId . DIRECTORY_SEPARATOR . $_POST['removedLabLogoImage']);
 			$data = array('facility_logo' => '');
