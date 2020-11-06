@@ -9,6 +9,7 @@ $pQuery = "SELECT * FROM province_details";
 $pResult = $db->rawQuery($pQuery);
 ?>
 <link href="/assets/css/jasny-bootstrap.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/css/jquery.multiselect.css" type="text/css" />
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
@@ -205,7 +206,6 @@ $pResult = $db->rawQuery($pQuery);
 											<label for="testType" class="col-lg-4 control-label">Test Type</label>
 											<div class="col-lg-7">
 												<select type="text" class="form-control" id="testType" name="testType" title="Choose one test type" onchange="getTestType();" multiple>
-													<option value="">--Select--</option>
 													<option value="vl">Viral Load</option>
 													<option value="eid">Early Infant Diagnosis</option>
 													<option value="covid19">Covid-19</option>
@@ -272,9 +272,16 @@ $pResult = $db->rawQuery($pQuery);
   <!-- /.content -->
 </div>
 
-<script type="text/javascript" src="/assets/js/multiselect.min.js"></script>
+<script type="text/javascript" src="/assets/js/jquery.multiselect.js"></script>
 <script type="text/javascript" src="/assets/js/jasny-bootstrap.js"></script>
 <script type="text/javascript">
+$(document).ready(function() {
+        $("#testType").multipleSelect({
+            placeholder: 'Select Test Type',
+            width: '100%'
+        });
+
+  });
   function validateNow() {
     var selVal = [];
     $('#search_to option').each(function(i, selected) {
