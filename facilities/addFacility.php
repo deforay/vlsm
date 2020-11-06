@@ -349,7 +349,7 @@ $(document).ready(function() {
     }
   }
 
-  function getTestType(val)
+  function getTestType()
   {
     var facility = $("#facilityType").val();
     var testType = $("#testType").val();
