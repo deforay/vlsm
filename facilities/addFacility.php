@@ -64,7 +64,7 @@ $pResult = $db->rawQuery($pQuery);
                 <div class="form-group">
                   <label for="facilityType" class="col-lg-4 control-label">Facility Type <span class="mandatory">*</span> </label>
                   <div class="col-lg-7">
-                    <select class="form-control isRequired" id="facilityType" name="facilityType" title="Please select facility type" onchange="<?php echo ($sarr['user_type'] == 'remoteuser') ? 'getFacilityUser();' : ''; ?>">
+                    <select class="form-control isRequired" id="facilityType" name="facilityType" title="Please select facility type" onchange="<?php echo ($sarr['user_type'] == 'remoteuser') ? 'getFacilityUser();' : ''; ?>; getTestType();">
                       <option value=""> -- Select -- </option>
                       <?php
                       foreach ($fResult as $type) {
@@ -200,6 +200,19 @@ $pResult = $db->rawQuery($pQuery);
                   </div>
                 </div>
               </div>
+              <div class="col-md-6">
+										<div class="form-group">
+											<label for="testType" class="col-lg-4 control-label">Test Type</label>
+											<div class="col-lg-7">
+												<select type="text" class="form-control" id="testType" name="testType" title="Choose one test type" onchange="getTestType();" multiple>
+													<option value="">--Select--</option>
+													<option value="vl">Viral Load</option>
+													<option value="eid">Early Infant Diagnosis</option>
+													<option value="covid19">Covid-19</option>
+												</select>
+											</div>
+										</div>
+									</div>
             </div>
             <div class="row logoImage" style="display:none;">
               <div class="col-md-6">
@@ -234,7 +247,11 @@ $pResult = $db->rawQuery($pQuery);
             </div>
 
             <div class="row" id="userDetails">
+                      
+            </div>
 
+            <div class="row" id="testDetails">
+                      
             </div>
 
           </div>
@@ -322,6 +339,34 @@ $pResult = $db->rawQuery($pQuery);
       $(".logoImage").show();
     } else {
       $(".logoImage").hide();
+    }
+  }
+
+  function getTestType(val)
+  {
+    var facility = $("#facilityType").val();
+    var testType = $("#testType").val();
+    if(facility && (testType.length > 0) && facility == '2')
+    {
+      var  div = '<table class="table table-bordered table-striped"><thead><th> Test Type</th> <th> Monthly Target <span class="mandatory">*</span></th> </thead><tbody>';
+      for(var i =0; i < testType.length; i++)
+      {
+        var testOrg = '';  
+        if(testType[i] == 'vl')
+          testOrg = 'Viral Load';
+        else if(testType[i] == 'eid')
+          testOrg = 'Early Infant Diagnosis';
+        else if(testType[i] == 'covid19')
+          testOrg = 'Covid-19';
+        div+='<tr><td>'+testOrg+'<input type="hidden" name="testData[]" id ="testData'+i+'" value="'+testType[i]+'" /></td>';
+        div+='<td><input type="text" class=" isRequired" name="monTar[]" id ="monTar'+i+'" value="" title="Please enter monthly target"/></td></tr>';
+      }
+      div+='</tbody></table>';
+      $("#testDetails").html(div);
+    }
+    else
+    {
+      $("#testDetails").html('');
     }
   }
 </script>

@@ -1794,3 +1794,7 @@ ALter table import_config_machines add column longitude Varchar(255) NULL;
 -- Thana 05-Nov-2020
 ALTER TABLE `import_config_machines` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `longitude`;
 
+-- Prasath M 06-Nov-2020
+ALTER TABLE `testing_labs` ADD `monthly_target`Varchar(255) NULL DEFAULT NULL ;
+
+
