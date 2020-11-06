@@ -5,7 +5,7 @@ if (session_status() == PHP_SESSION_NONE) {
 ob_start();
 #require_once('../startup.php');  
 
-
+$general = new \Vlsm\Models\General($db);
 $tableName = "import_config";
 $importMachineTable = "import_config_machines";
 $importControlTable = "import_config_controls";
@@ -34,7 +34,7 @@ try {
                     $pocDev = 'yes';
                 }
                 if (trim($_POST['configMachineName'][$c]) != '') {
-                    $configMachineData = array('config_id' => $id, 'config_machine_name' => $_POST['configMachineName'][$c], 'poc_device' => $pocDev, 'latitude' => $_POST['latitude'][$c], 'longitude' => $_POST['longitude'][$c]);
+                    $configMachineData = array('config_id' => $id, 'config_machine_name' => $_POST['configMachineName'][$c], 'poc_device' => $pocDev, 'latitude' => $_POST['latitude'][$c], 'longitude' => $_POST['longitude'][$c], 'updated_datetime'=> $general->getDateTime());
                     $db->insert($importMachineTable, $configMachineData);
                 }
             }
