@@ -16,6 +16,7 @@ $general = new \Vlsm\Models\General($db);
 $tableName = "facility_details";
 $tableName1 = "province_details";
 $tableName2 = "vl_user_facility_map";
+$tableName3 ="testing_labs";
 try {
 	if (isset($_POST['facilityName']) && trim($_POST['facilityName']) != "") {
 		if (trim($_POST['state']) != "") {
@@ -31,6 +32,7 @@ try {
 				);
 				$db->insert($tableName1, $data);
 				$_POST['state'] = $_POST['provinceNew'];
+				
 			}
 		}
 		$instanceId = '';
@@ -95,6 +97,17 @@ try {
 					'facility_id' => $lastId,
 				);
 				$db->insert($tableName2, $data);
+			}
+		}
+		if ($lastId > 0) {
+			for ($tf = 0; $tf < count($_POST['testData']); $tf++) {
+				$dataTest = array(
+					'test_type' => $_POST['testData'][$tf],
+					'facility_id' => $lastId,
+					'monthly_target' => $_POST['monTar'][$tf],
+					"updated_datetime" => $general->getDateTime()
+				);
+				$db->insert($tableName3, $dataTest);
 			}
 		}
 
