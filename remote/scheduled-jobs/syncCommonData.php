@@ -454,6 +454,7 @@ if (!empty($result['testingLabs']) && count($result['testingLabs']) > 0) {
         $testingLabsData = array(
             'test_type'         =>$testingLabs['test_type'],
             'facility_id'       => $testingLabs['facility_id'],
+            'monthly_target' => $testingLabs['monthly_target'],
             'updated_datetime'  => $general->getDateTime()
         );
         $lastId = 0;
