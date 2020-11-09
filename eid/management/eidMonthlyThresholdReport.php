@@ -214,7 +214,7 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
                 <tr>
                   <th>Facility Name</th>
                   <th>Month </th>
-                  <th>Facility Done </th>
+                  <th>Number of tests</th>
                   
                 </tr>
               </thead>
