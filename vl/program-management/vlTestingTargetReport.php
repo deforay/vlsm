@@ -190,7 +190,16 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
               </td>
               
             </tr>
-           
+            <tr>
+            <td><b>Target Type&nbsp;:</b></td>
+              <td>
+              <select class="form-control" id="targetType" name="targetType" title="Please select Target Type" >
+                <option value="1">Monthly Targets not met</option>
+                <option value="2">Monthly Targets met</option>
+                <option value="3">Show all</option>
+                </select>
+              </td>
+              </tr>
             <tr>
               <td colspan="4">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
                 &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
@@ -310,6 +319,10 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
         aoData.push({
           "name": "sampleTestDate",
           "value": $("#sampleTestDate").val()
+        });
+        aoData.push({
+          "name": "targetType",
+          "value": $("#targetType").val()
         });
         $.ajax({
           "dataType": 'json',
