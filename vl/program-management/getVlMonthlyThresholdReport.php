@@ -307,23 +307,58 @@ foreach ($rResult as $aRow) {
      }
 }
 // print_r($res);die;
+// print_r($_POST);die;
 $cnt = 0;
 foreach($res as $resultData)
 {
      foreach($resultData as $rowData)
      {
-          if($rowData['monthly_target'] > $rowData['totalCollected'])
-          { 
-               $cnt++;
-               $data = array();
-               $data[] = ucwords($rowData['facility_name']);
-               $data[] = $rowData['monthrange'];
-               $data[] = $rowData['totalReceived'];
-               $data[] = $rowData['totalRejected'];
-               $data[] = $rowData['totalCollected'];
-               $data[] = $rowData['monthly_target'];
-               // print_r($data);die;
-               $output['aaData'][] = $data;
+          if($_POST['targetType'] == 1)
+          {
+
+               if($rowData['monthly_target'] > $rowData['totalCollected'])
+               { 
+                    $cnt++;
+                    $data = array();
+                    $data[] = ucwords($rowData['facility_name']);
+                    $data[] = $rowData['monthrange'];
+                    $data[] = $rowData['totalReceived'];
+                    $data[] = $rowData['totalRejected'];
+                    $data[] = $rowData['totalCollected'];
+                    $data[] = $rowData['monthly_target'];
+                    // print_r($data);die;
+                    $output['aaData'][] = $data;
+              }
+          }
+          else if($_POST['targetType'] == 2)
+          {
+
+               if($rowData['monthly_target'] < $rowData['totalCollected'])
+               { 
+                    $cnt++;
+                    $data = array();
+                    $data[] = ucwords($rowData['facility_name']);
+                    $data[] = $rowData['monthrange'];
+                    $data[] = $rowData['totalReceived'];
+                    $data[] = $rowData['totalRejected'];
+                    $data[] = $rowData['totalCollected'];
+                    $data[] = $rowData['monthly_target'];
+                    // print_r($data);die;
+                    $output['aaData'][] = $data;
+              }
+          }
+          else if($_POST['targetType'] == 3)
+          {
+                    $cnt++;
+                    $data = array();
+                    $data[] = ucwords($rowData['facility_name']);
+                    $data[] = $rowData['monthrange'];
+                    $data[] = $rowData['totalReceived'];
+                    $data[] = $rowData['totalRejected'];
+                    $data[] = $rowData['totalCollected'];
+                    $data[] = $rowData['monthly_target'];
+                    // print_r($data);die;
+                    $output['aaData'][] = $data;
           }
      }
 
