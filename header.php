@@ -683,7 +683,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 										<li class="allMenu vlMonitoringReport"><a href="/vl/program-management/vlMonitoringReport.php"><i class="fa fa-circle-o"></i> Sample Monitoring Report</a></li>
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("vlMonthlyThresholdReport.php", $_SESSION['privileges'])) { ?>
-										<li class="allMenu vlMonthlyThresholdReport"><a href="/vl/program-management/vlMonthlyThresholdReport.php"><i class="fa fa-circle-o"></i>VL Monthly Threshold Report</a></li>
+										<li class="allMenu vlMonthlyThresholdReport"><a href="/vl/program-management/vlTestingTargetReport.php"><i class="fa fa-circle-o"></i>VL Testing Target Report</a></li>
 									<?php } ?>
 								</ul>
 							</li>
@@ -779,7 +779,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 										<li class="allMenu eidClinicReport"><a href="/eid/management/eid-clinic-report.php"><i class="fa fa-circle-o"></i> Clinic Report</a></li>
 									<?php } 
 									if (isset($_SESSION['privileges']) && in_array("eidMonthlyThresholdReport.PHP", $_SESSION['privileges'])) { ?>
-										<li class="allMenu eidMonthlyThresholdReport"><a href="/eid/management/eidMonthlyThresholdReport.php"><i class="fa fa-circle-o"></i> EID Monthly Threshold</a></li>
+										<li class="allMenu eidMonthlyThresholdReport"><a href="/eid/management/eidTestingTargetReport.php"><i class="fa fa-circle-o"></i> EID Testing Target Report</a></li>
 									<?php } ?>
 								</ul>
 							</li>
@@ -884,7 +884,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 										<li class="allMenu covid19ClinicReportMenu"><a href="/covid-19/management/covid-19-clinic-report.php"><i class="fa fa-circle-o"></i> Clinic Report</a></li>
 									<?php } 
 									if (isset($_SESSION['privileges']) && in_array("covid19MonthlyThresholdReport.PHP", $_SESSION['privileges'])) { ?>
-										<li class="allMenu covid19MonthlyThresholdReport"><a href="/covid-19/management/covid19MonthlyThresholdReport.php"><i class="fa fa-circle-o"></i>COVID-19 Monthly Threshold</a></li>
+										<li class="allMenu covid19MonthlyThresholdReport"><a href="/covid-19/management/covid19TestingTargetReport.php"><i class="fa fa-circle-o"></i>COVID-19 Testing Target Report</a></li>
 									<?php } ?>
 								</ul>
 							</li>
