@@ -179,9 +179,64 @@ if (isset($_SESSION['eidMonitoringThresholdReportQuery']) && trim($_SESSION['eid
     {
         foreach($resultData as $rowData)
         {
-            if($rowData['monthly_target'] > $rowData['totalCollected'])
+            if($_POST['targetType'] == 1)
             { 
-                // print_r("Prasath");die;
+                if($rowData['monthly_target'] > $rowData['totalCollected'])
+                { 
+                    // print_r("Prasath");die;
+                    $cnt++;
+                    //    $data = array();
+                    //    $data[] = ucwords($rowData['facility_name']);
+                    //    $data[] = $rowData['monthrange'];
+                    //    $data[] = $rowData['totalReceived'];
+                    //    $data[] = $rowData['totalRejected'];
+                    //    $data[] = $rowData['totalCollected'];
+                    //    $data[] = $rowData['monthly_target'];
+                    //    // print_r($data);die;
+                    //    $output['aaData'][] = $data;
+                    // $sheet->mergeCells('A3:M10');
+                    $sheet->setCellValue('A'.$cnt, html_entity_decode(ucwords($rowData['facility_name']), ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                    // $sheet->mergeCells('A11:A12');
+                    // $sheet->mergeCells('B11:F12');
+                    $sheet->setCellValue('B'.$cnt, html_entity_decode($rowData['monthrange'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                    // $sheet->mergeCells('G11:I12');
+                    $sheet->setCellValue('C'.$cnt, html_entity_decode($rowData['totalReceived'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+                    $sheet->setCellValue('D'.$cnt, html_entity_decode($rowData['totalRejected'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+                    // $sheet->mergeCells('J11:M12');
+                    $sheet->setCellValue('E'.$cnt, html_entity_decode($rowData['totalCollected'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+                    $sheet->setCellValue('F'.$cnt, html_entity_decode($rowData['monthly_target'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+                }
+            }
+            else if($_POST['targetType'] == 2)
+            { 
+                if($rowData['monthly_target'] < $rowData['totalCollected'])
+                { 
+                    // print_r("Prasath");die;
+                    $cnt++;
+                    //    $data = array();
+                    //    $data[] = ucwords($rowData['facility_name']);
+                    //    $data[] = $rowData['monthrange'];
+                    //    $data[] = $rowData['totalReceived'];
+                    //    $data[] = $rowData['totalRejected'];
+                    //    $data[] = $rowData['totalCollected'];
+                    //    $data[] = $rowData['monthly_target'];
+                    //    // print_r($data);die;
+                    //    $output['aaData'][] = $data;
+                    // $sheet->mergeCells('A3:M10');
+                    $sheet->setCellValue('A'.$cnt, html_entity_decode(ucwords($rowData['facility_name']), ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                    // $sheet->mergeCells('A11:A12');
+                    // $sheet->mergeCells('B11:F12');
+                    $sheet->setCellValue('B'.$cnt, html_entity_decode($rowData['monthrange'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                    // $sheet->mergeCells('G11:I12');
+                    $sheet->setCellValue('C'.$cnt, html_entity_decode($rowData['totalReceived'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+                    $sheet->setCellValue('D'.$cnt, html_entity_decode($rowData['totalRejected'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+                    // $sheet->mergeCells('J11:M12');
+                    $sheet->setCellValue('E'.$cnt, html_entity_decode($rowData['totalCollected'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+                    $sheet->setCellValue('F'.$cnt, html_entity_decode($rowData['monthly_target'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+                }
+            }
+            else 
+            { 
                 $cnt++;
                 //    $data = array();
                 //    $data[] = ucwords($rowData['facility_name']);
