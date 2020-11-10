@@ -158,11 +158,12 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
     max-width: 1920px !important;
   }
 </style>
+<link rel="stylesheet" href="/assets/css/jquery.multiselect.css" type="text/css" />
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
-    <h1><i class="fa fa-book"></i> Covid-19 Monthly Threshold Report
+    <h1><i class="fa fa-book"></i> COVID-19 Testing Target Report
       <!--<ol class="breadcrumb">-->
       <!--  <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>-->
       <!--  <li class="active">Export Result</li>-->
@@ -182,23 +183,14 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
                 <input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="background:#fff;" />
               </td>
               <td><b>Lab Name :</b></td>
-              <td>
-                <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name">
+              <td style="width: 30%;">
+                <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple>
                   <?= $testingLabsDropdown; ?>
                 </select>
               </td>
-              <td style=""><b>Region/Province&nbsp;:</b></td>
-              <td>
-                <input style="" type="text" id="state" name="state" class="form-control" placeholder="Enter Province" style="background:#fff;" onkeyup="searchVlRequestData()" />
-              </td>
-            </tr>
-            <tr>
-              <td><b>City :</b></td>
-              <td>
-                <input type="text" id="city" name="city" class="form-control" placeholder="Enter City" onkeyup="searchVlRequestData()" />
-              </td>
               
             </tr>
+            
             <tr>
               <td colspan="4">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
                 &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
@@ -212,9 +204,12 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
             <table id="vlMonitoringTable" class="table table-bordered table-striped">
               <thead>
                 <tr>
-                  <th>Facility Name</th>
+                <th>Facility Name</th>
                   <th>Month </th>
-                  <th>Number of tests </th>
+                  <th> Number of Samples Received </th>
+                  <th> Number of Samples Rejected </th>
+                  <th>Number of Samples Tested</th>
+                  <th>Monthly Test Target</th>
                   
                 </tr>
               </thead>
@@ -235,6 +230,7 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
   </section>
   <!-- /.content -->
 </div>
+<script type="text/javascript" src="/assets/js/jquery.multiselect.js"></script>
 <script type="text/javascript" src="/assets/plugins/daterangepicker/moment.min.js"></script>
 <script type="text/javascript" src="/assets/plugins/daterangepicker/daterangepicker.js"></script>
 <script type="text/javascript">
@@ -242,6 +238,10 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
   var endDate = "";
   var oTable = null;
   $(document).ready(function() {
+    $("#facilityName").multipleSelect({
+            placeholder: 'Select facility name',
+            width: '100%'
+        });
     $('#sampleTestDate').daterangepicker({
         format: 'DD-MMM-YYYY',
         separator: ' to ',
@@ -287,13 +287,22 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
         {
           "sClass": "center"
         },
+        {
+          "sClass": "center"
+        },
+        {
+          "sClass": "center"
+        },
+        {
+          "sClass": "center"
+        },
       ],
       "aaSorting": [
         [0, "asc"]
       ],
       "bProcessing": true,
       "bServerSide": true,
-      "sAjaxSource": "getVlMonthlyThresholdReport.php",
+      "sAjaxSource": "getCovid19MonthlyThresholdReport.php",
       "fnServerData": function(sSource, aoData, fnCallback) {
         aoData.push({
           "name": "facilityName",
@@ -332,7 +341,7 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
   function exportInexcel() {
     $.blockUI();
     oTable.fnDraw();
-    $.post("/vl/program-management/vlMonitoringExportInExcel.php", {
+    $.post("/covid-19/management/covid-19-TestingTargetInExcel.php", {
         sampleCollectionDate: $("#mrp-lowerDate").val() + ' to ' + $("#mrp-upperDate").val(),
         fyName: $("#facilityName  option:selected").text(),
         facilityName: $("#facilityName").val(),
