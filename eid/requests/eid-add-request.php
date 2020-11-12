@@ -58,6 +58,12 @@ foreach ($iResult as $val) {
     $machine[$val['config_machine_id']] = $val['config_machine_name'];
 }
 
+
+$testPlatformResult = $general->getTestingPlatforms('eid');
+foreach ($testPlatformResult as $row) {
+    $testPlatformList[$row['machine_name']] = $row['machine_name'];
+}
+
 $sampleResult = $general->fetchDataFromTable('r_eid_sample_type', "status = 'active'");
 
 $fileArray = array(

@@ -1772,7 +1772,7 @@ ALTER TABLE `user_details` ADD `api_token` TEXT NULL DEFAULT NULL AFTER `user_si
 ALTER TABLE `package_details` ADD `lab_id` INT(11) NULL DEFAULT NULL AFTER `module`;
 
 UPDATE `system_config` SET `value` = '4.2.5' WHERE `system_config`.`name` = 'version';
--- Version 4.2.4 -- Amit -- 22-Oct-2020
+-- Version 4.2.5 -- Amit -- 22-Oct-2020
 
 -- Thana 30-Oct-2020
 INSERT INTO `global_config` (`display_name`, `name`, `value`, `category`, `remote_sync_needed`, `updated_on`, `updated_by`, `status`) 

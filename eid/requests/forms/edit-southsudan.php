@@ -19,7 +19,7 @@ $specimenTypeResult = $eidObj->getEidSampleTypes();
 // Getting the list of Provinces, Districts and Facilities
 
 $rKey = '';
-$pdQuery = "SELECT * from province_details";
+$pdQuery = "SELECT * FROM province_details";
 
 
 if ($sarr['user_type'] == 'remoteuser') {
@@ -76,7 +76,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
     </section>
     <!-- Main content -->
     <section class="content">
-        
+
         <div class="box box-default">
             <div class="box-header with-border">
                 <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
@@ -157,13 +157,13 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                 <?php } ?>
                                             </select>
                                         </td>
-                                        
-                                            <td><label for="labId">Testing Laboratory <span class="mandatory">*</span></label> </td>
-                                            <td>
-                                                <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Testing Laboratory" style="width:100%;">
-                                                    <?= $general->generateSelectOptions($testingLabs, $eidInfo['lab_id'], '-- Select --'); ?>
-                                                </select>
-                                            </td>
+
+                                        <td><label for="labId">Testing Laboratory <span class="mandatory">*</span></label> </td>
+                                        <td>
+                                            <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Testing Laboratory" style="width:100%;">
+                                                <?= $general->generateSelectOptions($testingLabs, $eidInfo['lab_id'], '-- Select --'); ?>
+                                            </select>
+                                        </td>
                                     </tr>
                                 </table>
                                 <br>
@@ -201,7 +201,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                     </tr>
                                     <tr>
                                         <th>Infant Age (months) <span class="mandatory">*</span></th>
-                                        <td><input type="number"  step=".1" max="60" maxlength="4" class="form-control isRequired" id="childAge" name="childAge" placeholder="Age" title="Age" style="width:100%;" onchange="" value="<?php echo $eidInfo['child_age']; ?>" /></td>
+                                        <td><input type="number" step=".1" max="60" maxlength="4" class="form-control isRequired" id="childAge" name="childAge" placeholder="Age" title="Age" style="width:100%;" onchange="" value="<?php echo $eidInfo['child_age']; ?>" /></td>
                                         <th>Mother ART Number</th>
                                         <td><input type="text" class="form-control " id="mothersId" name="mothersId" placeholder="Mother ART Number" title="Mother ART Number" style="width:100%;" value="<?php echo $eidInfo['mother_id'] ?>" onchange="" /></td>
                                     </tr>
@@ -311,7 +311,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                 <option value="indeterminate" <?php echo ($eidInfo['previous_pcr_result'] == 'Indeterminate') ? "selected='selected'" : ""; ?>> Inderterminate </option>
                                             </select>
                                         </td>
-                                        
+
                                         <th>Previous PCR test date :</th>
                                         <td>
                                             <input class="form-control date" type="text" name="previousPCRTestDate" id="previousPCRTestDate" placeholder="if yes, test date" value="<?php echo $general->humanDateFormat($eidInfo['last_pcr_date']); ?>" />
@@ -377,17 +377,27 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         <tr>
                                             <th><label for="">Sample Received Date </label></th>
                                             <td>
-                                                <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter sample receipt date" value="<?php echo $general->humanDateFormat($eidInfo['sample_received_at_vl_lab_datetime']) ?>" onchange="" style="width:100%;" />
+                                                <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter sample receipt date" value="<?php echo $general->humanDateFormat($eidInfo['sample_received_at_vl_lab_datetime']) ?>" style="width:100%;" />
                                             </td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
                                             <td><label for="">Testing Platform </label></td>
-                                            <td><select name="machineName" id="machineName" class="form-control isRequired" title="Please select the  machine name" ">
-                                                <?= $general->generateSelectOptions($machine, $eidInfo['import_machine_name'], '-- Select --'); ?>
+                                            <td><select class="form-control isRequired" name="eidPlatform" id="eidPlatform" title="Please select the testing platform">
+                                                    <?= $general->generateSelectOptions($testPlatformList, $eidInfo['eid_test_platform'], '-- Select --'); ?>
                                                 </select>
                                             </td>
+                                            <td><label>Machine used to test </label></td>
+                                            <td><select class="form-control" id="machineName" name="machineName" title="Please select the machine name" ">
+                                                
+                                            </select>
+                                        </td>
+                                    </tr>
                                         <tr>
                                             <th>Is Sample Rejected ?</th>
                                             <td>
-                                                <select class="form-control" name="isSampleRejected" id="isSampleRejected">
+                                                <select class=" form-control" name="isSampleRejected" id="isSampleRejected">
                                                     <option value=''> -- Select -- </option>
                                                     <option value="yes" <?php echo ($eidInfo['is_sample_rejected'] == 'yes') ? "selected='selected'" : ""; ?>> Yes </option>
                                                     <option value="no" <?php echo ($eidInfo['is_sample_rejected'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
@@ -395,7 +405,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             </td>
 
                                             <th class="rejected" style="display: none;">Reason for Rejection</th>
-                      						<td class="rejected" style="display: none;">
+                                            <td class="rejected" style="display: none;">
                                                 <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason">
                                                     <option value="">-- Select --</option>
                                                     <?php foreach ($rejectionTypeResult as $type) { ?>
@@ -604,5 +614,27 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
             }
         });
 
+
+        $("#eidPlatform").on("change", function() {
+            if (this.value != "") {
+                getMachine(this.value);
+            }
+        });
+        getMachine($("#eidPlatform").val());
+
     });
+
+    function getMachine(value) {
+        $.post("/import-configs/get-config-machine-by-config.php", {
+                configName: value,
+                machine: <?php echo !empty($eidInfo['import_machine_name']) ? $eidInfo['import_machine_name']  : '""'; ?>,
+                testType: 'eid'
+            },
+            function(data) {
+                $('#machineName').html('');
+                if (data != "") {
+                    $('#machineName').append(data);
+                }
+            });
+    }
 </script>
