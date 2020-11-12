@@ -3,7 +3,7 @@
 // imported in eid-edit-request.php based on country in global config
 
 ob_start();
-
+$eidObj = new \Vlsm\Models\Eid($db);
 //Funding source list
 $fundingSourceQry = "SELECT * FROM r_funding_sources WHERE funding_source_status='active' ORDER BY funding_source_name ASC";
 $fundingSourceList = $db->query($fundingSourceQry);
@@ -14,7 +14,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 
 
 $eidResults = $general->getEidResults();
-
+$specimenTypeResult = $eidObj->getEidSampleTypes();
 
 // Getting the list of Provinces, Districts and Facilities
 
@@ -255,6 +255,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                 <option value=''> -- Select -- </option>
                                                 <option value="yes" <?php echo ($eidInfo['rapid_test_performed'] == 'yes') ? "selected='selected'" : ""; ?>> Yes </option>
                                                 <option value="no" <?php echo ($eidInfo['rapid_test_performed'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
+                                                <option value="unknown" <?php echo ($eidInfo['rapid_test_performed'] == 'unknown') ? "selected='selected'" : ""; ?>> Unknown </option>
                                             </select>
                                         </td>
 
@@ -275,7 +276,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             </select>
                                         </td>
 
-                                        <th>Infant stopped breastfeeding ?</th>
+                                        <th>Infant still breastfeeding?</th>
                                         <td>
                                             <select class="form-control" name="hasInfantStoppedBreastfeeding" id="hasInfantStoppedBreastfeeding">
                                                 <option value=''> -- Select -- </option>
@@ -301,11 +302,22 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         </td>
                                     </tr>
                                     <tr>
+                                        <th>Previous PCR Test Result :</th>
+                                        <td>
+                                            <select class="form-control" name="prePcrTestResult" id="prePcrTestResult">
+                                                <option value=''> -- Select -- </option>
+                                                <option value="positive" <?php echo ($eidInfo['previous_pcr_result'] == 'positive') ? "selected='selected'" : ""; ?>> Positive </option>
+                                                <option value="negative" <?php echo ($eidInfo['previous_pcr_result'] == 'negative') ? "selected='selected'" : ""; ?>> Negative </option>
+                                                <option value="indeterminate" <?php echo ($eidInfo['previous_pcr_result'] == 'Indeterminate') ? "selected='selected'" : ""; ?>> Inderterminate </option>
+                                            </select>
+                                        </td>
+                                        
                                         <th>Previous PCR test date :</th>
                                         <td>
                                             <input class="form-control date" type="text" name="previousPCRTestDate" id="previousPCRTestDate" placeholder="if yes, test date" value="<?php echo $general->humanDateFormat($eidInfo['last_pcr_date']); ?>" />
                                         </td>
-
+                                    </tr>
+                                    <tr>
                                         <th>Reason for 2nd PCR :</th>
                                         <td>
                                             <select class="form-control" name="pcrTestReason" id="pcrTestReason">
@@ -315,9 +327,9 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                 <option value="Other" <?php echo ($eidInfo['reason_for_pcr'] == 'Other') ? "selected='selected'" : ""; ?>> Other </option>
                                             </select>
                                         </td>
+                                        <th></th>
+                                        <td></td>
                                     </tr>
-
-
                                 </table>
 
                                 <br><br>

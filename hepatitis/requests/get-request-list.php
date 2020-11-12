@@ -22,22 +22,22 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
 }
 
 $general=new \Vlsm\Models\General($db);
-$tableName="eid_form";
-$primaryKey="eid_id";
+$tableName="form_hepatitis";
+$primaryKey="hepatitis_id";
 
 /* Array of database columns which should be read and sent back to DataTables. Use a space where
 * you want to insert a non-database field (for example a counter or static image)
 */
 $sampleCode = 'sample_code';
 
-$aColumns = array('vl.sample_code','vl.remote_sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.child_id','vl.child_name','vl.mother_id','vl.mother_name','f.facility_name','f.facility_state','f.facility_district','vl.result',"DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y %H:%i:%s')",'ts.status_name');
-$orderColumns = array('vl.sample_code','vl.remote_sample_code','vl.sample_collection_date','b.batch_code','vl.child_id','vl.child_name','vl.mother_id','vl.mother_name','f.facility_name','f.facility_state','f.facility_district','vl.result','vl.last_modified_datetime','ts.status_name');
+$aColumns = array('vl.sample_code','vl.remote_sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.patient_id','CONCAT(vl.patient_name, vl.patient_surname)','f.facility_name','f.facility_state','f.facility_district','vl.result',"DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y %H:%i:%s')",'ts.status_name');
+$orderColumns = array('vl.sample_code','vl.remote_sample_code','vl.sample_collection_date','b.batch_code','vl.patient_id','vl.patient_name','f.facility_name','f.facility_state','f.facility_district','vl.result','vl.last_modified_datetime','ts.status_name');
 
 if($sarr['user_type']=='remoteuser'){
      $sampleCode = 'remote_sample_code';
 }else if($sarr['user_type']=='standalone') {
-     $aColumns = array('vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.child_id','vl.child_name','vl.mother_id','vl.mother_name','f.facility_name','f.facility_state','f.facility_district','vl.result',"DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y %H:%i:%s')",'ts.status_name');
-     $orderColumns = array('vl.sample_code','vl.sample_collection_date','b.batch_code','vl.child_id','vl.child_name','vl.mother_id','vl.mother_name','f.facility_name','f.facility_state','f.facility_district','vl.result','vl.last_modified_datetime','ts.status_name');
+     $aColumns = array('vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.patient_id','CONCAT(vl.patient_name, vl.patient_surname)','f.facility_name','f.facility_state','f.facility_district','vl.result',"DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y %H:%i:%s')",'ts.status_name');
+     $orderColumns = array('vl.sample_code','vl.sample_collection_date','b.batch_code','vl.patient_id','vl.patient_name','f.facility_name','f.facility_state','f.facility_district','vl.result','vl.last_modified_datetime','ts.status_name');
 }
 
 
@@ -118,7 +118,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
           */
           $aWhere = '';
           
-          $sQuery="SELECT * FROM eid_form as vl 
+          $sQuery="SELECT * FROM $tableName as vl 
                          LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
                          LEFT JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
                          LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id";
@@ -238,18 +238,18 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
                $sQuery = $sQuery." ORDER BY ".$sOrder;
           }
-          $_SESSION['eidRequestSearchResultQuery'] = $sQuery;
+          $_SESSION['covid19RequestSearchResultQuery'] = $sQuery;
           if (isset($sLimit) && isset($sOffset)) {
                $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
           }
-          // echo $sQuery;die;
+          //echo $sQuery;die;
           $rResult = $db->rawQuery($sQuery);
           /* Data set length after filtering */
-          $aResultFilterTotal =$db->rawQuery("SELECT vl.eid_id FROM eid_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere");
+          $aResultFilterTotal =$db->rawQuery("SELECT vl.$primaryKey FROM $tableName as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere");
           $iFilteredTotal = count($aResultFilterTotal);
 
           /* Total data set length */
-          $aResultTotal =  $db->rawQuery("select COUNT(eid_id) as total FROM eid_form as vl where vlsm_country_id='".$gconfig['vl_form']."'".$sFilter);
+          $aResultTotal =  $db->rawQuery("select COUNT($primaryKey) as total FROM $tableName as vl where vlsm_country_id='".$gconfig['vl_form']."'".$sFilter);
           // $aResultTotal = $countResult->fetch_row();
           //print_r($aResultTotal);
           $iTotal = $aResultTotal[0]['total'];
@@ -265,16 +265,13 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
           );
           $editRequest = false;
           $viewRequest = false;
-          if(isset($_SESSION['privileges']) && (in_array("eid-edit-request.php", $_SESSION['privileges']))){
+          if(isset($_SESSION['privileges']) && (in_array("hepatitis-edit-request.php", $_SESSION['privileges']))){
                $editRequest = true;
           }
-          if(isset($_SESSION['privileges']) && (in_array("eid-view-request.php", $_SESSION['privileges']))){
+          if(isset($_SESSION['privileges']) && (in_array("hepatitis-view-request.php", $_SESSION['privileges']))){
                $viewRequest = true;
           }
-
-
           foreach ($rResult as $aRow) {
-
                $vlResult='';
                $edit='';
                $barcode='';
@@ -298,7 +295,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
 
                $row = array();
 
-               //$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['eid_id'] . '"  value="' . $aRow['eid_id'] . '" onclick="toggleTest(this);"  />';
+               //$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['$primaryKey'] . '"  value="' . $aRow['$primaryKey'] . '" onclick="toggleTest(this);"  />';
                $row[] = $aRow['sample_code'];
                if($sarr['user_type']!='standalone'){
                     $row[] = $aRow['remote_sample_code'];
@@ -306,44 +303,40 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                $row[] = $aRow['sample_collection_date'];
                $row[] = $aRow['batch_code'];
                $row[] = ucwords($aRow['facility_name']);
-               $row[] = $aRow['child_id'];
-               $row[] = $aRow['child_name'];
-               $row[] = $aRow['mother_id'];
-               $row[] = $aRow['mother_name'];
+               $row[] = $aRow['patient_id'];
+               $row[] = $aRow['patient_name']." ".$aRow['patient_surname'];
                
                $row[] = ucwords($aRow['facility_state']);
                $row[] = ucwords($aRow['facility_district']);
                $row[] = ucwords($aRow['result']);
                $row[] = $aRow['last_modified_datetime'];
                $row[] = ucwords($aRow['status_name']);
-               //$printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="printBarcode(\''.base64_encode($aRow['eid_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
-               //$enterResult='<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['eid_id']) . '\',900,520);"> Result</a>';
+               //$printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="printBarcode(\''.base64_encode($aRow['$primaryKey']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
+               //$enterResult='<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['$primaryKey']) . '\',900,520);"> Result</a>';
                
                if($editRequest){
-                    $edit='<a href="eid-edit-request.php?id=' . base64_encode($aRow['eid_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
+                    $edit='<a href="hepatitis-edit-request.php?id=' . base64_encode($aRow['$primaryKey']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
                     if($aRow['result_status'] == 7 && $aRow['locked'] == 'yes'){
-                         if( isset($_SESSION['privileges']) && !in_array("edit-locked-eid-samples", $_SESSION['privileges'])){
+                         if( isset($_SESSION['privileges']) && !in_array("edit-locked-hepatitis-samples", $_SESSION['privileges'])){
                               $edit = '<a href="javascript:void(0);" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Locked" disabled><i class="fa fa-lock"> Locked</i></a>';
                          }
                     }
                }
                
                if($viewRequest){
-                    $view = '<a href="eid-view-request.php?id=' . base64_encode($aRow['eid_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
+                    $view = '<a href="hepatitis-view-request.php?id=' . base64_encode($aRow['$primaryKey']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
                }
 
                if(isset($gconfig['bar_code_printing']) && $gconfig['bar_code_printing'] != "off"){
                     $fac = ucwords($aRow['facility_name'])." | ".$aRow['sample_collection_date'];
                     $barcode='<br><a href="javascript:void(0)" onclick="printBarcodeLabel(\''.$aRow[$sampleCode].'\',\''.$fac.'\')" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Barcode"><i class="fa fa-barcode"> </i> Barcode </a>';
                }
-
-               
                if($editRequest){
                     $row[] = $edit.$barcode;
                }else if($viewRequest){
                     $row[] = $view.$barcode;
                }
-
+               // echo '<pre>';print_r($row);die;
                $output['aaData'][] = $row;
           }
           echo json_encode($output);

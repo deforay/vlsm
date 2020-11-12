@@ -1,15 +1,18 @@
 <?php
 if (session_status() == PHP_SESSION_NONE) {
-	session_start();
+    session_start();
 }
 ob_start();
-#require_once('../../startup.php');  
-
+#require_once('../../startup.php');
 
 
 $general = new \Vlsm\Models\General($db);
 
 $eidResults = $general->getEidResults();
+
+$covid19Obj = new \Vlsm\Models\Covid19($db);
+$covid19Symptoms = $covid19Obj->getCovid19Symptoms();
+$covid19Comorbidities = $covid19Obj->getCovid19Comorbidities();
 
 //system config
 $systemConfigQuery = "SELECT * from system_config";
@@ -19,15 +22,17 @@ $sarr = array();
 for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
 	$sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
 }
-if (isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery']) != "") {
+// die($_SESSION['covid19ResultQuery']);
+if (isset($_SESSION['covid19ResultQuery']) && trim($_SESSION['covid19ResultQuery']) != "") {
 
-	$rResult = $db->rawQuery($_SESSION['vlResultQuery']);
+	$rResult = $db->rawQuery($_SESSION['covid19ResultQuery']);
 
 	$excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
 	$output = array();
 	$sheet = $excel->getActiveSheet();
 
-	$headings = array("S.No.","Sample Code","Health Facility Name","Health Facility Code","District/County","Province/State", "Testing Lab Name (Hub)","Child ID","Child Name","Mother ID","Child Date of Birth","Child Age","Child Gender", "Breastfeeding status", "Last PCR Test results", "Sample Collection Date","Is Sample Rejected?","Sample Tested On","Result","Sample Received On","Date Result Dispatched","Comments","Funding Source","Implementing Partner");
+	$headings = array("S.No.", "Sample Code", "Health Facility Name", "Health Facility Code", "District/County", "Province/State", "Patient ID", "Patient Name", "Patient DoB", "Patient Age", "Patient Gender", "Sample Collection Date","Symptoms Presented in last 14 days", "Co-morbidities", "Is Sample Rejected?", "Sample Tested On", "Result", "Sample Received On", "Date Result Dispatched", "Comments", "Funding Source", "Implementing Partner");
+
 	$colNo = 1;
 
 	$styleArray = array(
@@ -80,21 +85,21 @@ if (isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery']) != "")
 	}
 	$sheet->getStyle('A3:AG3')->applyFromArray($styleArray);
 
-	$no = 1;
+	$no = 1;$sysmtomsArr = array();$comorbiditiesArr = array();
 	foreach ($rResult as $aRow) {
 		$row = array();
 		//date of birth
 		$dob = '';
-		if ($aRow['child_dob'] != NULL && trim($aRow['child_dob']) != '' && $aRow['child_dob'] != '0000-00-00') {
-			$dob =  date("d-m-Y", strtotime($aRow['child_dob']));
+		if ($aRow['patient_dob'] != NULL && trim($aRow['patient_dob']) != '' && $aRow['patient_dob'] != '0000-00-00') {
+			$dob =  date("d-m-Y", strtotime($aRow['patient_dob']));
 		}
 		//set gender
 		$gender = '';
-		if ($aRow['child_gender'] == 'male') {
+		if ($aRow['patient_gender'] == 'male') {
 			$gender = 'M';
-		} else if ($aRow['child_gender'] == 'female') {
+		} else if ($aRow['patient_gender'] == 'female') {
 			$gender = 'F';
-		} else if ($aRow['child_gender'] == 'not_recorded') {
+		} else if ($aRow['patient_gender'] == 'not_recorded') {
 			$gender = 'Unreported';
 		}
 		//sample collecion date
@@ -121,63 +126,61 @@ if (isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery']) != "")
 			$expStr = explode(" ", $aRow['result_printed_datetime']);
 			$resultDispatchedDate =  date("d-m-Y", strtotime($expStr[0]));
 		}
-		//TAT result dispatched(in days)
-		// $tatdays = '';
-		// if(trim($sampleCollectionDate)!= '' && trim($resultDispatchedDate)!= ''){
-		//   $sample_collection_date = strtotime($sampleCollectionDate);
-		//   $result_dispatched_date = strtotime($resultDispatchedDate);
-		//   $dayDiff = $result_dispatched_date - $sample_collection_date;
-		//   $tatdays = (int)floor($dayDiff / (60 * 60 * 24));
-		// }
-		//set result log value
-		$logVal = '0.0';
-		if ($aRow['result_value_log'] != NULL && trim($aRow['result_value_log']) != '') {
-			$logVal = round($aRow['result_value_log'], 1);
-		} else if ($aRow['result_value_absolute'] != NULL && trim($aRow['result_value_absolute']) != '' && $aRow['result_value_absolute'] > 0) {
-			$logVal = round(log10((float)$aRow['result_value_absolute']), 1);
-		}
+
 		if ($sarr['user_type'] == 'remoteuser') {
 			$sampleCode = 'remote_sample_code';
 		} else {
 			$sampleCode = 'sample_code';
 		}
 
-		if ($aRow['patient_first_name'] != '') {
-			$patientFname = ucwords($general->crypto('decrypt', $aRow['patient_first_name'], $aRow['patient_art_no']));
+		if ($aRow['patient_name'] != '') {
+			$patientFname = ucwords($general->crypto('decrypt', $aRow['patient_name'], $aRow['patient_id']));
 		} else {
 			$patientFname = '';
 		}
-		if ($aRow['patient_middle_name'] != '') {
-			$patientMname = ucwords($general->crypto('decrypt', $aRow['patient_middle_name'], $aRow['patient_art_no']));
-		} else {
-			$patientMname = '';
-		}
 		if ($aRow['patient_last_name'] != '') {
-			$patientLname = ucwords($general->crypto('decrypt', $aRow['patient_last_name'], $aRow['patient_art_no']));
+			$patientLname = ucwords($general->crypto('decrypt', $aRow['patient_surname'], $aRow['patient_id']));
 		} else {
 			$patientLname = '';
-		}
-		
+        }
+        /* To get Symptoms and Comorbidities details */
+        $covid19SelectedSymptoms = $covid19Obj->getCovid19SymptomsByFormId($aRow['covid19_id']);
+        foreach ($covid19Symptoms as $symptomId => $symptomName) {
+			if($covid19SelectedSymptoms[$symptomId] == 'yes'){
+				$sysmtomsArr[] =$symptomName.':'.$covid19SelectedSymptoms[$symptomId];
+			}
+        }
+        $covid19SelectedComorbidities = $covid19Obj->getCovid19ComorbiditiesByFormId($aRow['covid19_id']);
+        foreach ($covid19Comorbidities as $comId => $comName) {
+			if($covid19SelectedComorbidities[$symptomId] == 'yes'){
+				$comorbiditiesArr[] =$comName.':'.$covid19SelectedComorbidities[$comId];
+			}
+        }
+
 		$row[] = $no;
 		$row[] = $aRow[$sampleCode];
 		$row[] = ucwords($aRow['facility_name']);
 		$row[] = $aRow['facility_code'];
 		$row[] = ucwords($aRow['facility_district']);
 		$row[] = ucwords($aRow['facility_state']);
-		$row[] = ucwords($aRow['labName']);
-		$row[] = $aRow['child_id'];
-		$row[] = $aRow['child_name'];
-		$row[] = $aRow['mother_id'];
+		$row[] = $aRow['patient_id'];
+		$row[] = $patientFname . " " . $patientLname;
 		$row[] = $dob;
-		$row[] = ($aRow['child_age'] != NULL && trim($aRow['child_age']) != '' && $aRow['child_age'] > 0) ? $aRow['child_age'] : 0;
+		$row[] = ($aRow['patient_age'] != NULL && trim($aRow['patient_age']) != '' && $aRow['patient_age'] > 0) ? $aRow['patient_age'] : 0;
 		$row[] = $gender;
-		$row[] = ucwords($aRow['has_infant_stopped_breastfeeding']);
-		$row[] = ucwords($aRow['previous_pcr_result']);
-		$row[] = $sampleCollectionDate;
+        $row[] = $sampleCollectionDate;
+        /* To get Symptoms and Comorbidities details */
+        $row[] = implode(',',$sysmtomsArr);
+        $row[] = implode(',',$comorbiditiesArr);
+		/* $row[] = $general->humanDateFormat($aRow['date_of_symptom_onset']);
+		$row[] = ucwords($aRow['contact_with_confirmed_case']);
+		$row[] = ucwords($aRow['has_recent_travel_history']);
+		$row[] = ucwords($aRow['travel_country_names']);
+		$row[] = $general->humanDateFormat($aRow['travel_return_date']); */
 		$row[] = $sampleRejection;
 		$row[] = $sampleTestedOn;
 		$row[] = $eidResults[$aRow['result']];
-		$row[] = $sampleReceivedOn;
+		$row[] = $general->humanDateFormat($aRow['sample_received_at_vl_lab_datetime']);
 		$row[] = $resultDispatchedDate;
 		$row[] = ucfirst($aRow['approver_comments']);
 		$row[] = (isset($aRow['funding_source_name']) && trim($aRow['funding_source_name']) != '') ? ucwords($aRow['funding_source_name']) : '';
@@ -201,7 +204,7 @@ if (isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery']) != "")
 		}
 	}
 	$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
-	$filename = 'VLSM-Export-Data-' . date('d-M-Y-H-i-s') . '.xlsx';
+	$filename = 'Covid-19-Export-Data-' . date('d-M-Y-H-i-s') . '.xlsx';
 	$writer->save(TEMP_PATH . DIRECTORY_SEPARATOR . $filename);
 	echo $filename;
 }

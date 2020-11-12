@@ -211,6 +211,14 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 }
 // COVID-19 Menu end
 
+// HEPATITIS Menu start
+if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array("hepatitis-requests.php", "hepatitis-add-request.php", "hepatitis-edit-request.php", "add-Samples-from-manifest.php",))) {
+	$hepatitisTestRequestMenuAccess = true;
+} else {
+	$hepatitisTestRequestMenuAccess = false;
+}
+// HEPATITIS Menu end
+
 ?>
 <!DOCTYPE html>
 <html lang="en-US">
@@ -891,6 +899,112 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 					<?php }
 					} ?>
 					<!-- COVID-19 END -->
+
+					<!-- HEPATITIS START -->
+					<?php if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true && array_intersect($_SESSION['module'], array('hepatitis'))) {  ?>
+						<li class="header">Hepatitis</li>
+						<?php if ($hepatitisTestRequestMenuAccess == true) { ?>
+							<li class="treeview covid19Request" style="<?php echo $hideRequest; ?>">
+								<a href="#">
+									<i class="fa fa-edit"></i>
+									<span>Request Management</span>
+									<span class="pull-right-container">
+										<i class="fa fa-angle-left pull-right"></i>
+									</span>
+								</a>
+								<ul class="treeview-menu">
+									<?php if (isset($_SESSION['privileges']) && in_array("hepatitis-requests.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu hepatitisRequestMenu">
+											<a href="/hepatitis/requests/hepatitis-requests.php"><i class="fa fa-circle-o"></i> View Test Requests</a>
+										</li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("hepatitis-add-request.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu addHepatitisRequestMenu">
+											<a href="/hepatitis/requests/hepatitis-add-request.php"><i class="fa fa-circle-o"></i> Add New Request</a>
+										</li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("addSamplesFromManifest.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu addSamplesFromManifestHepatitisMenu">
+											<a href="/hepatitis/requests/addSamplesFromManifest.php"><i class="fa fa-circle-o"></i> Add Samples from Manifest</a>
+										</li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("hepatitis-batches.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu hepatitisBatchCodeMenu">
+											<a href="/hepatitis/batch/hepatitis-batches.php"><i class="fa fa-circle-o"></i> Manage Batch</a>
+										</li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("specimenReferralManifestList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
+										<li class="allMenu specimenReferralManifestListMenu">
+											<a href="/specimen-referral-manifest/specimenReferralManifestList.php?t=<?php echo base64_encode('covid19'); ?>"><i class="fa fa-circle-o"></i> Hepatitis Specimen Manifest</a>
+										</li>
+									<?php } ?>
+								</ul>
+							</li>
+						<?php }
+						if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true && $hepatitisTestResultMenuAccess == true) { ?>
+							<li class="treeview hepatitisResults" style="<?php echo $hideResult; ?>">
+								<a href="#">
+									<i class="fa fa-tasks"></i>
+									<span>Test Result Management</span>
+									<span class="pull-right-container">
+										<i class="fa fa-angle-left pull-right"></i>
+									</span>
+								</a>
+								<ul class="treeview-menu">
+									<?php if (isset($_SESSION['privileges']) && in_array("addImportResult.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu hepatitisImportResultMenu"><a href="/import-result/addImportResult.php?t=<?php echo base64_encode('covid19'); ?>"><i class="fa fa-circle-o"></i> Import Result From File</a></li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("hepatitis-manual-results.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu hepatitisResultsMenu"><a href="/hepatitis/results/hepatitis-manual-results.php"><i class="fa fa-circle-o"></i> Enter Result Manually</a></li>
+									<?php }
+									if ($arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes' && isset($_SESSION['privileges']) && in_array("covid-19-confirmation-manifest.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu hepatitisResultsConfirmationMenu"><a href="/hepatitis/results/hepatitis-confirmation-manifest.php"><i class="fa fa-circle-o"></i> Confirmation Manifest</a></li>
+									<?php }
+									if ($arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes' && isset($_SESSION['privileges']) && in_array("can-record-confirmatory-tests.php", $_SESSION['privileges']) && ($sarr['user_type'] != 'remoteuser')) { ?>
+										<li class="allMenu canRecordConfirmatoryTestsHepatitisMenu"><a href="/hepatitis/results/can-record-confirmatory-tests.php"><i class="fa fa-circle-o"></i> Record Confirmatory Tests</a></li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("hepatitis-result-status.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu hepatitisResultStatus"><a href="/hepatitis/results/hepatitis-result-status.php"><i class="fa fa-circle-o"></i> Manage Results Status</a></li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("hepatitis-print-results.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu hepatitisResultMailMenu"><a href="/hepatitis/mail/mail-hepatitis-results.php"><i class="fa fa-circle-o"></i> E-mail Test Result</a></li>
+									<?php }  ?>
+								</ul>
+							</li>
+						<?php }
+						if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true && $hepatitisManagementMenuAccess == true) { ?>
+							<li class="treeview hepatitisProgramMenu">
+								<a href="#">
+									<i class="fa fa-book"></i>
+									<span>Management</span>
+									<span class="pull-right-container">
+										<i class="fa fa-angle-left pull-right"></i>
+									</span>
+								</a>
+								<ul class="treeview-menu">
+									<?php if (isset($_SESSION['privileges']) && in_array("hepatitis-sample-status.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu hepatitisSampleStatus"><a href="/hepatitis/management/hepatitis-sample-status.php"><i class="fa fa-circle-o"></i> Sample Status Report</a></li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("hepatitis-export-data.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu hepatitisExportResult"><a href="/hepatitis/management/hepatitis-export-data.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("hepatitis-print-results.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu hepatitisPrintResults"><a href="/hepatitis/results/hepatitis-print-results.php"><i class="fa fa-circle-o"></i> Print Result</a></li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("hepatitis-sample-rejection-report.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu hepatitisSampleRejectionReport"><a href="/hepatitis/management/hepatitis-sample-rejection-report.php"><i class="fa fa-circle-o"></i> Sample Rejection Report</a></li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("hepatitis-clinic-report.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu hepatitisClinicReportMenu"><a href="/hepatitis/management/hepatitis-clinic-report.php"><i class="fa fa-circle-o"></i> Clinic Report</a></li>
+									<?php } 
+									if (isset($_SESSION['privileges']) && in_array("hepatitisMonthlyThresholdReport.PHP", $_SESSION['privileges'])) { ?>
+										<li class="allMenu hepatitisMonthlyThresholdReport"><a href="/hepatitis/management/hepatitisTestingTargetReport.php"><i class="fa fa-circle-o"></i>Hepatitis Testing Target Report</a></li>
+									<?php } ?>
+								</ul>
+							</li>
+					<?php }
+					} ?>
+					<!-- HEPATITIS END -->
 
 					<!---->
 				</ul>

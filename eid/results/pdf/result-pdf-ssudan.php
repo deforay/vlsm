@@ -199,21 +199,41 @@ if (sizeof($requestResult) > 0) {
         $html .= '<td colspan="3">';
         $html .= '<table style="padding:8px 2px 2px 2px;">';
         $html .= '<tr>';
+        $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">TESTING LAB NAME</td>';
         $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">PATIENT NAME</td>';
+        $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">MOTHER ART NUMBER</td>';
         $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">CHILD ID</td>';
-        $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">AGE</td>';
-        $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">GENDER</td>';
         $html .= '</tr>';
         $html .= '<tr>';
-
         $patientFname = ucwords($general->crypto('decrypt', $result['child_name'], $result['child_id']));
 
-
+        $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['labName']) . '</td>';
         $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $patientFname . '</td>';
 
+        $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['mother_id'] . '</td>';
         $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['child_id'] . '</td>';
-        $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $age . '</td>';
-        $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords(str_replace("_", " ", $result['child_gender'])) . '</td>';
+        $html .= '</tr>';
+        $html .= '</table>';
+        $html .= '</td>';
+        $html .= '</tr>';
+        
+        $html .= '<tr>';
+
+        $html .= '<td colspan="3">';
+        $html .= '<table style="padding:8px 2px 2px 2px;">';
+        
+        $html .= '<tr>';
+            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">AGE IN MONTHS</td>';
+            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">GENDER</td>';
+            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
+            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
+        $html .= '</tr>';
+        
+        $html .= '<tr>';
+            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['child_age'] . '</td>';
+            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords(str_replace("_", " ", $result['child_gender'])) . '</td>';
+            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
         $html .= '</tr>';
         $html .= '</table>';
         $html .= '</td>';
@@ -261,7 +281,7 @@ if (sizeof($requestResult) > 0) {
         $html .= '<tr>';
         $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['sample_tested_datetime'] . '</td>';
         $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $sampleDisbatchDate . " " . $sampleDisbatchTime . '</td>';
-        $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['eid_test_platform']) . '</td>';
+        $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['testingPlatform']) . '</td>';
         $html .= '</tr>';
         $html .= '<tr>';
         $html .= '<td colspan="3" style="line-height:10px;"></td>';

@@ -245,7 +245,8 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             <select class="form-control" name="rapidTestPerformed" id="rapidTestPerformed">
                                                 <option value=''> -- Select -- </option>
                                                 <option value="yes"> Yes </option>
-                                                <option value="no" /> No </option>
+                                                <option value="no"> No </option>
+                                                <option value="unknown"> Unknown </option>
                                             </select>
                                         </td>
 
@@ -266,7 +267,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             </select>
                                         </td>
 
-                                        <th>Infant stopped breastfeeding ?</th>
+                                        <th>Infant still breastfeeding?</th>
                                         <td>
                                             <select class="form-control" name="hasInfantStoppedBreastfeeding" id="hasInfantStoppedBreastfeeding">
                                                 <option value=''> -- Select -- </option>
@@ -292,11 +293,22 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         </td>
                                     </tr>
                                     <tr>
+                                        <th>Previous PCR Test Result :</th>
+                                        <td>
+                                            <select class="form-control" name="prePcrTestResult" id="prePcrTestResult">
+                                                <option value=''> -- Select -- </option>
+                                                <option value="positive"> Positive </option>
+                                                <option value="negative"> Negative </option>
+                                                <option value="indeterminate"> Inderterminate </option>
+                                            </select>
+                                        </td>
+                                        
                                         <th>Previous PCR test date :</th>
                                         <td>
-                                            <input class="form-control date" type="text" name="previousPCRTestDate" id="previousPCRTestDate" placeholder="if yes, test date" />
+                                            <input class="form-control date" type="text" name="previousPCRTestDate" id="previousPCRTestDate" placeholder="if yes, test date"/>
                                         </td>
-
+                                    </tr>
+                                    <tr>
                                         <th>Reason for 2nd PCR :</th>
                                         <td>
                                             <select class="form-control" name="pcrTestReason" id="pcrTestReason">
@@ -306,9 +318,9 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                 <option value="Other"> Other </option>
                                             </select>
                                         </td>
+                                        <th></th>
+                                        <td></td>
                                     </tr>
-
-
                                 </table>
 
                                 <br><br>
