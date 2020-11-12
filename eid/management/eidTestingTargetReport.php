@@ -349,9 +349,9 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
         sampleCollectionDate: $("#mrp-lowerDate").val() + ' to ' + $("#mrp-upperDate").val(),
         fyName: $("#facilityName  option:selected").text(),
         facilityName: $("#facilityName").val(),
-        state: $("#state").val(),
-        district: $("#city").val(),
-        sampleTestDate: $("#sampleTestDate").val()
+        targetType: $("#targetType").val(),
+        sampleTestDate: $("#sampleTestDate").val(),
+
       },
       function(data) {
         if (data == "" || data == null || data == undefined) {
