@@ -372,10 +372,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             </td>
                                             <td><label for="">Testing Platform </label></td>
                                             <td><select name="machineName" id="machineName" class="form-control isRequired" title="Please select the  machine name" ">
-                                            <option value=""> -- Select -- </option>
-                                            <?php foreach ($iResult as $val) {  ?>
-                                                <option value="<?php echo ($val['config_machine_id']); ?>"><?php echo ucwords($val['config_machine_name']); ?></option>
-                                            <?php } ?>
+                                            <?= $general->generateSelectOptions($machine, null, '-- Select --'); ?>
                                             </select>
                                             </td>
                                         <tr>

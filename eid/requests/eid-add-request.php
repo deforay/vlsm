@@ -53,6 +53,11 @@ foreach ($rejectionTypeResult as $type) {
 
 $iResultQuery = "select * from  import_config_machines";
 $iResult = $db->rawQuery($iResultQuery);
+$machine = array();
+foreach ($iResult as $val) {
+    $machine[$val['config_machine_id']] = $val['config_machine_name'];
+}
+
 $sampleResult = $general->fetchDataFromTable('r_eid_sample_type', "status = 'active'");
 
 $fileArray = array(
