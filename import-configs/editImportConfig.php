@@ -232,8 +232,21 @@ foreach ($configControlInfo as $info) {
 										?>
 										<tr>
 											<td>
-												<input type="text" name="configMachineName[]" id="configMachineName<?php echo $i; ?>" class="form-control configMachineName isRequired" placeholder="Machine Name" title="Please enter machine name" onblur="checkMachineName(this);" />
+												<input type="text" name="configMachineName[]" id="configMachineName0" class="form-control configMachineName isRequired" placeholder="Machine Name" title="Please enter machine name" onblur="checkMachineName(this);" />
 											</td>
+											<td>
+										<div class="col-md-3" >
+										<input type="checkbox" id="pocdevice0" name="pocdevice[]" value="" onclick="getLatiLongi(0);">
+										</div>
+										<div class="latLong0 " style="display:none">
+											<div class="col-md-4">
+												<input type="text" name="latitude[]" id="latitude0" class="form-control " placeholder="Latitude" data-placement="bottom" title="Latitude"/> 
+											</div>
+											<div class="col-md-4">
+												<input type="text" name="longitude[]" id="longitude0" class="form-control " placeholder="Longitude" data-placement="bottom" title="Longitude"/>
+											</div>
+										</div>
+										</td>
 											<td align="center" style="vertical-align:middle;">
 												<a class="btn btn-xs btn-primary" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;&nbsp;<a class="btn btn-xs btn-default" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
 											</td>
