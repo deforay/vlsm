@@ -155,7 +155,7 @@ try {
 		'mother_vl_result' 									=> $motherVlResult,
 		'mother_hiv_status' 								=> isset($_POST['mothersHIVStatus']) ? $_POST['mothersHIVStatus'] : null,
 		'pcr_test_performed_before' 						=> isset($_POST['pcrTestPerformedBefore']) ? $_POST['pcrTestPerformedBefore'] : null,
-		'pre_pcr_result' 									=> isset($_POST['prePcrTestResult']) ? $_POST['prePcrTestResult'] : null,
+		'previous_pcr_result' 									=> isset($_POST['prePcrTestResult']) ? $_POST['prePcrTestResult'] : null,
 		'last_pcr_date' 									=> isset($_POST['previousPCRTestDate']) ? $_POST['previousPCRTestDate'] : null,
 		'reason_for_pcr' 									=> isset($_POST['pcrTestReason']) ? $_POST['pcrTestReason'] : null,
 		'sample_requestor_name' 							=> isset($_POST['sampleRequestorName']) ? $_POST['sampleRequestorName'] : null,

@@ -1901,4 +1901,4 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 -- Module Hepatitis End
 
 -- Thana 12-Nov-2020
-ALTER TABLE `eid_form` ADD `pre_pcr_result` VARCHAR(255) NULL DEFAULT NULL AFTER `last_pcr_id`;
+ALTER TABLE `eid_form` ADD `previous_pcr_result` VARCHAR(255) NULL DEFAULT NULL AFTER `last_pcr_id`;
