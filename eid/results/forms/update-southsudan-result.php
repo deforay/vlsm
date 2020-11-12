@@ -15,7 +15,11 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 
 $eidResults = $general->getEidResults();
 $specimenTypeResult = $eidObj->getEidSampleTypes();
-
+/* To get testing platform names */
+$testPlatformResult = $general->getTestingPlatforms('eid');
+foreach ($testPlatformResult as $row) {
+    $testPlatformList[$row['machine_name']] = $row['machine_name'];
+}
 // Getting the list of Provinces, Districts and Facilities
 
 $rKey = '';
@@ -415,11 +419,13 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                     </tr>
                                     <tr>
                                         <td><label for="">Testing Platform </label></td>
-                                        <td><select name="machineName" id="machineName" class="form-control isRequired" title="Please select the  machine name" ">
-                                            <option value=""> -- Select -- </option>
-                                            <?php foreach ($iResult as $val) {  ?>
-                                                <option value="<?php echo ($val['config_machine_id']); ?>" <?php echo ($eidInfo['import_machine_name'] == $val['config_machine_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($val['config_machine_name']); ?></option>
-                                            <?php } ?>
+                                        <td><select name="eidPlatform" id="eidPlatform" class="form-control isRequired" title="Please select the testing platform" ">
+                                            <?= $general->generateSelectOptions($testPlatformList, $eidInfo['eid_test_platform'], '-- Select --'); ?>
+                                            </select>
+                                        </td>
+                                        <td><label for="">Testing Machine </label></td>
+                                        <td><select name="machineName" id="machineName" class="form-control" title="Please select the machine name" ">
+                                                <?= $general->generateSelectOptions($machine, $eidInfo['import_machine_name'], '-- Select --'); ?>
                                             </select>
                                         </td>
                                     </tr>
@@ -597,5 +603,25 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
             }
         });
 
+        $("#eidPlatform").on("change", function() {
+			if(this.value != ""){
+                getMachine(this.value);
+            }
+		});
+        getMachine($("#eidPlatform").val());
     });
+
+    function getMachine(value){
+        $.post("/import-configs/get-config-machine-by-config.php", {
+            configName: value,
+            machine: <?php echo $eidInfo['import_machine_name'];?>,
+            testType: 'eid'
+        },
+        function(data) {
+            $('#machineName').html('');
+            if (data != "") {
+                $('#machineName').append(data);
+            }
+        });
+    }
 </script>

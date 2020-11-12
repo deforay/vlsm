@@ -381,10 +381,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             </td>
                                             <td><label for="">Testing Platform </label></td>
                                             <td><select name="machineName" id="machineName" class="form-control isRequired" title="Please select the  machine name" ">
-                                                <option value=""> -- Select -- </option>
-                                                <?php foreach ($iResult as $val) {  ?>
-                                                    <option value="<?php echo ($val['config_machine_id']); ?>" <?php echo ($eidInfo['import_machine_name'] == $val['config_machine_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($val['config_machine_name']); ?></option>
-                                                <?php } ?>
+                                                <?= $general->generateSelectOptions($machine, $eidInfo['import_machine_name'], '-- Select --'); ?>
                                                 </select>
                                             </td>
                                         <tr>
