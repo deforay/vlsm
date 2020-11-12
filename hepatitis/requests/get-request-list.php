@@ -118,7 +118,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
           */
           $aWhere = '';
           
-          $sQuery="SELECT * FROM form_covid19 as vl 
+          $sQuery="SELECT * FROM $tableName as vl 
                          LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
                          LEFT JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
                          LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id";
@@ -245,11 +245,11 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
           //echo $sQuery;die;
           $rResult = $db->rawQuery($sQuery);
           /* Data set length after filtering */
-          $aResultFilterTotal =$db->rawQuery("SELECT vl.covid19_id FROM form_covid19 as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere");
+          $aResultFilterTotal =$db->rawQuery("SELECT vl.$primaryKey FROM $tableName as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere");
           $iFilteredTotal = count($aResultFilterTotal);
 
           /* Total data set length */
-          $aResultTotal =  $db->rawQuery("select COUNT(covid19_id) as total FROM form_covid19 as vl where vlsm_country_id='".$gconfig['vl_form']."'".$sFilter);
+          $aResultTotal =  $db->rawQuery("select COUNT($primaryKey) as total FROM $tableName as vl where vlsm_country_id='".$gconfig['vl_form']."'".$sFilter);
           // $aResultTotal = $countResult->fetch_row();
           //print_r($aResultTotal);
           $iTotal = $aResultTotal[0]['total'];
@@ -265,10 +265,10 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
           );
           $editRequest = false;
           $viewRequest = false;
-          if(isset($_SESSION['privileges']) && (in_array("covid-19-edit-request.php", $_SESSION['privileges']))){
+          if(isset($_SESSION['privileges']) && (in_array("hepatitis-edit-request.php", $_SESSION['privileges']))){
                $editRequest = true;
           }
-          if(isset($_SESSION['privileges']) && (in_array("covid-19-view-request.php", $_SESSION['privileges']))){
+          if(isset($_SESSION['privileges']) && (in_array("hepatitis-view-request.php", $_SESSION['privileges']))){
                $viewRequest = true;
           }
           foreach ($rResult as $aRow) {
@@ -295,7 +295,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
 
                $row = array();
 
-               //$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['covid19_id'] . '"  value="' . $aRow['covid19_id'] . '" onclick="toggleTest(this);"  />';
+               //$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['$primaryKey'] . '"  value="' . $aRow['$primaryKey'] . '" onclick="toggleTest(this);"  />';
                $row[] = $aRow['sample_code'];
                if($sarr['user_type']!='standalone'){
                     $row[] = $aRow['remote_sample_code'];
@@ -311,20 +311,20 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                $row[] = ucwords($aRow['result']);
                $row[] = $aRow['last_modified_datetime'];
                $row[] = ucwords($aRow['status_name']);
-               //$printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="printBarcode(\''.base64_encode($aRow['covid19_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
-               //$enterResult='<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['covid19_id']) . '\',900,520);"> Result</a>';
+               //$printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="printBarcode(\''.base64_encode($aRow['$primaryKey']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
+               //$enterResult='<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['$primaryKey']) . '\',900,520);"> Result</a>';
                
                if($editRequest){
-                    $edit='<a href="covid-19-edit-request.php?id=' . base64_encode($aRow['covid19_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
+                    $edit='<a href="hepatitis-edit-request.php?id=' . base64_encode($aRow['$primaryKey']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
                     if($aRow['result_status'] == 7 && $aRow['locked'] == 'yes'){
-                         if( isset($_SESSION['privileges']) && !in_array("edit-locked-covid19-samples", $_SESSION['privileges'])){
+                         if( isset($_SESSION['privileges']) && !in_array("edit-locked-hepatitis-samples", $_SESSION['privileges'])){
                               $edit = '<a href="javascript:void(0);" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Locked" disabled><i class="fa fa-lock"> Locked</i></a>';
                          }
                     }
                }
                
                if($viewRequest){
-                    $view = '<a href="covid-19-view-request.php?id=' . base64_encode($aRow['covid19_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
+                    $view = '<a href="hepatitis-view-request.php?id=' . base64_encode($aRow['$primaryKey']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
                }
 
                if(isset($gconfig['bar_code_printing']) && $gconfig['bar_code_printing'] != "off"){
