@@ -306,9 +306,9 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         <td>
                                             <select class="form-control" name="prePcrTestResult" id="prePcrTestResult">
                                                 <option value=''> -- Select -- </option>
-                                                <option value="positive" <?php echo ($eidInfo['pre_pcr_result'] == 'positive') ? "selected='selected'" : ""; ?>> Positive </option>
-                                                <option value="negative" <?php echo ($eidInfo['pre_pcr_result'] == 'negative') ? "selected='selected'" : ""; ?>> Negative </option>
-                                                <option value="indeterminate" <?php echo ($eidInfo['pre_pcr_result'] == 'Indeterminate') ? "selected='selected'" : ""; ?>> Inderterminate </option>
+                                                <option value="positive" <?php echo ($eidInfo['previous_pcr_result'] == 'positive') ? "selected='selected'" : ""; ?>> Positive </option>
+                                                <option value="negative" <?php echo ($eidInfo['previous_pcr_result'] == 'negative') ? "selected='selected'" : ""; ?>> Negative </option>
+                                                <option value="indeterminate" <?php echo ($eidInfo['previous_pcr_result'] == 'Indeterminate') ? "selected='selected'" : ""; ?>> Inderterminate </option>
                                             </select>
                                         </td>
                                         

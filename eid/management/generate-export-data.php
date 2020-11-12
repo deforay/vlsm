@@ -172,7 +172,7 @@ if (isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery']) != "")
 		$row[] = ($aRow['child_age'] != NULL && trim($aRow['child_age']) != '' && $aRow['child_age'] > 0) ? $aRow['child_age'] : 0;
 		$row[] = $gender;
 		$row[] = ucwords($aRow['has_infant_stopped_breastfeeding']);
-		$row[] = ucwords($aRow['pre_pcr_result']);
+		$row[] = ucwords($aRow['previous_pcr_result']);
 		$row[] = $sampleCollectionDate;
 		$row[] = $sampleRejection;
 		$row[] = $sampleTestedOn;
