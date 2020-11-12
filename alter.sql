@@ -1893,3 +1893,7 @@ CREATE TABLE `form_hepatitis` (
  KEY `sample_code_key` (`sample_code_key`),
  KEY `remote_sample_code_key` (`remote_sample_code_key`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+-- Thana 12-Nov-2020
+INSERT INTO `resources` (`resource_id`, `module`, `display_name`) VALUES ('hepatitis-requests', 'hepatitis', 'Hepatitis Request Management');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'hepatitis-requests', 'hepatitis-requests.php', 'Access'), (NULL, 'hepatitis-requests', 'hepatitis-add-request.php', 'Add'), (NULL, 'hepatitis-requests', 'hepatitis-edit-request.php', 'Edit');

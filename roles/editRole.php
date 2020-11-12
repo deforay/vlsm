@@ -22,6 +22,10 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
 	$activeModules[] = 'covid19';
 }
 
+if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) {
+	$activeModules[] = 'hepatitis';
+}
+
 
 $resourcesQuery = "SELECT module, GROUP_CONCAT( DISTINCT CONCAT(resources.resource_id,',',resources.display_name) ORDER BY resources.display_name SEPARATOR '##' ) as 'module_resources' FROM `resources` WHERE `module` IN ('" . implode("','", $activeModules) . "') GROUP BY `module` ORDER BY `module` ASC";
 $rInfo = $db->query($resourcesQuery);
@@ -137,8 +141,8 @@ if ($priInfo) {
 										echo ($mRes[1]);
 								?>
 										<small class="pull-right toggler">
-											&nbsp;&nbsp;&nbsp;<input type='radio' class='' name='<?= $mRes[1]; ?>' onclick='togglePrivilegesForThisResource(<?= $mRes[0]; ?>,true);'> All
-											&nbsp;&nbsp;&nbsp;<input type='radio' class='' name='<?= $mRes[1]; ?>' onclick='togglePrivilegesForThisResource(<?= $mRes[0]; ?>,false);'> None
+											&nbsp;&nbsp;&nbsp;<input type='radio' class='' name='<?= $mRes[1]; ?>' onclick='togglePrivilegesForThisResource("<?= $mRes[0]; ?>",true);'> All
+											&nbsp;&nbsp;&nbsp;<input type='radio' class='' name='<?= $mRes[1]; ?>' onclick='togglePrivilegesForThisResource("<?= $mRes[0]; ?>",false);'> None
 										</small>
 								<?php
 										echo "</h4></td>";
