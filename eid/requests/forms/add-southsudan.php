@@ -309,11 +309,6 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th>Previous PCR test date :</th>
-                                        <td>
-                                            <input class="form-control date" type="text" name="previousPCRTestDate" id="previousPCRTestDate" placeholder="if yes, test date" />
-                                        </td>
-
                                         <th>Reason for 2nd PCR :</th>
                                         <td>
                                             <select class="form-control" name="pcrTestReason" id="pcrTestReason">
@@ -323,9 +318,9 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                 <option value="Other"> Other </option>
                                             </select>
                                         </td>
+                                        <th></th>
+                                        <td></td>
                                     </tr>
-
-
                                 </table>
 
                                 <br><br>
