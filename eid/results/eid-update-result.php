@@ -49,51 +49,51 @@ $disable = "disabled = 'disabled'";
 
 ?>
 <style>
-  .disabledForm {
-    background: #efefef;
-  }
+	.disabledForm {
+		background: #efefef;
+	}
 
-  :disabled,
-  .disabledForm .input-group-addon {
-    background: none !important;
-    border: none !important;
-  }
+	:disabled,
+	.disabledForm .input-group-addon {
+		background: none !important;
+		border: none !important;
+	}
 
-  .ui_tpicker_second_label {
-    display: none !important;
-  }
+	.ui_tpicker_second_label {
+		display: none !important;
+	}
 
-  .ui_tpicker_second_slider {
-    display: none !important;
-  }
+	.ui_tpicker_second_slider {
+		display: none !important;
+	}
 
-  .ui_tpicker_millisec_label {
-    display: none !important;
-  }
+	.ui_tpicker_millisec_label {
+		display: none !important;
+	}
 
-  .ui_tpicker_millisec_slider {
-    display: none !important;
-  }
+	.ui_tpicker_millisec_slider {
+		display: none !important;
+	}
 
-  .ui_tpicker_microsec_label {
-    display: none !important;
-  }
+	.ui_tpicker_microsec_label {
+		display: none !important;
+	}
 
-  .ui_tpicker_microsec_slider {
-    display: none !important;
-  }
+	.ui_tpicker_microsec_slider {
+		display: none !important;
+	}
 
-  .ui_tpicker_timezone_label {
-    display: none !important;
-  }
+	.ui_tpicker_timezone_label {
+		display: none !important;
+	}
 
-  .ui_tpicker_timezone {
-    display: none !important;
-  }
+	.ui_tpicker_timezone {
+		display: none !important;
+	}
 
-  .ui_tpicker_time_input {
-    width: 100%;
-  }
+	.ui_tpicker_time_input {
+		width: 100%;
+	}
 </style>
 <?php
 
@@ -101,14 +101,14 @@ $iResultQuery = "select * from  import_config_machines";
 $iResult = $db->rawQuery($iResultQuery);
 
 $fileArray = array(
-  1 => 'forms/update-southsudan-result.php',
-  2 => 'forms/update-zimbabwe-result.php',
-  3 => 'forms/update-drc-result.php',
-  4 => 'forms/update-zambia-result.php',
-  5 => 'forms/update-png-result.php',
-  6 => 'forms/update-who-result.php',
-  7 => 'forms/update-rwanda-result.php',
-  8 => 'forms/update-angola-result.php',
+	1 => 'forms/update-southsudan-result.php',
+	2 => 'forms/update-zimbabwe-result.php',
+	3 => 'forms/update-drc-result.php',
+	4 => 'forms/update-zambia-result.php',
+	5 => 'forms/update-png-result.php',
+	6 => 'forms/update-who-result.php',
+	7 => 'forms/update-rwanda-result.php',
+	8 => 'forms/update-angola-result.php',
 );
 
 require_once($fileArray[$arr['vl_form']]);
@@ -117,47 +117,60 @@ require_once($fileArray[$arr['vl_form']]);
 ?>
 
 <script>
-  $(document).ready(function() {
-    $("#isSampleRejected").change();
-	$("#isSampleRejected").on("change", function() {
-		if (this.value == "yes") {
-			$('.rejected').show();
-			$('#sampleRejectionReason').addClass('isRequired');
-			$('#sampleTestedDateTime').removeClass('isRequired');
-		} else {
-			$('.rejected').show();
-			$('#sampleRejectionReason').removeClass('isRequired');
-			$('#sampleTestedDateTime').addClass('isRequired');
-		}
+
+	function changeFun(){
+        if ($('#isSampleRejected').val() == "yes") {
+            $('.rejected').show();
+            $('#sampleRejectionReason').addClass('isRequired');
+            $('#sampleTestedDateTime,#result').val('');
+            $('#sampleTestedDateTime,#result').removeClass('isRequired');
+        } else {
+            $('.rejected').hide();
+            $('#sampleRejectionReason').removeClass('isRequired');
+            $('#sampleTestedDateTime').addClass('isRequired');
+        }
+
+        if ($('#result').val() == "") {
+            $('#sampleTestedDateTime').removeClass('isRequired');
+        } else {
+            $('#sampleTestedDateTime').addClass('isRequired');
+        }
+    }
+
+	$(document).ready(function() {
+		changeFun();
+		$("#isSampleRejected,#result").on("change", function() {
+			changeFun();
+		});
+
+		$('.date').datepicker({
+			changeMonth: true,
+			changeYear: true,
+			dateFormat: 'dd-M-yy',
+			timeFormat: "hh:mm TT",
+			maxDate: "Today",
+			yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+		}).click(function() {
+			$('.ui-datepicker-calendar').show();
+		});
+		$('.dateTime').datetimepicker({
+			changeMonth: true,
+			changeYear: true,
+			dateFormat: 'dd-M-yy',
+			timeFormat: "HH:mm",
+			maxDate: "Today",
+			onChangeMonthYear: function(year, month, widget) {
+				setTimeout(function() {
+					$('.ui-datepicker-calendar').show();
+				});
+			},
+			yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+		}).click(function() {
+			$('.ui-datepicker-calendar').show();
+		});
+		//$('.date').mask('99-aaa-9999');
+		//$('.dateTime').mask('99-aaa-9999 99:99');
 	});
-    $('.date').datepicker({
-      changeMonth: true,
-      changeYear: true,
-      dateFormat: 'dd-M-yy',
-      timeFormat: "hh:mm TT",
-      maxDate: "Today",
-      yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-    }).click(function() {
-      $('.ui-datepicker-calendar').show();
-    });
-    $('.dateTime').datetimepicker({
-      changeMonth: true,
-      changeYear: true,
-      dateFormat: 'dd-M-yy',
-      timeFormat: "HH:mm",
-      maxDate: "Today",
-      onChangeMonthYear: function(year, month, widget) {
-        setTimeout(function() {
-          $('.ui-datepicker-calendar').show();
-        });
-      },
-      yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-    }).click(function() {
-      $('.ui-datepicker-calendar').show();
-    });
-    //$('.date').mask('99-aaa-9999');
-    //$('.dateTime').mask('99-aaa-9999 99:99');
-  });
 </script>
 
 

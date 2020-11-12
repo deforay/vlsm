@@ -53,7 +53,8 @@ if (isset($_POST['id']) && trim($_POST['id']) != '') {
                   rip.i_partner_name,
                   rsrr.rejection_reason_name ,
                   u_d.user_name as reviewedBy,
-                  a_u_d.user_name as approvedBy
+                  a_u_d.user_name as approvedBy,
+                  tp.config_machine_name as testingPlatform
                   FROM eid_form as vl 
                   LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id
                   LEFT JOIN facility_details as l ON l.facility_id=vl.lab_id 
@@ -61,6 +62,7 @@ if (isset($_POST['id']) && trim($_POST['id']) != '') {
                   LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by 
                   LEFT JOIN r_eid_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection 
                   LEFT JOIN r_implementation_partners as rip ON rip.i_partner_id=vl.implementing_partner 
+                  LEFT JOIN import_config_machines as tp ON tp.config_machine_id=vl.import_machine_name 
                   WHERE vl.eid_id IN(" . $_POST['id'] . ")";
 } else {
   $searchQuery = $allQuery;
