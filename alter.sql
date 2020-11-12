@@ -1902,3 +1902,7 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 
 -- Thana 12-Nov-2020
 ALTER TABLE `eid_form` ADD `previous_pcr_result` VARCHAR(255) NULL DEFAULT NULL AFTER `last_pcr_id`;
+
+
+UPDATE `system_config` SET `value` = '4.2.6' WHERE `system_config`.`name` = 'version';
+-- Version 4.2.6 -- Amit -- 12-Nov-2020
