@@ -616,7 +616,7 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
     function getMachine(value) {
         $.post("/import-configs/get-config-machine-by-config.php", {
                 configName: value,
-                machine: <?php echo $eidInfo['import_machine_name']; ?>,
+                machine: <?php echo !empty($eidInfo['import_machine_name']) ? $eidInfo['import_machine_name']  : '""'; ?>,
                 testType: 'eid'
             },
             function(data) {
