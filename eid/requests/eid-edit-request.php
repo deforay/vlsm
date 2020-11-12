@@ -133,24 +133,30 @@ require_once($fileArray[$arr['vl_form']]);
         }
     }
 
-    function rejectedElements() {
-        console.log($('#isSampleRejected').val());
+    function changeFun(){
         if ($('#isSampleRejected').val() == "yes") {
             $('.rejected').show();
             $('#sampleRejectionReason').addClass('isRequired');
-            $('#sampleTestedDateTime').removeClass('isRequired');
+            $('#sampleTestedDateTime,#result').val('');
+            $('#sampleTestedDateTime,#result').removeClass('isRequired');
         } else {
             $('.rejected').hide();
             $('#sampleRejectionReason').removeClass('isRequired');
             $('#sampleTestedDateTime').addClass('isRequired');
         }
+
+        if ($('#result').val() == "") {
+            $('#sampleTestedDateTime').removeClass('isRequired');
+        } else {
+            $('#sampleTestedDateTime').addClass('isRequired');
+        }
     }
 
     $(document).ready(function() {
-        rejectedElements();
-        $("#isSampleRejected").on("change", function() {
-            rejectedElements();
-        });
+        changeFun();
+        $("#isSampleRejected,#result").on("change", function() {
+			changeFun();
+		});
 
         $('.date').datepicker({
             changeMonth: true,
