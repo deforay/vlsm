@@ -376,7 +376,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
 
                                         <tr>
                                             <td><label for="">Testing Platform </label></td>
-                                            <td><select name="eidPlatform" id="eidPlatform" class="form-control isRequired" title="Please select the testing platform">
+                                            <td><select name="eidPlatform" id="eidPlatform" class="form-control" title="Please select the testing platform">
                                                     <?= $general->generateSelectOptions($testPlatformList, null, '-- Select --'); ?>
                                                 </select>
                                             </td>

@@ -1801,6 +1801,8 @@ ALTER TABLE `testing_labs` ADD `monthly_target`Varchar(255) NULL DEFAULT NULL ;
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'vl-reports', 'vlMonthlyThresholdReport.php', 'Monthly Threshold Report'), (NULL, 'eid-management', 'eidMonthlyThresholdReport.PHP', 'Monthly Threshold Report'), (NULL, 'covid-19-management', 'covid19MonthlyThresholdReport.PHP', 'Monthly Threshold Report');
  
 -- Thana 10-Nov-2020
+
+DROP TABLE IF EXISTS `form_hepatitis`;
 CREATE TABLE `form_hepatitis` (
  `hepatitis_id` int(11) NOT NULL AUTO_INCREMENT,
  `vlsm_instance_id` varchar(255) DEFAULT NULL,
