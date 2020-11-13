@@ -384,7 +384,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         </tr>
                                         <tr>
                                             <td><label for="">Testing Platform </label></td>
-                                            <td><select class="form-control isRequired" name="eidPlatform" id="eidPlatform" title="Please select the testing platform">
+                                            <td><select class="form-control" name="eidPlatform" id="eidPlatform" title="Please select the testing platform">
                                                     <?= $general->generateSelectOptions($testPlatformList, $eidInfo['eid_test_platform'], '-- Select --'); ?>
                                                 </select>
                                             </td>
