@@ -3,7 +3,7 @@ if (session_status() == PHP_SESSION_NONE) {
      session_start();
 }
 #require_once('../../startup.php');  
-
+// print_r("Prasath");die;
 $general = new \Vlsm\Models\General($db);
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
 $facilityMap = $facilitiesDb->getFacilityMap($_SESSION['userId']);

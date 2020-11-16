@@ -81,7 +81,29 @@ $facilityCount = $facilityTotal[0]['total'];
 								<div class="box-body" id="vlNoOfSampleCount"></div>
 								<div id="vlPieChartDiv"></div>
 							</div>
-
+							<div class="box">
+								<div class="box-body">
+								<center> <h3 style="font-weight: 700;">Vl Testing Target </h3> </center>
+									<table id="vlMonitoringTable" class="table table-bordered table-striped">
+									<thead>
+										<tr>
+										<th>Facility Name</th>
+										<th>Month </th>
+										<th> Number of Samples Received </th>
+										<th> Number of Samples Rejected </th>
+										<th>Number of Samples Tested</th>
+										<th>Monthly Test Target</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+										<td colspan="10" class="dataTables_empty">Loading data from server</td>
+										</tr>
+									</tbody>
+									</table>
+								</div>
+							</div>
+							<!-- /.box-body -->
 							<!-- /.row -->
 							<!-- Main row -->
 							<!-- /.row (main row) -->
@@ -119,7 +141,6 @@ $facilityCount = $facilityTotal[0]['total'];
 								<div class="box-body" id="recencyNoOfSampleCount"></div>
 								<div id="recencyPieChartDiv"></div>
 							</div>
-
 							<!-- /.row -->
 							<!-- Main row -->
 							<!-- /.row (main row) -->
@@ -157,6 +178,29 @@ $facilityCount = $facilityTotal[0]['total'];
 								<div class="box-body" id="eidNoOfSampleCount"></div>
 								<div id="eidPieChartDiv"></div>
 							</div>
+							<div class="box">
+								<div class="box-body">
+								<center> <h3 style="font-weight: 700;">Eid Testing Target </h3> </center>
+									<table id="eidMonitoringTable" class="table table-bordered table-striped">
+									<thead>
+										<tr>
+										<th>Facility Name</th>
+										<th>Month </th>
+										<th> Number of Samples Received </th>
+										<th> Number of Samples Rejected </th>
+										<th>Number of Samples Tested</th>
+										<th>Monthly Test Target</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+										<td colspan="10" class="dataTables_empty">Loading data from server</td>
+										</tr>
+									</tbody>
+									</table>
+								</div>
+							</div>
+							<!-- /.box-body -->
 							<!-- /.row -->
 							<!-- Main row -->
 							<!-- /.row (main row) -->
@@ -195,6 +239,29 @@ $facilityCount = $facilityTotal[0]['total'];
 								<div class="box-body" id="covid19NoOfSampleCount"></div>
 								<div id="covid19PieChartDiv"></div>
 							</div>
+							<div class="box">
+								<div class="box-body">
+								<center> <h3 style="font-weight: 700;">Covid-19 Testing Target </h3> </center>
+									<table id="covid19MonitoringTable" class="table table-bordered table-striped">
+									<thead>
+										<tr>
+										<th>Facility Name</th>
+										<th>Month </th>
+										<th> Number of Samples Received </th>
+										<th> Number of Samples Rejected </th>
+										<th>Number of Samples Tested</th>
+										<th>Monthly Test Target</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+										<td colspan="10" class="dataTables_empty">Loading data from server</td>
+										</tr>
+									</tbody>
+									</table>
+								</div>
+							</div>
+							<!-- /.box-body -->
 							<!-- /.row -->
 							<!-- Main row -->
 							<!-- /.row (main row) -->
@@ -247,6 +314,12 @@ $facilityCount = $facilityTotal[0]['total'];
 		searchVlRequestData(requestType);
 		getNoOfSampleCount(requestType);
 		getSamplesOverview(requestType);
+		if(requestType == 'eid')
+			loadEidRequestData();
+		else if(requestType == 'vl')
+			loadVlRequestData();
+		else if(requestType == 'covid19')
+			loadCovid19RequestData();
 	}
 
 	function searchVlRequestData(requestType) {
@@ -416,6 +489,169 @@ $facilityCount = $facilityTotal[0]['total'];
 			});
 		generateDashboard(requestType);
 	}
+	function loadEidRequestData() {
+    $.blockUI();
+    oTable = $('#eidMonitoringTable').dataTable({
+      "oLanguage": {
+        "sLengthMenu": "_MENU_ records per page"
+      },
+      "bJQueryUI": false,
+      "bAutoWidth": false,
+      "bInfo": true,
+      "bScrollCollapse": true,
+      //"bStateSave" : true,
+      "iDisplayLength": 25,
+      "bRetrieve": true,
+      "aoColumns": [{
+          "sClass": "center"
+        },
+        {
+          "sClass": "center"
+        },
+        {
+          "sClass": "center"
+        },
+        {
+          "sClass": "center"
+        },
+        {
+          "sClass": "center"
+        },
+        {
+          "sClass": "center"
+        },
+      ],
+      "aaSorting": [
+        [0, "asc"]
+      ],
+      "bProcessing": true,
+      "bServerSide": true,
+      "sAjaxSource": "/eid/management/getEidMonthlyThresholdReport.php",
+      "fnServerData": function(sSource, aoData, fnCallback) {
+		aoData.push({
+          "name": "targetType",
+          "value": '1'
+        });
+        $.ajax({
+          "dataType": 'json',
+          "type": "POST",
+          "url": sSource,
+          "data": aoData,
+          "success": fnCallback
+        });
+      }
+    });
+    $.unblockUI();
+  }
+  function loadVlRequestData() {
+    $.blockUI();
+    oTable = $('#vlMonitoringTable').dataTable({
+      "oLanguage": {
+        "sLengthMenu": "_MENU_ records per page"
+      },
+      "bJQueryUI": false,
+      "bAutoWidth": false,
+      "bInfo": true,
+      "bScrollCollapse": true,
+      //"bStateSave" : true,
+      "iDisplayLength": 25,
+      "bRetrieve": true,
+      "aoColumns": [{
+          "sClass": "center"
+        },
+        {
+          "sClass": "center"
+        },
+        {
+          "sClass": "center"
+        },
+        {
+          "sClass": "center"
+        },
+        {
+          "sClass": "center"
+        },
+        {
+          "sClass": "center"
+        },
+      ],
+      "aaSorting": [
+        [0, "asc"]
+      ],
+      "bProcessing": true,
+      "bServerSide": true,
+      "sAjaxSource": "/vl/program-management/getVlMonthlyThresholdReport.php",
+      "fnServerData": function(sSource, aoData, fnCallback) {
+		aoData.push({
+          "name": "targetType",
+          "value": '1'
+        });
+        $.ajax({
+          "dataType": 'json',
+          "type": "POST",
+          "url": sSource,
+          "data": aoData,
+          "success": fnCallback
+        });
+      }
+    });
+    $.unblockUI();
+  }
+
+  function loadCovid19RequestData() {
+    $.blockUI();
+    oTable = $('#covid19MonitoringTable').dataTable({
+      "oLanguage": {
+        "sLengthMenu": "_MENU_ records per page"
+      },
+      "bJQueryUI": false,
+      "bAutoWidth": false,
+      "bInfo": true,
+      "bScrollCollapse": true,
+      //"bStateSave" : true,
+      "iDisplayLength": 25,
+      "bRetrieve": true,
+      "aoColumns": [{
+          "sClass": "center"
+        },
+        {
+          "sClass": "center"
+        },
+        {
+          "sClass": "center"
+        },
+        {
+          "sClass": "center"
+        },
+        {
+          "sClass": "center"
+        },
+        {
+          "sClass": "center"
+        },
+      ],
+      "aaSorting": [
+        [0, "asc"]
+      ],
+      "bProcessing": true,
+      "bServerSide": true,
+      "sAjaxSource": "/covid-19/management/getCovid19MonthlyThresholdReport.php",
+      "fnServerData": function(sSource, aoData, fnCallback) {
+		aoData.push({
+          "name": "targetType",
+          "value": '1'
+        });
+        $.ajax({
+          "dataType": 'json',
+          "type": "POST",
+          "url": sSource,
+          "data": aoData,
+          "success": fnCallback
+        });
+      }
+    });
+    $.unblockUI();
+  }
 </script>
 <?php
 include(APPLICATION_PATH . '/footer.php');
