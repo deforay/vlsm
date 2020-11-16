@@ -13,7 +13,7 @@ $nationalityQry = "SELECT * FROM `r_countries` ORDER BY `iso_name` ASC";
 $nationalityResult = $db->query($nationalityQry);
 
 foreach ($nationalityResult as $nrow) {
-    $nationalityList[$nrow['id']] = ucwords($nrow['iso_name']) . ' ('.$nrow['iso3'].')';
+    $nationalityList[$nrow['id']] = ucwords($nrow['iso_name']) . ' (' . $nrow['iso3'] . ')';
 }
 
 foreach ($testPlatformResult as $row) {
@@ -187,7 +187,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                 </select>
                                             </td>
                                             <!-- </tr> -->
-                                        <?php } else{ ?>
+                                        <?php } else { ?>
                                             <th></th>
                                             <td></td>
                                         <?php } ?>
@@ -467,7 +467,6 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             </td>
                                         </tr>
                                         <tr>
-
                                             <th>Is Result Authorized ?</th>
                                             <td>
                                                 <select name="isResultAuthorized" id="isResultAuthorized" class="disabled-field form-control" title="Is Result authorized ?" style="width:100%">
@@ -478,10 +477,8 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             </td>
                                             <th>Authorized By</th>
                                             <td><input type="text" name="authorizedBy" id="authorizedBy" class="disabled-field form-control" placeholder="Authorized By" /></td>
-
                                         </tr>
                                         <tr>
-
                                             <th>Authorized on</td>
                                             <td><input type="text" name="authorizedOn" id="authorizedOn" class="disabled-field form-control date" placeholder="Authorized on" /></td>
                                             <th></th>
@@ -583,7 +580,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
         }
         $.unblockUI();
     }
-    
+
     function getPatientDistrictDetails(obj) {
 
         $.blockUI();
@@ -701,16 +698,16 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
 
     $(document).ready(function() {
         $(".select2").select2();
-		$(".select2").select2({
-			tags: true
-		});
+        $(".select2").select2({
+            tags: true
+        });
         $('#facilityId').select2({
             placeholder: "Select Clinic/Health Center"
         });
         $('#labTechnician').select2({
             placeholder: "Select Lab Technician"
         });
-        
+
         $('#patientNationality').select2({
             placeholder: "Select Nationality"
         });
@@ -718,12 +715,12 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
         $('#isResultAuthorized').change(function(e) {
             checkIsResultAuthorized();
         });
-        
+
         $('#sourceOfAlertPOE').change(function(e) {
-            if(this.value == 'others'){
+            if (this.value == 'others') {
                 $('.show-alert-poe').show();
                 $('#alertPoeOthers').addClass('isRequired');
-            } else{
+            } else {
                 $('.show-alert-poe').hide();
                 $('#alertPoeOthers').removeClass('isRequired');
             }
