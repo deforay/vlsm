@@ -1772,7 +1772,7 @@ ALTER TABLE `user_details` ADD `api_token` TEXT NULL DEFAULT NULL AFTER `user_si
 ALTER TABLE `package_details` ADD `lab_id` INT(11) NULL DEFAULT NULL AFTER `module`;
 
 UPDATE `system_config` SET `value` = '4.2.5' WHERE `system_config`.`name` = 'version';
--- Version 4.2.4 -- Amit -- 22-Oct-2020
+-- Version 4.2.5 -- Amit -- 22-Oct-2020
 
 -- Thana 30-Oct-2020
 INSERT INTO `global_config` (`display_name`, `name`, `value`, `category`, `remote_sync_needed`, `updated_on`, `updated_by`, `status`) 
@@ -1801,6 +1801,8 @@ ALTER TABLE `testing_labs` ADD `monthly_target`Varchar(255) NULL DEFAULT NULL ;
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'vl-reports', 'vlMonthlyThresholdReport.php', 'Monthly Threshold Report'), (NULL, 'eid-management', 'eidMonthlyThresholdReport.PHP', 'Monthly Threshold Report'), (NULL, 'covid-19-management', 'covid19MonthlyThresholdReport.PHP', 'Monthly Threshold Report');
  
 -- Thana 10-Nov-2020
+
+DROP TABLE IF EXISTS `form_hepatitis`;
 CREATE TABLE `form_hepatitis` (
  `hepatitis_id` int(11) NOT NULL AUTO_INCREMENT,
  `vlsm_instance_id` varchar(255) DEFAULT NULL,
@@ -1902,3 +1904,7 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 
 -- Thana 12-Nov-2020
 ALTER TABLE `eid_form` ADD `previous_pcr_result` VARCHAR(255) NULL DEFAULT NULL AFTER `last_pcr_id`;
+
+
+UPDATE `system_config` SET `value` = '4.2.6' WHERE `system_config`.`name` = 'version';
+-- Version 4.2.6 -- Amit -- 12-Nov-2020

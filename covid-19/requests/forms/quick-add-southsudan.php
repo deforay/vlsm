@@ -3,9 +3,6 @@
 
 ob_start();
 
-
-
-
 //Funding source list
 $fundingSourceQry = "SELECT * FROM r_funding_sources WHERE funding_source_status='active' ORDER BY funding_source_name ASC";
 $fundingSourceList = $db->query($fundingSourceQry);
@@ -30,11 +27,11 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 $covid19Obj = new \Vlsm\Models\Covid19($db);
 
 
-$covid19Results = $covid19Obj->getCovid19Results();
+//$covid19Results = $covid19Obj->getCovid19Results();
 $specimenTypeResult = $covid19Obj->getCovid19SampleTypes();
-$covid19ReasonsForTesting = $covid19Obj->getCovid19ReasonsForTesting();
-$covid19Symptoms = $covid19Obj->getCovid19Symptoms();
-$covid19Comorbidities = $covid19Obj->getCovid19Comorbidities();
+//$covid19ReasonsForTesting = $covid19Obj->getCovid19ReasonsForTesting();
+//$covid19Symptoms = $covid19Obj->getCovid19Symptoms();
+//$covid19Comorbidities = $covid19Obj->getCovid19Comorbidities();
 
 
 $rKey = '';
@@ -96,7 +93,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                 <table class="table" style="width:100%">
                                     <tr>
                                         <?php if ($sarr['user_type'] == 'remoteuser') { ?>
-                                            <td><label for="sampleCode">Sample ID </label></td>
+                                            <th><label for="sampleCode">Sample ID </label></th>
                                             <td>
                                                 <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"></span>
                                                 <input type="hidden" id="sampleCode" name="sampleCode" />
@@ -125,6 +122,13 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         <td class="show-alert-poe" style="display: none;">
                                             <input type="text" class="form-control" name="alertPoeOthers" id="alertPoeOthers" placeholder="Source of Alert / POE Others" title="Please choose source of Alert / POE" style="width:100%;">
                                         </td>
+
+                                        <td><label for="facilityId">Facility </label><span class="mandatory">*</span></td>
+                                        <td>
+                                            <select class="form-control isRequired " name="facilityId" id="facilityId" title="Please choose service provider" style="width:100%;">
+                                                <?php echo $facility; ?>
+                                            </select>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th><label for="patientId">Case ID <span class="mandatory">*</span> </label></th>
@@ -134,30 +138,40 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
 
                                         <th><label for="externalSampleCode">DHIS2 Case ID </label></th>
                                         <td><input type="text" class="form-control" id="externalSampleCode" name="externalSampleCode" placeholder="DHIS2 Case ID" title="Please enter DHIS2 Case ID" style="width:100%;" /></td>
-                                        
-                                        <td><label for="facilityId">Facility </label><span class="mandatory">*</span></td>
-                                        <td>
-                                            <select class="form-control isRequired " name="facilityId" id="facilityId" title="Please choose service provider" style="width:100%;">
-                                                <?php echo $facility; ?>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
                                         <th>Specimen Type <span class="mandatory">*</span></th>
                                         <td>
                                             <select name="specimenType" id="specimenType" class="form-control isRequired" title="Please choose specimen type" style="width:100%">
                                                 <?php echo $general->generateSelectOptions($specimenTypeResult, null, '-- Select --'); ?>
                                             </select>
                                         </td>
-
+                                    </tr>
+                                    <tr>
                                         <th>Sample Collection Date <span class="mandatory">*</span> </th>
                                         <td>
                                             <input class="form-control isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" onchange="sampleCodeGeneration();" />
                                         </td>
-                                        
+
                                         <th><label for="">Sample Received Date <span class="mandatory">*</span></label></th>
                                         <td>
                                             <input type="text" class="form-control isRequired" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter sample receipt date" <?php echo (isset($labFieldDisabled) && trim($labFieldDisabled) != '') ? $labFieldDisabled : ''; ?> onchange="" style="width:100%;" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Is Sample Rejected? <span class="mandatory">*</span> </th>
+                                        <td>
+                                            <select class="form-control isRequired" name="isSampleRejected" id="isSampleRejected">
+                                                <option value=''> -- Select -- </option>
+                                                <option value="yes"> Yes </option>
+                                                <option value="no"> No </option>
+                                            </select>
+                                        </td>
+
+                                        <th class="show-rejection" style="display:none;">Reason for Rejection</th>
+                                        <td class="show-rejection" style="display:none;">
+                                            <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason">
+                                                <option> -- Select -- </option>
+                                                <?php echo $rejectionReason; ?>
+                                            </select>
                                         </td>
                                     </tr>
                                     <tr>
@@ -168,40 +182,33 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             </select>
                                         </td>
 
-                                        <td><label for="specimenQuality">Specimen Quality <span class="mandatory">*</span></label></td>
-                                        <td>
-                                            <select class="form-control isRequired" id="specimenQuality" name="specimenQuality" title="Please enter the specimen quality" style="width:100%">
-                                                <option value="">--Select--</option>
-                                                <option value="good">Good</option>
-                                                <option value="poor">Poor</option>
-                                            </select>
-                                        </td>
-
                                         <th class="testingPointField" style="display:none;"><label for="">Testing Point </label></th>
                                         <td class="testingPointField" style="display:none;">
                                             <select name="testingPoint" id="testingPoint" class="form-control" title="Please select a Testing Point" style="width:100%;">
                                             </select>
                                         </td>
+                                        <th></th>
+                                        <td></td>
                                     </tr>
                                 </table>
                             </div>
                         </div>
-                    <!-- /.box-body -->
-                    <div class="box-footer">
-                        <?php if ($arr['covid19_sample_code'] == 'auto' || $arr['covid19_sample_code'] == 'YY' || $arr['covid19_sample_code'] == 'MMYY') { ?>
-                            <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat; ?>" />
-                            <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey; ?>" />
-                            <input type="hidden" name="saveNext" id="saveNext" />
-                            <input type="hidden" name="quickForm" id="quickForm" value="quick" />
-                            <!-- <input type="hidden" name="pageURL" id="pageURL" value="<?php echo $_SERVER['PHP_SELF']; ?>" /> -->
-                        <?php } ?>
-                        <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
-                        <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();$('#saveNext').val('next');return false;">Save and Next</a>
-                        <input type="hidden" name="formId" id="formId" value="<?php echo $arr['vl_form']; ?>" />
-                        <input type="hidden" name="covid19SampleId" id="covid19SampleId" value="" />
-                        <a href="/covid-19/requests/covid-19-requests.php" class="btn btn-default"> Cancel</a>
-                    </div>
-                    <!-- /.box-footer -->
+                        <!-- /.box-body -->
+                        <div class="box-footer">
+                            <?php if ($arr['covid19_sample_code'] == 'auto' || $arr['covid19_sample_code'] == 'YY' || $arr['covid19_sample_code'] == 'MMYY') { ?>
+                                <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat; ?>" />
+                                <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey; ?>" />
+                                <input type="hidden" name="saveNext" id="saveNext" />
+                                <input type="hidden" name="quickForm" id="quickForm" value="quick" />
+                                <!-- <input type="hidden" name="pageURL" id="pageURL" value="<?php echo $_SERVER['PHP_SELF']; ?>" /> -->
+                            <?php } ?>
+                            <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
+                            <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();$('#saveNext').val('next');return false;">Save and Next</a>
+                            <input type="hidden" name="formId" id="formId" value="<?php echo $arr['vl_form']; ?>" />
+                            <input type="hidden" name="covid19SampleId" id="covid19SampleId" value="" />
+                            <a href="/covid-19/requests/covid-19-requests.php" class="btn btn-default"> Cancel</a>
+                        </div>
+                        <!-- /.box-footer -->
                 </form>
                 <!-- /.row -->
             </div>
@@ -268,14 +275,13 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
         });
 
         $('#sourceOfAlertPOE').change(function(e) {
-            if(this.value == 'others'){
+            if (this.value == 'others') {
                 $('.show-alert-poe').show();
                 $('#alertPoeOthers').addClass('isRequired');
-            } else{
+            } else {
                 $('.show-alert-poe').hide();
                 $('#alertPoeOthers').removeClass('isRequired');
             }
         });
     });
-
 </script>

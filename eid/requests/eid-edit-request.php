@@ -82,6 +82,17 @@ if ($arr['eid_sample_code'] == 'auto' || $arr['eid_sample_code'] == 'auto2' || $
 
 $iResultQuery = "select * from  import_config_machines";
 $iResult = $db->rawQuery($iResultQuery);
+$machine = array();
+foreach ($iResult as $val) {
+    $machine[$val['config_machine_id']] = $val['config_machine_name'];
+}
+
+$testPlatformResult = $general->getTestingPlatforms('eid');
+foreach ($testPlatformResult as $row) {
+    $testPlatformList[$row['machine_name']] = $row['machine_name'];
+}
+
+
 if(isset($eidInfo['sample_collection_date']) && trim($eidInfo['sample_collection_date'])!='' && $eidInfo['sample_collection_date']!='0000-00-00 00:00:00'){
     $sampleCollectionDate = $eidInfo['sample_collection_date'];
     $expStr=explode(" ",$eidInfo['sample_collection_date']);

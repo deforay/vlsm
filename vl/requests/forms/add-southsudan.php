@@ -614,7 +614,7 @@ $sFormat = '';
                                                                                 <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
                                                                                      <option value="">-- Select --</option>
                                                                                      <?php foreach ($userResult as $uName) { ?>
-                                                                                          <option value="<?php echo $uName['user_id']; ?>" <?php echo ($uName['user_id'] == $_SESSION['userId']) ? "selected=selected" : ""; ?>><?php echo ucwords($uName['user_name']); ?></option>
+                                                                                          <option value="<?php echo $uName['user_id']; ?>"><?php echo ucwords($uName['user_name']); ?></option>
                                                                                      <?php } ?>
                                                                                 </select>
                                                                            </div>

@@ -99,7 +99,10 @@ $disable = "disabled = 'disabled'";
 
 $iResultQuery = "select * from  import_config_machines";
 $iResult = $db->rawQuery($iResultQuery);
-
+$machine = array();
+foreach ($iResult as $val) {
+    $machine[$val['config_machine_id']] = $val['config_machine_name'];
+}
 $fileArray = array(
 	1 => 'forms/update-southsudan-result.php',
 	2 => 'forms/update-zimbabwe-result.php',
