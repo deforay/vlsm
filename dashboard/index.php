@@ -31,6 +31,9 @@ $facilityCount = $facilityTotal[0]['total'];
 	.labAverageTatDiv {
 		display: none;
 	}
+	.close{
+		color : #960014 !important;
+	}
 </style>
 
 <!-- Content Wrapper. Contains page content -->
@@ -440,8 +443,8 @@ $facilityCount = $facilityTotal[0]['total'];
 					console.log(data['aaData'].length);
 					if(data['aaData'].length > 0)
 					{
-						var div ='<div class="alert alert-danger alert-dismissible" role="alert">\
-							<button type="button" class="close" data-dismiss="alert" aria-label="Close" style="text-indent: 0px"><span aria-hidden="true">&times;</span></button>\
+						var div ='<div class="alert alert-danger alert-dismissible" role="alert" style="background-color: #ff909f !important">\
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close" style="text-indent: 0px"><span aria-hidden="true" style="font-size: larger;font-weight: bolder;color: #000000;">&times;</span></button>\
 							<span>'+data['aaData'].length+' EID testing labs did not meet the monthly test target. </span><a href="/eid/management/eidTestingTargetReport.php" target="_blank"> more </a>\
 							</div>';
 						$("#contEid").html(div);
@@ -463,8 +466,8 @@ $facilityCount = $facilityTotal[0]['total'];
 					console.log(data['aaData'].length);
 					if(data['aaData'].length > 0)
 					{
-						var div ='<div class="alert alert-danger alert-dismissible" role="alert">\
-							<button type="button" class="close" data-dismiss="alert" aria-label="Close" style="text-indent: 0px"><span aria-hidden="true">&times;</span></button>\
+						var div ='<div class="alert alert-danger alert-dismissible" role="alert" style="background-color: #ff909f !important">\
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close" style="text-indent: 0px"><span aria-hidden="true" style="font-size: larger;font-weight: bolder;color: #000000;">&times;</span></button>\
 							<span>'+data['aaData'].length+' Vl testing labs did not meet the monthly test target. </span><a href="/vl/program-management/vlTestingTargetReport.php" target="_blank"> more </a>\
 							</div>';
 						$("#cont").html(div);
@@ -487,9 +490,9 @@ $facilityCount = $facilityTotal[0]['total'];
 					console.log(data['aaData'].length);
 					if(data['aaData'].length > 0)
 					{
-						var div ='<div class="alert alert-danger alert-dismissible" role="alert">\
-							<button type="button" class="close" data-dismiss="alert" aria-label="Close" style="text-indent: 0px"><span aria-hidden="true">&times;</span></button>\
-							<span>'+data['aaData'].length+' Covid-19 testing labs did not meet the monthly test target.  </span><a href="/covid-19/management/covid19TestingTargetReport.php" target="_blank"> more </a>\
+						var div ='<div class="alert alert-danger alert-dismissible" role="alert" style="background-color: #ff909f !important">\
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close" style="text-indent: 0px"><span aria-hidden="true" style="font-size: larger;font-weight: bolder;color: #000000;">&times;</span></button>\
+							<span >'+data['aaData'].length+' Covid-19 testing labs did not meet the monthly test target.  </span><a href="/covid-19/management/covid19TestingTargetReport.php" target="_blank"> more </a>\
 							</div>';
 						$("#contCovid").html(div);
 					}
