@@ -323,6 +323,10 @@
 		$(".program").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".vlMonitoringReport").addClass('active');
+	} else if (splitsUrl == 'vlTestingTargetReport.php') {
+		$(".program").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".vlMonthlyThresholdReport").addClass('active');
 	} else if (splitsUrl == 'generate.php') {
 		$(".qr").addClass('active');
 		$(".allMenu").removeClass('active');
@@ -379,6 +383,10 @@
 		$(".allMenu").removeClass('active');
 		$(".eidProgramMenu").addClass('active');
 		$(".eidClinicReport").addClass('active');
+	} else if (splitsUrl == 'eidTestingTargetReport.php') {
+		$(".allMenu").removeClass('active');
+		$(".eidProgramMenu").addClass('active');
+		$(".eidMonthlyThresholdReport").addClass('active');
 	} else if (splitsUrl == 'covid-19-requests.php' || splitsUrl == 'covid-19-edit-request.php') {
 		$(".allMenu").removeClass('active');
 		$(".covid19Request").addClass('active');
@@ -435,6 +443,10 @@
 		$(".allMenu").removeClass('active');
 		$(".covid19ProgramMenu").addClass('active');
 		$(".covid19ClinicReportMenu").addClass('active');
+	} else if (splitsUrl == 'covid19TestingTargetReport.php') {
+		$(".allMenu").removeClass('active');
+		$(".covid19ProgramMenu").addClass('active');
+		$(".covid19MonthlyThresholdReport").addClass('active');
 	} else if (splitsUrl == 'province-details.php' || splitsUrl == 'add-province.php' || splitsUrl == 'edit-province.php') {
 		$(".manage").addClass('active');
 		$(".common-reference-manage").addClass('active');
