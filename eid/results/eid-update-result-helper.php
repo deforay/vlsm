@@ -31,17 +31,18 @@ try {
 
 
   $eidData = array(
-    'sample_received_at_vl_lab_datetime' => $_POST['sampleReceivedDate'],
-    'import_machine_name' => isset($_POST['machineName']) ? $_POST['machineName'] : null,
-    'sample_tested_datetime' => $_POST['sampleTestedDateTime'],
-    'is_sample_rejected' => isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
-    'lab_id' => isset($_POST['labId']) ? $_POST['labId'] : null,
-    'result' => isset($_POST['result']) ? $_POST['result'] : null,
-    'result_status' => 8,
-    'data_sync' => 0,
-    'reason_for_sample_rejection' => isset($_POST['sampleRejectionReason']) ? $_POST['sampleRejectionReason'] : null,
-    'last_modified_by' => $_SESSION['userId'],
-    'last_modified_datetime' => $general->getDateTime()
+    'sample_received_at_vl_lab_datetime'=> $_POST['sampleReceivedDate'],
+    'eid_test_platform'                 => isset($_POST['eidPlatform']) ? $_POST['eidPlatform'] : null,
+    'import_machine_name'               => isset($_POST['machineName']) ? $_POST['machineName'] : null,
+    'sample_tested_datetime'            => $_POST['sampleTestedDateTime'],
+    'is_sample_rejected'                => isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
+    'lab_id'                            => isset($_POST['labId']) ? $_POST['labId'] : null,
+    'result'                            => isset($_POST['result']) ? $_POST['result'] : null,
+    'result_status'                     => 8,
+    'data_sync'                         => 0,
+    'reason_for_sample_rejection'       => isset($_POST['sampleRejectionReason']) ? $_POST['sampleRejectionReason'] : null,
+    'last_modified_by'                  => $_SESSION['userId'],
+    'last_modified_datetime'            => $general->getDateTime()
   );
 
 

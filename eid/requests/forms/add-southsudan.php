@@ -34,7 +34,7 @@ if ($sarr['user_type'] == 'remoteuser') {
     $chkUserFcMapQry = "Select user_id from vl_user_facility_map where user_id='" . $_SESSION['userId'] . "'";
     $chkUserFcMapResult = $db->query($chkUserFcMapQry);
     if ($chkUserFcMapResult) {
-        $pdQuery = "SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='" . $_SESSION['userId'] . "' group by province_name";
+        $pdQuery = "SELECT * FROM province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='" . $_SESSION['userId'] . "' group by province_name";
     }
     $rKey = 'R';
 } else {
@@ -145,16 +145,16 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                 <?php } ?>
                                             </select>
                                         </td>
-                                        
-                                            <!-- <tr> -->
-                                            <td><label for="labId">Testing Laboratory <span class="mandatory">*</span></label> </td>
-                                            <td>
-                                                <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Testing Laboratory" style="width:100%;">
-                                                    <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
-                                                </select>
-                                            </td>
-                                            <!-- </tr> -->
-                                        
+
+                                        <!-- <tr> -->
+                                        <td><label for="labId">Testing Laboratory <span class="mandatory">*</span></label> </td>
+                                        <td>
+                                            <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Testing Laboratory" style="width:100%;">
+                                                <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
+                                            </select>
+                                        </td>
+                                        <!-- </tr> -->
+
                                     </tr>
                                 </table>
                                 <br>
@@ -192,7 +192,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                     </tr>
                                     <tr>
                                         <th>Infant Age (months) <span class="mandatory">*</span></th>
-                                        <td><input type="number"  step=".1" max="60" maxlength="4" class="form-control isRequired" id="childAge" name="childAge" placeholder="Age" title="Age" style="width:100%;" onchange="" /></td>
+                                        <td><input type="number" step=".1" max="60" maxlength="4" class="form-control isRequired" id="childAge" name="childAge" placeholder="Age" title="Age" style="width:100%;" onchange="" /></td>
                                         <th>Mother ART Number</th>
                                         <td><input type="text" class="form-control " id="mothersId" name="mothersId" placeholder="Mother ART Number" title="Mother ART Number" style="width:100%;" onchange="" /></td>
                                     </tr>
@@ -302,10 +302,10 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                 <option value="indeterminate"> Inderterminate </option>
                                             </select>
                                         </td>
-                                        
+
                                         <th>Previous PCR test date :</th>
                                         <td>
-                                            <input class="form-control date" type="text" name="previousPCRTestDate" id="previousPCRTestDate" placeholder="if yes, test date"/>
+                                            <input class="form-control date" type="text" name="previousPCRTestDate" id="previousPCRTestDate" placeholder="if yes, test date" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -370,18 +370,26 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             <td>
                                                 <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;" />
                                             </td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+
+                                        <tr>
                                             <td><label for="">Testing Platform </label></td>
-                                            <td><select name="machineName" id="machineName" class="form-control isRequired" title="Please select the  machine name" ">
-                                            <option value=""> -- Select -- </option>
-                                            <?php foreach ($iResult as $val) {  ?>
-                                                <option value="<?php echo ($val['config_machine_id']); ?>"><?php echo ucwords($val['config_machine_name']); ?></option>
-                                            <?php } ?>
-                                            </select>
+                                            <td><select name="eidPlatform" id="eidPlatform" class="form-control" title="Please select the testing platform">
+                                                    <?= $general->generateSelectOptions($testPlatformList, null, '-- Select --'); ?>
+                                                </select>
                                             </td>
+                                            <td><label for="">Machine used to test </label></td>
+                                            <td><select name="machineName" id="machineName" class="form-control" title="Please select the machine name" ">
+                                                <option value="">-- Select --</option>
+                                            </select>
+                                        </td>
+                                    </tr>
                                         <tr>
                                             <th>Is Sample Rejected ?</th>
                                             <td>
-                                                <select class="form-control" name="isSampleRejected" id="isSampleRejected">
+                                                <select class=" form-control" name="isSampleRejected" id="isSampleRejected">
                                                     <option value=''> -- Select -- </option>
                                                     <option value="yes"> Yes </option>
                                                     <option value="no" /> No </option>
@@ -606,6 +614,26 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
             }
         });
 
+        $("#eidPlatform").on("change", function() {
+            if (this.value != "") {
+                getMachine(this.value);
+            }
+        });
+
 
     });
+
+    function getMachine(value) {
+        $.post("/import-configs/get-config-machine-by-config.php", {
+                configName: value,
+                machine: '',
+                testType: 'eid'
+            },
+            function(data) {
+                $('#machineName').html('');
+                if (data != "") {
+                    $('#machineName').append(data);
+                }
+            });
+    }
 </script>

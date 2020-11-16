@@ -20,7 +20,7 @@ try {
         die;
     }
     //system config
-    $systemConfigQuery = "SELECT * from system_config";
+    $systemConfigQuery = "SELECT * FROM system_config";
     $systemConfigResult = $db->query($systemConfigQuery);
     $sarr = array();
     // now we create an associative array so that we can easily create view variables
@@ -259,7 +259,7 @@ try {
         'manual_result_entry' => 'yes'
     );
     $lock = $general->getGlobalConfig('lock_approved_vl_samples');
-    if($lock == 'yes' && $status == 7){
+    if ($lock == 'yes' && $status == 7) {
         $vldata['locked'] = 'yes';
     }
     $vldata['patient_first_name'] = $general->crypto('encrypt', $_POST['patientFirstName'], $vldata['patient_art_no']);

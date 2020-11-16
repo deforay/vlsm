@@ -15,7 +15,11 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 
 $eidResults = $general->getEidResults();
 $specimenTypeResult = $eidObj->getEidSampleTypes();
-
+/* To get testing platform names */
+$testPlatformResult = $general->getTestingPlatforms('eid');
+foreach ($testPlatformResult as $row) {
+    $testPlatformList[$row['machine_name']] = $row['machine_name'];
+}
 // Getting the list of Provinces, Districts and Facilities
 
 $rKey = '';
@@ -61,7 +65,7 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
     </section>
     <!-- Main content -->
     <section class="content">
-        
+
         <div class="box box-default">
             <div class="box-header with-border">
                 <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
@@ -294,7 +298,7 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                             <option value="indeterminate" <?php echo ($eidInfo['previous_pcr_result'] == 'Indeterminate') ? "selected='selected'" : ""; ?>> Inderterminate </option>
                                         </select>
                                     </td>
-                                    
+
                                     <th>Previous PCR test date :</th>
                                     <td>
                                         <input class="form-control date" type="text" name="previousPCRTestDate" id="previousPCRTestDate" placeholder="if yes, test date" value="<?php echo $general->humanDateFormat($eidInfo['last_pcr_date']); ?>" />
@@ -369,8 +373,22 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                                 <?= $general->generateSelectOptions($testingLabs, $eidInfo['lab_id'], '-- Select --'); ?>
                                             </select>
                                         </td>
+                                    </tr>
+
                                     <tr>
-                                        <th>Is Sample Rejected ? <span class="mandatory">*</span></th>
+                                        <td><label for="">Testing Platform </label></td>
+                                        <td><select name="eidPlatform" id="eidPlatform" class="form-control isRequired" title="Please select the testing platform">
+                                            <?= $general->generateSelectOptions($testPlatformList, $eidInfo['eid_test_platform'], '-- Select --'); ?>
+                                            </select>
+                                        </td>
+                                        <td><label>Machine used to test </label></td>
+                                        <td><select name="machineName" id="machineName" class="form-control" title="Please select the machine name" ">
+                                                <?= $general->generateSelectOptions($machine, $eidInfo['import_machine_name'], '-- Select --'); ?>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Is Sample Rejected ? <span class=" mandatory">*</span></th>
                                         <td>
                                             <select class="form-control isRequired" name="isSampleRejected" id="isSampleRejected">
                                                 <option value=''> -- Select -- </option>
@@ -410,16 +428,6 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                                 <?php foreach ($eidResults as $eidResultKey => $eidResultValue) { ?>
                                                     <option value="<?php echo $eidResultKey; ?>" <?php echo ($eidInfo['result'] == $eidResultKey) ? "selected='selected'" : ""; ?>> <?php echo $eidResultValue; ?> </option>
                                                 <?php } ?>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><label for="">Testing Platform </label></td>
-                                        <td><select name="machineName" id="machineName" class="form-control isRequired" title="Please select the  machine name" ">
-                                            <option value=""> -- Select -- </option>
-                                            <?php foreach ($iResult as $val) {  ?>
-                                                <option value="<?php echo ($val['config_machine_id']); ?>" <?php echo ($eidInfo['import_machine_name'] == $val['config_machine_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($val['config_machine_name']); ?></option>
-                                            <?php } ?>
                                             </select>
                                         </td>
                                     </tr>
@@ -597,5 +605,25 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
             }
         });
 
+        $("#eidPlatform").on("change", function() {
+            if (this.value != "") {
+                getMachine(this.value);
+            }
+        });
+        getMachine($("#eidPlatform").val());
     });
+
+    function getMachine(value) {
+        $.post("/import-configs/get-config-machine-by-config.php", {
+                configName: value,
+                machine: <?php echo !empty($eidInfo['import_machine_name']) ? $eidInfo['import_machine_name']  : '""'; ?>,
+                testType: 'eid'
+            },
+            function(data) {
+                $('#machineName').html('');
+                if (data != "") {
+                    $('#machineName').append(data);
+                }
+            });
+    }
 </script>
