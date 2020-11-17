@@ -9,7 +9,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
 // echo "<pre>";print_r($_POST);
 $general = new \Vlsm\Models\General($db);
-$covid19Model = new \Vlsm\Models\Covid19($db);
+$hepatitisModel = new \Vlsm\Models\Hepatitis($db);
 
 $globalConfig = $general->getGlobalConfig();
 $systemConfig = $general->getSystemConfig();
@@ -34,14 +34,14 @@ try {
             exit();
         }
     }
-    $sampleJson = $covid19Model->generateCovid19SampleCode($provinceCode, $sampleCollectionDate, null, $provinceId);
+    $sampleJson = $hepatitisModel->generateHepatitisSampleCode($provinceCode, $sampleCollectionDate, null, $provinceId);
     $sampleData = json_decode($sampleJson, true);
 
     $sampleDate = explode(" ", $_POST['sampleCollectionDate']);
     $_POST['sampleCollectionDate'] = $general->dateFormat($sampleDate[0]) . " " . $sampleDate[1];
 
-    $covid19Data = array();
-    $covid19Data = array(
+    $hepatitisData = array();
+    $hepatitisData = array(
         'vlsm_country_id' => $_POST['countryId'],
         'sample_collection_date' => $_POST['sampleCollectionDate'],
         'vlsm_instance_id' => $_SESSION['instanceId'],
@@ -53,21 +53,21 @@ try {
     );
 
     if ($systemConfig['user_type'] == 'remoteuser') {
-        $covid19Data['remote_sample_code'] = $sampleData['sampleCode'];
-        $covid19Data['remote_sample_code_format'] = $sampleData['sampleCodeFormat'];
-        $covid19Data['remote_sample_code_key'] = $sampleData['sampleCodeKey'];
-        $covid19Data['remote_sample'] = 'yes';
-        $covid19Data['result_status'] = 9;
+        $hepatitisData['remote_sample_code'] = $sampleData['sampleCode'];
+        $hepatitisData['remote_sample_code_format'] = $sampleData['sampleCodeFormat'];
+        $hepatitisData['remote_sample_code_key'] = $sampleData['sampleCodeKey'];
+        $hepatitisData['remote_sample'] = 'yes';
+        $hepatitisData['result_status'] = 9;
     } else {
-        $covid19Data['sample_code'] = $sampleData['sampleCode'];
-        $covid19Data['sample_code_format'] = $sampleData['sampleCodeFormat'];
-        $covid19Data['sample_code_key'] = $sampleData['sampleCodeKey'];
-        $covid19Data['remote_sample'] = 'no';
-        $covid19Data['result_status'] = 6;
+        $hepatitisData['sample_code'] = $sampleData['sampleCode'];
+        $hepatitisData['sample_code_format'] = $sampleData['sampleCodeFormat'];
+        $hepatitisData['sample_code_key'] = $sampleData['sampleCodeKey'];
+        $hepatitisData['remote_sample'] = 'no';
+        $hepatitisData['result_status'] = 6;
     }
     $id = 0;
     if (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '' && $_POST['sampleCollectionDate'] != null && $_POST['sampleCollectionDate'] != '') {
-        $id = $db->insert("form_covid19", $covid19Data);
+        $id = $db->insert("form_hepatitis", $hepatitisData);
     }
     if ($id > 0) {
         echo $id;
