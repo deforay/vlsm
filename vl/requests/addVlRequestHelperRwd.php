@@ -11,6 +11,7 @@ $tableName = "vl_request_form";
 $tableName1 = "activity_log";
 $vlTestReasonTable = "r_vl_test_reasons";
 $fDetails = "facility_details";
+$vl_result_category = NULL;
 try {
     $validateFields = array($_POST['sampleCode'], $_POST['sampleCollectionDate']);
     $chkValidation = $general->checkMandatoryFields($validateFields);
@@ -141,6 +142,7 @@ try {
     }
     $isRejection = false;
     if (isset($_POST['noResult']) && $_POST['noResult'] == 'yes') {
+        $vl_result_category = 'rejected';
         $isRejection = true;
         $_POST['vlResult'] = '';
         $_POST['vlLog'] = '';
@@ -174,14 +176,12 @@ try {
     } else if (isset($_POST['vlLog']) && trim($_POST['vlLog']) != '') {
         $_POST['result'] = $_POST['vlLog'];
     }
-    $vl_result_category = NULL;
+    
     if (isset($_POST['approvedBy']) && trim($_POST['approvedBy']) != '') {
         if($_POST['vlResult'] >= 1000)
             $vl_result_category = 'not suppressed';
         else if($_POST['vlResult'] < 1000)
             $vl_result_category = 'suppressed';
-        else if($_POST['vlResult'] == 'Invalid' || $_POST['vlResult'] == 'Failed' )
-            $vl_result_category = 'rejected';
     }
 
     if ($sarr['user_type'] == 'remoteuser') {
