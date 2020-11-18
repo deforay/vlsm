@@ -100,6 +100,7 @@ try {
 		'is_sample_rejected'                  => isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
 		'hbsag_result'                        => isset($_POST['HBsAg']) ? $_POST['HBsAg'] : null,
 		'anti_hcv_result'                     => isset($_POST['antiHcv']) ? $_POST['antiHcv'] : null,
+		'result'                       		  => isset($_POST['result']) ? $_POST['result'] : null,
 		'hcv_vl_result'                       => isset($_POST['hcv']) ? $_POST['hcv'] : null,
 		'hbv_vl_result'                       => isset($_POST['hbv']) ? $_POST['hbv'] : null,
 		'hcv_vl_count'                        => isset($_POST['hcvCount']) ? $_POST['hcvCount'] : null,
