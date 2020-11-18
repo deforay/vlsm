@@ -106,7 +106,8 @@ $fileArray = array(
     7 => 'forms/add-rwanda.php',
     8 => 'forms/add-angola.php',
 );
-
+// print_r($arr['vl_form']);die;
+// $arr['vl_form'] = 5;
 require_once($fileArray[$arr['vl_form']]);
 
 ?>
