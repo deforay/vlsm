@@ -174,6 +174,16 @@ try {
     } else if (isset($_POST['vlLog']) && trim($_POST['vlLog']) != '') {
         $_POST['result'] = $_POST['vlLog'];
     }
+    $vl_result_category = NULL;
+    if (isset($_POST['approvedBy']) && trim($_POST['approvedBy']) != '') {
+        if($_POST['vlResult'] >= 1000)
+            $vl_result_category = 'not suppressed';
+        else if($_POST['vlResult'] < 1000)
+            $vl_result_category = 'suppressed';
+        else if($_POST['vlResult'] == 'Invalid' || $_POST['vlResult'] == 'Failed' )
+            $vl_result_category = 'rejected';
+    }
+
     if ($sarr['user_type'] == 'remoteuser') {
         $sampleCode = 'remote_sample_code';
         $sampleCodeKey = 'remote_sample_code_key';
@@ -275,8 +285,10 @@ try {
         'request_created_datetime' => $general->getDateTime(),
         'last_modified_by' => $_SESSION['userId'],
         'last_modified_datetime' => $general->getDateTime(),
-        'manual_result_entry' => 'yes'
+        'manual_result_entry' => 'yes',
+        'vl_result_category' => $vl_result_category
     );
+    // print_r($vldata);die;
     $lock = $general->getGlobalConfig('lock_approved_vl_samples');
     if($status == 7  && $lock == 'yes'){
         $vldata['locked'] = 'yes';
