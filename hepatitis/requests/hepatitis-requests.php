@@ -108,7 +108,7 @@ $batResult = $db->rawQuery($batQuery);
 
 								<?php
 								if (isset($_SESSION['privileges']) && in_array("hepatitis-add-request.php", $_SESSION['privileges'])) { ?>
-									<a style=" margin: 0px 5px; " href="/hepatitis/requests/hepatitis-add-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Add new Covid-19 Request</a>
+									<a style=" margin: 0px 5px; " href="/hepatitis/requests/hepatitis-add-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Add new Hepatitis Request</a>
 								<?php } ?>
 								<button style=" margin: 0px 5px; " class="btn btn-primary btn-sm pull-right" style="margin-right:5px;" onclick="hideAdvanceSearch('filter','advanceFilter');"><span>Show Advanced Search</span></button>
 							</td>
@@ -135,7 +135,7 @@ $batResult = $db->rawQuery($batQuery);
 									<th>Result</th>
 									<th>Last Modified On</th>
 									<th>Status</th>
-									<?php if (isset($_SESSION['privileges']) && (in_array("hepatitis-edit-request.php", $_SESSION['privileges'])) || (in_array("covid-19-view-request.php", $_SESSION['privileges']))) { ?>
+									<?php if (isset($_SESSION['privileges']) && (in_array("hepatitis-edit-request.php", $_SESSION['privileges'])) || (in_array("hepatitis-view-request.php", $_SESSION['privileges']))) { ?>
 										<th>Action</th>
 									<?php } ?>
 								</tr>
@@ -301,7 +301,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 				}, {
 					"sClass": "center"
 				},
-				<?php if (isset($_SESSION['privileges']) && (in_array("hepatitis-edit-request.php", $_SESSION['privileges'])) || (in_array("covid-19-view-request.php", $_SESSION['privileges']))) { ?> {
+				<?php if (isset($_SESSION['privileges']) && (in_array("hepatitis-edit-request.php", $_SESSION['privileges'])) || (in_array("hepatitis-view-request.php", $_SESSION['privileges']))) { ?> {
 						"sClass": "center",
 						"bSortable": false
 					},
