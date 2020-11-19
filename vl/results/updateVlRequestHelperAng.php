@@ -9,6 +9,7 @@ ob_start();
 $general = new \Vlsm\Models\General($db);
 $tableName = "vl_request_form";
 $tableName2 = "log_result_updates";
+$vl_result_category = NULL;
 try {
     $testingPlatform = '';
     if (isset($_POST['testingPlatform']) && trim($_POST['testingPlatform']) != '') {
@@ -52,6 +53,7 @@ try {
 
     $isRejection = false;
     if (isset($_POST['noResult']) && $_POST['noResult'] == 'yes') {
+        $vl_result_category = 'rejected';
         $isRejection = true;
         $_POST['vlResult'] = '';
         $_POST['vlLog'] = '';
@@ -88,6 +90,12 @@ try {
     } else if (trim($reasonForChanges) != '') {
         $allChange =  $reasonForChanges;
     }
+    if (isset($_POST['approvedBy']) && trim($_POST['approvedBy']) != '') {
+        if($_POST['vlResult'] >= 1000)
+        $vl_result_category = 'not suppressed';
+        else if($_POST['vlResult'] < 1000)
+        $vl_result_category = 'suppressed';
+   }
     $vldata = array(
         'lab_id' => (isset($_POST['labId']) && $_POST['labId'] != '') ? $_POST['labId'] :  NULL,
         'lab_technician' => (isset($_POST['labTechnician']) && $_POST['labTechnician'] != '') ? $_POST['labTechnician'] :  NULL,
@@ -109,7 +117,8 @@ try {
         'reason_for_vl_result_changes' => $allChange,
         'last_modified_by' => $_SESSION['userId'],
         'last_modified_datetime' => $general->getDateTime(),
-        'data_sync' => 0
+        'data_sync' => 0,
+        'vl_result_category' => $vl_result_category
     );
     $lock = $general->getGlobalConfig('lock_approved_vl_samples');
     if($_POST['status'] == 7 && $lock == 'yes'){
