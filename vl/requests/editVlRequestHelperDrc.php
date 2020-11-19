@@ -9,6 +9,7 @@ ob_start();
 $general = new \Vlsm\Models\General($db);
 $tableName = "vl_request_form";
 $tableName1 = "activity_log";
+$vl_result_category = NULL;
 try {
     $configQuery = "SELECT * from global_config";
     $configResult = $db->query($configQuery);
@@ -216,7 +217,10 @@ try {
         $_POST['vlLog'] = '';
     }
 
-
+    if($_POST['vlResult'] >= 1000)
+        $vl_result_category = 'not suppressed';
+    else if($_POST['vlResult'] < 1000)
+        $vl_result_category = 'suppressed';
 
     $vldata = array(
         'facility_id' => $_POST['clinicName'],
@@ -258,7 +262,8 @@ try {
         //'result_printed_datetime'=>$_POST['sampleTestingDateAtLab'],
         'last_modified_by' => $_SESSION['userId'],
         'data_sync' => 0,
-        'last_modified_datetime' => $general->getDateTime()
+        'last_modified_datetime' => $general->getDateTime(),
+        'vl_result_category' => $vl_result_category
     );
     if ($sarr['user_type'] == 'remoteuser') {
         $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] :  NULL;
