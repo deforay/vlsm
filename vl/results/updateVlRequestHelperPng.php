@@ -11,6 +11,7 @@ $tableName = "vl_request_form";
 $tableName1 = "activity_log";
 $vlTestReasonTable = "r_vl_test_reasons";
 $tableName2 = "log_result_updates";
+$vl_result_category = NULL;
 try {
 
     if (isset($_POST['failedTestDate']) && trim($_POST['failedTestDate']) != "") {
@@ -66,8 +67,13 @@ try {
         $_POST['rejectionReason'] = NULL;
     }
     if (isset($_POST['sampleQuality']) && trim($_POST['sampleQuality']) == 'yes') {
+        $vl_result_category = 'rejected';
         $_POST['vlResult'] = NULL;
     }
+        if(isset($_POST['vlResult']) &&  $_POST['vlResult'] >= 1000)
+          $vl_result_category = 'not suppressed';
+     else if( isset($_POST['vlResult']) &&  $_POST['vlResult'] < 1000)
+          $vl_result_category = 'suppressed';
     $vldata = array(
         'is_sample_rejected' => (isset($_POST['sampleQuality']) && $_POST['sampleQuality'] != '') ? $_POST['sampleQuality'] : NULL,
         'reason_for_sample_rejection' => (isset($_POST['rejectionReason']) && $_POST['rejectionReason'] != '') ? $_POST['rejectionReason'] : NULL,
