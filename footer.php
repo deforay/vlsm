@@ -522,6 +522,22 @@
 		$(".covid19-reference-manage").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".covid19-test-reasons").addClass('active');
+	} else if (splitsUrl == 'hepatitis-requests.php' || splitsUrl == 'hepatitis-edit-request') {
+		$(".hepatitisRequest").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".hepatitisRequestMenu").addClass('active');
+	} else if (splitsUrl == 'hepatitis-add-request.php') {
+		$(".hepatitisRequest").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".addHepatitisRequestMenu").addClass('active');
+	} else if (splitsUrl == 'add-samples-from-manifest.php') {
+		$(".hepatitisRequest").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".addSamplesFromManifestHepatitisMenu").addClass('active');
+	} else if (splitsUrl == 'hepatitis-batches.php') {
+		$(".hepatitisRequest").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".hepatitisBatchCodeMenu").addClass('active');
 	} else {
 		$(".allMenu").removeClass('active');
 		$(".dashboardMenu").addClass('active');

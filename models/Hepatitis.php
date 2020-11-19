@@ -132,4 +132,30 @@ class Hepatitis
         return json_encode($sCodeKey);
     }
 
+    public function getComorbidityByHepatitisId($id)
+    {
+        $comorbidityData = array();
+        if(isset($id) && $id != ""){
+            $comorbidityQuery = "SELECT DISTINCT comorbidity_id, comorbidity_detected FROM hepatitis_patient_comorbidities WHERE hepatitis_id = " .$id;
+            $comorbidityResult = $this->db->rawQuery($comorbidityQuery);
+            foreach($comorbidityResult as $comorbidity){
+                $comorbidityData[$comorbidity['comorbidity_id']] = $comorbidity['comorbidity_detected'];
+            }
+        }
+        return $comorbidityData;
+    }
+    
+    public function getRiskFactorsByHepatitisId($id)
+    {
+        $riskFactorsData = array();
+        if(isset($id) && $id != ""){
+            $riskFactorQuery = "SELECT DISTINCT riskfactors_id, riskfactors_detected FROM hepatitis_risk_factors WHERE hepatitis_id = " .$id;
+            $riskFactorsResult = $this->db->rawQuery($riskFactorQuery);
+            foreach($riskFactorsResult as $riskFactor){
+                $riskFactorsData[$riskFactor['riskfactors_id']] = $riskFactor['riskfactors_detected'];
+            }
+        }
+        return $riskFactorsData;
+    }
+
 }

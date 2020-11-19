@@ -89,8 +89,6 @@ if (file_exists($fileArray[$arr['vl_form']])) {
 } else {
     require_once('forms/add-who.php');
 }
-
-
 ?>
 
 <script>
