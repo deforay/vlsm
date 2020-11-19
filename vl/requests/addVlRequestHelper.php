@@ -11,6 +11,7 @@ $tableName = "vl_request_form";
 $tableName1 = "activity_log";
 $vlTestReasonTable = "r_vl_test_reasons";
 $fDetails = "facility_details";
+$vl_result_category = NULL;
 try {
     $validateField = array($_POST['sampleCode'], $_POST['sampleCollectionDate']);
     $chkValidation = $general->checkMandatoryFields($validateField);
@@ -29,6 +30,7 @@ try {
     }
     $status = 6;
     if (isset($_POST['noResult']) && $_POST['noResult'] == 'yes') {
+        $vl_result_category = 'rejected';
         $status = 4;
     }
     if ($sarr['user_type'] == 'remoteuser') {
@@ -157,6 +159,7 @@ try {
 
     $isRejection = false;
     if (isset($_POST['noResult']) && $_POST['noResult'] == 'yes') {
+        $vl_result_category = 'rejected';
         $isRejection = true;
         $_POST['vlResult'] = '';
         $_POST['vlLog'] = '';
@@ -199,6 +202,12 @@ try {
             $id = $db->insert('r_vl_test_reasons', $data);
             $_POST['stViralTesting'] = $id;
         }
+    }
+    if (isset($_POST['approvedBy']) && trim($_POST['approvedBy']) != '') {
+        if($_POST['vlResult'] >= 1000)
+            $vl_result_category = 'not suppressed';
+        else if($_POST['vlResult'] < 1000)
+            $vl_result_category = 'suppressed';
     }
 
     $vldata = array(
@@ -256,7 +265,8 @@ try {
         'request_created_datetime' => $general->getDateTime(),
         'last_modified_by' => $_SESSION['userId'],
         'last_modified_datetime' => $general->getDateTime(),
-        'manual_result_entry' => 'yes'
+        'manual_result_entry' => 'yes',
+        'vl_result_category' => $vl_result_category
     );
     $lock = $general->getGlobalConfig('lock_approved_vl_samples');
     if ($lock == 'yes' && $status == 7) {

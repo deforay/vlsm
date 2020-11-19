@@ -11,6 +11,7 @@ $tableName = "vl_request_form";
 $tableName1 = "activity_log";
 $vlTestReasonTable = "r_vl_test_reasons";
 $fDetails = "facility_details";
+$vl_result_category = NULL;
 try {
      //system config
      $systemConfigQuery = "SELECT * from system_config";
@@ -113,6 +114,7 @@ try {
 
      $isRejection = false;
      if (isset($_POST['noResult']) && $_POST['noResult'] == 'yes') {
+          $vl_result_category = 'rejected';
           $isRejection = true;
           $_POST['vlResult'] = '';
           $_POST['vlLog'] = '';
@@ -167,6 +169,12 @@ try {
                $patientGroup['patient_group'] = 'breast_feeding';
           }
      }
+     if (isset($_POST['approvedBy']) && trim($_POST['approvedBy']) != '') {
+          if($_POST['vlResult'] >= 1000)
+          $vl_result_category = 'not suppressed';
+          else if($_POST['vlResult'] < 1000)
+          $vl_result_category = 'suppressed';
+     }
      $vldata = array(
           'facility_id' => (isset($_POST['fName']) && $_POST['fName'] != '') ? $_POST['fName'] :  NULL,
           'sample_collection_date' => $_POST['sampleCollectionDate'],
@@ -217,7 +225,8 @@ try {
           'reason_for_vl_result_changes' => $allChange,
           'last_modified_by' => $_SESSION['userId'],
           'last_modified_datetime' => $general->getDateTime(),
-          'data_sync' => 0
+          'data_sync' => 0,
+          'vl_result_category' => $vl_result_category
      );
      if ($sarr['user_type'] == 'remoteuser') {
           $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] :  NULL;
