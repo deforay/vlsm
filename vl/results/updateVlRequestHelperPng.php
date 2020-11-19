@@ -101,7 +101,8 @@ try {
         'report_date' => $_POST['reportDate'],
         'last_modified_by' => $_SESSION['userId'],
         'last_modified_datetime' => $general->getDateTime(),
-        'data_sync' => 0
+        'data_sync' => 0,
+        'vl_result_category' => $vl_result_category
     );
     //print_r($vldata);die;
     if (isset($_POST['status']) && trim($_POST['status']) != '') {
