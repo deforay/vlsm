@@ -11,6 +11,7 @@ $tableName = "vl_request_form";
 $tableName1 = "activity_log";
 $vlTestReasonTable = "r_vl_test_reasons";
 $fDetails = "facility_details";
+$vl_result_category = NULL;
 try {
      //system config
      $systemConfigQuery = "SELECT * from system_config";
@@ -115,6 +116,7 @@ try {
      }
      $isRejection = false;
      if (isset($_POST['noResult']) && $_POST['noResult'] == 'yes') {
+          $vl_result_category = 'rejected';
           $isRejection = true;
           $_POST['vlResult'] = '';
           $_POST['vlLog'] = '';
@@ -177,6 +179,12 @@ try {
                header("location:addVlRequest.php");
           }
      }
+     if (isset($_POST['approvedBy']) && trim($_POST['approvedBy']) != '') {
+          if($_POST['vlResult'] >= 1000)
+          $vl_result_category = 'not suppressed';
+          else if($_POST['vlResult'] < 1000)
+          $vl_result_category = 'suppressed';
+     }
      $vldata = array(
           'vlsm_instance_id' => $instanceId,
           'vlsm_country_id' => 8,
@@ -237,6 +245,7 @@ try {
           'last_modified_by' => $_SESSION['userId'],
           'last_modified_datetime' => $general->getDateTime(),
           'manual_result_entry' => 'yes',
+          'vl_result_category' => $vl_result_category
      );
      $lock = $general->getGlobalConfig('lock_approved_vl_samples');
      if($lock == 'yes' && $status == 7){
