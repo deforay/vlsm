@@ -9,6 +9,7 @@ ob_start();
 $general = new \Vlsm\Models\General($db);
 $tableName = "vl_request_form";
 $tableName2 = "log_result_updates";
+$vl_result_category = NULL;
 try {
     //var_dump($_POST);die;
     $instanceId = '';
@@ -58,6 +59,7 @@ try {
     $isRejection = false;
     $textValue = NULL;
     if (isset($_POST['noResult']) && $_POST['noResult'] == 'yes') {
+        $vl_result_category = 'rejected';
         $isRejection = true;
         $_POST['vlResult'] = '';
         $_POST['vlLog'] = '';
@@ -106,6 +108,12 @@ try {
     } else if (trim($reasonForChanges) != '') {
         $allChange =  $reasonForChanges;
     }
+    if (isset($_POST['approvedBy']) && trim($_POST['approvedBy']) != '') {
+        if($_POST['vlResult'] >= 1000)
+            $vl_result_category = 'not suppressed';
+        else if($_POST['vlResult'] < 1000)
+            $vl_result_category = 'suppressed';
+    }
 
     //echo $reasonForChanges;die;
     $vldata = array(
@@ -129,7 +137,8 @@ try {
         'last_modified_by' => $_SESSION['userId'],
         'last_modified_datetime' => $general->getDateTime(),
         'manual_result_entry' => 'yes',
-        'data_sync' => 0
+        'data_sync' => 0,
+        'vl_result_category' => $vl_result_category
     );
 
     if (isset($_POST['noResult']) && $_POST['noResult'] == 'yes') {

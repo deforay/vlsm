@@ -10,6 +10,7 @@ $general = new \Vlsm\Models\General($db);
 $tableName = "vl_request_form";
 $tableName1 = "activity_log";
 $tableName2 = "log_result_updates";
+$vl_result_category = NULL;
 try {
     //Set sample received date
     if (isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate']) != "") {
@@ -74,7 +75,10 @@ try {
         $textResult = $_POST['vlResult'] = '< 400';
         $_POST['vlLog'] = '';
     }
-
+    if($_POST['vlResult'] >= 1000)
+        $vl_result_category = 'not suppressed';
+    else if($_POST['vlResult'] < 1000)
+        $vl_result_category = 'suppressed';
     //echo "<pre>";var_dump($_POST);die;
 
     $vldata = array(
@@ -88,7 +92,8 @@ try {
         //'result_printed_datetime'=>$_POST['sampleTestingDateAtLab'],
         'last_modified_datetime' => $general->getDateTime(),
         'lab_id' => (isset($_POST['labId']) && $_POST['labId'] != '' ? $_POST['labId'] :  NULL),
-        'data_sync' => 0
+        'data_sync' => 0,
+        'vl_result_category' => $vl_result_category
     );
     if (isset($_POST['status']) && trim($_POST['status']) != '') {
         $vldata['result_status'] = $_POST['status'];

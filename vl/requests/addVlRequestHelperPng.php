@@ -106,14 +106,13 @@ try {
           $_POST['rejectionReason'] = NULL;
      }
      if (isset($_POST['sampleQuality']) && trim($_POST['sampleQuality']) == 'yes') {
+          $vl_result_category = 'rejected';
           $_POST['vlResult'] = NULL;
           $status = 4;
      }
 
      if(isset($_POST['finalViralResult']) &&  $_POST['finalViralResult'] >= 1000)
           $vl_result_category = 'not suppressed';
-     else if(isset($_POST['sampleQuality']) && trim($_POST['sampleQuality']) == 'yes')
-               $vl_result_category = 'rejected';
      else if( isset($_POST['finalViralResult']) &&  $_POST['finalViralResult'] < 1000)
           $vl_result_category = 'suppressed';
      // print_r($_POST['finalViralResult']);die;
