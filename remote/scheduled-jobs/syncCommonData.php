@@ -110,7 +110,6 @@ if (!empty($result['vlArtCodes']) && count($result['vlArtCodes']) > 0) {
             'art_code' => $artCode['art_code'],
             'parent_art' => $artCode['parent_art'],
             'headings' => $artCode['headings'],
-            'nation_identifier' => $artCode['nation_identifier'],
             'art_status' => $artCode['art_status'],
             'data_sync' => 1,
             'updated_datetime' => $artCode['updated_datetime']

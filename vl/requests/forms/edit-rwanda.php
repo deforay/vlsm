@@ -38,9 +38,9 @@ foreach ($pdResult as $provinceName) {
 }
 $facility = $general->generateSelectOptions($healthFacilities, $vlQueryInfo['facility_id'], '-- Select --');
 //regimen heading
-$artRegimenQuery = "SELECT DISTINCT headings FROM r_vl_art_regimen WHERE nation_identifier ='rwd'";
+$artRegimenQuery = "SELECT DISTINCT headings FROM r_vl_art_regimen";
 $artRegimenResult = $db->rawQuery($artRegimenQuery);
-$aQuery = "SELECT * from r_vl_art_regimen where nation_identifier='rwd' AND art_status ='active'";
+$aQuery = "SELECT * from r_vl_art_regimen where art_status ='active'";
 $aResult = $db->query($aQuery);
 //facility details
 if (isset($vlQueryInfo['facility_id']) && $vlQueryInfo['facility_id'] > 0) {

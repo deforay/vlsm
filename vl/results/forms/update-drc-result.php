@@ -31,7 +31,7 @@ if (!isset($provinceResult[0]['province_code'])) {
 }
 
 //get ART list
-$aQuery = "SELECT * from r_vl_art_regimen where nation_identifier='drc'";
+$aQuery = "SELECT * from r_vl_art_regimen";
 $aResult = $db->query($aQuery);
 
 //Set plasma storage temp.
