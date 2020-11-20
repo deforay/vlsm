@@ -18,7 +18,7 @@ if ($sarr['user_type'] == 'remoteuser') {
 }
 $bQuery = "SELECT * FROM batch_details";
 $bResult = $db->rawQuery($bQuery);
-$aQuery = "SELECT * from r_vl_art_regimen where nation_identifier='png'";
+$aQuery = "SELECT * from r_vl_art_regimen";
 $aResult = $db->query($aQuery);
 
 $pdResult = $db->query($pdQuery);

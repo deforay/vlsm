@@ -83,7 +83,6 @@ try {
         $data = array(
             'art_code' => $_POST['newArtRegimen'],
             'parent_art' => 3,
-            'nation_identifier' => 'drc',
             'updated_datetime' => $general->getDateTime(),
         );
 

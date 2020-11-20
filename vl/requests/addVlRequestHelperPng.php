@@ -90,8 +90,7 @@ try {
      if (isset($_POST['newArtRegimen']) && trim($_POST['newArtRegimen']) != "") {
           $data = array(
                'art_code' => $_POST['newArtRegimen'],
-               'parent_art' => '5',
-               'nation_identifier' => 'png'
+               'parent_art' => '5'
           );
           $result = $db->insert('r_vl_art_regimen', $data);
           $_POST['currentRegimen'] = $_POST['newArtRegimen'];
