@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
   session_start();
 }
 
-$c19Model = new \Vlsm\Models\Covid19($db);
+$hepatitisModel = new \Vlsm\Models\Hepatitis($db);
 
 $sampleCollectionDate = $province = '';
 
@@ -27,4 +27,4 @@ if (isset($_POST['sampleFrom'])) {
 }
 
 
-echo $c19Model->generateCovid19SampleCode($province, $sampleCollectionDate, $sampleFrom);
+echo $hepatitisModel->generateHepatitisSampleCode($province, $sampleCollectionDate, $sampleFrom);

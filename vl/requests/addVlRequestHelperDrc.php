@@ -9,6 +9,7 @@ ob_start();
 $general = new \Vlsm\Models\General($db);
 $tableName = "vl_request_form";
 $tableName1 = "activity_log";
+$vl_result_category = NULL;
 try {
     //system config
     $systemConfigQuery = "SELECT * from system_config";
@@ -241,6 +242,10 @@ try {
         $_POST['vlLog'] = '';
     }
 
+    if($_POST['vlResult'] >= 1000)
+        $vl_result_category = 'not suppressed';
+    else if($_POST['vlResult'] < 1000)
+        $vl_result_category = 'suppressed';
 
     $vldata = array(
         'vlsm_instance_id' => $instanceId,
@@ -294,8 +299,10 @@ try {
         'request_created_by' => $_SESSION['userId'],
         'request_created_datetime' => $general->getDateTime(),
         'last_modified_by' => $_SESSION['userId'],
-        'last_modified_datetime' => $general->getDateTime()
+        'last_modified_datetime' => $general->getDateTime(),
+        'vl_result_category' => $vl_result_category
     );
+    // print_r($vldata);die;
     $lock = $general->getGlobalConfig('lock_approved_vl_samples');
     if($_POST['status'] == 7 && $lock == 'yes'){
         $vldata['locked'] = 'yes';

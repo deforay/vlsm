@@ -24,14 +24,14 @@ if ($value != '') {
         $parameters = array($value);
         $result = $db->rawQuery($sQuery, $parameters);
         if ($result) {
-            $data = base64_encode($result[0]['covid19_id']) . "##" . $result[0][$fieldName];
+            $data = base64_encode($result[0]['hepatitis_id']) . "##" . $result[0][$fieldName];
         } else {
             if ($sarr['user_type'] == 'vluser') {
                 $sQuery = "SELECT * FROM $tableName WHERE remote_sample_code= ?";
                 $parameters = array($value);
                 $result = $db->rawQuery($sQuery, $parameters);
                 if ($result) {
-                    $data = base64_encode($result[0]['covid19_id']) . "##" . $result[0]['remote_sample_code'];
+                    $data = base64_encode($result[0]['hepatitis_id']) . "##" . $result[0]['remote_sample_code'];
                 } else {
                     $data = 0;
                 }
@@ -46,14 +46,14 @@ if ($value != '') {
             $parameters = array($value, $table[1]);
             $result = $db->rawQuery($sQuery, $parameters);
             if ($result) {
-                $data = base64_encode($result[0]['covid19_id']) . "##" . $result[0][$fieldName];
+                $data = base64_encode($result[0]['hepatitis_id']) . "##" . $result[0][$fieldName];
             } else {
                 if ($sarr['user_type'] == 'vluser') {
                     $sQuery = "SELECT * FROM $tableName where remote_sample_code= ? and $table[0]!= ?";
                     $parameters = array($value, $table[1]);
                     $result = $db->rawQuery($sQuery, $parameters);
                     if ($result) {
-                        $data = base64_encode($result[0]['covid19_id']) . "##" . $result[0]['remote_sample_code'];
+                        $data = base64_encode($result[0]['hepatitis_id']) . "##" . $result[0]['remote_sample_code'];
                     } else {
                         $data = 0;
                     }

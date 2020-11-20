@@ -9,6 +9,7 @@ $general = new \Vlsm\Models\General($db);
 $tableName = "vl_request_form";
 $tableName1 = "activity_log";
 $vlTestReasonTable = "r_vl_test_reasons";
+$vl_result_category = NULL;
 try {
      $validateField = array($_POST['sampleCode'], $_POST['collectionDate']);
      $chkValidation = $general->checkMandatoryFields($validateField);
@@ -112,6 +113,7 @@ try {
           $_POST['rejectionReason'] = NULL;
      }
      if (isset($_POST['sampleQuality']) && trim($_POST['sampleQuality']) == 'yes') {
+          $vl_result_category = 'rejected';
           $_POST['vlResult'] = NULL;
      }
 
@@ -143,7 +145,10 @@ try {
      if (empty($_POST['status'])) {
           $_POST['status']  = $_POST['oldStatus'];
      }
-
+     if(isset($_POST['finalViralResult']) &&  $_POST['finalViralResult'] >= 1000)
+          $vl_result_category = 'not suppressed';
+     else if( isset($_POST['finalViralResult']) &&  $_POST['finalViralResult'] < 1000)
+          $vl_result_category = 'suppressed';
      $vldata = array(
           //'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
           'facility_id' => (isset($_POST['clinicName']) && trim($_POST['clinicName']) != '') ? $_POST['clinicName'] : NULL,
@@ -205,7 +210,8 @@ try {
           'report_date' => $_POST['reportDate'],
           'last_modified_by' => $_SESSION['userId'],
           'last_modified_datetime' => $general->getDateTime(),
-          'data_sync' => 0
+          'data_sync' => 0,
+          'vl_result_category' => $vl_result_category
      );
      $lock = $general->getGlobalConfig('lock_approved_vl_samples');
      if($_POST['status'] == 7 && $lock == 'yes'){
