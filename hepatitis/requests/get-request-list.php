@@ -238,7 +238,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
                $sQuery = $sQuery." ORDER BY ".$sOrder;
           }
-          $_SESSION['covid19RequestSearchResultQuery'] = $sQuery;
+          $_SESSION['hepatitisRequestSearchResultQuery'] = $sQuery;
           if (isset($sLimit) && isset($sOffset)) {
                $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
           }
@@ -295,7 +295,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
 
                $row = array();
 
-               //$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['$primaryKey'] . '"  value="' . $aRow['$primaryKey'] . '" onclick="toggleTest(this);"  />';
+               //$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow[$primaryKey] . '"  value="' . $aRow[$primaryKey] . '" onclick="toggleTest(this);"  />';
                $row[] = $aRow['sample_code'];
                if($sarr['user_type']!='standalone'){
                     $row[] = $aRow['remote_sample_code'];
@@ -311,11 +311,11 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                $row[] = ucwords($aRow['result']);
                $row[] = $aRow['last_modified_datetime'];
                $row[] = ucwords($aRow['status_name']);
-               //$printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="printBarcode(\''.base64_encode($aRow['$primaryKey']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
-               //$enterResult='<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['$primaryKey']) . '\',900,520);"> Result</a>';
+               //$printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="printBarcode(\''.base64_encode($aRow[$primaryKey]).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
+               //$enterResult='<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow[$primaryKey]) . '\',900,520);"> Result</a>';
                
                if($editRequest){
-                    $edit='<a href="hepatitis-edit-request.php?id=' . base64_encode($aRow['$primaryKey']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
+                    $edit='<a href="hepatitis-edit-request.php?id=' . base64_encode($aRow[$primaryKey]) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
                     if($aRow['result_status'] == 7 && $aRow['locked'] == 'yes'){
                          if( isset($_SESSION['privileges']) && !in_array("edit-locked-hepatitis-samples", $_SESSION['privileges'])){
                               $edit = '<a href="javascript:void(0);" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Locked" disabled><i class="fa fa-lock"> Locked</i></a>';
@@ -324,7 +324,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                }
                
                if($viewRequest){
-                    $view = '<a href="hepatitis-view-request.php?id=' . base64_encode($aRow['$primaryKey']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
+                    $view = '<a href="hepatitis-view-request.php?id=' . base64_encode($aRow[$primaryKey]) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
                }
 
                if(isset($gconfig['bar_code_printing']) && $gconfig['bar_code_printing'] != "off"){

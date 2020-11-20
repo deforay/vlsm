@@ -1908,3 +1908,46 @@ ALTER TABLE `eid_form` ADD `previous_pcr_result` VARCHAR(255) NULL DEFAULT NULL 
 
 UPDATE `system_config` SET `value` = '4.2.6' WHERE `system_config`.`name` = 'version';
 -- Version 4.2.6 -- Amit -- 12-Nov-2020
+
+-- Thana 17-Nov-2020
+CREATE TABLE `r_hepatitis_comorbidities` (
+ `comorbidity_id` int NOT NULL AUTO_INCREMENT,
+ `comorbidity_name` varchar(255) DEFAULT NULL,
+ `comorbidity_status` varchar(45) DEFAULT NULL,
+ `updated_datetime` datetime DEFAULT NULL,
+ PRIMARY KEY (`comorbidity_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `r_hepatitis_rick_factors` (
+ `riskfactor_id` int NOT NULL AUTO_INCREMENT,
+ `riskfactor_name` varchar(255) DEFAULT NULL,
+ `riskfactor_status` varchar(45) DEFAULT NULL,
+ `updated_datetime` datetime DEFAULT NULL,
+ PRIMARY KEY (`riskfactor_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+INSERT INTO `r_hepatitis_comorbidities` (`comorbidity_id`, `comorbidity_name`, `comorbidity_status`, `updated_datetime`) VALUES (NULL, 'Diabetes', 'active', '2020-11-17 16:32:11'), (NULL, 'Chronic renal failure', 'active', '2020-11-17 16:32:11'), (NULL, 'Cancer', 'active', '2020-11-17 16:32:11'), (NULL, 'HIV infection', 'active', '2020-11-17 16:32:11'), (NULL, 'Cardiovascular disease', 'active', '2020-11-17 16:32:11'), (NULL, 'HPV', 'active', '2020-11-17 16:32:11');
+
+INSERT INTO `r_hepatitis_rick_factors` (`riskfactor_id`, `riskfactor_name`, `riskfactor_status`, `updated_datetime`) VALUES (NULL, 'Ever diagnosed with a liver disease', 'active', '2020-11-17 16:35:09'), (NULL, 'Viral hepatitis in the family', 'active', '2020-11-17 16:35:09'), (NULL, 'Ever been operated', 'active', '2020-11-17 16:35:09'), (NULL, 'Ever been traditionally operated (ibyinyo, ibirimi, indasago, scarification, tattoo)', 'active', '2020-11-17 16:35:09'), (NULL, 'Ever been transfused', 'active', '2020-11-17 16:35:09'), (NULL, 'Having more than one sexually partner', 'active', '2020-11-17 16:35:09'), (NULL, 'Ever experienced a physical trauma', 'active', '2020-11-17 16:35:09');
+
+CREATE TABLE `hepatitis_patient_comorbidities` (
+ `hepatitis_id` int NOT NULL,
+ `comorbidity_id` int NOT NULL,
+ `comorbidity_detected` varchar(255) NOT NULL,
+ PRIMARY KEY (`hepatitis_id`,`comorbidity_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `hepatitis_risk_factors` (
+ `hepatitis_id` int NOT NULL,
+ `riskfactors_id` int NOT NULL,
+ `riskfactors_detected` varchar(255) NOT NULL,
+ PRIMARY KEY (`hepatitis_id`,`riskfactors_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `global_config` (`display_name`, `name`, `value`, `category`, `remote_sync_needed`, `updated_on`, `updated_by`, `status`) VALUES ('Hepatitis Sample Code Format', 'hepatitis_sample_code', 'MMYY', 'hepatitis', 'yes', '2020-11-17 18:47:05', NULL, 'active'), ('Hepatitis Sample Code Prefix', 'hepatitis_sample_code_prefix', 'VLHEP', 'hepatitis', 'yes', '2020-11-17 18:47:05', NULL, 'active');
+
+-- Thana 19-Nov-2020
+ALTER TABLE `form_hepatitis` ADD `hbv_vaccination` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_insurance` ADD `vl_testing_site` VARCHAR(255) NULL DEFAULT NULL AFTER `hbv_vl_count`;
+ALTER TABLE `health_facilities` CHANGE `test_type` `test_type` ENUM('vl','eid','covid19','hepatitis') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+INSERT INTO `resources` (`resource_id`, `module`, `display_name`) VALUES ('hepatitis-results', 'hepatitis', 'Hepatitis Results Management');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'hepatitis-results', 'hepatitis-manual-results.php', 'Enter Result Manually');

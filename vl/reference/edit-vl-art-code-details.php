@@ -7,21 +7,28 @@ $artId = base64_decode($_GET['id']);
 $artQ = "SELECT * FROM `r_vl_art_regimen` WHERE art_id = $artId";
 $result = $db->query($artQ);
 $artResult = $result[0];
-
+$artParent = array();
 $artQuery = "SELECT DISTINCT art_code, art_id FROM `r_vl_art_regimen` WHERE parent_art = 0 AND art_id != $artId";
 $artInfo = $db->query($artQuery);
 foreach($artInfo as $art){
     $artParent[$art['art_id']] = $art['art_code'];
+}
+
+$categoryQuery = "SELECT DISTINCT headings FROM `r_vl_art_regimen` GROUP BY headings";
+$categoryInfo = $db->query($categoryQuery);
+$categoryData = array();
+foreach($categoryInfo as $category){
+    $categoryData[$category['headings']] = ucwords($category['headings']);
 }
 ?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<h1><i class="fa fa-gears"></i> Edit Viral Load Art Code Details</h1>
+		<h1><i class="fa fa-gears"></i> Edit Viral Load ART Regimen</h1>
 		<ol class="breadcrumb">
 			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-			<li class="active">Viral Load Art Code Details</li>
+			<li class="active">Viral Load ART Regimen</li>
 		</ol>
 	</section>
 
@@ -39,7 +46,7 @@ foreach($artInfo as $art){
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
-									<label for="artCode" class="col-lg-4 control-label">Art Code <span class="mandatory">*</span></label>
+									<label for="artCode" class="col-lg-4 control-label">ART Code <span class="mandatory">*</span></label>
 									<div class="col-lg-7">
 										<input type="text" value="<?php echo $artResult['art_code'];?>" class="form-control isRequired" id="artCode" name="artCode" placeholder="Enter art code" title="Please enter art code" onblur="checkNameValidation('r_vl_art_regimen','art_code',this,'<?php echo "art_id##" . $id; ?>','This art code that you entered already exists.Try another art code',null)"/>
 									</div>
@@ -47,9 +54,12 @@ foreach($artInfo as $art){
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									<label for="heading" class="col-lg-4 control-label">Headings <span class="mandatory">*</span></label>
+									<label for="category" class="col-lg-4 control-label">Category <span class="mandatory">*</span></label>
 									<div class="col-lg-7">
-										<input type="text" value="<?php echo $artResult['headings'];?>" class="form-control isRequired" id="heading" name="heading" placeholder="Enter heading" title="Please enter heading" />
+										<select class="form-control select2" id="category" name="category" placeholder="Select category" title="Please select category">
+											<?= $general->generateSelectOptions($categoryData, $artResult['headings'], '-- Select --'); ?>
+											</select>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -57,7 +67,7 @@ foreach($artInfo as $art){
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
-									<label for="parentArtCode" class="col-lg-4 control-label">Parent Art Code</label>
+									<label for="parentArtCode" class="col-lg-4 control-label">Parent ART Code</label>
 									<div class="col-lg-7">
 										<select class="form-control select2" id="parentArtCode" name="parentArtCode" placeholder="Select parent art code" title="Please select parent art code">
                                             <?= $general->generateSelectOptions($artParent, $artResult['parent_art'], '-- Select --'); ?>

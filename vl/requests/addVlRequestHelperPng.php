@@ -10,6 +10,7 @@ $general = new \Vlsm\Models\General($db);
 $tableName = "vl_request_form";
 $tableName1 = "activity_log";
 $vlTestReasonTable = "r_vl_test_reasons";
+$vl_result_category = NULL;
 try {
      //system config
      $systemConfigQuery = "SELECT * from system_config";
@@ -100,14 +101,21 @@ try {
      if ($sarr['user_type'] == 'remoteuser') {
           $status = 9;
      }
-
+     
      if (isset($_POST['sampleQuality']) && trim($_POST['sampleQuality']) == 'no') {
           $_POST['rejectionReason'] = NULL;
      }
      if (isset($_POST['sampleQuality']) && trim($_POST['sampleQuality']) == 'yes') {
+          $vl_result_category = 'rejected';
           $_POST['vlResult'] = NULL;
           $status = 4;
      }
+
+     if(isset($_POST['finalViralResult']) &&  $_POST['finalViralResult'] >= 1000)
+          $vl_result_category = 'not suppressed';
+     else if( isset($_POST['finalViralResult']) &&  $_POST['finalViralResult'] < 1000)
+          $vl_result_category = 'suppressed';
+     // print_r($_POST['finalViralResult']);die;
      $reasonForTestField = NULL;
      if (isset($_POST['reasonForTest']) && $_POST['reasonForTest'] != '') {
 
@@ -197,8 +205,10 @@ try {
           'request_created_datetime' => $general->getDateTime(),
           'last_modified_by' => $_SESSION['userId'],
           'last_modified_datetime' => $general->getDateTime(),
-          'data_sync' => 0
+          'data_sync' => 0,
+          'vl_result_category' => $vl_result_category
      );
+     // print_r($vldata);die;
      $lock = $general->getGlobalConfig('lock_approved_vl_samples');
      if($status == 7  && $lock == 'yes'){
           $vldata['locked'] = 'yes';
