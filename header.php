@@ -505,7 +505,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 
 										<ul class="treeview-menu">
 											<li class="allMenu vl-art-code-details">
-												<a href="/vl/reference/vl-art-code-details.php"><i class="fa fa-caret-right"></i>Art Code Details</a>
+												<a href="/vl/reference/vl-art-code-details.php"><i class="fa fa-caret-right"></i>ART Regimen</a>
 											</li>
 											<li class="allMenu vl-sample-rejection-reasons">
 												<a href="/vl/reference/vl-sample-rejection-reasons.php"><i class="fa fa-caret-right"></i>Rejection Reasons</a>

@@ -114,9 +114,7 @@ try {
                     } else if (strpos($sheetData[$resultCol], 'Copies') !== false) {
                         if (strpos($sheetData[$resultCol], '<') !== false || $sheetData[$resultCol] == '839 Copies / mL') {
                             $txtVal = "Below Detection Level";
-                            $resultFlag = "";
-                            $absVal = "";
-                            $logVal = "";
+                            $logVal = $absDecimalVal = $absVal = $resultFlag = "";
                         } else {
                             $absVal = $absDecimalVal = abs((int) filter_var($sheetData[$resultCol], FILTER_SANITIZE_NUMBER_INT));
                         }
@@ -191,9 +189,9 @@ try {
                             "lotExpirationDate" => $lotExpirationDateVal,
                         );
                     } else {
-                        if (isset($logVal) && trim($logVal) != "") {
-                            $infoFromFile[$sampleCode]['logVal'] = trim($logVal);
-                        }
+                        // if (isset($logVal) && trim($logVal) != "") {
+                        //     $infoFromFile[$sampleCode]['logVal'] = trim($logVal);
+                        // }
                     }
 
                     $m++;
