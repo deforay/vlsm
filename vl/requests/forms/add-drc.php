@@ -38,7 +38,7 @@ foreach ($pdResult as $provinceName) {
 $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélectionner --');
 
 //get ART list
-$aQuery = "SELECT * from r_vl_art_regimen"; // where nation_identifier='drc'";
+$aQuery = "SELECT * from r_vl_art_regimen";
 $aResult = $db->query($aQuery);
 
 $sKey = '';

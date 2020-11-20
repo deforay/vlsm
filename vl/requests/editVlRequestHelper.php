@@ -70,12 +70,11 @@ try {
      }
 
      if (isset($_POST['newArtRegimen']) && trim($_POST['newArtRegimen']) != "") {
-          $artQuery = "SELECT art_id,art_code FROM r_vl_art_regimen where (art_code='" . $_POST['newArtRegimen'] . "' OR art_code='" . strtolower($_POST['newArtRegimen']) . "' OR art_code='" . ucfirst(strtolower($_POST['newArtRegimen'])) . "') AND nation_identifier='sudan'";
+          $artQuery = "SELECT art_id,art_code FROM r_vl_art_regimen where (art_code='" . $_POST['newArtRegimen'] . "' OR art_code='" . strtolower($_POST['newArtRegimen']) . "' OR art_code='" . ucfirst(strtolower($_POST['newArtRegimen'])) . "')";
           $artResult = $db->rawQuery($artQuery);
           if (!isset($artResult[0]['art_id'])) {
                $data = array(
                     'art_code' => $_POST['newArtRegimen'],
-                    'nation_identifier' => 'sudan',
                     'parent_art' => '1',
                     'updated_datetime' => $general->getDateTime(),
                );

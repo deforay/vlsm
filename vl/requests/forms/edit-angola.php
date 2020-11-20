@@ -1,6 +1,6 @@
 <?php
 ob_start();
-$artRegimenQuery = "SELECT DISTINCT headings FROM r_vl_art_regimen WHERE nation_identifier ='ang'";
+$artRegimenQuery = "SELECT DISTINCT headings FROM r_vl_art_regimen";
 $artRegimenResult = $db->rawQuery($artRegimenQuery);
 //check remote user
 $pdQuery = "SELECT * FROM province_details";
@@ -39,7 +39,7 @@ if (!isset($provinceResult[0]['province_code']) || $provinceResult[0]['province_
   $provinceResult[0]['province_code'] = '';
 }
 //get ART list
-$aQuery = "SELECT * from r_vl_art_regimen"; // where nation_identifier='drc'";
+$aQuery = "SELECT * from r_vl_art_regimen";";
 $aResult = $db->query($aQuery);
 $start_date = date('Y-m-01');
 $end_date = date('Y-m-31');
