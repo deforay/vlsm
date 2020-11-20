@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 ob_start();
 #require_once('../../startup.php');
-
+require_once('../vlfunction.php');
 //echo "<pre>";var_dump($_POST);die;
 $general = new \Vlsm\Models\General($db);
 $tableName = "vl_request_form";
@@ -251,10 +251,7 @@ try {
         }
     }
     if (isset($_POST['approvedBy']) && trim($_POST['approvedBy']) != '') {
-        if($_POST['vlResult'] >= 1000)
-            $vl_result_category = 'not suppressed';
-        else if($_POST['vlResult'] < 1000)
-            $vl_result_category = 'suppressed';
+        $vl_result_category = resultCategory($_POST['vlResult']);
     }
 
     $vldata = array(

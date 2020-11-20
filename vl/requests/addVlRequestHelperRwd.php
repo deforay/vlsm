@@ -5,7 +5,7 @@ if (session_status() == PHP_SESSION_NONE) {
 ob_start();
 #require_once('../../startup.php');  
 
-
+require_once('../vlfunction.php');
 $general = new \Vlsm\Models\General($db);
 $tableName = "vl_request_form";
 $tableName1 = "activity_log";
@@ -178,10 +178,7 @@ try {
     }
     
     if (isset($_POST['approvedBy']) && trim($_POST['approvedBy']) != '') {
-        if($_POST['vlResult'] >= 1000)
-            $vl_result_category = 'not suppressed';
-        else if($_POST['vlResult'] < 1000)
-            $vl_result_category = 'suppressed';
+        $vl_result_category = resultCategory($_POST['vlResult']);
     }
 
     if ($sarr['user_type'] == 'remoteuser') {
@@ -191,6 +188,7 @@ try {
         $sampleCode = 'sample_code';
         $sampleCodeKey = 'sample_code_key';
     }
+    // print_r($vl_result_category);die;
     //Indication for Viral Load Testing
     $rmVLValue = NULL;
     if (isset($_POST['stViralTesting']) && $_POST['stViralTesting'] == 'routine') {
