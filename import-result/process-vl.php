@@ -138,12 +138,12 @@ try {
                         $data['is_sample_rejected'] = 'no';
                         $data['reason_for_sample_rejection'] = null;
 
-                        if ($rResult[0]['result_value_absolute'] != '') {
+                        if (!empty(trim($rResult[0]['result_value_text'])) && $rResult[0]['result_value_text'] != '') {
+                            $data['result'] = $rResult[0]['result_value_text'];
+                        } else if ($rResult[0]['result_value_absolute'] != '') {
                             $data['result'] = $rResult[0]['result_value_absolute'];
                         } else if ($rResult[0]['result_value_log'] != '') {
                             $data['result'] = $rResult[0]['result_value_log'];
-                        } else if ($rResult[0]['result_value_text'] != '') {
-                            $data['result'] = $rResult[0]['result_value_text'];
                         }
                     }
                     //get bacth code
@@ -232,12 +232,12 @@ try {
                 $data['is_sample_rejected'] = 'no';
                 $data['reason_for_sample_rejection'] = null;
 
-                if ($accResult[$i]['result_value_absolute'] != '') {
+                if (!empty(trim($accResult[$i]['result_value_text'])) && $accResult[$i]['result_value_text'] != '') {
+                    $data['result'] = trim($accResult[$i]['result_value_text']);
+                } else if ($accResult[$i]['result_value_absolute'] != '') {
                     $data['result'] = $accResult[$i]['result_value_absolute'];
                 } else if ($accResult[$i]['result_value_log'] != '') {
                     $data['result'] = $accResult[$i]['result_value_log'];
-                } else if ($accResult[$i]['result_value_text'] != '') {
-                    $data['result'] = $accResult[$i]['result_value_text'];
                 }
             }
             //get bacth code

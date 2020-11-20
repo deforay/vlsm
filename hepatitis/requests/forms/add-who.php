@@ -205,7 +205,7 @@ foreach ($fResult as $fDetails) {
                                     <tr>
                                         <th><label for="patientGender">Marital Status</label></th>
                                         <td>
-                                            <select class="form-control isRequired" name="patientGender" id="patientGender">
+                                            <select class="form-control isRequired" name="maritalStatus" id="maritalStatus">
                                                 <option value=''> -- Select -- </option>
                                                 <option value='married'> Married </option>
                                                 <option value='single'> Single </option>
@@ -217,7 +217,7 @@ foreach ($fResult as $fDetails) {
                                         </td>
                                         <th><label for="patientGender">Insurance</label></th>
                                         <td>
-                                            <select class="form-control isRequired" name="patientGender" id="patientGender">
+                                            <select class="form-control isRequired" name="insurance" id="insurance">
                                                 <option value=''> -- Select -- </option>
                                                 <option value='mutuelle'> Mutuelle </option>
                                                 <option value='RAMA'> RAMA </option>
