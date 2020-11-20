@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 ob_start();
 #require_once('../../startup.php');
-require_once('../Vl.php');
+
 
 $general = new \Vlsm\Models\General($db);
 $tableName = "vl_request_form";
@@ -111,7 +111,8 @@ try {
           $status = 4;
      }
 
-     $vl_result_category = resultCategory($_POST['finalViralResult']);
+     $vlObj = new \Vlsm\Models\Vl($db);
+     $vl_result_category = $vlObj->vlResultCategory($_POST['finalViralResult']);
      // print_r($_POST['finalViralResult']);die;
      $reasonForTestField = NULL;
      if (isset($_POST['reasonForTest']) && $_POST['reasonForTest'] != '') {

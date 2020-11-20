@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 ob_start();
 #require_once('../../startup.php');
-require_once('../Vl.php');
+
 
 $general = new \Vlsm\Models\General($db);
 $tableName = "vl_request_form";
@@ -217,7 +217,8 @@ try {
         $_POST['vlLog'] = '';
     }
 
-    $vl_result_category = resultCategory($_POST['vlResult']);
+    $vlObj = new \Vlsm\Models\Vl($db);
+    $vl_result_category = $vlObj->vlResultCategory($_POST['vlResult']);
 
     $vldata = array(
         'facility_id' => $_POST['clinicName'],

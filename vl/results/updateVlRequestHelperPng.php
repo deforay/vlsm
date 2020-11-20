@@ -4,7 +4,6 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 ob_start();
 #require_once('../../startup.php');
-require_once('../Vl.php');
 
 $general = new \Vlsm\Models\General($db);
 $tableName = "vl_request_form";
@@ -70,7 +69,8 @@ try {
         $vl_result_category = 'rejected';
         $_POST['vlResult'] = NULL;
     }
-          $vl_result_category = resultCategory($_POST['vlResult']);
+          $vlObj = new \Vlsm\Models\Vl($db);
+        $vl_result_category = $vlObj->vlResultCategory($_POST['vlResult']);
     $vldata = array(
         'is_sample_rejected' => (isset($_POST['sampleQuality']) && $_POST['sampleQuality'] != '') ? $_POST['sampleQuality'] : NULL,
         'reason_for_sample_rejection' => (isset($_POST['rejectionReason']) && $_POST['rejectionReason'] != '') ? $_POST['rejectionReason'] : NULL,
