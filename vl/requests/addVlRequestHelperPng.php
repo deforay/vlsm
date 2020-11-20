@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 ob_start();
 #require_once('../../startup.php');
-
+require_once('../vlfunction.php');
 
 $general = new \Vlsm\Models\General($db);
 $tableName = "vl_request_form";
@@ -111,10 +111,7 @@ try {
           $status = 4;
      }
 
-     if(isset($_POST['finalViralResult']) &&  $_POST['finalViralResult'] >= 1000)
-          $vl_result_category = 'not suppressed';
-     else if( isset($_POST['finalViralResult']) &&  $_POST['finalViralResult'] < 1000)
-          $vl_result_category = 'suppressed';
+     $vl_result_category = resultCategory($_POST['finalViralResult']);
      // print_r($_POST['finalViralResult']);die;
      $reasonForTestField = NULL;
      if (isset($_POST['reasonForTest']) && $_POST['reasonForTest'] != '') {
