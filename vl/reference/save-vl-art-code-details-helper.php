@@ -10,7 +10,7 @@ $general = new \Vlsm\Models\General($db);
 
 $tableName = "r_vl_art_regimen";
 $primaryKey = "art_id";
-
+// echo "<pre>";print_r($_POST);die;
 try {
 	if (isset($_POST['artCode']) && trim($_POST['artCode']) != "") {
 
@@ -18,7 +18,7 @@ try {
 		$data = array(
 			'art_code'          => $_POST['artCode'],
 			'parent_art'        => (isset($_POST['parentArtCode']) && $_POST['parentArtCode'] != "")?$_POST['parentArtCode']:0,
-			'headings'          => $_POST['heading'],
+			'headings'          => $_POST['category'],
 			'art_status'        => $_POST['artStatus'],
 			'updated_datetime'  => $general->getDateTime()
 		);

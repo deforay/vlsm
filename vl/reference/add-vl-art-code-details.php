@@ -4,9 +4,16 @@ ob_start();
 include_once(APPLICATION_PATH . '/header.php');
 $artQuery = "SELECT DISTINCT art_code, art_id FROM `r_vl_art_regimen` WHERE parent_art = 0";
 $artInfo = $db->query($artQuery);
-
+$artParent = array();
 foreach($artInfo as $art){
-    $artParent[$art['art_id']] = $art['art_code'];
+	$artParent[$art['art_id']] = $art['art_code'];
+}
+
+$categoryQuery = "SELECT DISTINCT headings FROM `r_vl_art_regimen` GROUP BY headings";
+$categoryInfo = $db->query($categoryQuery);
+$categoryData = array();
+foreach($categoryInfo as $category){
+    $categoryData[$category['headings']] = ucwords($category['headings']);
 }
 ?>
 <!-- Content Wrapper. Contains page content -->
@@ -43,9 +50,12 @@ foreach($artInfo as $art){
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									<label for="heading" class="col-lg-4 control-label">Headings <span class="mandatory">*</span></label>
+									<label for="category" class="col-lg-4 control-label">Category <span class="mandatory">*</span></label>
 									<div class="col-lg-7">
-										<input type="text" class="form-control isRequired" id="heading" name="heading" placeholder="Enter heading" title="Please enter heading" />
+										<select class="form-control select2" id="category" name="category" placeholder="Select category" title="Please select category">
+											<?= $general->generateSelectOptions($categoryData, null, '-- Select --'); ?>
+											</select>
+										</div>
 									</div>
 								</div>
 							</div>
