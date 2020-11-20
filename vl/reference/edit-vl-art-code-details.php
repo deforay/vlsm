@@ -48,7 +48,7 @@ foreach($categoryInfo as $category){
 								<div class="form-group">
 									<label for="artCode" class="col-lg-4 control-label">ART Code <span class="mandatory">*</span></label>
 									<div class="col-lg-7">
-										<input type="text" value="<?php echo $artResult['art_code'];?>" class="form-control isRequired" id="artCode" name="artCode" placeholder="Enter art code" title="Please enter art code" onblur="checkNameValidation('r_vl_art_regimen','art_code',this,'<?php echo "art_id##" . $id; ?>','This art code that you entered already exists.Try another art code',null)"/>
+										<input type="text" value="<?php echo $artResult['art_code'];?>" class="form-control isRequired" id="artCode" name="artCode" placeholder="Enter art code" title="Please enter art code" onblur="checkNameValidation('r_vl_art_regimen','art_code',this,'<?php echo "art_id##" . $artId; ?>','This art code that you entered already exists.Try another art code',null)"/>
 									</div>
 								</div>
 							</div>
