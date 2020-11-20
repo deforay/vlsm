@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 ob_start();
 #require_once('../../startup.php');
-require_once('../Vl.php');
+
 $general = new \Vlsm\Models\General($db);
 $tableName = "vl_request_form";
 $tableName1 = "activity_log";
@@ -145,7 +145,8 @@ try {
      if (empty($_POST['status'])) {
           $_POST['status']  = $_POST['oldStatus'];
      }
-     $vl_result_category = resultCategory($_POST['finalViralResult']);
+     $vlObj = new \Vlsm\Models\Vl($db);
+        $vl_result_category = $vlObj->vlResultCategory($_POST['finalViralResult']);
      $vldata = array(
           //'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
           'facility_id' => (isset($_POST['clinicName']) && trim($_POST['clinicName']) != '') ? $_POST['clinicName'] : NULL,
