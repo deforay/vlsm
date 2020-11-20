@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 ob_start();
 #require_once('../../startup.php');
-
+require_once('../vlfunction.php');
 
 $general = new \Vlsm\Models\General($db);
 $tableName = "vl_request_form";
@@ -70,10 +70,7 @@ try {
         $vl_result_category = 'rejected';
         $_POST['vlResult'] = NULL;
     }
-        if(isset($_POST['vlResult']) &&  $_POST['vlResult'] >= 1000)
-          $vl_result_category = 'not suppressed';
-     else if( isset($_POST['vlResult']) &&  $_POST['vlResult'] < 1000)
-          $vl_result_category = 'suppressed';
+          $vl_result_category = resultCategory($_POST['vlResult']);
     $vldata = array(
         'is_sample_rejected' => (isset($_POST['sampleQuality']) && $_POST['sampleQuality'] != '') ? $_POST['sampleQuality'] : NULL,
         'reason_for_sample_rejection' => (isset($_POST['rejectionReason']) && $_POST['rejectionReason'] != '') ? $_POST['rejectionReason'] : NULL,
