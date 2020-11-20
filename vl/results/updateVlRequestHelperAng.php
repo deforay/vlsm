@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 ob_start();
 #require_once('../../startup.php');
-
+require_once('../vlfunction.php');
 
 $general = new \Vlsm\Models\General($db);
 $tableName = "vl_request_form";
@@ -91,10 +91,7 @@ try {
         $allChange =  $reasonForChanges;
     }
     if (isset($_POST['approvedBy']) && trim($_POST['approvedBy']) != '') {
-        if($_POST['vlResult'] >= 1000)
-        $vl_result_category = 'not suppressed';
-        else if($_POST['vlResult'] < 1000)
-        $vl_result_category = 'suppressed';
+        $vl_result_category = resultCategory($_POST['vlResult']);
    }
     $vldata = array(
         'lab_id' => (isset($_POST['labId']) && $_POST['labId'] != '') ? $_POST['labId'] :  NULL,
