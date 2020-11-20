@@ -35,7 +35,7 @@ $importQuery = "SELECT * FROM import_config WHERE status = 'active'";
 $importResult = $db->query($importQuery);
 
 
-$aQuery = "SELECT * from r_vl_art_regimen where nation_identifier='png'";
+$aQuery = "SELECT * from r_vl_art_regimen";
 $aResult = $db->query($aQuery);
 
 $sQuery = "SELECT * from r_vl_sample_type where status='active'";
