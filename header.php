@@ -122,6 +122,7 @@ $sharedPrivileges = array(
 	'funding-sources.php'						=> 'province-details.php',
 	'add-funding-sources.php'					=> 'province-details.php',
 	'edit-funding-sources.php'					=> 'province-details.php',
+	'hepatitis-update-result.php'       		=> 'hepatitis-manual-results.php',
 );
 // Does the current file share privileges with another privilege ?
 $currentFileName = isset($sharedPrivileges[$currentFileName]) ? $sharedPrivileges[$currentFileName] : $currentFileName;
@@ -216,6 +217,12 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 	$hepatitisTestRequestMenuAccess = true;
 } else {
 	$hepatitisTestRequestMenuAccess = false;
+}
+
+if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array("addImportResult.php", "hepatitis-manual-results.php", "hepatitis-result-status.php", "hepatitis-print-results.php",))) {
+	$hepatitisTestResultMenuAccess = true;
+} else {
+	$hepatitisTestResultMenuAccess = false;
 }
 // HEPATITIS Menu end
 
@@ -505,7 +512,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 
 										<ul class="treeview-menu">
 											<li class="allMenu vl-art-code-details">
-												<a href="/vl/reference/vl-art-code-details.php"><i class="fa fa-caret-right"></i>Art Code Details</a>
+												<a href="/vl/reference/vl-art-code-details.php"><i class="fa fa-caret-right"></i>ART Regimen</a>
 											</li>
 											<li class="allMenu vl-sample-rejection-reasons">
 												<a href="/vl/reference/vl-sample-rejection-reasons.php"><i class="fa fa-caret-right"></i>Rejection Reasons</a>
@@ -904,7 +911,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 					<?php if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true && array_intersect($_SESSION['module'], array('hepatitis'))) {  ?>
 						<li class="header">Hepatitis</li>
 						<?php if ($hepatitisTestRequestMenuAccess == true) { ?>
-							<li class="treeview covid19Request" style="<?php echo $hideRequest; ?>">
+							<li class="treeview hepatitisRequest" style="<?php echo $hideRequest; ?>">
 								<a href="#">
 									<i class="fa fa-edit"></i>
 									<span>Request Management</span>
@@ -923,9 +930,9 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 											<a href="/hepatitis/requests/hepatitis-add-request.php"><i class="fa fa-circle-o"></i> Add New Request</a>
 										</li>
 									<?php }
-									if (isset($_SESSION['privileges']) && in_array("addSamplesFromManifest.php", $_SESSION['privileges'])) { ?>
+									if (isset($_SESSION['privileges']) && in_array("add-samples-from-manifest.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu addSamplesFromManifestHepatitisMenu">
-											<a href="/hepatitis/requests/addSamplesFromManifest.php"><i class="fa fa-circle-o"></i> Add Samples from Manifest</a>
+											<a href="/hepatitis/requests/add-samples-from-manifest.php"><i class="fa fa-circle-o"></i> Add Samples from Manifest</a>
 										</li>
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("hepatitis-batches.php", $_SESSION['privileges'])) { ?>
@@ -956,12 +963,6 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("hepatitis-manual-results.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu hepatitisResultsMenu"><a href="/hepatitis/results/hepatitis-manual-results.php"><i class="fa fa-circle-o"></i> Enter Result Manually</a></li>
-									<?php }
-									if ($arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes' && isset($_SESSION['privileges']) && in_array("covid-19-confirmation-manifest.php", $_SESSION['privileges'])) { ?>
-										<li class="allMenu hepatitisResultsConfirmationMenu"><a href="/hepatitis/results/hepatitis-confirmation-manifest.php"><i class="fa fa-circle-o"></i> Confirmation Manifest</a></li>
-									<?php }
-									if ($arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes' && isset($_SESSION['privileges']) && in_array("can-record-confirmatory-tests.php", $_SESSION['privileges']) && ($sarr['user_type'] != 'remoteuser')) { ?>
-										<li class="allMenu canRecordConfirmatoryTestsHepatitisMenu"><a href="/hepatitis/results/can-record-confirmatory-tests.php"><i class="fa fa-circle-o"></i> Record Confirmatory Tests</a></li>
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("hepatitis-result-status.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu hepatitisResultStatus"><a href="/hepatitis/results/hepatitis-result-status.php"><i class="fa fa-circle-o"></i> Manage Results Status</a></li>
