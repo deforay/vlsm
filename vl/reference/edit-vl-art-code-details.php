@@ -54,7 +54,7 @@ foreach($categoryInfo as $category){
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									<label for="category" class="col-lg-4 control-label">Category <span class="mandatory">*</span></label>
+									<label for="category" class="col-lg-4 control-label">Category</label>
 									<div class="col-lg-7">
 										<select class="form-control select2" id="category" name="category" placeholder="Select category" title="Please select category">
 											<?= $general->generateSelectOptions($categoryData, $artResult['headings'], '-- Select --'); ?>
