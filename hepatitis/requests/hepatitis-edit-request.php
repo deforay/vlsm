@@ -33,6 +33,7 @@ $facilitiesDb = new \Vlsm\Models\Facilities($db);
 $userDb = new \Vlsm\Models\Users($db);
 $hepatitisDb = new \Vlsm\Models\Hepatitis($db);
 
+$hepatitisResults = $hepatitisDb->getHepatitisResults();
 $healthFacilities = $facilitiesDb->getHealthFacilities('hepatitis');
 $testingLabs = $facilitiesDb->getTestingLabs('hepatitis');
 
@@ -238,7 +239,35 @@ if (file_exists($fileArray[$arr['vl_form']])) {
 
         //$('.date').mask('99-aaa-9999');
         //$('.dateTime').mask('99-aaa-9999 99:99');
+        $('#isSampleRejected').change(function(e) {
+            changeReject(this.value);
+        });
+        changeReject($('#isSampleRejected').val());
     });
+
+    function changeReject(val) {
+        if (val == 'yes') {
+            $('.show-rejection').show();
+            $('.test-name-table-input').prop('disabled', true);
+            $('.test-name-table').addClass('disabled');
+            $('#sampleRejectionReason,#rejectionDate').addClass('isRequired');
+            $('#sampleTestedDateTime,#result,.test-name-table-input').removeClass('isRequired');
+            $('#result').prop('disabled', true);
+            $('#sampleRejectionReason').prop('disabled', false);
+        } else if (val == 'no') {
+            $('#rejectionDate').val('');
+            $('.show-rejection').hide();
+            $('.test-name-table-input').prop('disabled', false);
+            $('.test-name-table').removeClass('disabled');
+            $('#sampleRejectionReason,#rejectionDate').removeClass('isRequired');
+            $('#sampleTestedDateTime,#result,.test-name-table-input').addClass('isRequired');
+            $('#result').prop('disabled', false);
+            $('#sampleRejectionReason').prop('disabled', true);
+        }
+        <?php if (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes') { ?>
+            checkPostive();
+        <?php } ?>
+    }
 
     function calculateAgeInYears() {
         var dateOfBirth = moment($("#patientDob").val(), "DD-MMM-YYYY");

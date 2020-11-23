@@ -1959,3 +1959,41 @@ UPDATE `system_config` SET `value` = '4.2.7' WHERE `system_config`.`name` = 'ver
 
 -- Prasath M 23-Nov-2020
 ALTER TABLE `testing_labs` ADD `suppressed_monthly_target`Varchar(255) NULL DEFAULT NULL ;
+-- Thana 23-Nov-2020
+CREATE TABLE `r_hepatitis_sample_rejection_reasons` (
+ `rejection_reason_id` int NOT NULL AUTO_INCREMENT,
+ `rejection_reason_name` varchar(255) DEFAULT NULL,
+ `rejection_type` varchar(255) NOT NULL DEFAULT 'general',
+ `rejection_reason_status` varchar(255) DEFAULT NULL,
+ `rejection_reason_code` varchar(255) DEFAULT NULL,
+ `updated_datetime` datetime DEFAULT NULL,
+ `data_sync` int NOT NULL DEFAULT '0',
+ PRIMARY KEY (`rejection_reason_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `r_hepatitis_sample_type` (
+ `sample_id` int NOT NULL AUTO_INCREMENT,
+ `sample_name` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
+ `status` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
+ `updated_datetime` datetime DEFAULT NULL,
+ `data_sync` int NOT NULL DEFAULT '0',
+ PRIMARY KEY (`sample_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `r_hepatitis_test_reasons` (
+ `test_reason_id` int NOT NULL AUTO_INCREMENT,
+ `test_reason_name` varchar(255) DEFAULT NULL,
+ `parent_reason` int DEFAULT NULL,
+ `test_reason_status` varchar(45) DEFAULT NULL,
+ `updated_datetime` datetime DEFAULT NULL,
+ PRIMARY KEY (`test_reason_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `r_hepatitis_results` (
+ `result_id` varchar(255) NOT NULL,
+ `result` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+ `status` varchar(255) NOT NULL DEFAULT 'active',
+ `updated_datetime` datetime DEFAULT NULL,
+ `data_sync` int NOT NULL DEFAULT '0',
+ PRIMARY KEY (`result_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;

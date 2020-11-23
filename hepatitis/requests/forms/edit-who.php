@@ -410,22 +410,50 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th><label for="hcv">HCV VL</label></th>
+                                            <th>Is Sample Rejected ?</th>
                                             <td>
-                                                <select class="form-control" name="hcv" id="hcv">
+                                                <select class="form-control result-focus" name="isSampleRejected" id="isSampleRejected">
                                                     <option value=''> -- Select -- </option>
-                                                    <option value='positive' <?php echo ($hepatitisInfo['hcv_vl_result'] == 'positive') ? "selected='selected'" : ""; ?>>Positive</option>
-                                                    <option value='negative' <?php echo ($hepatitisInfo['hcv_vl_result'] == 'negative') ? "selected='selected'" : ""; ?>>Negative</option>
-                                                    <option value='interminate' <?php echo ($hepatitisInfo['hcv_vl_result'] == 'interminate') ? "selected='selected'" : ""; ?>>Interminate</option>
+                                                    <option value="yes" <?php echo ($hepatitisInfo['is_sample_rejected'] == 'yes') ? "selected='selected'" : ""; ?>> Yes </option>
+                                                    <option value="no" <?php echo ($hepatitisInfo['is_sample_rejected'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
                                                 </select>
                                             </td>
-                                            <th><label for="hbv">HBV VL</label></th>
+
+                                            <th class="show-rejection" style="display:none;">Reason for Rejection</th>
+                                            <td class="show-rejection" style="display:none;">
+                                                <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason">
+                                                    <option value="">-- Select --</option>
+                                                    <?php foreach ($rejectionTypeResult as $type) { ?>
+                                                        <optgroup label="<?php echo ucwords($type['rejection_type']); ?>">
+                                                            <?php
+                                                            foreach ($rejectionResult as $reject) {
+                                                                if ($type['rejection_type'] == $reject['rejection_type']) { ?>
+                                                                    <option value="<?php echo $reject['rejection_reason_id']; ?>" <?php echo ($hepatitisInfo['reason_for_sample_rejection'] == $reject['rejection_reason_id']) ? 'selected="selected"' : ''; ?>><?php echo ucwords($reject['rejection_reason_name']); ?></option>
+                                                            <?php }
+                                                            } ?>
+                                                        </optgroup>
+                                                    <?php }  ?>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr class="show-rejection" style="display:none;">
+                                            <th>Rejection Date<span class="mandatory">*</span></th>
+                                            <td><input value="<?php echo $general->humanDateFormat($hepatitisInfo['rejection_on']); ?>" class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Select Rejection Date" /></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <th><label for="hcv">HCV VL Result</label></th>
+                                            <td>
+                                                <select class="form-control" name="hcv" id="hcv">
+                                                    <?= $general->generateSelectOptions($hepatitisResults, $hepatitisInfo['hcv_vl_result'], '-- Select --'); ?>
+                                                </select>
+                                            </td>
+                                            <th><label for="hbv">HBV VL Result</label></th>
                                             <td>
                                                 <select class="form-control" name="hbv" id="hbv">
                                                     <option value=''> -- Select -- </option>
-                                                    <option value='positive' <?php echo ($hepatitisInfo['hbv_vl_result'] == 'positive') ? "selected='selected'" : ""; ?>>Positive</option>
-                                                    <option value='negative' <?php echo ($hepatitisInfo['hbv_vl_result'] == 'negative') ? "selected='selected'" : ""; ?>>Negative</option>
-                                                    <option value='interminate' <?php echo ($hepatitisInfo['hbv_vl_result'] == 'interminate') ? "selected='selected'" : ""; ?>>Interminate</option>
+                                                    <?= $general->generateSelectOptions($hepatitisResults, $hepatitisInfo['hbv_vl_result'], '-- Select --'); ?>
                                                 </select>
                                             </td>
                                         </tr>
