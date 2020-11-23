@@ -42,13 +42,13 @@ $facilityCount = $facilityTotal[0]['total'];
 	<section class="content-header">
 		<div class="bs-example bs-example-tabs">
 			<ul id="myTab" class="nav nav-tabs" style="font-size:1.4em;">
-				<?php if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) {  ?>
+				<?php if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true && array_intersect($_SESSION['module'], array('vl'))) {  ?>
 					<li class="active"><a href="#vlDashboard" data-toggle="tab" onclick="generateDashboard('vl');">Viral Load Tests</a></li>
 				<?php } ?>
-				<?php if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) {  ?>
+				<?php if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true  && array_intersect($_SESSION['module'], array('eid'))) {  ?>
 					<li><a href="#eidDashboard" data-toggle="tab" onclick="generateDashboard('eid');">EID Tests</a></li>
 				<?php } ?>
-				<?php if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) {  ?>
+				<?php if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true && array_intersect($_SESSION['module'], array('covid19'))) {  ?>
 					<li><a href="#covid19Dashboard" data-toggle="tab" onclick="generateDashboard('covid19');">Covid-19 Tests</a></li>
 				<?php } ?>
 				<?php
@@ -58,7 +58,7 @@ $facilityCount = $facilityTotal[0]['total'];
 			</ul>
 			<div id="myTabContent" class="tab-content">
 
-				<?php if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) {  ?>
+				<?php if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true && array_intersect($_SESSION['module'], array('vl'))) {  ?>
 					<div class="tab-pane fade in active" id="vlDashboard">
 						<!-- VL content -->
 						<section class="content">
@@ -133,7 +133,7 @@ $facilityCount = $facilityTotal[0]['total'];
 					</div>
 				<?php } ?>
 				<!-- EID START-->
-				<?php if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) {  ?>
+				<?php if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true  && array_intersect($_SESSION['module'], array('eid'))) {  ?>
 
 					<div class="tab-pane fade in" id="eidDashboard">
 						<!-- EID content -->
@@ -173,7 +173,7 @@ $facilityCount = $facilityTotal[0]['total'];
 				<?php } ?>
 				<!-- EID END -->
 				<!-- COVID-19 START-->
-				<?php if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) {  ?>
+				<?php if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true && array_intersect($_SESSION['module'], array('covid19'))) {  ?>
 
 					<div class="tab-pane fade in" id="covid19Dashboard">
 						<!-- COVID-19 content -->

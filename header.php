@@ -582,7 +582,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 					<?php } ?>
 
 					<?php
-					if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true  && array_intersect($_SESSION['module'], array('vl'))) { ?>
+					if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true && array_intersect($_SESSION['module'], array('vl'))) { ?>
 						<li class="header">VIRAL LOAD</li>
 						<?php if ($vlRequestMenuAccess == true) { ?>
 							<li class="treeview request" style="<?php echo $hideRequest; ?>">

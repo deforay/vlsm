@@ -38,6 +38,9 @@ $hepatitisDb = new \Vlsm\Models\Hepatitis($db);
 $userDb = new \Vlsm\Models\Users($db);
 
 $hepatitisResults = $hepatitisDb->getHepatitisResults();
+$testReasonResults = $hepatitisDb->getHepatitisReasonsForTesting();
+$healthFacilities = $facilitiesDb->getHealthFacilities('hepatitis');
+$testingLabs = $facilitiesDb->getTestingLabs('hepatitis');
 // $arr = $general->getGlobalConfig();
 // $sarr = $general->getSystemConfig();
 
@@ -45,8 +48,6 @@ $labTechnicians = $userDb->getActiveUserInfo();
 foreach ($labTechnicians as $labTech) {
     $labTechniciansResults[$labTech['user_id']] = ucwords($labTech['user_name']);
 }
-$healthFacilities = $facilitiesDb->getHealthFacilities('hepatitis');
-$testingLabs = $facilitiesDb->getTestingLabs('hepatitis');
 
 // Comorbidity
 $comorbidityData = array();
@@ -64,6 +65,9 @@ foreach($riskFactorsResult as $riskFactors){
 }
 
 //sample rejection reason
+$rejectionTypeQuery = "SELECT DISTINCT rejection_type FROM r_hepatitis_sample_rejection_reasons WHERE rejection_reason_status ='active'";
+$rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
+
 $rejectionQuery = "SELECT * FROM r_hepatitis_sample_rejection_reasons where rejection_reason_status = 'active'";
 $rejectionResult = $db->rawQuery($rejectionQuery);
 
@@ -218,7 +222,6 @@ if (file_exists($fileArray[$arr['vl_form']])) {
                 $('#sampleTestedDateTime,').removeClass('isRequired');
                 $('#result').prop('disabled', true);
                 $('#sampleRejectionReason').prop('disabled', false);
-                // }else if(this.value == 'no'){
             } else {
                 $('#rejectionDate').val('');
                 $('.show-rejection').hide();
@@ -228,7 +231,6 @@ if (file_exists($fileArray[$arr['vl_form']])) {
                 $('#sampleTestedDateTime,').addClass('isRequired');
                 $('#result').prop('disabled', false);
                 $('#sampleRejectionReason').prop('disabled', true);
-                checkPostive();
             }
         });
     });

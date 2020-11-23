@@ -168,26 +168,19 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                 <?php } ?>
                                             </select>
                                         </td>
-                                        <th style="width:15% !important">Sample Collection Date <span class="mandatory">*</span> </th>
-                                        <td style="width:35% !important;">
-                                            <input value="<?php echo ($hepatitisInfo['sample_collection_date']); ?>" class="form-control isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" onchange="sampleCodeGeneration();" />
-                                        </td>
-                                    </tr>
-                                    <?php if ($sarr['user_type'] == 'remoteuser') { ?>
-                                        <tr>
+                                        <?php if ($sarr['user_type'] == 'remoteuser') { ?>
                                             <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
                                             <td>
                                                 <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;">
                                                     <?= $general->generateSelectOptions($testingLabs, $hepatitisInfo['lab_id'], '-- Select --'); ?>
                                                 </select>
                                             </td>
+                                        <?php } else{ ?> 
                                             <th></th>
                                             <td></td>
-                                            <th></th>
-                                            <td></td>
-                                        </tr>
-                                    <?php } ?>
+                                        <?php } ?>
                                     </tr>
+                                    
                                 </table>
                                 <br>
                                 <hr style="border: 1px solid #ccc;">
@@ -353,6 +346,21 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                             </div>
                             <table class="table" style="width:100%">
                                 <tr>
+                                    <th style="width:15% !important">Sample Collection Date <span class="mandatory">*</span> </th>
+                                    <td style="width:35% !important;">
+                                        <input value="<?php echo ($hepatitisInfo['sample_collection_date']); ?>" class="form-control isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" onchange="sampleCodeGeneration();" />
+                                    </td>
+                                    <th>Specimen Type <span class="mandatory">*</span></th>
+                                    <td>
+                                        <select name="specimenType" id="specimenType" class="form-control isRequired" title="Please choose specimen type" style="width:100%">
+                                            <option value="">-- Select --</option>
+                                            <?php foreach ($specimenTypeResult as $name) { ?>
+                                                <option value="<?php echo $name['sample_id']; ?>" <?php echo ($covid19Info['specimen_type'] == $name['sample_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($name['sample_name']); ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <th><label for="HBsAg">HBsAg Result</label></th>
                                     <td>
                                         <select class="form-control" name="HBsAg" id="HBsAg" title="Please choose HBsAg result">
@@ -372,6 +380,14 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         </select>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <th><label for="testTypeRequested">Purpose of Test</label></th>
+                                    <td>
+                                        <select class="form-control" name="testTypeRequested" id="testTypeRequested" title="Please choose purpose of test">
+                                        <?= $general->generateSelectOptions($testReasonResults, $hepatitisInfo['type_of_test_requested'], '-- Select --'); ?>
+                                        </select>
+                                    </td>
+                                </tr>
                             </table>
                         </div>
 
@@ -388,19 +404,27 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             <td>
                                                 <input value="<?php echo $general->humanDateFormat($hepatitisInfo['sample_received_at_vl_lab_datetime']) ?>" type="text" class="form-control" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter sample receipt date" style="width:100%;" />
                                             </td>
+                                            <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
+                                            <td>
+                                                <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;">
+                                                    <?= $general->generateSelectOptions($testingLabs, $hepatitisInfo['lab_id'], '-- Select --'); ?>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
                                             <th><label for="sampleTestedDateTime">Vl Testing Date</label></th>
                                             <td>
                                                 <input value="<?php echo $general->humanDateFormat($hepatitisInfo['sample_tested_datetime']) ?>" type="text" class="form-control" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Please enter testing date" style="width:100%;" />
                                             </td>
-                                        </tr>
-                                        <tr>
                                             <th><label for="vlTestingSite">Vl Testing Site</label></th>
                                             <td>
                                                 <input value="<?php echo $hepatitisInfo['vl_testing_site'];?>" type="text" class="form-control" id="vlTestingSite" name="vlTestingSite" placeholder="Testing Site" title="Please enter testing site" style="width:100%;" />
                                             </td>
-                                            <th><label for="sampleCondition">VL test purpose</label></th>
+                                        </tr>
+                                        <tr>
+                                            <th><label for="reasonVlTest">VL test purpose</label></th>
                                             <td>
-                                                <select class="form-control" name="sampleCondition" id="sampleCondition">
+                                                <select class="form-control" name="reasonVlTest" id="reasonVlTest">
                                                     <option value=''> -- Select -- </option>
                                                     <option value='Initial HCV VL' <?php echo ($hepatitisInfo['sample_condition'] == 'Initial HCV VL') ? "selected='selected'" : ""; ?>>Initial HCV VL</option>
                                                     <option value='SVR12 HCV VL' <?php echo ($hepatitisInfo['sample_condition'] == 'SVR12 HCV VL') ? "selected='selected'" : ""; ?>>SVR12 HCV VL</option>
@@ -408,8 +432,6 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                     <option value='Follow up HBV VL' <?php echo ($hepatitisInfo['sample_condition'] == 'Follow up HBV VL') ? "selected='selected'" : ""; ?>>Follow up HBV VL</option>
                                                 </select>
                                             </td>
-                                        </tr>
-                                        <tr>
                                             <th>Is Sample Rejected ?</th>
                                             <td>
                                                 <select class="form-control result-focus" name="isSampleRejected" id="isSampleRejected">
@@ -418,40 +440,28 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                     <option value="no" <?php echo ($hepatitisInfo['is_sample_rejected'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
                                                 </select>
                                             </td>
-
-                                            <th class="show-rejection" style="display:none;">Reason for Rejection</th>
-                                            <td class="show-rejection" style="display:none;">
-                                                <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason">
-                                                    <option value="">-- Select --</option>
-                                                    <?php foreach ($rejectionTypeResult as $type) { ?>
-                                                        <optgroup label="<?php echo ucwords($type['rejection_type']); ?>">
-                                                            <?php
-                                                            foreach ($rejectionResult as $reject) {
-                                                                if ($type['rejection_type'] == $reject['rejection_type']) { ?>
-                                                                    <option value="<?php echo $reject['rejection_reason_id']; ?>" <?php echo ($hepatitisInfo['reason_for_sample_rejection'] == $reject['rejection_reason_id']) ? 'selected="selected"' : ''; ?>><?php echo ucwords($reject['rejection_reason_name']); ?></option>
-                                                            <?php }
-                                                            } ?>
-                                                        </optgroup>
-                                                    <?php }  ?>
-                                                </select>
-                                            </td>
                                         </tr>
                                         <tr class="show-rejection" style="display:none;">
+                                            <th class="show-rejection" style="display:none;">Reason for Rejection<span class="mandatory">*</span></th>
+                                            <td class="show-rejection" style="display:none;">
+                                                <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason" title="Please choose reason for rejection">
+                                                    <option value="">-- Select --</option>
+                                                    <?php echo $rejectionReason; ?>
+                                                </select>
+                                            </td>
                                             <th>Rejection Date<span class="mandatory">*</span></th>
                                             <td><input value="<?php echo $general->humanDateFormat($hepatitisInfo['rejection_on']); ?>" class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Select Rejection Date" /></td>
-                                            <td></td>
-                                            <td></td>
                                         </tr>
                                         <tr>
                                             <th><label for="hcv">HCV VL Result</label></th>
                                             <td>
-                                                <select class="form-control" name="hcv" id="hcv">
+                                                <select class="form-control test-name-table-input" name="hcv" id="hcv">
                                                     <?= $general->generateSelectOptions($hepatitisResults, $hepatitisInfo['hcv_vl_result'], '-- Select --'); ?>
                                                 </select>
                                             </td>
                                             <th><label for="hbv">HBV VL Result</label></th>
                                             <td>
-                                                <select class="form-control" name="hbv" id="hbv">
+                                                <select class="form-control test-name-table-input" name="hbv" id="hbv">
                                                     <option value=''> -- Select -- </option>
                                                     <?= $general->generateSelectOptions($hepatitisResults, $hepatitisInfo['hbv_vl_result'], '-- Select --'); ?>
                                                 </select>
@@ -460,11 +470,11 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         <tr>
                                             <th><label for="hcvCount">HCV VL Count</label></th>
                                             <td>
-                                                <input value="<?php echo $hepatitisInfo['hcv_vl_count'];?>" type="text" class="form-control" placeholder="Enter HCV Count" title="Please enter HCV Count" name="hcvCount" id="hcvCount">
+                                                <input value="<?php echo $hepatitisInfo['hcv_vl_count'];?>" type="text" class="form-control test-name-table-input" placeholder="Enter HCV Count" title="Please enter HCV Count" name="hcvCount" id="hcvCount">
                                             </td>
                                             <th><label for="hbvCount">HBV VL Count</label></th>
                                             <td>
-                                                <input value="<?php echo $hepatitisInfo['hbv_vl_count'];?>" type="text" class="form-control" placeholder="Enter HBV Count" title="Please enter HBV Count" name="hbvCount" id="hbvCount">
+                                                <input value="<?php echo $hepatitisInfo['hbv_vl_count'];?>" type="text" class="form-control test-name-table-input" placeholder="Enter HBV Count" title="Please enter HBV Count" name="hbvCount" id="hbvCount">
                                             </td>
                                         </tr>
                                         <tr>
@@ -476,12 +486,14 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                     <option value='no' <?php echo ($hepatitisInfo['is_result_authorised'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
                                                 </select>
                                             </td>
-                                        </tr>
-                                        <tr>
                                             <th>Authorized By</th>
                                             <td><input value="<?php echo $hepatitisInfo['authorized_by'];?>" type="text" name="authorizedBy" id="authorizedBy" class="disabled-field form-control" placeholder="Authorized By" /></td>
+                                        </tr>
+                                        <tr>
                                             <th>Authorized on</td>
                                             <td><input value="<?php echo $general->humanDateFormat($hepatitisInfo['authorized_on']) ?>" type="text" name="authorizedOn" id="authorizedOn" class="disabled-field form-control date" placeholder="Authorized on" /></td>
+                                            <th></th>
+                                            <td></td>
                                         </tr>
                                     </table>
                                 </div>
