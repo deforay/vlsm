@@ -34,8 +34,10 @@ include_once(APPLICATION_PATH . '/header.php');
 
 // $general = new \Vlsm\Models\General($db);
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
+$hepatitisDb = new \Vlsm\Models\Hepatitis($db);
 $userDb = new \Vlsm\Models\Users($db);
 
+$hepatitisResults = $hepatitisDb->getHepatitisResults();
 // $arr = $general->getGlobalConfig();
 // $sarr = $general->getSystemConfig();
 
@@ -61,6 +63,10 @@ foreach($riskFactorsResult as $riskFactors){
     $riskFactorsData[$riskFactors['riskfactor_id']] = ucwords($riskFactors['riskfactor_name']);
 }
 
+//sample rejection reason
+$rejectionQuery = "SELECT * FROM r_hepatitis_sample_rejection_reasons where rejection_reason_status = 'active'";
+$rejectionResult = $db->rawQuery($rejectionQuery);
+
 $rejectionReason = "";
 foreach ($rejectionTypeResult as $type) {
     $rejectionReason .= '<optgroup label="' . ucwords($type['rejection_type']) . '">';
@@ -71,7 +77,7 @@ foreach ($rejectionTypeResult as $type) {
     }
     $rejectionReason .= '</optgroup>';
 }
-// $specimenTypeResult = $general->fetchDataFromTable('r_hepatitis_sample_type', "status = 'active'");
+$specimenTypeResult = $general->fetchDataFromTable('r_hepatitis_sample_type', "status = 'active'");
 
 $fileArray = array(
     1 => 'forms/add-southsudan.php',
@@ -202,6 +208,29 @@ if (file_exists($fileArray[$arr['vl_form']])) {
 
         $('.date').mask('99-aaa-9999');
         $('.dateTime').mask('99-aaa-9999 99:99');
+
+        $('#isSampleRejected').change(function(e) {
+            if (this.value == 'yes') {
+                $('.show-rejection').show();
+                $('.test-name-table-input').prop('disabled', true);
+                $('.test-name-table').addClass('disabled');
+                $('#sampleRejectionReason,#rejectionDate').addClass('isRequired');
+                $('#sampleTestedDateTime,').removeClass('isRequired');
+                $('#result').prop('disabled', true);
+                $('#sampleRejectionReason').prop('disabled', false);
+                // }else if(this.value == 'no'){
+            } else {
+                $('#rejectionDate').val('');
+                $('.show-rejection').hide();
+                $('.test-name-table-input').prop('disabled', false);
+                $('.test-name-table').removeClass('disabled');
+                $('#sampleRejectionReason,#rejectionDate').removeClass('isRequired');
+                $('#sampleTestedDateTime,').addClass('isRequired');
+                $('#result').prop('disabled', false);
+                $('#sampleRejectionReason').prop('disabled', true);
+                checkPostive();
+            }
+        });
     });
 
     function checkSampleNameValidation(tableName, fieldName, id, fnct, alrt) {
