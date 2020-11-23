@@ -1955,7 +1955,7 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 
 
 UPDATE `system_config` SET `value` = '4.2.7' WHERE `system_config`.`name` = 'version';
--- Amit -- 20-Nov-2020
+--- Version 4.2.7  -- Amit -- 20-Nov-2020
 
 -- Prasath M 23-Nov-2020
-ALTER TABLE `testing_labs` ADD `monthly_target`Varchar(255) NULL DEFAULT NULL ;
+ALTER TABLE `testing_labs` ADD `suppressed_monthly_target`Varchar(255) NULL DEFAULT NULL ;
