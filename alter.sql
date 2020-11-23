@@ -1953,5 +1953,9 @@ INSERT INTO `resources` (`resource_id`, `module`, `display_name`) VALUES ('hepat
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'hepatitis-results', 'hepatitis-manual-results.php', 'Enter Result Manually');
 
 
+
 UPDATE `system_config` SET `value` = '4.2.7' WHERE `system_config`.`name` = 'version';
--- Version 4.2.7 -- Amit -- 20-Nov-2020
+-- Amit -- 20-Nov-2020
+
+-- Prasath M 23-Nov-2020
+ALTER TABLE `testing_labs` ADD `monthly_target`Varchar(255) NULL DEFAULT NULL ;
