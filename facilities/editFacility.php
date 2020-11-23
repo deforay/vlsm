@@ -525,7 +525,11 @@ $(document).ready(function() {
           else
             var oldMonTar ='';
           if(testType[i] == 'vl'){
-            testOrg = 'Viral Load'; var extraDiv = '<td><input type="text" class=" isRequired" name="supMonTar[]" id ="supMonTar'+i+'" value="'+$("#monTar"+i).val()+'" title="Please enter Suppressed monthly target"/></td>';
+            if($("#supMonTar"+i).val())
+              var supM = $("#supMonTar"+i).val();
+            else
+              var supM = '';
+            testOrg = 'Viral Load'; var extraDiv = '<td><input type="text" class=" isRequired" name="supMonTar[]" id ="supMonTar'+i+'" value="'+supM+'" title="Please enter Suppressed monthly target"/></td>';
             }else if(testType[i] == 'eid'){
             testOrg = 'Early Infant Diagnosis'; var extraDiv = '<td></td>';
             }else if(testType[i] == 'covid19'){
