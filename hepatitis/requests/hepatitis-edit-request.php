@@ -104,7 +104,11 @@ foreach ($rejectionTypeResult as $type) {
     }
     $rejectionReason .= '</optgroup>';
 }
+$specimenResult = array();
 $specimenTypeResult = $general->fetchDataFromTable('r_hepatitis_sample_type', "status = 'active'");
+foreach ($specimenTypeResult as $name) {
+    $specimenResult[$name['sample_id']] = ucwords($name['sample_name']); 
+}
 
 $fileArray = array(
     1 => 'forms/edit-southsudan.php',
@@ -268,8 +272,8 @@ if (file_exists($fileArray[$arr['vl_form']])) {
     function changeReject(val) {
         if (val == 'yes') {
             $('.show-rejection').show();
-            $('.test-name-table-input').prop('disabled', true);
-            $('.test-name-table').addClass('disabled');
+            $('.rejected-input').prop('disabled', true);
+            $('.rejected').addClass('disabled');
             $('#sampleRejectionReason,#rejectionDate').addClass('isRequired');
             $('#sampleTestedDateTime').removeClass('isRequired');
             $('#result').prop('disabled', true);
@@ -277,8 +281,8 @@ if (file_exists($fileArray[$arr['vl_form']])) {
         } else {
             $('#rejectionDate').val('');
             $('.show-rejection').hide();
-            $('.test-name-table-input').prop('disabled', false);
-            $('.test-name-table').removeClass('disabled');
+            $('.rejected-input').prop('disabled', false);
+            $('.rejected').removeClass('disabled');
             $('#sampleRejectionReason,#rejectionDate').removeClass('isRequired');
             $('#sampleTestedDateTime').addClass('isRequired');
             $('#result').prop('disabled', false);

@@ -10,7 +10,8 @@ $facilitiesDb = new \Vlsm\Models\Facilities($db);
 $userDb = new \Vlsm\Models\Users($db);
 $hepatitisDb = new \Vlsm\Models\Hepatitis($db);
 
-$labTechnicians = $userDb->getActiveUserInfo();
+$hepatitisResults = $hepatitisDb->getHepatitisResults();
+$testReasonResults = $hepatitisDb->getHepatitisReasonsForTesting();
 $healthFacilities = $facilitiesDb->getHealthFacilities('hepatitis');
 $testingLabs = $facilitiesDb->getTestingLabs('hepatitis');
 
@@ -49,6 +50,30 @@ $riskFactorsInfo = $hepatitisDb->getRiskFactorsByHepatitisId($id);
 
 $hepatitisQuery = "SELECT * FROM form_hepatitis where hepatitis_id=$id";
 $hepatitisInfo = $db->rawQueryOne($hepatitisQuery);
+
+//sample rejection reason
+$rejectionTypeQuery = "SELECT DISTINCT rejection_type FROM r_hepatitis_sample_rejection_reasons WHERE rejection_reason_status ='active'";
+$rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
+
+$rejectionQuery = "SELECT * FROM r_hepatitis_sample_rejection_reasons where rejection_reason_status = 'active'";
+$rejectionResult = $db->rawQuery($rejectionQuery);
+
+$rejectionReason = "";
+foreach ($rejectionTypeResult as $type) {
+    $rejectionReason .= '<optgroup label="' . ucwords($type['rejection_type']) . '">';
+    foreach ($rejectionResult as $reject) {
+        if ($type['rejection_type'] == $reject['rejection_type']) {
+            $selected = (isset($hepatitisInfo['reason_for_sample_rejection']) && $hepatitisInfo['reason_for_sample_rejection'] == $reject['rejection_reason_id'])?"selected='selected'":"";
+            $rejectionReason .= '<option value="' . $reject['rejection_reason_id'] . '" '.$selected.'>' . ucwords($reject['rejection_reason_name']) . '</option>';
+        }
+    }
+    $rejectionReason .= '</optgroup>';
+}
+$specimenResult = array();
+$specimenTypeResult = $general->fetchDataFromTable('r_hepatitis_sample_type', "status = 'active'");
+foreach ($specimenTypeResult as $name) {
+    $specimenResult[$name['sample_id']] = ucwords($name['sample_name']); 
+}
 $disable = "disabled = 'disabled'";
 ?>
 <style>
@@ -206,7 +231,32 @@ if (file_exists($fileArray[$arr['vl_form']])) {
         });
 		//$('.date').mask('99-aaa-9999');
 		//$('.dateTime').mask('99-aaa-9999 99:99');
+		$('#isSampleRejected').change(function(e) {
+            changeReject(this.value);
+        });
+        changeReject($('#isSampleRejected').val());
 	});
+
+	function changeReject(val) {
+        if (val == 'yes') {
+            $('.show-rejection').show();
+            $('.rejected-input').prop('disabled', true);
+            $('.rejected').addClass('disabled');
+            $('#sampleRejectionReason,#rejectionDate').addClass('isRequired');
+            $('#sampleTestedDateTime').removeClass('isRequired');
+            $('#result').prop('disabled', true);
+            $('#sampleRejectionReason').prop('disabled', false);
+        } else {
+            $('#rejectionDate').val('');
+            $('.show-rejection').hide();
+            $('.rejected-input').prop('disabled', false);
+            $('.rejected').removeClass('disabled');
+            $('#sampleRejectionReason,#rejectionDate').removeClass('isRequired');
+            $('#sampleTestedDateTime').addClass('isRequired');
+            $('#result').prop('disabled', false);
+            $('#sampleRejectionReason').prop('disabled', true);
+        }
+    }
 </script>
 
 
