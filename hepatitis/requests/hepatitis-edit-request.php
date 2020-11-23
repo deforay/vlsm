@@ -34,6 +34,7 @@ $userDb = new \Vlsm\Models\Users($db);
 $hepatitisDb = new \Vlsm\Models\Hepatitis($db);
 
 $hepatitisResults = $hepatitisDb->getHepatitisResults();
+$testReasonResults = $hepatitisDb->getHepatitisReasonsForTesting();
 $healthFacilities = $facilitiesDb->getHealthFacilities('hepatitis');
 $testingLabs = $facilitiesDb->getTestingLabs('hepatitis');
 
@@ -85,6 +86,25 @@ if (isset($hepatitisInfo['sample_collection_date']) && trim($hepatitisInfo['samp
     $hepatitisInfo['sample_collection_date'] = '';
 }
 
+//sample rejection reason
+$rejectionTypeQuery = "SELECT DISTINCT rejection_type FROM r_hepatitis_sample_rejection_reasons WHERE rejection_reason_status ='active'";
+$rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
+
+$rejectionQuery = "SELECT * FROM r_hepatitis_sample_rejection_reasons where rejection_reason_status = 'active'";
+$rejectionResult = $db->rawQuery($rejectionQuery);
+
+$rejectionReason = "";
+foreach ($rejectionTypeResult as $type) {
+    $rejectionReason .= '<optgroup label="' . ucwords($type['rejection_type']) . '">';
+    foreach ($rejectionResult as $reject) {
+        if ($type['rejection_type'] == $reject['rejection_type']) {
+            $selected = (isset($hepatitisInfo['reason_for_sample_rejection']) && $hepatitisInfo['reason_for_sample_rejection'] == $reject['rejection_reason_id'])?"selected='selected'":"";
+            $rejectionReason .= '<option value="' . $reject['rejection_reason_id'] . '" '.$selected.'>' . ucwords($reject['rejection_reason_name']) . '</option>';
+        }
+    }
+    $rejectionReason .= '</optgroup>';
+}
+$specimenTypeResult = $general->fetchDataFromTable('r_hepatitis_sample_type', "status = 'active'");
 
 $fileArray = array(
     1 => 'forms/edit-southsudan.php',
@@ -251,22 +271,19 @@ if (file_exists($fileArray[$arr['vl_form']])) {
             $('.test-name-table-input').prop('disabled', true);
             $('.test-name-table').addClass('disabled');
             $('#sampleRejectionReason,#rejectionDate').addClass('isRequired');
-            $('#sampleTestedDateTime,#result,.test-name-table-input').removeClass('isRequired');
+            $('#sampleTestedDateTime').removeClass('isRequired');
             $('#result').prop('disabled', true);
             $('#sampleRejectionReason').prop('disabled', false);
-        } else if (val == 'no') {
+        } else {
             $('#rejectionDate').val('');
             $('.show-rejection').hide();
             $('.test-name-table-input').prop('disabled', false);
             $('.test-name-table').removeClass('disabled');
             $('#sampleRejectionReason,#rejectionDate').removeClass('isRequired');
-            $('#sampleTestedDateTime,#result,.test-name-table-input').addClass('isRequired');
+            $('#sampleTestedDateTime').addClass('isRequired');
             $('#result').prop('disabled', false);
             $('#sampleRejectionReason').prop('disabled', true);
         }
-        <?php if (isset($arr['covid19_positive_confirmatory_tests_required_by_central_lab']) && $arr['covid19_positive_confirmatory_tests_required_by_central_lab'] == 'yes') { ?>
-            checkPostive();
-        <?php } ?>
     }
 
     function calculateAgeInYears() {
