@@ -332,7 +332,7 @@ foreach ($fResult as $fDetails) {
                                 <tr>
                                     <th><label for="HBsAg">HBsAg Result</label></th>
                                     <td>
-                                        <select class="form-control" name="HBsAg" id="HBsAg" title="Please choose HBsAg result">
+                                        <select class="form-control rejected-input" name="HBsAg" id="HBsAg" title="Please choose HBsAg result">
                                             <option value=''> -- Select -- </option>
                                             <option value='positive'>Positive</option>
                                             <option value='negative'>Negative</option>
@@ -341,7 +341,7 @@ foreach ($fResult as $fDetails) {
                                     </td>
                                     <th><label for="antiHcv">Anti-HCV Result</label></th>
                                     <td>
-                                        <select class="form-control" name="antiHcv" id="antiHcv" title="Please choose Anti-HCV result">
+                                        <select class="form-control rejected-input" name="antiHcv" id="antiHcv" title="Please choose Anti-HCV result">
                                             <option value=''> -- Select -- </option>
                                             <option value='positive'>Positive</option>
                                             <option value='negative'>Negative</option>
@@ -422,13 +422,13 @@ foreach ($fResult as $fDetails) {
                                         <tr>
                                             <th><label for="hcv">HCV VL Result</label></th>
                                             <td>
-                                                <select class="form-control test-name-table-input" name="hcv" id="hcv">
+                                                <select class="form-control rejected-input" name="hcv" id="hcv">
                                                     <?= $general->generateSelectOptions($hepatitisResults, null, '-- Select --'); ?>
                                                 </select>
                                             </td>
                                             <th><label for="hbv">HBV VL Result</label></th>
                                             <td>
-                                                <select class="form-control test-name-table-input" name="hbv" id="hbv">
+                                                <select class="form-control rejected-input" name="hbv" id="hbv">
                                                     <?= $general->generateSelectOptions($hepatitisResults, null, '-- Select --'); ?>
                                                 </select>
                                             </td>
@@ -436,28 +436,28 @@ foreach ($fResult as $fDetails) {
                                         <tr>
                                             <th><label for="hcvCount">HCV VL Count</label></th>
                                             <td>
-                                                <input type="text" class="form-control test-name-table-input" placeholder="Enter HCV Count" title="Please enter HCV Count" name="hcvCount" id="hcvCount">
+                                                <input type="text" class="form-control rejected-input" placeholder="Enter HCV Count" title="Please enter HCV Count" name="hcvCount" id="hcvCount">
                                             </td>
                                             <th><label for="hbvCount">HBV VL Count</label></th>
                                             <td>
-                                                <input type="text" class="form-control test-name-table-input" placeholder="Enter HBV Count" title="Please enter HBV Count" name="hbvCount" id="hbvCount">
+                                                <input type="text" class="form-control rejected-input" placeholder="Enter HBV Count" title="Please enter HBV Count" name="hbvCount" id="hbvCount">
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>Is Result Authorized ?</th>
                                             <td>
-                                                <select name="isResultAuthorized" id="isResultAuthorized" class="disabled-field form-control" title="Is Result authorized ?" style="width:100%">
+                                                <select name="isResultAuthorized" id="isResultAuthorized" class="disabled-field form-control rejected-input" title="Is Result authorized ?" style="width:100%">
                                                     <option value="">-- Select --</option>
                                                     <option value='yes'> Yes </option>
                                                     <option value='no'> No </option>
                                                 </select>
                                             </td>
                                             <th>Authorized By</th>
-                                            <td><input type="text" name="authorizedBy" id="authorizedBy" class="disabled-field form-control" placeholder="Authorized By" /></td>
+                                            <td><input type="text" name="authorizedBy" id="authorizedBy" class="disabled-field form-control rejected-input" placeholder="Authorized By" /></td>
                                         </tr>
                                         <tr>
                                             <th>Authorized on</td>
-                                            <td><input type="text" name="authorizedOn" id="authorizedOn" class="disabled-field form-control date" placeholder="Authorized on" /></td>
+                                            <td><input type="text" name="authorizedOn" id="authorizedOn" class="disabled-field form-control date rejected-input" placeholder="Authorized on" /></td>
                                             <th></th>
                                             <td></td>
                                         </tr>
@@ -626,6 +626,18 @@ foreach ($fResult as $fDetails) {
 
 
     function validateNow() {
+        var rejected = $('#isSampleRejected').val();
+        if(rejected != 'yes'){
+            if(($('#hcv').val() != "" || $('#antiHcv').val() != "") &&($('#hbv').val() != "" || $('#HBsAg').val() != "")){
+                checkresult = true;
+            } else{
+                checkresult = false;
+                alert("Please select least one of the result");
+            }
+        } else{
+            checkresult = true;
+        }
+
         if ($('#isResultAuthorized').val() != "yes") {
             $('#authorizedBy,#authorizedOn').removeClass('isRequired');
         }
@@ -633,7 +645,7 @@ foreach ($fResult as $fDetails) {
         flag = deforayValidator.init({
             formId: 'addHepatitisRequestForm'
         });
-        if (flag) {
+        if (flag && checkresult) {
             <?php
             if ($arr['hepatitis_sample_code'] == 'auto' || $arr['hepatitis_sample_code'] == 'YY' || $arr['hepatitis_sample_code'] == 'MMYY') {
             ?>

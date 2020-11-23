@@ -353,17 +353,14 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                     <th>Specimen Type <span class="mandatory">*</span></th>
                                     <td>
                                         <select name="specimenType" id="specimenType" class="form-control isRequired" title="Please choose specimen type" style="width:100%">
-                                            <option value="">-- Select --</option>
-                                            <?php foreach ($specimenTypeResult as $name) { ?>
-                                                <option value="<?php echo $name['sample_id']; ?>" <?php echo ($covid19Info['specimen_type'] == $name['sample_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($name['sample_name']); ?></option>
-                                            <?php } ?>
+                                        <?= $general->generateSelectOptions($specimenResult, $hepatitisInfo['specimen_type'], '-- Select --'); ?>
                                         </select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th><label for="HBsAg">HBsAg Result</label></th>
                                     <td>
-                                        <select class="form-control" name="HBsAg" id="HBsAg" title="Please choose HBsAg result">
+                                        <select class="form-control rejected-input" name="HBsAg" id="HBsAg" title="Please choose HBsAg result">
                                             <option value=''> -- Select -- </option>
                                             <option value='positive' <?php echo ($hepatitisInfo['hbsag_result'] == 'positive') ? "selected='selected'" : ""; ?>>Positive</option>
                                             <option value='negative' <?php echo ($hepatitisInfo['hbsag_result'] == 'negative') ? "selected='selected'" : ""; ?>>Negative</option>
@@ -372,7 +369,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                     </td>
                                     <th><label for="antiHcv">Anti-HCV Result</label></th>
                                     <td>
-                                        <select class="form-control" name="antiHcv" id="antiHcv" title="Please choose Anti-HCV result">
+                                        <select class="form-control rejected-input" name="antiHcv" id="antiHcv" title="Please choose Anti-HCV result">
                                             <option value=''> -- Select -- </option>
                                             <option value='positive' <?php echo ($hepatitisInfo['anti_hcv_result'] == 'positive') ? "selected='selected'" : ""; ?>>Positive</option>
                                             <option value='negative' <?php echo ($hepatitisInfo['anti_hcv_result'] == 'negative') ? "selected='selected'" : ""; ?>>Negative</option>
@@ -426,10 +423,10 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             <td>
                                                 <select class="form-control" name="reasonVlTest" id="reasonVlTest">
                                                     <option value=''> -- Select -- </option>
-                                                    <option value='Initial HCV VL' <?php echo ($hepatitisInfo['sample_condition'] == 'Initial HCV VL') ? "selected='selected'" : ""; ?>>Initial HCV VL</option>
-                                                    <option value='SVR12 HCV VL' <?php echo ($hepatitisInfo['sample_condition'] == 'SVR12 HCV VL') ? "selected='selected'" : ""; ?>>SVR12 HCV VL</option>
-                                                    <option value='Initial HBV VL' <?php echo ($hepatitisInfo['sample_condition'] == 'Initial HBV VL') ? "selected='selected'" : ""; ?>>Initial HBV VL</option>
-                                                    <option value='Follow up HBV VL' <?php echo ($hepatitisInfo['sample_condition'] == 'Follow up HBV VL') ? "selected='selected'" : ""; ?>>Follow up HBV VL</option>
+                                                    <option value='Initial HCV VL' <?php echo ($hepatitisInfo['reason_for_vl_test'] == 'Initial HCV VL') ? "selected='selected'" : ""; ?>>Initial HCV VL</option>
+                                                    <option value='SVR12 HCV VL' <?php echo ($hepatitisInfo['reason_for_vl_test'] == 'SVR12 HCV VL') ? "selected='selected'" : ""; ?>>SVR12 HCV VL</option>
+                                                    <option value='Initial HBV VL' <?php echo ($hepatitisInfo['reason_for_vl_test'] == 'Initial HBV VL') ? "selected='selected'" : ""; ?>>Initial HBV VL</option>
+                                                    <option value='Follow up HBV VL' <?php echo ($hepatitisInfo['reason_for_vl_test'] == 'Follow up HBV VL') ? "selected='selected'" : ""; ?>>Follow up HBV VL</option>
                                                 </select>
                                             </td>
                                             <th>Is Sample Rejected ?</th>
@@ -455,13 +452,13 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         <tr>
                                             <th><label for="hcv">HCV VL Result</label></th>
                                             <td>
-                                                <select class="form-control test-name-table-input" name="hcv" id="hcv">
+                                                <select class="form-control rejected-input" name="hcv" id="hcv">
                                                     <?= $general->generateSelectOptions($hepatitisResults, $hepatitisInfo['hcv_vl_result'], '-- Select --'); ?>
                                                 </select>
                                             </td>
                                             <th><label for="hbv">HBV VL Result</label></th>
                                             <td>
-                                                <select class="form-control test-name-table-input" name="hbv" id="hbv">
+                                                <select class="form-control rejected-input" name="hbv" id="hbv">
                                                     <option value=''> -- Select -- </option>
                                                     <?= $general->generateSelectOptions($hepatitisResults, $hepatitisInfo['hbv_vl_result'], '-- Select --'); ?>
                                                 </select>
@@ -470,28 +467,28 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         <tr>
                                             <th><label for="hcvCount">HCV VL Count</label></th>
                                             <td>
-                                                <input value="<?php echo $hepatitisInfo['hcv_vl_count'];?>" type="text" class="form-control test-name-table-input" placeholder="Enter HCV Count" title="Please enter HCV Count" name="hcvCount" id="hcvCount">
+                                                <input value="<?php echo $hepatitisInfo['hcv_vl_count'];?>" type="text" class="form-control rejected-input" placeholder="Enter HCV Count" title="Please enter HCV Count" name="hcvCount" id="hcvCount">
                                             </td>
                                             <th><label for="hbvCount">HBV VL Count</label></th>
                                             <td>
-                                                <input value="<?php echo $hepatitisInfo['hbv_vl_count'];?>" type="text" class="form-control test-name-table-input" placeholder="Enter HBV Count" title="Please enter HBV Count" name="hbvCount" id="hbvCount">
+                                                <input value="<?php echo $hepatitisInfo['hbv_vl_count'];?>" type="text" class="form-control rejected-input" placeholder="Enter HBV Count" title="Please enter HBV Count" name="hbvCount" id="hbvCount">
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>Is Result Authorized ?</th>
                                             <td>
-                                                <select name="isResultAuthorized" id="isResultAuthorized" class="disabled-field form-control" title="Is Result authorized ?" style="width:100%">
+                                                <select name="isResultAuthorized" id="isResultAuthorized" class="disabled-field form-control rejected-input" title="Is Result authorized ?" style="width:100%">
                                                     <option value="">-- Select --</option>
                                                     <option value='yes' <?php echo ($hepatitisInfo['is_result_authorised'] == 'yes') ? "selected='selected'" : ""; ?>> Yes </option>
                                                     <option value='no' <?php echo ($hepatitisInfo['is_result_authorised'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
                                                 </select>
                                             </td>
                                             <th>Authorized By</th>
-                                            <td><input value="<?php echo $hepatitisInfo['authorized_by'];?>" type="text" name="authorizedBy" id="authorizedBy" class="disabled-field form-control" placeholder="Authorized By" /></td>
+                                            <td><input value="<?php echo $hepatitisInfo['authorized_by'];?>" type="text" name="authorizedBy" id="authorizedBy" class="disabled-field form-control rejected-input" placeholder="Authorized By" /></td>
                                         </tr>
                                         <tr>
                                             <th>Authorized on</td>
-                                            <td><input value="<?php echo $general->humanDateFormat($hepatitisInfo['authorized_on']) ?>" type="text" name="authorizedOn" id="authorizedOn" class="disabled-field form-control date" placeholder="Authorized on" /></td>
+                                            <td><input value="<?php echo $general->humanDateFormat($hepatitisInfo['authorized_on']) ?>" type="text" name="authorizedOn" id="authorizedOn" class="disabled-field rejected-input form-control date" placeholder="Authorized on" /></td>
                                             <th></th>
                                             <td></td>
                                         </tr>
@@ -621,6 +618,18 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
     }
 
     function validateNow() {
+        var rejected = $('#isSampleRejected').val();
+        if(rejected != 'yes'){
+            if(($('#hcv').val() != "" || $('#antiHcv').val() != "") &&($('#hbv').val() != "" || $('#HBsAg').val() != "")){
+                checkresult = true;
+            } else{
+                checkresult = false;
+                alert("Please select least one of the result");
+            }
+        } else{
+            checkresult = true;
+        }
+
         if ($('#isResultAuthorized').val() != "yes") {
             $('#authorizedBy,#authorizedOn').removeClass('isRequired');
         }
@@ -629,7 +638,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         flag = deforayValidator.init({
             formId: 'editHepatitisRequestForm'
         });
-        if (flag) {
+        if (flag && checkresult) {
             document.getElementById('editHepatitisRequestForm').submit();
         }
     }
