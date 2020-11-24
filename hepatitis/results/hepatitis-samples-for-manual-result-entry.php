@@ -262,13 +262,13 @@ $dWhere = '';
 if (isset($_POST['vlPrint']) && $_POST['vlPrint'] == 'print') {
      if (!isset($_POST['status']) || trim($_POST['status']) == '') {
           if (trim($sWhere) != '') {
-               $sWhere = $sWhere . " AND ((vl.result_status = 7 AND (vl.hcv_vl_result is NULL OR vl.hcv_vl_result  ='' OR vl.hbv_vl_result is NULL OR vl.hbv_vl_result  ='')) OR (vl.result_status = 4 AND (vl.hcv_vl_result is NULL OR vl.hcv_vl_result  ='' OR vl.hbv_vl_result is NULL OR vl.hbv_vl_result  =''))) AND (result_printed_datetime is NULL OR result_printed_datetime like '')";
+               $sWhere = $sWhere . " AND ((vl.result_status = 7 AND (vl.hcv_vl_result is NULL AND vl.hcv_vl_result  ='' AND vl.hbv_vl_result is NULL AND vl.hbv_vl_result  ='')) OR (vl.result_status = 4 AND (vl.hcv_vl_result is NULL AND vl.hcv_vl_result  ='' AND vl.hbv_vl_result is NULL AND vl.hbv_vl_result  =''))) AND (result_printed_datetime is NULL OR result_printed_datetime like '')";
           } else {
-               $sWhere = "WHERE ((vl.result_status = 7 AND (vl.hcv_vl_result is NULL OR vl.hcv_vl_result  ='' OR vl.hbv_vl_result is NULL OR vl.hbv_vl_result  ='')) OR (vl.hcv_vl_result is NULL OR vl.hcv_vl_result  ='' OR vl.hbv_vl_result is NULL OR vl.hbv_vl_result  =''))) AND (result_printed_datetime is NULL OR result_printed_datetime like '')";
+               $sWhere = "WHERE ((vl.result_status = 7 AND (vl.hcv_vl_result is NULL AND vl.hcv_vl_result  ='' AND vl.hbv_vl_result is NULL AND vl.hbv_vl_result  ='')) OR (vl.hcv_vl_result is NULL AND vl.hcv_vl_result  ='' AND vl.hbv_vl_result is NULL AND vl.hbv_vl_result  =''))) AND (result_printed_datetime is NULL OR result_printed_datetime like '')";
           }
      }
      $sWhere = $sWhere . " AND vl.vlsm_country_id='" . $arr['vl_form'] . "'";
-     $dWhere = "WHERE ((vl.result_status = 7 AND (vl.hcv_vl_result is NULL OR vl.hcv_vl_result  ='' OR vl.hbv_vl_result is NULL OR vl.hbv_vl_result  ='')) OR (vl.result_status = 4 AND (vl.hcv_vl_result is NULL OR vl.hcv_vl_result  ='' OR vl.hbv_vl_result is NULL OR vl.hbv_vl_result  =''))) AND vl.vlsm_country_id='" . $arr['vl_form'] . "' AND (result_printed_datetime is NULL OR result_printed_datetime like '')";
+     $dWhere = "WHERE ((vl.result_status = 7 AND (vl.hcv_vl_result is NULL AND vl.hcv_vl_result  ='' AND vl.hbv_vl_result is NULL AND vl.hbv_vl_result  ='')) OR (vl.result_status = 4 AND (vl.hcv_vl_result is NULL AND vl.hcv_vl_result  ='' AND vl.hbv_vl_result is NULL AND vl.hbv_vl_result  =''))) AND vl.vlsm_country_id='" . $arr['vl_form'] . "' AND (result_printed_datetime is NULL OR result_printed_datetime like '')";
 } else {
      if (trim($sWhere) != '') {
           $sWhere = $sWhere . " AND vl.vlsm_country_id='" . $arr['vl_form'] . "' AND vl.result_status!=9";
