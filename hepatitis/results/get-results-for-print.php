@@ -24,23 +24,23 @@ $general = new \Vlsm\Models\General($db);
 
 $covid19Results = $general->getCovid19Results();
 
-$tableName = "form_covid19";
-$primaryKey = "covid19_id";
+$tableName = "form_hepatitis";
+$primaryKey = "hepatitis_id";
 
 /* Array of database columns which should be read and sent back to DataTables. Use a space where
 * you want to insert a non-database field (for example a counter or static image)
 */
 $sampleCode = 'sample_code';
-$aColumns = array('vl.sample_code', 'vl.remote_sample_code', 'b.batch_code', 'vl.patient_id', 'CONCAT(vl.patient_name, vl.patient_surname)', 'f.facility_name', 'vl.result', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
-$orderColumns = array('vl.sample_code', 'vl.remote_sample_code', 'b.batch_code', 'vl.patient_id', 'vl.patient_name', 'f.facility_name', 'vl.result', 'vl.last_modified_datetime', 'ts.status_name');
+$aColumns = array('vl.sample_code', 'vl.remote_sample_code', 'b.batch_code', 'vl.patient_id', 'CONCAT(vl.patient_name, vl.patient_surname)', 'f.facility_name', 'vl.hcv_vl_result', 'vl.hbv_vl_result', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
+$orderColumns = array('vl.sample_code', 'vl.remote_sample_code', 'b.batch_code', 'vl.patient_id', 'vl.patient_name', 'f.facility_name', 'vl.hcv_vl_result', 'vl.hbv_vl_result', 'vl.last_modified_datetime', 'ts.status_name');
 if ($sarr['user_type'] == 'remoteuser') {
     $sampleCode = 'remote_sample_code';
 } else if ($sarr['user_type'] == 'standalone') {
-    $aColumns = array('vl.sample_code', 'b.batch_code', 'vl.patient_id', 'CONCAT(vl.patient_name, vl.patient_surname)', 'f.facility_name', 'vl.result', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
-    $orderColumns = array('vl.sample_code', 'b.batch_code', 'vl.patient_id', 'vl.patient_name', 'f.facility_name', 'vl.result', 'vl.last_modified_datetime', 'ts.status_name');
+    $aColumns = array('vl.sample_code', 'b.batch_code', 'vl.patient_id', 'CONCAT(vl.patient_name, vl.patient_surname)', 'f.facility_name', 'vl.hcv_vl_result', 'vl.hbv_vl_result', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
+    $orderColumns = array('vl.sample_code', 'b.batch_code', 'vl.patient_id', 'vl.patient_name', 'f.facility_name', 'vl.hcv_vl_result', 'vl.hbv_vl_result', 'vl.last_modified_datetime', 'ts.status_name');
 }
 if (isset($_POST['vlPrint']) && $_POST['vlPrint'] == 'print') {
-    array_unshift($orderColumns, "vl.covid19_id");
+    array_unshift($orderColumns, "vl.hepatitis_id");
 }
 /* Indexed column (used for fast and accurate table cardinality) */
 $sIndexColumn = $primaryKey;
@@ -131,7 +131,7 @@ $sQuery = "SELECT vl.*,b.*,ts.*,imp.*,
             a_u_d.user_name as approvedBy,
             c.iso_name as nationality,
             rs.rejection_reason_name 
-            FROM form_covid19 as vl 
+            FROM form_hepatitis as vl 
             LEFT JOIN r_countries as c ON vl.patient_nationality=c.id
             LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
             LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id
@@ -193,9 +193,9 @@ if (isset($sWhere) && $sWhere != "") {
     }
     if (isset($_POST['status']) && trim($_POST['status']) != '') {
         if ($_POST['status'] == 'no_result') {
-            $statusCondition = ' AND (vl.result is NULL OR vl.result ="")';
+            $statusCondition = ' AND (vl.hcv_vl_result is NULL AND vl.hcv_vl_result  ="" AND vl.hbv_vl_result is NULL AND vl.hbv_vl_result  ="")';
         } else if ($_POST['status'] == 'result') {
-            $statusCondition = ' AND (vl.result is NOT NULL AND vl.result !="")';
+            $statusCondition = ' AND (vl.hcv_vl_result is NOT NULL OR vl.hcv_vl_result  !="" OR vl.hbv_vl_result is NOT NULL OR vl.hbv_vl_result  !="")';
         } else {
             $statusCondition = ' AND vl.result_status=4';
         }
@@ -284,9 +284,9 @@ if (isset($sWhere) && $sWhere != "") {
     if (isset($_POST['status']) && trim($_POST['status']) != '') {
         if (isset($setWhr)) {
             if ($_POST['status'] == 'no_result') {
-                $statusCondition = ' AND  (vl.result is NULL OR vl.result ="")';
+                $statusCondition = ' AND  (vl.hcv_vl_result is NULL AND vl.hcv_vl_result  ="" AND vl.hbv_vl_result is NULL AND vl.hbv_vl_result  ="")';
             } else if ($_POST['status'] == 'result') {
-                $statusCondition = ' AND (vl.result is NOT NULL AND vl.result !="")';
+                $statusCondition = ' AND (vl.hcv_vl_result is NOT NULL OR vl.hcv_vl_result  !="" OR vl.hbv_vl_result is NOT NULL OR vl.hbv_vl_result  !="")';
             } else {
                 $statusCondition = ' AND vl.result_status=4';
             }
@@ -295,9 +295,9 @@ if (isset($sWhere) && $sWhere != "") {
             $setWhr = 'where';
             $sWhere = ' where ' . $sWhere;
             if ($_POST['status'] == 'no_result') {
-                $statusCondition = '  (vl.result is NULL OR vl.result ="")';
+                $statusCondition = '  (vl.hcv_vl_result is NULL AND vl.hcv_vl_result  ="" AND vl.hbv_vl_result is NULL AND vl.hbv_vl_result  ="")';
             } else if ($_POST['status'] == 'result') {
-                $statusCondition = ' (vl.result is NOT NULL AND vl.result !="")';
+                $statusCondition = ' (vl.hcv_vl_result is NOT NULL OR vl.hcv_vl_result  !="" OR vl.hbv_vl_result is NOT NULL OR vl.hbv_vl_result  !="")';
             } else {
                 $statusCondition = ' vl.result_status=4';
             }
@@ -382,14 +382,14 @@ if (isset($sLimit) && isset($sOffset)) {
     $sQuery = $sQuery . ' LIMIT ' . $sOffset . ',' . $sLimit;
 }
 //error_log($sQuery);
-//die($sQuery);
+die($sQuery);
 $rResult = $db->rawQuery($sQuery);
 /* Data set length after filtering */
 
-$aResultFilterTotal = $db->rawQuery("SELECT * FROM form_covid19 as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere order by $sOrder");
+$aResultFilterTotal = $db->rawQuery("SELECT * FROM form_hepatitis as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere order by $sOrder");
 $iFilteredTotal = count($aResultFilterTotal);
 /* Total data set length */
-$aResultTotal =  $db->rawQuery("SELECT * FROM form_covid19 as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere order by $sOrder");
+$aResultTotal =  $db->rawQuery("SELECT * FROM form_hepatitis as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere order by $sOrder");
 $iTotal = count($aResultTotal);
 
 /*
@@ -405,8 +405,8 @@ $output = array(
 foreach ($rResult as $aRow) {
     $row = array();
     if (isset($_POST['vlPrint']) && $_POST['vlPrint'] == 'print') {
-        $row[] = '<input type="checkbox" name="chk[]" class="checkRows" id="chk' . $aRow['covid19_id'] . '"  value="' . $aRow['covid19_id'] . '" onclick="checkedRow(this);"  />';
-        $print = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="resultPDF(' . $aRow['covid19_id'] . ',\'\');"><i class="fa fa-print"> Print</i></a>';
+        $row[] = '<input type="checkbox" name="chk[]" class="checkRows" id="chk' . $aRow['hepatitis_id'] . '"  value="' . $aRow['hepatitis_id'] . '" onclick="checkedRow(this);"  />';
+        $print = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="resultPDF(' . $aRow['hepatitis_id'] . ',\'\');"><i class="fa fa-print"> Print</i></a>';
     }
 
     $patientFname = $general->crypto('decrypt', $aRow['patient_name'], $aRow['patient_id']);
