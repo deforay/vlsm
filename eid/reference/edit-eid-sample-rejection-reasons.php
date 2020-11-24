@@ -4,17 +4,17 @@ ob_start();
 include_once(APPLICATION_PATH . '/header.php');
 $rejReaons = $general->getRejectionReasons('eid');
 $id = base64_decode($_GET['id']);
-$rsnQuery = "SELECT * from r_covid19_sample_rejection_reasons where rejection_reason_id=$id";
+$rsnQuery = "SELECT * from r_eid_sample_rejection_reasons where rejection_reason_id=$id";
 $rsnInfo = $db->query($rsnQuery);
 ?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<h1><i class="fa fa-gears"></i> Add Covid-19 Sample Rejection Reasons</h1>
+		<h1><i class="fa fa-gears"></i> Edit EID Sample Rejection Reasons</h1>
 		<ol class="breadcrumb">
 			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-			<li class="active">Covid-19 Sample Rejection Reasons</li>
+			<li class="active">EID Sample Rejection Reasons</li>
 		</ol>
 	</section>
 
@@ -35,7 +35,7 @@ $rsnInfo = $db->query($rsnQuery);
 								<div class="form-group">
 									<label for="rejectionReasonName" class="col-lg-4 control-label">Rejection Reason Name <span class="mandatory">*</span></label>
 									<div class="col-lg-7">
-										<input type="text" class="form-control isRequired" id="rejectionReasonName" name="rejectionReasonName" value="<?php echo $rsnInfo[0]['rejection_reason_name']; ?>" placeholder="Rejection Reason Name" title="Please enter Rejection Reason name" />
+										<input type="text" class="form-control isRequired" id="rejectionReasonName" name="rejectionReasonName" value="<?php echo $rsnInfo[0]['rejection_reason_name']; ?>" placeholder="Rejection Reason Name" title="Please enter Rejection Reason name" onblur="checkNameValidation('r_eid_sample_rejection_reasons','rejection_reason_name',this,'<?php echo "rejection_reason_id##" . $id; ?>','This Rejection reason name that you entered already exists.Try another Rejection reason name',null)"/>
 										<input type="hidden" class="form-control isRequired" id="rejectionReasonId" name="rejectionReasonId" value="<?php echo base64_encode($rsnInfo[0]['rejection_reason_id']); ?>" />
 									</div>
 								</div>
@@ -79,7 +79,7 @@ $rsnInfo = $db->query($rsnQuery);
 					<!-- /.box-body -->
 					<div class="box-footer">
 						<a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
-						<a href="covid19-sample-rejection-reasons.php" class="btn btn-default"> Cancel</a>
+						<a href="eid-sample-rejection-reasons.php" class="btn btn-default"> Cancel</a>
 					</div>
 					<!-- /.box-footer -->
 				</form>
