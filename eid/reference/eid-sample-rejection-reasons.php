@@ -7,10 +7,10 @@ include_once(APPLICATION_PATH . '/header.php');
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<h1><i class="fa fa-gears"></i> Eid Sample Rejection Reasons</h1>
+		<h1><i class="fa fa-gears"></i> EID Sample Rejection Reasons</h1>
 		<ol class="breadcrumb">
 			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-			<li class="active">Eid Sample Rejection Reasons</li>
+			<li class="active">EID Sample Rejection Reasons</li>
 		</ol>
 	</section>
 
@@ -21,7 +21,7 @@ include_once(APPLICATION_PATH . '/header.php');
 				<div class="box">
 					<div class="box-header with-border">
 						<?php if (isset($_SESSION['privileges']) && in_array("eid-sample-type.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') { ?>
-							<a href="add-eid-sample-rejection-reasons.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Covid-19 Sample Rejection Reasons</a>
+							<a href="add-eid-sample-rejection-reasons.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add EID Sample Rejection Reasons</a>
 						<?php } ?>
 						<!--<button class="btn btn-primary pull-right" style="margin-right: 1%;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>-->
 					</div>
