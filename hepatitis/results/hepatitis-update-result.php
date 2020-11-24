@@ -144,6 +144,8 @@ if (file_exists($fileArray[$arr['vl_form']])) {
 ?>
 
 <script>
+	changeReject($('#isSampleRejected').val());
+
 	$(document).ready(function() {
 		$('.date').datepicker({
 			changeMonth: true,
@@ -234,7 +236,6 @@ if (file_exists($fileArray[$arr['vl_form']])) {
 		$('#isSampleRejected').change(function(e) {
             changeReject(this.value);
         });
-        changeReject($('#isSampleRejected').val());
 	});
 
 	function changeReject(val) {

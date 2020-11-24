@@ -538,6 +538,10 @@
 		$(".hepatitisRequest").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".hepatitisBatchCodeMenu").addClass('active');
+	} else if (splitsUrl == 'hepatitis-manual-results.php' || splitsUrl == 'hepatitis-update-result.php') {
+		$(".allMenu").removeClass('active');
+		$(".hepatitisResults").addClass('active');
+		$(".hepatitisResultsMenu").addClass('active');
 	} else {
 		$(".allMenu").removeClass('active');
 		$(".dashboardMenu").addClass('active');
