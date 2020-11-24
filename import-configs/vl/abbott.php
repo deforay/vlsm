@@ -1,5 +1,7 @@
 <?php
 
+// File included in addImportResultHelper.php
+
 try {
     $db = $db->where('imported_by', $_SESSION['userId']);
     $db->delete('temp_sample_import');
@@ -64,13 +66,21 @@ try {
 
             $row = 1;
             if (($handle = fopen(TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName, "r")) !== false) {
-                while (($sheetData = fgetcsv($handle, 1000, "\t")) !== false) {
+                while (($sheetData = fgetcsv($handle, 10000, "\t")) !== false) {
                     $num = count($sheetData);
                     $row++;
                     if ($row < $skip) {
+                        if ($row == 8) {
+                            $timestamp = DateTime::createFromFormat('!m/d/Y h:i:s A', $sheetData[1]);
+                            if (!empty($timestamp)) {
+                                $timestamp = $timestamp->getTimestamp();
+                                $testingDate = date('Y-m-d H:i', ($timestamp));
+                            } else {
+                                $testingDate = null;
+                            }
+                        }
                         continue;
                     }
-
                     $sampleCode = "";
                     $batchCode = "";
                     $sampleType = "";
@@ -79,18 +89,18 @@ try {
                     $logVal = "";
                     $txtVal = "";
                     $resultFlag = "";
-                    $testingDate = "";
 
                     $sampleCode = $sheetData[$sampleIdCol];
                     $sampleType = $sheetData[$sampleTypeCol];
 
-                    $batchCode = $sheetData[$batchCodeCol];
+                    //$batchCode = $sheetData[$batchCodeCol];
                     $resultFlag = $sheetData[$flagCol];
                     //$reviewBy = $sheetData[$reviewByCol];
 
-                    //Changing date to European format for strtotime - https://stackoverflow.com/a/5736255
-                    //$sheetData[$testDateCol] = str_replace("/", "-", $sheetData[$testDateCol]);
+                    // //Changing date to European format for strtotime - https://stackoverflow.com/a/5736255
+                    // $sheetData[$testDateCol] = str_replace("/", "-", $sheetData[$testDateCol]);
                     $testingDate = date('Y-m-d H:i', strtotime($sheetData[$testDateCol]));
+
                     if (strpos($sheetData[$resultCol], 'Log') !== false) {
                         $sheetData[$resultCol] = str_replace(",", ".", $sheetData[$resultCol]); // in case they are using european decimal format
                         $logVal = ((float) filter_var($sheetData[$resultCol], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION));
@@ -102,50 +112,63 @@ try {
                             $absVal = $absDecimalVal;
                         }
                     } else if (strpos($sheetData[$resultCol], 'Copies') !== false) {
-                        $absDecimalVal = abs((int) filter_var($sheetData[$resultCol], FILTER_SANITIZE_NUMBER_INT));
-                        if (strpos($sheetData[$resultCol], "<") !== false) {
-                            $txtVal = $absVal = "< " . trim($absDecimalVal);
+                        if (strpos($sheetData[$resultCol], '<') !== false) {
+                            $txtVal = "Below Detection Level";
+                            $logVal = $absDecimalVal = $absVal = $resultFlag = "";
                         } else {
-                            $txtVal = null;
-                            $absVal = $absDecimalVal;
+                            $absVal = $absDecimalVal = abs((int) filter_var($sheetData[$resultCol], FILTER_SANITIZE_NUMBER_INT));
                         }
                     } else if (strpos($sheetData[$resultCol], 'IU/mL') !== false) {
                         $absVal = $absDecimalVal = abs((int) filter_var($sheetData[$resultCol], FILTER_SANITIZE_NUMBER_INT));
                     } else {
-                        if ($sheetData[$resultCol] == "" || $sheetData[$resultCol] == null) {
+                        if (strpos(strtolower($sheetData[$resultCol]), 'not detected') !== false || strtolower($sheetData[$resultCol]) == 'target not detected') {
+                            $txtVal = "Below Detection Level";
+                            $resultFlag = "";
+                            $absVal = "";
+                            $logVal = "";
+                        } else if ($sheetData[$resultCol] == "" || $sheetData[$resultCol] == null) {
                             //$txtVal =  $sheetData[$flagCol];
                             $txtVal = "Failed";
                             $resultFlag = $sheetData[$flagCol];
                         } else {
                             $txtVal = $sheetData[$resultCol + 1];
                             $resultFlag = "";
-                            $absDecimalVal = $absVal = "";
+                            $absVal = "";
                             $logVal = "";
                         }
                     }
 
-                    $sampleType = $sheetData[$sampleTypeCol];
 
+                    $lotNumberVal = $sheetData[$lotNumberCol];
+                    if (trim($sheetData[$lotExpirationDateCol]) != '') {
+                        $timestamp = DateTime::createFromFormat('!m/d/Y', $sheetData[$lotExpirationDateCol]);
+                        if (!empty($timestamp)) {
+                            $timestamp = $timestamp->getTimestamp();
+                            $lotExpirationDateVal = date('Y-m-d H:i', $timestamp);
+                        } else {
+                            $lotExpirationDateVal = null;
+                        }
+                    }
+
+                    $sampleType = $sheetData[$sampleTypeCol];
                     if ($sampleType == 'Patient') {
                         $sampleType = 'S';
                     } else if ($sampleType == 'Control') {
-                        if ($sampleType == 'HIV_HIPOS') {
+
+                        if ($sampleCode == 'HIV_HIPOS') {
                             $sampleType = 'HPC';
-                        } else if ($sampleType == 'HIV_LOPOS') {
+                            $sampleCode = $sampleCode . '-' . $lotNumberVal;
+                        } else if ($sampleCode == 'HIV_LOPOS') {
                             $sampleType = 'LPC';
-                        } else if ($sampleType == 'HIV_NEG') {
+                            $sampleCode = $sampleCode . '-' . $lotNumberVal;
+                        } else if ($sampleCode == 'HIV_NEG') {
                             $sampleType = 'NC';
+                            $sampleCode = $sampleCode . '-' . $lotNumberVal;
                         }
                     }
 
                     $batchCode = "";
 
-                    $lotNumberVal = $sheetData[$lotNumberCol];
-                    if (trim($sheetData[$lotExpirationDateCol]) != '') {
-                        //Changing date to European format for strtotime - https://stackoverflow.com/a/5736255
-                        //$sheetData[$lotExpirationDateCol] = str_replace("/", "-", $sheetData[$lotExpirationDateCol]);
-                        $lotExpirationDateVal = date('Y-m-d', strtotime($sheetData[$lotExpirationDateCol]));
-                    }
 
                     if ($sampleCode == "") {
                         $sampleCode = $sampleType . $m;
@@ -166,9 +189,9 @@ try {
                             "lotExpirationDate" => $lotExpirationDateVal,
                         );
                     } else {
-                        if (isset($logVal) && trim($logVal) != "") {
-                            $infoFromFile[$sampleCode]['logVal'] = trim($logVal);
-                        }
+                        // if (isset($logVal) && trim($logVal) != "") {
+                        //     $infoFromFile[$sampleCode]['logVal'] = trim($logVal);
+                        // }
                     }
 
                     $m++;
@@ -202,11 +225,11 @@ try {
             );
 
             //echo "<pre>";var_dump($data);continue;
-            if (!empty($d['txtVal']) && $d['txtVal'] != "") {
+            if ($d['txtVal'] != "") {
                 $data['result'] = $d['txtVal'];
-            } else if (!empty($d['absVal']) && $d['absVal'] != "") {
+            } else if ($d['absVal'] != "") {
                 $data['result'] = $d['absVal'];
-            } else if (!empty($d['logVal']) && $d['logVal'] != "") {
+            } else if ($d['logVal'] != "") {
                 $data['result'] = $d['logVal'];
             } else {
                 $data['result'] = "";
@@ -219,8 +242,8 @@ try {
                 $data['batch_code'] = $batchCode;
             }
             //get user name
-            if ($d['reviewBy'] != '') {
-                $uQuery = "SELECT user_name,user_id FROM user_details WHERE user_name='" . $d['reviewBy'] . "'";
+            if (isset($d['reviewBy']) && $d['reviewBy'] != '') {
+                $uQuery = "select user_name,user_id from user_details where user_name='" . $d['reviewBy'] . "'";
                 $uResult = $db->rawQuery($uQuery);
                 if ($uResult) {
                     $data['sample_review_by'] = $uResult[0]['user_id'];
@@ -237,10 +260,10 @@ try {
                 }
             }
 
-            $query = "SELECT facility_id,vl_sample_id,result,result_value_log,result_value_absolute,result_value_text,result_value_absolute_decimal FROM vl_request_form where sample_code='" . $sampleCode . "'";
+            $query = "SELECT facility_id,vl_sample_id,result,result_value_log,result_value_absolute,result_value_text,result_value_absolute_decimal FROM vl_request_form WHERE sample_code='" . $sampleCode . "'";
             $vlResult = $db->rawQuery($query);
             //insert sample controls
-            $scQuery = "SELECT r_sample_control_name FROM r_sample_controls WHERE r_sample_control_name='" . trim($d['sampleType']) . "'";
+            $scQuery = "SELECT r_sample_control_name FROM r_sample_controls where r_sample_control_name='" . trim($d['sampleType']) . "'";
             $scResult = $db->rawQuery($scQuery);
             if ($scResult == false) {
                 $scData = array('r_sample_control_name' => trim($d['sampleType']));
