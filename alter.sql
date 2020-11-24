@@ -1953,5 +1953,50 @@ INSERT INTO `resources` (`resource_id`, `module`, `display_name`) VALUES ('hepat
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'hepatitis-results', 'hepatitis-manual-results.php', 'Enter Result Manually');
 
 
+
 UPDATE `system_config` SET `value` = '4.2.7' WHERE `system_config`.`name` = 'version';
--- Version 4.2.7 -- Amit -- 20-Nov-2020
+--- Version 4.2.7  -- Amit -- 20-Nov-2020
+
+-- Prasath M 23-Nov-2020
+ALTER TABLE `testing_labs` ADD `suppressed_monthly_target`Varchar(255) NULL DEFAULT NULL ;
+-- Thana 23-Nov-2020
+CREATE TABLE `r_hepatitis_sample_rejection_reasons` (
+ `rejection_reason_id` int NOT NULL AUTO_INCREMENT,
+ `rejection_reason_name` varchar(255) DEFAULT NULL,
+ `rejection_type` varchar(255) NOT NULL DEFAULT 'general',
+ `rejection_reason_status` varchar(255) DEFAULT NULL,
+ `rejection_reason_code` varchar(255) DEFAULT NULL,
+ `updated_datetime` datetime DEFAULT NULL,
+ `data_sync` int NOT NULL DEFAULT '0',
+ PRIMARY KEY (`rejection_reason_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `r_hepatitis_sample_type` (
+ `sample_id` int NOT NULL AUTO_INCREMENT,
+ `sample_name` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
+ `status` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
+ `updated_datetime` datetime DEFAULT NULL,
+ `data_sync` int NOT NULL DEFAULT '0',
+ PRIMARY KEY (`sample_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `r_hepatitis_test_reasons` (
+ `test_reason_id` int NOT NULL AUTO_INCREMENT,
+ `test_reason_name` varchar(255) DEFAULT NULL,
+ `parent_reason` int DEFAULT NULL,
+ `test_reason_status` varchar(45) DEFAULT NULL,
+ `updated_datetime` datetime DEFAULT NULL,
+ PRIMARY KEY (`test_reason_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `r_hepatitis_results` (
+ `result_id` varchar(255) NOT NULL,
+ `result` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+ `status` varchar(255) NOT NULL DEFAULT 'active',
+ `updated_datetime` datetime DEFAULT NULL,
+ `data_sync` int NOT NULL DEFAULT '0',
+ PRIMARY KEY (`result_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+ALTER TABLE `form_hepatitis` ADD `reason_for_vl_test` VARCHAR(255) NULL DEFAULT NULL AFTER `type_of_test_requested`;
+
+ALTER TABLE `testing_labs` CHANGE `test_type` `test_type` ENUM('vl','eid','covid19','hepatitis') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;

@@ -34,8 +34,13 @@ include_once(APPLICATION_PATH . '/header.php');
 
 // $general = new \Vlsm\Models\General($db);
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
+$hepatitisDb = new \Vlsm\Models\Hepatitis($db);
 $userDb = new \Vlsm\Models\Users($db);
 
+$hepatitisResults = $hepatitisDb->getHepatitisResults();
+$testReasonResults = $hepatitisDb->getHepatitisReasonsForTesting();
+$healthFacilities = $facilitiesDb->getHealthFacilities('hepatitis');
+$testingLabs = $facilitiesDb->getTestingLabs('hepatitis');
 // $arr = $general->getGlobalConfig();
 // $sarr = $general->getSystemConfig();
 
@@ -43,8 +48,6 @@ $labTechnicians = $userDb->getActiveUserInfo();
 foreach ($labTechnicians as $labTech) {
     $labTechniciansResults[$labTech['user_id']] = ucwords($labTech['user_name']);
 }
-$healthFacilities = $facilitiesDb->getHealthFacilities('hepatitis');
-$testingLabs = $facilitiesDb->getTestingLabs('hepatitis');
 
 // Comorbidity
 $comorbidityData = array();
@@ -61,6 +64,13 @@ foreach($riskFactorsResult as $riskFactors){
     $riskFactorsData[$riskFactors['riskfactor_id']] = ucwords($riskFactors['riskfactor_name']);
 }
 
+//sample rejection reason
+$rejectionTypeQuery = "SELECT DISTINCT rejection_type FROM r_hepatitis_sample_rejection_reasons WHERE rejection_reason_status ='active'";
+$rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
+
+$rejectionQuery = "SELECT * FROM r_hepatitis_sample_rejection_reasons where rejection_reason_status = 'active'";
+$rejectionResult = $db->rawQuery($rejectionQuery);
+
 $rejectionReason = "";
 foreach ($rejectionTypeResult as $type) {
     $rejectionReason .= '<optgroup label="' . ucwords($type['rejection_type']) . '">';
@@ -71,7 +81,7 @@ foreach ($rejectionTypeResult as $type) {
     }
     $rejectionReason .= '</optgroup>';
 }
-// $specimenTypeResult = $general->fetchDataFromTable('r_hepatitis_sample_type', "status = 'active'");
+$specimenTypeResult = $general->fetchDataFromTable('r_hepatitis_sample_type', "status = 'active'");
 
 $fileArray = array(
     1 => 'forms/add-southsudan.php',
@@ -202,6 +212,27 @@ if (file_exists($fileArray[$arr['vl_form']])) {
 
         $('.date').mask('99-aaa-9999');
         $('.dateTime').mask('99-aaa-9999 99:99');
+
+        $('#isSampleRejected').change(function(e) {
+            if (this.value == 'yes') {
+                $('.show-rejection').show();
+                $('.rejected-input').prop('disabled', true);
+                $('.rejected').addClass('disabled');
+                $('#sampleRejectionReason,#rejectionDate').addClass('isRequired');
+                $('#sampleTestedDateTime,').removeClass('isRequired');
+                $('#result').prop('disabled', true);
+                $('#sampleRejectionReason').prop('disabled', false);
+            } else {
+                $('#rejectionDate').val('');
+                $('.show-rejection').hide();
+                $('.rejected-input').prop('disabled', false);
+                $('.rejected').removeClass('disabled');
+                $('#sampleRejectionReason,#rejectionDate').removeClass('isRequired');
+                $('#sampleTestedDateTime,').addClass('isRequired');
+                $('#result').prop('disabled', false);
+                $('#sampleRejectionReason').prop('disabled', true);
+            }
+        });
     });
 
     function checkSampleNameValidation(tableName, fieldName, id, fnct, alrt) {
