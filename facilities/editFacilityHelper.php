@@ -97,6 +97,7 @@ try {
 					'test_type' => $_POST['testData'][$tf],
 					'facility_id' => $lastId,
 					'monthly_target' => $_POST['monTar'][$tf],
+					'suppressed_monthly_target' => $_POST['supMonTar'][$tf],
 					"updated_datetime" => $general->getDateTime()
 				);
 				$db->insert($tableName3, $dataTest);

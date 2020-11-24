@@ -124,6 +124,7 @@ try {
 		'hbv_vaccination'                     => isset($_POST['HbvVaccination']) ? $_POST['HbvVaccination'] : null,
 		'is_sample_collected'                 => isset($_POST['isSampleCollected']) ? $_POST['isSampleCollected'] : null,
 		'type_of_test_requested'              => isset($_POST['testTypeRequested']) ? $_POST['testTypeRequested'] : null,
+		'reason_for_vl_test'  				  => isset($_POST['reasonVlTest']) ? $_POST['reasonVlTest'] :null,
 		'specimen_type'                       => isset($_POST['specimenType']) ? $_POST['specimenType'] : null,
 		'sample_collection_date'              => isset($_POST['sampleCollectionDate']) ? $_POST['sampleCollectionDate'] : null,
 		'sample_received_at_vl_lab_datetime'  => isset($_POST['sampleReceivedDate']) ? $_POST['sampleReceivedDate'] : null,

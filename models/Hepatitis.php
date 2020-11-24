@@ -158,4 +158,24 @@ class Hepatitis
         return $riskFactorsData;
     }
 
+    public function getHepatitisResults()
+    {
+        $results = $this->db->rawQuery("SELECT result_id,result FROM r_hepatitis_results where status='active' ORDER BY result_id DESC");
+        $response = array();
+        foreach ($results as $row) {
+            $response[$row['result_id']] = $row['result'];
+        }
+        return $response;
+    }
+
+    public function getHepatitisReasonsForTesting()
+    {
+        $results = $this->db->rawQuery("SELECT test_reason_id,test_reason_name FROM r_hepatitis_test_reasons WHERE `test_reason_status` LIKE 'active'");
+        $response = array();
+        foreach ($results as $row) {
+            $response[$row['test_reason_id']] = $row['test_reason_name'];
+        }
+        return $response;
+    }
+
 }

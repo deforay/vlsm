@@ -12,7 +12,7 @@ $rsnInfo = $db->query($rsnQuery);
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<h1><i class="fa fa-gears"></i> Add Covid-19 Sample Rejection Reasons</h1>
+		<h1><i class="fa fa-gears"></i> Edit Covid-19 Sample Rejection Reasons</h1>
 		<ol class="breadcrumb">
 			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
 			<li class="active">Covid-19 Sample Rejection Reasons</li>
@@ -79,7 +79,7 @@ $rsnInfo = $db->query($rsnQuery);
 					<!-- /.box-body -->
 					<div class="box-footer">
 						<a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
-						<a href="covid19-sample-rejection-reasons.php" class="btn btn-default"> Cancel</a>
+						<a href="vl-sample-rejection-reasons.php" class="btn btn-default"> Cancel</a>
 					</div>
 					<!-- /.box-footer -->
 				</form>

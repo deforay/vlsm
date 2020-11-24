@@ -355,18 +355,22 @@ $(document).ready(function() {
     var testType = $("#testType").val();
     if(facility && (testType.length > 0) && facility == '2')
     {
-      var  div = '<table class="table table-bordered table-striped"><thead><th> Test Type</th> <th> Monthly Target <span class="mandatory">*</span></th> </thead><tbody>';
+      var  div = '<table class="table table-bordered table-striped"><thead><th> Test Type</th> <th> Monthly Target <span class="mandatory">*</span></th><th>Suppressed Monthly Target <span class="mandatory">*</span></th> </thead><tbody>';
       for(var i =0; i < testType.length; i++)
       {
         var testOrg = '';  
         if(testType[i] == 'vl')
-          testOrg = 'Viral Load';
-        else if(testType[i] == 'eid')
-          testOrg = 'Early Infant Diagnosis';
-        else if(testType[i] == 'covid19')
-          testOrg = 'Covid-19';
+        {
+          testOrg = 'Viral Load'; var extraDiv = '<td><input type="text" class=" isRequired" name="supMonTar[]" id ="supMonTar'+i+'" value="" title="Please enter Suppressed monthly target"/></td>';
+        }else if(testType[i] == 'eid'){
+          testOrg = 'Early Infant Diagnosis'; var extraDiv = '<td></td>';
+        }else if(testType[i] == 'covid19'){
+          testOrg = 'Covid-19'; var extraDiv = '<td></td>';
+        }
         div+='<tr><td>'+testOrg+'<input type="hidden" name="testData[]" id ="testData'+i+'" value="'+testType[i]+'" /></td>';
-        div+='<td><input type="text" class=" isRequired" name="monTar[]" id ="monTar'+i+'" value="" title="Please enter monthly target"/></td></tr>';
+        div+='<td><input type="text" class=" isRequired" name="monTar[]" id ="monTar'+i+'" value="" title="Please enter monthly target"/></td>';
+        div+= extraDiv;
+        div+='</tr>';
       }
       div+='</tbody></table>';
       $("#testDetails").html(div);
