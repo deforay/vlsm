@@ -135,7 +135,7 @@ class MYPDF extends TCPDF
 					$this->writeHTMLCell(0, 0, 10, 25, strtoupper($this->lab), 0, 0, 0, true, 'C', true);
 				}
 				$this->SetFont('helvetica', '', 12);
-				$this->writeHTMLCell(0, 0, 10, 30, 'HEPATITIS TEST - PATIENT REPORT', 0, 0, 0, true, 'C', true);
+				$this->writeHTMLCell(0, 0, 10, 30, 'HCV Viral Load Results Report', 0, 0, 0, true, 'C', true);
 				$this->writeHTMLCell(0, 0, 15, 38, '<hr>', 0, 0, 0, true, 'C', true);
 			}
 		} else {
@@ -288,6 +288,17 @@ $fileArray = array(
     6 => 'pdf/result-pdf-who.php',
     7 => 'pdf/result-pdf-rwanda.php',
     8 => 'pdf/result-pdf-angola.php',
+);
+
+$country = array(
+    1 => 'South sudan',
+    2 => 'Zimbabwe',
+    3 => 'Democratic Republic of the Congo',
+    4 => 'Zambia',
+    5 => 'Papua New Guinea',
+    6 => 'Who',
+    7 => 'Rwanda',
+    8 => 'Angola',
 );
 
 if (file_exists($fileArray[$arr['vl_form']])) {
