@@ -517,7 +517,7 @@
 		$(".covid19-reference-manage").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".covid19-symptoms").addClass('active');
-	} else if (splitsUrl == 'covid19-test-reasons.php' || splitsUrl == 'add-covid19-test-reasons.php.php' || splitsUrl == 'edit-covid19-test-reasons.php.php') {
+	} else if (splitsUrl == 'covid19-test-reasons.php' || splitsUrl == 'add-covid19-test-reasons.php' || splitsUrl == 'edit-covid19-test-reasons.php') {
 		$(".manage").addClass('active');
 		$(".covid19-reference-manage").addClass('active');
 		$(".allMenu").removeClass('active');
@@ -538,7 +538,12 @@
 		$(".hepatitisRequest").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".hepatitisBatchCodeMenu").addClass('active');
-	} else {
+	} else if (splitsUrl == 'hepatitis-comorbidities.php' || splitsUrl == 'add-hepatitis-comorbidities.php' || splitsUrl == 'edit-hepatitis-comorbidities.php') {
+		$(".manage").addClass('active');
+		$(".hepatitis-reference-manage").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".hepatitis-comorbidities").addClass('active');
+	}else {
 		$(".allMenu").removeClass('active');
 		$(".dashboardMenu").addClass('active');
 	}
