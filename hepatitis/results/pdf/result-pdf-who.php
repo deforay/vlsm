@@ -1,7 +1,8 @@
 <?php
 
-// this file is included in covid-19/results/generate-result-pdf.php
-$covid19Results = $general->getCovid19Results();
+// this file is included in hepatitis/results/generate-result-pdf.php
+$hepatitisDb = new \Vlsm\Models\Hepatitis($db);
+$hepatitisResults = $hepatitisDb->getHepatitisResults();
 
 $resultFilename = '';
 
@@ -41,7 +42,7 @@ if (sizeof($requestResult) > 0) {
         $pdf->setHeading($arr['logo'], $arr['header'], $result['labName'], $title = 'EARLY INFANT DIAGNOSIS PATIENT REPORT');
         // set document information
         $pdf->SetCreator('VLSM');
-        $pdf->SetTitle('Covid-19 Patient Report');
+        $pdf->SetTitle('Hepatitis Patient Report');
         //$pdf->SetSubject('TCPDF Tutorial');
         //$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
@@ -258,7 +259,7 @@ if (sizeof($requestResult) > 0) {
             $html .= '<tr>';
                 $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['sample_tested_datetime'] . '</td>';
                 $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $sampleDisbatchDate . " " . $sampleDisbatchTime . '</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['covid19_test_platform']) . '</td>';
+                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['hepatitis_test_platform']) . '</td>';
             $html .= '</tr>';
 
             $html .= '<tr>';
@@ -269,37 +270,6 @@ if (sizeof($requestResult) > 0) {
                 $html .= '<td colspan="3" style="line-height:10px;"></td>';
             $html .= '</tr>';
 
-            $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">DATE OF SYMPTOM ONSET</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">HAS THE PATIENT HAD CONTACT WITH A CONFIRMED CASE?</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">HAS THE PATIENT HAD A RECENT HISTORY OF TRAVELLING TO AN AFFECTED AREA?</td>';
-            $html .= '</tr>';
-
-            $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $general->humanDateFormat($result['date_of_symptom_onset']) . '</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['contact_with_confirmed_case']). '</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['has_recent_travel_history']) . '</td>';
-            $html .= '</tr>';
-
-            $html .= '<tr>';
-                $html .= '<td colspan="3" style="line-height:10px;"></td>';
-            $html .= '</tr>';
-            
-            $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">IF YES, COUNTRY NAME(S)</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">RETURN DATE</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
-            $html .= '</tr>';
-
-            $html .= '<tr>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['travel_country_names']). '</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $general->humanDateFormat($result['travel_return_date']) . '</td>';
-                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
-            $html .= '</tr>';
-        
-            $html .= '<tr>';
-                $html .= '<td colspan="3" style="line-height:10px;"></td>';
-            $html .= '</tr>';
             $html .= '<tr>';
                 $html .= '<td colspan="3" style="line-height:10px;"></td>';
             $html .= '</tr>';
@@ -314,33 +284,13 @@ if (sizeof($requestResult) > 0) {
                         // $html .= '<tr style="background-color:#dbdbdb;">
                         $html .= '<tr>';
                             $html .= '<td colspan="3" style="line-height:40px;font-size:12px;font-weight:normal;">';
-                                if(isset($covid19TestInfo) && count($covid19TestInfo) > 0 && $arr['covid19_tests_table_in_results_pdf'] == 'yes'){
-                                /* Test Result Section */
-                                $html .= '<table border="1">
-                                        <tr>
-                                            <td align="center" width="15%"><b>Test No.</b></td>
-                                            <td align="center" width="45%"><b>Name of the Testkit (or) Test Method used</b></td>
-                                            <td align="center" width="25%"><b>Date of Testing</b></td>
-                                            <td align="center" width="15%"><b>Test Result</b></td>
-                                        </tr>';
-                                
-                                    foreach($covid19TestInfo as $indexKey=>$rows){
-                                        $html .= '<tr>
-                                            <td align="center" width="15%">'.($indexKey+1).'</td>
-                                            <td align="center" width="45%">'.$covid19TestInfo[$indexKey]['test_name'].'</td>
-                                            <td align="center" width="25%">'.$general->humanDateFormat($covid19TestInfo[$indexKey]['sample_tested_datetime']).'</td>
-                                            <td align="center" width="15%">'.ucwords($covid19TestInfo[$indexKey]['result']).'</td>
-                                        </tr>';
-                                    }
-                                $html .='</table>';
-                                }
                                 $html .='<table style="padding:10px">
                                             <tr>
                                                 <td colspan="2" style="line-height:10px;"></td>
                                             </tr>
                                             <tr style="background-color:#dbdbdb;">
-                                                <td style="line-height:70px;font-size:18px;font-weight:normal;"><br>&nbsp;&nbsp;Result &nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . $covid19Results[$result['result']] .'</td>
-                                                <td align="center"><br>'.$smileyContent.'</td>
+                                                <td style="line-height:70px;font-size:18px;font-weight:normal;"><br>&nbsp;&nbsp;HCV VL Result &nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . $hepatitisResults[$result['hcv_vl_result']] .'</td>
+                                                <td style="line-height:70px;font-size:18px;font-weight:normal;"><br>&nbsp;&nbsp;HBV VL Result &nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . $hepatitisResults[$result['hbv_vl_result']] .'</td>
                                             </tr>
                                         </table>';
                             $html .='</td>';
@@ -461,10 +411,10 @@ if (sizeof($requestResult) > 0) {
             );
             $db->insert($tableName1, $data);
             //Update print datetime in VL tbl.
-            $vlQuery = "SELECT result_printed_datetime FROM form_covid19 as vl WHERE vl.covid19_id ='" . $result['covid19_id'] . "'";
+            $vlQuery = "SELECT result_printed_datetime FROM form_hepatitis as vl WHERE vl.hepatitis_id ='" . $result['hepatitis_id'] . "'";
             $vlResult = $db->query($vlQuery);
             if ($vlResult[0]['result_printed_datetime'] == NULL || trim($vlResult[0]['result_printed_datetime']) == '' || $vlResult[0]['result_printed_datetime'] == '0000-00-00 00:00:00') {
-                $db = $db->where('covid19_id', $result['covid19_id']);
+                $db = $db->where('hepatitis_id', $result['hepatitis_id']);
                 $db->update($tableName2, array('result_printed_datetime' => $currentTime, 'result_dispatched_datetime' => $currentTime));
             }
         }
@@ -476,7 +426,7 @@ if (sizeof($requestResult) > 0) {
         $resultPdf->setPrintHeader(false);
         $resultPdf->setPrintFooter(false);
         $resultPdf->concat();
-        $resultFilename = 'COVID-19-Test-result-' . date('d-M-Y-H-i-s') . '.pdf';
+        $resultFilename = 'Hepatitis-Test-result-' . date('d-M-Y-H-i-s') . '.pdf';
         $resultPdf->Output(UPLOAD_PATH . DIRECTORY_SEPARATOR . $resultFilename, "F");
         $general->removeDirectory($pathFront);
         unset($_SESSION['rVal']);

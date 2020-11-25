@@ -253,13 +253,13 @@ $dWhere = '';
 if (isset($_POST['vlPrint']) && $_POST['vlPrint'] == 'print') {
 	if (!isset($_POST['status']) || trim($_POST['status']) == '') {
 		if (trim($sWhere) != '') {
-			$sWhere = $sWhere . " AND ((vl.result_status = 7 AND (vl.hcv_vl_result is NOT NULL OR vl.hcv_vl_result  !='' OR vl.hbv_vl_result is NOT NULL OR vl.hbv_vl_result  !='')) OR (vl.result_status = 4 AND (vl.hcv_vl_result is NULL AND vl.hcv_vl_result  ='' AND vl.hbv_vl_result is NULL AND vl.hbv_vl_result  =''))) AND result_printed_datetime is NOT NULL AND result_printed_datetime not like ''";
+			$sWhere = $sWhere . " AND ((vl.result_status = 7 AND (vl.hcv_vl_result is NOT NULL OR vl.hcv_vl_result not like '' OR vl.hbv_vl_result is NOT NULL OR vl.hbv_vl_result not like '')) OR (vl.result_status = 4 AND (vl.hcv_vl_result is NULL AND vl.hcv_vl_result like '' AND vl.hbv_vl_result is NULL AND vl.hbv_vl_result like ''))) AND result_printed_datetime is NOT NULL AND result_printed_datetime not like ''";
 		} else {
-			$sWhere = "WHERE ((vl.result_status = 7 AND (vl.hcv_vl_result is NOT NULL OR vl.hcv_vl_result  !='' OR vl.hbv_vl_result is NOT NULL OR vl.hbv_vl_result  !='')) OR (vl.result_status = 4 AND (vl.hcv_vl_result is NULL AND vl.hcv_vl_result  ='' AND vl.hbv_vl_result is NULL AND vl.hbv_vl_result  =''))) AND result_printed_datetime is NOT NULL AND result_printed_datetime not like ''";
+			$sWhere = "WHERE ((vl.result_status = 7 AND (vl.hcv_vl_result is NOT NULL OR vl.hcv_vl_result not like '' OR vl.hbv_vl_result is NOT NULL OR vl.hbv_vl_result not like '')) OR (vl.result_status = 4 AND (vl.hcv_vl_result is NULL AND vl.hcv_vl_result like '' AND vl.hbv_vl_result is NULL AND vl.hbv_vl_result like ''))) AND result_printed_datetime is NOT NULL AND result_printed_datetime not like ''";
 		}
 	}
 	$sWhere = $sWhere . " AND vl.vlsm_country_id='" . $arr['vl_form'] . "'";
-	$dWhere = "WHERE ((vl.result_status = 7 AND (vl.hcv_vl_result is NOT NULL OR vl.hcv_vl_result  !='' OR vl.hbv_vl_result is NOT NULL OR vl.hbv_vl_result  !='')') OR (vl.result_status = 4 AND (vl.hcv_vl_result is NULL OR vl.hcv_vl_result ='' OR vl.hbv_vl_result is NULL OR vl.hbv_vl_result  =''))) AND vl.vlsm_country_id='" . $arr['vl_form'] . "' AND result_printed_datetime is NOT NULL AND result_printed_datetime not like ''";
+	$dWhere = "WHERE ((vl.result_status = 7 AND (vl.hcv_vl_result is NOT NULL OR vl.hcv_vl_result not like '' OR vl.hbv_vl_result is NOT NULL OR vl.hbv_vl_result not like '')) OR (vl.result_status = 4 AND (vl.hcv_vl_result is NULL OR vl.hcv_vl_result ='' OR vl.hbv_vl_result is NULL OR vl.hbv_vl_result like ''))) AND vl.vlsm_country_id='" . $arr['vl_form'] . "' AND result_printed_datetime is NOT NULL AND result_printed_datetime not like ''";
 }
 if ($sarr['user_type'] == 'remoteuser') {
 	//$sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
@@ -285,7 +285,7 @@ if (isset($sLimit) && isset($sOffset)) {
 	$sQuery = $sQuery . ' LIMIT ' . $sOffset . ',' . $sLimit;
 }
 //error_log($sQuery);
-die($sQuery);
+// die($sQuery);
 $rResult = $db->rawQuery($sQuery);
 /* Data set length after filtering */
 

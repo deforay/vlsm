@@ -344,13 +344,13 @@ $dWhere = '';
 if (isset($_POST['vlPrint']) && $_POST['vlPrint'] == 'print') {
     if (!isset($_POST['status']) || trim($_POST['status']) == '') {
         if (trim($sWhere) != '') {
-            $sWhere = $sWhere . " AND ((vl.result_status = 7 AND vl.result is NOT NULL AND vl.result !='') OR (vl.result_status = 4 AND (vl.result is NULL OR vl.result = ''))) AND (result_printed_datetime is NULL OR result_printed_datetime like '')";
+            $sWhere = $sWhere . " AND ((vl.result_status = 7 AND (vl.hcv_vl_result is NOT NULL OR vl.hcv_vl_result  !='' OR vl.hbv_vl_result is NOT NULL OR vl.hbv_vl_result  !='')) OR (vl.result_status = 4 AND (vl.hcv_vl_result is NULL OR vl.hcv_vl_result  ='' OR vl.hbv_vl_result is NULL OR vl.hbv_vl_result  =''))) AND (result_printed_datetime is NULL OR result_printed_datetime like '')";
         } else {
-            $sWhere = "WHERE ((vl.result_status = 7 AND vl.result is NOT NULL AND vl.result !='') OR (vl.result_status = 4 AND (vl.result is NULL OR vl.result = ''))) AND (result_printed_datetime is NULL OR result_printed_datetime like '')";
+            $sWhere = "WHERE ((vl.result_status = 7 AND (vl.hcv_vl_result is NOT NULL OR vl.hcv_vl_result  !='' OR vl.hbv_vl_result is NOT NULL OR vl.hbv_vl_result  !='')) OR (vl.result_status = 4 AND (vl.hcv_vl_result is NULL OR vl.hcv_vl_result  ='' OR vl.hbv_vl_result is NULL OR vl.hbv_vl_result  =''))) AND (result_printed_datetime is NULL OR result_printed_datetime like '')";
         }
     }
     $sWhere = $sWhere . " AND vl.vlsm_country_id='" . $arr['vl_form'] . "'";
-    $dWhere = "WHERE ((vl.result_status = 7 AND vl.result is NOT NULL AND vl.result !='') OR (vl.result_status = 4 AND (vl.result is NULL OR vl.result = ''))) AND vl.vlsm_country_id='" . $arr['vl_form'] . "' AND (result_printed_datetime is NULL OR result_printed_datetime like '')";
+    $dWhere = "WHERE ((vl.result_status = 7 AND (vl.hcv_vl_result is NOT NULL OR vl.hcv_vl_result  !='' OR vl.hbv_vl_result is NOT NULL OR vl.hbv_vl_result  !='')) OR (vl.result_status = 4 AND (vl.hcv_vl_result is NULL OR vl.hcv_vl_result  ='' OR vl.hbv_vl_result is NULL OR vl.hbv_vl_result =''))) AND vl.vlsm_country_id='" . $arr['vl_form'] . "' AND (result_printed_datetime is NULL OR result_printed_datetime like '')";
 } else {
     if (trim($sWhere) != '') {
         $sWhere = $sWhere . " AND vl.vlsm_country_id='" . $arr['vl_form'] . "' AND vl.result_status!=9";
@@ -382,7 +382,7 @@ if (isset($sLimit) && isset($sOffset)) {
     $sQuery = $sQuery . ' LIMIT ' . $sOffset . ',' . $sLimit;
 }
 //error_log($sQuery);
-die($sQuery);
+// die($sQuery);
 $rResult = $db->rawQuery($sQuery);
 /* Data set length after filtering */
 
@@ -420,7 +420,8 @@ foreach ($rResult as $aRow) {
     $row[] = $aRow['patient_id'];
     $row[] = ucwords($patientFname . " " . $patientLname);
     $row[] = ucwords($aRow['facility_name']);
-    $row[] = $covid19Results[$aRow['result']];
+    $row[] = ucwords($hepatitisResults[$aRow['hcv_vl_result']]);
+	$row[] = ucwords($hepatitisResults[$aRow['hbv_vl_result']]);
 
     if (isset($aRow['last_modified_datetime']) && trim($aRow['last_modified_datetime']) != '' && $aRow['last_modified_datetime'] != '0000-00-00 00:00:00') {
         $xplodDate = explode(" ", $aRow['last_modified_datetime']);
