@@ -20,9 +20,11 @@ $sarr = array();
 for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
     $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
 }
-$general = new \Vlsm\Models\General($db);
 
-$covid19Results = $general->getCovid19Results();
+$general = new \Vlsm\Models\General($db);
+$hepatitisDb = new \Vlsm\Models\Hepatitis($db);
+
+$hepatitisResults = $hepatitisDb->getHepatitisResults();
 
 $tableName = "form_hepatitis";
 $primaryKey = "hepatitis_id";
@@ -139,7 +141,7 @@ $sQuery = "SELECT vl.*,b.*,ts.*,imp.*,
             LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id 
             LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by 
             LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by 
-            LEFT JOIN r_covid19_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection 
+            LEFT JOIN r_hepatitis_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection 
             LEFT JOIN r_implementation_partners as imp ON imp.i_partner_id=vl.implementing_partner";
 $start_date = '';
 $end_date = '';
@@ -370,14 +372,13 @@ if ($sarr['user_type'] == 'remoteuser') {
     }
 }
 $sQuery = $sQuery . ' ' . $sWhere;
-$_SESSION['covid19PrintQuery'] = $sQuery;
-//echo $_SESSION['vlResultQuery'];die;
+$_SESSION['hepatitisPrintQuery'] = $sQuery;
 
 if (isset($sOrder) && $sOrder != "") {
     $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
     $sQuery = $sQuery . ' order by ' . $sOrder;
 }
-$_SESSION['covid19PrintSearchResultQuery'] = $sQuery;
+$_SESSION['hepatitisPrintSearchResultQuery'] = $sQuery;
 if (isset($sLimit) && isset($sOffset)) {
     $sQuery = $sQuery . ' LIMIT ' . $sOffset . ',' . $sLimit;
 }

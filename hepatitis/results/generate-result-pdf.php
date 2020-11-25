@@ -76,7 +76,7 @@ if (isset($_POST['id']) && trim($_POST['id']) != '') {
 } else {
 	$searchQuery = $allQuery;
 }
-//echo($searchQuery);die;
+// echo($searchQuery);die;
 $requestResult = $db->query($searchQuery);
 /* Test Results */
 
@@ -125,7 +125,7 @@ class MYPDF extends TCPDF
 				$this->SetFont('helvetica', 'b', 12);
 				$this->writeHTMLCell(0, 0, 10, 33, 'RESULTATS DE LABORATOIRE DES ECHANTIONS RESPIRATOIRES', 0, 0, 0, true, 'C', true);
 				$this->SetFont('helvetica', 'u', 10);
-				$this->writeHTMLCell(0, 0, 10, 40, 'TESTES AU COVID-19 PAR RT-PCR en temps réel N°', 0, 0, 0, true, 'C', true);
+				$this->writeHTMLCell(0, 0, 10, 40, 'TESTES AU HEPATITIS PAR RT-PCR en temps réel N°', 0, 0, 0, true, 'C', true);
 				$this->writeHTMLCell(0, 0, 15, 48, '<hr>', 0, 0, 0, true, 'C', true);
 			} else {
 				$this->SetFont('helvetica', 'B', 16);
@@ -135,7 +135,7 @@ class MYPDF extends TCPDF
 					$this->writeHTMLCell(0, 0, 10, 25, strtoupper($this->lab), 0, 0, 0, true, 'C', true);
 				}
 				$this->SetFont('helvetica', '', 12);
-				$this->writeHTMLCell(0, 0, 10, 30, 'COVID-19 TEST - PATIENT REPORT', 0, 0, 0, true, 'C', true);
+				$this->writeHTMLCell(0, 0, 10, 30, 'HEPATITIS TEST - PATIENT REPORT', 0, 0, 0, true, 'C', true);
 				$this->writeHTMLCell(0, 0, 15, 38, '<hr>', 0, 0, 0, true, 'C', true);
 			}
 		} else {

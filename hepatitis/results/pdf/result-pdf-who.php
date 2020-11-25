@@ -13,7 +13,6 @@ if (!empty($userRes['user_signature'])) {
     $userSignaturePath = UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature" . DIRECTORY_SEPARATOR . $userRes['user_signature'];
 }
 
-
 if (sizeof($requestResult) > 0) {
     $_SESSION['rVal'] = $general->generateRandomString(6);
     $pathFront = (UPLOAD_PATH . DIRECTORY_SEPARATOR .  $_SESSION['rVal']);
@@ -173,6 +172,7 @@ if (sizeof($requestResult) > 0) {
         if ($result['result_status'] == '4') {
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/cross.png" alt="rejected"/>';
         }
+
         $html = '';
         $html .= '<table style="padding:0px 2px 2px 2px;">';
             $html .= '<tr>';
@@ -384,7 +384,8 @@ if (sizeof($requestResult) > 0) {
                 $html .= '</td>';
             $html .= '</tr>';
         $html .= '</table>';
-        if ($result['result'] != '' || ($result['result'] == '' && $result['result_status'] == '4')) {
+
+        if (($result['hcv_vl_result'] != '' || $result['hbv_vl_result'] != '') || (($result['hcv_vl_result'] == '' || $result['hbv_vl_result'] == '') && $result['result_status'] == '4')) {
             $pdf->writeHTML($html);
             $pdf->lastPage();
             $filename = $pathFront . DIRECTORY_SEPARATOR . 'p' . $page . '.pdf';
