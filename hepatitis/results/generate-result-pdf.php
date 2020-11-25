@@ -12,10 +12,9 @@ use setasign\Fpdi\Tcpdf\Fpdi;
 
 
 $tableName1 = "activity_log";
-$tableName2 = "form_covid19";
+$tableName2 = "form_hepatitis";
 $general = new \Vlsm\Models\General($db);
 $users = new \Vlsm\Models\Users($db);
-$covid19Obj = new \Vlsm\Models\Covid19($db);
 
 $configQuery = "SELECT * from global_config";
 $configResult = $db->query($configQuery);
@@ -41,11 +40,11 @@ $printDate = $general->humanDateFormat($expStr[0]);
 $printDateTime = $expStr[1];
 //set query
 if (isset($_POST['newData']) && $_POST['newData'] != '') {
-	$query = $_SESSION['covid19PrintedResultsQuery'];
-	$allQuery = $_SESSION['covid19PrintedSearchResultQuery'];
+	$query = $_SESSION['hepatitisPrintedResultsQuery'];
+	$allQuery = $_SESSION['hepatitisPrintedSearchResultQuery'];
 } else {
-	$query = $_SESSION['covid19PrintQuery'];
-	$allQuery = $_SESSION['covid19PrintSearchResultQuery'];
+	$query = $_SESSION['hepatitisPrintQuery'];
+	$allQuery = $_SESSION['hepatitisPrintSearchResultQuery'];
 }
 if (isset($_POST['id']) && trim($_POST['id']) != '') {
 
@@ -62,18 +61,18 @@ if (isset($_POST['id']) && trim($_POST['id']) != '') {
 				c.iso_name as nationality,
 				rst.sample_name,
 				testres.test_reason_name as reasonForTesting
-				FROM form_covid19 as vl
+				FROM form_hepatitis as vl
 				LEFT JOIN r_countries as c ON vl.patient_nationality=c.id
 				LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id
 				LEFT JOIN facility_details as l ON l.facility_id=vl.lab_id 
 				LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by 
 				LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by 
-				LEFT JOIN r_covid19_test_reasons as testres ON testres.test_reason_id=vl.reason_for_covid19_test 
-				LEFT JOIN r_covid19_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection 
+				LEFT JOIN r_hepatitis_test_reasons as testres ON testres.test_reason_id=vl.reason_for_hepatitis_test 
+				LEFT JOIN r_hepatitis_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection 
 				LEFT JOIN r_implementation_partners as rip ON rip.i_partner_id=vl.implementing_partner
 				LEFT JOIN r_funding_sources as rfs ON rfs.funding_source_id=vl.funding_source 
-				LEFT JOIN r_covid19_sample_type as rst ON rst.sample_id=vl.specimen_type 
-				WHERE vl.covid19_id IN(" . $_POST['id'] . ")";
+				LEFT JOIN r_hepatitis_sample_type as rst ON rst.sample_id=vl.specimen_type 
+				WHERE vl.hepatitis_id IN(" . $_POST['id'] . ")";
 } else {
 	$searchQuery = $allQuery;
 }
@@ -279,20 +278,20 @@ class Pdf_concat extends FPDI
 		}
 	}
 }
-if ($arr['vl_form'] == 1) {
-	include('pdf/result-pdf-ssudan.php');
-} else if ($arr['vl_form'] == 2) {
-	include('pdf/result-pdf-zm.php');
-} else if ($arr['vl_form'] == 3) {
-	include('pdf/result-pdf-drc.php');
-} else if ($arr['vl_form'] == 4) {
-	include('pdf/result-pdf-zam.php');
-} else if ($arr['vl_form'] == 5) {
-	include('pdf/result-pdf-png.php');
-} else if ($arr['vl_form'] == 6) {
-	include('pdf/result-pdf-who.php');
-} else if ($arr['vl_form'] == 7) {
-	include('pdf/result-pdf-rwanda.php');
-} else if ($arr['vl_form'] == 8) {
-	include('pdf/result-pdf-angola.php');
+
+$fileArray = array(
+    1 => 'pdf/result-pdf-ssudan.php',
+    2 => 'pdf/result-pdf-zm.php',
+    3 => 'pdf/result-pdf-drc.php',
+    4 => 'pdf/result-pdf-zam.php',
+    5 => 'pdf/result-pdf-png.php',
+    6 => 'pdf/result-pdf-who.php',
+    7 => 'pdf/result-pdf-rwanda.php',
+    8 => 'pdf/result-pdf-angola.php',
+);
+
+if (file_exists($fileArray[$arr['vl_form']])) {
+    require_once($fileArray[$arr['vl_form']]);
+} else {
+    require_once('pdf/result-pdf-who.php');
 }

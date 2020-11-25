@@ -546,6 +546,10 @@
 		$(".allMenu").removeClass('active');
 		$(".hepatitisProgramMenu").addClass('active');
 		$(".hepatitisPrintResults").addClass('active');
+	} else if (splitsUrl == 'hepatitis-result-status.php') {
+		$(".allMenu").removeClass('active');
+		$(".hepatitisResults").addClass('active');
+		$(".hepatitisResultStatus").addClass('active');
 	} else {
 		$(".allMenu").removeClass('active');
 		$(".dashboardMenu").addClass('active');

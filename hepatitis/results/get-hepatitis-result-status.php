@@ -23,23 +23,24 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
 
 
 $general = new \Vlsm\Models\General($db);
-$covid19Results = $general->getCovid19Results();
+$hepatitisDb = new \Vlsm\Models\Hepatitis($db);
+$hepatitisResults = $hepatitisDb->getHepatitisResults();
 
 
-$tableName = "form_covid19";
-$primaryKey = "covid19_id";
+$tableName = "form_hepatitis";
+$primaryKey = "hepatitis_id";
 
 /* Array of database columns which should be read and sent back to DataTables. Use a space where
 * you want to insert a non-database field (for example a counter or static image)
 */
 $sampleCode = 'sample_code';
-$aColumns = array('vl.sample_code', 'vl.remote_sample_code', "DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')", 'b.batch_code', 'vl.patient_id', 'CONCAT(vl.patient_name, vl.patient_surname)',  'f.facility_name', 'f.facility_code', 'vl.result', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
-$orderColumns = array('vl.sample_code', 'vl.remote_sample_code', 'vl.sample_collection_date', 'b.batch_code', 'vl.patient_id', 'vl.patient_name', 'f.facility_name', 'f.facility_code',  'vl.result', 'vl.last_modified_datetime', 'ts.status_name');
+$aColumns = array('vl.sample_code', 'vl.remote_sample_code', "DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')", 'b.batch_code', 'vl.patient_id', 'CONCAT(vl.patient_name, vl.patient_surname)',  'f.facility_name', 'f.facility_code', 'vl.hcv_vl_result', 'vl.hbv_vl_result', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
+$orderColumns = array('vl.sample_code', 'vl.remote_sample_code', 'vl.sample_collection_date', 'b.batch_code', 'vl.patient_id', 'vl.patient_name', 'f.facility_name', 'f.facility_code',  'vl.hcv_vl_result', 'vl.hbv_vl_result', 'vl.last_modified_datetime', 'ts.status_name');
 if ($sarr['user_type'] == 'remoteuser') {
     $sampleCode = 'remote_sample_code';
 } else if ($sarr['user_type'] == 'standalone') {
-    $aColumns = array('vl.sample_code', "DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')", 'b.batch_code', 'vl.patient_id', 'CONCAT(vl.patient_name, vl.patient_surname)', 'f.facility_name', 'f.facility_code',  'vl.result', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
-    $orderColumns = array('vl.sample_code', 'vl.sample_collection_date', 'b.batch_code', 'vl.patient_id', 'vl.patient_name', 'f.facility_name', 'f.facility_code', 'vl.result', 'vl.last_modified_datetime', 'ts.status_name');
+    $aColumns = array('vl.sample_code', "DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')", 'b.batch_code', 'vl.patient_id', 'CONCAT(vl.patient_name, vl.patient_surname)', 'f.facility_name', 'f.facility_code',  'vl.hcv_vl_result', 'vl.hbv_vl_result', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
+    $orderColumns = array('vl.sample_code', 'vl.sample_collection_date', 'b.batch_code', 'vl.patient_id', 'vl.patient_name', 'f.facility_name', 'f.facility_code', 'vl.hcv_vl_result', 'vl.hbv_vl_result', 'vl.last_modified_datetime', 'ts.status_name');
 }
 
 /* Indexed column (used for fast and accurate table cardinality) */
@@ -117,7 +118,7 @@ for ($i = 0; $i < count($aColumns); $i++) {
           * Get data to display
           */
 $aWhere = '';
-$sQuery = "SELECT * FROM form_covid19 as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id";
+$sQuery = "SELECT * FROM form_hepatitis as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id";
 
 //echo $sQuery;die;
 $start_date = '';
@@ -218,7 +219,7 @@ if ($sarr['user_type'] == 'remoteuser') {
         $sWhere = $sWhere . " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")   AND remote_sample='yes'";
     }
 }
-$sWhere = $sWhere . ' AND vl.result!=""';
+$sWhere = $sWhere . ' AND (vl.hcv_vl_result !="" OR vl.hbv_vl_result !="") ';
 $sQuery = $sQuery . ' ' . $sWhere;
 
 //echo $sQuery;die;
@@ -230,17 +231,17 @@ if (isset($sOrder) && $sOrder != "") {
 if (isset($sLimit) && isset($sOffset)) {
     $sQuery = $sQuery . ' LIMIT ' . $sOffset . ',' . $sLimit;
 }
-//die($sQuery);
+// die($sQuery);
 // echo $sQuery;
 $_SESSION['covid19RequestSearchResultQuery'] = $sQuery;
 $rResult = $db->rawQuery($sQuery);
 // print_r($rResult);
 /* Data set length after filtering */
 
-$aResultFilterTotal = $db->rawQuery("SELECT * FROM form_covid19 as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id  $sWhere");
+$aResultFilterTotal = $db->rawQuery("SELECT * FROM form_hepatitis as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id  $sWhere");
 $iFilteredTotal = count($aResultFilterTotal);
 
-$aResultTotal = $db->rawQuery("SELECT * FROM form_covid19 as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere");
+$aResultTotal = $db->rawQuery("SELECT * FROM form_hepatitis as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere");
 $iTotal = count($aResultTotal);
 
 /*
@@ -273,7 +274,7 @@ foreach ($rResult as $aRow) {
     $patientLname = ucwords($general->crypto('decrypt', $aRow['patient_surname'], $aRow['patient_id']));
 
 
-    $status = '<select class="form-control" style="" name="status[]" id="' . $aRow['covid19_id'] . '" title="Please select status" onchange="updateStatus(this,' . $aRow['status_id'] . ')">
+    $status = '<select class="form-control" style="" name="status[]" id="' . $aRow['hepatitis_id'] . '" title="Please select status" onchange="updateStatus(this,' . $aRow['status_id'] . ')">
                <option value="">-- Select --</option>
                <option value="7" ' . ($aRow['status_id'] == "7" ? "selected=selected" : "") . '>Accepted</option>
                <option value="4" ' . ($aRow['status_id'] == "4"  ? "selected=selected" : "") . '>Rejected</option>
@@ -281,7 +282,7 @@ foreach ($rResult as $aRow) {
                </select><br><br>';
 
     $row = array();
-    $row[] = '<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['covid19_id'] . '"  value="' . $aRow['covid19_id'] . '" onclick="toggleTest(this);"  />';
+    $row[] = '<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['hepatitis_id'] . '"  value="' . $aRow['hepatitis_id'] . '" onclick="toggleTest(this);"  />';
     $row[] = $aRow['sample_code'];
     if ($sarr['user_type'] != 'standalone') {
         $row[] = $aRow['remote_sample_code'];
@@ -291,7 +292,8 @@ foreach ($rResult as $aRow) {
     $row[] = $aRow['patient_id'];
     $row[] = $patientFname . " " . $patientLname;
     $row[] = ($aRow['facility_name']);
-    $row[] = $covid19Results[$aRow['result']];
+    $row[] = ucwords($hepatitisResults[$aRow['hcv_vl_result']]);
+	$row[] = ucwords($hepatitisResults[$aRow['hbv_vl_result']]);
     if (isset($aRow['last_modified_datetime']) && trim($aRow['last_modified_datetime']) != '' && $aRow['last_modified_datetime'] != '0000-00-00 00:00:00') {
         $xplodDate = explode(" ", $aRow['last_modified_datetime']);
         $aRow['last_modified_datetime'] = $general->humanDateFormat($xplodDate[0]) . " " . $xplodDate[1];
@@ -300,7 +302,7 @@ foreach ($rResult as $aRow) {
     }
     $row[] = $aRow['last_modified_datetime'];
     $row[] = $status;
-    //$row[] = '<a href="updateVlTestResult.php?id=' . base64_encode($aRow['covid19_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Result</a>';
+    //$row[] = '<a href="updateVlTestResult.php?id=' . base64_encode($aRow['hepatitis_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Result</a>';
 
     $output['aaData'][] = $row;
 }
