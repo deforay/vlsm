@@ -548,6 +548,11 @@
 		$(".hepatitis-reference-manage").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".hepatitis-sample-rejection-reasons").addClass('active');
+	} else if (splitsUrl == 'hepatitis-sample-type.php' || splitsUrl == 'add-hepatitis-sample-type.php' || splitsUrl == 'edit-hepatitis-sample-type.php') {
+		$(".manage").addClass('active');
+		$(".hepatitis-reference-manage").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".hepatitis-sample-type").addClass('active');
 	} else {
 		$(".allMenu").removeClass('active');
 		$(".dashboardMenu").addClass('active');
