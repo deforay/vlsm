@@ -543,7 +543,12 @@
 		$(".hepatitis-reference-manage").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".hepatitis-comorbidities").addClass('active');
-	}else {
+	} else if (splitsUrl == 'hepatitis-sample-rejection-reasons.php' || splitsUrl == 'add-hepatitis-sample-rejection-reasons.php' || splitsUrl == 'edit-hepatitis-sample-rejection-reasons.php') {
+		$(".manage").addClass('active');
+		$(".hepatitis-reference-manage").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".hepatitis-sample-rejection-reasons").addClass('active');
+	} else {
 		$(".allMenu").removeClass('active');
 		$(".dashboardMenu").addClass('active');
 	}
