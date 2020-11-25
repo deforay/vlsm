@@ -2,18 +2,15 @@
 ob_start();
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-$id = base64_decode($_GET['id']);
-$comorbidityQuery = "SELECT * from r_covid19_comorbidities where comorbidity_id=$id";
-$comorbidityInfo = $db->query($comorbidityQuery);
 ?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
-    <h1><i class="fa fa-gears"></i> Edit Covid-19 Co-morbidities</h1>
+    <h1><i class="fa fa-gears"></i> Add Hepatitis Co-morbidities</h1>
     <ol class="breadcrumb">
       <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li class="active">Covid-19 Co-morbidities</li>
+      <li class="active">Hepatitis Co-morbidities</li>
     </ol>
   </section>
 
@@ -27,15 +24,14 @@ $comorbidityInfo = $db->query($comorbidityQuery);
       <!-- /.box-header -->
       <div class="box-body">
         <!-- form start -->
-        <form class="form-horizontal" method='post' name='editComorbidityForm' id='editComorbidityForm' autocomplete="off" enctype="multipart/form-data" action="edit-comorbidity-helper.php">
+        <form class="form-horizontal" method='post' name='addComorbidityForm' id='addComorbidityForm' autocomplete="off" enctype="multipart/form-data" action="save-hepatitis-comorbidities-helper.php">
           <div class="box-body">
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="comorbidityName" class="col-lg-4 control-label">Comorbidity Name <span class="mandatory">*</span></label>
                   <div class="col-lg-7">
-                    <input type="text" class="form-control isRequired" id="comorbidityName" name="comorbidityName" placeholder="Comorbidity Name" title="Please enter Comorbidity name" value="<?php echo $comorbidityInfo[0]['comorbidity_name']; ?>" onblur="checkNameValidation('r_covid19_comorbidities','comorbidity_name',this,'<?php echo "comorbidity_id##" . $id; ?>','The comorbidity name that you entered already exists.Enter another name',null)" />
-                    <input type="hidden" class="form-control isRequired" id="comorbidityId" name="comorbidityId" value="<?php echo base64_encode($comorbidityInfo[0]['comorbidity_id']); ?>" />
+                    <input type="text" class="form-control isRequired" id="comorbidityName" name="comorbidityName" placeholder="Comorbidity Name" title="Please enter Comorbidity name" onblur="checkNameValidation('r_hepatitis_comorbidities','comorbidity_name',this,null,'The comorbidity name that you entered already exists.Enter another name',null)" />
                   </div>
                 </div>
               </div>
@@ -44,8 +40,8 @@ $comorbidityInfo = $db->query($comorbidityQuery);
                   <label for="comorbidityStatus" class="col-lg-4 control-label">Comorbidity Status</label>
                   <div class="col-lg-7">
                     <select class="form-control isRequired" id="comorbidityStatus" name="comorbidityStatus" placeholder="Comorbidity Status" title="Please enter Comorbidity Status"  >
-                        <option value="active" <?php echo($comorbidityInfo[0]['comorbidity_status']=="active" ? 'selected':''); ?> >Active</option>
-                        <option value="inactive" <?php echo($comorbidityInfo[0]['comorbidity_status']=="inactive" ? 'selected':''); ?> >Inactive</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
                     </select>
                   </div>
                 </div>
@@ -58,7 +54,7 @@ $comorbidityInfo = $db->query($comorbidityQuery);
           <!-- /.box-body -->
           <div class="box-footer">
             <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
-            <a href="covid19-comorbidities.php" class="btn btn-default"> Cancel</a>
+            <a href="hepatitis-comorbidities.php" class="btn btn-default"> Cancel</a>
           </div>
           <!-- /.box-footer -->
         </form>
@@ -75,12 +71,12 @@ $comorbidityInfo = $db->query($comorbidityQuery);
   function validateNow() {
    
     flag = deforayValidator.init({
-      formId: 'editComorbidityForm'
+      formId: 'addComorbidityForm'
     });
 
     if (flag) {
       $.blockUI();
-      document.getElementById('editComorbidityForm').submit();
+      document.getElementById('addComorbidityForm').submit();
     }
   }
 

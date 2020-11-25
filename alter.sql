@@ -2004,3 +2004,9 @@ ALTER TABLE `testing_labs` CHANGE `test_type` `test_type` ENUM('vl','eid','covid
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'hepatitis-requests', 'hepatitis-print-results.php', 'Print Results');
 -- Thana 25-Nov-2020
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'hepatitis-requests', 'hepatitis-result-status.php', 'Manage Result Status');
+
+
+--Sudarmathi 25 Nov 2020
+INSERT INTO `resources` (`resource_id`, `module`, `display_name`) VALUES ('hepatitis-reference', 'admin', 'Hepatitis Reference Tables');
+-- Thana 25-Nov-2020
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'hepatitis-reference', 'hepatitis-sample-type.php', 'Manage Hepatitis Reference');

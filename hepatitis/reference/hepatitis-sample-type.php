@@ -1,5 +1,5 @@
 <?php
-$title = "EID Sample Rejection Reasons";
+$title = "hepatitis Sample Type";
 #require_once('../startup.php'); 
 include_once(APPLICATION_PATH . '/header.php');
 ?>
@@ -7,10 +7,10 @@ include_once(APPLICATION_PATH . '/header.php');
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<h1><i class="fa fa-gears"></i> EID Sample Rejection Reasons</h1>
+		<h1><i class="fa fa-gears"></i> Hepatitis Sample Type</h1>
 		<ol class="breadcrumb">
 			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-			<li class="active">EID Sample Rejection Reasons</li>
+			<li class="active">Hepatitis Sample Type</li>
 		</ol>
 	</section>
 
@@ -20,28 +20,25 @@ include_once(APPLICATION_PATH . '/header.php');
 			<div class="col-xs-12">
 				<div class="box">
 					<div class="box-header with-border">
-						<?php if (isset($_SESSION['privileges']) && in_array("eid-sample-type.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') { ?>
-							<a href="add-eid-sample-rejection-reasons.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add EID Sample Rejection Reasons</a>
+						<?php if (isset($_SESSION['privileges']) && in_array("hepatitis-sample-type.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') { ?>
+							<a href="add-hepatitis-sample-type.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Hepatitis Sample Type</a>
 						<?php } ?>
-						<!--<button class="btn btn-primary pull-right" style="margin-right: 1%;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>-->
 					</div>
 					<!-- /.box-header -->
 					<div class="box-body">
-						<table id="samRejReasonDataTable" class="table table-bordered table-striped">
+						<table id="sampTypDataTable" class="table table-bordered table-striped">
 							<thead>
 								<tr>
-									<th>Rejection Reason</th>
-									<th>Type</th>
-									<th>Code</th>
+									<th>Sample Name</th>
 									<th>Status</th>
-									<?php if (isset($_SESSION['privileges']) && in_array("eid-sample-type.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') { ?>
+									<?php if (isset($_SESSION['privileges']) && in_array("hepatitis-sample-type.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') { ?>
 										<th>Action</th>
 									<?php } ?>
 								</tr>
 							</thead>
 							<tbody>
 								<tr>
-									<td colspan="6" class="dataTables_empty">Loading data from server</td>
+									<td colspan="3" class="dataTables_empty">Loading data from server</td>
 								</tr>
 							</tbody>
 
@@ -64,7 +61,7 @@ include_once(APPLICATION_PATH . '/header.php');
 	});
 	$(document).ready(function() {
 		$.blockUI();
-		oTable = $('#samRejReasonDataTable').dataTable({
+		oTable = $('#sampTypDataTable').dataTable({
 			"oLanguage": {
 				"sLengthMenu": "_MENU_ records per page"
 			},
@@ -80,13 +77,7 @@ include_once(APPLICATION_PATH . '/header.php');
 				{
 					"sClass": "center"
 				},
-				{
-					"sClass": "center"
-				},
-				{
-					"sClass": "center"
-				},
-				<?php if (isset($_SESSION['privileges']) && in_array("eid-sample-type.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') { ?> {
+				<?php if (isset($_SESSION['privileges']) && in_array("hepatitis-sample-type.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') { ?> {
 						"sClass": "center",
 						"bSortable": false
 					},
@@ -97,7 +88,7 @@ include_once(APPLICATION_PATH . '/header.php');
 			],
 			"bProcessing": true,
 			"bServerSide": true,
-			"sAjaxSource": "get-eid-sample-rejection-reasons-helper.php",
+			"sAjaxSource": "get-hepatitis-sample-type-helper.php",
 			"fnServerData": function(sSource, aoData, fnCallback) {
 				$.ajax({
 					"dataType": 'json',

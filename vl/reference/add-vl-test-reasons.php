@@ -37,7 +37,7 @@ foreach ($testInfo as $test) {
 								<div class="form-group">
 									<label for="testReasonName" class="col-lg-4 control-label">Test Reason Name<span class="mandatory">*</span></label>
 									<div class="col-lg-7">
-										<input type="text" class="form-control isRequired" id="testReasonName" name="testReasonName" placeholder="Test Reason Name" title="Please enter Test Reason name" onblur="checkNameValidation('r_vl_test_reasons','test_reason_id',this,null,'The Test Reason name that you entered already exists.Enter another name',null)" />
+										<input type="text" class="form-control isRequired" id="testReasonName" name="testReasonName" placeholder="Test Reason Name" title="Please enter Test Reason name" onblur="checkNameValidation('r_vl_test_reasons','test_reason_name',this,null,'The Test Reason name that you entered already exists.Enter another name',null)" />
 									</div>
 								</div>
 							</div>
