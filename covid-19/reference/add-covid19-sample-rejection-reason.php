@@ -32,7 +32,7 @@ $rejReaons = $general->getRejectionReasons('covid19');
                 <div class="form-group">
                   <label for="rejectionReasonName" class="col-lg-4 control-label">Rejection Reason Name <span class="mandatory">*</span></label>
                   <div class="col-lg-7">
-                    <input type="text" class="form-control isRequired" id="rejectionReasonName" name="rejectionReasonName" placeholder="Rejection Reason Name" title="Please enter Rejection Reason name" />
+                    <input type="text" class="form-control isRequired" id="rejectionReasonName" name="rejectionReasonName" placeholder="Rejection Reason Name" title="Please enter Rejection Reason name" onblur="checkNameValidation('r_covid19_sample_rejection_reasons','rejection_reason_name',this,null,'The Rejection Reason name that you entered already exists.Enter another Rejection Reason name',null)"/>
                   </div>
                 </div>
               </div>
@@ -52,7 +52,7 @@ $rejReaons = $general->getRejectionReasons('covid19');
                 <div class="form-group">
                   <label for="rejectionReasonCode" class="col-lg-4 control-label">Rejection Reason Code <span class="mandatory">*</span></label>
                   <div class="col-lg-7">
-                    <input type="text" class="form-control isRequired" id="rejectionReasonCode" name="rejectionReasonCode" placeholder="Rejection Reason Code" title="Please enter Rejection Reason Code" />
+                    <input type="text" class="form-control isRequired" id="rejectionReasonCode" name="rejectionReasonCode" placeholder="Rejection Reason Code" title="Please enter Rejection Reason Code" onblur="checkNameValidation('r_covid19_sample_rejection_reasons','rejection_reason_code',this,null,'The Rejection Reason code that you entered already exists.Enter another Rejection Reason code',null)"/>
                   </div>
                 </div>
               </div>

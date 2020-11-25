@@ -36,7 +36,7 @@ $symptomInfo = $db->query($symptomQuery);
 								<div class="form-group">
 									<label for="symptomsName" class="col-lg-4 control-label">Symptom Name <span class="mandatory">*</span></label>
 									<div class="col-lg-7">
-										<input type="text" class="form-control isRequired" id="symptomsName" name="symptomsName" value="<?php echo $symptomInfo[0]['symptom_name']; ?>" placeholder="Symptom Name" title="Please enter Symptom name" onblur="checkNameValidation('r_covid19_symptoms','symptom_name',this,null,'The Symptom name that you entered already exists.Enter another name',null)" />
+										<input type="text" class="form-control isRequired" id="symptomsName" name="symptomsName" value="<?php echo $symptomInfo[0]['symptom_name']; ?>" placeholder="Symptom Name" title="Please enter Symptom name" onblur="checkNameValidation('r_covid19_symptoms','symptom_name',this,'<?php echo "symptom_id##" . $id; ?>','The Symptom name that you entered already exists.Enter another name',null)" />
 										<input type="hidden" class="form-control isRequired" id="symptomId" name="symptomId" value="<?php echo base64_encode($symptomInfo[0]['symptom_id']); ?>" />
 									</div>
 								</div>

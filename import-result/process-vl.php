@@ -256,7 +256,7 @@ try {
             $numberOfResults++;
 
             $printSampleCode[] = "'" . $accResult[$i]['sample_code'] . "'";
-            if (file_exists(TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $accResult[$i]['import_machine_file_name'])) {
+            if (file_exists(TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $accResult[$i]['import_machine_file_name']) && !is_dir(TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $accResult[$i]['import_machine_file_name'])) {
                 if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "import-result")) {
                     mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "import-result", 0777, true);
                 }
