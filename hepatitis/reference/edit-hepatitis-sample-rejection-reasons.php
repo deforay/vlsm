@@ -2,20 +2,19 @@
 ob_start();
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-$rejReaons = $general->getRejectionReasons('covid19');
-
+$rejReaons = $general->getRejectionReasons('hepatitis');
 $id = base64_decode($_GET['id']);
-$rsnQuery = "SELECT * from r_covid19_sample_rejection_reasons where rejection_reason_id=$id";
+$rsnQuery = "SELECT * from r_hepatitis_sample_rejection_reasons where rejection_reason_id=$id";
 $rsnInfo = $db->query($rsnQuery);
 ?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<h1><i class="fa fa-gears"></i> Add Covid-19 Sample Rejection Reasons</h1>
+		<h1><i class="fa fa-gears"></i> Edit Hepatitis Sample Rejection Reasons</h1>
 		<ol class="breadcrumb">
 			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-			<li class="active">Covid-19 Sample Rejection Reasons</li>
+			<li class="active">Hepatitis Sample Rejection Reasons</li>
 		</ol>
 	</section>
 
@@ -29,14 +28,14 @@ $rsnInfo = $db->query($rsnQuery);
 			<!-- /.box-header -->
 			<div class="box-body">
 				<!-- form start -->
-				<form class="form-horizontal" method='post' name='addSampleRejcForm' id='addSampleRejcForm' autocomplete="off" enctype="multipart/form-data" action="edit-rejection-reason-helper.php">
+				<form class="form-horizontal" method='post' name='addSampleRejcForm' id='addSampleRejcForm' autocomplete="off" enctype="multipart/form-data" action="save-hepatitis-sample-rejection-reasons-helper.php">
 					<div class="box-body">
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
 									<label for="rejectionReasonName" class="col-lg-4 control-label">Rejection Reason Name <span class="mandatory">*</span></label>
 									<div class="col-lg-7">
-										<input type="text" class="form-control isRequired" id="rejectionReasonName" name="rejectionReasonName" value="<?php echo $rsnInfo[0]['rejection_reason_name']; ?>" placeholder="Rejection Reason Name" title="Please enter Rejection Reason name" onblur="checkNameValidation('r_covid19_sample_rejection_reasons','rejection_reason_name',this,'<?php echo "rejection_reason_id##" . $id; ?>','This Rejection reason name that you entered already exists.Try another Rejection reason name',null)"/>
+										<input type="text" class="form-control isRequired" id="rejectionReasonName" name="rejectionReasonName" value="<?php echo $rsnInfo[0]['rejection_reason_name']; ?>" placeholder="Rejection Reason Name" title="Please enter Rejection Reason name" onblur="checkNameValidation('r_hepatitis_sample_rejection_reasons','rejection_reason_name',this,'<?php echo "rejection_reason_id##" . $id; ?>','This Rejection reason name that you entered already exists.Try another Rejection reason name',null)"/>
 										<input type="hidden" class="form-control isRequired" id="rejectionReasonId" name="rejectionReasonId" value="<?php echo base64_encode($rsnInfo[0]['rejection_reason_id']); ?>" />
 									</div>
 								</div>
@@ -46,7 +45,7 @@ $rsnInfo = $db->query($rsnQuery);
 									<label for="rejectionType" class="col-lg-4 control-label">Rejection Type</label>
 									<div class="col-lg-7">
 										<select class="form-control select2 isRequired" id="rejectionType" name="rejectionType" placeholder="Rejection Type" title="Please enter Rejection Type" >
-											<?= $general->generateSelectOptions($rejReaons, $rsnInfo[0]['rejection_type'], '-- Select --'); ?>
+											<?= $general->generateSelectOptions($rejReaons, strtolower($rsnInfo[0]['rejection_type']), '-- Select --'); ?>
 										</select>
 									</div>
 								</div>
@@ -57,7 +56,7 @@ $rsnInfo = $db->query($rsnQuery);
 								<div class="form-group">
 									<label for="rejectionReasonCode" class="col-lg-4 control-label">Rejection Reason Code <span class="mandatory">*</span></label>
 									<div class="col-lg-7">
-										<input type="text" class="form-control isRequired" value="<?php echo $rsnInfo[0]['rejection_reason_code']; ?>" id="rejectionReasonCode" name="rejectionReasonCode" placeholder="Rejection Reason Code" title="Please enter Rejection Reason Code" onblur="checkNameValidation('r_covid19_sample_rejection_reasons','rejection_reason_code',this,'<?php echo "rejection_reason_id##" . $id; ?>','This Rejection reason code that you entered already exists.Try another Rejection reason code',null)"/>
+										<input type="text" class="form-control isRequired" value="<?php echo $rsnInfo[0]['rejection_reason_code']; ?>" id="rejectionReasonCode" name="rejectionReasonCode" placeholder="Rejection Reason Code" title="Please enter Rejection Reason Code" onblur="checkNameValidation('r_hepatitis_sample_rejection_reasons','rejection_reason_code',this,'<?php echo "rejection_reason_id##" . $id; ?>','This Rejection reason code that you entered already exists.Try another Rejection reason code',null)"/>
 									</div>
 								</div>
 							</div>
@@ -66,6 +65,7 @@ $rsnInfo = $db->query($rsnQuery);
 									<label for="rejectionReasonStatus" class="col-lg-4 control-label">Rejection Reason Status</label>
 									<div class="col-lg-7">
 										<select class="form-control isRequired" id="rejectionReasonStatus" name="rejectionReasonStatus" placeholder="Rejection Reason Status" title="Please enter Rejection Reason Status">
+											<option value="">--Select--</option>
 											<option value="active" <?php echo ($rsnInfo[0]['rejection_reason_status'] == "active" ? 'selected' : ''); ?>>Active</option>
 											<option value="inactive" <?php echo ($rsnInfo[0]['rejection_reason_status'] == "inactive" ? 'selected' : ''); ?>>Inactive</option>
 										</select>
@@ -79,7 +79,7 @@ $rsnInfo = $db->query($rsnQuery);
 					<!-- /.box-body -->
 					<div class="box-footer">
 						<a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
-						<a href="covid19-sample-rejection-reasons.php" class="btn btn-default"> Cancel</a>
+						<a href="hepatitis-sample-rejection-reasons.php" class="btn btn-default"> Cancel</a>
 					</div>
 					<!-- /.box-footer -->
 				</form>
@@ -137,12 +137,12 @@ $rsnInfo = $db->query($rsnQuery);
 		checkValue = $("#" + id + " option:selected").html();
 		if (checkValue != '') {
 			$.post("/includes/addNewField.php", {
-					value: checkValue,
-					mode: 'addNewRejectionType'
-				},
-				function(data) {
-					console.log(data)
-				});
+				value: checkValue,
+				mode: 'addNewRejectionType'
+			},
+			function(data) {
+				console.log(data)
+			});
 		}
 	}
 </script>
