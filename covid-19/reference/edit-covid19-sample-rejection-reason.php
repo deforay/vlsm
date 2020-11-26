@@ -57,7 +57,7 @@ $rsnInfo = $db->query($rsnQuery);
 								<div class="form-group">
 									<label for="rejectionReasonCode" class="col-lg-4 control-label">Rejection Reason Code <span class="mandatory">*</span></label>
 									<div class="col-lg-7">
-										<input type="text" class="form-control isRequired" value="<?php echo $rsnInfo[0]['rejection_reason_code']; ?>" id="rejectionReasonCode" name="rejectionReasonCode" placeholder="Rejection Reason Code" title="Please enter Rejection Reason Code" />
+										<input type="text" class="form-control isRequired" value="<?php echo $rsnInfo[0]['rejection_reason_code']; ?>" id="rejectionReasonCode" name="rejectionReasonCode" placeholder="Rejection Reason Code" title="Please enter Rejection Reason Code" onblur="checkNameValidation('r_covid19_sample_rejection_reasons','rejection_reason_code',this,'<?php echo "rejection_reason_id##" . $id; ?>','This Rejection reason code that you entered already exists.Try another Rejection reason code',null)"/>
 									</div>
 								</div>
 							</div>

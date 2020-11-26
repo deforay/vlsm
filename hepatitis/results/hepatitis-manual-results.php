@@ -162,7 +162,8 @@ if ($lastUrl1 != '' || $lastUrl2 != '') {
 									<th>Facility Name</th>
 									<th>Patient ID</th>
 									<th>Patient Name</th>
-									<th>Result</th>
+									<th>HCV VL Result</th>
+									<th>HBV VL Result</th>
 									<th>Modified On</th>
 									<th>Status</th>
 									<th>Action</th>
@@ -293,6 +294,9 @@ if ($lastUrl1 != '' || $lastUrl2 != '') {
 					"sClass": "center"
 				},
 				{
+					"sClass": "center"
+				},
+				{
 					"sClass": "center",
 					"bSortable": false
 				},
@@ -302,10 +306,10 @@ if ($lastUrl1 != '' || $lastUrl2 != '') {
 				}
 			],
 			<?php if ($sarr['user_type'] != 'standalone') { ?> "aaSorting": [
-					[7, "desc"]
+					[8, "desc"]
 				],
 			<?php } else { ?> "aaSorting": [
-					[6, "desc"]
+					[7, "desc"]
 				],
 			<?php } ?> "bProcessing": true,
 			"bServerSide": true,

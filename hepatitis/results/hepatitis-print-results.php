@@ -1,5 +1,5 @@
 <?php
-$title = "Print Covid-19 Results";
+$title = "Print Hepatitis Results";
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 // $tsQuery = "SELECT * FROM r_sample_status";
@@ -7,7 +7,7 @@ include_once(APPLICATION_PATH . '/header.php');
 // $configFormQuery = "SELECT * FROM global_config WHERE name ='vl_form'";
 // $configFormResult = $db->rawQuery($configFormQuery);
 
-$batQuery = "SELECT batch_code FROM batch_details where test_type ='covid19' AND batch_status='completed'";
+$batQuery = "SELECT batch_code FROM batch_details where test_type ='hepatitis' AND batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
 // $fundingSourceQry = "SELECT * FROM r_funding_sources WHERE funding_source_status='active' ORDER BY funding_source_name ASC";
 // $fundingSourceList = $db->query($fundingSourceQry);
@@ -18,7 +18,7 @@ $batResult = $db->rawQuery($batQuery);
 
 $general = new \Vlsm\Models\General($db);
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
-$healthFacilites = $facilitiesDb->getHealthFacilities('covid19');
+$healthFacilites = $facilitiesDb->getHealthFacilities('hepatitis');
 
 $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
 
@@ -36,10 +36,10 @@ $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <h1><i class="fa fa-edit"></i> Print Covid-19 Results</h1>
+        <h1><i class="fa fa-edit"></i> Print Hepatitis Results</h1>
         <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">Print Covid-19 Results</li>
+            <li class="active">Print Hepatitis Results</li>
         </ol>
     </section>
     <!-- Main content -->
@@ -159,7 +159,8 @@ $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-
                                                         <th>Patient ID</th>
                                                         <th>Patient Name</th>
                                                         <th>Facility Name</th>
-                                                        <th>Result</th>
+                                                        <th>HCV VL Result</th>
+									                    <th>HBV VL Result</th>
                                                         <th>Last Modified On</th>
                                                         <th>Status</th>
                                                         <th>Action</th>
@@ -275,7 +276,8 @@ $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-
                                                         <th>Patient ID</th>
                                                         <th>Patient Name</th>
                                                         <th>Facility Name</th>
-                                                        <th>Result</th>
+                                                        <th>HCV VL Result</th>
+									                    <th>HBV VL Result</th>
                                                         <th>Last Modified On</th>
                                                         <th>Status</th>
                                                         <th>Action</th>
@@ -438,15 +440,18 @@ $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-
                     "sClass": "center"
                 },
                 {
+                    "sClass": "center"
+                },
+                {
                     "sClass": "center",
                     "bSortable": false
                 },
             ],
             <?php if ($sarr['user_type'] != 'standalone') { ?> "aaSorting": [
-                    [8, "desc"]
+                    [9, "desc"]
                 ],
             <?php } else { ?> "aaSorting": [
-                    [7, "desc"]
+                    [8, "desc"]
                 ],
             <?php } ?> "fnDrawCallback": function() {
                 var checkBoxes = document.getElementsByName("chk[]");
@@ -459,7 +464,7 @@ $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-
             },
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "/covid-19/results/get-results-for-print.php",
+            "sAjaxSource": "/hepatitis/results/get-results-for-print.php",
             "fnServerData": function(sSource, aoData, fnCallback) {
                 aoData.push({
                     "name": "batchCode",
@@ -542,15 +547,18 @@ $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-
                     "sClass": "center"
                 },
                 {
+                    "sClass": "center"
+                },
+                {
                     "sClass": "center",
                     "bSortable": false
                 },
             ],
             <?php if ($sarr['user_type'] != 'standalone') { ?> "aaSorting": [
-                    [8, "desc"]
+                    [9, "desc"]
                 ],
             <?php } else { ?> "aaSorting": [
-                    [7, "desc"]
+                    [8, "desc"]
                 ],
             <?php } ?> "fnDrawCallback": function() {
                 var checkBoxes = document.getElementsByName("chkPrinted[]");
@@ -563,7 +571,7 @@ $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-
             },
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "/covid-19/results/get-printed-results-for-print.php",
+            "sAjaxSource": "/hepatitis/results/get-printed-results-for-print.php",
             "fnServerData": function(sSource, aoData, fnCallback) {
                 aoData.push({
                     "name": "batchCode",
@@ -618,7 +626,7 @@ $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-
         $.blockUI();
         <?php
         $path = '';
-        $path = '/covid-19/results/generate-result-pdf.php';
+        $path = '/hepatitis/results/generate-result-pdf.php';
         ?>
         $.post("<?php echo $path; ?>", {
                 source: 'print',
@@ -642,7 +650,7 @@ $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-
         $.blockUI();
         <?php
         $path = '';
-        $path = '/covid-19/results/generate-result-pdf.php';
+        $path = '/hepatitis/results/generate-result-pdf.php';
         ?>
         if (newData == null) {
             var rowsLength = selectedRows.length;
