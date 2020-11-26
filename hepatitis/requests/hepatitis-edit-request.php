@@ -104,12 +104,17 @@ foreach ($rejectionTypeResult as $type) {
     }
     $rejectionReason .= '</optgroup>';
 }
+// speciment Type
 $specimenResult = array();
 $specimenTypeResult = $general->fetchDataFromTable('r_hepatitis_sample_type', "status = 'active'");
 foreach ($specimenTypeResult as $name) {
     $specimenResult[$name['sample_id']] = ucwords($name['sample_name']); 
 }
-
+// Import machine config
+$testPlatformResult = $general->getTestingPlatforms('hepatitis');
+foreach ($testPlatformResult as $row) {
+    $testPlatformList[$row['machine_name']] = $row['machine_name'];
+}
 $fileArray = array(
     1 => 'forms/edit-southsudan.php',
     2 => 'forms/edit-zimbabwe.php',
@@ -268,6 +273,13 @@ if (file_exists($fileArray[$arr['vl_form']])) {
         $('#isSampleRejected').change(function(e) {
             changeReject(this.value);
         });
+
+        $("#hepatitisPlatform").on("change", function() {
+            if (this.value != "") {
+                getMachine(this.value);
+            }
+        });
+        getMachine($("#hepatitisPlatform").val());
     });
 
     function changeReject(val) {
@@ -284,7 +296,7 @@ if (file_exists($fileArray[$arr['vl_form']])) {
             $('.show-rejection').hide();
             $('.rejected-input').prop('disabled', false);
             $('.rejected').removeClass('disabled');
-            $('#sampleRejectionReason,#rejectionDate').removeClass('isRequired');
+            $('#sampleRejectionReason,#rejectionDate,.rejected-input').removeClass('isRequired');
             $('#sampleTestedDateTime').addClass('isRequired');
             $('#result').prop('disabled', false);
             $('#sampleRejectionReason').prop('disabled', true);
@@ -294,6 +306,20 @@ if (file_exists($fileArray[$arr['vl_form']])) {
     function calculateAgeInYears() {
         var dateOfBirth = moment($("#patientDob").val(), "DD-MMM-YYYY");
         $("#patientAge").val(moment().diff(dateOfBirth, 'years'));
+    }
+
+    function getMachine(value) {
+        $.post("/import-configs/get-config-machine-by-config.php", {
+            configName: value,
+            machine: <?php echo !empty($hepatitisInfo['import_machine_name']) ? $hepatitisInfo['import_machine_name']  : '""'; ?>,
+            testType: 'eid'
+        },
+        function(data) {
+            $('#machineName').html('');
+            if (data != "") {
+                $('#machineName').append(data);
+            }
+        });
     }
 </script>
 <?php include_once(APPLICATION_PATH . '/footer.php');
