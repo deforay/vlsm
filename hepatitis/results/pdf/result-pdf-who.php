@@ -217,7 +217,7 @@ if (sizeof($requestResult) > 0) {
             $html .= '</tr>';
             
             $html .= '<tr>';
-            $html .= '<td colspan="3" style="line-height:25px;font-size:13px;text-align:left;padding-bottom:5px;"><br><u><i>SITE INFORMATION</i></u></td>';
+            $html .= '<td colspan="3" style="line-height:25px;font-size:13px;text-align:left;padding-bottom:5px;"><br><u>SITE INFORMATION</u></td>';
             $html .= '</tr>';
             
             $html .= '<tr>';
@@ -266,7 +266,7 @@ if (sizeof($requestResult) > 0) {
             $html .= '</tr>';
             
             $html .= '<tr>';
-            $html .= '<td colspan="3" style="line-height:25px;font-size:13px;text-align:left;padding-bottom:5px;"><br><u><i>PATIENT INFORMATION</i></u></td>';
+            $html .= '<td colspan="3" style="line-height:25px;font-size:13px;text-align:left;padding-bottom:5px;"><br><u>PATIENT INFORMATION</u></td>';
             $html .= '</tr>';
             
             $html .= '<tr>';
@@ -304,7 +304,7 @@ if (sizeof($requestResult) > 0) {
             $html .= '</tr>';
             
             $html .= '<tr>';
-            $html .= '<td colspan="3" style="line-height:25px;font-size:13px;text-align:left;padding-bottom:5px;"><br><u><i>SPECIMEN INFORMATION</i></u></td>';
+            $html .= '<td colspan="3" style="line-height:25px;font-size:13px;text-align:left;padding-bottom:5px;"><br><u>SPECIMEN INFORMATION</u></td>';
             $html .= '</tr>';
             
             $html .= '<tr>';
