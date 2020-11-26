@@ -22,25 +22,23 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
 }
 $general = new \Vlsm\Models\General($db);
 
-$covid19Results = $general->getCovid19Results();
-
-$tableName = "form_covid19";
-$primaryKey = "covid19_id";
+$tableName = "form_hepatitis";
+$primaryKey = "hepatitis_id";
 
 /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
 $sampleCode = 'sample_code';
-$aColumns = array('vl.sample_code', 'vl.remote_sample_code', 'b.batch_code', 'vl.patient_id', 'CONCAT(vl.patient_name, vl.patient_surname)', 'f.facility_name', 'vl.result', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
-$orderColumns = array('vl.sample_code', 'vl.remote_sample_code', 'b.batch_code', 'vl.patient_id', 'vl.patient_name', 'f.facility_name', 'vl.result', 'vl.last_modified_datetime', 'ts.status_name');
+$aColumns = array('vl.sample_code', 'vl.remote_sample_code', 'b.batch_code', 'vl.patient_id', 'CONCAT(vl.patient_name, vl.patient_surname)', 'f.facility_name', 'vl.hcv_vl_result', 'vl.hbv_vl_result', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
+$orderColumns = array('vl.sample_code', 'vl.remote_sample_code', 'b.batch_code', 'vl.patient_id', 'vl.patient_name', 'f.facility_name', 'vl.hcv_vl_result', 'vl.hbv_vl_result', 'vl.last_modified_datetime', 'ts.status_name');
 if ($sarr['user_type'] == 'remoteuser') {
 	$sampleCode = 'remote_sample_code';
 } else if ($sarr['user_type'] == 'standalone') {
-	$aColumns = array('vl.sample_code', 'b.batch_code', 'vl.patient_id', 'CONCAT(vl.patient_name, vl.patient_surname)', 'f.facility_name',  'vl.result', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
-	$orderColumns = array('vl.sample_code', 'b.batch_code', 'vl.patient_id', 'vl.patient_name', 'f.facility_name', 'vl.result', 'vl.last_modified_datetime', 'ts.status_name');
+	$aColumns = array('vl.sample_code', 'b.batch_code', 'vl.patient_id', 'CONCAT(vl.patient_name, vl.patient_surname)', 'f.facility_name',  'vl.hcv_vl_result', 'vl.hbv_vl_result', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
+	$orderColumns = array('vl.sample_code', 'b.batch_code', 'vl.patient_id', 'vl.patient_name', 'f.facility_name', 'vl.hcv_vl_result', 'vl.hbv_vl_result', 'vl.last_modified_datetime', 'ts.status_name');
 }
 if (isset($_POST['vlPrint']) && $_POST['vlPrint'] == 'print') {
-	array_unshift($orderColumns, "vl.covid19_id");
+	array_unshift($orderColumns, "vl.hepatitis_id");
 }
 
 /* Indexed column (used for fast and accurate table cardinality) */
@@ -121,7 +119,7 @@ for ($i = 0; $i < count($aColumns); $i++) {
          * SQL queries
          * Get data to display
         */
-$sQuery = 	 "SELECT covid19_id,
+$sQuery = 	 "SELECT hepatitis_id,
 							vl.sample_code,
 							vl.remote_sample,
 							vl.remote_sample_code,
@@ -132,6 +130,8 @@ $sQuery = 	 "SELECT covid19_id,
 							vl.patient_surname,
 							f.facility_name, 
 							vl.result,
+							vl.hcv_vl_result,
+							vl.hbv_vl_result,
 							vl.sample_received_at_hub_datetime,							
 							vl.sample_received_at_vl_lab_datetime,
 							vl.last_modified_datetime,
@@ -146,17 +146,15 @@ $sQuery = 	 "SELECT covid19_id,
 							imp.i_partner_name,
 							u_d.user_name as reviewedBy,
 							a_u_d.user_name as approvedBy,
-							rs.rejection_reason_name,
-							testres.test_reason_name as reasonForTesting
+							rs.rejection_reason_name
 							
-							FROM form_covid19 as vl  
+							FROM form_hepatitis as vl  
 							LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
                             LEFT JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
                             LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id 
 							LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by  
 							LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by 
-							LEFT JOIN r_covid19_test_reasons as testres ON testres.test_reason_id=vl.reason_for_covid19_test 
-							LEFT JOIN r_covid19_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection 
+							LEFT JOIN r_hepatitis_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection 
 							LEFT JOIN r_implementation_partners as imp ON imp.i_partner_id=vl.implementing_partner";
 $start_date = '';
 $end_date = '';
@@ -255,13 +253,13 @@ $dWhere = '';
 if (isset($_POST['vlPrint']) && $_POST['vlPrint'] == 'print') {
 	if (!isset($_POST['status']) || trim($_POST['status']) == '') {
 		if (trim($sWhere) != '') {
-			$sWhere = $sWhere . " AND ((vl.result_status = 7 AND vl.result is NOT NULL AND vl.result !='') OR (vl.result_status = 4 AND (vl.result is NULL OR vl.result = ''))) AND result_printed_datetime is NOT NULL AND result_printed_datetime not like ''";
+			$sWhere = $sWhere . " AND ((vl.result_status = 7 AND (vl.hcv_vl_result is NOT NULL OR vl.hcv_vl_result not like '' OR vl.hbv_vl_result is NOT NULL OR vl.hbv_vl_result not like '')) OR (vl.result_status = 4 AND (vl.hcv_vl_result is NULL AND vl.hcv_vl_result like '' AND vl.hbv_vl_result is NULL AND vl.hbv_vl_result like ''))) AND result_printed_datetime is NOT NULL AND result_printed_datetime not like ''";
 		} else {
-			$sWhere = "WHERE ((vl.result_status = 7 AND vl.result is NOT NULL AND vl.result !='') OR (vl.result_status = 4 AND (vl.result is NULL OR vl.result = ''))) AND result_printed_datetime is NOT NULL AND result_printed_datetime not like ''";
+			$sWhere = "WHERE ((vl.result_status = 7 AND (vl.hcv_vl_result is NOT NULL OR vl.hcv_vl_result not like '' OR vl.hbv_vl_result is NOT NULL OR vl.hbv_vl_result not like '')) OR (vl.result_status = 4 AND (vl.hcv_vl_result is NULL AND vl.hcv_vl_result like '' AND vl.hbv_vl_result is NULL AND vl.hbv_vl_result like ''))) AND result_printed_datetime is NOT NULL AND result_printed_datetime not like ''";
 		}
 	}
 	$sWhere = $sWhere . " AND vl.vlsm_country_id='" . $arr['vl_form'] . "'";
-	$dWhere = "WHERE ((vl.result_status = 7 AND vl.result is NOT NULL AND vl.result !='') OR (vl.result_status = 4 AND (vl.result is NULL OR vl.result = ''))) AND vl.vlsm_country_id='" . $arr['vl_form'] . "' AND result_printed_datetime is NOT NULL AND result_printed_datetime not like ''";
+	$dWhere = "WHERE ((vl.result_status = 7 AND (vl.hcv_vl_result is NOT NULL OR vl.hcv_vl_result not like '' OR vl.hbv_vl_result is NOT NULL OR vl.hbv_vl_result not like '')) OR (vl.result_status = 4 AND (vl.hcv_vl_result is NULL OR vl.hcv_vl_result ='' OR vl.hbv_vl_result is NULL OR vl.hbv_vl_result like ''))) AND vl.vlsm_country_id='" . $arr['vl_form'] . "' AND result_printed_datetime is NOT NULL AND result_printed_datetime not like ''";
 }
 if ($sarr['user_type'] == 'remoteuser') {
 	//$sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
@@ -275,32 +273,31 @@ if ($sarr['user_type'] == 'remoteuser') {
 }
 
 $sQuery = $sQuery . ' ' . $sWhere;
-$_SESSION['covid19PrintedResultsQuery'] = $sQuery;
+$_SESSION['hepatitisPrintedResultsQuery'] = $sQuery;
 //echo $_SESSION['vlResultQuery'];die;
 
 if (isset($sOrder) && $sOrder != "") {
 	$sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
 	$sQuery = $sQuery . ' order by ' . $sOrder;
 }
-$_SESSION['covid19PrintedSearchResultQuery'] = $sQuery;
+$_SESSION['hepatitisPrintedSearchResultQuery'] = $sQuery;
 if (isset($sLimit) && isset($sOffset)) {
 	$sQuery = $sQuery . ' LIMIT ' . $sOffset . ',' . $sLimit;
 }
 //error_log($sQuery);
-//die($sQuery);
+// die($sQuery);
 $rResult = $db->rawQuery($sQuery);
 /* Data set length after filtering */
 
-$aResultFilterTotal = $db->rawQuery("SELECT covid19_id FROM form_covid19 as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
-																		
-																		INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
-																		
-																		LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id 
-																		LEFT JOIN r_implementation_partners as imp ON imp.i_partner_id=vl.implementing_partner 
-																		$sWhere");
+$aResultFilterTotal = $db->rawQuery("SELECT hepatitis_id FROM form_hepatitis as vl 
+					LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
+					INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
+					LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id 
+					LEFT JOIN r_implementation_partners as imp ON imp.i_partner_id=vl.implementing_partner 
+					$sWhere");
 $iFilteredTotal = count($aResultFilterTotal);
 /* Total data set length */
-$aResultTotal =  $db->rawQuery("select COUNT(covid19_id) as total FROM form_covid19 as vl $dWhere");
+$aResultTotal =  $db->rawQuery("select COUNT(hepatitis_id) as total FROM form_hepatitis as vl $dWhere");
 $iTotal = $aResultTotal[0]['total'];
 
 /*
@@ -312,12 +309,13 @@ $output = array(
 	"iTotalDisplayRecords" => $iFilteredTotal,
 	"aaData" => array()
 );
-
+$hepatitisDb = new \Vlsm\Models\Hepatitis($db);
+$hepatitisResults = $hepatitisDb->getHepatitisResults();
 foreach ($rResult as $aRow) {
 	$row = array();
 	if (isset($_POST['vlPrint']) && $_POST['vlPrint'] == 'print') {
-		$row[] = '<input type="checkbox" name="chkPrinted[]" class="checkPrintedRows" id="chkPrinted' . $aRow['covid19_id'] . '"  value="' . $aRow['covid19_id'] . '" onclick="checkedPrintedRow(this);"  />';
-		$print = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="resultPDF(' . $aRow['covid19_id'] . ',\'printData\');"><i class="fa fa-print"> Print</i></a>';
+		$row[] = '<input type="checkbox" name="chkPrinted[]" class="checkPrintedRows" id="chkPrinted' . $aRow['hepatitis_id'] . '"  value="' . $aRow['hepatitis_id'] . '" onclick="checkedPrintedRow(this);"  />';
+		$print = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="resultPDF(' . $aRow['hepatitis_id'] . ',\'printData\');"><i class="fa fa-print"> Print</i></a>';
 	}
 	if ($aRow['remote_sample'] == 'yes') {
 		$decrypt = 'remote_sample_code';
@@ -336,7 +334,8 @@ foreach ($rResult as $aRow) {
 	$row[] = $aRow['patient_id'];
 	$row[] = $patientFname . " " . $patientLname;
 	$row[] = ($aRow['facility_name']);
-	$row[] = $covid19Results[$aRow['result']];
+	$row[] = ucwords($hepatitisResults[$aRow['hcv_vl_result']]);
+	$row[] = ucwords($hepatitisResults[$aRow['hbv_vl_result']]);
 	if (isset($aRow['last_modified_datetime']) && trim($aRow['last_modified_datetime']) != '' && $aRow['last_modified_datetime'] != '0000-00-00 00:00:00') {
 		$xplodDate = explode(" ", $aRow['last_modified_datetime']);
 		$aRow['last_modified_datetime'] = $general->humanDateFormat($xplodDate[0]) . " " . $xplodDate[1];

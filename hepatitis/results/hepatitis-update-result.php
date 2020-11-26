@@ -144,6 +144,8 @@ if (file_exists($fileArray[$arr['vl_form']])) {
 ?>
 
 <script>
+	changeReject($('#isSampleRejected').val());
+
 	$(document).ready(function() {
 		$('.date').datepicker({
 			changeMonth: true,
@@ -233,8 +235,14 @@ if (file_exists($fileArray[$arr['vl_form']])) {
 		//$('.dateTime').mask('99-aaa-9999 99:99');
 		$('#isSampleRejected').change(function(e) {
             changeReject(this.value);
+		});
+		
+		$("#hepatitisPlatform").on("change", function() {
+            if (this.value != "") {
+                getMachine(this.value);
+            }
         });
-        changeReject($('#isSampleRejected').val());
+        getMachine($("#hepatitisPlatform").val());
 	});
 
 	function changeReject(val) {
@@ -251,15 +259,27 @@ if (file_exists($fileArray[$arr['vl_form']])) {
             $('.show-rejection').hide();
             $('.rejected-input').prop('disabled', false);
             $('.rejected').removeClass('disabled');
-            $('#sampleRejectionReason,#rejectionDate').removeClass('isRequired');
+            $('#sampleRejectionReason,#rejectionDate,.rejected-input').removeClass('isRequired');
             $('#sampleTestedDateTime').addClass('isRequired');
             $('#result').prop('disabled', false);
             $('#sampleRejectionReason').prop('disabled', true);
         }
+	}
+	
+	function getMachine(value) {
+        $.post("/import-configs/get-config-machine-by-config.php", {
+			configName: value,
+			machine: <?php echo !empty($hepatitisInfo['import_machine_name']) ? $hepatitisInfo['import_machine_name']  : '""'; ?>,
+			testType: 'eid'
+		},
+		function(data) {
+			$('#machineName').html('');
+			if (data != "") {
+				$('#machineName').append(data);
+			}
+		});
     }
 </script>
-
-
 <?php
 include(APPLICATION_PATH . '/footer.php');
 ?>

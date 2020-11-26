@@ -1,5 +1,5 @@
 <?php
-$title = "Covid-19 Sample Rejection Reasons";
+$title = "EID Sample Rejection Reasons";
 #require_once('../startup.php'); 
 include_once(APPLICATION_PATH . '/header.php');
 ?>

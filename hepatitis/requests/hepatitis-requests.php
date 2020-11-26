@@ -132,7 +132,8 @@ $batResult = $db->rawQuery($batQuery);
 									<th>Patient Name</th>
 									<th>Province/State</th>
 									<th>District/County</th>
-									<th>Result</th>
+									<th>HCV VL Result</th>
+									<th>HBV VL Result</th>
 									<th>Last Modified On</th>
 									<th>Status</th>
 									<?php if (isset($_SESSION['privileges']) && (in_array("hepatitis-edit-request.php", $_SESSION['privileges'])) || (in_array("hepatitis-view-request.php", $_SESSION['privileges']))) { ?>
@@ -300,6 +301,8 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 					"sClass": "center"
 				}, {
 					"sClass": "center"
+				}, {
+					"sClass": "center"
 				},
 				<?php if (isset($_SESSION['privileges']) && (in_array("hepatitis-edit-request.php", $_SESSION['privileges'])) || (in_array("hepatitis-view-request.php", $_SESSION['privileges']))) { ?> {
 						"sClass": "center",
@@ -308,7 +311,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 				<?php } ?>
 			],
 			"aaSorting": [
-				[<?php echo ($sarr['user_type'] == 'remoteuser' || $sarr['user_type'] == 'vluser') ? 10 : 9 ?>, "desc"]
+				[<?php echo ($sarr['user_type'] == 'remoteuser' || $sarr['user_type'] == 'vluser') ? 11 : 10 ?>, "desc"]
 			],
 			"fnDrawCallback": function() {
 				var checkBoxes = document.getElementsByName("chk[]");
