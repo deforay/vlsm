@@ -241,7 +241,7 @@ try {
                 }
             }
             //get bacth code
-            $bquery = "select * from batch_details where batch_code='" . $accResult[$i]['batch_code'] . "'";
+            $bquery = "SELECT * FROM batch_details WHERE batch_code='" . $accResult[$i]['batch_code'] . "'";
             $bvlResult = $db->rawQuery($bquery);
             if ($bvlResult) {
                 $data['sample_batch_id'] = $bvlResult[0]['batch_id'];
