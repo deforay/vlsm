@@ -41,8 +41,6 @@ $hepatitisResults = $hepatitisDb->getHepatitisResults();
 $testReasonResults = $hepatitisDb->getHepatitisReasonsForTesting();
 $healthFacilities = $facilitiesDb->getHealthFacilities('hepatitis');
 $testingLabs = $facilitiesDb->getTestingLabs('hepatitis');
-// $arr = $general->getGlobalConfig();
-// $sarr = $general->getSystemConfig();
 
 $labTechnicians = $userDb->getActiveUserInfo();
 foreach ($labTechnicians as $labTech) {
@@ -81,8 +79,14 @@ foreach ($rejectionTypeResult as $type) {
     }
     $rejectionReason .= '</optgroup>';
 }
+// speciment type
 $specimenTypeResult = $general->fetchDataFromTable('r_hepatitis_sample_type', "status = 'active'");
 
+// Import machine config
+$testPlatformResult = $general->getTestingPlatforms('hepatitis');
+foreach ($testPlatformResult as $row) {
+    $testPlatformList[$row['machine_name']] = $row['machine_name'];
+}
 $fileArray = array(
     1 => 'forms/add-southsudan.php',
     2 => 'forms/add-zimbabwe.php',
@@ -227,7 +231,7 @@ if (file_exists($fileArray[$arr['vl_form']])) {
                 $('.show-rejection').hide();
                 $('.rejected-input').prop('disabled', false);
                 $('.rejected').removeClass('disabled');
-                $('#sampleRejectionReason,#rejectionDate').removeClass('isRequired');
+                $('#sampleRejectionReason,#rejectionDate,.rejected-input').removeClass('isRequired');
                 $('#sampleTestedDateTime,').addClass('isRequired');
                 $('#result').prop('disabled', false);
                 $('#sampleRejectionReason').prop('disabled', true);
@@ -266,31 +270,51 @@ if (file_exists($fileArray[$arr['vl_form']])) {
     function insertSampleCode(formId, hepatitisSampleId, sampleCode, sampleCodeKey, sampleCodeFormat, countryId, sampleCollectionDate, provinceCode = null, provinceId = null) {
         $.blockUI();
         $.post("/hepatitis/requests/insert-sample.php", {
-                sampleCode: $("#" + sampleCode).val(),
-                sampleCodeKey: $("#" + sampleCodeKey).val(),
-                sampleCodeFormat: $("#" + sampleCodeFormat).val(),
-                countryId: countryId,
-                sampleCollectionDate: $("#" + sampleCollectionDate).val(),
-                provinceCode: provinceCode,
-                provinceId: provinceId
-            },
-            function(data) {
-                if (data > 0) {
-                    $.unblockUI();
-                    document.getElementById("hepatitisSampleId").value = data;
-                    document.getElementById(formId).submit();
-                } else {
-                    $.unblockUI();
-                    //$("#sampleCollectionDate").val('');
-                    sampleCodeGeneration();
-                    alert("We could not save this form. Please try saving again.");
-                }
-            });
+            sampleCode: $("#" + sampleCode).val(),
+            sampleCodeKey: $("#" + sampleCodeKey).val(),
+            sampleCodeFormat: $("#" + sampleCodeFormat).val(),
+            countryId: countryId,
+            sampleCollectionDate: $("#" + sampleCollectionDate).val(),
+            provinceCode: provinceCode,
+            provinceId: provinceId
+        },
+        function(data) {
+            if (data > 0) {
+                $.unblockUI();
+                document.getElementById("hepatitisSampleId").value = data;
+                document.getElementById(formId).submit();
+            } else {
+                $.unblockUI();
+                //$("#sampleCollectionDate").val('');
+                sampleCodeGeneration();
+                alert("We could not save this form. Please try saving again.");
+            }
+        });
+
+        $("#hepatitisPlatform").on("change", function() {
+            if (this.value != "") {
+                getMachine(this.value);
+            }
+        });
     }
 
     function calculateAgeInYears() {
         var dateOfBirth = moment($("#patientDob").val(), "DD-MMM-YYYY");
         $("#patientAge").val(moment().diff(dateOfBirth, 'years'));
+    }
+
+    function getMachine(value) {
+        $.post("/import-configs/get-config-machine-by-config.php", {
+            configName: value,
+            machine: '',
+            testType: 'hepatitis'
+        },
+        function(data) {
+            $('#machineName').html('');
+            if (data != "") {
+                $('#machineName').append(data);
+            }
+        });
     }
 </script>
 <?php include_once(APPLICATION_PATH . '/footer.php');

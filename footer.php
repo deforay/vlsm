@@ -538,6 +538,48 @@
 		$(".hepatitisRequest").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".hepatitisBatchCodeMenu").addClass('active');
+	} else if (splitsUrl == 'hepatitis-manual-results.php' || splitsUrl == 'hepatitis-update-result.php') {
+		$(".allMenu").removeClass('active');
+		$(".hepatitisResults").addClass('active');
+		$(".hepatitisResultsMenu").addClass('active');
+	} else if (splitsUrl == 'hepatitis-print-results.php') {
+		$(".allMenu").removeClass('active');
+		$(".hepatitisProgramMenu").addClass('active');
+		$(".hepatitisPrintResults").addClass('active');
+	} else if (splitsUrl == 'hepatitis-result-status.php') {
+		$(".allMenu").removeClass('active');
+		$(".hepatitisResults").addClass('active');
+		$(".hepatitisResultStatus").addClass('active');
+	} else if (splitsUrl == 'hepatitis-comorbidities.php' || splitsUrl == 'add-hepatitis-comorbidities.php' || splitsUrl == 'edit-hepatitis-comorbidities.php') {
+		$(".manage").addClass('active');
+		$(".hepatitis-reference-manage").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".hepatitis-comorbidities").addClass('active');
+	} else if (splitsUrl == 'hepatitis-sample-rejection-reasons.php' || splitsUrl == 'add-hepatitis-sample-rejection-reasons.php' || splitsUrl == 'edit-hepatitis-sample-rejection-reasons.php') {
+		$(".manage").addClass('active');
+		$(".hepatitis-reference-manage").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".hepatitis-sample-rejection-reasons").addClass('active');
+	} else if (splitsUrl == 'hepatitis-sample-type.php' || splitsUrl == 'add-hepatitis-sample-type.php' || splitsUrl == 'edit-hepatitis-sample-type.php') {
+		$(".manage").addClass('active');
+		$(".hepatitis-reference-manage").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".hepatitis-sample-type").addClass('active');
+	} else if (splitsUrl == 'hepatitis-test-reasons.php' || splitsUrl == 'add-hepatitis-test-reasons.php' || splitsUrl == 'edit-hepatitis-test-reasons.php') {
+		$(".manage").addClass('active');
+		$(".hepatitis-reference-manage").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".hepatitis-test-reasons").addClass('active');
+	} else if (splitsUrl == 'hepatitis-risk-factors.php' || splitsUrl == 'add-hepatitis-risk-factors.php' || splitsUrl == 'edit-hepatitis-risk-factors.php') {
+		$(".manage").addClass('active');
+		$(".hepatitis-reference-manage").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".hepatitis-risk-factors").addClass('active');
+	} else if (splitsUrl == 'hepatitis-results.php' || splitsUrl == 'add-hepatitis-results.php' || splitsUrl == 'edit-hepatitis-results.php') {
+		$(".manage").addClass('active');
+		$(".hepatitis-reference-manage").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".hepatitis-results").addClass('active');
 	} else {
 		$(".allMenu").removeClass('active');
 		$(".dashboardMenu").addClass('active');

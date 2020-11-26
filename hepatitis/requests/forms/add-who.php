@@ -444,6 +444,18 @@ foreach ($fResult as $fDetails) {
                                             </td>
                                         </tr>
                                         <tr>
+                                            <td><label for="">Testing Platform </label></td>
+                                            <td><select name="hepatitisPlatform" id="hepatitisPlatform" class="form-control rejected-input" title="Please select the testing platform">
+                                                    <?= $general->generateSelectOptions($testPlatformList, null, '-- Select --'); ?>
+                                                </select>
+                                            </td>
+                                            <td><label for="">Machine used to test </label></td>
+                                            <td><select name="machineName" id="machineName" class="form-control rejected-input" title="Please select the machine name" ">
+                                                <option value="">-- Select --</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
                                             <th>Is Result Authorized ?</th>
                                             <td>
                                                 <select name="isResultAuthorized" id="isResultAuthorized" class="disabled-field form-control rejected-input" title="Is Result authorized ?" style="width:100%">
@@ -673,6 +685,12 @@ foreach ($fResult as $fDetails) {
 
         $('#isResultAuthorized').change(function(e) {
             checkIsResultAuthorized();
+        });
+
+        $("#hepatitisPlatform").on("change", function() {
+            if (this.value != "") {
+                getMachine(this.value);
+            }
         });
     });
 
