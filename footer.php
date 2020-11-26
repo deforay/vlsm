@@ -570,11 +570,11 @@
 		$(".hepatitis-reference-manage").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".hepatitis-test-reasons").addClass('active');
-	} else if (splitsUrl == 'hepatitis-rick-factors.php' || splitsUrl == 'add-hepatitis-rick-factors.php' || splitsUrl == 'edit-hepatitis-rick-factors.php') {
+	} else if (splitsUrl == 'hepatitis-risk-factors.php' || splitsUrl == 'add-hepatitis-risk-factors.php' || splitsUrl == 'edit-hepatitis-risk-factors.php') {
 		$(".manage").addClass('active');
 		$(".hepatitis-reference-manage").addClass('active');
 		$(".allMenu").removeClass('active');
-		$(".hepatitis-rick-factors").addClass('active');
+		$(".hepatitis-risk-factors").addClass('active');
 	} else if (splitsUrl == 'hepatitis-results.php' || splitsUrl == 'add-hepatitis-results.php' || splitsUrl == 'edit-hepatitis-results.php') {
 		$(".manage").addClass('active');
 		$(".hepatitis-reference-manage").addClass('active');
