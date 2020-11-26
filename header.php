@@ -135,9 +135,9 @@ $sharedPrivileges = array(
 	'hepatitis-results.php'							=> 'hepatitis-sample-type.php',
 	'add-hepatitis-results.php'						=> 'hepatitis-sample-type.php',
 	'edit-hepatitis-results.php'					=> 'hepatitis-sample-type.php',
-	'hepatitis-rick-factors.php'					=> 'hepatitis-sample-type.php',
-	'add-hepatitis-rick-factors.php'				=> 'hepatitis-sample-type.php',
-	'edit-hepatitis-rick-factors.php'				=> 'hepatitis-sample-type.php',
+	'hepatitis-risk-factors.php'					=> 'hepatitis-sample-type.php',
+	'add-hepatitis-risk-factors.php'				=> 'hepatitis-sample-type.php',
+	'edit-hepatitis-risk-factors.php'				=> 'hepatitis-sample-type.php',
 	'hepatitis-test-reasons.php'					=> 'hepatitis-sample-type.php',
 	'add-hepatitis-test-reasons.php'				=> 'hepatitis-sample-type.php',
 	'edit-hepatitis-test-reasons.php'				=> 'hepatitis-sample-type.php',
@@ -616,8 +616,8 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 											<li class="allMenu hepatitis-comorbidities">
 												<a href="/hepatitis/reference/hepatitis-comorbidities.php"><i class="fa fa-caret-right"></i>Co-morbidities</a>
 											</li>
-											<li class="allMenu hepatitis-rick-factors">
-												<a href="/hepatitis/reference/hepatitis-rick-factors.php"><i class="fa fa-caret-right"></i>Rick Factors</a>
+											<li class="allMenu hepatitis-risk-factors">
+												<a href="/hepatitis/reference/hepatitis-risk-factors.php"><i class="fa fa-caret-right"></i>Risk Factors</a>
 											</li>
 											<li class="allMenu hepatitis-sample-rejection-reasons">
 												<a href="/hepatitis/reference/hepatitis-sample-rejection-reasons.php"><i class="fa fa-caret-right"></i>Rejection Reasons</a>

@@ -1,5 +1,5 @@
 <?php
-$title = "Hepatitis Test Reasons";
+$title = "Hepatitis Risk Factors";
 #require_once('../startup.php'); 
 include_once(APPLICATION_PATH . '/header.php');
 ?>
@@ -7,10 +7,10 @@ include_once(APPLICATION_PATH . '/header.php');
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<h1><i class="fa fa-gears"></i> Hepatitis Test Reasons</h1>
+		<h1><i class="fa fa-gears"></i> Hepatitis Risk Factors</h1>
 		<ol class="breadcrumb">
 			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-			<li class="active">Hepatitis Test Reasons</li>
+			<li class="active">Hepatitis Risk Factors</li>
 		</ol>
 	</section>
 
@@ -21,16 +21,15 @@ include_once(APPLICATION_PATH . '/header.php');
 				<div class="box">
 					<div class="box-header with-border">
 						<?php if (isset($_SESSION['privileges']) && in_array("hepatitis-sample-type.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') { ?>
-							<a href="add-hepatitis-test-reasons.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Hepatitis Test Reasons</a>
+							<a href="add-hepatitis-risk-factors.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Hepatitis Risk Factors</a>
 						<?php } ?>
-						<!--<button class="btn btn-primary pull-right" style="margin-right: 1%;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>-->
 					</div>
 					<!-- /.box-header -->
 					<div class="box-body">
-						<table id="testReasonDataTable" class="table table-bordered table-striped">
+						<table id="sampTypDataTable" class="table table-bordered table-striped">
 							<thead>
 								<tr>
-									<th>Test Reason</th>
+									<th>Risk Factor Name</th>
 									<th>Status</th>
 									<?php if (isset($_SESSION['privileges']) && in_array("hepatitis-sample-type.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') { ?>
 										<th>Action</th>
@@ -62,7 +61,7 @@ include_once(APPLICATION_PATH . '/header.php');
 	});
 	$(document).ready(function() {
 		$.blockUI();
-		oTable = $('#testReasonDataTable').dataTable({
+		oTable = $('#sampTypDataTable').dataTable({
 			"oLanguage": {
 				"sLengthMenu": "_MENU_ records per page"
 			},
@@ -89,7 +88,7 @@ include_once(APPLICATION_PATH . '/header.php');
 			],
 			"bProcessing": true,
 			"bServerSide": true,
-			"sAjaxSource": "get-hepatitis-test-reasons-helper.php",
+			"sAjaxSource": "get-hepatitis-risk-factor-helper.php",
 			"fnServerData": function(sSource, aoData, fnCallback) {
 				$.ajax({
 					"dataType": 'json',
