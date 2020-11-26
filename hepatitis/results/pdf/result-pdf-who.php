@@ -147,30 +147,53 @@ if (sizeof($requestResult) > 0) {
         } else {
             $resultApprovedBy  = '';
         }
-
         $vlResult = '';
-        $smileyContent = '';
         $showMessage = '';
         $tndMessage = '';
         $messageTextSize = '12px';
-        if ($result['result'] != NULL && trim($result['result']) != '') {
-            $resultType = is_numeric($result['result']);
-            if ($result['result'] == 'positive') {
-                $vlResult = $result['result'];
-                //$smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_frown.png" alt="smile_face"/>';
-            } else if ($result['result'] == 'negative') {
-                $vlResult = $result['result'];
-                $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_smile.png" alt="smile_face"/>';
-            } else if ($result['result'] == 'indeterminate') {
-                $vlResult = $result['result'];
-                $smileyContent = '';
+
+        // Smily for HCV Result
+        $smileyContenthcv = '';
+        if ($result['hcv_vl_result'] != NULL && trim($result['hcv_vl_result']) != '') {
+            $resultType = is_numeric($result['hcv_vl_result']);
+            if ($result['hcv_vl_result'] == 'positive') {
+                $vlResult = $result['hcv_vl_result'];
+                //$smileyContenthcv = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_frown.png" alt="smile_face"/>';
+            } else if ($result['hcv_vl_result'] == 'negative') {
+                $vlResult = $result['hcv_vl_result'];
+                $smileyContenthcv = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_smile.png" alt="smile_face"/>';
+            } else if ($result['hcv_vl_result'] == 'indeterminate') {
+                $vlResult = $result['hcv_vl_result'];
+                $smileyContenthcv = '';
             }
         }
         if (isset($arr['show_smiley']) && trim($arr['show_smiley']) == "no") {
-            $smileyContent = '';
+            $smileyContenthcv = '';
         }
         if ($result['result_status'] == '4') {
-            $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/cross.png" alt="rejected"/>';
+            $smileyContenthcv = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/cross.png" alt="rejected"/>';
+        }
+        
+        // Smily for HBV Result
+        $smileyContenthbv = '';
+        if ($result['hbv_vl_result'] != NULL && trim($result['hbv_vl_result']) != '') {
+            $resultType = is_numeric($result['hbv_vl_result']);
+            if ($result['hbv_vl_result'] == 'positive') {
+                $vlResult = $result['hbv_vl_result'];
+                //$smileyContenthbv = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_frown.png" alt="smile_face"/>';
+            } else if ($result['hbv_vl_result'] == 'negative') {
+                $vlResult = $result['hbv_vl_result'];
+                $smileyContenthbv = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_smile.png" alt="smile_face"/>';
+            } else if ($result['hbv_vl_result'] == 'indeterminate') {
+                $vlResult = $result['hbv_vl_result'];
+                $smileyContenthbv = '';
+            }
+        }
+        if (isset($arr['show_smiley']) && trim($arr['show_smiley']) == "no") {
+            $smileyContenthbv = '';
+        }
+        if ($result['result_status'] == '4') {
+            $smileyContenthbv = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/cross.png" alt="rejected"/>';
         }
 
         $html = '';
@@ -194,7 +217,7 @@ if (sizeof($requestResult) > 0) {
             $html .= '</tr>';
             
             $html .= '<tr>';
-            $html .= '<td colspan="3" style="line-height:11px;font-size:13px;font-weight:bold;text-align:left;"><br>SITE INFORMATION</td>';
+            $html .= '<td colspan="3" style="line-height:25px;font-size:13px;text-align:left;padding-bottom:5px;"><br><u><i>SITE INFORMATION</i></u></td>';
             $html .= '</tr>';
             
             $html .= '<tr>';
@@ -243,7 +266,7 @@ if (sizeof($requestResult) > 0) {
             $html .= '</tr>';
             
             $html .= '<tr>';
-            $html .= '<td colspan="3" style="line-height:11px;font-size:13px;font-weight:bold;text-align:left;"><br>PATIENT INFORMATION</td>';
+            $html .= '<td colspan="3" style="line-height:25px;font-size:13px;text-align:left;padding-bottom:5px;"><br><u><i>PATIENT INFORMATION</i></u></td>';
             $html .= '</tr>';
             
             $html .= '<tr>';
@@ -254,33 +277,19 @@ if (sizeof($requestResult) > 0) {
                 $html .= '<td colspan="3">';
                     $html .= '<table style="padding:8px 2px 2px 2px;">';
                         $html .= '<tr>';
-                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">NRL ID</td>';
-                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">PATIENT IDENTIFIER</td>';
+                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">TRACNET ID</td>';
                             $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">NAME</td>';
                             $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SEX</td>';
+                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">BIRTH DATE / AGE</td>';
                         $html .= '</tr>';
                         $html .= '<tr>';
                             $patientFname = ucwords($general->crypto('decrypt', $result['patient_name'], $result['patient_id']));
                             $patientLname = ucwords($general->crypto('decrypt', $result['patient_surname'], $result['patient_id']));
 
-                            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
                             $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['patient_id'] . '</td>';
                             $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $patientFname.' '.$patientLname . '</td>';
                             $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords(str_replace("_", " ", $result['patient_gender'])) . '</td>';
-                        $html .= '</tr>';
-
-                        $html .= '<tr>';
-                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">TRACNET ID</td>';
-                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">BIRTH DATE / AGE</td>';
-                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">DRUGS TAKEN</td>';
-                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
-                        $html .= '</tr>';
-                        $html .= '<tr>';
-                            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
                             $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $general->humanDateFormat($result['patient_dob']) . ' / '. $age . '</td>';
-                            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['patient_id'] . '</td>';
-                            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
-                            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
                         $html .= '</tr>';
                     $html .= '</table>';
                 $html .= '</td>';
@@ -295,7 +304,7 @@ if (sizeof($requestResult) > 0) {
             $html .= '</tr>';
             
             $html .= '<tr>';
-            $html .= '<td colspan="3" style="line-height:11px;font-size:13px;font-weight:bold;text-align:left;"><br>SPECIMEN INFORMATION</td>';
+            $html .= '<td colspan="3" style="line-height:25px;font-size:13px;text-align:left;padding-bottom:5px;"><br><u><i>SPECIMEN INFORMATION</i></u></td>';
             $html .= '</tr>';
             
             $html .= '<tr>';
@@ -321,14 +330,14 @@ if (sizeof($requestResult) > 0) {
                         $html .= '<tr>';
                             $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">DATE OF RECEPTION</td>';
                             $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">TIME OF RECEPTION</td>';
-                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
-                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
+                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Testing Lab</td>';
+                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Testing Platform</td>';
                         $html .= '</tr>';
                         $html .= '<tr>';
                             $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $sampleReceivedDate . '</td>';
                             $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $sampleReceivedTime . '</td>';
-                            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
-                            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+                            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['labName']).'</td>';
+                            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['hepatitis_test_platform']).'</td>';
                         $html .= '</tr>';
                     $html .= '</table>';
                 $html .= '</td>';
@@ -345,16 +354,36 @@ if (sizeof($requestResult) > 0) {
             $html .= '<tr>';
                 $html .= '<td colspan="3">';
                     $html .= '<table style="padding:2px;">';
-                        $html .= '<tr>';
-                            $html .= '<td colspan="2" style="line-height:50px;font-size:14px;text-align:left;">&nbsp;&nbsp;<b>TEST REQUESTED : </b>'.$result['sample_tested_datetime'].'</td>';
-                        $html .= '</tr>';
-                        $html .= '<tr>';
-                            $html .= '<td colspan="2" style="line-height:2px;"></td>';
-                        $html .= '</tr>';
-                        $html .= '<tr style="background-color:#dbdbdb;">';
-                            $html .= '<td style="line-height:50px;font-size:14px;font-weight:bold;text-align:left;">&nbsp;&nbsp;HCV VL RESULTS : '.ucwords($hepatitisResults[$result['hcv_vl_result']]).'</td>';
-                            $html .= '<td style="line-height:50px;font-size:14px;font-weight:bold;text-align:left;">&nbsp;&nbsp;HBV VL RESULTS : '.ucwords($hepatitisResults[$result['hbv_vl_result']]).'</td>';
-                        $html .= '</tr>';
+                        if((isset($result['hcv_vl_result']) && $result['hcv_vl_result'] != "") && (isset($result['hbv_vl_result']) && $result['hbv_vl_result'] != "")){
+                            $html .= '<tr>';
+                                $html .= '<td colspan="2" style="line-height:50px;font-size:14px;text-align:left;">&nbsp;&nbsp;<b>TEST REQUESTED : </b>'.$result['sample_tested_datetime'].'</td>';
+                            $html .= '</tr>';
+                            $html .= '<tr>';
+                                $html .= '<td colspan="2" style="line-height:2px;"></td>';
+                            $html .= '</tr>';
+                            $html .= '<tr style="background-color:#dbdbdb;">';
+                                if(isset($result['hcv_vl_result']) && $result['hcv_vl_result'] != ""){
+                                    $html .= '<td style="line-height:50px;font-size:14px;font-weight:bold;text-align:left;">&nbsp;&nbsp;HCV VL RESULTS : '.ucwords($hepatitisResults[$result['hcv_vl_result']]).'</td>';
+                                }
+                                if(isset($result['hbv_vl_result']) && $result['hbv_vl_result'] != ""){
+                                    $html .= '<td style="line-height:50px;font-size:14px;font-weight:bold;text-align:left;">&nbsp;&nbsp;HBV VL RESULTS : '.ucwords($hepatitisResults[$result['hbv_vl_result']]).'</td>';
+                                }
+                            $html .= '</tr>';
+                        } else{
+                            $resultTxt = "Result";
+                            $resultVal = "";
+                            if(isset($result['hcv_vl_result']) && $result['hcv_vl_result'] != ""){
+                                $resultTxt = "HCV VL Result";
+                                $resultVal = ucwords($hepatitisResults[$result['hcv_vl_result']]);
+                            } else if(isset($result['hbv_vl_result']) && $result['hbv_vl_result'] != ""){
+                                $resultTxt = "HBV VL Result";
+                                $resultVal = ucwords($hepatitisResults[$result['hbv_vl_result']]);
+                            }
+                            $html .= '<tr style="background-color:#dbdbdb;">';
+                                $html .= '<td style="line-height:50px;font-size:16px;font-weight:bold;text-align:left;">&nbsp;&nbsp;<b>TEST REQUESTED : </b>'.$result['sample_tested_datetime'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.$resultTxt.' : '.$resultVal.'</td>';
+                            $html .= '</tr>';
+
+                        }
                         
                         if ($result['reason_for_sample_rejection'] != '') {
                             $html .= '<tr>';
