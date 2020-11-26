@@ -434,7 +434,6 @@ $facility = $general->generateSelectOptions($healthFacilities, $hepatitisInfo['f
                                         <th><label for="hbv">HBV VL Result</label></th>
                                         <td>
                                             <select class="form-control rejected-input" name="hbv" id="hbv">
-                                                <option value=''> -- Select -- </option>
                                                 <?= $general->generateSelectOptions($hepatitisResults, $hepatitisInfo['hbv_vl_result'], '-- Select --'); ?>
                                             </select>
                                         </td>
@@ -449,6 +448,18 @@ $facility = $general->generateSelectOptions($healthFacilities, $hepatitisInfo['f
                                             <input value="<?php echo $hepatitisInfo['hbv_vl_count'];?>" type="text" class="form-control rejected-input" placeholder="Enter HBV Count" title="Please enter HBV Count" name="hbvCount" id="hbvCount">
                                         </td>
                                     </tr>
+                                    <tr>
+                                            <td><label for="">Testing Platform </label></td>
+                                            <td><select name="hepatitisPlatform" id="hepatitisPlatform" class="form-control rejected-input" title="Please select the testing platform">
+                                                    <?= $general->generateSelectOptions($testPlatformList, $hepatitisInfo['hepatitis_test_platform'], '-- Select --'); ?>
+                                                </select>
+                                            </td>
+                                            <td><label for="">Machine used to test </label></td>
+                                            <td><select name="machineName" id="machineName" class="form-control rejected-input" title="Please select the machine name" ">
+                                                <option value="">-- Select --</option>
+                                                </select>
+                                            </td>
+                                        </tr>
                                     <tr>
                                         <th>Is Result Authorized ?</th>
                                         <td>

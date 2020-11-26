@@ -54,7 +54,7 @@ include_once(APPLICATION_PATH . '/header.php');
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
-                        <a href="province-details.php" class="btn btn-default"> Cancel</a>
+                        <a href="funding-sources.php" class="btn btn-default"> Cancel</a>
                     </div>
                     <!-- /.box-footer -->
                 </form>

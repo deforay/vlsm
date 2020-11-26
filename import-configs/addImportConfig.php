@@ -56,6 +56,9 @@ include_once(APPLICATION_PATH . '/header.php');
 											<option value='vl'>Viral Load</option>
 											<option value='eid'>EID</option>
 											<option value='covid19'>Covid-19</option>
+											<?php if(isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) {?> 
+												<option value='hepatitis'>Hepatitis</option>
+											<?php } ?>
 										</select>
 									</div>
 								</div>

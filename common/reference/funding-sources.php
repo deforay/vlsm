@@ -8,10 +8,10 @@ include_once(APPLICATION_PATH . '/header.php');
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<h1><i class="fa fa-gears"></i> Implementation Partners</h1>
+		<h1><i class="fa fa-gears"></i> Funding Sources</h1>
 		<ol class="breadcrumb">
 			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-			<li class="active">Implementation Partners</li>
+			<li class="active">Funding Sources</li>
 		</ol>
 	</section>
 
@@ -22,7 +22,7 @@ include_once(APPLICATION_PATH . '/header.php');
 				<div class="box">
 					<div class="box-header with-border">
 						<?php if (isset($_SESSION['privileges']) && in_array("province-details.php", $_SESSION['privileges']) && $sarr['user_type'] != 'vluser') { ?>
-							<a href="add-funding-sources.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Implementation Partners</a>
+							<a href="add-funding-sources.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Funding Sources</a>
 						<?php } ?>
 					</div>
 					<!-- /.box-header -->
@@ -30,7 +30,7 @@ include_once(APPLICATION_PATH . '/header.php');
 						<table id="partnerTable" class="table table-bordered table-striped">
 							<thead>
 								<tr>
-									<th>Partner Name</th>
+									<th>Funding Source Name</th>
 									<th>Status</th>
 									<?php if (isset($_SESSION['privileges']) && in_array("province-details.php", $_SESSION['privileges']) && $sarr['user_type'] != 'vluser') { ?>
 										<th>Action</th>

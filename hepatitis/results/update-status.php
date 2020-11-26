@@ -4,10 +4,10 @@ ob_start();
 
 
 $general = new \Vlsm\Models\General($db);
-$tableName = "form_covid19";
+$tableName = "form_hepatitis";
 try {
     $id = explode(",", $_POST['id']);
-    $lock = $general->getGlobalConfig('lock_approved_covid19_samples');
+    // $lock = $general->getGlobalConfig('lock_approved_hepatitis_samples');
     for ($i = 0; $i < count($id); $i++) {
         $status = array(
             'result_status'         => $_POST['status'],
@@ -22,10 +22,10 @@ try {
             $status['is_sample_rejected'] = 'no';
             $status['reason_for_sample_rejection'] = null;
         }
-        if($status['result_status'] == 7 && $lock == 'yes'){
+        /* if($status['result_status'] == 7 && $lock == 'yes'){
             $status['locked'] = 'yes';
-        }
-        $db = $db->where('covid19_id', $id[$i]);
+        } */
+        $db = $db->where('hepatitis_id', $id[$i]);
         $db->update($tableName, $status);
         $result = $id[$i];
     }
