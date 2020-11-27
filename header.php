@@ -756,6 +756,9 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("vlMonthlyThresholdReport.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu vlMonthlyThresholdReport"><a href="/vl/program-management/vlTestingTargetReport.php"><i class="fa fa-circle-o"></i>VL Testing Target Report</a></li>
+									<?php } 
+									if (isset($_SESSION['privileges']) && in_array("vlSuppressedTargetReport.php", $_SESSION['privileges'])) { ?>
+									<li class="allMenu vlSuppressedMonthlyThresholdReport"><a href="/vl/program-management/vlSuppressedTargetReport.php"><i class="fa fa-circle-o"></i>VL Suppression Target Report</a></li>
 									<?php } ?>
 								</ul>
 							</li>
