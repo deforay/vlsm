@@ -198,7 +198,7 @@ if (sizeof($requestResult) > 0) {
 
         $html = '';
         $html .= '<table style="padding:0px 2px 2px 2px;">';
-            $html .= '<tr>';
+            /* $html .= '<tr>';
                 $html .= '<td colspan="3">';
                     $html .= '<table style="padding:2px;">';
                         $html .= '<tr>';
@@ -210,7 +210,7 @@ if (sizeof($requestResult) > 0) {
 
             $html .= '<tr>';
                 $html .= '<td colspan="3" style="line-height:2px;border-bottom:1px solid #d3d3d3;"></td>';
-            $html .= '</tr>';
+            $html .= '</tr>'; */
             
             $html .= '<tr>';
                 $html .= '<td colspan="3" style="line-height:2px;"></td>';
@@ -315,16 +315,16 @@ if (sizeof($requestResult) > 0) {
                 $html .= '<td colspan="3">';
                     $html .= '<table style="padding:8px 2px 2px 2px;">';
                         $html .= '<tr>';
-                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SPECIMEN TYPE</td>';
-                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">PURPOSE OF TEST</td>';
+                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SAMPLE ID</td>';
                             $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">COLLECTION DATE</td>';
-                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">COLLECTION TIME</td>';
+                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">PURPOSE OF TEST</td>';
+                            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SPECIMEN TYPE</td>';
                         $html .= '</tr>';
                         $html .= '<tr>';
-                            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['sample_name'] . '</td>';
+                            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['sample_code'] . '</td>';
+                            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['sample_collection_date'] . ' '.$sampleCollectionTime . '</td>';
                             $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['reason_for_vl_test'] . '</td>';
-                            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['sample_collection_date'] . '</td>';
-                            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $sampleCollectionTime . '</td>';
+                            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['sample_name'] . '</td>';
                         $html .= '</tr>';
 
                         $html .= '<tr>';
@@ -337,7 +337,7 @@ if (sizeof($requestResult) > 0) {
                             $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $sampleReceivedDate . '</td>';
                             $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $sampleReceivedTime . '</td>';
                             $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['labName']).'</td>';
-                            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['hepatitis_test_platform']).'</td>';
+                            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['hepatitis_test_platform']) . '</td>';
                         $html .= '</tr>';
                     $html .= '</table>';
                 $html .= '</td>';
