@@ -113,10 +113,14 @@ $_SESSION['vlSuppressedTargetReportResult'] = json_encode($res);
 // echo json_encode($res);die;
 ksort($res);
 end($res);
+// print_r($_POST);die;
 if(isset($_POST['monthYear']) && $_POST['monthYear']!='')
 {
-    $monthYear = $_POST['monthYear'];
-    $resArray = $res[$_POST['monthYear']];
+    $monthYear = '01-'.$_POST['monthYear'];
+    $mon = date('Y-M', strtotime($monthYear));
+    $resArray = $res[$mon];
+    // print_r($mon);
+    // print_r($res);die;
 }
 else
 {
