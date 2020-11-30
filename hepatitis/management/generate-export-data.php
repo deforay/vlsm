@@ -14,17 +14,17 @@ $covid19Results = $general->getCovid19Results();
 $arr = $general->getGlobalConfig();
 $sarr = $general->getSystemConfig();
 // echo "<pre>";print_r($arr);die;
-if (isset($_SESSION['covid19ResultQuery']) && trim($_SESSION['covid19ResultQuery']) != "") {
+if (isset($_SESSION['hepatitisResultQuery']) && trim($_SESSION['hepatitisResultQuery']) != "") {
 
-	$rResult = $db->rawQuery($_SESSION['covid19ResultQuery']);
+	$rResult = $db->rawQuery($_SESSION['hepatitisResultQuery']);
 
 	$excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
 	$output = array();
 	$sheet = $excel->getActiveSheet();
 	if($arr['vl_form'] == 1){
-		$headings = array("S. No.", "Sample Code", "Testing Lab Name", "Testing Point", "Lab staff Assigned", "Source Of Alert / POE", "Health Facility/POE County", "Health Facility/POE State", "Health Facility/POE", "Case ID", "Patient Name", "Patient DoB", "Patient Age", "Patient Gender", "Nationality", "Patient State", "Patient County", "Patient City/Village", "Date specimen collected", "Reason for Test Request",  "Date specimen Received", "Date specimen Entered", "Specimen Condition", "Specimen Status", "Specimen Type", "Date specimen Tested", "Testing Platform", "Test Method", "Result", "Date result released");
+		$headings = array("S. No.", "Sample Code", "Testing Lab Name", "Testing Point", "Lab staff Assigned", "Source Of Alert / POE", "Health Facility/POE County", "Health Facility/POE State", "Health Facility/POE", "Case ID", "Patient Name", "Patient DoB", "Patient Age", "Patient Gender", "Nationality", "Patient State", "Patient County", "Patient City/Village", "Date specimen collected", "Reason for Test Request",  "Date specimen Received", "Date specimen Entered", "Specimen Condition", "Specimen Status", "Specimen Type", "Date specimen Tested", "Testing Platform", "Test Method", "HCV VL Result", "HBV VL Result", "Date result released");
 	} else{
-		$headings = array("S. No.", "Sample Code", "Health Facility Name", "Health Facility Code", "District/County", "Province/State", "Patient ID", "Patient Name", "Patient DoB", "Patient Age", "Patient Gender", "Sample Collection Date","Date of Symptom Onset", "Has the patient had contact with a confirmed case?", "Has the patient had a recent history of travelling to an affected area?", "If Yes, Country Name(s)", "Return Date", "Is Sample Rejected?", "Sample Tested On", "Result", "Sample Received On", "Date Result Dispatched", "Comments", "Funding Source", "Implementing Partner");
+		$headings = array("S. No.", "Sample Code", "Health Facility Name", "Health Facility Code", "District/County", "Province/State", "Patient ID", "Patient Name", "Patient DoB", "Patient Age", "Patient Gender", "Sample Collection Date","Date of Symptom Onset", "Has the patient had contact with a confirmed case?", "Has the patient had a recent history of travelling to an affected area?", "If Yes, Country Name(s)", "Return Date", "Is Sample Rejected?", "Sample Tested On", "HCV VL Result", "HBV VL Result", "Sample Received On", "Date Result Dispatched", "Comments", "Funding Source", "Implementing Partner");
 	}
 
 	$colNo = 1;
@@ -82,15 +82,15 @@ if (isset($_SESSION['covid19ResultQuery']) && trim($_SESSION['covid19ResultQuery
 	$no = 1;
 	foreach ($rResult as $aRow) {
 		$row = array();
-		if($arr['vl_form'] == 1){
-			// Get testing platform and test method 
-			$covid19TestQuery = "SELECT * from covid19_tests where covid19_id= " . $aRow['covid19_id'] . " ORDER BY test_id ASC";
-			$covid19TestInfo = $db->rawQuery($covid19TestQuery);
-			foreach ($covid19TestInfo as $indexKey => $rows) {
-				$testPlatform = $rows['testing_platform'];
-				$testMethod = $rows['test_name'];
-			}
-		}
+		// if($arr['vl_form'] == 1){
+		// 	// Get testing platform and test method 
+		// 	$covid19TestQuery = "SELECT * from covid19_tests where covid19_id= " . $aRow['covid19_id'] . " ORDER BY test_id ASC";
+		// 	$covid19TestInfo = $db->rawQuery($covid19TestQuery);
+		// 	foreach ($covid19TestInfo as $indexKey => $rows) {
+		// 		$testPlatform = $rows['testing_platform'];
+		// 		$testMethod = $rows['test_name'];
+		// 	}
+		// }
 		
 		//date of birth
 		$dob = '';
@@ -182,9 +182,10 @@ if (isset($_SESSION['covid19ResultQuery']) && trim($_SESSION['covid19ResultQuery
 			$row[] = ucwords($aRow['status_name']);
 			$row[] = ucwords($aRow['sample_name']);
 			$row[] = $general->humanDateFormat($aRow['sample_tested_datetime']);
-			$row[] = ucwords($testPlatform);
-			$row[] = ucwords($testMethod);
-			$row[] = $covid19Results[$aRow['result']];
+			// $row[] = ucwords($testPlatform);
+			// $row[] = ucwords($testMethod);
+			$row[] = $aRow['hcv_vl_result'];
+			$row[] = $aRow['hbv_vl_result'];
 			$row[] = $general->humanDateFormat($aRow['result_printed_datetime']);
 		} else{
 
@@ -207,7 +208,8 @@ if (isset($_SESSION['covid19ResultQuery']) && trim($_SESSION['covid19ResultQuery
 			$row[] = $general->humanDateFormat($aRow['travel_return_date']);
 			$row[] = $sampleRejection;
 			$row[] = $sampleTestedOn;
-			$row[] = $covid19Results[$aRow['result']];
+			$row[] = $aRow['hcv_vl_result'];
+			$row[] = $aRow['hbv_vl_result'];
 			$row[] = $general->humanDateFormat($aRow['sample_received_at_vl_lab_datetime']);
 			$row[] = $resultDispatchedDate;
 			$row[] = ucfirst($aRow['approver_comments']);
@@ -233,7 +235,7 @@ if (isset($_SESSION['covid19ResultQuery']) && trim($_SESSION['covid19ResultQuery
 		}
 	}
 	$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
-	$filename = 'Covid-19-Export-Data-' . date('d-M-Y-H-i-s') . '.xlsx';
+	$filename = 'Hepatitis-Export-Data-' . date('d-M-Y-H-i-s') . '.xlsx';
 	$writer->save(TEMP_PATH . DIRECTORY_SEPARATOR . $filename);
 	echo $filename;
 }
