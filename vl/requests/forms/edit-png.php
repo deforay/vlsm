@@ -32,16 +32,16 @@ $rKey = '';
 $sampleCodeKey = 'sample_code_key';
 $sampleCode = 'sample_code';
 $prefix = $arr['sample_code_prefix'];
-$pdQuery = "SELECT * from province_details";
+$pdQuery = "SELECT * FROM province_details";
 if ($sarr['user_type'] == 'remoteuser') {
   $rKey = 'R';
   $sampleCodeKey = 'remote_sample_code_key';
   $sampleCode = 'remote_sample_code';
   //check user exist in user_facility_map table
-  $chkUserFcMapQry = "Select user_id from vl_user_facility_map where user_id='" . $_SESSION['userId'] . "'";
+  $chkUserFcMapQry = "SELECT user_id FROM vl_user_facility_map WHERE user_id='" . $_SESSION['userId'] . "'";
   $chkUserFcMapResult = $db->query($chkUserFcMapQry);
   if ($chkUserFcMapResult) {
-    $pdQuery = "SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='" . $_SESSION['userId'] . "'";
+    $pdQuery = "SELECT * FROM province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='" . $_SESSION['userId'] . "'";
   }
 }
 //sample rejection reason
@@ -54,17 +54,17 @@ $bResult = $db->rawQuery($bQuery);
 $importQuery = "SELECT * FROM import_config WHERE status = 'active'";
 $importResult = $db->query($importQuery);
 
-$aQuery = "SELECT * from r_vl_art_regimen";
+$aQuery = "SELECT * FROM r_vl_art_regimen";
 $aResult = $db->query($aQuery);
 
-$sQuery = "SELECT * from r_vl_sample_type where status='active'";
+$sQuery = "SELECT * FROM r_vl_sample_type where status='active'";
 $sResult = $db->query($sQuery);
 
 $pdResult = $db->query($pdQuery);
 
 
 //facility details
-$facilityQuery = "SELECT * from facility_details where facility_id='" . $vlQueryInfo['facility_id'] . "'";
+$facilityQuery = "SELECT * FROM facility_details where facility_id='" . $vlQueryInfo['facility_id'] . "'";
 $facilityResult = $db->query($facilityQuery);
 if (!isset($facilityResult[0]['facility_state']) || $facilityResult[0]['facility_state'] == '') {
   $facilityResult[0]['facility_state'] = "";
@@ -87,44 +87,12 @@ foreach ($pdResult as $provinceName) {
 
 $facility = $general->generateSelectOptions($healthFacilities, $vlQueryInfo['facility_id'], '-- Select --');
 
-if (isset($vlQueryInfo['sample_collection_date']) && trim($vlQueryInfo['sample_collection_date']) != '' && $vlQueryInfo['sample_collection_date'] != '0000-00-00 00:00:00') {
-  $expStr = explode(" ", $vlQueryInfo['sample_collection_date']);
-  $vlQueryInfo['sample_collection_date'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
-} else {
-  $vlQueryInfo['sample_collection_date'] = '';
-}
-if (isset($vlQueryInfo['patient_dob']) && trim($vlQueryInfo['patient_dob']) != '' && $vlQueryInfo['patient_dob'] != '0000-00-00') {
-  $vlQueryInfo['patient_dob'] = $general->humanDateFormat($vlQueryInfo['patient_dob']);
-} else {
-  $vlQueryInfo['patient_dob'] = '';
-}
-if (isset($vlQueryInfo['date_of_initiation_of_current_regimen']) && trim($vlQueryInfo['date_of_initiation_of_current_regimen']) != '' && $vlQueryInfo['date_of_initiation_of_current_regimen'] != '0000-00-00') {
-  $vlQueryInfo['date_of_initiation_of_current_regimen'] = $general->humanDateFormat($vlQueryInfo['date_of_initiation_of_current_regimen']);
-} else {
-  $vlQueryInfo['date_of_initiation_of_current_regimen'] = '';
-}
-if (isset($vlQueryInfo['last_viral_load_date']) && trim($vlQueryInfo['last_viral_load_date']) != '' && $vlQueryInfo['last_viral_load_date'] != '0000-00-00') {
-  $vlQueryInfo['last_viral_load_date'] = $general->humanDateFormat($vlQueryInfo['last_viral_load_date']);
-} else {
-  $vlQueryInfo['last_viral_load_date'] = '';
-}
-if (isset($vlQueryInfo['sample_tested_datetime']) && trim($vlQueryInfo['sample_tested_datetime']) != '' && trim($vlQueryInfo['sample_tested_datetime']) != '0000-00-00 00:00:00') {
-  $expStr = explode(" ", $vlQueryInfo['sample_tested_datetime']);
-  $vlQueryInfo['sample_tested_datetime'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
-} else {
-  $vlQueryInfo['sample_tested_datetime'] = '';
-}
+
 if (isset($vlQueryInfo['failed_test_date']) && trim($vlQueryInfo['failed_test_date']) != '' && trim($vlQueryInfo['failed_test_date']) != '0000-00-00 00:00:00') {
   $failedDate = explode(" ", $vlQueryInfo['failed_test_date']);
   $vlQueryInfo['failed_test_date'] = $general->humanDateFormat($failedDate[0]) . " " . $failedDate[1];
 } else {
   $vlQueryInfo['failed_test_date'] = '';
-}
-if (isset($vlQueryInfo['sample_received_at_vl_lab_datetime']) && trim($vlQueryInfo['sample_received_at_vl_lab_datetime']) != '' && $vlQueryInfo['sample_received_at_vl_lab_datetime'] != '0000-00-00 00:00:00') {
-  $expStr = explode(" ", $vlQueryInfo['sample_received_at_vl_lab_datetime']);
-  $vlQueryInfo['sample_received_at_vl_lab_datetime'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
-} else {
-  $vlQueryInfo['sample_received_at_vl_lab_datetime'] = '';
 }
 if (isset($vlQueryInfo['art_cd_date']) && trim($vlQueryInfo['art_cd_date']) != '' && $vlQueryInfo['art_cd_date'] != '0000-00-00') {
   $vlQueryInfo['art_cd_date'] = $general->humanDateFormat($vlQueryInfo['art_cd_date']);
@@ -215,7 +183,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
 
   <!-- Main content -->
   <section class="content">
-    
+
     <div class="box box-default">
       <div class="box-header with-border">
         <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
@@ -317,11 +285,11 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                         </td>
                         <td style="width:20%">
                           <select class="form-control isRequired" id="wardData" name="wardData" title="Please select ward data" style="width:100%;">
-			    <option value="">-- Select --</option>
-			    <option value="inpatient" < ?php echo ($vlQueryInfo['ward']=="inpatient")?"selected='selected'":""?>>In-Patient</option>
-			    <option value="outpatient" < php echo ($vlQueryInfo['ward']=="outpatient")?"selected='selected'":""?>>Out-Patient</option>
-			    <option value="anc"< ?php echo ($vlQueryInfo['ward']=="anc")?"selected='selected'":""?>>ANC</option>
-			  </select>
+                        <option value="">-- Select --</option>
+                        <option value="inpatient" < ?php echo ($vlQueryInfo['ward']=="inpatient")?"selected='selected'":""?>>In-Patient</option>
+                        <option value="outpatient" < php echo ($vlQueryInfo['ward']=="outpatient")?"selected='selected'":""?>>Out-Patient</option>
+                        <option value="anc"< ?php echo ($vlQueryInfo['ward']=="anc")?"selected='selected'":""?>>ANC</option>
+                      </select>
                         </td>-->
                     <td>
                       <label for="officerName">Requesting Medical Officer <span class="mandatory">*</span></label>
@@ -330,13 +298,13 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                       <input type="text" class="form-control isRequired" name="officerName" id="officerName" placeholder="Officer Name" title="Enter Medical Officer Name" style="width:100%;" value="<?php echo $vlQueryInfo['request_clinician_name']; ?>">
                     </td>
                     <td>
-                      <label for="telephone">Telephone </label>
+                      <label for="telephone">Clinic/Ward Telephone </label>
                     </td>
                     <td>
                       <input type="text" class="form-control checkNum" name="telephone" id="telephone" placeholder="Telephone" title="Enter Telephone" style="width:100%;" value="<?php echo $vlQueryInfo['lab_phone_number']; ?>">
                     </td>
                     <td>
-                      <label for="clinicDate">Date </label>
+                      <label for="clinicDate">Date Requested </label>
                     </td>
                     <td>
                       <input type="text" class="form-control date" name="clinicDate" id="clinicDate" placeholder="Date" title="Enter Date" style="width:100%;" value="<?php echo $vlQueryInfo['clinic_date']; ?>">
@@ -778,11 +746,12 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
   <!-- /.content -->
 </div>
 <script>
-  provinceName = true;
-  facilityName = true;
+  let provinceName = true;
+  let facilityName = true;
+  
   $(document).ready(function() {
 
-    getfacilityProvinceDetails($("#clinicName").val());
+    //getfacilityProvinceDetails($("#clinicName").val());
     $('.date').datepicker({
       changeMonth: true,
       changeYear: true,
@@ -891,7 +860,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
 
   function getfacilityProvinceDetails(obj) {
     $.blockUI();
-    $('#telephone').val($("#clinicName").find(":selected").attr("data-mobile-nos"));
+    //$('#telephone').val($("#clinicName").find(":selected").attr("data-mobile-nos"));
     $.unblockUI();
     //   check facility name
     //    var cName = $("#clinicName").val();
