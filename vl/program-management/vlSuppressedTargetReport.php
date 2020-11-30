@@ -34,6 +34,11 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
 
 ?>
 <link rel="stylesheet" href="/assets/css/jquery.multiselect.css" type="text/css" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/css/datepicker.min.css" rel="stylesheet">
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/js/bootstrap-datepicker.min.js"></script>
+
 <style>
   .bluebox,
   .dashboard-stat2 {
@@ -193,20 +198,12 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
             <tr class="testMon" >
             <td><b>Month :</b></td>
               <td style="width: 30%;">
-                <select class="form-control" id="month" name="month" title="Please select month" >
+                <!-- <select class="form-control" id="month" name="month" title="Please select month" > -->
+                <input type="text" class="form-control" name="month" id="month" />  
                 </select>
               </td>
             </tr>
-            <!-- <tr>
-            <td><b>Target Type&nbsp;:</b></td>
-              <td>
-              <select class="form-control" id="targetType" name="targetType" title="Please select Target Type" >
-                <option value="1">Monthly Targets not met</option>
-                <option value="2">Monthly Targets met</option>
-                <option value="3">Show all</option>
-                </select>
-              </td>
-              </tr> -->
+            
             <tr>
               <td colspan="4">&nbsp;<input type="button" onclick="loadVlRequestData();" value="Search" class="btn btn-success btn-sm">
                 &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
@@ -217,23 +214,7 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
           </table>
           <!-- /.box-header -->
           <div class="box-body">
-            <!-- <table id="vlMonitoringTable" class="table table-bordered table-striped">
-              <thead>
-                <tr>
-                  <th>Facility Name</th>
-                  <th>Month </th>
-                  <th> Number of Samples Received </th>
-                  <th> Number of Samples Rejected </th>
-                  <th>Number of Samples Tested</th>
-                  <th>Monthly Test Target</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td colspan="10" class="dataTables_empty">Loading data from server</td>
-                </tr>
-              </tbody>
-            </table> -->
+           
             <div class="row">
               <div id="vlSuppressChartDiv"></div>
             </div>
@@ -282,6 +263,11 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
         endDate = end.format('YYYY-MM-DD');
       });
     $('#sampleTestDate').val("");
+    $("#month").datepicker( {
+        format: "mm-yyyy",
+        startView: "months", 
+        minViewMode: "months"
+    });
     loadVlRequestData();
   });
 
@@ -298,47 +284,10 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
 					if ($.trim(data) != '') {
 						$("#vlSuppressChartDiv").html(data);
 					}
-          if(!monthYear)
-          {
-            var result = '<?php  echo $_SESSION['vlSuppressedTargetReportResult']; ?>';
-            var res = JSON.parse(result);
-            console.log(res);
-            var option = '';
-            for(i in res)
-            {
-              option+='<option value="'+i+'" selected>'+i+' </option>'
-            }
-            $("#month").html(option);
-          }
+          
 				});
     $.unblockUI();
   }
-
-  // function searchVlRequestData() {
-  //   $.blockUI();
-  //   // oTable.fnDraw();
-  //   $.unblockUI();
-  // }
-
-  // function exportInexcel() {
-  //   $.blockUI();
-  //   oTable.fnDraw();
-  //   $.post("/vl/program-management/vlTestingTargetInExcel.php", {
-  //       sampleCollectionDate: $("#mrp-lowerDate").val() + ' to ' + $("#mrp-upperDate").val(),
-  //       fyName: $("#facilityName  option:selected").text(),
-  //       facilityName: $("#facilityName").val(),
-  //       targetType: $("#targetType").val(),
-  //       sampleTestDate: $("#sampleTestDate").val()
-  //     },
-  //     function(data) {
-  //       if (data == "" || data == null || data == undefined) {
-  //         alert('Unable to generate excel file');
-  //       } else {
-  //         location.href = '/temporary/' + data;
-  //       }
-  //     });
-  //   $.unblockUI();
-  // }
 
   var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 

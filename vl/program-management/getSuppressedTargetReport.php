@@ -73,7 +73,7 @@ foreach ($rResult as $aRow) {
                 $row['totalSuppressed'] = $res[$aRow['monthrange']][$aRow['facility_id']]['totalSuppressed'] + 1;
             $row['facility_name'] = ucwords($aRow['facility_name']);
             $row['monthrange'] = $aRow['monthrange'];
-            $row['supp_percent'] = ($row['totalSuppressed']/$row['totalTested']) * 100;
+            $row['supp_percent'] = ($row['totalSuppressed']/$aRow['suppressed_monthly_target']) * 100;
             $row['suppressed_monthly_target'] = $aRow['suppressed_monthly_target'];
             // $row['totalCollected'] = $res[$aRow['monthrange']][$aRow['facility_id']]['totalCollected']  + 1;
             $res[$aRow['monthrange']][$aRow['facility_id']] = $row;
@@ -88,7 +88,7 @@ foreach ($rResult as $aRow) {
                 $row['totalSuppressed'] =  0;
         $row['facility_name'] = ucwords($aRow['facility_name']);
         $row['monthrange'] = $aRow['monthrange'];
-        $row['supp_percent'] = ($row['totalSuppressed']/$row['totalTested']) * 100;
+        $row['supp_percent'] = ($row['totalSuppressed']/$aRow['suppressed_monthly_target']) * 100;
             $row['suppressed_monthly_target'] = $aRow['suppressed_monthly_target'];
                 $res[$aRow['monthrange']][$aRow['facility_id']] = $row;
         }
@@ -102,7 +102,7 @@ foreach ($rResult as $aRow) {
                     $row['totalSuppressed'] =  0;
                $row['facility_name'] = ucwords($aRow['facility_name']);
                $row['monthrange'] = $aRow['monthrange'];
-               $row['supp_percent'] = ($row['totalSuppressed']/$row['totalTested']) * 100;
+               $row['supp_percent'] = ($row['totalSuppressed']/$aRow['suppressed_monthly_target']) * 100;
                 $row['suppressed_monthly_target'] = $aRow['suppressed_monthly_target'];
                // $row['totalCollected'] = $res[$aRow['monthrange']]['totalCollected']  + 1;
                $res[$aRow['monthrange']][$aRow['facility_id']] = $row;
@@ -113,15 +113,36 @@ $_SESSION['vlSuppressedTargetReportResult'] = json_encode($res);
 // echo json_encode($res);die;
 ksort($res);
 end($res);
+// print_r($_POST);die;
 if(isset($_POST['monthYear']) && $_POST['monthYear']!='')
 {
-    $monthYear = $_POST['monthYear'];
-    $resArray = $res[$_POST['monthYear']];
+    $monthYear = '01-'.$_POST['monthYear'];
+    $mon = date('Y-M', strtotime($monthYear));
+    $resArray = $res[$mon];
+    // print_r($mon);
+    // print_r($res);die;
 }
 else
 {
     $monthYear = key($res);
     $resArray = end($res);
+}
+if(isset($_POST['targetType'])  && $_POST['targetType']!='')
+{
+    $returnVal = 0 ;
+    foreach($res as $row)
+    {
+        foreach($row as $subRow)
+        {
+            if($subRow['totalSuppressed'] < $subRow['suppressed_monthly_target'])
+            {
+                $returnVal = 1;
+                echo $returnVal;die;
+            }
+        }
+
+    }
+    echo $returnVal;die;
 }
 ?>
 <div class="col-xs-12 labAverageTatDiv">
@@ -170,7 +191,7 @@ $('#eidLabAverageTat').highcharts({
         tooltip: {
                 headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                 pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                '<td style="padding:0"><b>{point.y:.1f} %</b></td></tr>',
                 footerFormat: '</table>',
                 shared: true,
                 useHTML: true

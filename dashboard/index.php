@@ -64,6 +64,7 @@ $facilityCount = $facilityTotal[0]['total'];
 						<section class="content">
 							<!-- Small boxes (Stat box) -->
 							<div id="cont"> </div>
+							<div id="contVl"> </div>
 							<div class="row" style="padding-top:10px;padding-bottom:20px;">
 								<div class="col-lg-7">
 									<form autocomplete="off">
@@ -263,6 +264,7 @@ $facilityCount = $facilityTotal[0]['total'];
 			loadVlRequestData();
 		else if(requestType == 'covid19')
 			loadCovid19RequestData();
+		loadVlSuppressedData();
 	}
 
 	function searchVlRequestData(requestType) {
@@ -468,7 +470,7 @@ $facilityCount = $facilityTotal[0]['total'];
 					{
 						var div ='<div class="alert alert-danger alert-dismissible" role="alert" style="background-color: #ff909f !important">\
 							<button type="button" class="close" data-dismiss="alert" aria-label="Close" style="text-indent: 0px"><span aria-hidden="true" style="font-size: larger;font-weight: bolder;color: #000000;">&times;</span></button>\
-							<span>'+data['aaData'].length+' Vl testing labs did not meet the monthly test target. </span><a href="/vl/program-management/vlTestingTargetReport.php" target="_blank"> more </a>\
+							<span>'+data['aaData'].length+' VL testing labs did not meet the monthly test target. </span><a href="/vl/program-management/vlTestingTargetReport.php" target="_blank"> more </a>\
 							</div>';
 						$("#cont").html(div);
 					}
@@ -478,7 +480,29 @@ $facilityCount = $facilityTotal[0]['total'];
 				});
     $.unblockUI();
   }
-
+  function loadVlSuppressedData()
+  {
+	$.blockUI();
+    
+	$.post("/vl/program-management/getSuppressedTargetReport.php", {
+					targetType: '1',
+				},
+				function(data) {
+					console.log(data)
+					if(data == 1)
+					{
+						var div ='<div class="alert alert-danger alert-dismissible" role="alert" style="background-color: #ff909f !important">\
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close" style="text-indent: 0px"><span aria-hidden="true" style="font-size: larger;font-weight: bolder;color: #000000;">&times;</span></button>\
+							<span> VL testing labs did not meet suppression targets </span><a href="/vl/program-management/vlSuppressedTargetReport.php" target="_blank"> more </a>\
+							</div>';
+						$("#contVl").html(div);
+					}
+					// toastr.info('Are you the 6 fingered man?')
+					
+					
+				});
+    $.unblockUI();
+  }
   function loadCovid19RequestData() {
     $.blockUI();
     
