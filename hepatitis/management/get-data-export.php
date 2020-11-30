@@ -21,21 +21,21 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
      $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
 }
 $general=new \Vlsm\Models\General($db);
-$covid19Results = $general->getCovid19Results();
+// $covid19Results = $general->getCovid19Results();
 
-$tableName="form_covid19";
-$primaryKey="covid19_id";
+$tableName="form_hepatitis";
+$primaryKey="hepatitis_id";
 /* Array of database columns which should be read and sent back to DataTables. Use a space where
 * you want to insert a non-database field (for example a counter or static image)
 */
-$aColumns = array('vl.sample_code','vl.remote_sample_code','b.batch_code','vl.patient_id','CONCAT(vl.patient_name, vl.patient_surname)','f.facility_name','vl.result','ts.status_name','funding_source_name','i_partner_name');
-$orderColumns = array('vl.sample_code','vl.remote_sample_code','b.batch_code','vl.patient_id','vl.patient_name','f.facility_name','vl.result','ts.status_name','funding_source_name','i_partner_name');
+$aColumns = array('vl.sample_code','vl.remote_sample_code','b.batch_code','vl.patient_id','CONCAT(vl.patient_name, vl.patient_surname)','f.facility_name','vl.hcv_vl_result','vl.hbv_vl_result','ts.status_name','funding_source_name','i_partner_name');
+$orderColumns = array('vl.sample_code','vl.remote_sample_code','b.batch_code','vl.patient_id','vl.patient_name','f.facility_name','vl.hcv_vl_result','vl.hbv_vl_result','ts.status_name','funding_source_name','i_partner_name');
 $sampleCode = 'sample_code';
 if($sarr['user_type']=='remoteuser'){
      $sampleCode = 'remote_sample_code';
 }else if($sarr['user_type']=='standalone') {
-     $aColumns = array('vl.sample_code','b.batch_code','vl.patient_id','CONCAT(vl.patient_name, vl.patient_surname)','f.facility_name','vl.result','ts.status_name','funding_source_name','i_partner_name');
-     $orderColumns = array('vl.sample_code','b.batch_code','vl.patient_id','vl.patient_name','f.facility_name','vl.result','ts.status_name','funding_source_name','i_partner_name');
+     $aColumns = array('vl.sample_code','b.batch_code','vl.patient_id','CONCAT(vl.patient_name, vl.patient_surname)','f.facility_name','vl.hcv_vl_result','vl.hbv_vl_result','ts.status_name','funding_source_name','i_partner_name');
+     $orderColumns = array('vl.sample_code','b.batch_code','vl.patient_id','vl.patient_name','f.facility_name','vl.hcv_vl_result','vl.hbv_vl_result','ts.status_name','funding_source_name','i_partner_name');
 }
 /* Indexed column (used for fast and accurate table cardinality) */
 $sIndexColumn = $primaryKey;
@@ -113,42 +113,9 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
           */
           $aWhere = '';
           $sQuery="SELECT 
-                        vl.covid19_id,
-                        vl.sample_code,
-                        vl.remote_sample_code,
-                        vl.patient_id,
-                        vl.patient_name,
-                        vl.patient_surname,
-                        vl.patient_dob,
-                        vl.patient_gender,
-                        vl.patient_age,
-                        vl.patient_province,
-                        vl.patient_district,
-                        vl.patient_nationality,
-                        vl.patient_city,
-                        vl.sample_collection_date,
-                        vl.type_of_test_requested,
-                        vl.date_of_symptom_onset,
-                        vl.sample_condition,
-                        vl.contact_with_confirmed_case,
-                        vl.has_recent_travel_history,
-                        vl.travel_country_names,
-                        vl.travel_return_date,
-                        vl.sample_tested_datetime,
-                        vl.sample_received_at_vl_lab_datetime,
-                        vl.is_sample_rejected,
-                        vl.result,
-                        vl.is_result_authorised,
-                        vl.approver_comments,
-                        vl.request_created_datetime,
-                        vl.result_printed_datetime,
-                        vl.testing_point,
-                        vl.source_of_alert,
-                        vl.source_of_alert_other,
-                        rtr.test_reason_name,
+                        vl.*,
                         b.batch_code,
                         ts.status_name,
-                        rst.sample_name,
                         f.facility_name,
                         l_f.facility_name as labName,
                         f.facility_code,
@@ -156,13 +123,10 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                         f.facility_district,
                         u_d.user_name as reviewedBy,
                         a_u_d.user_name as approvedBy,
-                        lt_u_d.user_name as labTechnician,
-                        rs.rejection_reason_name,
-                        r_f_s.funding_source_name,
-                        c.iso_name as nationality,
-                        r_i_p.i_partner_name 
+                        lt_u_d.user_name as labTechnician
+                    
                         
-                        FROM form_covid19 as vl 
+                        FROM form_hepatitis as vl 
                         
                         LEFT JOIN r_countries as c ON vl.patient_nationality=c.id
                         LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
@@ -171,12 +135,8 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                         LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id 
                         LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by 
                         LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by 
-                        LEFT JOIN user_details as lt_u_d ON lt_u_d.user_id=vl.lab_technician 
-                        LEFT JOIN r_covid19_test_reasons as rtr ON rtr.test_reason_id=vl.reason_for_covid19_test 
-                        LEFT JOIN r_covid19_sample_type as rst ON rst.sample_id=vl.specimen_type 
-                        LEFT JOIN r_covid19_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection 
-                        LEFT JOIN r_funding_sources as r_f_s ON r_f_s.funding_source_id=vl.funding_source 
-                        LEFT JOIN r_implementation_partners as r_i_p ON r_i_p.i_partner_id=vl.implementing_partner";
+                        LEFT JOIN user_details as lt_u_d ON lt_u_d.user_id=vl.lab_reception_person 
+                   ";
           //echo $sQuery;die;
           $start_date = '';
           $end_date = '';
@@ -241,10 +201,15 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                          $sWhere = $sWhere.' AND DATE(vl.result_printed_datetime) >= "'.$sPrintDate.'" AND DATE(vl.result_printed_datetime) <= "'.$ePrintDate.'"';
                     }
                }
-               if(isset($_POST['vLoad']) && trim($_POST['vLoad'])!= ''){
+               if(isset($_POST['hcvVLoad']) && trim($_POST['hcvVLoad'])!= ''){
                     
-                    $sWhere = $sWhere.' AND vl.result like "'.$_POST['vLoad'].'"';
+                    $sWhere = $sWhere.' AND vl.hcv_vl_result = "'.$_POST['hcvVLoad'].'"';
                }
+               if(isset($_POST['hbvVLoad']) && trim($_POST['hbvVLoad'])!= ''){
+                    
+                    $sWhere = $sWhere.' AND vl.hbv_vl_result = "'.$_POST['hbvVLoad'].'"';
+               }
+
                if(isset($_POST['status']) && trim($_POST['status'])!= ''){
                     $sWhere = $sWhere.' AND vl.result_status ='.$_POST['status'];
                }
@@ -309,14 +274,24 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                          $sWhere = $sWhere.' DATE(vl.result_printed_datetime) >= "'.$sPrintDate.'" AND DATE(vl.result_printed_datetime) <= "'.$ePrintDate.'"';
                     }
                }
-               if(isset($_POST['vLoad']) && trim($_POST['vLoad'])!= ''){
+               if(isset($_POST['hcvVLoad']) && trim($_POST['hcvVLoad'])!= ''){
                     
                     if(isset($setWhr)){
-                         $sWhere = $sWhere.' AND vl.result like "'.$_POST['vLoad'].'"';
+                         $sWhere = $sWhere.' AND vl.hcv_vl_result = "'.$_POST['hcvVLoad'].'"';
                     }else{
                          $setWhr = 'where';
                          $sWhere=' where '.$sWhere;
-                         $sWhere = $sWhere.' vl.result like "'.$_POST['vLoad'].'"';
+                         $sWhere = $sWhere.' vl.hcv_vl_result = "'.$_POST['hcvVLoad'].'"';
+                    }
+               }
+               if(isset($_POST['hbvVLoad']) && trim($_POST['hbvVLoad'])!= ''){
+                    
+                    if(isset($setWhr)){
+                         $sWhere = $sWhere.' AND vl.hbv_vl_result = "'.$_POST['hbvVLoad'].'"';
+                    }else{
+                         $setWhr = 'where';
+                         $sWhere=' where '.$sWhere;
+                         $sWhere = $sWhere.' vl.hbv_vl_result = "'.$_POST['hbvVLoad'].'"';
                     }
                }
                if(isset($_POST['status']) && trim($_POST['status'])!= ''){
@@ -366,7 +341,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                }
           }
           $sQuery = $sQuery.' '.$sWhere;
-          //echo $sQuery;die;
+          // echo $sQuery;die;
           
           
           if (isset($sOrder) && $sOrder != "") {
@@ -383,9 +358,9 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
           $rResult = $db->rawQuery($sQuery);
           /* Data set length after filtering */
 
-          $aResultFilterTotal =$db->rawQuery("SELECT vl.covid19_id 
+          $aResultFilterTotal =$db->rawQuery("SELECT vl.hepatitis_id 
           
-          FROM form_covid19 as vl 
+          FROM form_hepatitis as vl 
                         
           LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
           LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id 
@@ -395,17 +370,17 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
           LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id 
           LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by 
           LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by 
-          LEFT JOIN r_covid19_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection 
+          -- LEFT JOIN r_covid19_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection 
           
-          LEFT JOIN r_funding_sources as r_f_s ON r_f_s.funding_source_id=vl.funding_source 
-          LEFT JOIN r_implementation_partners as r_i_p ON r_i_p.i_partner_id=vl.implementing_partner 
+          -- LEFT JOIN r_funding_sources as r_f_s ON r_f_s.funding_source_id=vl.funding_source 
+          -- LEFT JOIN r_implementation_partners as r_i_p ON r_i_p.i_partner_id=vl.implementing_partner 
           
           $sWhere");
           
           $iFilteredTotal = count($aResultFilterTotal);
 
           /* Total data set length */
-          $aResultTotal =  $db->rawQuery("select COUNT(covid19_id) as total FROM form_covid19 as vl where result_status!=9 $cWhere");
+          $aResultTotal =  $db->rawQuery("select COUNT(*) as total FROM form_hepatitis as vl where result_status!=9 $cWhere");
           // $aResultTotal = $countResult->fetch_row();
           $iTotal = $aResultTotal[0]['total'];
 
@@ -433,12 +408,13 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                $row[] = $aRow['patient_id'];
                $row[] = ucwords($patientFname." ".$patientLname);
                $row[] = ucwords($aRow['facility_name']);
-               $row[] = $covid19Results[$aRow['result']];
+               $row[] = $aRow['hcv_vl_result'];
+               $row[] = $aRow['hbv_vl_result'];
                $row[] = ucwords($aRow['status_name']);
                $row[] = (isset($aRow['funding_source_name']) && trim($aRow['funding_source_name'])!= '')?ucwords($aRow['funding_source_name']):'';
                $row[] = (isset($aRow['i_partner_name']) && trim($aRow['i_partner_name'])!= '')?ucwords($aRow['i_partner_name']):'';
                if($aRow['is_result_authorised'] == 'yes'){
-                    $row[] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertSearchResultToPdf('.$aRow['covid19_id'].');"><i class="fa fa-file-text"></i> Result PDF</a>';
+                    // $row[] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertSearchResultToPdf('.$aRow['covid19_id'].');"><i class="fa fa-file-text"></i> Result PDF</a>';
                }else{
                     $row[] = '<a href="javascript:void(0);" class="btn btn-default btn-xs disabled" style="margin-right: 2px;" title="View"><i class="fa fa-ban"></i> Not Authorized</a>';
                }
