@@ -459,7 +459,8 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 				Batch_Code: $("#batchCode  option:selected").text(),
 				Facility_Name: $("#facilityName  option:selected").text(),
 				sample_Test_Date: $("#sampleTestDate").val(),
-				Viral_Load: $("#vLoad  option:selected").text(),
+				HCV_Viral_Load: $("#hcvVLoad  option:selected").text(),
+				HBV_Viral_Load: $("#hbvVLoad  option:selected").text(),
 				Print_Date: $("#printDate").val(),
 				Status: $("#status  option:selected").text(),
 				withAlphaNum: withAlphaNum

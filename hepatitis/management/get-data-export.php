@@ -136,7 +136,12 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                         LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by 
                         LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by 
                         LEFT JOIN user_details as lt_u_d ON lt_u_d.user_id=vl.lab_reception_person 
-                   ";
+                        LEFT JOIN r_hepatitis_test_reasons as rtr ON rtr.test_reason_id=vl.reason_for_hepatitis_test 
+                        LEFT JOIN r_hepatitis_sample_type as rst ON rst.sample_id=vl.specimen_type 
+                        LEFT JOIN r_hepatitis_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection 
+                        LEFT JOIN r_funding_sources as r_f_s ON r_f_s.funding_source_id=vl.funding_source 
+                        LEFT JOIN r_implementation_partners as r_i_p ON r_i_p.i_partner_id=vl.implementing_partner";
+               //     ";
           //echo $sQuery;die;
           $start_date = '';
           $end_date = '';
@@ -349,7 +354,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                $sQuery = $sQuery.' order by '.$sOrder;
           }
           
-          $_SESSION['covid19ResultQuery']=$sQuery;
+          $_SESSION['hepatitisResultQuery']=$sQuery;
           
           if (isset($sLimit) && isset($sOffset)) {
                $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
@@ -415,6 +420,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                $row[] = (isset($aRow['i_partner_name']) && trim($aRow['i_partner_name'])!= '')?ucwords($aRow['i_partner_name']):'';
                if($aRow['is_result_authorised'] == 'yes'){
                     // $row[] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertSearchResultToPdf('.$aRow['covid19_id'].');"><i class="fa fa-file-text"></i> Result PDF</a>';
+                    $row[] = '';
                }else{
                     $row[] = '<a href="javascript:void(0);" class="btn btn-default btn-xs disabled" style="margin-right: 2px;" title="View"><i class="fa fa-ban"></i> Not Authorized</a>';
                }
