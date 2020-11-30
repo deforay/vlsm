@@ -2016,3 +2016,4 @@ INSERT INTO `global_config` (`display_name`, `name`, `value`, `category`, `remot
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'vl-reports', 'vlSuppressedTargetReport.php', 'Monthly Threshold Report');
 -- Thana 30-Nov-2020
 INSERT INTO `resources` (`resource_id`, `module`, `display_name`) VALUES ('hepatitis-batches', 'hepatitis', 'Hepatitis Batch Management');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'hepatitis-batch', 'hepatitis-batches.php', 'View Batches'), (NULL, 'hepatitis-batch', 'hepatitis-add-batch.php', 'Add Batch'), (NULL, 'hepatitis-batch', 'hepatitis-edit-batch.php', 'Edit Batch'), (NULL, 'hepatitis-batch', 'hepatitis-add-batch-position.php', 'Add Batch Position'), (NULL, 'hepatitis-batch', 'hepatitis-edit-batch-position.php', 'Edit Batch Position');
