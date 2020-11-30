@@ -67,44 +67,12 @@ foreach ($pdResult as $provinceName) {
 
 $facility = $general->generateSelectOptions($healthFacilities, $vlQueryInfo['facility_id'], '-- Selecione --');
 
-if (isset($vlQueryInfo['sample_collection_date']) && trim($vlQueryInfo['sample_collection_date']) != '' && $vlQueryInfo['sample_collection_date'] != '0000-00-00 00:00:00') {
-  $expStr = explode(" ", $vlQueryInfo['sample_collection_date']);
-  $vlQueryInfo['sample_collection_date'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
-} else {
-  $vlQueryInfo['sample_collection_date'] = '';
-}
-if (isset($vlQueryInfo['patient_dob']) && trim($vlQueryInfo['patient_dob']) != '' && $vlQueryInfo['patient_dob'] != '0000-00-00') {
-  $vlQueryInfo['patient_dob'] = $general->humanDateFormat($vlQueryInfo['patient_dob']);
-} else {
-  $vlQueryInfo['patient_dob'] = '';
-}
-if (isset($vlQueryInfo['date_of_initiation_of_current_regimen']) && trim($vlQueryInfo['date_of_initiation_of_current_regimen']) != '' && $vlQueryInfo['date_of_initiation_of_current_regimen'] != '0000-00-00') {
-  $vlQueryInfo['date_of_initiation_of_current_regimen'] = $general->humanDateFormat($vlQueryInfo['date_of_initiation_of_current_regimen']);
-} else {
-  $vlQueryInfo['date_of_initiation_of_current_regimen'] = '';
-}
-if (isset($vlQueryInfo['last_viral_load_date']) && trim($vlQueryInfo['last_viral_load_date']) != '' && $vlQueryInfo['last_viral_load_date'] != '0000-00-00') {
-  $vlQueryInfo['last_viral_load_date'] = $general->humanDateFormat($vlQueryInfo['last_viral_load_date']);
-} else {
-  $vlQueryInfo['last_viral_load_date'] = '';
-}
-if (isset($vlQueryInfo['sample_tested_datetime']) && trim($vlQueryInfo['sample_tested_datetime']) != '' && trim($vlQueryInfo['sample_tested_datetime']) != '0000-00-00 00:00:00') {
-  $expStr = explode(" ", $vlQueryInfo['sample_tested_datetime']);
-  $vlQueryInfo['sample_tested_datetime'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
-} else {
-  $vlQueryInfo['sample_tested_datetime'] = '';
-}
+
 if (isset($vlQueryInfo['failed_test_date']) && trim($vlQueryInfo['failed_test_date']) != '' && trim($vlQueryInfo['failed_test_date']) != '0000-00-00 00:00:00') {
   $failedDate = explode(" ", $vlQueryInfo['failed_test_date']);
   $vlQueryInfo['failed_test_date'] = $general->humanDateFormat($failedDate[0]) . " " . $failedDate[1];
 } else {
   $vlQueryInfo['failed_test_date'] = '';
-}
-if (isset($vlQueryInfo['sample_received_at_vl_lab_datetime']) && trim($vlQueryInfo['sample_received_at_vl_lab_datetime']) != '' && $vlQueryInfo['sample_received_at_vl_lab_datetime'] != '0000-00-00 00:00:00') {
-  $expStr = explode(" ", $vlQueryInfo['sample_received_at_vl_lab_datetime']);
-  $vlQueryInfo['sample_received_at_vl_lab_datetime'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
-} else {
-  $vlQueryInfo['sample_received_at_vl_lab_datetime'] = '';
 }
 if (isset($vlQueryInfo['art_cd_date']) && trim($vlQueryInfo['art_cd_date']) != '' && $vlQueryInfo['art_cd_date'] != '0000-00-00') {
   $vlQueryInfo['art_cd_date'] = $general->humanDateFormat($vlQueryInfo['art_cd_date']);
@@ -126,6 +94,7 @@ if (isset($vlQueryInfo['clinic_date']) && trim($vlQueryInfo['clinic_date']) != '
 } else {
   $vlQueryInfo['clinic_date'] = '';
 }
+
 $disable = "disabled = 'disabled'";
 ?>
 <style>
