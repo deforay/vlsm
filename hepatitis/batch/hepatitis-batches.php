@@ -1,6 +1,6 @@
 <?php
 ob_start();
-$title = "Covid-19 | Batches";
+$title = "Hepatitis | Batches";
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 
@@ -42,8 +42,8 @@ include_once(APPLICATION_PATH . '/header.php');
 					</span>
 
 					<div class="box-header with-border">
-						<?php if (isset($_SESSION['privileges']) && in_array("covid-19-add-batch.php", $_SESSION['privileges'])) { ?>
-							<a href="covid-19-add-batch.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Create New Batch</a>
+						<?php if (isset($_SESSION['privileges']) && in_array("hepatitis-add-batch.php", $_SESSION['privileges'])) { ?>
+							<a href="hepatitis-add-batch.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Create New Batch</a>
 						<?php } ?>
 						<!--<button class="btn btn-primary pull-right" style="margin-right: 1%;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>-->
 					</div>
@@ -57,7 +57,7 @@ include_once(APPLICATION_PATH . '/header.php');
 									<th>No. of Samples Tested</th>
 									<th>Last Tested Date</th>
 									<th>Created On</th>
-									<?php if (isset($_SESSION['privileges']) && in_array("covid-19-edit-batch.php", $_SESSION['privileges'])) { ?>
+									<?php if (isset($_SESSION['privileges']) && in_array("hepatitis-edit-batch.php", $_SESSION['privileges'])) { ?>
 										<th>Action</th>
 									<?php } ?>
 								</tr>
@@ -126,7 +126,7 @@ include_once(APPLICATION_PATH . '/header.php');
 			"fnServerData": function(sSource, aoData, fnCallback) {
 				aoData.push({
 					"name": "type",
-					"value": "covid19"
+					"value": "hepatitis"
 				});
 				$.ajax({
 					"dataType": 'json',
@@ -160,17 +160,17 @@ include_once(APPLICATION_PATH . '/header.php');
 		var conf = confirm("Are you sure you want to delete Batch : " + batchCode + "?\nThis action cannot be undone.");
 		if (conf) {
 			$.post("/vl/batch/deleteBatchCode.php", {
-					id: bId,
-					type: 'covid19'
-				},
-				function(data) {
-					if (data == 1) {
-						alert("Batch deleted");
-					} else {
-						alert("Something went wrong. Please try again!");
-					}
-					oTable.fnDraw();
-				});
+				id: bId,
+				type: 'hepatitis'
+			},
+			function(data) {
+				if (data == 1) {
+					alert("Batch deleted");
+				} else {
+					alert("Something went wrong. Please try again!");
+				}
+				oTable.fnDraw();
+			});
 		}
 	}
 </script>
