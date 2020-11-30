@@ -1,6 +1,6 @@
 <?php
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+     session_start();
 }
 ob_start();
 #require_once('../../startup.php');
@@ -140,12 +140,12 @@ try {
      } else if ($sarr['user_type'] == 'vluser' && $_POST['oldStatus'] == 9) {
           $_POST['status'] = 6;
      }
-     
+
      if (empty($_POST['status'])) {
           $_POST['status']  = $_POST['oldStatus'];
      }
      $vlObj = new \Vlsm\Models\Vl($db);
-        $vl_result_category = $vlObj->vlResultCategory($_POST['finalViralResult']);
+     $vl_result_category = $vlObj->vlResultCategory($_POST['finalViralResult']);
      $vldata = array(
           //'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
           'facility_id' => (isset($_POST['clinicName']) && trim($_POST['clinicName']) != '') ? $_POST['clinicName'] : NULL,
@@ -211,7 +211,7 @@ try {
           'vl_result_category' => $vl_result_category
      );
      $lock = $general->getGlobalConfig('lock_approved_vl_samples');
-     if($_POST['status'] == 7 && $lock == 'yes'){
+     if ($_POST['status'] == 7 && $lock == 'yes') {
           $vldata['locked'] = 'yes';
      }
 

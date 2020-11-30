@@ -44,7 +44,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
 
   <!-- Main content -->
   <section class="content">
-    
+
     <div class="box box-default">
       <div class="box-header with-border">
         <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
@@ -129,16 +129,16 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                       <input type="text" class="form-control isRequired " name="officerName" id="officerName" placeholder="Officer Name" title="Enter Medical Officer Name" style="width:100%;">
                     </td>
                     <td style="width:10%">
-                      <label for="telephone">Telephone </label>
+                      <label for="telephone">Clinic/Ward Telephone </label>
                     </td>
                     <td style="width:20%">
                       <input type="text" class="form-control checkNum" name="telephone" id="telephone" placeholder="Telephone" title="Enter Telephone" style="width:100%;">
                     </td>
                     <td style="width:10%">
-                      <label for="clinicDate">Date </label>
+                      <label for="clinicDate">Date Requested</label>
                     </td>
                     <td style="width:20%">
-                      <input type="text" class="form-control date" name="clinicDate" id="clinicDate" placeholder="Date" title="Enter Date" style="width:100%;">
+                      <input type="text" class="form-control date" name="clinicDate" id="clinicDate" placeholder="Requested on Date" title="Enter Date" style="width:100%;">
                     </td>
                   </tr>
                   <tr>
