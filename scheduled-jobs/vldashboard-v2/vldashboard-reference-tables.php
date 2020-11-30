@@ -54,6 +54,18 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
     $referenceTables = array_merge($referenceTables, $covid19Tables);
 }
 
+if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) {
+    $hepatitisTables = array(
+        //'r_covid19_results',
+        'r_hepatitis_sample_rejection_reasons',
+        'r_hepatitis_sample_type',
+        'r_hepatitis_results',
+        'r_hepatitis_rick_factors',
+        'r_hepatitis_test_reasons',
+    );
+    $referenceTables = array_merge($referenceTables, $hepatitisTables);
+}
+
 if (isset($systemConfig['modules']['common']) && $systemConfig['modules']['common'] == true) {
     $commonTables = array(
         'import_config_machines',
