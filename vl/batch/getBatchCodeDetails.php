@@ -24,6 +24,11 @@ if (isset($_POST['type']) && $_POST['type'] == 'vl') {
     $refPrimaryColumn = "covid19_id";
     $editFileName = 'covid-19-edit-batch.php';
     $editPositionFileName = 'covid-19-edit-batch-position.php';
+} else if (isset($_POST['type']) && $_POST['type'] == 'hepatitis') {
+    $refTable = "form_hepatitis";
+    $refPrimaryColumn = "hepatitis_id";
+    $editFileName = 'hepatitis-edit-batch.php';
+    $editPositionFileName = 'hepatitis-edit-batch-position.php';
 }
 
 
