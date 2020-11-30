@@ -327,7 +327,12 @@
 		$(".program").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".vlMonthlyThresholdReport").addClass('active');
-	} else if (splitsUrl == 'generate.php') {
+	}else if (splitsUrl == 'vlSuppressedTargetReport.php') {
+		$(".program").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".vlSuppressedMonthlyThresholdReport").addClass('active');
+	}
+	 else if (splitsUrl == 'generate.php') {
 		$(".qr").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".generateQRCode").addClass('active');
