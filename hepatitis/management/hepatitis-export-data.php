@@ -6,6 +6,7 @@ include_once(APPLICATION_PATH . '/header.php');
 
 $general = new \Vlsm\Models\General($db);
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
+$hepatitisDb = new \Vlsm\Models\Hepatitis($db);
 
 $tsQuery = "SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
@@ -32,7 +33,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 
 
 
-$covid19Results = $general->getCovid19Results();
+$hepatitisResults = $hepatitisDb->getHepatitisResults();
 if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda' && $arr['vl_form'] != 1)){
 	$reportType = 'generate-export-rwanda.php';
 }else{
@@ -88,19 +89,23 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 								<input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;" />
 							</td>
 
-							<th>Result </th>
+							<th>HCV VL Result </th>
 							<td>
-								<select class="form-control" id="vLoad" name="vLoad" title="Please select batch code" style="width:220px;">
+								<select class="form-control" id="hcvVLoad" name="hcvVLoad" title="Please select batch code" style="width:220px;">
 									<option value=""> -- Select -- </option>
-									<?php foreach ($covid19Results as $covid19ResultKey => $covid19ResultValue) { ?>
-										<option value="<?php echo $covid19ResultKey; ?>"> <?php echo $covid19ResultValue; ?> </option>
+									<?php foreach ($hepatitisResults as $hepatitisResultsKey => $hepatitisResultsValue) { ?>
+										<option value="<?php echo $hepatitisResultsKey; ?>"> <?php echo $hepatitisResultsValue; ?> </option>
 									<?php } ?>
 								</select>
 							</td>
-
-							<th>Last Print Date</th>
+							<th>HBV VL Result </th>
 							<td>
-								<input type="text" id="printDate" name="printDate" class="form-control" placeholder="Select Print Date" readonly style="width:220px;background:#fff;" />
+								<select class="form-control" id="hbvVLoad" name="hbvVLoad" title="Please select batch code" style="width:220px;">
+									<option value=""> -- Select -- </option>
+									<?php foreach ($hepatitisResults as $hepatitisResultsKey => $hepatitisResultsValue) { ?>
+										<option value="<?php echo $hepatitisResultsKey; ?>"> <?php echo $hepatitisResultsValue; ?> </option>
+									<?php } ?>
+								</select>
 							</td>
 						</tr>
 						<tr>
@@ -137,7 +142,12 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 								</select>
 							</td>
 						</tr>
+						
 						<tr>
+							<th>Last Print Date</th>
+							<td>
+								<input type="text" id="printDate" name="printDate" class="form-control" placeholder="Select Print Date" readonly style="width:220px;background:#fff;" />
+							</td>
 							<td colspan="6">
 								&nbsp;<button onclick="searchVlRequestData();" value="Search" class="btn btn-primary btn-sm"><span>Search</span></button>
 
@@ -204,7 +214,8 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 									<th>Patient ID</th>
 									<th>Patient Name</th>
 									<th>Facility Name</th>
-									<th>Result</th>
+									<th>HCV VL Result</th>
+									<th>HBV VL Result</th>
 									<th>Status</th>
 									<th>Funding Source</th>
 									<th>Implementing Partner</th>
@@ -344,6 +355,9 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 					"sClass": "center"
 				},
 				{
+					"sClass": "center"
+				},
+				{
 					"sClass": "center",
 					"bSortable": false
 				},
@@ -353,7 +367,7 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 			],
 			"bProcessing": true,
 			"bServerSide": true,
-			"sAjaxSource": "/covid-19/management/get-data-export.php",
+			"sAjaxSource": "/hepatitis/management/get-data-export.php",
 			"fnServerData": function(sSource, aoData, fnCallback) {
 
 				aoData.push({
@@ -377,8 +391,12 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 					"value": $("#vlLab").val()
 				});
 				aoData.push({
-					"name": "vLoad",
-					"value": $("#vLoad").val()
+					"name": "hcvVLoad",
+					"value": $("#hcvVLoad").val()
+				});
+				aoData.push({
+					"name": "hbvVLoad",
+					"value": $("#hbvVLoad").val()
 				});
 				aoData.push({
 					"name": "status",
