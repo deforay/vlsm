@@ -696,7 +696,7 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 								</div>
 							</div>
 						<?php }
-						if ($systemConfig['modules']['hepatitis']) { ?>
+						if ($systemConfig['modules']['hepatitis'] == true) { ?>
 							<div class="panel panel-default">
 								<div class="panel-heading">
 									<h3 class="panel-title">Hepatitis Settings</h3>

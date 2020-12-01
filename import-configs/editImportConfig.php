@@ -173,6 +173,14 @@ foreach ($configControlInfo as $info) {
 												<td><input type="text" value="<?php echo $configControl['covid-19']['noManufacturerCtrl']; ?>" name="noManufacturerCtrl[]" id="noManufacturerCtrl1" class="form-control" placeholder="No of Manufacturer Controls in covid-19" title="Please enter No of Manufacturer Controls in covid-19" /></td>
 												<td><input type="text" value="<?php echo $configControl['covid-19']['noCalibrators']; ?>" name="noCalibrators[]" id="noCalibrators1" class="form-control" placeholder="No of Calibrators in covid-19" title="Please enter No of Calibrators in covid-19" /></td>
 											</tr>
+										<?php }
+										if (($systemConfig['modules']['hepatitis'])) { ?>
+											<tr>
+												<td align="left">Hepatitis<input type="hidden" name="testType[]" id="testType1" value="hepatitis" /></td>
+												<td><input type="text" value="<?php echo $configControl['hepatitis']['noHouseCtrl']; ?>" name="noHouseCtrl[]" id="noHouseCtrl1" class="form-control" placeholder="No of In-House Controls in hepatitis" title="Please enter No of In-House Controls in hepatitis" /></td>
+												<td><input type="text" value="<?php echo $configControl['hepatitis']['noManufacturerCtrl']; ?>" name="noManufacturerCtrl[]" id="noManufacturerCtrl1" class="form-control" placeholder="No of Manufacturer Controls in hepatitis" title="Please enter No of Manufacturer Controls in hepatitis" /></td>
+												<td><input type="text" value="<?php echo $configControl['hepatitis']['noCalibrators']; ?>" name="noCalibrators[]" id="noCalibrators1" class="form-control" placeholder="No of Calibrators in hepatitis" title="Please enter No of Calibrators in hepatitis" /></td>
+											</tr>
 										<?php } ?>
 									</tbody>
 								</table>
