@@ -283,8 +283,8 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                     <td>
                                         <select class="form-control" name="pcrTestPerformedBefore" id="pcrTestPerformedBefore">
                                             <option value=''> -- Select -- </option>
-                                            <option value="yes"> Yes </option>
-                                            <option value="no"> No </option>
+                                            <option value="yes" <?php echo ($eidInfo['pcr_test_performed_before'] == 'yes') ? "selected='selected'" : ""; ?>> Yes </option>
+                                                <option value="no" <?php echo ($eidInfo['pcr_test_performed_before'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
                                         </select>
                                     </td>
                                 </tr>

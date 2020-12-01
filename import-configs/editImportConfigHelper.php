@@ -14,7 +14,7 @@ $configId = (int) base64_decode($_POST['configId']);
 
 $configControlQuery = "SELECT * FROM import_config_controls WHERE config_id=$configId";
 $configControlInfo = $db->query($configControlQuery);
-// print_r($_POST);die;
+// echo "<pre>";print_r($_POST);die;
 try {
     if (trim($_POST['configurationName']) != "") {
         $_POST['supportedTests'] = !empty($_POST['supportedTests']) ? json_encode($_POST['supportedTests']) : null;
@@ -54,11 +54,16 @@ try {
         if ($configId > 0 && isset($_POST['testType']) && count($_POST['testType']) > 0) {
             if (count($configControlInfo) > 0) {
                 foreach ($_POST['testType'] as $key => $val) {
-                    if (trim($val) != '') {
+                    $CQuery = "SELECT * FROM import_config_controls WHERE config_id= ".$configId." AND test_type like '".$val."%'";
+                    $CResult = $db->rawQueryOne($cQuery);
+                    if (trim($val) != '' && $CResult) {
                         $configControlData = array('number_of_in_house_controls' => $_POST['noHouseCtrl'][$key], 'number_of_manufacturer_controls' => $_POST['noManufacturerCtrl'][$key], 'number_of_calibrators' => $_POST['noCalibrators'][$key]);
                         $db = $db->where('config_id', $configId);
                         $db = $db->where('test_type', $val);
                         $db->update($importControlTable, $configControlData);
+                    } else{
+                        $configControlData = array('test_type' => $val, 'config_id' => $configId, 'number_of_in_house_controls' => $_POST['noHouseCtrl'][$key], 'number_of_manufacturer_controls' => $_POST['noManufacturerCtrl'][$key], 'number_of_calibrators' => $_POST['noCalibrators'][$key]);
+                        $db->insert($importControlTable, $configControlData);
                     }
                 }
             } else {
@@ -75,6 +80,7 @@ try {
         $configFileVL = $configDir . DIRECTORY_SEPARATOR . "vl" . DIRECTORY_SEPARATOR . $_POST['configurationFile'];
         $configFileEID = $configDir . DIRECTORY_SEPARATOR . "eid" . DIRECTORY_SEPARATOR . $_POST['configurationFile'];
         $configFileCovid19 = $configDir . DIRECTORY_SEPARATOR . "covid-19" . DIRECTORY_SEPARATOR . $_POST['configurationFile'];
+        $configFileHepatitis = $configDir . DIRECTORY_SEPARATOR . "hepatitis" . DIRECTORY_SEPARATOR . $_POST['configurationFile'];
 
 
         if (!file_exists($configDir)) {
@@ -95,6 +101,12 @@ try {
 
         if (!file_exists($configFileCovid19)) {
             $fp = fopen($configFileCovid19, 'w');
+            fwrite($fp, '');
+            fclose($fp);
+        }
+        
+        if (!file_exists($configFileHepatitis)) {
+            $fp = fopen($configFileHepatitis, 'w');
             fwrite($fp, '');
             fclose($fp);
         }
