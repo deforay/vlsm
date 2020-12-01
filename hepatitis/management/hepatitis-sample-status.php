@@ -2,14 +2,14 @@
 if (session_status() == PHP_SESSION_NONE) {
   session_start();
 }
-$title = "Covid-19 | Sample Status Report";
+$title = "Hepatitis | Sample Status Report";
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 
 $general = new \Vlsm\Models\General($db); // passing $db which is coming from startup.php
 
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
-$healthFacilites = $facilitiesDb->getHealthFacilities('covid19');
+$healthFacilites = $facilitiesDb->getHealthFacilities('hepatitis');
 $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
 
 // $tsQuery = "SELECT * FROM r_sample_status";
@@ -18,7 +18,7 @@ $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-
 // $configFormResult = $db->rawQuery($configFormQuery);
 
 
-$batQuery = "SELECT batch_code FROM batch_details WHERE test_type='covid19' AND batch_status='completed'";
+$batQuery = "SELECT batch_code FROM batch_details WHERE test_type='hepatitis' AND batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
 ?>
 <style>
@@ -30,10 +30,10 @@ $batResult = $db->rawQuery($batQuery);
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
-    <h1><i class="fa fa-book"></i> Covid-19 Sample Status Report</h1>
+    <h1><i class="fa fa-book"></i> Hepatitis Sample Status Report</h1>
     <ol class="breadcrumb">
       <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li class="active">Covid-19 Sample Status</li>
+      <li class="active">Hepatitis Sample Status</li>
     </ol>
   </section>
 
@@ -94,11 +94,11 @@ $batResult = $db->rawQuery($batQuery);
       <div class="col-xs-12">
         <div class="box">
           <div class="box-body">
-            <button class="btn btn-success pull-right" type="button" onclick="covid19ExportTAT()"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export to excel</button>
-            <table id="covid19RequestDataTable" class="table table-bordered table-striped">
+            <button class="btn btn-success pull-right" type="button" onclick="hepatitisExportTAT()"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export to excel</button>
+            <table id="hepatitisRequestDataTable" class="table table-bordered table-striped">
               <thead>
                 <tr>
-                  <th>Covid-19 Sample ID</th>
+                  <th>Hepatitis Sample ID</th>
                   <th>Sample Collection Date</th>
                   <th>Sample Received Date in Lab</th>
                   <th>Sample Test Date</th>
@@ -159,7 +159,7 @@ $batResult = $db->rawQuery($batQuery);
 
   function searchResultData() {
     $.blockUI();
-    $.post("/covid-19/management/getSampleStatus.php", {
+    $.post("/hepatitis/management/get-sample-status.php", {
         sampleCollectionDate: $("#sampleCollectionDate").val(),
         batchCode: $("#batchCode").val(),
         facilityName: $("#facilityName").val(),
@@ -181,7 +181,7 @@ $batResult = $db->rawQuery($batQuery);
 
   function loadVlTATData() {
     $.blockUI();
-    oTable = $('#covid19RequestDataTable').dataTable({
+    oTable = $('#hepatitisRequestDataTable').dataTable({
       "oLanguage": {
         "sLengthMenu": "_MENU_ records per page"
       },
@@ -216,7 +216,7 @@ $batResult = $db->rawQuery($batQuery);
       ],
       "bProcessing": true,
       "bServerSide": true,
-      "sAjaxSource": "/covid-19/management/getCovid19SampleTATDetails.php",
+      "sAjaxSource": "/hepatitis/management/get-hepatitis-sample-tat-details.php",
       "fnServerData": function(sSource, aoData, fnCallback) {
         aoData.push({
           "name": "batchCode",
@@ -246,10 +246,10 @@ $batResult = $db->rawQuery($batQuery);
     $.unblockUI();
   }
 
-  function covid19ExportTAT() {
+  function hepatitisExportTAT() {
     $.blockUI();
     oTable.fnDraw();
-    $.post("/covid-19/management/covid19ExportTAT.php", {
+    $.post("/hepatitis/management/hepatitis-export-tat.php", {
         Sample_Collection_Date: $("#sampleCollectionDate").val(),
         Batch_Code: $("#batchCode  option:selected").text(),
         Sample_Type: $("#sampleType  option:selected").text(),
