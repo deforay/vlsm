@@ -435,7 +435,7 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 	function convertSearchResultToPdf(id) {
 		<?php
 		$path = '';
-		$path = '/covid-19/results/generate-result-pdf.php';
+		$path = '/hepatitis/results/generate-result-pdf.php';
 		?>
 		$.post("<?php echo $path; ?>", {
 				source: 'print',
