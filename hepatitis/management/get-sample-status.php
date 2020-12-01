@@ -1,7 +1,7 @@
 <?php
 ob_start();
 #require_once('../../startup.php');
-
+// print_r("Prasath");die;
 $general = new \Vlsm\Models\General($db); // passing $db which is coming from startup.php
 $whereCondition = '';
 $configFormQuery = "SELECT * FROM global_config WHERE `name` ='vl_form'";
@@ -54,8 +54,8 @@ if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']
     }
 }
 
-$tQuery = "SELECT COUNT(covid19_id) as total,status_id,status_name 
-                FROM form_covid19 as vl 
+$tQuery = "SELECT COUNT(hepatitis_id) as total,status_id,status_name 
+                FROM form_hepatitis as vl 
                 JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
                 JOIN facility_details as f ON vl.facility_id=f.facility_id 
                 LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id 
@@ -83,21 +83,29 @@ $tResult = $db->rawQuery($tQuery);
 
 //HVL and LVL Samples
 
-$vlSuppressionQuery = "SELECT   COUNT(covid19_id) as total,
+$vlSuppressionQuery = "SELECT   COUNT(hepatitis_id) as total,
                                 SUM(CASE
-                                        WHEN (vl.result = 'positive') THEN 1
+                                        WHEN (vl.hcv_vl_result = 'positive') THEN 1
                                             ELSE 0
                                         END) AS positiveResult,
                                 (SUM(CASE
-                                        WHEN (vl.result = 'negative') THEN 1
+                                        WHEN (vl.hcv_vl_result = 'negative') THEN 1
                                             ELSE 0
                                         END)) AS negativeResult,
+                                SUM(CASE
+                                        WHEN (vl.hbv_vl_result = 'positive') THEN 1
+                                            ELSE 0
+                                        END) AS hbvpositiveResult,
+                                (SUM(CASE
+                                        WHEN (vl.hbv_vl_result = 'negative') THEN 1
+                                            ELSE 0
+                                        END)) AS hbvnegativeResult,
                                 status_id,
                                 status_name 
                                 
-                                FROM form_covid19 as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.vlsm_country_id='" . $configFormResult[0]['value'] . "' $whereCondition";
+                                FROM form_hepatitis as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.vlsm_country_id='" . $configFormResult[0]['value'] . "' $whereCondition";
 
-$sWhere = " AND (vl.result!='' and vl.result is not null) ";
+$sWhere = " AND (vl.hcv_vl_result!='' and vl.hcv_vl_result is not null) ";
 
 if (isset($_POST['batchCode']) && trim($_POST['batchCode']) != '') {
     $sWhere .= ' AND b.batch_code = "' . $_POST['batchCode'] . '"';
@@ -114,7 +122,7 @@ if (isset($_POST['facilityName']) && is_array($_POST['facilityName']) && count($
 $vlSuppressionQuery = $vlSuppressionQuery . ' ' . $sWhere;
 
 $vlSuppressionResult = $db->rawQueryOne($vlSuppressionQuery);
-
+// print_r($vlSuppressionResult);die;
 //get LAB TAT
 if ($start_date == '' && $end_date == '') {
     $date = strtotime(date('Y-m-d') . ' -1 year');
@@ -127,7 +135,7 @@ $tatSampleQuery = "select
                         CAST(ABS(AVG(TIMESTAMPDIFF(DAY,sample_received_at_vl_lab_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgReceivedDiff,
                         CAST(ABS(AVG(TIMESTAMPDIFF(DAY,result_printed_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgPrintedDiff
 
-                        from form_covid19 as vl 
+                        from form_hepatitis as vl 
                         INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
                         JOIN facility_details as f ON vl.facility_id=f.facility_id 
                         LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id 
@@ -136,8 +144,8 @@ $tatSampleQuery = "select
                         AND ((vl.sample_tested_datetime is not null AND vl.sample_tested_datetime not like '' AND DATE(vl.sample_tested_datetime) !='1970-01-01' AND DATE(vl.sample_tested_datetime) !='0000-00-00') OR
                         (vl.result_printed_datetime is not null AND vl.result_printed_datetime not like '' AND DATE(vl.result_printed_datetime) !='1970-01-01' AND DATE(vl.result_printed_datetime) !='0000-00-00') OR
                         (vl.sample_received_at_vl_lab_datetime is not null AND vl.sample_received_at_vl_lab_datetime not like '' AND DATE(vl.sample_received_at_vl_lab_datetime) !='1970-01-01' AND DATE(vl.sample_received_at_vl_lab_datetime) !='0000-00-00'))
-                        AND vl.result is not null
-                        AND vl.result != ''
+                        AND vl.hcv_vl_result is not null
+                        AND vl.hcv_vl_result != ''
                         AND DATE(vl.sample_collection_date) >= '" . $start_date . "'
                         AND DATE(vl.sample_collection_date) <= '" . $end_date . "' AND vl.vlsm_country_id='" . $configFormResult[0]['value'] . "' $whereCondition group by MONTH(vl.sample_collection_date) ORDER BY (vl.sample_collection_date)";
 $sWhere = '';
@@ -153,6 +161,7 @@ if (isset($_POST['facilityName']) && is_array($_POST['facilityName']) && count($
 $tatSampleQuery = $tatSampleQuery . " " . $sWhere;
 //$tatSampleQuery .= " HAVING TIMESTAMPDIFF(DAY,sample_tested_datetime,sample_collection_date) < 120 ";
 $tatResult = $db->rawQuery($tatSampleQuery);
+// print_r($tatSampleQuery);die;
 $j = 0;
 foreach ($tatResult as $sRow) {
     if ($sRow["monthDate"] == null) {
@@ -167,12 +176,12 @@ foreach ($tatResult as $sRow) {
 }
 
 $testReasonQuery = "SELECT count(c.sample_code) AS total, tr.test_reason_name 
-                    from form_covid19 as c 
-                    INNER JOIN r_covid19_test_reasons as tr ON c.reason_for_covid19_test = tr.test_reason_id 
+                    from form_hepatitis as c 
+                    INNER JOIN r_hepatitis_test_reasons as tr ON c.reason_for_hepatitis_test = tr.test_reason_id 
                     JOIN facility_details as f ON c.facility_id=f.facility_id 
                     LEFT JOIN batch_details as b ON b.batch_id=c.sample_batch_id";
 
-$sWhere = ' WHERE c.reason_for_covid19_test IS NOT NULL ';
+$sWhere = ' WHERE c.reason_for_hepatitis_test IS NOT NULL ';
 if (isset($_POST['batchCode']) && trim($_POST['batchCode']) != '') {
     $sWhere .= ' AND b.batch_code = "' . $_POST['batchCode'] . '"';
 }
@@ -185,22 +194,27 @@ if (isset($_POST['facilityName']) && is_array($_POST['facilityName']) && count($
 $testReasonQuery = $testReasonQuery . " " . $sWhere;
 $testReasonQuery = $testReasonQuery . " GROUP BY tr.test_reason_name";
 $testReasonResult = $db->rawQuery($testReasonQuery);
-// echo "<pre>";print_r($testReasonResult);die;
+// echo "<pre>";print_r($testReasonQuery);die;
 ?>
 <div class="col-xs-12">
     <div class="box">
         <div class="box-body">
-            <div id="covid19SampleStatusOverviewContainer" style="float:left;width:100%; margin: 0 auto;"></div>
+            <div id="hepatitisSampleStatusOverviewContainer" style="float:left;width:100%; margin: 0 auto;"></div>
         </div>
     </div>
     <div class="box">
         <div class="box-body">
-            <div id="covid19TestReasonContainer" style="float:left;width:100%; margin: 0 auto;"></div>
+            <div id="hepatitisTestReasonContainer" style="float:left;width:100%; margin: 0 auto;"></div>
         </div>
     </div>
     <div class="box">
         <div class="box-body">
-            <div id="covid19SamplesOverview" style="float:right;width:100%;margin: 0 auto;"></div>
+            <div id="hepatitisSamplesOverview" style="float:right;width:100%;margin: 0 auto;"></div>
+        </div>
+    </div>
+    <div class="box">
+        <div class="box-body">
+            <div id="hepatitisHbvSamplesOverview" style="float:right;width:100%;margin: 0 auto;"></div>
         </div>
     </div>
 </div>
@@ -208,7 +222,7 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
 <div class="col-xs-12 labAverageTatDiv">
     <div class="box">
         <div class="box-body">
-            <div id="covid19LabAverageTat" style="padding:15px 0px 5px 0px;float:left;width:100%;"></div>
+            <div id="hepatitisLabAverageTat" style="padding:15px 0px 5px 0px;float:left;width:100%;"></div>
         </div>
     </div>
 </div>
@@ -216,7 +230,7 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
     <?php
     if (isset($tResult) && count($tResult) > 0) {
     ?>
-        $('#covid19SampleStatusOverviewContainer').highcharts({
+        $('#hepatitisSampleStatusOverviewContainer').highcharts({
             chart: {
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
@@ -224,13 +238,13 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
                 type: 'pie'
             },
             title: {
-                text: 'Covid-19 Samples Status Overview'
+                text: 'Hepatitis Samples Status Overview'
             },
             credits: {
                 enabled: false
             },
             tooltip: {
-                pointFormat: 'Covid-19 Samples :<b>{point.y}</b>'
+                pointFormat: 'Hepatitis Samples :<b>{point.y}</b>'
             },
             plotOptions: {
                 pie: {
@@ -289,7 +303,7 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
         Highcharts.setOptions({
             colors: ['#FF0000', '#50B432']
         });
-        $('#covid19SamplesOverview').highcharts({
+        $('#hepatitisSamplesOverview').highcharts({
             chart: {
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
@@ -297,7 +311,7 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
                 type: 'pie'
             },
             title: {
-                text: 'Covid-19 Results'
+                text: 'Hepatitis HCV VL Results'
             },
             credits: {
                 enabled: false
@@ -337,19 +351,74 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
         });
     <?php
     }
+
+    if (isset($vlSuppressionResult) && (isset($vlSuppressionResult['hbvpositiveResult']) || isset($vlSuppressionResult['hbvnegativeResult']))) {
+
+        ?>
+            Highcharts.setOptions({
+                colors: ['#FF0000', '#50B432']
+            });
+            $('#hepatitisHbvSamplesOverview').highcharts({
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Hepatitis HBV VL Results'
+                },
+                credits: {
+                    enabled: false
+                },
+                tooltip: {
+                    pointFormat: 'Samples :<b>{point.y}</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        size: '100%',
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            useHTML: true,
+                            format: '<div style="padding-bottom:10px;"><b>{point.name}</b>: {point.y}</div>',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            },
+                            distance: 10
+                        },
+                        showInLegend: true
+                    }
+                },
+                series: [{
+                    colorByPoint: true,
+                    data: [{
+                            name: 'Positive',
+                            y: <?php echo (isset($vlSuppressionResult['hbvpositiveResult']) && $vlSuppressionResult['hbvpositiveResult'] > 0) > 0 ? $vlSuppressionResult['hbvpositiveResult'] : 0; ?>
+                        },
+                        {
+                            name: 'Negative',
+                            y: <?php echo (isset($vlSuppressionResult['hbvnegativeResult']) && $vlSuppressionResult['hbvnegativeResult'] > 0) > 0 ? $vlSuppressionResult['hbvnegativeResult'] : 0; ?>
+                        },
+                    ]
+                }]
+            });
+        <?php
+        }
     if (isset($result) && count($result) > 0) {
     ?>
-        $('#covid19LabAverageTat').highcharts({
+        $('#hepatitisLabAverageTat').highcharts({
             chart: {
                 type: 'line'
             },
             title: {
-                text: 'Covid-19 Laboratory Turnaround Time'
+                text: 'Hepatitis Laboratory Turnaround Time'
             },
             exporting: {
                 chartOptions: {
                     subtitle: {
-                        text: 'Covid-19 Laboratory Turnaround Time',
+                        text: 'Hepatitis Laboratory Turnaround Time',
                     }
                 }
             },
@@ -433,7 +502,7 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
             ],
         });
     <?php } if (isset($testReasonResult) && count($testReasonResult) > 0) { ?>
-        $('#covid19TestReasonContainer').highcharts({
+        $('#hepatitisTestReasonContainer').highcharts({
             chart: {
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
@@ -441,7 +510,7 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
                 type: 'pie'
             },
             title: {
-                text: 'Covid-19 Test Reasons'
+                text: 'Hepatitis Test Reasons'
             },
             credits: {
                 enabled: false
