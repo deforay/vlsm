@@ -1,19 +1,19 @@
 <?php
 ob_start();
-$title = "Covid-19 | Add Batch";
+$title = "Hepatitis | Add Batch";
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 
 $general = new \Vlsm\Models\General($db);
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
-$healthFacilites = $facilitiesDb->getHealthFacilities('covid19');
+$healthFacilites = $facilitiesDb->getHealthFacilities('hepatitis');
 
 $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
 
 
 //Get active machines
-$testPlatformResult = $general->getTestingPlatforms('covid19');
-// $query = "SELECT vl.sample_code,vl.covid19_id,vl.facility_id,f.facility_name,f.facility_code FROM form_covid19 as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where sample_batch_id is NULL OR sample_batch_id='' ORDER BY f.facility_name ASC";
+$testPlatformResult = $general->getTestingPlatforms('hepatitis');
+// $query = "SELECT vl.sample_code,vl.hepatitis_id,vl.facility_id,f.facility_name,f.facility_code FROM form_hepatitis as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where sample_batch_id is NULL OR sample_batch_id='' ORDER BY f.facility_name ASC";
 // $result = $db->rawQuery($query);
 
 $start_date = date('Y-m-d');
@@ -91,7 +91,7 @@ foreach ($testPlatformResult as $machine) {
 
     <!-- Main content -->
     <section class="content">
-
+        <pre><?php print_r($testPlatformResult);?></pre>
         <div class="box box-default">
             <div class="box-header with-border">
                 <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
@@ -138,7 +138,7 @@ foreach ($testPlatformResult as $machine) {
             <!-- /.box-header -->
             <div class="box-body">
                 <!-- form start -->
-                <form class="form-horizontal" method="post" name="addBatchForm" id="addBatchForm" autocomplete="off" action="covid-19-add-batch-helper.php">
+                <form class="form-horizontal" method="post" name="addBatchForm" id="addBatchForm" autocomplete="off" action="hepatitis-add-batch-helper.php">
                     <div class="box-body">
                         <div class="row">
                             <div class="col-md-6">
@@ -172,7 +172,7 @@ foreach ($testPlatformResult as $machine) {
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <a id="batchSubmit" class="btn btn-primary" href="javascript:void(0);" title="Please select machine" onclick="validateNow();return false;" style="pointer-events:none;" disabled>Save and Next</a>
-                        <a href="covid-19-batches.php" class="btn btn-default"> Cancel</a>
+                        <a href="hepatitis-batches.php" class="btn btn-default"> Cancel</a>
                     </div>
                     <!-- /.box-footer -->
                 </form>
@@ -344,7 +344,7 @@ foreach ($testPlatformResult as $machine) {
         var fName = $("#facilityName").val();
 
         $.blockUI();
-        $.post("/covid-19/batch/get-covid-19-samples-batch.php", {
+        $.post("/hepatitis/batch/get-hepatitis-samples-batch.php", {
                 sampleCollectionDate: $("#sampleCollectionDate").val(),
                 sampleReceivedAtLab: $("#sampleReceivedAtLab").val(),
                 fName: fName
