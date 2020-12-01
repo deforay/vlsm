@@ -27,7 +27,7 @@ if (isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery']) != "")
 	$output = array();
 	$sheet = $excel->getActiveSheet();
 
-	$headings = array("S.No.","Sample Code","Health Facility Name","Health Facility Code","District/County","Province/State", "Testing Lab Name (Hub)","Child ID","Child Name","Mother ID","Child Date of Birth","Child Age","Child Gender", "Breastfeeding status", "Last PCR Test results", "Sample Collection Date","Is Sample Rejected?","Sample Tested On","Result","Sample Received On","Date Result Dispatched","Comments","Funding Source","Implementing Partner");
+	$headings = array("S.No.","Sample Code","Health Facility Name","Health Facility Code","District/County","Province/State", "Testing Lab Name (Hub)","Child ID","Child Name","Mother ID","Child Date of Birth","Child Age","Child Gender", "Breastfeeding status", "PCR Test Performed Before", "Last PCR Test results", "Sample Collection Date","Is Sample Rejected?","Sample Tested On","Result","Sample Received On","Date Result Dispatched","Comments","Funding Source","Implementing Partner");
 	$colNo = 1;
 
 	$styleArray = array(
@@ -172,6 +172,7 @@ if (isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery']) != "")
 		$row[] = ($aRow['child_age'] != NULL && trim($aRow['child_age']) != '' && $aRow['child_age'] > 0) ? $aRow['child_age'] : 0;
 		$row[] = $gender;
 		$row[] = ucwords($aRow['has_infant_stopped_breastfeeding']);
+		$row[] = ucwords($aRow['pcr_test_performed_before']);
 		$row[] = ucwords($aRow['previous_pcr_result']);
 		$row[] = $sampleCollectionDate;
 		$row[] = $sampleRejection;

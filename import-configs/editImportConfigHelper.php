@@ -14,7 +14,7 @@ $configId = (int) base64_decode($_POST['configId']);
 
 $configControlQuery = "SELECT * FROM import_config_controls WHERE config_id=$configId";
 $configControlInfo = $db->query($configControlQuery);
-echo "<pre>";print_r($_POST);die;
+// echo "<pre>";print_r($_POST);die;
 try {
     if (trim($_POST['configurationName']) != "") {
         $_POST['supportedTests'] = !empty($_POST['supportedTests']) ? json_encode($_POST['supportedTests']) : null;
