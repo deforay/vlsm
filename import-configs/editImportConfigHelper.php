@@ -54,11 +54,16 @@ try {
         if ($configId > 0 && isset($_POST['testType']) && count($_POST['testType']) > 0) {
             if (count($configControlInfo) > 0) {
                 foreach ($_POST['testType'] as $key => $val) {
-                    if (trim($val) != '') {
+                    $CQuery = "SELECT * FROM import_config_controls WHERE config_id= ".$configId." AND test_type like '".$val."%'";
+                    $CResult = $db->rawQueryOne($cQuery);
+                    if (trim($val) != '' && $CResult) {
                         $configControlData = array('number_of_in_house_controls' => $_POST['noHouseCtrl'][$key], 'number_of_manufacturer_controls' => $_POST['noManufacturerCtrl'][$key], 'number_of_calibrators' => $_POST['noCalibrators'][$key]);
                         $db = $db->where('config_id', $configId);
                         $db = $db->where('test_type', $val);
                         $db->update($importControlTable, $configControlData);
+                    } else{
+                        $configControlData = array('test_type' => $val, 'config_id' => $configId, 'number_of_in_house_controls' => $_POST['noHouseCtrl'][$key], 'number_of_manufacturer_controls' => $_POST['noManufacturerCtrl'][$key], 'number_of_calibrators' => $_POST['noCalibrators'][$key]);
+                        $db->insert($importControlTable, $configControlData);
                     }
                 }
             } else {
