@@ -7,7 +7,7 @@ $general=new \Vlsm\Models\General($db);
 
 
 $tableName1="batch_details";
-$tableName2="form_covid19";
+$tableName2="form_hepatitis";
 try {
 
     
@@ -16,7 +16,7 @@ try {
                             'machine'=>$_POST['platform'],
                             'batch_code'=>$_POST['batchCode'],
                             'batch_code_key'=>$_POST['batchCodeKey'],
-                            'test_type'=>'covid19',
+                            'test_type'=>'hepatitis',
                             'request_created_datetime'=>$general->getDateTime()
                             );
                             
@@ -27,13 +27,13 @@ try {
                     for($j=0;$j<count($_POST['sampleCode']);$j++){
                         $vlSampleId = $_POST['sampleCode'][$j];
                         $value = array('sample_batch_id'=>$lastId);
-                        $db=$db->where('covid19_id',$vlSampleId);
+                        $db=$db->where('hepatitis_id',$vlSampleId);
                         $db->update($tableName2,$value); 
                     }
-                    header("location:covid-19-add-batch-position.php?id=".base64_encode($lastId));
+                    header("location:hepatitis-add-batch-position.php?id=".base64_encode($lastId));
                 }
         }else{
-                header("location:covid-19-batches.php");
+                header("location:hepatitis-batches.php");
         }
 } catch (Exception $exc) {
     echo ($exc->getMessage());
