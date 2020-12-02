@@ -9,15 +9,15 @@ ob_start();
 
 $general = new \Vlsm\Models\General($db);
 
-if (isset($_SESSION['covid19TATQuery']) && trim($_SESSION['covid19TATQuery']) != "") {
+if (isset($_SESSION['HepatitisTATQuery']) && trim($_SESSION['HepatitisTATQuery']) != "") {
 
-  $rResult = $db->rawQuery($_SESSION['covid19TATQuery']);
+  $rResult = $db->rawQuery($_SESSION['HepatitisTATQuery']);
 
   $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
   $output = array();
   $sheet = $excel->getActiveSheet();
 
-  $headings = array("Covid-19 Sample Id", "Sample Collection Date", "Sample Received Date in Lab", "Sample Test Date", "Sample Print Date", "Sample Email Date");
+  $headings = array("hepatitis Sample Id", "Sample Collection Date", "Sample Received Date in Lab", "Sample Test Date", "Sample Print Date", "Sample Email Date");
 
   $colNo = 1;
 
@@ -123,7 +123,7 @@ if (isset($_SESSION['covid19TATQuery']) && trim($_SESSION['covid19TATQuery']) !=
     }
   }
   $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
-  $filename = 'COVID-19-TAT-Report-' . date('d-M-Y-H-i-s') . '.xlsx';
+  $filename = 'Hepatitis-TAT-Report-' . date('d-M-Y-H-i-s') . '.xlsx';
   $writer->save(TEMP_PATH . DIRECTORY_SEPARATOR . $filename);
   echo $filename;
 }

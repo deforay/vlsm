@@ -13,16 +13,16 @@ $tsResult = $db->rawQuery($tsQuery);
 
 $arr = $general->getGlobalConfig();
 
-$sQuery = "SELECT * FROM r_covid19_sample_type where status='active'";
+$sQuery = "SELECT * FROM r_hepatitis_sample_type where status='active'";
 $sResult = $db->rawQuery($sQuery);
 
 
-$healthFacilites = $facilitiesDb->getHealthFacilities('covid19');
+$healthFacilites = $facilitiesDb->getHealthFacilities('hepatitis');
 $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
-$testingLabs = $facilitiesDb->getTestingLabs('covid19');
+$testingLabs = $facilitiesDb->getTestingLabs('hepatitis');
 $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- Select --");
 
-$batQuery = "SELECT batch_code FROM batch_details WHERE test_type ='covid19' AND batch_status='completed'";
+$batQuery = "SELECT batch_code FROM batch_details WHERE test_type ='hepatitis' AND batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
 //Funding source list
 $fundingSourceQry = "SELECT * FROM r_funding_sources WHERE funding_source_status='active' ORDER BY funding_source_name ASC";
@@ -34,7 +34,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 
 
 $hepatitisResults = $hepatitisDb->getHepatitisResults();
-if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda' && $arr['vl_form'] != 1)){
+if((isset($arr['hepatitis_report_type']) && $arr['hepatitis_report_type'] =='rwanda' && $arr['vl_form'] != 1)){
 	$reportType = 'generate-export-rwanda.php';
 }else{
 	$reportType = 'generate-export-data.php';
