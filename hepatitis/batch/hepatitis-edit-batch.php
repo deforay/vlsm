@@ -9,7 +9,7 @@ include_once(APPLICATION_PATH . '/header.php');
 
 $general = new \Vlsm\Models\General($db);
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
-$healthFacilites = $facilitiesDb->getHealthFacilities('covid19');
+$healthFacilites = $facilitiesDb->getHealthFacilities('hepatitis');
 //$formId = $general->getGlobalConfig('vl_form');
 
 $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
@@ -19,18 +19,18 @@ $id = base64_decode($_GET['id']);
 
 $batchQuery = "SELECT * from batch_details as b_d LEFT JOIN import_config as i_c ON i_c.config_id=b_d.machine where batch_id=$id";
 $batchInfo = $db->query($batchQuery);
-$bQuery = "SELECT vl.sample_code,vl.sample_batch_id,vl.covid19_id,vl.facility_id,vl.result,vl.result_status,f.facility_name,f.facility_code FROM form_covid19 as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE  (vl.is_sample_rejected IS NULL OR vl.is_sample_rejected = '' OR vl.is_sample_rejected = 'no') AND (vl.reason_for_sample_rejection IS NULL OR vl.reason_for_sample_rejection ='' OR vl.reason_for_sample_rejection = 0) AND vl.sample_code!='' AND vl.sample_batch_id = $id ORDER BY vl.last_modified_datetime ASC";
+$bQuery = "SELECT vl.sample_code,vl.sample_batch_id,vl.hepatitis_id,vl.facility_id,vl.result,vl.result_status,f.facility_name,f.facility_code FROM form_hepatitis as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE  (vl.is_sample_rejected IS NULL OR vl.is_sample_rejected = '' OR vl.is_sample_rejected = 'no') AND (vl.reason_for_sample_rejection IS NULL OR vl.reason_for_sample_rejection ='' OR vl.reason_for_sample_rejection = 0) AND vl.sample_code!='' AND vl.sample_batch_id = $id ORDER BY vl.last_modified_datetime ASC";
 //error_log($bQuery);die;
 $batchResultresult = $db->rawQuery($bQuery);
 
-$query = "SELECT vl.sample_code,vl.sample_batch_id,vl.covid19_id,vl.facility_id,vl.result,vl.result_status,f.facility_name,f.facility_code FROM form_covid19 as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE (vl.sample_batch_id IS NULL OR vl.sample_batch_id = '') AND (vl.is_sample_rejected IS NULL OR vl.is_sample_rejected = '' OR vl.is_sample_rejected = 'no') AND (vl.reason_for_sample_rejection IS NULL OR vl.reason_for_sample_rejection ='' OR vl.reason_for_sample_rejection = 0) AND (vl.result is NULL or vl.result = '') AND vl.sample_code!='' ORDER BY vl.last_modified_datetime ASC";
+$query = "SELECT vl.sample_code,vl.sample_batch_id,vl.hepatitis_id,vl.facility_id,vl.result,vl.result_status,f.facility_name,f.facility_code FROM form_hepatitis as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE (vl.sample_batch_id IS NULL OR vl.sample_batch_id = '') AND (vl.is_sample_rejected IS NULL OR vl.is_sample_rejected = '' OR vl.is_sample_rejected = 'no') AND (vl.reason_for_sample_rejection IS NULL OR vl.reason_for_sample_rejection ='' OR vl.reason_for_sample_rejection = 0) AND (vl.result is NULL or vl.result = '') AND vl.sample_code!='' ORDER BY vl.last_modified_datetime ASC";
 //error_log($query);die;
 $result = $db->rawQuery($query);
 $result = array_merge($batchResultresult, $result);
 
 //Get active machines
 
-$testPlatformResult = $general->getTestingPlatforms('covid19');
+$testPlatformResult = $general->getTestingPlatforms('hepatitis');
 // $machinesLabelOrder = array();
 ?>
 <link href="/assets/css/multi-select.css" rel="stylesheet" />
@@ -116,7 +116,7 @@ $testPlatformResult = $general->getTestingPlatforms('covid19');
 			<!-- /.box-header -->
 			<div class="box-body">
 				<!-- form start -->
-				<form class="form-horizontal" method='post' name='editBatchForm' id='editBatchForm' autocomplete="off" action="covid-19-edit-batch-helper.php">
+				<form class="form-horizontal" method='post' name='editBatchForm' id='editBatchForm' autocomplete="off" action="hepatitis-edit-batch-helper.php">
 					<div class="box-body">
 						<div class="row">
 							<div class="col-md-6">
@@ -144,7 +144,7 @@ $testPlatformResult = $general->getTestingPlatforms('covid19');
 									</div>
 								</div>
 							</div>
-							<div class="col-md-6"><a href="covid-19-edit-batch-position.php?id=<?php echo base64_encode($batchInfo[0]['batch_id']); ?>" class="btn btn-default btn-xs" style="margin-right: 2px;margin-top:6px;" title="Edit Position"><i class="fa fa-sort-numeric-desc"> Edit Position</i></a></div>
+							<div class="col-md-6"><a href="hepatitis-edit-batch-position.php?id=<?php echo base64_encode($batchInfo[0]['batch_id']); ?>" class="btn btn-default btn-xs" style="margin-right: 2px;margin-top:6px;" title="Edit Position"><i class="fa fa-sort-numeric-desc"> Edit Position</i></a></div>
 						</div>
 						<div class="row" id="sampleDetails">
 							<div class="col-md-8">
@@ -158,7 +158,7 @@ $testPlatformResult = $general->getTestingPlatforms('covid19');
 												<?php
 												foreach ($result as $key => $sample) {
 												?>
-													<option value="<?php echo $sample['covid19_id']; ?>" <?php echo (trim($sample['sample_batch_id']) == $id) ? 'selected="selected"' : ''; ?>><?php echo $sample['sample_code'] . " - " . ucwords($sample['facility_name']); ?></option>
+													<option value="<?php echo $sample['hepatitis_id']; ?>" <?php echo (trim($sample['sample_batch_id']) == $id) ? 'selected="selected"' : ''; ?>><?php echo $sample['sample_code'] . " - " . ucwords($sample['facility_name']); ?></option>
 												<?php
 												}
 												?>
@@ -175,7 +175,7 @@ $testPlatformResult = $general->getTestingPlatforms('covid19');
 						<input type="hidden" name="batchId" id="batchId" value="<?php echo $batchInfo[0]['batch_id']; ?>" />
 						<input type="hidden" name="resultSample" id="resultSample" />
 						<a id="batchSubmit" class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
-						<a href="covid-19-batches.php" class="btn btn-default"> Cancel</a>
+						<a href="hepatitis-batches.php" class="btn btn-default"> Cancel</a>
 					</div>
 					<!-- /.box-footer -->
 				</form>
@@ -336,7 +336,7 @@ $testPlatformResult = $general->getTestingPlatforms('covid19');
 		?>
 						$("#deselect-all-samplecode").remove();
 					<?php } ?>
-					resultSampleArray.push('<?php echo $sample['form_covid19']; ?>');
+					resultSampleArray.push('<?php echo $sample['form_hepatitis']; ?>');
 		<?php $r++;
 				}
 			}
@@ -374,7 +374,7 @@ $testPlatformResult = $general->getTestingPlatforms('covid19');
 		$.blockUI();
 		var fName = $("#facilityName").val();
 
-		$.post("/covid-19/batch/get-covid-19-samples-batch.php", {
+		$.post("/hepatitis/batch/get-hepatitis-samples-batch.php", {
 				sampleCollectionDate: $("#sampleCollectionDate").val(),
 				sampleReceivedAtLab: $("#sampleReceivedAtLab").val(),
 				fName: fName
