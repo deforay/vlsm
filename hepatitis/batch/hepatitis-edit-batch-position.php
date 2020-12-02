@@ -1,13 +1,13 @@
 <?php
 ob_start();
 
-$title = "Covid-19 | Edit Batch Position";
+$title = "Hepatitis | Edit Batch Position";
 
 #require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 $id = base64_decode($_GET['id']);
 if (!isset($id) || trim($id) == '') {
-	header("location:covid-19-batches.php");
+	header("location:hepatitis-batches.php");
 }
 $content = '';
 $displayOrder = array();
@@ -18,7 +18,7 @@ $configControlQuery = "SELECT * from import_config_controls where config_id=".$b
 $configControlInfo = $db->query($configControlQuery);
 $configControl = array();
 foreach($configControlInfo as $info){
-	if($info['test_type'] == 'covid-19'){
+	if($info['test_type'] == 'hepatitis'){
 		$configControl[$info['test_type']]['noHouseCtrl'] = $info['number_of_in_house_controls'];
 		$configControl[$info['test_type']]['noManufacturerCtrl'] = $info['number_of_manufacturer_controls'];
 		$configControl[$info['test_type']]['noCalibrators'] = $info['number_of_calibrators'];
@@ -26,7 +26,7 @@ foreach($configControlInfo as $info){
 }
 
 if (!isset($batchInfo) || count($batchInfo) == 0) {
-	header("location:covid-19-batches.php");
+	header("location:hepatitis-batches.php");
 }
 if (isset($batchInfo[0]['label_order']) && trim($batchInfo[0]['label_order']) != '') {
 	$jsonToArray = json_decode($batchInfo[0]['label_order'], true);
@@ -34,7 +34,7 @@ if (isset($batchInfo[0]['label_order']) && trim($batchInfo[0]['label_order']) !=
 		$displayOrder[] = $jsonToArray[$j];
 		$xplodJsonToArray = explode("_", $jsonToArray[$j]);
 		if (count($xplodJsonToArray) > 1 && $xplodJsonToArray[0] == "s") {
-			$sampleQuery = "SELECT sample_code from form_covid19 where covid19_id=$xplodJsonToArray[1]";
+			$sampleQuery = "SELECT sample_code from form_hepatitis where hepatitis_id=$xplodJsonToArray[1]";
 			$sampleResult = $db->query($sampleQuery);
 			$label = $sampleResult[0]['sample_code'];
 		} else {
@@ -45,27 +45,27 @@ if (isset($batchInfo[0]['label_order']) && trim($batchInfo[0]['label_order']) !=
 		$content .= '<li class="ui-state-default" id="' . $jsonToArray[$j] . '">' . $label . '</li>';
 	}
 } else {
-	if(isset($configControl['covid-19']['noHouseCtrl']) && trim($configControl['covid-19']['noHouseCtrl'])!='' && $configControl['covid-19']['noHouseCtrl']>0){
-		foreach(range(1,$configControl['covid-19']['noHouseCtrl']) as $h){
+	if(isset($configControl['hepatitis']['noHouseCtrl']) && trim($configControl['hepatitis']['noHouseCtrl'])!='' && $configControl['hepatitis']['noHouseCtrl']>0){
+		foreach(range(1,$configControl['hepatitis']['noHouseCtrl']) as $h){
 			$displayOrder[] = "no_of_in_house_controls_".$h;
 			$content.='<li class="ui-state-default" id="no_of_in_house_controls_'.$h.'">In-House Controls '.$h.'</li>';
 		}
-	}if(isset($configControl['covid-19']['noManufacturerCtrl']) && trim($configControl['covid-19']['noManufacturerCtrl'])!='' && $configControl['covid-19']['noManufacturerCtrl']>0){
-		foreach(range(1,$configControl['covid-19']['noManufacturerCtrl']) as $m){
+	}if(isset($configControl['hepatitis']['noManufacturerCtrl']) && trim($configControl['hepatitis']['noManufacturerCtrl'])!='' && $configControl['hepatitis']['noManufacturerCtrl']>0){
+		foreach(range(1,$configControl['hepatitis']['noManufacturerCtrl']) as $m){
 			$displayOrder[] = "no_of_manufacturer_controls_".$m;
 		   	$content.='<li class="ui-state-default" id="no_of_manufacturer_controls_'.$m.'">Manufacturer Controls '.$m.'</li>';	
 		}
-	}if(isset($configControl['covid-19']['noCalibrators']) && trim($configControl['covid-19']['noCalibrators'])!='' && $configControl['covid-19']['noCalibrators']>0){
-		foreach(range(1,$configControl['covid-19']['noCalibrators']) as $c){
+	}if(isset($configControl['hepatitis']['noCalibrators']) && trim($configControl['hepatitis']['noCalibrators'])!='' && $configControl['hepatitis']['noCalibrators']>0){
+		foreach(range(1,$configControl['hepatitis']['noCalibrators']) as $c){
 			$displayOrder[] = "no_of_calibrators_".$c;	 	
 		   	$content.='<li class="ui-state-default" id="no_of_calibrators_'.$c.'">Calibrators '.$c.'</li>';
 		}
 	}
-	$samplesQuery = "SELECT covid19_id,sample_code from form_covid19 where sample_batch_id=$id ORDER BY sample_code ASC";
+	$samplesQuery = "SELECT hepatitis_id,sample_code from form_hepatitis where sample_batch_id=$id ORDER BY sample_code ASC";
 	$samplesInfo = $db->query($samplesQuery);
 	foreach ($samplesInfo as $sample) {
-		$displayOrder[] = "s_" . $sample['covid19_id'];
-		$content .= '<li class="ui-state-default" id="s_' . $sample['covid19_id'] . '">' . $sample['sample_code'] . '</li>';
+		$displayOrder[] = "s_" . $sample['hepatitis_id'];
+		$content .= '<li class="ui-state-default" id="s_' . $sample['hepatitis_id'] . '">' . $sample['sample_code'] . '</li>';
 	}
 }
 ?>
@@ -107,7 +107,7 @@ if (isset($batchInfo[0]['label_order']) && trim($batchInfo[0]['label_order']) !=
 			<div class="box-body">
 				<!-- <pre><?php print_r($configControl); ?></pre> -->
 				<!-- form start -->
-				<form class="form-horizontal" method='post' name='editBatchControlsPosition' id='editBatchControlsPosition' autocomplete="off" action="covid-19-edit-batch-position-helper.php">
+				<form class="form-horizontal" method='post' name='editBatchControlsPosition' id='editBatchControlsPosition' autocomplete="off" action="hepatitis-edit-batch-position-helper.php">
 					<div class="box-body">
 						<div class="row" id="displayOrderDetails">
 							<div class="col-md-8">
@@ -124,7 +124,7 @@ if (isset($batchInfo[0]['label_order']) && trim($batchInfo[0]['label_order']) !=
 						<input type="hidden" name="sortOrders" id="sortOrders" value="<?php echo implode(",", $displayOrder); ?>" />
 						<input type="hidden" name="batchId" id="batchId" value="<?php echo $id; ?>" />
 						<a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
-						<a href="/covid-19/batch/covid-19-batches.php" class="btn btn-default"> Cancel</a>
+						<a href="/hepatitis/batch/hepatitis-batches.php" class="btn btn-default"> Cancel</a>
 					</div>
 					<!-- /.box-footer -->
 				</form>

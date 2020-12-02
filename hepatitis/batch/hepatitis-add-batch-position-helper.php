@@ -18,9 +18,9 @@ try {
         $db=$db->where('batch_id',$_POST['batchId']);
         $db->update($tableName,$data);
         $_SESSION['alertMsg']="Batch position saved";
-        header("location:covid-19-batches.php");
+        header("location:hepatitis-batches.php");
     }else{
-        header("location:covid-19-batches.php");
+        header("location:hepatitis-batches.php");
     }
 }catch (Exception $exc) {
     error_log($exc->getMessage());
