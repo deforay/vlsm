@@ -1,5 +1,5 @@
 <?php
-$title = "Covid-19 | Sample Rejection Report";
+$title = "Hepatitis | Sample Rejection Report";
 #require_once('../../startup.php'); 
 include_once(APPLICATION_PATH . '/header.php');
 
@@ -9,9 +9,9 @@ include_once(APPLICATION_PATH . '/header.php');
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
 
 
-$healthFacilites = $facilitiesDb->getHealthFacilities('covid19');
+$healthFacilites = $facilitiesDb->getHealthFacilities('hepatitis');
 $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
-$testingLabs = $facilitiesDb->getTestingLabs('covid19');
+$testingLabs = $facilitiesDb->getTestingLabs('hepatitis');
 $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- Select --");
 
 
@@ -115,7 +115,7 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
 
   function searchResultData() {
     $.blockUI();
-    $.post("/covid-19/management/get-rejected-samples.php", {
+    $.post("/hepatitis/management/get-rejected-samples.php", {
         sampleCollectionDate: $("#sampleCollectionDate").val(),
         labName: $("#labName").val(),
         clinicName: $("#clinicName").val()
@@ -130,7 +130,7 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
 
   function exportInexcel() {
     $.blockUI();
-    $.post("/covid-19/management/generate-rejected-samples-export.php", {
+    $.post("/hepatitis/management/generate-rejected-samples-export.php", {
         sampleCollectionDate: $("#sampleCollectionDate").val(),
         lab_name: $("#labName").val(),
         clinic_name: $("#clinicName").val()
