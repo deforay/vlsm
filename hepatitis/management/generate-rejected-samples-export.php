@@ -79,8 +79,8 @@ if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']
     }
     //get value by rejection reason id
     $vlQuery = "select count(*) as `total`, vl.reason_for_sample_rejection,sr.rejection_reason_name,sr.rejection_type,sr.rejection_reason_code,fd.facility_name, lab.facility_name as `labname`
-                FROM form_covid19 as vl
-                INNER JOIN r_covid19_sample_rejection_reasons as sr ON sr.rejection_reason_id=vl.reason_for_sample_rejection
+                FROM form_hepatitis as vl
+                INNER JOIN r_hepatitis_sample_rejection_reasons as sr ON sr.rejection_reason_id=vl.reason_for_sample_rejection
                 INNER JOIN facility_details as fd ON fd.facility_id=vl.facility_id
                 INNER JOIN facility_details as lab ON lab.facility_id=vl.lab_id";
     $sWhere .= ' where DATE(vl.sample_collection_date) <= "' . $end_date . '" AND DATE(vl.sample_collection_date) >= "' . $start_date . '" AND vl.vlsm_country_id = "' . $configFormResult[0]['value'] . '" AND reason_for_sample_rejection!="" AND reason_for_sample_rejection IS NOT NULL';
@@ -133,6 +133,6 @@ if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']
     }
 }
 $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
-$filename = 'VLSM-COVID-19-Rejected-Data-report' . date('d-M-Y-H-i-s') . '.xlsx';
+$filename = 'VLSM-Hepatitis-19-Rejected-Data-report' . date('d-M-Y-H-i-s') . '.xlsx';
 $writer->save(TEMP_PATH . DIRECTORY_SEPARATOR . $filename);
 echo $filename;
