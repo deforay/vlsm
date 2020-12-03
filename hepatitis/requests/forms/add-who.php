@@ -55,7 +55,7 @@ foreach ($fResult as $fDetails) {
     </section>
     <!-- Main content -->
     <section class="content">
-        
+
         <div class="box box-default">
             <div class="box-header with-border">
 
@@ -138,20 +138,17 @@ foreach ($fResult as $fDetails) {
                                             </select>
                                         </td>
                                         <?php if ($sarr['user_type'] == 'remoteuser') { ?>
-                                        <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
-                                        <td>
-                                            <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;">
-                                                <option value=""> -- Select -- </option>
-                                                <?php foreach ($lResult as $labName) { ?>
-                                                    <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
-                                                <?php } ?>
-                                            </select>
-                                        </td>
-                                        <?php } else{ ?> 
+                                            <td><label for="labId">Testing Lab Name <span class="mandatory">*</span></label> </td>
+                                            <td>
+                                                <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;">
+                                                    <?= $general->generateSelectOptions($testingLabs, $hepatitisInfo['lab_id'], '-- Select --'); ?>
+                                                </select>
+                                            </td>
+                                        <?php } else { ?>
                                             <th></th>
                                             <td></td>
                                         <?php } ?>
-                                    
+
                                 </table>
                                 <br>
                                 <hr style="border: 1px solid #ccc;">
@@ -243,28 +240,28 @@ foreach ($fResult as $fDetails) {
                                             <h4>COMORBIDITIES</h4>
                                         </th>
                                     </tr>
-                                    <?php foreach($comorbidityData as $id=>$name){ ?>
+                                    <?php foreach ($comorbidityData as $id => $name) { ?>
                                         <tr>
                                             <th>
-                                                <label for="riskFactors"><?php echo ucwords($name);?></label>
+                                                <label for="riskFactors"><?php echo ucwords($name); ?></label>
                                             </th>
                                             <td>
-                                                <select name="comorbidity[<?php echo $id;?>]" id="comorbidity<?php echo $id;?>" class="form-control" title="Please choose <?php echo ucwords($name);?>" style="width:100%"  onchange="comorbidity(this,<?php echo $id;?>);">
+                                                <select name="comorbidity[<?php echo $id; ?>]" id="comorbidity<?php echo $id; ?>" class="form-control" title="Please choose <?php echo ucwords($name); ?>" style="width:100%" onchange="comorbidity(this,<?php echo $id; ?>);">
                                                     <option value="">-- Select --</option>
                                                     <option value="yes">Yes</option>
                                                     <option value="no">No</option>
                                                     <option value="other">Others</option>
                                                 </select>
                                             </td>
-                                            
-                                            <th class="show-comorbidity<?php echo $id;?>" style="display:none;">
-                                                <label for="comorbidityOther<?php echo $id;?>">Enter other comorbidity for <?php echo ucwords($name);?></label>
+
+                                            <th class="show-comorbidity<?php echo $id; ?>" style="display:none;">
+                                                <label for="comorbidityOther<?php echo $id; ?>">Enter other comorbidity for <?php echo ucwords($name); ?></label>
                                             </th>
-                                            <td class="show-comorbidity<?php echo $id;?>" style="display:none;">
-                                                <input name="comorbidityOther[<?php echo $id;?>]" id="comorbidityOther<?php echo $id;?>" placeholder="Enter other comorbidity" type="text" class="form-control" title="Please enter <?php echo ucwords($name);?> others" style="width:100%">
+                                            <td class="show-comorbidity<?php echo $id; ?>" style="display:none;">
+                                                <input name="comorbidityOther[<?php echo $id; ?>]" id="comorbidityOther<?php echo $id; ?>" placeholder="Enter other comorbidity" type="text" class="form-control" title="Please enter <?php echo ucwords($name); ?> others" style="width:100%">
                                             </td>
                                         </tr>
-                                    <?php }?>
+                                    <?php } ?>
                                 </table>
                                 <table class="table">
                                     <tr>
@@ -272,28 +269,28 @@ foreach ($fResult as $fDetails) {
                                             <h4>HEPATITIS RISK FACTORS</h4>
                                         </th>
                                     </tr>
-                                    <?php foreach($riskFactorsData as $id=>$name){ ?>
+                                    <?php foreach ($riskFactorsData as $id => $name) { ?>
                                         <tr>
                                             <th>
-                                                <label for="riskFactors"><?php echo ucwords($name);?></label>
+                                                <label for="riskFactors"><?php echo ucwords($name); ?></label>
                                             </th>
                                             <td>
-                                                <select name="riskFactors[<?php echo $id;?>]" id="riskFactors<?php echo $id;?>" class="form-control" title="Please choose <?php echo ucwords($name);?>" style="width:100%"  onchange="riskfactor(this,<?php echo $id;?>);">
+                                                <select name="riskFactors[<?php echo $id; ?>]" id="riskFactors<?php echo $id; ?>" class="form-control" title="Please choose <?php echo ucwords($name); ?>" style="width:100%" onchange="riskfactor(this,<?php echo $id; ?>);">
                                                     <option value="">-- Select --</option>
                                                     <option value="yes">Yes</option>
                                                     <option value="no">No</option>
                                                     <option value="other">Others</option>
                                                 </select>
                                             </td>
-                                            
-                                            <th class="show-riskfactor<?php echo $id;?>" style="display:none;">
-                                                <label for="riskFactors">Enter other risk factor for <?php echo ucwords($name);?></label>
+
+                                            <th class="show-riskfactor<?php echo $id; ?>" style="display:none;">
+                                                <label for="riskFactors">Enter other risk factor for <?php echo ucwords($name); ?></label>
                                             </th>
-                                            <td class="show-riskfactor<?php echo $id;?>" style="display:none;">
-                                                <input name="riskFactorsOther[<?php echo $id;?>]" id="riskFactorsOther<?php echo $id;?>" placeholder="Enter other risk factor" type="text" class="form-control" title="Please enter <?php echo ucwords($name);?> others" style="width:100%">
+                                            <td class="show-riskfactor<?php echo $id; ?>" style="display:none;">
+                                                <input name="riskFactorsOther[<?php echo $id; ?>]" id="riskFactorsOther<?php echo $id; ?>" placeholder="Enter other risk factor" type="text" class="form-control" title="Please enter <?php echo ucwords($name); ?> others" style="width:100%">
                                             </td>
                                         </tr>
-                                    <?php }?>
+                                    <?php } ?>
                                     <tr>
                                         <th><label for="HbvVaccination">HBV vaccination</label></th>
                                         <td>
@@ -353,7 +350,7 @@ foreach ($fResult as $fDetails) {
                                     <th><label for="testTypeRequested">Purpose of Test</label></th>
                                     <td>
                                         <select class="form-control" name="testTypeRequested" id="testTypeRequested" title="Please choose purpose of test">
-                                        <?= $general->generateSelectOptions($testReasonResults, null, '-- Select --'); ?>
+                                            <?= $general->generateSelectOptions($testReasonResults, null, '-- Select --'); ?>
                                         </select>
                                     </td>
                                 </tr>
@@ -458,7 +455,7 @@ foreach ($fResult as $fDetails) {
                                         <tr>
                                             <th>Is Result Authorized ?</th>
                                             <td>
-                                                <select name="isResultAuthorized" id="isResultAuthorized" class="disabled-field form-control rejected-input" title="Is Result authorized ?" style="width:100%">
+                                                <select name=" isResultAuthorized" id="isResultAuthorized" class="disabled-field form-control rejected-input" title="Is Result authorized ?" style="width:100%">
                                                     <option value="">-- Select --</option>
                                                     <option value='yes'> Yes </option>
                                                     <option value='no'> No </option>
@@ -511,22 +508,22 @@ foreach ($fResult as $fDetails) {
     provinceName = true;
     facilityName = true;
 
-    function comorbidity(obj,id){
-        if(obj.value == 'other'){
-            $('.show-comorbidity'+id).show();
+    function comorbidity(obj, id) {
+        if (obj.value == 'other') {
+            $('.show-comorbidity' + id).show();
             $('#comorbidityOther').addClass('isRequired');
-        } else{
-            $('.show-comorbidity'+id).hide();
+        } else {
+            $('.show-comorbidity' + id).hide();
             $('#comorbidityOther').removeClass('isRequired');
         }
     }
-    
-    function riskfactor(obj,id){
-        if(obj.value == 'other'){
-            $('.show-riskfactor'+id).show();
+
+    function riskfactor(obj, id) {
+        if (obj.value == 'other') {
+            $('.show-riskfactor' + id).show();
             $('#riskFactorsOther').addClass('isRequired');
-        } else{
-            $('.show-riskfactor'+id).hide();
+        } else {
+            $('.show-riskfactor' + id).hide();
             $('#riskFactorsOther').removeClass('isRequired');
         }
     }
@@ -639,14 +636,14 @@ foreach ($fResult as $fDetails) {
 
     function validateNow() {
         var rejected = $('#isSampleRejected').val();
-        if(rejected != 'yes'){
-            if(($('#hcv').val() != "" || $('#antiHcv').val() != "") &&($('#hbv').val() != "" || $('#HBsAg').val() != "")){
+        if (rejected != 'yes') {
+            if (($('#hcv').val() != "" || $('#antiHcv').val() != "") && ($('#hbv').val() != "" || $('#HBsAg').val() != "")) {
                 checkresult = true;
-            } else{
+            } else {
                 checkresult = false;
                 alert("Please select least one of the result");
             }
-        } else{
+        } else {
             checkresult = true;
         }
 
