@@ -1034,9 +1034,8 @@ ALTER TABLE `r_eid_test_reasons` ADD `updated_datetime` DATETIME NULL DEFAULT NU
 -- UPDATE facility_details set updated_datetime = CURRENT_TIMESTAMP;
 -- UPDATE r_vl_sample_type set updated_datetime = CURRENT_TIMESTAMP;
 -- UPDATE r_vl_test_reasons set updated_datetime = CURRENT_TIMESTAMP;
--- UPDATE r_art_code_details set updated_datetime = CURRENT_TIMESTAMP;
--- UPDATE r_art_code_details set updated_datetime = CURRENT_TIMESTAMP;
--- UPDATE r_sample_rejection_reasons set updated_datetime = CURRENT_TIMESTAMP;
+-- UPDATE r_vl_art_regimen set updated_datetime = CURRENT_TIMESTAMP;
+-- UPDATE r_vl_sample_rejection_reasons set updated_datetime = CURRENT_TIMESTAMP;
 -- UPDATE r_eid_sample_type set updated_datetime = CURRENT_TIMESTAMP;
 -- UPDATE r_eid_sample_rejection_reasons set updated_datetime = CURRENT_TIMESTAMP;
 -- UPDATE r_covid19_sample_type set updated_datetime = CURRENT_TIMESTAMP;
@@ -1947,7 +1946,7 @@ CREATE TABLE `hepatitis_risk_factors` (
 INSERT INTO `global_config` (`display_name`, `name`, `value`, `category`, `remote_sync_needed`, `updated_on`, `updated_by`, `status`) VALUES ('Hepatitis Sample Code Format', 'hepatitis_sample_code', 'MMYY', 'hepatitis', 'yes', '2020-11-17 18:47:05', NULL, 'active'), ('Hepatitis Sample Code Prefix', 'hepatitis_sample_code_prefix', 'VLHEP', 'hepatitis', 'yes', '2020-11-17 18:47:05', NULL, 'active');
 
 -- Thana 19-Nov-2020
-ALTER TABLE `form_hepatitis` ADD `hbv_vaccination` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_insurance` ADD `vl_testing_site` VARCHAR(255) NULL DEFAULT NULL AFTER `hbv_vl_count`;
+ALTER TABLE `form_hepatitis` ADD `hbv_vaccination` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_insurance`, ADD `vl_testing_site` VARCHAR(255) NULL DEFAULT NULL AFTER `hbv_vl_count`;
 ALTER TABLE `health_facilities` CHANGE `test_type` `test_type` ENUM('vl','eid','covid19','hepatitis') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 INSERT INTO `resources` (`resource_id`, `module`, `display_name`) VALUES ('hepatitis-results', 'hepatitis', 'Hepatitis Results Management');
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'hepatitis-results', 'hepatitis-manual-results.php', 'Enter Result Manually');
