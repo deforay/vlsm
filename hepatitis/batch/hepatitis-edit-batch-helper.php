@@ -7,7 +7,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
 
 $tableName1 = "batch_details";
-$tableName2 = "form_covid19";
+$tableName2 = "form_hepatitis";
 try {
 	if (isset($_POST['batchCode']) && trim($_POST['batchCode']) != "") {
 		$id = intval($_POST['batchId']);
@@ -39,7 +39,7 @@ try {
 
 			for ($j = 0; $j < count($sample); $j++) {
 				$value = array('sample_batch_id' => $id);
-				$db = $db->where('covid19_id', $sample[$j]);
+				$db = $db->where('hepatitis_id', $sample[$j]);
 				$db->update($tableName2, $value);
 			}
 			//Update batch controls position, If samples has changed
@@ -49,10 +49,10 @@ try {
 			if (isset($batchInfo) && count($batchInfo) > 0) {
 				if (isset($batchInfo[0]['label_order']) && trim($batchInfo[0]['label_order']) != '') {
 					//Get display sample only
-					$samplesQuery = "SELECT covid19_id,sample_code from form_covid19 where sample_batch_id=$id ORDER BY sample_code ASC";
+					$samplesQuery = "SELECT hepatitis_id,sample_code from form_hepatitis where sample_batch_id=$id ORDER BY sample_code ASC";
 					$samplesInfo = $db->query($samplesQuery);
 					foreach ($samplesInfo as $sample) {
-						$displaySampleOrderArray[] = $sample['covid19_id'];
+						$displaySampleOrderArray[] = $sample['hepatitis_id'];
 					}
 					//Set label order
 					$jsonToArray = json_decode($batchInfo[0]['label_order'], true);
@@ -87,7 +87,7 @@ try {
 			$_SESSION['alertMsg'] = "Batch updated successfully";
 		}
 	}
-	header("location:/covid-19/batch/covid-19-batches.php");
+	header("location:/hepatitis/batch/hepatitis-batches.php");
 } catch (Exception $exc) {
 	error_log($exc->getMessage());
 	error_log($exc->getTraceAsString());
