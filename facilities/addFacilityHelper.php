@@ -12,7 +12,6 @@ include_once(APPLICATION_PATH . '/includes/ImageResize.php');
 $general = new \Vlsm\Models\General($db);
 
 
-
 $tableName = "facility_details";
 $tableName1 = "province_details";
 $tableName2 = "vl_user_facility_map";
@@ -54,7 +53,7 @@ try {
 			}
 		}
 
-
+		
 		if(!empty($_POST['testingPoints'])){
 			$_POST['testingPoints'] = explode(",", $_POST['testingPoints']);
 			$_POST['testingPoints'] = array_map('trim', $_POST['testingPoints']);;
@@ -62,8 +61,8 @@ try {
 		}else{
 			$_POST['testingPoints'] = null;
 		}
-
-
+		
+		
 		$data = array(
 			'facility_name' => $_POST['facilityName'],
 			'facility_code' => $_POST['facilityCode'],
@@ -86,7 +85,7 @@ try {
 			'updated_datetime' => $general->getDateTime(),
 			'status' => 'active'
 		);
-
+		
 		$db->insert($tableName, $data);
 		$lastId = $db->getInsertId();
 		if ($lastId > 0 && trim($_POST['selectedUser']) != '') {
@@ -111,7 +110,7 @@ try {
 				$db->insert($tableName3, $dataTest);
 			}
 		}
-
+		
 		if (isset($_FILES['labLogo']['name']) && $_FILES['labLogo']['name'] != "") {
 			if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "facility-logo") && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "facility-logo")) {
 				mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "facility-logo");
@@ -129,7 +128,7 @@ try {
 				$db->update($tableName, $image);
 			}
 		}
-
+		
 		$_SESSION['alertMsg'] = "Facility details added successfully";
 		$general->activityLog('add-facility', $_SESSION['userName'] . ' added new facility ' . $_POST['facilityName'], 'facility');
 	}
