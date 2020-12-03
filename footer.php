@@ -539,7 +539,7 @@
 		$(".hepatitisRequest").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".addSamplesFromManifestHepatitisMenu").addClass('active');
-	} else if (splitsUrl == 'hepatitis-batches.php') {
+	} else if (splitsUrl == 'hepatitis-batches.php' || splitsUrl == 'hepatitis-add-batch.php' || splitsUrl == 'hepatitis-edit-batch.php') {
 		$(".hepatitisRequest").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".hepatitisBatchCodeMenu").addClass('active');
