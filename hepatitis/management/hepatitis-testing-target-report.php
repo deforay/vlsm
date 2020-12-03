@@ -164,12 +164,13 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1><i class="fa fa-book"></i> Hepatitis Testing Target Report
-      <!--<ol class="breadcrumb">-->
-      <!--  <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>-->
-      <!--  <li class="active">Export Result</li>-->
-      <!--</ol>-->
-
     </h1>
+    <ol class="breadcrumb">
+       <!-- <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li> -->
+       <li ><i class="fa fa-book"></i> Hepatitis</li>
+			<li >Management</li>
+       <li class="active">Testing Target Report</li>
+      </ol>
   </section>
   <!-- Main content -->
   <section class="content">
