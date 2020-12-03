@@ -20,9 +20,9 @@ try {
         $db=$db->where('batch_id',$_POST['batchId']);
         $db->update($tableName,$data);
         $_SESSION['alertMsg']="Batch Controls Position updated successfully";
-        header("location:/covid-19/batch/covid-19-batches.php");
+        header("location:/hepatitis/batch/hepatitis-batches.php");
     }else{
-        header("location:/covid-19/batch/covid-19-batches.php");
+        header("location:/hepatitis/batch/hepatitis-batches.php");
     }
 }catch (Exception $exc) {
     error_log($exc->getMessage());
