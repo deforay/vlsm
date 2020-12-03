@@ -36,6 +36,8 @@ $batResult = $db->rawQuery($batQuery);
 		<h1> <i class="fa fa-book"></i> Clinic Reports</h1>
 		<ol class="breadcrumb">
 			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
+			<li >Hepatitis</li>
+			<li >Management</li>
 			<li class="active">Clinic Reports</li>
 		</ol>
 	</section>
