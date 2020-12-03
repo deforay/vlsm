@@ -35,7 +35,9 @@ $batResult = $db->rawQuery($batQuery);
 	<section class="content-header">
 		<h1> <i class="fa fa-book"></i> Clinic Reports</h1>
 		<ol class="breadcrumb">
-			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
+			<!-- <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li> -->
+			<li > <i class="fa fa-book"></i> Hepatitis</li>
+			<li >Management</li>
 			<li class="active">Clinic Reports</li>
 		</ol>
 	</section>
@@ -144,7 +146,8 @@ $batResult = $db->rawQuery($batQuery);
 														<th>Sample Collection Date</th>
 														<th>Sample Tested Date</th>
 														<th>Testing Lab</th>
-														<th>Result</th>
+														<th>HCV VL Result</th>
+														<th>HBV VL Result</th>
 														<th>Status</th>
 													</tr>
 												</thead>
@@ -373,7 +376,8 @@ $batResult = $db->rawQuery($batQuery);
 														<th>Province/State</th>
 														<th>District/County</th>
 														<th>Sample Type</th>
-														<th>Result</th>
+														<th>HCV VL Result</th>
+														<th>HBV VL Result</th>
 														<th>Status</th>
 													</tr>
 												</thead>
@@ -481,6 +485,9 @@ $batResult = $db->rawQuery($batQuery);
 				{
 					"sClass": "center"
 				},
+				{
+					"sClass": "center"
+				},
 			],
 			<?php if ($sarr['user_type'] != 'standalone') { ?> "aaSorting": [
 					[6, "desc"]
@@ -492,7 +499,7 @@ $batResult = $db->rawQuery($batQuery);
 			//aaSorting: [[ 4, "desc" ]],
 			"bProcessing": true,
 			"bServerSide": true,
-			"sAjaxSource": "getPositiveCovid19ResultDetails.php",
+			"sAjaxSource": "get-positive-hepatitis-result-details.php",
 			"fnServerData": function(sSource, aoData, fnCallback) {
 				aoData.push({
 					"name": "hvlBatchCode",
@@ -577,7 +584,7 @@ $batResult = $db->rawQuery($batQuery);
 			//"aaSorting": [[ 3, "desc" ]],
 			"bProcessing": true,
 			"bServerSide": true,
-			"sAjaxSource": "getSampleRejectionReport.php",
+			"sAjaxSource": "get-sample-rejection-report.php",
 			"fnServerData": function(sSource, aoData, fnCallback) {
 				aoData.push({
 					"name": "rjtBatchCode",
@@ -655,7 +662,7 @@ $batResult = $db->rawQuery($batQuery);
 			//"aaSorting": [[ 3, "desc" ]],
 			"bProcessing": true,
 			"bServerSide": true,
-			"sAjaxSource": "getResultNotAvailable.php",
+			"sAjaxSource": "get-result-not-available.php",
 			"fnServerData": function(sSource, aoData, fnCallback) {
 				aoData.push({
 					"name": "noResultBatchCode",
@@ -734,6 +741,9 @@ $batResult = $db->rawQuery($batQuery);
 				{
 					"sClass": "center"
 				},
+				{
+					"sClass": "center"
+				},
 			],
 			<?php if ($sarr['user_type'] != 'standalone') { ?> "aaSorting": [
 					[2, "desc"]
@@ -745,7 +755,7 @@ $batResult = $db->rawQuery($batQuery);
 			//"aaSorting": [[ 1, "desc" ]],
 			"bProcessing": true,
 			"bServerSide": true,
-			"sAjaxSource": "dataQualityCheck.php",
+			"sAjaxSource": "data-quality-check.php",
 			"fnServerData": function(sSource, aoData, fnCallback) {
 				aoData.push({
 					"name": "sampleCollectionDate",

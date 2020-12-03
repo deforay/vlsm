@@ -15,8 +15,8 @@ $arr = array();
 for ($i = 0; $i < sizeof($configResult); $i++) {
     $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
-if (isset($_SESSION['covid19MonitoringThresholdReportQuery']) && trim($_SESSION['covid19MonitoringThresholdReportQuery']) != "") {
-    $rResult = $db->rawQuery($_SESSION['covid19MonitoringThresholdReportQuery']);
+if (isset($_SESSION['hepatitisMonitoringThresholdReportQuery']) && trim($_SESSION['hepatitisMonitoringThresholdReportQuery']) != "") {
+    $rResult = $db->rawQuery($_SESSION['hepatitisMonitoringThresholdReportQuery']);
 
     $res = array();
     foreach ($rResult as $aRow) {   
@@ -162,7 +162,7 @@ if (isset($_SESSION['covid19MonitoringThresholdReportQuery']) && trim($_SESSION[
     $sheet->getStyle('A1')->applyFromArray($backgroundStyle);
     $sheet->getStyle('A3')->applyFromArray($styleArray);
     $sheet->mergeCells('A1:F2');
-    $sheet->setCellValue('A1', html_entity_decode('COVID-19 - Testing Target ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+    $sheet->setCellValue('A1', html_entity_decode('Hepatitis - Testing Target ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     // $sheet->mergeCells('A3:M10');
     $sheet->setCellValue('A4', html_entity_decode('Facility Name', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     // $sheet->mergeCells('A11:A12');
@@ -214,7 +214,7 @@ if (isset($_SESSION['covid19MonitoringThresholdReportQuery']) && trim($_SESSION[
     //question one start
     
     $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xls');
-    $filename = 'VLSM-covid19-Testing-Target-Report-' . date('d-M-Y-H-i-s') . '.xls';
+    $filename = 'VLSM-hepatitis-Testing-Target-Report-' . date('d-M-Y-H-i-s') . '.xls';
     ob_end_clean();
     $writer->save(TEMP_PATH . DIRECTORY_SEPARATOR . $filename);
     echo $filename;
