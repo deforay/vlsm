@@ -52,6 +52,9 @@ if (count($testTypeInfo) > 0) {
 		} else if ($test['test_type'] == 'covid19') {
 			$testOrg = 'Covid-19';
 			$extraDiv = '<td></td>';
+		} else if ($test['test_type'] == 'hepatitis') {
+			$testOrg = 'Hepatitis';
+			$extraDiv = '<td></td>';
 		}
 		$div .= '<tr><td>' . $testOrg . '<input type="hidden" name="testData[]" id ="testData' . $tf . '" value="' . $test['test_type'] . '" /></td>';
 		$div .= '<td><input type="text" class=" isRequired" name="monTar[]" id ="monTar' . $tf . '" value="' . $test['monthly_target'] . '" title="Please enter monthly target"/></td>';
@@ -61,7 +64,7 @@ if (count($testTypeInfo) > 0) {
 	}
 	$div .= '</tbody></table>';
 }
-// print_r($editTestType);die;
+
 ?>
 <style>
 	.ms-choice, .ms-choice:focus{
@@ -83,7 +86,7 @@ if (count($testTypeInfo) > 0) {
 
 	<!-- Main content -->
 	<section class="content">
-
+		<pre><?php print_r($editTestType);?></pre>
 		<div class="box box-default">
 			<div class="box-header with-border">
 				<div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
@@ -292,6 +295,9 @@ if (count($testTypeInfo) > 0) {
 											<option value="covid19" <?php if (preg_match("/covid19/i", $editTestType)) {
 																		echo "selected='selected'";
 																	}  ?>>Covid-19</option>
+											<?php if(isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) {?> 
+												<option value='hepatitis' <?php echo (preg_match("/hepatitis/i", $editTestType)) ? "selected='selected'" : '';  ?>>Hepatitis</option>
+											<?php } ?>
 										</select>
 									</div>
 								</div>
@@ -544,6 +550,9 @@ if (count($testTypeInfo) > 0) {
 						var extraDiv = '<td></td>';
 					} else if (testType[i] == 'covid19') {
 						testOrg = 'Covid-19';
+						var extraDiv = '<td></td>';
+					} else if (testType[i] == 'hepatitis') {
+						testOrg = 'Hepatitis';
 						var extraDiv = '<td></td>';
 					}
 					div += '<tr><td>' + testOrg + '<input type="hidden" name="testData[]" id ="testData' + i + '" value="' + testType[i] + '" /></td>';
