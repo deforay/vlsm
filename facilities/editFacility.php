@@ -83,7 +83,7 @@ if (count($testTypeInfo) > 0) {
 
 	<!-- Main content -->
 	<section class="content">
-
+		<pre></pre>
 		<div class="box box-default">
 			<div class="box-header with-border">
 				<div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
@@ -282,7 +282,7 @@ if (count($testTypeInfo) > 0) {
 								<div class="form-group">
 									<label for="testType" class="col-lg-4 control-label">Test Type</label>
 									<div class="col-lg-7">
-										<select type="text" class="form-control" id="testType" name="testType" title="Choose one test type" onchange="getTestType();" multiple>
+										<select type="text" class="" id="testType" name="testType" title="Choose one test type" onchange="getTestType();" multiple>
 											<option value="vl" <?php if (preg_match("/vl/i", $editTestType)) {
 																	echo "selected='selected'";
 																}  ?>>Viral Load</option>
@@ -292,6 +292,9 @@ if (count($testTypeInfo) > 0) {
 											<option value="covid19" <?php if (preg_match("/covid19/i", $editTestType)) {
 																		echo "selected='selected'";
 																	}  ?>>Covid-19</option>
+											<?php if(isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) {?> 
+												<option value='hepatitis' <?php echo (preg_match("/hepatitis/i", $editTestType)) ? "selected='selected'" : '';  ?>>Hepatitis</option>
+											<?php } ?>
 										</select>
 									</div>
 								</div>
