@@ -105,8 +105,8 @@ for ($i = 0; $i < count($aColumns); $i++) {
           */
 $aWhere = '';
 // $sQuery = "SELECT vl.*,s.sample_name,b.*,ts.*,f.facility_name,l_f.facility_name as labName,f.facility_code,f.facility_state,f.facility_district,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy,rs.rejection_reason_name,tr.test_reason_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_vl_art_regimen as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_vl_sample_type as rst ON rst.sample_id=vl.last_vl_sample_type_routine LEFT JOIN r_vl_sample_type as fst ON fst.sample_id=vl.last_vl_sample_type_failure_ac  LEFT JOIN r_vl_sample_type as sst ON sst.sample_id=vl.last_vl_sample_type_failure LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by LEFT JOIN r_vl_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection LEFT JOIN r_vl_test_reasons as tr ON tr.test_reason_id=vl.reason_for_vl_testing";
-// $sQuery = "SELECT count(*) as total, DATE_FORMAT(DATE(vl.sample_tested_datetime), '%b-%Y') as monthrange, f.facility_name, vl.lab_id, hf.monthly_target FROM testing_labs as hf INNER JOIN form_covid19 as vl ON vl.lab_id=hf.facility_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  ";
-$sQuery = "SELECT   DATE_FORMAT(DATE(vl.sample_tested_datetime), '%b-%Y') as monthrange, f.*, vl.*, hf.monthly_target FROM testing_labs as hf INNER JOIN form_covid19 as vl ON vl.lab_id=hf.facility_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  ";
+// $sQuery = "SELECT count(*) as total, DATE_FORMAT(DATE(vl.sample_tested_datetime), '%b-%Y') as monthrange, f.facility_name, vl.lab_id, hf.monthly_target FROM testing_labs as hf INNER JOIN form_hepatitis as vl ON vl.lab_id=hf.facility_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  ";
+$sQuery = "SELECT   DATE_FORMAT(DATE(vl.sample_tested_datetime), '%b-%Y') as monthrange, f.*, vl.*, hf.monthly_target FROM testing_labs as hf INNER JOIN form_hepatitis as vl ON vl.lab_id=hf.facility_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  ";
 
 // vl_request_form
 //   health_facilities
@@ -223,21 +223,21 @@ if (isset($sWhere) && $sWhere != "") {
      }
 }
 if ($sWhere != '') {
-     $sWhere = $sWhere . ' AND vl.result!="" AND vl.vlsm_country_id="' . $formId . '" AND vl.result_status!=9';
+     $sWhere = $sWhere . '  AND vl.vlsm_country_id="' . $formId . '" AND vl.result_status!=9';
 } else {
-     $sWhere = $sWhere . ' where vl.result!="" AND vl.vlsm_country_id="' . $formId . '" AND vl.result_status!=9';
+     $sWhere = $sWhere . ' where  vl.vlsm_country_id="' . $formId . '" AND vl.result_status!=9';
 }
 
 if (!empty($facilityMap)) {
      $sWhere .= " AND vl.facility_id IN ($facilityMap) ";
 }
-$sWhere .= " AND hf.test_type = 'covid19'";
+$sWhere .= " AND hf.test_type = 'hepatitis'";
 
 
 $sQuery = $sQuery . ' ' . $sWhere;
 // $sQuery = $sQuery.' '. "group by DATE_FORMAT(DATE(vl.sample_tested_datetime), '%b-%Y');";
 // echo $sQuery;die;
-$_SESSION['covid19MonitoringThresholdReportQuery'] = $sQuery;
+$_SESSION['hepatitisMonitoringThresholdReportQuery'] = $sQuery;
 
 // if (isset($sOrder) && $sOrder != "") {
 //      $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);

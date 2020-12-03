@@ -163,7 +163,7 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
-    <h1><i class="fa fa-book"></i> COVID-19 Testing Target Report
+    <h1><i class="fa fa-book"></i> Hepatitis Testing Target Report
       <!--<ol class="breadcrumb">-->
       <!--  <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>-->
       <!--  <li class="active">Export Result</li>-->
@@ -311,7 +311,7 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
       ],
       "bProcessing": true,
       "bServerSide": true,
-      "sAjaxSource": "getCovid19MonthlyThresholdReport.php",
+      "sAjaxSource": "get-hepatitis-monthly-threshold-report.php",
       "fnServerData": function(sSource, aoData, fnCallback) {
         aoData.push({
           "name": "facilityName",
@@ -346,7 +346,7 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
   function exportInexcel() {
     $.blockUI();
     oTable.fnDraw();
-    $.post("/covid-19/management/covid-19-TestingTargetInExcel.php", {
+    $.post("/hepatitis/management/hepatitis-testing-target-in-excel.php", {
         sampleCollectionDate: $("#mrp-lowerDate").val() + ' to ' + $("#mrp-upperDate").val(),
         fyName: $("#facilityName  option:selected").text(),
         facilityName: $("#facilityName").val(),
