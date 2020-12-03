@@ -210,7 +210,7 @@ $pResult = $db->rawQuery($pQuery);
 								<div class="form-group">
 									<label for="testType" class="col-lg-4 control-label">Test Type</label>
 									<div class="col-lg-7">
-										<select type="text" class="form-control" id="testType" name="testType" title="Choose one test type" onchange="getTestType();" multiple>
+										<select type="text" class="" id="testType" name="testType" title="Choose one test type" onchange="getTestType();" multiple>
 											<option value="vl">Viral Load</option>
 											<option value="eid">Early Infant Diagnosis</option>
 											<option value="covid19">Covid-19</option>
@@ -373,6 +373,10 @@ $pResult = $db->rawQuery($pQuery);
 					var extraDiv = '<td></td>';
 				} else if (testType[i] == 'covid19') {
 					testOrg = 'Covid-19';
+					var extraDiv = '<td></td>';
+				}
+				else if (testType[i] == 'hepatitis') {
+					testOrg = 'Hepatitis';
 					var extraDiv = '<td></td>';
 				}
 				div += '<tr><td>' + testOrg + '<input type="hidden" name="testData[]" id ="testData' + i + '" value="' + testType[i] + '" /></td>';

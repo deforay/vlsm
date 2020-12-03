@@ -285,7 +285,7 @@ if (count($testTypeInfo) > 0) {
 								<div class="form-group">
 									<label for="testType" class="col-lg-4 control-label">Test Type</label>
 									<div class="col-lg-7">
-										<select type="text" class="form-control" id="testType" name="testType" title="Choose one test type" onchange="getTestType();" multiple>
+										<select type="text" class="" id="testType" name="testType" title="Choose one test type" onchange="getTestType();" multiple>
 											<option value="vl" <?php if (preg_match("/vl/i", $editTestType)) {
 																	echo "selected='selected'";
 																}  ?>>Viral Load</option>
