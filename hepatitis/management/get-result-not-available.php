@@ -6,8 +6,8 @@ if (session_status() == PHP_SESSION_NONE) {
 
 
 $general=new \Vlsm\Models\General($db);
-$tableName="form_covid19";
-$primaryKey="covid19_id";
+$tableName="form_hepatitis";
+$primaryKey="hepatitis_id";
 //config  query
 $configQuery="SELECT * from global_config";
 $configResult=$db->query($configQuery);
@@ -111,7 +111,7 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
          * Get data to display
         */
 	$aWhere = '';
-	$sQuery="SELECT vl.*,f.*,s.*,fd.facility_name as labName FROM form_covid19 as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as fd ON fd.facility_id=vl.lab_id LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.specimen_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.result_status!=4 AND vl.sample_code is NOT NULL AND (vl.result IS NULL OR vl.result='')";
+	$sQuery="SELECT vl.*,f.*,s.*,fd.facility_name as labName FROM form_hepatitis as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as fd ON fd.facility_id=vl.lab_id LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.specimen_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.result_status!=4 AND vl.sample_code is NOT NULL AND (vl.hcv_vl_result IS NULL OR vl.hcv_vl_result='') AND (vl.hbv_vl_result IS NULL OR vl.hbv_vl_result='')";
 	$start_date = '';
 	$end_date = '';
 	if(isset($_POST['noResultBatchCode']) && trim($_POST['noResultBatchCode'])!= ''){
@@ -162,7 +162,7 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
     }
     
 	$sQuery = $sQuery.' '.$sWhere;
-        $sQuery = $sQuery.' group by vl.covid19_id';
+        $sQuery = $sQuery.' group by vl.hepatitis_id';
         if (isset($sOrder) && $sOrder != "") {
             $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
             $sQuery = $sQuery.' order by '.$sOrder;
@@ -178,11 +178,11 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
        // print_r($rResult);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT vl.*,f.*,s.*,fd.facility_name as labName FROM form_covid19 as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as fd ON fd.facility_id=vl.lab_id LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.specimen_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.result_status!=4 AND vl.sample_code is NOT NULL AND  (vl.result IS NULL OR vl.result='') $sWhere group by vl.covid19_id order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT vl.*,f.*,s.*,fd.facility_name as labName FROM form_hepatitis as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as fd ON fd.facility_id=vl.lab_id LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.specimen_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.result_status!=4 AND vl.sample_code is NOT NULL AND  (vl.hcv_vl_result IS NULL OR vl.hcv_vl_result='') AND (vl.hbv_vl_result IS NULL OR vl.hbv_vl_result='') $sWhere group by vl.hepatitis_id order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(covid19_id) as total FROM form_covid19 as vl where result_status!=4 AND  vl.sample_code is NOT NULL AND (vl.result IS NULL OR vl.result='') AND vlsm_country_id='".$arr['vl_form']."' $dWhere");
+        $aResultTotal =  $db->rawQuery("select COUNT(hepatitis_id) as total FROM form_hepatitis as vl where result_status!=4 AND  vl.sample_code is NOT NULL AND (vl.hcv_vl_result IS NULL OR vl.hcv_vl_result='') AND (vl.hbv_vl_result IS NULL OR vl.hbv_vl_result='') AND vlsm_country_id='".$arr['vl_form']."' $dWhere");
         $iTotal = $aResultTotal[0]['total'];
         /*
          * Output

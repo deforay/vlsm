@@ -2016,3 +2016,6 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 -- Thana 30-Nov-2020
 INSERT INTO `resources` (`resource_id`, `module`, `display_name`) VALUES ('hepatitis-batches', 'hepatitis', 'Hepatitis Batch Management');
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'hepatitis-batches', 'hepatitis-batches.php', 'View Batches'), (NULL, 'hepatitis-batches', 'hepatitis-add-batch.php', 'Add Batch'), (NULL, 'hepatitis-batches', 'hepatitis-edit-batch.php', 'Edit Batch'), (NULL, 'hepatitis-batches', 'hepatitis-add-batch-position.php', 'Add Batch Position'), (NULL, 'hepatitis-batches', 'hepatitis-edit-batch-position.php', 'Edit Batch Position');
+
+-- Thana 03-Dec-2020
+UPDATE `resources` SET `display_name` = 'Hepatitis Reference Management' WHERE `resources`.`resource_id` = 'hepatitis-reference';
