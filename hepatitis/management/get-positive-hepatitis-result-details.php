@@ -6,8 +6,8 @@ if (session_status() == PHP_SESSION_NONE) {
 
 
 $general = new \Vlsm\Models\General($db);
-$tableName = "form_covid19";
-$primaryKey = "covid19_id";
+$tableName = "form_hepatitis";
+$primaryKey = "hepatitis_id";
 //config  query
 $configQuery = "SELECT * from global_config";
 $configResult = $db->query($configQuery);
@@ -30,13 +30,13 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
          * you want to insert a non-database field (for example a counter or static image)
         */
 $sampleCode = 'sample_code';
-$aColumns = array('vl.sample_code', 'vl.remote_sample_code', 'f.facility_name', 'vl.patient_first_name', 'vl.patient_id', 'vl.caretaker_phone_number', "DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')", "DATE_FORMAT(vl.sample_tested_datetime,'%d-%b-%Y')", 'fd.facility_name', 'vl.result');
-$orderColumns = array('vl.sample_code', 'vl.remote_sample_code', 'f.facility_name', 'vl.patient_id', 'vl.patient_first_name', 'vl.caretaker_phone_number', 'vl.sample_collection_date', 'vl.sample_tested_datetime', 'fd.facility_name', 'vl.result');
+$aColumns = array('vl.sample_code', 'vl.remote_sample_code', 'f.facility_name', 'vl.patient_first_name', 'vl.patient_id', 'vl.caretaker_phone_number', "DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')", "DATE_FORMAT(vl.sample_tested_datetime,'%d-%b-%Y')", 'fd.facility_name', 'vl.hcv_vl_result', 'vl.hbv_vl_result');
+$orderColumns = array('vl.sample_code', 'vl.remote_sample_code', 'f.facility_name', 'vl.patient_id', 'vl.patient_first_name', 'vl.caretaker_phone_number', 'vl.sample_collection_date', 'vl.sample_tested_datetime', 'fd.facility_name', 'vl.hcv_vl_result', 'vl.hbv_vl_result');
 if ($sarr['user_type'] == 'remoteuser') {
     $sampleCode = 'remote_sample_code';
 } else if ($sarr['user_type'] == 'standalone') {
-    $aColumns = array('vl.sample_code', 'f.facility_name', 'vl.patient_first_name', 'vl.patient_id', 'vl.caretaker_phone_number', "DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')", "DATE_FORMAT(vl.sample_tested_datetime,'%d-%b-%Y')", 'fd.facility_name', 'vl.result');
-    $orderColumns = array('vl.sample_code', 'f.facility_name', 'vl.patient_id', 'vl.patient_first_name', 'vl.caretaker_phone_number', 'vl.sample_collection_date', 'vl.sample_tested_datetime', 'fd.facility_name', 'vl.result');
+    $aColumns = array('vl.sample_code', 'f.facility_name', 'vl.patient_first_name', 'vl.patient_id', 'vl.caretaker_phone_number', "DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')", "DATE_FORMAT(vl.sample_tested_datetime,'%d-%b-%Y')", 'fd.facility_name', 'vl.hcv_vl_result', 'vl.hbv_vl_result');
+    $orderColumns = array('vl.sample_code', 'f.facility_name', 'vl.patient_id', 'vl.patient_first_name', 'vl.caretaker_phone_number', 'vl.sample_collection_date', 'vl.sample_tested_datetime', 'fd.facility_name', 'vl.hcv_vl_result', 'vl.hbv_vl_result');
 }
 
 /* Indexed column (used for fast and accurate table cardinality) */
@@ -116,7 +116,7 @@ for ($i = 0; $i < count($aColumns); $i++) {
          * Get data to display
         */
 $aWhere = '';
-$sQuery = "SELECT vl.*,f.*,s.*,b.*,fd.facility_name as labName FROM form_covid19 as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as fd ON fd.facility_id=vl.lab_id LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.specimen_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.result_status=7 AND vl.result > " . $thresholdLimit;
+$sQuery = "SELECT vl.*,f.*,s.*,b.*,fd.facility_name as labName FROM form_hepatitis as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as fd ON fd.facility_id=vl.lab_id LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.specimen_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.result_status=7 AND vl.hcv_vl_result = 'positive' OR vl.hbv_vl_result = 'positive'";
 $start_date = '';
 $end_date = '';
 
@@ -178,7 +178,7 @@ $sWhere = $sWhere . ' AND vl.vlsm_country_id="' . $arr['vl_form'] . '"';
 
 
 $sQuery = $sQuery . ' ' . $sWhere;
-$sQuery = $sQuery . ' group by vl.covid19_id';
+$sQuery = $sQuery . ' group by vl.hepatitis_id';
 if (isset($sOrder) && $sOrder != "") {
     $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
     $sQuery = $sQuery . ' order by ' . $sOrder;
@@ -192,11 +192,11 @@ $rResult = $db->rawQuery($sQuery);
 // print_r($rResult);
 /* Data set length after filtering */
 
-$aResultFilterTotal = $db->rawQuery("SELECT vl.*,f.*,s.*,b.*,fd.facility_name as labName FROM form_covid19 as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as fd ON fd.facility_id=vl.lab_id LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.specimen_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.result_status=7 AND vl.result > $thresholdLimit $sWhere group by vl.covid19_id order by $sOrder");
+$aResultFilterTotal = $db->rawQuery("SELECT vl.*,f.*,s.*,b.*,fd.facility_name as labName FROM form_hepatitis as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as fd ON fd.facility_id=vl.lab_id LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.specimen_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.result_status=7 AND vl.hcv_vl_result = 'positive' OR vl.hbv_vl_result = 'positive'  $sWhere group by vl.hepatitis_id order by $sOrder");
 $iFilteredTotal = count($aResultFilterTotal);
 
 /* Total data set length */
-$aResultTotal =  $db->rawQuery("select COUNT(covid19_id) as total FROM form_covid19 as vl where result_status=7 AND result > $thresholdLimit AND vlsm_country_id='" . $arr['vl_form'] . "' $dWhere");
+$aResultTotal =  $db->rawQuery("select COUNT(hepatitis_id) as total FROM form_hepatitis as vl where result_status=7 AND  vl.hcv_vl_result = 'positive' OR vl.hbv_vl_result = 'positive' AND vlsm_country_id='" . $arr['vl_form'] . "' $dWhere");
 $iTotal = $aResultTotal[0]['total'];
 /*
          * Output
@@ -241,9 +241,10 @@ foreach ($rResult as $aRow) {
     $row[] = $aRow['sample_collection_date'];
     $row[] = $aRow['sample_tested_datetime'];
     $row[] = $aRow['labName'];
-    $row[] = $aRow['result'];
+    $row[] =  ucwords($aRow['hcv_vl_result']);
+    $row[] =  ucwords($aRow['hbv_vl_result']);
     $row[] = '';
-    /* $row[] = '<select class="form-control" name="status" id=' . $aRow['covid19_id'] . ' title="Please select status" onchange="updateStatus(this.id,this.value)">
+    /* $row[] = '<select class="form-control" name="status" id=' . $aRow['hepatitis_id'] . ' title="Please select status" onchange="updateStatus(this.id,this.value)">
                             <option value=""> -- Select -- </option>
                             <option value="yes" ' . ($aRow['contact_complete_status'] == "yes" ? "selected=selected" : "") . '>Yes</option>
                             <option value="no" ' . ($aRow['contact_complete_status'] == "no" ? "selected=selected" : "") . '>No</option>
