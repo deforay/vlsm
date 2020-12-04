@@ -142,9 +142,7 @@ foreach ($fResult as $fDetails) {
                                         <td>
                                             <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;">
                                                 <option value=""> -- Select -- </option>
-                                                <?php foreach ($lResult as $labName) { ?>
-                                                    <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
-                                                <?php } ?>
+                                                <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
                                             </select>
                                         </td>
                                         <?php } else{ ?> 
