@@ -297,7 +297,7 @@ if (file_exists($fileArray[$arr['vl_form']])) {
             $('.rejected-input').prop('disabled', false);
             $('.rejected').removeClass('disabled');
             $('#sampleRejectionReason,#rejectionDate,.rejected-input').removeClass('isRequired');
-            $('#sampleTestedDateTime').addClass('isRequired');
+            // $('#sampleTestedDateTime').addClass('isRequired');
             $('#result').prop('disabled', false);
             $('#sampleRejectionReason').prop('disabled', true);
         }

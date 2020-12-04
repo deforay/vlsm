@@ -441,7 +441,7 @@ $batchResult = $db->rawQuery($batchQuery);
     if ($.trim(pName) != '') {
       $.post("/includes/siteInformationDropdownOptions.php", {
           pName: pName,
-          testType : 'covid19'
+          testType : 'hepatitis'
         },
         function(data) {
           if ($.trim(data) != "") {

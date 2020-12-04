@@ -543,6 +543,10 @@
 		$(".hepatitisRequest").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".hepatitisBatchCodeMenu").addClass('active');
+	} else if (splitsUrl == 'add-samples-from-manifest.php') {
+		$(".hepatitisRequest").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".addSamplesFromManifestHepatitisMenu").addClass('active');
 	} else if (splitsUrl == 'hepatitis-manual-results.php' || splitsUrl == 'hepatitis-update-result.php') {
 		$(".allMenu").removeClass('active');
 		$(".hepatitisResults").addClass('active');
@@ -551,6 +555,10 @@
 		$(".allMenu").removeClass('active');
 		$(".hepatitisProgramMenu").addClass('active');
 		$(".hepatitisPrintResults").addClass('active');
+	} else if (splitsUrl == 'mail-hepatitis-results.php') {
+		$(".allMenu").removeClass('active');
+		$(".hepatitisResults").addClass('active');
+		$(".hepatitisResultMailMenu").addClass('active');
 	} else if (splitsUrl == 'hepatitis-result-status.php') {
 		$(".allMenu").removeClass('active');
 		$(".hepatitisResults").addClass('active');

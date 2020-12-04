@@ -123,7 +123,8 @@ $sharedPrivileges = array(
 	'add-funding-sources.php'						=> 'province-details.php',
 	'edit-funding-sources.php'						=> 'province-details.php',
 	'hepatitis-update-result.php'       			=> 'hepatitis-manual-results.php',
-	'mail-hepatitis-results.php'       				=> 'hepatitis-manual-results.php',
+	'mail-hepatitis-results.php'       				=> 'hepatitis-print-results.php',
+	'hepatitis-result-mail-confirm.php'  			=> 'hepatitis-print-results.php',
 	'hepatitis-sample-rejection-reasons.php'		=> 'hepatitis-sample-type.php',
 	'add-hepatitis-sample-rejection-reasons.php'	=> 'hepatitis-sample-type.php',
 	'edit-hepatitis-sample-rejection-reasons.php'	=> 'hepatitis-sample-type.php',
@@ -1001,7 +1002,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("specimenReferralManifestList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
 										<li class="allMenu specimenReferralManifestListMenu">
-											<a href="/specimen-referral-manifest/specimenReferralManifestList.php?t=<?php echo base64_encode('covid19'); ?>"><i class="fa fa-circle-o"></i> Hepatitis Specimen Manifest</a>
+											<a href="/specimen-referral-manifest/specimenReferralManifestList.php?t=<?php echo base64_encode('hepatitis'); ?>"><i class="fa fa-circle-o"></i> Hepatitis Specimen Manifest</a>
 										</li>
 									<?php } ?>
 								</ul>
@@ -1026,7 +1027,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 									if (isset($_SESSION['privileges']) && in_array("hepatitis-result-status.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu hepatitisResultStatus"><a href="/hepatitis/results/hepatitis-result-status.php"><i class="fa fa-circle-o"></i> Manage Results Status</a></li>
 									<?php }
-									if (isset($_SESSION['privileges']) && in_array("hepatitis-manual-results.php", $_SESSION['privileges'])) { ?>
+									if (isset($_SESSION['privileges']) && in_array("hepatitis-print-results.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu hepatitisResultMailMenu"><a href="/hepatitis/mail/mail-hepatitis-results.php"><i class="fa fa-circle-o"></i> E-mail Test Result</a></li>
 									<?php }  ?>
 								</ul>
