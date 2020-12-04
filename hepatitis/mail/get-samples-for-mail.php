@@ -36,12 +36,12 @@ if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']
   }
 }
 
-$query = "SELECT hepatitis.sample_code,hepatitis.hepatitis_id,hepatitis.facility_id,f.facility_name,f.facility_code FROM form_hepatitis as hepatitis LEFT JOIN facility_details as f ON hepatitis.facility_id=f.facility_id where ((hepatitis.result_status = 7 AND hepatitis.result is NOT NULL AND hepatitis.result !='') OR (hepatitis.result_status = 4 AND (hepatitis.result is NULL OR hepatitis.result = '')))";
+$query = "SELECT hepatitis.sample_code,hepatitis.hepatitis_id,hepatitis.facility_id,f.facility_name,f.facility_code FROM form_hepatitis as hepatitis LEFT JOIN facility_details as f ON hepatitis.facility_id=f.facility_id where ((hepatitis.result_status = 7 AND ((hepatitis.hcv_vl_result is NOT NULL AND hepatitis.hcv_vl_result !='') OR (hepatitis.hbv_vl_result is NOT NULL AND hepatitis.hbv_vl_result !=''))) OR (hepatitis.result_status = 4 AND ((hepatitis.hcv_vl_result is NULL AND hepatitis.hcv_vl_result ='') OR (hepatitis.hbv_vl_result is NULL AND hepatitis.hbv_vl_result =''))))";
 if (isset($facility) && count(array_filter($facility)) > 0) {
   $query = $query . " AND hepatitis.facility_id IN (" . implode(',', $facility) . ")";
 }
 if (trim($sampleType) != '') {
-  $query = $query . " AND hepatitis.sample_type='" . $sampleType . "'";
+  $query = $query . " AND hepatitis.specimen_type='" . $sampleType . "'";
 }
 if (trim($gender) != '') {
   $query = $query . " AND hepatitis.patient_gender='" . $gender . "'";
@@ -62,7 +62,7 @@ if (trim($mailSentStatus) != '') {
   if (trim($type) == 'request') {
     $query = $query . " AND hepatitis.is_request_mail_sent='" . $mailSentStatus . "'";
   } elseif (trim($type) == 'result') {
-    $query = $query . " AND hepatitis.is_result_mail_sent='" . $mailSentStatus . "' AND hepatitis.result IS NOT NULL AND hepatitis.result!= ''";
+    $query = $query . " AND hepatitis.is_result_mail_sent='" . $mailSentStatus . "' AND (hepatitis.hcv_vl_result!= '' OR hepatitis.hbv_vl_result!= '')";
   }
 }
 if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != '') {
@@ -73,7 +73,7 @@ if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']
   }
 }
 $query = $query . " ORDER BY f.facility_name ASC";
-//echo $query;die;
+// echo $query;die;
 $result = $db->rawQuery($query);
 ?>
 <div class="col-md-9">

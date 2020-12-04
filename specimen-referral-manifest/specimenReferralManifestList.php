@@ -139,6 +139,8 @@ include_once(APPLICATION_PATH . '/header.php');
       manifestFileName = "generateEIDManifest.php";
     }else if (module == 'C19') {
       manifestFileName = "generateCovid19Manifest.php";
+    } else if (module == 'hepatitis') {
+      manifestFileName = "generateHepatitisManifest.php";
     }
     $.post(manifestFileName, {
         id: pId,

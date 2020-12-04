@@ -115,7 +115,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $hepatitisInfo['f
                                     <td><label for="facilityId">Health Facility </label><span class="mandatory">*</span></td>
                                     <td>
                                         <select class="form-control isRequired " name="facilityId" id="facilityId" title="Please choose service provider" style="width:100%;" onchange="getfacilityProvinceDetails(this);">
-                                            <?php echo $facility; ?>
+                                        <?= $general->generateSelectOptions($healthFacilities, $hepatitisInfo['facility_id'], '-- Select --'); ?>
                                         </select>
                                     </td>
                                 </tr>

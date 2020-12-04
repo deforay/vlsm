@@ -2020,3 +2020,6 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 
 -- Thana 03-Dec-2020
 UPDATE `resources` SET `display_name` = 'Hepatitis Reference Management' WHERE `resources`.`resource_id` = 'hepatitis-reference';
+
+-- Thana 04-Dec-2020
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'hepatitis-requests', 'add-samples-from-manifest.php', 'Add Samples from Manifest');

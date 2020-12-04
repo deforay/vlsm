@@ -38,6 +38,8 @@ if ($module == 'vl') {
 	$query .= "SELECT vl.sample_code,vl.remote_sample_code,vl.eid_id FROM eid_form as vl where (vl.sample_code IS NOT NULL OR vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='') AND (vl.sample_code is null OR vl.sample_code ='')  AND vl.vlsm_country_id = $country";
 } else if ($module == 'C19') {
 	$query .= "SELECT vl.sample_code,vl.remote_sample_code,vl.covid19_id FROM form_covid19 as vl where (vl.sample_code IS NOT NULL OR vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='') AND (vl.sample_code is null OR vl.sample_code ='')  AND vl.vlsm_country_id = $country";
+} else if ($module == 'hepatitis') {
+	$query .= "SELECT vl.sample_code,vl.remote_sample_code,vl.hepatitis_id FROM form_hepatitis as vl where (vl.sample_code IS NOT NULL OR vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='') AND (vl.sample_code is null OR vl.sample_code ='')  AND vl.vlsm_country_id = $country";
 }
 
 if (isset($vlfmResult[0]['facilityId'])) {
@@ -49,7 +51,6 @@ if (isset($_POST['testingLab']) && $_POST['testingLab'] != "") {
 }
 
 $query .= " ORDER BY vl.request_created_datetime ASC";
-
 $result = $db->rawQuery($query);
 
 ?>
@@ -71,6 +72,8 @@ $result = $db->rawQuery($query);
 								$sampleId  = $sample['eid_id'];
 							} else if ($module == 'C19') {
 								$sampleId  = $sample['covid19_id'];
+							} else if ($module == 'hepatitis') {
+								$sampleId  = $sample['hepatitis_id'];
 							}
 					?>
 							<option value="<?php echo $sampleId; ?>"><?php echo ucwords($sample[$sCode]); ?></option>

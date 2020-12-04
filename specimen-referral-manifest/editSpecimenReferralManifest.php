@@ -25,6 +25,8 @@ if ($module == 'vl') {
 	$query = "SELECT vl.sample_code,vl.remote_sample_code,vl.vl_sample_id,vl.sample_package_id FROM vl_request_form as vl where (vl.sample_code IS NOT NULL OR vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='' OR vl.sample_package_id=" . $id . ") ";
 } else if ($module == 'eid') {
 	$query = "SELECT vl.sample_code,vl.remote_sample_code,vl.eid_id,vl.sample_package_id FROM eid_form as vl where (vl.sample_code IS NOT NULL OR vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='' OR vl.sample_package_id=" . $id . ")";
+} else if ($module == 'hepatitis'){
+	$query = "SELECT vl.sample_code,vl.remote_sample_code,vl.hepatitis_id,vl.sample_package_id FROM form_hepatitis as vl where (vl.sample_code IS NOT NULL OR vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='' OR vl.sample_package_id=" . $id . ")";
 } else {
 	$query = "SELECT vl.sample_code,vl.remote_sample_code,vl.covid19_id,vl.sample_package_id FROM form_covid19 as vl where (vl.sample_code IS NOT NULL OR vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='' OR vl.sample_package_id=" . $id . ")";
 }

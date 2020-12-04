@@ -242,8 +242,8 @@ if (isset($_POST['toEmail']) && trim($_POST['toEmail']) != "" && count($_POST['s
       $pathFront = realpath(UPLOAD_PATH);
       $filename = 'vlsm-result-' . date('d-M-Y-H-i-s') . '.pdf';
       $pdf->Output($pathFront . DIRECTORY_SEPARATOR . $filename, "F");
-      $downloadFile1 = UPLOAD_PATH . $_POST['pdfFile'];
-      $downloadFile2 = UPLOAD_PATH . $filename;
+      $downloadFile1 = UPLOAD_PATH . DIRECTORY_SEPARATOR . $_POST['pdfFile'];
+      $downloadFile2 = UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename;
    } else {
       $_SESSION['alertMsg'] = 'Unable to generate test result pdf. Please check the result fields.';
       header('location:vlResultMail.php');

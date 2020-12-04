@@ -17,7 +17,7 @@ include_once(APPLICATION_PATH . '/header.php');
 		<h1><i class="fa fa-plus"></i> Add Samples from Manifest</h1>
 		<ol class="breadcrumb">
 			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-			<li class="active">Covid-19 Test Request</li>
+			<li class="active">hepatitis Test Request</li>
 		</ol>
 	</section>
 
@@ -45,7 +45,7 @@ include_once(APPLICATION_PATH . '/header.php');
 					</table>
 					<!-- /.box-header -->
 					<div class="box-body table-responsive">
-						<table id="covid19ManifestDataTable" class="table table-bordered table-striped table-vcenter">
+						<table id="hepatitisManifestDataTable" class="table table-bordered table-striped table-vcenter">
 							<thead>
 								<tr>
 									<th>Sample Code</th>
@@ -106,12 +106,12 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 <script type="text/javascript">
 	var oTable = null;
 
-	function loadCovid19RequestData() {
+	function loadhepatitisRequestData() {
 		$.blockUI();
 		if(oTable){
-			$("#covid19ManifestDataTable").dataTable().fnDestroy();
+			$("#hepatitisManifestDataTable").dataTable().fnDestroy();
 		}		
-		oTable = $('#covid19ManifestDataTable').dataTable({
+		oTable = $('#hepatitisManifestDataTable').dataTable({
 			"oLanguage": {
 				"sLengthMenu": "_MENU_ records per page"
 			},
@@ -136,7 +136,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 			"fnDrawCallback": function() {},
 			"bProcessing": true,
 			"bServerSide": true,
-			"sAjaxSource": "/covid-19/requests/getManifestInGridHelper.php",
+			"sAjaxSource": "/hepatitis/requests/get-manifest-in-grid-helper.php",
 			"fnServerData": function(sSource, aoData, fnCallback) {
 				aoData.push({
 					"name": "samplePackageCode",
@@ -157,8 +157,8 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 	function getSampleCode() {
 		if ($("#samplePackageCode").val() != "") {
 			$.blockUI();
-			loadCovid19RequestData();
-			$.post("/covid-19/requests/getRemoteManifestHelper.php", {
+			loadhepatitisRequestData();
+			$.post("/hepatitis/requests/get-remote-manifest-helper.php", {
 					samplePackageCode: $("#samplePackageCode").val()
 				},
 				function(data) {
@@ -175,7 +175,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 
 	function activeSampleCode() {
 		$.blockUI();
-		$.post("/covid-19/requests/addSamplesByPackageHelper.php", {
+		$.post("/hepatitis/requests/add-samples-by-package-helper.php", {
 				sampleId: $("#sampleId").val()
 			},
 			function(data) {
