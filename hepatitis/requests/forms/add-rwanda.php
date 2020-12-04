@@ -390,11 +390,11 @@ foreach ($pdResult as $provinceName) {
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th><label for="sampleTestedDateTime">Vl Testing Date</label></th>
+                                            <th><label for="sampleTestedDateTime">VL Testing Date</label></th>
                                             <td>
                                                 <input type="text" class="labSecInput form-control" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Please enter testing date" style="width:100%;" />
                                             </td>
-                                            <th><label for="vlTestingSite">Vl Testing Site</label></th>
+                                            <th><label for="vlTestingSite">VL Testing Site</label></th>
                                             <td>
                                                 <input type="text" class="labSecInput form-control" id="vlTestingSite" name="vlTestingSite" placeholder="Testing Site" title="Please enter testing site" style="width:100%;" />
                                             </td>
