@@ -59,7 +59,8 @@ include_once(APPLICATION_PATH . '/header.php');
 									<th>Patient Name</th>
 									<th>Province/State</th>
 									<th>District/County</th>
-									<th>Result</th>
+									<th>HCV VL Result</th>
+									<th>HBV VL Result</th>
 									<th>Last Modified On</th>
 									<th>Status</th>
 								</tr>
@@ -128,7 +129,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 				<?php if ($sarr['user_type'] != 'standalone') { ?> {
 						"sClass": "center"
 					},
-				<?php } ?> {"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"}
+				<?php } ?> {"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"}
 			],
 			"aaSorting": [
 				[<?php echo ($sarr['user_type'] == 'remoteuser' || $sarr['user_type'] == 'vluser') ? 9 : 8 ?>, "desc"]
