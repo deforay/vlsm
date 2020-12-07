@@ -49,7 +49,8 @@ try {
 		'result_status'                       => 8,
 		'data_sync'                           => 0,
 		'last_modified_by'                    => $_SESSION['userId'],
-		'last_modified_datetime'              => $general->getDateTime()
+		'last_modified_datetime'              => $general->getDateTime(),
+		'reason_for_vl_test'				  => isset($_POST['reasonVlTest']) ? $_POST['reasonVlTest'] : null,
 	);
 
 	$db = $db->where('hepatitis_id', $_POST['hepatitisSampleId']);

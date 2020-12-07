@@ -191,7 +191,7 @@ foreach ($pdResult as $provinceName) {
                                     <tr>
                                         <th><label for="patientGender">Marital Status</label></th>
                                         <td>
-                                            <select class="form-control isRequired" name="maritalStatus" id="maritalStatus">
+                                            <select class="form-control" name="maritalStatus" id="maritalStatus">
                                                 <option value=''> -- Select -- </option>
                                                 <option value='married'> Married </option>
                                                 <option value='single'> Single </option>
@@ -203,7 +203,7 @@ foreach ($pdResult as $provinceName) {
                                         </td>
                                         <th><label for="patientGender">Insurance</label></th>
                                         <td>
-                                            <select class="form-control isRequired" name="insurance" id="insurance">
+                                            <select class="form-control" name="insurance" id="insurance">
                                                 <option value=''> -- Select -- </option>
                                                 <option value='mutuelle'> Mutuelle </option>
                                                 <option value='RAMA'> RAMA </option>
@@ -659,7 +659,7 @@ foreach ($pdResult as $provinceName) {
             checkresult = true;
         } else{
             checkresult = false;
-            alert("Please select least one of the result");
+            alert("Please select test result for screening");
             $('#HBsAg').focus();
         }
 
