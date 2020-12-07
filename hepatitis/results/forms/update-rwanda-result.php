@@ -388,9 +388,9 @@ $facility = $general->generateSelectOptions($healthFacilities, $hepatitisInfo['f
                                 </div>
                                 <table class="table" style="width:100%">
                                     <tr>
-                                        <th><label for="">Sample Received Date </label></th>
+                                        <th><label for="">Sample Received Date <span class="mandatory">*</span></label></th>
                                         <td>
-                                            <input value="<?php echo $general->humanDateFormat($hepatitisInfo['sample_received_at_vl_lab_datetime']) ?>" type="text" class="form-control" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter sample receipt date" style="width:100%;" />
+                                            <input value="<?php echo $general->humanDateFormat($hepatitisInfo['sample_received_at_vl_lab_datetime']) ?>" type="text" class="form-control isRequired" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter sample receipt date" style="width:100%;" />
                                         </td>
                                         <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
                                         <td>
@@ -400,9 +400,9 @@ $facility = $general->generateSelectOptions($healthFacilities, $hepatitisInfo['f
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th><label for="sampleTestedDateTime">VL Testing Date</label></th>
+                                        <th><label for="sampleTestedDateTime">VL Testing Date <span class="mandatory">*</span></label></th>
                                         <td>
-                                            <input value="<?php echo $general->humanDateFormat($hepatitisInfo['sample_tested_datetime']) ?>" type="text" class="form-control" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Please enter testing date" style="width:100%;" />
+                                            <input value="<?php echo $general->humanDateFormat($hepatitisInfo['sample_tested_datetime']) ?>" type="text" class="form-control isRequired" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Please enter testing date" style="width:100%;" />
                                         </td>
                                         <th><label for="vlTestingSite">VL Testing Site</label></th>
                                         <td>
@@ -410,9 +410,9 @@ $facility = $general->generateSelectOptions($healthFacilities, $hepatitisInfo['f
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th><label for="reasonVlTest">VL test purpose</label></th>
+                                        <th><label for="reasonVlTest">VL test purpose <span class="mandatory">*</span></label></th>
                                         <td>
-                                            <select class="form-control" name="reasonVlTest" id="reasonVlTest">
+                                            <select class="form-control isRequired" name="reasonVlTest" id="reasonVlTest" title="Please select test purpose">
                                                 <option value=''> -- Select -- </option>
                                                 <option value='Initial HCV VL' <?php echo ($hepatitisInfo['reason_for_vl_test'] == 'Initial HCV VL') ? "selected='selected'" : ""; ?>>Initial HCV VL</option>
                                                 <option value='SVR12 HCV VL' <?php echo ($hepatitisInfo['reason_for_vl_test'] == 'SVR12 HCV VL') ? "selected='selected'" : ""; ?>>SVR12 HCV VL</option>
@@ -465,8 +465,8 @@ $facility = $general->generateSelectOptions($healthFacilities, $hepatitisInfo['f
                                         </td>
                                     </tr>
                                     <tr>
-                                            <td><label for="">Testing Platform </label></td>
-                                            <td><select name="hepatitisPlatform" id="hepatitisPlatform" class="form-control rejected-input" title="Please select the testing platform">
+                                            <td><label for="">Testing Platform <span class="mandatory">*</span></label></td>
+                                            <td><select name="hepatitisPlatform" id="hepatitisPlatform" class="form-control isRequired" title="Please select the testing platform">
                                                     <?= $general->generateSelectOptions($testPlatformList, $hepatitisInfo['hepatitis_test_platform'], '-- Select --'); ?>
                                                 </select>
                                             </td>
@@ -626,7 +626,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $hepatitisInfo['f
         flag = deforayValidator.init({
             formId: 'updateHepatitisRequestForm'
         });
-        if (flag && checkresult) {
+        if (flag) {
             document.getElementById('updateHepatitisRequestForm').submit();
         }
     }

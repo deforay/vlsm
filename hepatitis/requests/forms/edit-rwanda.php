@@ -224,7 +224,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                     <tr>
                                         <th><label for="patientGender">Marital Status</label></th>
                                         <td>
-                                            <select class="form-control isRequired" name="maritalStatus" id="maritalStatus" title="Please select the Marital Status">
+                                            <select class="form-control" name="maritalStatus" id="maritalStatus" title="Please select the Marital Status">
                                                 <option value=''> -- Select -- </option>
                                                 <option value='married' <?php echo ($hepatitisInfo['patient_marital_status'] == 'married') ? "selected='selected'" : ""; ?>> Married </option>
                                                 <option value='single' <?php echo ($hepatitisInfo['patient_marital_status'] == 'single') ? "selected='selected'" : ""; ?>> Single </option>
@@ -236,7 +236,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         </td>
                                         <th><label for="patientGender">Insurance</label></th>
                                         <td>
-                                            <select class="form-control isRequired" name="insurance" id="insurance" title="Please select the Insurance">
+                                            <select class="form-control" name="insurance" id="insurance" title="Please select the Insurance">
                                                 <option value=''> -- Select -- </option>
                                                 <option value='mutuelle' <?php echo ($hepatitisInfo['patient_insurance'] == 'mutuelle') ? "selected='selected'" : ""; ?>> Mutuelle </option>
                                                 <option value='RAMA' <?php echo ($hepatitisInfo['patient_insurance'] == 'RAMA') ? "selected='selected'" : ""; ?>> RAMA </option>
@@ -652,7 +652,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
             checkresult = true;
         } else{
             checkresult = false;
-            alert("Please select least one of the screening by RDTs result");
+            alert("Please select test result for screening");
             $('#HBsAg').focus();
         }
 
