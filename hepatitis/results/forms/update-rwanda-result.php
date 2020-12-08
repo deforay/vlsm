@@ -115,7 +115,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $hepatitisInfo['f
                                     <td><label for="facilityId">Health Facility </label><span class="mandatory">*</span></td>
                                     <td>
                                         <select class="form-control isRequired " name="facilityId" id="facilityId" title="Please choose service provider" style="width:100%;" onchange="getfacilityProvinceDetails(this);">
-                                            <?php echo $facility; ?>
+                                        <?= $general->generateSelectOptions($healthFacilities, $hepatitisInfo['facility_id'], '-- Select --'); ?>
                                         </select>
                                     </td>
                                 </tr>
@@ -240,7 +240,23 @@ $facility = $general->generateSelectOptions($healthFacilities, $hepatitisInfo['f
                                     <td><input class="form-control" value="<?php echo $hepatitisInfo['patient_district']; ?>" id="patientDistrict" name="patientDistrict" placeholder="Patient District" title="Please enter the patient district" style="width:100%;"></td>
                                 </tr>
                             </table>
-
+                            <table class="table" style="border-top:#ccc 2px solid;">
+                                <tr>
+                                    <th style="width:15% !important">
+                                        <label for="testNumber">Ubudehe</label>
+                                    </th>
+                                    <td style="width:35% !important">
+                                        <select name="testNumber" id="testNumber" class="form-control" title="Please choose ubudehe" style="width:100%">
+                                            <option value="">-- Select --</option>
+                                            <?php foreach(array('A','B','C','D','E') as $val){ ?>
+                                                <option value="<?php echo $val;?>" <?php echo ($hepatitisInfo['test_number'] == $val) ? "selected='selected'" : ""; ?>><?php echo $val;?></option>
+                                            <?php }?>
+                                        </select>
+                                    </td>
+                                    <th style="width:15% !important"></th>
+                                    <td style="width:35% !important"></td>
+                                </tr>
+                            </table>
                             <br><br>
                             <table class="table">
                                 <tr>
@@ -258,10 +274,10 @@ $facility = $general->generateSelectOptions($healthFacilities, $hepatitisInfo['f
                                                 <option value="">-- Select --</option>
                                                 <option value="yes" <?php echo (isset($comorbidityInfo[$id]) && $comorbidityInfo[$id] == 'yes')?"selected='selected'":"";?>>Yes</option>
                                                 <option value="no" <?php echo (isset($comorbidityInfo[$id]) && $comorbidityInfo[$id] == 'no')?"selected='selected'":"";?>>No</option>
-                                                <option value="other" <?php echo (isset($comorbidityInfo[$id]) && $comorbidityInfo[$id] != 'yes' && $comorbidityInfo[$id] != 'no')?"selected='selected'":"";?>>Others</option>
+                                                <option value="other" <?php echo (isset($comorbidityInfo[$id]) && $comorbidityInfo[$id] != 'yes' && $comorbidityInfo[$id] != 'no' && $comorbidityInfo[$id] != "")?"selected='selected'":"";?>>Others</option>
                                             </select>
                                         </td>
-                                        <?php $display = (isset($comorbidityInfo[$id]) && $comorbidityInfo[$id] != 'yes' && $comorbidityInfo[$id] != 'no')?"revert":"none";?>
+                                        <?php $display = (isset($comorbidityInfo[$id]) && $comorbidityInfo[$id] != 'yes' && $comorbidityInfo[$id] != 'no' && $comorbidityInfo[$id] != "")?"revert":"none";?>
                                         <th class="show-comorbidity<?php echo $id;?>" style="display:<?php echo $display;?>;">
                                             <label for="comorbidityOther<?php echo $id;?>">Enter other comorbidity for <?php echo ucwords($name);?></label>
                                         </th>
@@ -288,10 +304,10 @@ $facility = $general->generateSelectOptions($healthFacilities, $hepatitisInfo['f
                                                 <option value="">-- Select --</option>
                                                 <option value="yes" <?php echo (isset($riskFactorsInfo[$id]) && $riskFactorsInfo[$id] == 'yes')?"selected='selected'":"";?>>Yes</option>
                                                 <option value="no" <?php echo (isset($riskFactorsInfo[$id]) && $riskFactorsInfo[$id] == 'no')?"selected='selected'":"";?>>No</option>
-                                                <option value="other" <?php echo (isset($riskFactorsInfo[$id]) && $riskFactorsInfo[$id] != 'yes' && $riskFactorsInfo[$id] != 'no')?"selected='selected'":"";?>>Others</option>
+                                                <option value="other" <?php echo (isset($riskFactorsInfo[$id]) && $riskFactorsInfo[$id] != 'yes' && $riskFactorsInfo[$id] != 'no' && $riskFactorsInfo[$id] != "")?"selected='selected'":"";?>>Others</option>
                                             </select>
                                         </td>
-                                        <?php $display = (isset($riskFactorsInfo[$id]) && $riskFactorsInfo[$id] != 'yes' && $riskFactorsInfo[$id] != 'no')?"revert":"none";?>
+                                        <?php $display = (isset($riskFactorsInfo[$id]) && $riskFactorsInfo[$id] != 'yes' && $riskFactorsInfo[$id] != 'no' && $riskFactorsInfo[$id] != "")?"revert":"none";?>
                                         <th class="show-riskfactor<?php echo $id;?>" style="display:<?php echo $display;?>;">
                                             <label for="riskFactors">Enter other risk factor for <?php echo ucwords($name);?></label>
                                         </th>
@@ -339,7 +355,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $hepatitisInfo['f
                                         <option value=''> -- Select -- </option>
                                         <option value='positive' <?php echo ($hepatitisInfo['hbsag_result'] == 'positive') ? "selected='selected'" : ""; ?>>Positive</option>
                                         <option value='negative' <?php echo ($hepatitisInfo['hbsag_result'] == 'negative') ? "selected='selected'" : ""; ?>>Negative</option>
-                                        <option value='interminate' <?php echo ($hepatitisInfo['hbsag_result'] == 'interminate') ? "selected='selected'" : ""; ?>>Interminate</option>
+                                        <option value='intermediate' <?php echo ($hepatitisInfo['hbsag_result'] == 'intermediate') ? "selected='selected'" : ""; ?>>Intermediate</option>
                                     </select>
                                 </td>
                                 <th><label for="antiHcv">Anti-HCV Result</label></th>
@@ -348,7 +364,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $hepatitisInfo['f
                                         <option value=''> -- Select -- </option>
                                         <option value='positive' <?php echo ($hepatitisInfo['anti_hcv_result'] == 'positive') ? "selected='selected'" : ""; ?>>Positive</option>
                                         <option value='negative' <?php echo ($hepatitisInfo['anti_hcv_result'] == 'negative') ? "selected='selected'" : ""; ?>>Negative</option>
-                                        <option value='interminate' <?php echo ($hepatitisInfo['anti_hcv_result'] == 'interminate') ? "selected='selected'" : ""; ?>>Interminate</option>
+                                        <option value='intermediate' <?php echo ($hepatitisInfo['anti_hcv_result'] == 'intermediate') ? "selected='selected'" : ""; ?>>Intermediate</option>
                                     </select>
                                 </td>
                             </tr>
@@ -372,9 +388,9 @@ $facility = $general->generateSelectOptions($healthFacilities, $hepatitisInfo['f
                                 </div>
                                 <table class="table" style="width:100%">
                                     <tr>
-                                        <th><label for="">Sample Received Date </label></th>
+                                        <th><label for="">Sample Received Date <span class="mandatory">*</span></label></th>
                                         <td>
-                                            <input value="<?php echo $general->humanDateFormat($hepatitisInfo['sample_received_at_vl_lab_datetime']) ?>" type="text" class="form-control" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter sample receipt date" style="width:100%;" />
+                                            <input value="<?php echo $general->humanDateFormat($hepatitisInfo['sample_received_at_vl_lab_datetime']) ?>" type="text" class="form-control isRequired" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter sample receipt date" style="width:100%;" />
                                         </td>
                                         <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
                                         <td>
@@ -384,19 +400,19 @@ $facility = $general->generateSelectOptions($healthFacilities, $hepatitisInfo['f
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th><label for="sampleTestedDateTime">Vl Testing Date</label></th>
+                                        <th><label for="sampleTestedDateTime">VL Testing Date <span class="mandatory">*</span></label></th>
                                         <td>
-                                            <input value="<?php echo $general->humanDateFormat($hepatitisInfo['sample_tested_datetime']) ?>" type="text" class="form-control" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Please enter testing date" style="width:100%;" />
+                                            <input value="<?php echo $general->humanDateFormat($hepatitisInfo['sample_tested_datetime']) ?>" type="text" class="form-control isRequired" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Please enter testing date" style="width:100%;" />
                                         </td>
-                                        <th><label for="vlTestingSite">Vl Testing Site</label></th>
+                                        <th><label for="vlTestingSite">VL Testing Site</label></th>
                                         <td>
                                             <input value="<?php echo $hepatitisInfo['vl_testing_site'];?>" type="text" class="form-control" id="vlTestingSite" name="vlTestingSite" placeholder="Testing Site" title="Please enter testing site" style="width:100%;" />
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th><label for="reasonVlTest">VL test purpose</label></th>
+                                        <th><label for="reasonVlTest">VL test purpose <span class="mandatory">*</span></label></th>
                                         <td>
-                                            <select class="form-control" name="reasonVlTest" id="reasonVlTest">
+                                            <select class="form-control isRequired" name="reasonVlTest" id="reasonVlTest" title="Please select test purpose">
                                                 <option value=''> -- Select -- </option>
                                                 <option value='Initial HCV VL' <?php echo ($hepatitisInfo['reason_for_vl_test'] == 'Initial HCV VL') ? "selected='selected'" : ""; ?>>Initial HCV VL</option>
                                                 <option value='SVR12 HCV VL' <?php echo ($hepatitisInfo['reason_for_vl_test'] == 'SVR12 HCV VL') ? "selected='selected'" : ""; ?>>SVR12 HCV VL</option>
@@ -449,8 +465,8 @@ $facility = $general->generateSelectOptions($healthFacilities, $hepatitisInfo['f
                                         </td>
                                     </tr>
                                     <tr>
-                                            <td><label for="">Testing Platform </label></td>
-                                            <td><select name="hepatitisPlatform" id="hepatitisPlatform" class="form-control rejected-input" title="Please select the testing platform">
+                                            <td><label for="">Testing Platform <span class="mandatory">*</span></label></td>
+                                            <td><select name="hepatitisPlatform" id="hepatitisPlatform" class="form-control isRequired" title="Please select the testing platform">
                                                     <?= $general->generateSelectOptions($testPlatformList, $hepatitisInfo['hepatitis_test_platform'], '-- Select --'); ?>
                                                 </select>
                                             </td>
@@ -601,17 +617,6 @@ $facility = $general->generateSelectOptions($healthFacilities, $hepatitisInfo['f
     }
 
     function validateNow() {
-        var rejected = $('#isSampleRejected').val();
-        if(rejected != 'yes'){
-            if(($('#hcv').val() != "" || $('#antiHcv').val() != "") &&($('#hbv').val() != "" || $('#HBsAg').val() != "")){
-                checkresult = true;
-            } else{
-                checkresult = false;
-                alert("Please select least one of the result");
-            }
-        } else{
-            checkresult = true;
-        }
         if ($('#isResultAuthorized').val() != "yes" && $('#result').val() == "") {
             $('#authorizedBy,#authorizedOn').removeClass('isRequired');
         } else {
@@ -621,7 +626,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $hepatitisInfo['f
         flag = deforayValidator.init({
             formId: 'updateHepatitisRequestForm'
         });
-        if (flag && checkresult) {
+        if (flag) {
             document.getElementById('updateHepatitisRequestForm').submit();
         }
     }

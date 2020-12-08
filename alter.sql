@@ -1943,7 +1943,7 @@ CREATE TABLE `hepatitis_risk_factors` (
  PRIMARY KEY (`hepatitis_id`,`riskfactors_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO `global_config` (`display_name`, `name`, `value`, `category`, `remote_sync_needed`, `updated_on`, `updated_by`, `status`) VALUES ('Hepatitis Sample Code Format', 'hepatitis_sample_code', 'MMYY', 'hepatitis', 'yes', '2020-11-17 18:47:05', NULL, 'active'), ('Hepatitis Sample Code Prefix', 'hepatitis_sample_code_prefix', 'VLHEP', 'hepatitis', 'yes', '2020-11-17 18:47:05', NULL, 'active');
+INSERT INTO `global_config` (`display_name`, `name`, `value`, `category`, `remote_sync_needed`, `updated_on`, `updated_by`, `status`) VALUES ('Hepatitis Sample Code Format', 'hepatitis_sample_code', 'MMYY', 'hepatitis', 'yes', '2020-11-17 18:47:05', NULL, 'active'), ('Hepatitis Sample Code Prefix', 'hepatitis_sample_code_prefix', 'HEP', 'hepatitis', 'yes', '2020-11-17 18:47:05', NULL, 'active');
 
 -- Thana 19-Nov-2020
 ALTER TABLE `form_hepatitis` ADD `hbv_vaccination` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_insurance`, ADD `vl_testing_site` VARCHAR(255) NULL DEFAULT NULL AFTER `hbv_vl_count`;
@@ -1996,6 +1996,7 @@ CREATE TABLE `r_hepatitis_results` (
  `data_sync` int NOT NULL DEFAULT '0',
  PRIMARY KEY (`result_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 ALTER TABLE `form_hepatitis` ADD `reason_for_vl_test` VARCHAR(255) NULL DEFAULT NULL AFTER `type_of_test_requested`;
 
 ALTER TABLE `testing_labs` CHANGE `test_type` `test_type` ENUM('vl','eid','covid19','hepatitis') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
@@ -2004,14 +2005,14 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 -- Thana 25-Nov-2020
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'hepatitis-requests', 'hepatitis-result-status.php', 'Manage Result Status');
 
---Sudarmathi 25 Nov 2020
+-- Sudarmathi 25 Nov 2020
 INSERT INTO `resources` (`resource_id`, `module`, `display_name`) VALUES ('hepatitis-reference', 'admin', 'Hepatitis Reference Tables');
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'hepatitis-reference', 'hepatitis-sample-type.php', 'Manage Hepatitis Reference');
 -- Thana 26-Nov-2020
 INSERT INTO `global_config` (`display_name`, `name`, `value`, `category`, `remote_sync_needed`, `updated_on`, `updated_by`, `status`) VALUES ('Report Type', 'hepatitis_report_type', 'who', 'hepatitis', 'yes', '2020-11-26 17:35:16', NULL, 'active');
 
 
---Prasath M 27-Nov-2020
+-- Prasath M 27-Nov-2020
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'vl-reports', 'vlSuppressedTargetReport.php', 'Monthly Threshold Report');
 -- Thana 30-Nov-2020
 INSERT INTO `resources` (`resource_id`, `module`, `display_name`) VALUES ('hepatitis-batches', 'hepatitis', 'Hepatitis Batch Management');
@@ -2023,3 +2024,6 @@ UPDATE `resources` SET `display_name` = 'Hepatitis Reference Management' WHERE `
 -- Prasath 08-Dec-2020
 INSERT INTO `resources` (`resource_id`, `module`, `display_name`) VALUES ('hepatitis-reports', 'hepatitis', 'Hepatitis Reports');
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'hepatitis-reports', 'hepatitis-clinic-report.php', 'Hepatitis Clinic Reports'), (NULL, 'hepatitis-reports', 'hepatitis-testing-target-report.php', 'Hepatitis Testing Target Reports'), (NULL, 'hepatitis-reports', 'hepatitis-sample-rejection-report.php', 'Hepatitis Sample Rejection Reports'), (NULL, 'hepatitis-reports', 'hepatitis-sample-status.php', 'Hepatitis Sample Status Reports');
+-- Thana 04-Dec-2020
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'hepatitis-requests', 'add-samples-from-manifest.php', 'Add Samples from Manifest');
+DELETE FROM `global_config` WHERE name = 'hepatitis_report_type';

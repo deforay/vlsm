@@ -36,18 +36,13 @@ $province .= "<option value=''> -- Select -- </option>";
 foreach ($pdResult as $provinceName) {
     $province .= "<option data-code='" . $provinceName['province_code'] . "' data-province-id='" . $provinceName['province_id'] . "' data-name='" . $provinceName['province_name'] . "' value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
-//$facility = "";
-$facility = "<option value=''> -- Select -- </option>";
-foreach ($fResult as $fDetails) {
-    $facility .= "<option value='" . $fDetails['facility_id'] . "'>" . ucwords(addslashes($fDetails['facility_name'])) . "</option>";
-}
 
 ?>
 
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <h1><i class="fa fa-edit"></i> WHO HEPATITIS LABORATORY TEST REQUEST FORM</h1>
+        <h1><i class="fa fa-edit"></i> RWANDA HEPATITIS LABORATORY TEST REQUEST FORM</h1>
         <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
             <li class="active">Add New Request</li>
@@ -109,7 +104,7 @@ foreach ($fResult as $fDetails) {
                                         <td><label for="facilityId">Health Facility </label><span class="mandatory">*</span></td>
                                         <td>
                                             <select class="form-control isRequired " name="facilityId" id="facilityId" title="Please choose service provider" style="width:100%;" onchange="getfacilityProvinceDetails(this);">
-                                                <?php echo $facility; ?>
+                                                <?= $general->generateSelectOptions($healthFacilities, null, '-- Select --'); ?>
                                             </select>
                                         </td>
                                     </tr>
@@ -142,9 +137,7 @@ foreach ($fResult as $fDetails) {
                                         <td>
                                             <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;">
                                                 <option value=""> -- Select -- </option>
-                                                <?php foreach ($lResult as $labName) { ?>
-                                                    <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
-                                                <?php } ?>
+                                                <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
                                             </select>
                                         </td>
                                         <?php } else{ ?> 
@@ -198,7 +191,7 @@ foreach ($fResult as $fDetails) {
                                     <tr>
                                         <th><label for="patientGender">Marital Status</label></th>
                                         <td>
-                                            <select class="form-control isRequired" name="maritalStatus" id="maritalStatus">
+                                            <select class="form-control" name="maritalStatus" id="maritalStatus">
                                                 <option value=''> -- Select -- </option>
                                                 <option value='married'> Married </option>
                                                 <option value='single'> Single </option>
@@ -210,7 +203,7 @@ foreach ($fResult as $fDetails) {
                                         </td>
                                         <th><label for="patientGender">Insurance</label></th>
                                         <td>
-                                            <select class="form-control isRequired" name="insurance" id="insurance">
+                                            <select class="form-control" name="insurance" id="insurance">
                                                 <option value=''> -- Select -- </option>
                                                 <option value='mutuelle'> Mutuelle </option>
                                                 <option value='RAMA'> RAMA </option>
@@ -234,6 +227,24 @@ foreach ($fResult as $fDetails) {
 
                                         <th>District</th>
                                         <td><input class="form-control" id="patientDistrict" name="patientDistrict" placeholder="Patient District" title="Please enter the patient district" style="width:100%;"></td>
+                                    </tr>
+                                </table>
+                                <br><br>
+                                <table class="table" style="border-top:#ccc 2px solid;">
+                                    <tr>
+                                        <th style="width:15% !important">
+                                            <label for="testNumber">Ubudehe</label>
+                                        </th>
+                                        <td style="width:35% !important">
+                                            <select name="testNumber" id="testNumber" class="form-control" title="Please choose ubudehe">
+                                                <option value="">-- Select --</option>
+                                                <?php foreach(array('A','B','C','D','E') as $val){ ?>
+                                                    <option value="<?php echo $val;?>"><?php echo $val;?></option>
+                                                <?php }?>
+                                            </select>
+                                        </td>
+                                        <th style="width:15% !important"></th>
+                                        <td style="width:35% !important"></td>
                                     </tr>
                                 </table>
                                 <br><br>
@@ -332,20 +343,20 @@ foreach ($fResult as $fDetails) {
                                 <tr>
                                     <th><label for="HBsAg">HBsAg Result</label></th>
                                     <td>
-                                        <select class="form-control rejected-input" name="HBsAg" id="HBsAg" title="Please choose HBsAg result">
+                                        <select class="form-control" name="HBsAg" id="HBsAg" title="Please choose HBsAg result">
                                             <option value=''> -- Select -- </option>
                                             <option value='positive'>Positive</option>
                                             <option value='negative'>Negative</option>
-                                            <option value='interminate'>Interminate</option>
+                                            <option value='intermediate'>Intermediate</option>
                                         </select>
                                     </td>
                                     <th><label for="antiHcv">Anti-HCV Result</label></th>
                                     <td>
-                                        <select class="form-control rejected-input" name="antiHcv" id="antiHcv" title="Please choose Anti-HCV result">
+                                        <select class="form-control" name="antiHcv" id="antiHcv" title="Please choose Anti-HCV result">
                                             <option value=''> -- Select -- </option>
                                             <option value='positive'>Positive</option>
                                             <option value='negative'>Negative</option>
-                                            <option value='interminate'>Interminate</option>
+                                            <option value='intermediate'>Intermediate</option>
                                         </select>
                                     </td>
                                 </tr>
@@ -369,29 +380,29 @@ foreach ($fResult as $fDetails) {
                                         <tr>
                                             <th><label for="">Sample Received Date </label></th>
                                             <td>
-                                                <input type="text" class="form-control" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter sample receipt date" style="width:100%;" />
+                                                <input type="text" class="labSecInput form-control" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter sample receipt date" style="width:100%;" />
                                             </td>
                                             <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
                                             <td>
-                                                <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;">
+                                                <select name="labId" id="labId" class="form-control" title="Please select Testing Lab name" style="width:100%;">
                                                     <?= $general->generateSelectOptions($testingLabs, $hepatitisInfo['lab_id'], '-- Select --'); ?>
                                                 </select>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th><label for="sampleTestedDateTime">Vl Testing Date</label></th>
+                                            <th><label for="sampleTestedDateTime">VL Testing Date</label></th>
                                             <td>
-                                                <input type="text" class="form-control" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Please enter testing date" style="width:100%;" />
+                                                <input type="text" class="labSecInput form-control" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Please enter testing date" style="width:100%;" />
                                             </td>
-                                            <th><label for="vlTestingSite">Vl Testing Site</label></th>
+                                            <th><label for="vlTestingSite">VL Testing Site</label></th>
                                             <td>
-                                                <input type="text" class="form-control" id="vlTestingSite" name="vlTestingSite" placeholder="Testing Site" title="Please enter testing site" style="width:100%;" />
+                                                <input type="text" class="labSecInput form-control" id="vlTestingSite" name="vlTestingSite" placeholder="Testing Site" title="Please enter testing site" style="width:100%;" />
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><label for="reasonVlTest">VL test purpose</label></th>
                                             <td>
-                                                <select class="form-control" name="reasonVlTest" id="reasonVlTest" title="Please choose VL test purpose">
+                                                <select class="labSecInput form-control" name="reasonVlTest" id="reasonVlTest" title="Please choose VL test purpose">
                                                     <option value=''> -- Select -- </option>
                                                     <option value='Initial HCV VL'>Initial HCV VL</option>
                                                     <option value='SVR12 HCV VL'>SVR12 HCV VL</option>
@@ -401,7 +412,7 @@ foreach ($fResult as $fDetails) {
                                             </td>
                                             <th>Is Sample Rejected ?</th>
                                             <td>
-                                                <select class="form-control" name="isSampleRejected" id="isSampleRejected">
+                                                <select class="labSecInput form-control" name="isSampleRejected" id="isSampleRejected">
                                                     <option value=''> -- Select -- </option>
                                                     <option value="yes"> Yes </option>
                                                     <option value="no"> No </option>
@@ -422,13 +433,13 @@ foreach ($fResult as $fDetails) {
                                         <tr>
                                             <th><label for="hcv">HCV VL Result</label></th>
                                             <td>
-                                                <select class="form-control rejected-input" name="hcv" id="hcv">
+                                                <select class="labSecInput form-control rejected-input" name="hcv" id="hcv">
                                                     <?= $general->generateSelectOptions($hepatitisResults, null, '-- Select --'); ?>
                                                 </select>
                                             </td>
                                             <th><label for="hbv">HBV VL Result</label></th>
                                             <td>
-                                                <select class="form-control rejected-input" name="hbv" id="hbv">
+                                                <select class="labSecInput form-control rejected-input" name="hbv" id="hbv">
                                                     <?= $general->generateSelectOptions($hepatitisResults, null, '-- Select --'); ?>
                                                 </select>
                                             </td>
@@ -436,21 +447,21 @@ foreach ($fResult as $fDetails) {
                                         <tr>
                                             <th><label for="hcvCount">HCV VL Count</label></th>
                                             <td>
-                                                <input type="text" class="form-control rejected-input" placeholder="Enter HCV Count" title="Please enter HCV Count" name="hcvCount" id="hcvCount">
+                                                <input type="text" class="labSecInput form-control rejected-input" placeholder="Enter HCV Count" title="Please enter HCV Count" name="hcvCount" id="hcvCount">
                                             </td>
                                             <th><label for="hbvCount">HBV VL Count</label></th>
                                             <td>
-                                                <input type="text" class="form-control rejected-input" placeholder="Enter HBV Count" title="Please enter HBV Count" name="hbvCount" id="hbvCount">
+                                                <input type="text" class="labSecInput form-control rejected-input" placeholder="Enter HBV Count" title="Please enter HBV Count" name="hbvCount" id="hbvCount">
                                             </td>
                                         </tr>
                                         <tr>
                                             <td><label for="">Testing Platform </label></td>
-                                            <td><select name="hepatitisPlatform" id="hepatitisPlatform" class="form-control rejected-input" title="Please select the testing platform">
+                                            <td><select name="hepatitisPlatform" id="hepatitisPlatform" class="labSecInput form-control rejected-input" title="Please select the testing platform">
                                                     <?= $general->generateSelectOptions($testPlatformList, null, '-- Select --'); ?>
                                                 </select>
                                             </td>
                                             <td><label for="">Machine used to test </label></td>
-                                            <td><select name="machineName" id="machineName" class="form-control rejected-input" title="Please select the machine name" ">
+                                            <td><select name="machineName" id="machineName" class="labSecInput form-control rejected-input" title="Please select the machine name" ">
                                                 <option value="">-- Select --</option>
                                                 </select>
                                             </td>
@@ -458,18 +469,18 @@ foreach ($fResult as $fDetails) {
                                         <tr>
                                             <th>Is Result Authorized ?</th>
                                             <td>
-                                                <select name="isResultAuthorized" id="isResultAuthorized" class="disabled-field form-control rejected-input" title="Is Result authorized ?" style="width:100%">
+                                                <select name="isResultAuthorized" id="isResultAuthorized" class="labSecInput disabled-field form-control rejected-input" title="Is Result authorized ?" style="width:100%">
                                                     <option value="">-- Select --</option>
                                                     <option value='yes'> Yes </option>
                                                     <option value='no'> No </option>
                                                 </select>
                                             </td>
                                             <th>Authorized By</th>
-                                            <td><input type="text" name="authorizedBy" id="authorizedBy" class="disabled-field form-control rejected-input" placeholder="Authorized By" /></td>
+                                            <td><input type="text" name="authorizedBy" id="authorizedBy" class="labSecInput disabled-field form-control rejected-input" placeholder="Authorized By" /></td>
                                         </tr>
                                         <tr>
                                             <th>Authorized on</td>
-                                            <td><input type="text" name="authorizedOn" id="authorizedOn" class="disabled-field form-control date rejected-input" placeholder="Authorized on" /></td>
+                                            <td><input type="text" name="authorizedOn" id="authorizedOn" class="labSecInput disabled-field form-control date rejected-input" placeholder="Authorized on" /></td>
                                             <th></th>
                                             <td></td>
                                         </tr>
@@ -638,16 +649,18 @@ foreach ($fResult as $fDetails) {
 
 
     function validateNow() {
-        var rejected = $('#isSampleRejected').val();
-        if(rejected != 'yes'){
-            if(($('#hcv').val() != "" || $('#antiHcv').val() != "") &&($('#hbv').val() != "" || $('#HBsAg').val() != "")){
-                checkresult = true;
-            } else{
-                checkresult = false;
-                alert("Please select least one of the result");
+        $('#labId').removeClass('isRequired');
+        $('.labSecInput').each(function(){
+            if ($(this).val()){
+                $('#labId').addClass('isRequired');
             }
-        } else{
+        });
+        if($('#antiHcv').val() != "" || $('#HBsAg').val() != ""){
             checkresult = true;
+        } else{
+            checkresult = false;
+            alert("Please select test result for screening");
+            $('#HBsAg').focus();
         }
 
         if ($('#isResultAuthorized').val() != "yes") {

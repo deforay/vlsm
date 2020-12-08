@@ -28,6 +28,8 @@ if($type == 'vl'){
     include_once(APPLICATION_PATH.DIRECTORY_SEPARATOR."import-configs".DIRECTORY_SEPARATOR."eid".DIRECTORY_SEPARATOR.$confFileName);
 }else if($type == 'covid19'){
     include_once(APPLICATION_PATH.DIRECTORY_SEPARATOR."import-configs".DIRECTORY_SEPARATOR."covid-19".DIRECTORY_SEPARATOR.$confFileName);
+}else if($type == 'hepatitis'){
+    include_once(APPLICATION_PATH.DIRECTORY_SEPARATOR."import-configs".DIRECTORY_SEPARATOR."hepatitis".DIRECTORY_SEPARATOR.$confFileName);
 }
 
 

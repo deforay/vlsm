@@ -90,6 +90,40 @@ if ($data['Key'] == 'vlsm-get-remote') {
         }
         $response['covid19ReasonForTesting'] = $general->fetchDataFromTable('r_covid19_test_reasons', $condition);
     }
+    
+    if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) {
+
+        $condition = null;
+        if (isset($data['hepatitisRejectionReasonsLastModified']) && !empty($data['hepatitisRejectionReasonsLastModified'])) {
+            $condition = "updated_datetime > '" . $data['hepatitisRejectionReasonsLastModified'] . "'";
+        }
+        $response['hepatitisRejectionReasons'] = $general->fetchDataFromTable('r_hepatitis_sample_rejection_reasons', $condition);
+
+
+        $condition = null;
+        if (isset($data['hepatitisSampleTypesLastModified']) && !empty($data['hepatitisSampleTypesLastModified'])) {
+            $condition = "updated_datetime > '" . $data['hepatitisSampleTypesLastModified'] . "'";
+        }
+        $response['hepatitisSampleTypes'] = $general->fetchDataFromTable('r_hepatitis_sample_type', $condition);
+        
+        $condition = null;
+        if (isset($data['hepatitisComorbiditiesLastModified']) && !empty($data['hepatitisComorbiditiesLastModified'])) {
+            $condition = "updated_datetime > '" . $data['hepatitisComorbiditiesLastModified'] . "'";
+        }
+        $response['hepatitisComorbidities'] = $general->fetchDataFromTable('r_hepatitis_comorbidities', $condition);
+        
+        $condition = null;
+        if (isset($data['hepatitisResultsLastModified']) && !empty($data['hepatitisResultsLastModified'])) {
+            $condition = "updated_datetime > '" . $data['hepatitisResultsLastModified'] . "'";
+        }
+        $response['hepatitisResults'] = $general->fetchDataFromTable('r_hepatitis_results', $condition);
+        
+        $condition = null;
+        if (isset($data['hepatitisReasonForTestingLastModified']) && !empty($data['hepatitisReasonForTestingLastModified'])) {
+            $condition = "updated_datetime > '" . $data['hepatitisReasonForTestingLastModified'] . "'";
+        }
+        $response['hepatitisReasonForTesting'] = $general->fetchDataFromTable('r_hepatitis_test_reasons', $condition);
+    }
 
 
     $condition = null;

@@ -702,23 +702,6 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 									<h3 class="panel-title">Hepatitis Settings</h3>
 								</div>
 								<div class="panel-body">
-									<?php if (isset($arr['hepatitis_report_type']) && $arr['hepatitis_report_type'] != '') { ?>
-									<div class="row">
-										<div class="col-md-12">
-											<div class="form-group">
-												<label for="hepatitisReportType" class="col-lg-2 control-label">Hepatitis Report Type<span class="mandatory ">*</span></label>
-												<div class="col-lg-4">
-													<select name="hepatitisReportType" id="hepatitisReportType" class="form-control isRequired" title="Please select hepatitis report type">
-														<option value="">-- Select --</option>
-														<option value='rwanda' <?php echo ($arr['hepatitis_report_type'] == 'rwanda') ? "selected='selected'" : ""; ?>> Rwanda </option>
-														<option value='who' <?php echo ($arr['hepatitis_report_type'] == 'who') ? "selected='selected'" : ""; ?>> WHO </option>
-													</select>
-												</div>
-											</div>
-										</div>
-									</div>
-									<?php }?>
-
 									<div class="row">
 										<div class="col-md-12">
 											<div class="form-group">
