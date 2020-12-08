@@ -585,6 +585,37 @@
 		$(".hepatitis-reference-manage").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".hepatitis-results").addClass('active');
+	}else if (splitsUrl == 'hepatitis-sample-status.php') {
+		$(".manage").removeClass('active');
+		$(".hepatitisProgramMenu").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".hepatitisSampleStatus").addClass('active');
+	}
+	else if (splitsUrl == 'hepatitis-export-data.php') {
+		$(".manage").removeClass('active');
+		$(".hepatitisProgramMenu").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".hepatitisExportResult").addClass('active');
+	}else if (splitsUrl == 'hepatitis-print-results.php') {
+		$(".manage").removeClass('active');
+		$(".hepatitisProgramMenu").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".hepatitisPrintResults").addClass('active');
+	}else if (splitsUrl == 'hepatitis-sample-rejection-report.php') {
+		$(".manage").removeClass('active');
+		$(".hepatitisProgramMenu").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".hepatitisSampleRejectionReport").addClass('active');
+	}else if (splitsUrl == 'hepatitis-clinic-report.php') {
+		$(".manage").removeClass('active');
+		$(".hepatitisProgramMenu").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".hepatitisClinicReportMenu").addClass('active');
+	}else if (splitsUrl == 'hepatitis-testing-target-report.php') {
+		$(".manage").removeClass('active');
+		$(".hepatitisProgramMenu").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".hepatitisMonthlyThresholdReport").addClass('active');
 	} else {
 		$(".allMenu").removeClass('active');
 		$(".dashboardMenu").addClass('active');

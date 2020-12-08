@@ -2019,3 +2019,7 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 
 -- Thana 03-Dec-2020
 UPDATE `resources` SET `display_name` = 'Hepatitis Reference Management' WHERE `resources`.`resource_id` = 'hepatitis-reference';
+
+-- Prasath 08-Dec-2020
+INSERT INTO `resources` (`resource_id`, `module`, `display_name`) VALUES ('hepatitis-reports', 'hepatitis', 'Hepatitis Reports');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'hepatitis-reports', 'hepatitis-clinic-report.php', 'Hepatitis Clinic Reports'), (NULL, 'hepatitis-reports', 'hepatitis-testing-target-report.php', 'Hepatitis Testing Target Reports'), (NULL, 'hepatitis-reports', 'hepatitis-sample-rejection-report.php', 'Hepatitis Sample Rejection Reports'), (NULL, 'hepatitis-reports', 'hepatitis-sample-status.php', 'Hepatitis Sample Status Reports');
