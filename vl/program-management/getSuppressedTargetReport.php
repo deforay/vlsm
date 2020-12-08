@@ -23,7 +23,7 @@ $tableName = "vl_request_form";
 $primaryKey = "vl_sample_id";
 
 
-$sQuery = "SELECT   DATE_FORMAT(DATE(vl.sample_tested_datetime), '%Y-%b') as monthrange, f.*, vl.*, hf.suppressed_monthly_target FROM testing_labs as hf INNER JOIN vl_request_form as vl ON vl.lab_id=hf.facility_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  ";
+$sQuery = "SELECT DATE_FORMAT(DATE(vl.sample_tested_datetime), '%Y-%b') as monthrange, f.*, vl.*, hf.suppressed_monthly_target FROM testing_labs as hf INNER JOIN vl_request_form as vl ON vl.lab_id=hf.facility_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  ";
 
 $sWhere = $sWhere . ' where  vl.vlsm_country_id="' . $formId . '" AND vl.result_status!=9';
 if (isset($_POST['facilityName']) && count($_POST['facilityName']) > 0) {

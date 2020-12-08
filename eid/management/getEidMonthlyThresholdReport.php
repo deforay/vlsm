@@ -104,9 +104,11 @@ for ($i = 0; $i < count($aColumns); $i++) {
           * Get data to display
           */
 $aWhere = '';
-// $sQuery = "SELECT vl.*,s.sample_name,b.*,ts.*,f.facility_name,l_f.facility_name as labName,f.facility_code,f.facility_state,f.facility_district,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy,rs.rejection_reason_name,tr.test_reason_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_vl_art_regimen as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_vl_sample_type as rst ON rst.sample_id=vl.last_vl_sample_type_routine LEFT JOIN r_vl_sample_type as fst ON fst.sample_id=vl.last_vl_sample_type_failure_ac  LEFT JOIN r_vl_sample_type as sst ON sst.sample_id=vl.last_vl_sample_type_failure LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by LEFT JOIN r_vl_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection LEFT JOIN r_vl_test_reasons as tr ON tr.test_reason_id=vl.reason_for_vl_testing";
-// $sQuery = "SELECT count(*) as total, DATE_FORMAT(DATE(vl.sample_tested_datetime), '%b-%Y') as monthrange, f.facility_name, vl.lab_id, hf.monthly_target FROM testing_labs as hf INNER JOIN eid_form as vl ON vl.lab_id=hf.facility_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  ";
-$sQuery = "SELECT   DATE_FORMAT(DATE(vl.sample_tested_datetime), '%b-%Y') as monthrange, f.*, vl.*, hf.monthly_target FROM testing_labs as hf INNER JOIN eid_form as vl ON vl.lab_id=hf.facility_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  ";
+
+$sQuery = "SELECT  DATE_FORMAT(DATE(vl.sample_tested_datetime), '%b-%Y') as monthrange, f.facility_id, f.facility_name, vl.is_sample_rejected,vl.sample_tested_datetime,vl.sample_collection_date, tl.monthly_target, 
+SUM(CASE WHEN (is_sample_rejected IS NOT NULL AND is_sample_rejected LIKE 'yes%') THEN 1 ELSE 0 END) as totalRejected, 
+SUM(CASE WHEN (sample_tested_datetime IS NULL AND sample_collection_date IS NOT NULL) THEN 1 ELSE 0 END) as totalReceived, 
+SUM(CASE WHEN (sample_collection_date IS NOT NULL) THEN 1 ELSE 0 END) as totalCollected FROM testing_labs as tl INNER JOIN eid_form as vl ON vl.lab_id=tl.facility_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  ";
 // vl_request_form
 //   health_facilities
 //echo $sQuery;die;
@@ -227,10 +229,10 @@ if ($sWhere != '') {
 if (!empty($facilityMap)) {
      $sWhere .= " AND vl.facility_id IN ($facilityMap) ";
 }
-$sWhere .= " AND hf.test_type = 'eid'";
+$sWhere .= " AND tl.test_type = 'eid'";
 
 
-$sQuery = $sQuery . ' ' . $sWhere;
+$sQuery = $sQuery . ' ' . $sWhere .' GROUP BY f.facility_id, YEAR(vl.sample_tested_datetime), MONTH(vl.sample_tested_datetime)';
 // $sQuery = $sQuery.' '. "group by DATE_FORMAT(DATE(vl.sample_tested_datetime), '%b-%Y');";
 // echo $sQuery;die;
 $_SESSION['eidMonitoringThresholdReportQuery'] = $sQuery;
@@ -279,7 +281,7 @@ $output = array(
 // }
 // echo json_encode($output);
 // print_r($rResult);die;
-$res = array();
+/* $res = array();
 foreach ($rResult as $aRow) {
      $row = array();
      if( isset($res[$aRow['facility_id']]))
@@ -333,13 +335,13 @@ foreach ($rResult as $aRow) {
           $row['totalCollected'] = 1;
           $res[$aRow['facility_id']][$aRow['monthrange']] = $row;
      }
-}
+} */
 // print_r($res);die;
 $cnt = 0;
-foreach($res as $resultData)
+foreach($rResult as $rowData)
 {
-     foreach($resultData as $rowData)
-     {
+     // foreach($resultData as $rowData)
+     // {
           if($_POST['targetType'] == 1)
           {
 
@@ -387,7 +389,7 @@ foreach($res as $resultData)
                     // print_r($data);die;
                     $output['aaData'][] = $data;
           }
-     }
+     // }
 
 }   
 $output['iTotalDisplayRecords'] = $cnt;
