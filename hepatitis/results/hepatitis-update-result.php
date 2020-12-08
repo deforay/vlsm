@@ -125,6 +125,11 @@ $disable = "disabled = 'disabled'";
 </style>
 <?php
 
+// Import machine config
+$testPlatformResult = $general->getTestingPlatforms('hepatitis');
+foreach ($testPlatformResult as $row) {
+    $testPlatformList[$row['machine_name']] = $row['machine_name'];
+}
 $fileArray = array(
     1 => 'forms/update-southsudan-result.php',
     2 => 'forms/update-zimbabwe-result.php',

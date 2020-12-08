@@ -19,9 +19,10 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
 }
 
 $general=new \Vlsm\Models\General($db);
-$covid19Results = $general->getCovid19Results();
-$tableName = "form_covid19";
-$primaryKey = "covid19_id";
+$hepatitisObj=new \Vlsm\Models\Hepatitis($db);
+$hepatitisResults = $hepatitisObj->getHepatitisResults();
+$tableName = "form_hepatitis";
+$primaryKey = "hepatitis_id";
 
 /* Array of database columns which should be read and sent back to DataTables. Use a space where
 * you want to insert a non-database field (for example a counter or static image)
@@ -113,7 +114,7 @@ for ($i = 0; $i < count($aColumns); $i++) {
 * Get data to display
 */
 $aWhere = '';
-$sQuery = "SELECT * FROM form_covid19 as vl    
+$sQuery = "SELECT * FROM form_hepatitis as vl    
                     LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
                     INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
                     LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id";
@@ -156,11 +157,11 @@ if (isset($sLimit) && isset($sOffset)) {
 }
 $rResult = $db->rawQuery($sQuery);
 /* Data set length after filtering */
-$aResultFilterTotal = $db->rawQuery("SELECT vl.covid19_id,vl.facility_id,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.patient_id,vl.patient_name, vl.patient_surname,b.batch_code,vl.sample_batch_id,ts.status_name FROM form_covid19 as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_covid19_sample_type as s ON s.sample_id=vl.specimen_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere");
+$aResultFilterTotal = $db->rawQuery("SELECT vl.hepatitis_id,vl.facility_id,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.patient_id,vl.patient_name, vl.patient_surname,b.batch_code,vl.sample_batch_id,ts.status_name FROM form_hepatitis as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_hepatitis_sample_type as s ON s.sample_id=vl.specimen_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere");
 $iFilteredTotal = count($aResultFilterTotal);
 
 /* Total data set length */
-$aResultTotal =  $db->rawQuery("select COUNT(covid19_id) as total FROM form_covid19 as vl where vlsm_country_id='" . $gconfig['vl_form'] . "'" . $sFilter);
+$aResultTotal =  $db->rawQuery("select COUNT(hepatitis_id) as total FROM form_hepatitis as vl where vlsm_country_id='" . $gconfig['vl_form'] . "'" . $sFilter);
 $iTotal = $aResultTotal[0]['total'];
 
 /*
@@ -203,7 +204,8 @@ foreach ($rResult as $aRow) {
      $row[] = $patientFname. " " . $patientLname;
      $row[] = ucwords($aRow['facility_state']);
      $row[] = ucwords($aRow['facility_district']);
-     $row[] = $covid19Results[$aRow['result']];;
+     $row[] = ucwords($hepatitisResults[$aRow['hcv_vl_result']]);
+     $row[] = ucwords($hepatitisResults[$aRow['hbv_vl_result']]);
      $row[] = $aRow['last_modified_datetime'];
      $row[] = ucwords($aRow['status_name']);
      

@@ -5,10 +5,10 @@
 
 
 $general = new \Vlsm\Models\General($db);
-$covid19Obj = new \Vlsm\Models\Covid19($db);
+$hepatitisObj = new \Vlsm\Models\Hepatitis($db);
 
 
-$sampleQuery = "SELECT covid19_id, sample_collection_date, sample_package_code, province_id, sample_code FROM form_covid19 where covid19_id IN (" . $_POST['sampleId'] . ") ORDER BY covid19_id";
+$sampleQuery = "SELECT hepatitis_id, sample_collection_date, sample_package_code, province_id, sample_code FROM form_hepatitis where hepatitis_id IN (" . $_POST['sampleId'] . ") ORDER BY hepatitis_id";
 $sampleResult = $db->query($sampleQuery);
 $status = 0;
 foreach ($sampleResult as $sampleRow) {
@@ -24,18 +24,18 @@ foreach ($sampleResult as $sampleRow) {
     // ONLY IF SAMPLE CODE IS NOT ALREADY GENERATED
     if ($sampleRow['sample_code'] == null || $sampleRow['sample_code'] == '' || $sampleRow['sample_code'] == 'null') {
 
-        $sampleJson = $covid19Obj->generateCovid19SampleCode($provinceCode, $general->humanDateFormat($sampleRow['sample_collection_date']));
+        $sampleJson = $hepatitisObj->generatehepatitisSampleCode($provinceCode, $general->humanDateFormat($sampleRow['sample_collection_date']));
         $sampleData = json_decode($sampleJson, true);
-        $covid19Data = array();
-        $covid19Data['sample_code'] = $sampleData['sampleCode'];
-        $covid19Data['sample_code_format'] = $sampleData['sampleCodeFormat'];
-        $covid19Data['sample_code_key'] = $sampleData['sampleCodeKey'];
-        $covid19Data['result_status'] = 6;
-        $covid19Data['last_modified_by'] = $_SESSION['userId'];
-        $covid19Data['last_modified_datetime'] = $general->getDateTime();
+        $hepatitisData = array();
+        $hepatitisData['sample_code'] = $sampleData['sampleCode'];
+        $hepatitisData['sample_code_format'] = $sampleData['sampleCodeFormat'];
+        $hepatitisData['sample_code_key'] = $sampleData['sampleCodeKey'];
+        $hepatitisData['result_status'] = 6;
+        $hepatitisData['last_modified_by'] = $_SESSION['userId'];
+        $hepatitisData['last_modified_datetime'] = $general->getDateTime();
 
-        $db = $db->where('covid19_id', $sampleRow['covid19_id']);
-        $id = $db->update('form_covid19', $covid19Data);
+        $db = $db->where('hepatitis_id', $sampleRow['hepatitis_id']);
+        $id = $db->update('form_hepatitis', $hepatitisData);
         if ($id > 0) {
             $status = $id;
         }
