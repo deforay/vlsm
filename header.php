@@ -1058,8 +1058,8 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 									if (isset($_SESSION['privileges']) && in_array("hepatitis-clinic-report.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu hepatitisClinicReportMenu"><a href="/hepatitis/management/hepatitis-clinic-report.php"><i class="fa fa-circle-o"></i> Clinic Report</a></li>
 									<?php } 
-									if (isset($_SESSION['privileges']) && in_array("hepatitisMonthlyThresholdReport.PHP", $_SESSION['privileges'])) { ?>
-										<li class="allMenu hepatitisMonthlyThresholdReport"><a href="/hepatitis/management/hepatitisTestingTargetReport.php"><i class="fa fa-circle-o"></i>Hepatitis Testing Target Report</a></li>
+									if (isset($_SESSION['privileges']) && in_array("hepatitis-testing-target-report.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu hepatitisMonthlyThresholdReport"><a href="/hepatitis/management/hepatitis-testing-target-report.php"><i class="fa fa-circle-o"></i>Hepatitis Testing Target Report</a></li>
 									<?php } ?>
 								</ul>
 							</li>
