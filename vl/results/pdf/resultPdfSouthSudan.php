@@ -521,5 +521,5 @@ if (sizeof($requestResult) > 0) {
           unset($_SESSION['rVal']);
      }
 }
-
+error_log($resultFilename);
 echo $resultFilename;

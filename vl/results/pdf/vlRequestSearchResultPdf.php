@@ -36,12 +36,11 @@ $printDateTime = $expStr[1];
 //set query
 if (isset($_POST['newData']) && $_POST['newData'] != '') {
   //$query = $_SESSION['vlPrintResultQuery'];
-  $allQuery = $_SESSION['vlPrintRequestSearchResultQuery'];
-} else {
+  $searchQuery = $_SESSION['vlPrintRequestSearchResultQuery'];
+} else if (!empty($_SESSION['vlRequestSearchResultQuery'])) {
   //$query = isset($_SESSION['vlResultQuery']) ? $_SESSION['vlResultQuery'] : null;
-  $allQuery = $_SESSION['vlRequestSearchResultQuery'];
-}
-if (isset($_POST['id']) && trim($_POST['id']) != '') {
+  $searchQuery = $_SESSION['vlRequestSearchResultQuery'];
+} else if (isset($_POST['id']) && trim($_POST['id']) != '') {
   //if(isset($_POST['resultMail'])){
   $searchQuery = "SELECT vl.*,
                   f.*,
@@ -67,9 +66,11 @@ if (isset($_POST['id']) && trim($_POST['id']) != '') {
   //  $searchQuery = $query." and vl.vl_sample_id IN(".$_POST['id'].")";
   //}
 } else {
-  $searchQuery = $allQuery;
+  
 }
-//echo($searchQuery);die;
+//error_log($searchQuery);
+
+//die;
 $requestResult = $db->query($searchQuery);
 $_SESSION['nbPages'] = sizeof($requestResult);
 $_SESSION['aliasPage'] = 1;
