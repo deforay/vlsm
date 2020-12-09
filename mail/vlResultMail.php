@@ -11,15 +11,18 @@ $healthFacilites = $facilitiesDb->getHealthFacilities('vl');
 $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
 
 
+$facilityQuery = "SELECT * FROM facility_details WHERE `status`='active' order by facility_name ASC";
+$facilityResult = $db->rawQuery($facilityQuery);
+
 $formId = $general->getGlobalConfig('vl_form');
 
 //main query
-$query = "SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vlsm_country_id = $formId AND is_result_mail_sent ='no' AND vl.result IS NOT NULL AND vl.result!= '' ORDER BY f.facility_name ASC";
-$result = $db->rawQuery($query);
-$sTypeQuery = "SELECT * FROM r_vl_sample_type where status='active'";
+//$query = "SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE 1=0 AND is_result_mail_sent ='no' AND vl.result IS NOT NULL AND vl.result!= '' ORDER BY f.facility_name ASC";
+//$result = $db->rawQuery($query);
+$sTypeQuery = "SELECT * FROM r_vl_sample_type WHERE `status`='active'";
 $sTypeResult = $db->rawQuery($sTypeQuery);
 
-$pdQuery = "SELECT * from province_details";
+$pdQuery = "SELECT * FROM province_details";
 $pdResult = $db->query($pdQuery);
 $batchQuery = "SELECT * FROM batch_details WHERE test_type='vl' AND batch_status='completed'";
 $batchResult = $db->rawQuery($batchQuery);
@@ -47,7 +50,7 @@ $batchResult = $db->rawQuery($batchQuery);
 
   <!-- Main content -->
   <section class="content">
-    
+
     <div class="box box-default">
       <div class="box-header with-border">
         <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
@@ -73,7 +76,12 @@ $batchResult = $db->rawQuery($batchQuery);
                   <label for="facility" class="col-lg-3 control-label">Facility Name (To)<span class="mandatory">*</span></label>
                   <div class="col-lg-9">
                     <select class="form-control isRequired" id="facility" name="facility" title="Please select facility name">
-                      <?= $facilitiesDropdown; ?>
+                      <option></option>
+                    <?php
+                      foreach ($facilityResult as $facility) { ?>
+                        ?>
+                        <option data-name="<?php echo $facility['facility_name']; ?>" data-email="<?php echo $facility['facility_emails']; ?>" data-report-email="<?php echo $facility['report_email']; ?>" value="<?php echo base64_encode($facility['facility_id']); ?>"><?php echo ucwords($facility['facility_name']); ?></option>
+                      <?php } ?>
                     </select>
                   </div>
                 </div>
@@ -117,14 +125,8 @@ $batchResult = $db->rawQuery($batchQuery);
                   <tr>
                     <td>&nbsp;<b>Facility Name&nbsp;:</b></td>
                     <td>
-                      <select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple">
-                        <?php
-                        foreach ($facilityResult as $name) {
-                        ?>
-                          <option value="<?php echo $name['facility_id']; ?>"><?php echo ucwords($name['facility_name'] . "-" . $name['facility_code']); ?></option>
-                        <?php
-                        }
-                        ?>
+                      <select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select facility name">
+                        <?= $facilitiesDropdown; ?>
                       </select>
                     </td>
                     <td><b>Gender&nbsp;:</b></td>
@@ -221,17 +223,7 @@ $batchResult = $db->rawQuery($batchQuery);
                     <div style="width:100%;margin:0 auto;clear:both;">
                       <a href="#" id="select-all-sample" style="float:left" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a> <a href="#" id="deselect-all-sample" style="float:right" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
                     </div><br /><br />
-                    <select id="sample" name="sample[]" multiple="multiple" class="search isRequired" title="Please select sample(s)">
-                      <?php
-                      foreach ($result as $sample) {
-                        if (trim($sample['sample_code']) != '') {
-                      ?>
-                          <option value="<?php echo $sample['vl_sample_id']; ?>"><?php echo ucwords($sample['sample_code']); ?></option>
-                      <?php
-                        }
-                      }
-                      ?>
-                    </select>
+                    <select id="sample" name="sample[]" multiple="multiple" class="search isRequired" title="Please select sample(s)"></select>
                   </div>
                 </div>
               </div>
@@ -243,6 +235,7 @@ $batchResult = $db->rawQuery($batchQuery);
           </div>
           <!-- /.box-body -->
           <div class="box-footer">
+            <input type="hidden" name="selectedSamples" id="selectedSamples" value="" />
             <input type="hidden" id="type" name="type" value="result" />
             <input type="hidden" id="toName" name="toName" />
             <input type="hidden" id="toEmail" name="toEmail" />
@@ -270,6 +263,7 @@ $batchResult = $db->rawQuery($batchQuery);
   noOfAllowedSamples = 100;
   var startDate = "";
   var endDate = "";
+  let samplesData = null;
   $(document).ready(function() {
     document.getElementById('message').value = "Hi, \nPFA the viral load test results. \n\nThanks";
     $('#facility').select2({
@@ -420,8 +414,8 @@ $batchResult = $db->rawQuery($batchQuery);
 
   function convertSearchResultToPdf() {
     $.blockUI();
-    var sample = $("#sample").val();
-    var id = sample.toString();
+    //var sample = $("#sample").val();
+    var id = samplesData.toString();
     $.post("/vl/results/pdf/vlRequestSearchResultPdf.php", {
         source: 'print',
         id: id,
@@ -481,6 +475,12 @@ $batchResult = $db->rawQuery($batchQuery);
   }
 
   function validateNow() {
+
+    samplesData = $("#sample").val();
+    let samples = JSON.stringify($("#sample").val());
+    $("#selectedSamples").val(samples);
+    $("#sample").removeClass("isRequired");
+    $("#sample").val(""); // THIS IS IMPORTANT. TO REDUCE NUMBER OF PHP VARIABLES    
     flag = deforayValidator.init({
       formId: 'mailForm'
     });

@@ -5,7 +5,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 #require_once('../startup.php');  
 
-require '/includes/mail/PHPMailerAutoload.php';
+require APPLICATION_PATH . '/includes/mail/PHPMailerAutoload.php';
 
 $general=new \Vlsm\Models\General($db);
 $tableName="vl_request_form";
