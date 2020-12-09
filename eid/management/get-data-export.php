@@ -326,7 +326,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
 
                }
           }
-          $sQuery = $sQuery.' '.$sWhere;
+          $sQuery = $sQuery.' '.$sWhere .' GROUP BY vl.eid_id';
           //echo $sQuery;die;
           
           
