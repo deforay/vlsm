@@ -23,7 +23,11 @@ $tableName = "vl_request_form";
 $primaryKey = "vl_sample_id";
 
 
-$sQuery = "SELECT DATE_FORMAT(DATE(vl.sample_tested_datetime), '%Y-%b') as monthrange, f.*, vl.*, hf.suppressed_monthly_target FROM testing_labs as hf INNER JOIN vl_request_form as vl ON vl.lab_id=hf.facility_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  ";
+$sQuery = "SELECT DATE_FORMAT(DATE(vl.sample_tested_datetime), '%Y-%b') as monthrange, f.facility_id, f.facility_name, vl.is_sample_rejected,vl.sample_tested_datetime,vl.sample_collection_date, vl.vl_result_category, tl.suppressed_monthly_target,
+SUM(CASE WHEN (sample_collection_date IS NOT NULL) THEN 1 ELSE 0 END) as totalCollected,
+SUM(CASE WHEN (vl_result_category IS NOT NULL AND vl_result_category LIKE 'suppressed%') THEN 1 ELSE 0 END) as totalSuppressed,
+SUM(IF(vl_result_category LIKE 'suppressed%', (((IF(vl_result_category LIKE 'suppressed%',1,0))/tl.suppressed_monthly_target) * 100), 0)) as supp_percent
+ FROM testing_labs as tl INNER JOIN vl_request_form as vl ON vl.lab_id=tl.facility_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  ";
 
 $sWhere = $sWhere . ' where  vl.vlsm_country_id="' . $formId . '" AND vl.result_status!=9';
 if (isset($_POST['facilityName']) && count($_POST['facilityName']) > 0) {
@@ -50,16 +54,16 @@ if (isset($_POST['facilityName']) && count($_POST['facilityName']) > 0) {
 if (!empty($facilityMap)) {
     $sWhere .= " AND vl.facility_id IN ($facilityMap) ";
 }
-$sWhere .= " AND hf.test_type = 'vl' " ;
+$sWhere .= " AND tl.test_type = 'vl' " ;
 
-$sQuery = $sQuery . ' ' . $sWhere;
+$sQuery = $sQuery . ' ' . $sWhere. ' GROUP BY f.facility_id, YEAR(vl.sample_tested_datetime), MONTH(vl.sample_tested_datetime)';
 
-$_SESSION['vlSuppressedTargetReportQuery'] = $sQuery;
-
+// $_SESSION['vlSuppressedTargetReportQuery'] = $sQuery;
+// die($sQuery);
 $rResult = $db->rawQuery($sQuery);
 // print_r($sQuery);die;
 
-$res = array();
+/* $res = array();
 $totCnt = 0;
 foreach ($rResult as $aRow) {
      $row = array();
@@ -73,10 +77,7 @@ foreach ($rResult as $aRow) {
                 $row['totalSuppressed'] = $res[$aRow['monthrange']][$aRow['facility_id']]['totalSuppressed'] + 1;
             $row['facility_name'] = ucwords($aRow['facility_name']);
             $row['monthrange'] = $aRow['monthrange'];
-            if($aRow['suppressed_monthly_target']  && $aRow['suppressed_monthly_target']>0)
-                $row['supp_percent'] = ($row['totalSuppressed']/$aRow['suppressed_monthly_target']) * 100;
-            else
-                $row['supp_percent'] = 0;
+            $row['supp_percent'] = ($row['totalSuppressed']/$aRow['suppressed_monthly_target']) * 100;
             $row['suppressed_monthly_target'] = $aRow['suppressed_monthly_target'];
             // $row['totalCollected'] = $res[$aRow['monthrange']][$aRow['facility_id']]['totalCollected']  + 1;
             $res[$aRow['monthrange']][$aRow['facility_id']] = $row;
@@ -89,40 +90,42 @@ foreach ($rResult as $aRow) {
                 $row['totalSuppressed'] =  1;
             else
                 $row['totalSuppressed'] =  0;
-            $row['facility_name'] = ucwords($aRow['facility_name']);
-            $row['monthrange'] = $aRow['monthrange'];
-            if($aRow['suppressed_monthly_target']  && $aRow['suppressed_monthly_target']>0)
-                $row['supp_percent'] = ($row['totalSuppressed']/$aRow['suppressed_monthly_target']) * 100;
-            else
-                $row['supp_percent'] = 0;
+        $row['facility_name'] = ucwords($aRow['facility_name']);
+        $row['monthrange'] = $aRow['monthrange'];
+        $row['supp_percent'] = ($row['totalSuppressed']/$aRow['suppressed_monthly_target']) * 100;
             $row['suppressed_monthly_target'] = $aRow['suppressed_monthly_target'];
                 $res[$aRow['monthrange']][$aRow['facility_id']] = $row;
         }
     }
     else
-        {
-            $row['totalTested'] = 1; 
-            if(trim($aRow['vl_result_category'])  != NULL  && trim($aRow['vl_result_category']) == 'suppressed')
-                $row['totalSuppressed'] =  1;
-            else
-                $row['totalSuppressed'] =  0;
-            $row['facility_name'] = ucwords($aRow['facility_name']);
-            $row['monthrange'] = $aRow['monthrange'];
-            if($aRow['suppressed_monthly_target']  && $aRow['suppressed_monthly_target']>0)
-                $row['supp_percent'] = ($row['totalSuppressed']/$aRow['suppressed_monthly_target']) * 100;
-            else
-                $row['supp_percent'] = 0;
-            $row['suppressed_monthly_target'] = $aRow['suppressed_monthly_target'];
+          {
+                $row['totalTested'] = 1; 
+                if(trim($aRow['vl_result_category'])  != NULL  && trim($aRow['vl_result_category']) == 'suppressed')
+                    $row['totalSuppressed'] =  1;
+                else
+                    $row['totalSuppressed'] =  0;
+               $row['facility_name'] = ucwords($aRow['facility_name']);
+               $row['monthrange'] = $aRow['monthrange'];
+               $row['supp_percent'] = ($row['totalSuppressed']/$aRow['suppressed_monthly_target']) * 100;
+                $row['suppressed_monthly_target'] = $aRow['suppressed_monthly_target'];
                // $row['totalCollected'] = $res[$aRow['monthrange']]['totalCollected']  + 1;
-            $res[$aRow['monthrange']][$aRow['facility_id']] = $row;
-        }
+               $res[$aRow['monthrange']][$aRow['facility_id']] = $row;
+          }
    
-}
-$_SESSION['vlSuppressedTargetReportResult'] = json_encode($res);
+} */
+// $_SESSION['vlSuppressedTargetReportResult'] = json_encode($res);
 // echo json_encode($res);die;
+
+foreach($rResult as $subRow)
+{
+    $res[$subRow['monthrange']][$subRow['facility_id']]['totalSuppressed']   = $subRow['totalSuppressed'];
+    $res[$subRow['monthrange']][$subRow['facility_id']]['totalCollected']    = $subRow['totalCollected'];
+    $res[$subRow['monthrange']][$subRow['facility_id']]['facility_name']     = $subRow['facility_name'];
+    $res[$subRow['monthrange']][$subRow['facility_id']]['supp_percent']      = $subRow['supp_percent'];
+}
+
 ksort($res);
 end($res);
-// print_r($_POST);die;
 if(isset($_POST['monthYear']) && $_POST['monthYear']!='')
 {
     $monthYear = '01-'.$_POST['monthYear'];
@@ -136,19 +139,20 @@ else
     $monthYear = key($res);
     $resArray = end($res);
 }
+
 if(isset($_POST['targetType'])  && $_POST['targetType']!='')
 {
     $returnVal = 0 ;
-    foreach($res as $row)
+    foreach($rResult as $subRow)
     {
-        foreach($row as $subRow)
-        {
+        /* foreach($row as $subRow)
+        { */
             if($subRow['totalSuppressed'] < $subRow['suppressed_monthly_target'])
             {
                 $returnVal = 1;
                 echo $returnVal;die;
             }
-        }
+        // }
 
     }
     echo $returnVal;die;
