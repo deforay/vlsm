@@ -381,7 +381,7 @@ if (sizeof($requestResult) > 0) {
           $html .= '<tr>';
           $html .= '<td colspan="3" style="line-height:10px;"></td>';
           $html .= '</tr>';
-          if (trim($result['approver_comments']) != '') {
+          if (isset($result['approver_comments']) && trim($result['approver_comments']) != '') {
                $html .= '<tr>';
                $html .= '<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">LAB COMMENTS&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">' . ucfirst($result['approver_comments']) . '</span></td>';
                $html .= '</tr>';

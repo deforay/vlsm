@@ -26,6 +26,11 @@ if (sizeof($requestResult) > 0) {
                     $testedBy = $testedByRes['user_name'];
                }
           }
+
+          $testUserSignaturePath = null;
+          if (!empty($testedByRes['user_signature'])) {
+               $testUserSignaturePath = UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature" . DIRECTORY_SEPARATOR . $testedByRes['user_signature'];
+          }
           $resultApprovedBy = '';
           $userSignaturePath = null;
           if (isset($result['result_approved_by']) && !empty($result['result_approved_by'])) {
@@ -37,7 +42,17 @@ if (sizeof($requestResult) > 0) {
                     $userSignaturePath = UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature" . DIRECTORY_SEPARATOR . $resultApprovedByRes['user_signature'];
                }
           }
+          if (isset($result['approvedBy']) && trim($result['approvedBy']) != '') {
+               $resultApprovedBy = ucwords($result['approvedBy']);
+               $userRes = $users->getUserInfo($result['result_approved_by'], 'user_signature');
+          } else {
+               $resultApprovedBy  = '';
+          }
 
+          $userSignaturePath = null;
+          if (!empty($userRes['user_signature'])) {
+               $userSignaturePath = UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature" . DIRECTORY_SEPARATOR . $userRes['user_signature'];
+          }
           $_SESSION['aliasPage'] = $page;
           if (!isset($result['labName'])) {
                $result['labName'] = '';
@@ -157,6 +172,13 @@ if (sizeof($requestResult) > 0) {
                $result['sample_tested_datetime'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
           } else {
                $result['sample_tested_datetime'] = '';
+          }
+          
+          if (isset($result['result_approved_datetime']) && trim($result['result_approved_datetime']) != '' && $result['result_approved_datetime'] != '0000-00-00 00:00:00') {
+               $expStr = explode(" ", $result['result_approved_datetime']);
+               $result['result_approved_datetime'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
+          } else {
+               $result['result_approved_datetime'] = '';
           }
 
           if (isset($result['last_viral_load_date']) && trim($result['last_viral_load_date']) != '' && $result['last_viral_load_date'] != '0000-00-00') {
@@ -431,8 +453,12 @@ if (sizeof($requestResult) > 0) {
           $html .= '</tr>';
           $html .= '<tr>';
           $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $testedBy . '</td>';
-          $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
-          $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+          if (!empty($testUserSignaturePath) && file_exists($testUserSignaturePath)) {
+               $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"><img src="' . $testUserSignaturePath . '" style="width:70px;" /></td>';
+          } else {
+               $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+          }
+          $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['sample_tested_datetime'].'</td>';
           $html .= '</tr>';
           $html .= '<tr>';
           $html .= '<td colspan="3" style="line-height:8px;"></td>';
@@ -450,7 +476,7 @@ if (sizeof($requestResult) > 0) {
                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
           }
 
-          $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+          $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['result_approved_datetime'].'</td>';
           $html .= '</tr>';
 
           $html .= '<tr>';
