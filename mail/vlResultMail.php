@@ -80,7 +80,7 @@ $batchResult = $db->rawQuery($batchQuery);
                     <?php
                       foreach ($facilityResult as $facility) { ?>
                         ?>
-                        <option data-name="<?php echo $facility['facility_name']; ?>" data-email="<?php echo $facility['facility_emails']; ?>" data-report-email="<?php echo $facility['report_email']; ?>" value="<?php echo base64_encode($facility['facility_id']); ?>"><?php echo ucwords($facility['facility_name']); ?></option>
+                        <option data-name="<?php echo $facility['facility_name']; ?>" data-email="<?php echo $facility['facility_emails']; ?>" data-report-email="<?php echo $facility['report_email']; ?>" data-id="<?= $facility['facility_id']?>" value="<?php echo base64_encode($facility['facility_id']); ?>"><?php echo ucwords($facility['facility_name']); ?></option>
                       <?php } ?>
                     </select>
                   </div>
@@ -100,8 +100,12 @@ $batchResult = $db->rawQuery($batchQuery);
                 </div>
               </div>
             </div>
-            <div class="row">
+            <div class="row" style="display:none;" id="filterArea">
               <div class="col-md-12">
+                <br>
+                <br>
+                <br>
+                <h4>Please use the following to filter the samples you wish to email</h4>
                 <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width:90%;">
                   <tr>
                     <td>&nbsp;<b>Sample Collection Date&nbsp;:</b></td>
@@ -439,10 +443,12 @@ $batchResult = $db->rawQuery($batchQuery);
       $('#toName').val('');
       $('#toEmail').val('');
       $('#reportEmail').val('');
+      
     } else {
       var toName = $(this).find(':selected').data('name');
       var toEmailId = $(this).find(':selected').data('email');
       var reportEmailId = $(this).find(':selected').data('report-email');
+      $('#facilityName').val($(this).find(':selected').data('id')).trigger("change");
       if ($.trim(toEmailId) == '') {
         $('.emailSection').html('No valid Email id available. Please add valid email for this facility..');
       } else {
@@ -451,6 +457,8 @@ $batchResult = $db->rawQuery($batchQuery);
       $('#toName').val(toName);
       $('#toEmail').val(toEmailId);
       $('#reportEmail').val(reportEmailId);
+      $('#filterArea').show();
+      getSampleDetails();
     }
   });
 
