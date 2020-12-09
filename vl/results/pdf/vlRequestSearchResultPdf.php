@@ -70,7 +70,7 @@ if (isset($_POST['newData']) && $_POST['newData'] != '') {
 }
 //error_log($searchQuery);
 
-//die;
+// die($searchQuery);
 $requestResult = $db->query($searchQuery);
 $_SESSION['nbPages'] = sizeof($requestResult);
 $_SESSION['aliasPage'] = 1;

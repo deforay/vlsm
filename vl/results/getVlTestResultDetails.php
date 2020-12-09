@@ -117,7 +117,7 @@ for ($i = 0; $i < count($aColumns); $i++) {
           * SQL queries
           * Get data to display
           */
-$sQuery = "SELECT 		vl.vl_sample_id,
+$sQuery = "SELECT vl.vl_sample_id,
 vl.sample_code,
 vl.remote_sample,
 vl.remote_sample_code,
@@ -162,7 +162,9 @@ vl.result_reviewed_datetime,
 vl.sample_received_at_hub_datetime,							
 vl.sample_received_at_vl_lab_datetime,							
 vl.result_dispatched_datetime,							
-vl.result_printed_datetime,							
+vl.result_printed_datetime,
+vl.result_approved_by,
+a_u_d.user_name as approvedBy,							
 rs.rejection_reason_name 
 
 FROM vl_request_form as vl 
