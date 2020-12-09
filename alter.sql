@@ -2027,3 +2027,6 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 -- Thana 04-Dec-2020
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'hepatitis-requests', 'add-samples-from-manifest.php', 'Add Samples from Manifest');
 DELETE FROM `global_config` WHERE name = 'hepatitis_report_type';
+
+--Prasath 09-Dec-2020
+UPDATE `privileges` SET  `display_name` = "Suppressed Target report"  where `privilege_name` = 'vlSuppressedTargetReport.php'
