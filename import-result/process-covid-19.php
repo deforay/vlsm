@@ -60,6 +60,8 @@ try {
                     //'is_sample_rejected'=>'yes',
                     //'reason_for_sample_rejection'=>$rResult[0]['reason_for_sample_rejection'],
                     'result' => $rResult[0]['result'],
+                    'tested_by' => $_POST['testBy'],
+                    'sample_tested_datetime' => $general->getDateTime(),
                     'approver_comments' => $comments,
                     'result_reviewed_by' => $rResult[0]['result_reviewed_by'],
                     'result_reviewed_datetime' => $general->getDateTime(),
@@ -119,6 +121,8 @@ try {
                     $data['import_batch_tracking'] = $_SESSION['controllertrack'];
                     $result = $db->insert($tableName2, $data);
                 } else {
+                    $data['tested_by'] = $_POST['testBy'];
+                    $data['sample_tested_datetime'] = $general->getDateTime();
                     //$data['request_created_by'] = $rResult[0]['result_reviewed_by'];
                     //$data['request_created_datetime'] = $general->getDateTime();
                     $data['last_modified_by'] = $rResult[0]['result_reviewed_by'];
@@ -208,6 +212,8 @@ try {
                 'result' => $accResult[$i]['result'],
                 'sample_tested_datetime' => $accResult[$i]['sample_tested_datetime'],
                 'lab_id' => $accResult[$i]['lab_id'],
+                'tested_by' => $_POST['testBy'],
+                'sample_tested_datetime' => $general->getDateTime(),
                 //'request_created_by' => $accResult[$i]['result_reviewed_by'],
                 //'request_created_datetime' => $general->getDateTime(),
                 'last_modified_datetime' => $general->getDateTime(),

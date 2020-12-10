@@ -175,32 +175,46 @@ foreach ($rejectionTypeResult as $type) {
 							<input type="hidden" name="checkedTests" id="checkedTests" />
 							<input type="hidden" name="checkedTestsIdValue" id="checkedTestsIdValue" />
 							<td>
-								<b>Comments&nbsp;</b>
-								<textarea style="height: 34px;" class="form-control" id="comments" name="comments" placeholder="Comments"></textarea>
+								<b><label for="comments">Comments&nbsp;</label></b>
+								<textarea style="height: 34px;width: 200px;" class="form-control" id="comments" name="comments" placeholder="Comments"></textarea>
 							</td>
 							<td>
-								<b>Reviewed By&nbsp;</b>
-								<!--<input type="text" name="reviewedBy" id="reviewedBy" class="form-control" title="Please enter Reviewed By" placeholder ="Reviewed By"/>-->
-								<select name="reviewedBy" id="reviewedBy" class="form-control" title="Please choose reviewed by">
+								<b><label for="testedBy">Tested By&nbsp;</label> </b>
+								<select name="testedBy" id="testedBy" class="select2 form-control" title="Please choose tested by">
 									<option value="">-- Select --</option>
 									<?php
 									foreach ($userResult as $uName) {
 									?>
-										<option value="<?php echo $uName['user_id']; ?>" <?php echo ($uName['user_id'] == $reviewBy) ? "selected=selected" : ""; ?>><?php echo ucwords($uName['user_name']); ?></option>
+										<option value="<?php echo $uName['user_id']; ?>"><?php echo ucwords($uName['user_name']); ?></option>
 									<?php
 									}
 									?>
 								</select>
 							</td>
 							<td>
-								<b>Approved By&nbsp;</b>
-								<!--<input type="text" name="approvedBy" id="approvedBy" class="form-control" title="Please enter Approved By" placeholder ="Approved By"/>-->
-								<select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
+								<b><label for="reviewedBy">Reviewed By&nbsp;</label></b>
+								<!--<input type="text" name="reviewedBy" id="reviewedBy" class="form-control" title="Please enter Reviewed By" placeholder ="Reviewed By"/>-->
+								<select name="reviewedBy" id="reviewedBy" class="select2 form-control" title="Please choose reviewed by">
 									<option value="">-- Select --</option>
 									<?php
 									foreach ($userResult as $uName) {
 									?>
-										<option value="<?php echo $uName['user_id']; ?>" <?php echo ($uName['user_id'] == $_SESSION['userId']) ? "selected=selected" : ""; ?>><?php echo ucwords($uName['user_name']); ?></option>
+										<!-- <option value="<?php echo $uName['user_id']; ?>" <?php echo ($uName['user_id'] == $reviewBy) ? "selected=selected" : ""; ?>><?php echo ucwords($uName['user_name']); ?></option> -->
+										<option value="<?php echo $uName['user_id']; ?>"><?php echo ucwords($uName['user_name']); ?></option>
+									<?php
+									}
+									?>
+								</select>
+							</td>
+							<td>
+								<b><label for="approvedBy">Approved By&nbsp;</label></b>
+								<!--<input type="text" name="approvedBy" id="approvedBy" class="form-control" title="Please enter Approved By" placeholder ="Approved By"/>-->
+								<select name="approvedBy" id="approvedBy" class="select2 form-control" title="Please choose approved by">
+									<option value="">-- Select --</option>
+									<?php
+									foreach ($userResult as $uName) {
+									?>
+										<option value="<?php echo $uName['user_id']; ?>"><?php echo ucwords($uName['user_name']); ?></option>
 									<?php
 									}
 									?>
@@ -210,7 +224,7 @@ foreach ($rejectionTypeResult as $type) {
 								<br>
 								<input type="hidden" name="print" id="print" />
 								<input type="hidden" name="module" id="module" value="<?php echo $module; ?>" />
-								<input type="button" onclick="submitTestStatus();" value="Save" class="btn btn-success btn-sm"></td>
+								<input type="button" onclick="submitTestStatus();" value="Save" class="btn btn-success" style=" margin-top: 6px; "></td>
 						</tr>
 
 					</table>
@@ -231,6 +245,18 @@ foreach ($rejectionTypeResult as $type) {
 	var selectedTests = [];
 	var selectedTestsIdValue = [];
 	$(document).ready(function() {
+		$('#testedBy').select2({
+			width : '200px',
+            placeholder: "Select Tested By"
+        });
+		$('#reviewedBy').select2({
+			width : '200px',
+            placeholder: "Select Reviewed By"
+        });
+		$('#approvedBy').select2({
+			width : '200px',
+            placeholder: "Select Approved By"
+        });
 		loadVlRequestData();
 	});
 
@@ -429,6 +455,7 @@ foreach ($rejectionTypeResult as $type) {
 		status = statusArray.join();
 		rejectReasonId = rejectReasonArray.join();
 		comments = $("#comments").val();
+		testBy = $("#testedBy").val();
 		appBy = $("#approvedBy").val();
 		reviewedBy = $("#reviewedBy").val();
 		moduleName = $("#module").val();
@@ -443,6 +470,13 @@ foreach ($rejectionTypeResult as $type) {
 			return false;
 		}
 
+		if (appBy == reviewedBy && (reviewedBy != '' && appBy != '') && globalValue == 'yes') {
+			conf = confirm("Same person is reviewing and approving result!");
+			if (conf) {} else {
+				return false;
+			}
+		}
+
 		//alert(somethingmissing);return false;
 
 		if (somethingmissing == true) {
@@ -451,7 +485,7 @@ foreach ($rejectionTypeResult as $type) {
 			return false;
 		}
 
-		if (appBy != '' && somethingmissing == false) {
+		if (appBy != '' && somethingmissing == false && testBy != "" && reviewedBy != "") {
 			conf = confirm("Are you sure you want to continue ?");
 			if (conf) {
 				$.blockUI();
@@ -460,6 +494,7 @@ foreach ($rejectionTypeResult as $type) {
 						value: id,
 						status: status,
 						comments: comments,
+						testBy: testBy,
 						appBy: appBy,
 						module: moduleName,
 						reviewedBy: reviewedBy,
@@ -484,7 +519,7 @@ foreach ($rejectionTypeResult as $type) {
 				oTable.fnDraw();
 			}
 		} else {
-			alert("Please ensure you have updated the status and the approved by field");
+			alert("Please ensure you have updated the status and the approved by and reviewed by and tested by field");
 			return false;
 		}
 	}

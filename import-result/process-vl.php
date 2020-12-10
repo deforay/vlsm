@@ -35,27 +35,29 @@ try {
 
             if ($rResult[0]['sample_type'] != 'S' && $rResult[0]['sample_type'] != 's') {
                 $data = array(
-                    'control_code' => $rResult[0]['sample_code'],
-                    'lab_id' => $rResult[0]['lab_id'],
-                    'control_type' => $rResult[0]['sample_type'],
-                    'lot_number' => $rResult[0]['lot_number'],
-                    'lot_expiration_date' => $rResult[0]['lot_expiration_date'],
-                    'sample_tested_datetime' => $rResult[0]['sample_tested_datetime'],
+                    'control_code'                  => $rResult[0]['sample_code'],
+                    'lab_id'                        => $rResult[0]['lab_id'],
+                    'control_type'                  => $rResult[0]['sample_type'],
+                    'lot_number'                    => $rResult[0]['lot_number'],
+                    'lot_expiration_date'           => $rResult[0]['lot_expiration_date'],
+                    'sample_tested_datetime'        => $rResult[0]['sample_tested_datetime'],
                     //'is_sample_rejected'=>'yes',
                     //'reason_for_sample_rejection'=>$rResult[0]['reason_for_sample_rejection'],
-                    'result_value_log' => $rResult[0]['result_value_log'],
-                    'result_value_absolute' => $rResult[0]['result_value_absolute'],
-                    'result_value_text' => $rResult[0]['result_value_text'],
+                    'result_value_log'              => $rResult[0]['result_value_log'],
+                    'result_value_absolute'         => $rResult[0]['result_value_absolute'],
+                    'result_value_text'             => $rResult[0]['result_value_text'],
                     'result_value_absolute_decimal' => $rResult[0]['result_value_absolute_decimal'],
-                    'result' => $rResult[0]['result'],
-                    'approver_comments' => $comments,
-                    'result_reviewed_by' => $rResult[0]['result_reviewed_by'],
-                    'result_reviewed_datetime' => $general->getDateTime(),
-                    'result_approved_by' => $_POST['appBy'],
-                    'result_approved_datetime' => $general->getDateTime(),
-                    'vlsm_country_id' => $arr['vl_form'],
-                    'file_name' => $rResult[0]['import_machine_file_name'],
-                    'imported_date_time' => $rResult[0]['result_imported_datetime'],
+                    'result'                        => $rResult[0]['result'],
+                    'tested_by'                     => $_POST['testBy'],
+                    'sample_tested_datetime'        => $general->getDateTime(),
+                    'approver_comments'             => $comments,
+                    'result_reviewed_by'            => $rResult[0]['result_reviewed_by'],
+                    'result_reviewed_datetime'      => $general->getDateTime(),
+                    'result_approved_by'            => $_POST['appBy'],
+                    'result_approved_datetime'      => $general->getDateTime(),
+                    'vlsm_country_id'               => $arr['vl_form'],
+                    'file_name'                     => $rResult[0]['import_machine_file_name'],
+                    'imported_date_time'            => $rResult[0]['result_imported_datetime'],
                 );
                 if ($status[$i] == 4) {
                     $data['is_sample_rejected'] = 'yes';
@@ -117,6 +119,8 @@ try {
                     $data['import_batch_tracking'] = $_SESSION['controllertrack'];
                     $result = $db->insert('hold_sample_import', $data);
                 } else {
+                    $data['tested_by'] = $_POST['testBy'];
+                    $data['sample_tested_datetime'] = $general->getDateTime();
                     $data['request_created_by'] = $rResult[0]['result_reviewed_by'];
                     $data['request_created_datetime'] = $general->getDateTime();
                     $data['last_modified_by'] = $rResult[0]['result_reviewed_by'];
@@ -206,6 +210,8 @@ try {
                 'result' => $accResult[$i]['result'],
                 'sample_tested_datetime' => $accResult[$i]['sample_tested_datetime'],
                 'lab_id' => $accResult[$i]['lab_id'],
+                'tested_by'                     => $_POST['testBy'],
+                'sample_tested_datetime'        => $general->getDateTime(),
                 'request_created_by' => $accResult[$i]['result_reviewed_by'],
                 'request_created_datetime' => $general->getDateTime(),
                 'last_modified_datetime' => $general->getDateTime(),
