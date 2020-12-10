@@ -98,9 +98,7 @@ try {
                     //$reviewBy = $sheetData[$reviewByCol];
 
                     // //Changing date to European format for strtotime - https://stackoverflow.com/a/5736255
-                    // $sheetData[$testDateCol] = str_replace("/", "-", $sheetData[$testDateCol]);
-                    $testingDate = date('Y-m-d H:i', strtotime($sheetData[$testDateCol]));
-
+                    
                     if (strpos($sheetData[$resultCol], 'Log') !== false) {
                         $sheetData[$resultCol] = str_replace(",", ".", $sheetData[$resultCol]); // in case they are using european decimal format
                         $logVal = ((float) filter_var($sheetData[$resultCol], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION));
