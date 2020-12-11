@@ -193,6 +193,19 @@ if (sizeof($requestResult) > 0) {
             $sampleDisbatchTime = $expStr[1];
         }
 
+        $testedBy = '';
+        if (isset($result['tested_by']) && !empty($result['tested_by'])) {
+            $testedByRes = $users->getUserInfo($result['tested_by'], 'user_name');
+            if ($testedByRes) {
+                $testedBy = $testedByRes['user_name'];
+            }
+        }
+
+        $testUserSignaturePath = null;
+        if (!empty($testedByRes['user_signature'])) {
+            $testUserSignaturePath = UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature" . DIRECTORY_SEPARATOR . $testedByRes['user_signature'];
+        }
+        
         if (isset($result['sample_tested_datetime']) && trim($result['sample_tested_datetime']) != '' && $result['sample_tested_datetime'] != '0000-00-00 00:00:00') {
             $expStr = explode(" ", $result['sample_tested_datetime']);
             $result['sample_tested_datetime'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];

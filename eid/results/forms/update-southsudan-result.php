@@ -431,7 +431,26 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                             </select>
                                         </td>
                                     </tr>
-
+                                    <tr>
+                                        <th>Tested By</th>
+                                        <td>
+                                            <select name="testedBy" id="testedBy" class="select2 form-control" title="Please choose approved by">
+                                                <?= $general->generateSelectOptions($userInfo, $eidInfo['tested_by'], '-- Select --'); ?>
+                                            </select>
+                                        </td>
+                                        <th>Approved By</th>
+                                        <td>
+                                            <select name="approvedBy" id="approvedBy" class="form-control labSection" title="Please choose approved by">
+                                                <?= $general->generateSelectOptions($userInfo, $eidInfo['result_approved_by'], '-- Select --'); ?>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:25%;"><label for="">Approve On </label></td>
+                                        <td style="width:25%;">
+                                            <input type="text" value="<?php echo $eidInfo['result_approved_datetime']; ?>" class="form-control dateTime" id="approvedOnDateTime" name="approvedOnDateTime" placeholder="e.g 09-Jan-1992 05:30" <?php echo $labFieldDisabled; ?> style="width:100%;" />
+                                        </td>
+                                    </tr>
                                 </table>
                             </div>
                         </div>
