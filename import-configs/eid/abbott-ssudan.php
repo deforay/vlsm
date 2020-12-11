@@ -99,9 +99,6 @@ try {
                     $resultFlag = $sheetData[$flagCol];
                     //$reviewBy = $sheetData[$reviewByCol];
 
-                    // //Changing date to European format for strtotime - https://stackoverflow.com/a/5736255
-                    // $sheetData[$testDateCol] = str_replace("/", "-", $sheetData[$testDateCol]);
-                    // $testingDate = date('Y-m-d H:i', strtotime($sheetData[$testDateCol]));
                     $result = '';
 
                     if (strpos(strtolower($sheetData[$resultCol]), 'not detected') !== false) {
@@ -195,7 +192,7 @@ try {
                 $data['batch_code'] = $batchCode;
             }
             //get user name
-            if ($d['reviewBy'] != '') {
+            if (!empty($d['reviewBy'])) {
                 $uQuery = "select user_name,user_id from user_details where user_name='" . $d['reviewBy'] . "'";
                 $uResult = $db->rawQuery($uQuery);
                 if ($uResult) {
