@@ -170,17 +170,17 @@ foreach ($rejectionTypeResult as $type) {
 							</tbody>
 						</table>
 					</div>
-					<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:30px;width: 75%;">
+					<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:30px;width: 100%;">
 						<tr>
 							<input type="hidden" name="checkedTests" id="checkedTests" />
 							<input type="hidden" name="checkedTestsIdValue" id="checkedTestsIdValue" />
-							<td>
+							<td style=" width: 30%; ">
 								<b>Comments&nbsp;</b>
-								<textarea style="height: 34px;width: 282px;" class="form-control" id="comments" name="comments" placeholder="Comments"></textarea>
+								<textarea style="height: 34px;width: 100%;" class="form-control" id="comments" name="comments" placeholder="Comments"></textarea>
 							</td>
-							<td>
+							<td style=" width: 20%; ">
 								<b>Tested By<span class="mandatory">*</span>&nbsp;</b>
-								<select name="testedBy" id="testedBy" class="select2 form-control" title="Please choose tested by">
+								<select name="testedBy" id="testedBy" class="select2 form-control" title="Please choose tested by" style="width: 100%;">
 									<option value="">-- Select --</option>
 									<?php
 									foreach ($userResult as $uName) {
@@ -191,10 +191,10 @@ foreach ($rejectionTypeResult as $type) {
 									?>
 								</select>
 							</td>
-							<td>
+							<td style=" width: 20%; ">
 								<b>Reviewed By<span class="mandatory">*</span>&nbsp;</b>
 								<!--<input type="text" name="reviewedBy" id="reviewedBy" class="form-control" title="Please enter Reviewed By" placeholder ="Reviewed By"/>-->
-								<select name="reviewedBy" id="reviewedBy" class="form-control" title="Please choose reviewed by">
+								<select name="reviewedBy" id="reviewedBy" class="form-control" title="Please choose reviewed by" style="width: 100%;">
 									<option value="">-- Select --</option>
 									<?php
 									foreach ($userResult as $uName) {
@@ -205,10 +205,10 @@ foreach ($rejectionTypeResult as $type) {
 									?>
 								</select>
 							</td>
-							<td>
+							<td style=" width: 20%; ">
 								<b>Approved By<span class="mandatory">*</span>&nbsp;</b>
 								<!--<input type="text" name="approvedBy" id="approvedBy" class="form-control" title="Please enter Approved By" placeholder ="Approved By"/>-->
-								<select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
+								<select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by" style="width: 100%;">
 									<option value="">-- Select --</option>
 									<?php
 									foreach ($userResult as $uName) {
@@ -219,7 +219,7 @@ foreach ($rejectionTypeResult as $type) {
 									?>
 								</select>
 							</td>
-							<td>
+							<td style=" width: 10%; ">
 								<br>
 								<input type="hidden" name="print" id="print" />
 								<input type="hidden" name="module" id="module" value="<?php echo $module; ?>" />
@@ -246,15 +246,15 @@ foreach ($rejectionTypeResult as $type) {
 	var selectedTestsIdValue = [];
 	$(document).ready(function() {
 		$('#testedBy').select2({
-			width : '200px',
+			width : '100%',
             placeholder: "Select Tested By"
         });
 		$('#reviewedBy').select2({
-			width : '200px',
+			width : '100%',
             placeholder: "Select Reviewed By"
         });
 		$('#approvedBy').select2({
-			width : '200px',
+			width : '100%',
             placeholder: "Select Approved By"
         });
 		loadVlRequestData();
