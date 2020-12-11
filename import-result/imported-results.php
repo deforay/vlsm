@@ -175,11 +175,11 @@ foreach ($rejectionTypeResult as $type) {
 							<input type="hidden" name="checkedTests" id="checkedTests" />
 							<input type="hidden" name="checkedTestsIdValue" id="checkedTestsIdValue" />
 							<td>
-								<b><label for="comments">Comments&nbsp;</label></b>
-								<textarea style="height: 34px;width: 200px;" class="form-control" id="comments" name="comments" placeholder="Comments"></textarea>
+								<b>Comments&nbsp;</b>
+								<textarea style="height: 34px;width: 282px;" class="form-control" id="comments" name="comments" placeholder="Comments"></textarea>
 							</td>
 							<td>
-								<b><label for="testedBy">Tested By&nbsp;</label> </b>
+								<b>Tested By&nbsp;</b>
 								<select name="testedBy" id="testedBy" class="select2 form-control" title="Please choose tested by">
 									<option value="">-- Select --</option>
 									<?php
@@ -192,29 +192,28 @@ foreach ($rejectionTypeResult as $type) {
 								</select>
 							</td>
 							<td>
-								<b><label for="reviewedBy">Reviewed By&nbsp;</label></b>
+								<b>Reviewed By&nbsp;</b>
 								<!--<input type="text" name="reviewedBy" id="reviewedBy" class="form-control" title="Please enter Reviewed By" placeholder ="Reviewed By"/>-->
-								<select name="reviewedBy" id="reviewedBy" class="select2 form-control" title="Please choose reviewed by">
+								<select name="reviewedBy" id="reviewedBy" class="form-control" title="Please choose reviewed by">
 									<option value="">-- Select --</option>
 									<?php
 									foreach ($userResult as $uName) {
 									?>
-										<!-- <option value="<?php echo $uName['user_id']; ?>" <?php echo ($uName['user_id'] == $reviewBy) ? "selected=selected" : ""; ?>><?php echo ucwords($uName['user_name']); ?></option> -->
-										<option value="<?php echo $uName['user_id']; ?>"><?php echo ucwords($uName['user_name']); ?></option>
-									<?php
+										<option value="<?php echo $uName['user_id']; ?>" <?php echo ($uName['user_id'] == $reviewBy) ? "selected=selected" : ""; ?>><?php echo ucwords($uName['user_name']); ?></option>
+										<?php
 									}
 									?>
 								</select>
 							</td>
 							<td>
-								<b><label for="approvedBy">Approved By&nbsp;</label></b>
+								<b>Approved By&nbsp;</b>
 								<!--<input type="text" name="approvedBy" id="approvedBy" class="form-control" title="Please enter Approved By" placeholder ="Approved By"/>-->
-								<select name="approvedBy" id="approvedBy" class="select2 form-control" title="Please choose approved by">
+								<select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
 									<option value="">-- Select --</option>
 									<?php
 									foreach ($userResult as $uName) {
 									?>
-										<option value="<?php echo $uName['user_id']; ?>"><?php echo ucwords($uName['user_name']); ?></option>
+										<option value="<?php echo $uName['user_id']; ?>" <?php echo ($uName['user_id'] == $_SESSION['userId']) ? "selected=selected" : ""; ?>><?php echo ucwords($uName['user_name']); ?></option>
 									<?php
 									}
 									?>
@@ -224,7 +223,8 @@ foreach ($rejectionTypeResult as $type) {
 								<br>
 								<input type="hidden" name="print" id="print" />
 								<input type="hidden" name="module" id="module" value="<?php echo $module; ?>" />
-								<input type="button" onclick="submitTestStatus();" value="Save" class="btn btn-success" style=" margin-top: 6px; "></td>
+								<input type="button" onclick="submitTestStatus();" value="Save" class="btn btn-success btn-sm">
+							</td>
 						</tr>
 
 					</table>
