@@ -609,19 +609,30 @@ $sFormat = '';
                                                                            </div>
                                                                       </div>
                                                                       <div class="col-md-4">
-                                                                           <label class="col-lg-5 control-label" for="approvedBy">Approved By </label>
+                                                                           <label class="col-lg-5 control-label" for="testedBy">Tested By </label>
                                                                            <div class="col-lg-7">
-                                                                                <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
-                                                                                     <option value="">-- Select --</option>
-                                                                                     <?php foreach ($userResult as $uName) { ?>
-                                                                                          <option value="<?php echo $uName['user_id']; ?>"><?php echo ucwords($uName['user_name']); ?></option>
-                                                                                     <?php } ?>
+                                                                                <select name="testedBy" id="testedBy" class="select2 form-control" title="Please choose approved by">
+                                                                                <?= $general->generateSelectOptions($userInfo, null, '-- Select --');?>
                                                                                 </select>
                                                                            </div>
                                                                       </div>
                                                                  </div><br />
                                                                  <div class="row">
-                                                                      <div class="col-md-8">
+                                                                      <div class="col-md-4">
+                                                                           <label class="col-lg-5 control-label" for="approvedBy">Approved By </label>
+                                                                           <div class="col-lg-7">
+                                                                                <select name="approvedBy" id="approvedBy" class="select2 form-control" title="Please choose approved by">
+                                                                                <?= $general->generateSelectOptions($userInfo, null, '-- Select --');?>
+                                                                                </select>
+                                                                           </div>
+                                                                      </div>
+                                                                      <div class="col-md-4">
+                                                                           <label class="col-lg-5 control-label" for="approvedOnDateTime">Approved On </label>
+                                                                           <div class="col-lg-7">
+                                                                                <input type="text" value="<?php echo $general->humanDateFormat($general->getDateTime()); ?>" class="form-control dateTime" id="approvedOnDateTime" name="approvedOnDateTime" placeholder="e.g 09-Jan-1992 05:30" <?php echo $labFieldDisabled; ?> style="width:100%;" />
+                                                                           </div>
+                                                                      </div>
+                                                                      <div class="col-md-4">
                                                                            <label class="col-lg-2 control-label" for="labComments">Lab Tech. Comments </label>
                                                                            <div class="col-lg-10">
                                                                                 <textarea class="form-control" name="labComments" id="labComments" placeholder="Lab comments" style="width:100%"></textarea>
@@ -689,6 +700,24 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
      provinceName = true;
      facilityName = true;
      $(document).ready(function() {
+          $('#testedBy').select2({
+			width : '100%',
+               placeholder: "Select Tested By"
+          });
+		
+		$('#approvedBy').select2({
+			width : '100%',
+               placeholder: "Select Approved By"
+          });
+          $('#facilityId').select2({
+            placeholder: "Select Clinic/Health Center"
+          });
+          $('#district').select2({
+               placeholder: "District"
+          });
+          $('#province').select2({
+               placeholder: "Province"
+          });
           // BARCODESTUFF START
           <?php
           if (isset($_GET['barcode']) && $_GET['barcode'] == 'true') {
