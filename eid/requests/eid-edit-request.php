@@ -33,6 +33,12 @@ $facilitiesDb = new \Vlsm\Models\Facilities($db);
 
 $healthFacilities = $facilitiesDb->getHealthFacilities('eid');
 $testingLabs = $facilitiesDb->getTestingLabs('eid');
+$userQuery = "SELECT * FROM user_details where status='active'";
+$userResult = $db->rawQuery($userQuery);
+$userInfo = array();
+foreach($userResult as $user){
+     $userInfo[$user['user_id']] = ucwords($user['user_name']);
+}
 
 $rejectionTypeQuery = "SELECT DISTINCT rejection_type FROM r_eid_sample_rejection_reasons WHERE rejection_reason_status ='active'";
 $rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
@@ -100,6 +106,13 @@ if(isset($eidInfo['sample_collection_date']) && trim($eidInfo['sample_collection
 }else{
     $sampleCollectionDate = '';
     $eidInfo['sample_collection_date']='';
+}
+
+if(isset($eidInfo['result_approved_datetime']) && trim($eidInfo['result_approved_datetime'])!='' && $eidInfo['result_approved_datetime']!='0000-00-00 00:00:00'){
+    $expStr=explode(" ",$eidInfo['result_approved_datetime']);
+    $eidInfo['result_approved_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+}else{
+    $eidInfo['result_approved_datetime']=$general->humanDateFormat($general->getDateTime());
 }
 
 
@@ -209,6 +222,84 @@ require_once($fileArray[$arr['vl_form']]);
                 setTimeout(function() {
                     $('.ui-datepicker-calendar').show();
                 });
+            },
+            yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+        }).click(function() {
+            $('.ui-datepicker-calendar').show();
+        });
+
+        $('#sampleCollectionDate').datetimepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'dd-M-yy',
+            timeFormat: "HH:mm",
+            maxDate: "Today",
+            onChangeMonthYear: function(year, month, widget) {
+                setTimeout(function() {
+                    $('.ui-datepicker-calendar').show();
+                });
+            },
+            onSelect: function(e) {
+                $('#sampleReceivedDate').val('');
+                $('#sampleReceivedDate').datetimepicker('option', 'minDate', e);
+            },
+            yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+        }).click(function() {
+            $('.ui-datepicker-calendar').show();
+        });
+
+        $('#sampleReceivedDate').datetimepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'dd-M-yy',
+            timeFormat: "HH:mm",
+            maxDate: "Today",
+            onChangeMonthYear: function(year, month, widget) {
+                setTimeout(function() {
+                    $('.ui-datepicker-calendar').show();
+                });
+            },
+            onSelect: function(e) {
+                $('#sampleTestedDateTime').val('');
+                $('#sampleTestedDateTime').datetimepicker('option', 'minDate', e);
+            },
+            yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+        }).click(function() {
+            $('.ui-datepicker-calendar').show();
+        });
+
+        $('#sampleTestedDateTime').datetimepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'dd-M-yy',
+            timeFormat: "HH:mm",
+            maxDate: "Today",
+            onChangeMonthYear: function(year, month, widget) {
+                setTimeout(function() {
+                    $('.ui-datepicker-calendar').show();
+                });
+            },
+            onSelect: function(e) {
+                $('#approvedOnDateTime').val('');
+                $('#approvedOnDateTime').datetimepicker('option', 'minDate', e);
+            },
+            yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+        }).click(function() {
+            $('.ui-datepicker-calendar').show();
+        });
+        
+        $('#approvedOnDateTime').datetimepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'dd-M-yy',
+            timeFormat: "HH:mm",
+            maxDate: "Today",
+            onChangeMonthYear: function(year, month, widget) {
+                setTimeout(function() {
+                    $('.ui-datepicker-calendar').show();
+                });
+            },
+            onSelect: function(e) {
             },
             yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
         }).click(function() {

@@ -2037,3 +2037,5 @@ ALTER TABLE `vl_imported_controls` ADD `tested_by` VARCHAR(255) NULL DEFAULT NUL
 
 ALTER TABLE `eid_imported_controls` ADD `tested_by` VARCHAR(255) NULL DEFAULT NULL AFTER `lot_expiration_date`;
 ALTER TABLE `covid19_imported_controls` ADD `tested_by` VARCHAR(255) NULL DEFAULT NULL AFTER `lot_expiration_date`;
+-- Thana 11-Dec-2020
+ALTER TABLE `form_covid19` ADD `tested_by` VARCHAR(255) NULL DEFAULT NULL AFTER `sample_condition`;

@@ -421,7 +421,26 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                 </select>
                                             </td>
                                         </tr>
-
+                                        <tr>
+                                            <th>Tested By</th>
+                                            <td>
+                                                <select name="testedBy" id="testedBy" class="select2 form-control" title="Please choose approved by">
+                                                    <?= $general->generateSelectOptions($userInfo, $eidInfo['tested_by'], '-- Select --'); ?>
+                                                </select>
+                                            </td>
+                                            <th>Approved By</th>
+                                            <td>
+                                                <select name="approvedBy" id="approvedBy" class="form-control labSection" title="Please choose approved by">
+                                                    <?= $general->generateSelectOptions($userInfo, $eidInfo['result_approved_by'], '-- Select --'); ?>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:25%;"><label for="">Approve On </label></td>
+                                            <td style="width:25%;">
+                                                <input type="text" value="<?php $general->humanDateFormat($general->getDateTime());?>" class="form-control dateTime" id="approvedOnDateTime" name="approvedOnDateTime" placeholder="e.g 09-Jan-1992 05:30" <?php echo $labFieldDisabled; ?> style="width:100%;" />
+                                            </td>
+                                        </tr>
                                     </table>
                                 </div>
                             </div>
@@ -596,7 +615,22 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
     }
 
     $(document).ready(function() {
+        $('#testedBy').select2({
+			width: '100%',
+			placeholder: "Select Tested By"
+		});
 
+		$('#approvedBy').select2({
+			width: '100%',
+			placeholder: "Select Approved By"
+		});
+
+        $('#district').select2({
+            placeholder: "District"
+        });
+        $('#province').select2({
+            placeholder: "Province"
+        });
         $('#facilityId').select2({
             placeholder: "Select Clinic/Health Center"
         });

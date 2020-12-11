@@ -35,7 +35,13 @@ try {
 	} else {
 		$_POST['sampleCollectionDate'] = NULL;
 	}
-
+	
+	if (isset($_POST['approvedOnDateTime']) && trim($_POST['approvedOnDateTime']) != "") {
+		$approvedOnDateTime = explode(" ", $_POST['approvedOnDateTime']);
+		$_POST['approvedOnDateTime'] = $general->dateFormat($approvedOnDateTime[0]) . " " . $approvedOnDateTime[1];
+	} else {
+		$_POST['approvedOnDateTime'] = NULL;
+	}
 
 	//Set sample received date
 	if (isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate']) != "") {
@@ -174,6 +180,9 @@ try {
 		'sample_tested_datetime' 							=> isset($_POST['sampleTestedDateTime']) ? $_POST['sampleTestedDateTime'] : null,
 		'is_sample_rejected' 								=> isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
 		'result' 											=> isset($_POST['result']) ? $_POST['result'] : null,
+		'tested_by' 										=> (isset($_POST['testedBy']) && $_POST['testedBy'] != '') ? $_POST['testedBy'] :  NULL,
+		'result_approved_by' 								=> (isset($_POST['approvedBy']) && $_POST['approvedBy'] != '') ? $_POST['approvedBy'] :  NULL,
+		'result_approved_datetime' 							=> (isset($_POST['approvedBy']) && $_POST['approvedBy'] != '') ? $_POST['approvedOnDateTime'] :  NULL,
 		'result_status' 									=> $status,
 		'data_sync' 										=> 0,
 		'reason_for_sample_rejection' 						=> isset($_POST['sampleRejectionReason']) ? $_POST['sampleRejectionReason'] : null,

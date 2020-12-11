@@ -31,7 +31,12 @@ $facilitiesDb = new \Vlsm\Models\Facilities($db);
 
 $healthFacilities = $facilitiesDb->getHealthFacilities('eid');
 $testingLabs = $facilitiesDb->getTestingLabs('eid');
-
+$userQuery = "SELECT * FROM user_details where status='active'";
+$userResult = $db->rawQuery($userQuery);
+$userInfo = array();
+foreach($userResult as $user){
+     $userInfo[$user['user_id']] = ucwords($user['user_name']);
+}
 
 $rejectionTypeQuery = "SELECT DISTINCT rejection_type FROM r_eid_sample_rejection_reasons WHERE rejection_reason_status ='active'";
 $rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);

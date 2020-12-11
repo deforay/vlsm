@@ -467,6 +467,16 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             </td>
                                         </tr>
                                         <tr>
+                                            <th>Tested By</th>
+                                            <td>
+                                                <select name="testedBy" id="testedBy" class="select2 form-control" title="Please choose approved by" style="width: 100%;">
+                                                    <?= $general->generateSelectOptions($labTechniciansResults, null, '-- Select --'); ?>
+                                                </select>
+                                            </td>
+                                            <th></th>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
                                             <th>Is Result Authorized ?</th>
                                             <td>
                                                 <select name="isResultAuthorized" id="isResultAuthorized" class="disabled-field form-control" title="Is Result authorized ?" style="width:100%">
@@ -483,7 +493,6 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             <td><input type="text" name="authorizedOn" id="authorizedOn" class="disabled-field form-control date" placeholder="Authorized on" /></td>
                                             <th></th>
                                             <td></td>
-
                                         </tr>
                                     </table>
                                 </div>
@@ -806,7 +815,6 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
             $('#authorizedBy,#authorizedOn').prop('disabled', true);
             $('#authorizedBy,#authorizedOn').addClass('disabled');
             $('#authorizedBy,#authorizedOn').removeClass('isRequired');
-            return false;
         } else {
             $('#authorizedBy,#authorizedOn').prop('disabled', false);
             $('#authorizedBy,#authorizedOn').removeClass('disabled');

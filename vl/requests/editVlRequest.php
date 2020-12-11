@@ -24,7 +24,10 @@ $importResult = $db->query($importQuery);
 
 $userQuery = "SELECT * FROM user_details where status='active'";
 $userResult = $db->rawQuery($userQuery);
-
+$userInfo = array();
+foreach($userResult as $user){
+     $userInfo[$user['user_id']] = ucwords($user['user_name']);
+}
 //sample rejection reason
 $rejectionQuery = "SELECT * FROM r_vl_sample_rejection_reasons where rejection_reason_status = 'active'";
 $rejectionResult = $db->rawQuery($rejectionQuery);
@@ -63,7 +66,16 @@ if (isset($vlQueryInfo['sample_collection_date']) && trim($vlQueryInfo['sample_c
      $vlQueryInfo['sample_collection_date'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
 } else {
      $sampleCollectionDate = '';
-     $vlQueryInfo['sample_collection_date'] = '';
+     $vlQueryInfo['sample_collection_date'] = $general->getDateTime();
+}
+
+if (isset($vlQueryInfo['result_approved_datetime']) && trim($vlQueryInfo['result_approved_datetime']) != '' && $vlQueryInfo['result_approved_datetime'] != '0000-00-00 00:00:00') {
+     $sampleCollectionDate = $vlQueryInfo['result_approved_datetime'];
+     $expStr = explode(" ", $vlQueryInfo['result_approved_datetime']);
+     $vlQueryInfo['result_approved_datetime'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
+} else {
+     $sampleCollectionDate = '';
+     $vlQueryInfo['result_approved_datetime'] = $general->humanDateFormat($general->getDateTime());
 }
 
 if (isset($vlQueryInfo['treatment_initiated_date']) && trim($vlQueryInfo['treatment_initiated_date']) != '' && $vlQueryInfo['treatment_initiated_date'] != '0000-00-00') {
