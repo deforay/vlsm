@@ -179,7 +179,7 @@ foreach ($rejectionTypeResult as $type) {
 								<textarea style="height: 34px;width: 282px;" class="form-control" id="comments" name="comments" placeholder="Comments"></textarea>
 							</td>
 							<td>
-								<b>Tested By&nbsp;</b>
+								<b>Tested By<span class="mandatory">*</span>&nbsp;</b>
 								<select name="testedBy" id="testedBy" class="select2 form-control" title="Please choose tested by">
 									<option value="">-- Select --</option>
 									<?php
@@ -192,7 +192,7 @@ foreach ($rejectionTypeResult as $type) {
 								</select>
 							</td>
 							<td>
-								<b>Reviewed By&nbsp;</b>
+								<b>Reviewed By<span class="mandatory">*</span>&nbsp;</b>
 								<!--<input type="text" name="reviewedBy" id="reviewedBy" class="form-control" title="Please enter Reviewed By" placeholder ="Reviewed By"/>-->
 								<select name="reviewedBy" id="reviewedBy" class="form-control" title="Please choose reviewed by">
 									<option value="">-- Select --</option>
@@ -206,7 +206,7 @@ foreach ($rejectionTypeResult as $type) {
 								</select>
 							</td>
 							<td>
-								<b>Approved By&nbsp;</b>
+								<b>Approved By<span class="mandatory">*</span>&nbsp;</b>
 								<!--<input type="text" name="approvedBy" id="approvedBy" class="form-control" title="Please enter Approved By" placeholder ="Approved By"/>-->
 								<select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
 									<option value="">-- Select --</option>
