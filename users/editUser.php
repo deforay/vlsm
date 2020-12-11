@@ -141,7 +141,7 @@ $ftResult = $db->rawQuery($fQuery);
                                                        </div>
                                                        <div>
                                                             <span class="btn btn-default btn-file"><span class="fileinput-new">Select Signature Image</span><span class="fileinput-exists">Change</span>
-                                                                 <input type="file" id="userSignature" name="userSignature" title="Please select user signature" onchange="getNewSignatureImage('<?php echo $userInfo[0]['user_signature']; ?>');">
+                                                                 <input type="file" id="userSignature" name="userSignature" accept="image/png,image/gpg,image/jpeg" title="Please select user signature" onchange="getNewSignatureImage('<?php echo $userInfo[0]['user_signature']; ?>');">
                                                             </span>
                                                             <?php
                                                             if (isset($userInfo[0]['user_signature']) && trim($userInfo[0]['user_signature']) != '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature" . DIRECTORY_SEPARATOR . $userInfo[0]['user_signature'])) {

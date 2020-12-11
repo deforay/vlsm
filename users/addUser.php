@@ -124,7 +124,7 @@ $ftResult = $db->rawQuery($fQuery);
                                                        </div>
                                                        <div>
                                                             <span class="btn btn-default btn-file"><span class="fileinput-new">Select Signature Image</span><span class="fileinput-exists">Change</span>
-                                                                 <input type="file" id="userSignature" name="userSignature" title="Please select user signature" onchange="">
+                                                                 <input type="file" id="userSignature" name="userSignature" accept="image/png,image/gpg,image/jpeg" title="Please select user signature" onchange="">
                                                             </span>
 
                                                             <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
