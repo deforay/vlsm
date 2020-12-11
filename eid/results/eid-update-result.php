@@ -11,7 +11,12 @@ $facilitiesDb = new \Vlsm\Models\Facilities($db);
 
 $healthFacilities = $facilitiesDb->getHealthFacilities('eid');
 $testingLabs = $facilitiesDb->getTestingLabs('eid');
-
+$userQuery = "SELECT * FROM user_details where status='active'";
+$userResult = $db->rawQuery($userQuery);
+$userInfo = array();
+foreach($userResult as $user){
+     $userInfo[$user['user_id']] = ucwords($user['user_name']);
+}
 //get import config
 $importQuery = "SELECT * FROM import_config WHERE status = 'active'";
 $importResult = $db->query($importQuery);
@@ -96,7 +101,12 @@ $disable = "disabled = 'disabled'";
 	}
 </style>
 <?php
-
+if(isset($eidInfo['result_approved_datetime']) && trim($eidInfo['result_approved_datetime'])!='' && $eidInfo['result_approved_datetime']!='0000-00-00 00:00:00'){
+    $expStr=explode(" ",$eidInfo['result_approved_datetime']);
+    $eidInfo['result_approved_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+}else{
+    $eidInfo['result_approved_datetime']=$general->humanDateFormat($general->getDateTime());
+}
 $iResultQuery = "select * from  import_config_machines";
 $iResult = $db->rawQuery($iResultQuery);
 $machine = array();
@@ -141,6 +151,15 @@ require_once($fileArray[$arr['vl_form']]);
     }
 
 	$(document).ready(function() {
+		$('#testedBy').select2({
+			width: '100%',
+			placeholder: "Select Tested By"
+		});
+
+		$('#approvedBy').select2({
+			width: '100%',
+			placeholder: "Select Approved By"
+		});
 		changeFun();
 		$("#isSampleRejected,#result").on("change", function() {
 			changeFun();

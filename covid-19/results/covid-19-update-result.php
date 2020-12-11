@@ -12,7 +12,9 @@ $userDb = new \Vlsm\Models\Users($db);
 $labTechnicians = $userDb->getActiveUserInfo();
 $healthFacilities = $facilitiesDb->getHealthFacilities('covid19');
 $testingLabs = $facilitiesDb->getTestingLabs('covid19');
-
+foreach ($labTechnicians as $labTech) {
+    $labTechniciansResults[$labTech['user_id']] = ucwords($labTech['user_name']);
+}
 
 $id = base64_decode($_GET['id']);
 

@@ -28,6 +28,12 @@ try {
     $_POST['sampleTestedDateTime'] = NULL;
   }
 
+  if (isset($_POST['approvedOnDateTime']) && trim($_POST['approvedOnDateTime']) != "") {
+		$approvedOnDateTime = explode(" ", $_POST['approvedOnDateTime']);
+		$_POST['approvedOnDateTime'] = $general->dateFormat($approvedOnDateTime[0]) . " " . $approvedOnDateTime[1];
+	} else {
+		$_POST['approvedOnDateTime'] = NULL;
+	}
 
 
   $eidData = array(
@@ -38,6 +44,9 @@ try {
     'is_sample_rejected'                => isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
     'lab_id'                            => isset($_POST['labId']) ? $_POST['labId'] : null,
     'result'                            => isset($_POST['result']) ? $_POST['result'] : null,
+    'tested_by' 										    => (isset($_POST['testedBy']) && $_POST['testedBy'] != '') ? $_POST['testedBy'] :  NULL,
+		'result_approved_by' 								=> (isset($_POST['approvedBy']) && $_POST['approvedBy'] != '') ? $_POST['approvedBy'] :  NULL,
+		'result_approved_datetime' 					=> (isset($_POST['approvedBy']) && $_POST['approvedBy'] != '') ? $_POST['approvedOnDateTime'] :  NULL,
     'result_status'                     => 8,
     'data_sync'                         => 0,
     'reason_for_sample_rejection'       => isset($_POST['sampleRejectionReason']) ? $_POST['sampleRejectionReason'] : null,

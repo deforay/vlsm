@@ -131,6 +131,18 @@ if (sizeof($requestResult) > 0) {
             $sampleDisbatchDate = $general->humanDateFormat($expStr[0]);
             $sampleDisbatchTime = $expStr[1];
         }
+        $testedBy = '';
+        if (isset($result['tested_by']) && !empty($result['tested_by'])) {
+            $testedByRes = $users->getUserInfo($result['tested_by'], array('user_name', 'user_signature'));
+            if ($testedByRes) {
+                $testedBy = $testedByRes['user_name'];
+            }
+        }
+
+        $testUserSignaturePath = null;
+        if (!empty($testedByRes['user_signature'])) {
+            $testUserSignaturePath = UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature" . DIRECTORY_SEPARATOR . $testedByRes['user_signature'];
+        }
 
         if (isset($result['sample_tested_datetime']) && trim($result['sample_tested_datetime']) != '' && $result['sample_tested_datetime'] != '0000-00-00 00:00:00') {
             $expStr = explode(" ", $result['sample_tested_datetime']);
@@ -329,11 +341,17 @@ if (sizeof($requestResult) > 0) {
         $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SIGNATURE</td>';
         $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">DATE</td>';
         $html .= '</tr>';
+        
         $html .= '<tr>';
-        $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
-        $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
-        $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+        $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $testedBy . '</td>';
+        if (!empty($testUserSignaturePath) && file_exists($testUserSignaturePath)) {
+            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"><img src="' . $testUserSignaturePath . '" style="width:70px;" /></td>';
+        } else {
+            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+        }
+        $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['sample_tested_datetime'].'</td>';
         $html .= '</tr>';
+
         $html .= '<tr>';
         $html .= '<td colspan="3" style="line-height:8px;"></td>';
         $html .= '</tr>';

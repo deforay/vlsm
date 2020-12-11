@@ -501,11 +501,15 @@ $sampleSuggestionDisplay = 'display:none;';
                                                 </table>
                                             </td>
                                         </tr>
-                                        <tr class="change-reason" style="display: none;">
+                                        <tr>
+                                            <th>Tested By</th>
+                                            <td>
+                                                <select name="testedBy" id="testedBy" class="select2 form-control" title="Please choose approved by" style="width: 100%;">
+                                                    <?= $general->generateSelectOptions($labTechniciansResults, $covid19Info['tested_by'], '-- Select --'); ?>
+                                                </select>
+                                            </td>
                                             <th class="change-reason" style="display: none;">Reason for Changing <span class="mandatory">*</span></td>
                                             <td class="change-reason" style="display: none;"><textarea type="text" name="reasonForChanging" id="reasonForChanging" class="form-control date" placeholder="Enter the reason for changing" title="Please enter the reason for changing"></textarea></td>
-                                            <td></td>
-                                            <td></td>
                                         </tr>
                                         <tr>
                                             <th>Is Result Authorized ?</th>
@@ -636,26 +640,27 @@ $sampleSuggestionDisplay = 'display:none;';
         var pName = val;
         if ($.trim(pName) != '') {
             $.post("/includes/siteInformationDropdownOptions.php", {
-                    pName: pName,
-                    requestType: 'patient',
-                    dName: '<?php echo $covid19Info['patient_district']; ?>',
-                    testType: 'covid19'
+                pName: pName,
+                requestType: 'patient',
+                dName: '<?php echo $covid19Info['patient_district']; ?>',
+                testType: 'covid19'
 
-                },
-                function(data) {
-                    if (data != "") {
-                        details = data.split("###");
-                        $("#patientDistrict").html(details[1]);
-                    }
-                });
+            },
+            function(data) {
+                if (data != "") {
+                    details = data.split("###");
+                    $("#patientDistrict").html(details[1]);
+                }
+            });
         } else if (pName == '') {
-            $(obj).html("<?php echo $province; ?>");
+            $("#patientDistrict").html("<?php echo $province; ?>");
             $("#patientDistrict").html("<option value=''> -- Select -- </option>");
         }
         $.unblockUI();
     }
 
     $(document).ready(function() {
+        $('.select2').select2();
         $('#patientNationality').select2({
             placeholder: "Select Nationality"
         });
@@ -718,7 +723,7 @@ $sampleSuggestionDisplay = 'display:none;';
         if ($('#result').val() != "") {
             $('#isResultAuthorized').val('yes');
         }
-        getPatientDistrictDetails('<?php echo $covid19Info['patient_province'];?>');
+        getPatientDistrictDetails('<?php echo (isset($covid19Info['patient_province']) && $covid19Info['patient_province'] != "");?>');
     });
 
 
