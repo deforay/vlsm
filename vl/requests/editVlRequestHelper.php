@@ -316,10 +316,10 @@ try {
           //   );
           //   $db->insert($tableName1,$data);
 
-          header("location:vlRequest.php");
      } else {
           $_SESSION['alertMsg'] = "Please try again later";
      }
+     header("location:vlRequest.php");
 } catch (Exception $exc) {
      error_log($exc->getMessage());
      error_log($exc->getTraceAsString());
