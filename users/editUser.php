@@ -351,6 +351,17 @@ $ftResult = $db->rawQuery($fQuery);
                     $('#authToken').removeClass('isRequired');
                }
           });
+
+          $('#userSignature').change(function(e) {
+               const file = this.files[0];
+               const  fileType = file['type'];
+               const validImageTypes = ['image/jpg', 'image/jpeg', 'image/png'];
+               if (!validImageTypes.includes(fileType)) {
+                    $('#userSignature').val('');
+                    alert("Invalid file type. Please upload correct image format like JPG or JPEG or PNG");
+                    return false;
+               }
+          });
      });
      pwdflag = true;
 
