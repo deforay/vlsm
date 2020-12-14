@@ -857,6 +857,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
      $('#tnd').change(function() {
           if ($('#tnd').is(':checked')) {
                $('#vlResult,#vlLog').attr('readonly', true);
+               $('#vlResult,#vlLog').removeClass('isRequired');
                $('#bdl').attr('disabled', true);
           } else {
                $('#vlResult,#vlLog').attr('readonly', false);
