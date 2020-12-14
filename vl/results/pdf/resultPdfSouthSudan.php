@@ -457,7 +457,7 @@ if (sizeof($requestResult) > 0) {
           if (!empty($testUserSignaturePath) && file_exists($testUserSignaturePath)) {
                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"><img src="' . $testUserSignaturePath . '" style="width:70px;" /></td>';
           } else {
-               $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">'.print_r($testedByRes).'</td>';
+               $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
           }
           $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['sample_tested_datetime'].'</td>';
           $html .= '</tr>';
