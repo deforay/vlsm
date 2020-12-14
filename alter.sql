@@ -2039,3 +2039,8 @@ ALTER TABLE `eid_imported_controls` ADD `tested_by` VARCHAR(255) NULL DEFAULT NU
 ALTER TABLE `covid19_imported_controls` ADD `tested_by` VARCHAR(255) NULL DEFAULT NULL AFTER `lot_expiration_date`;
 -- Thana 11-Dec-2020
 ALTER TABLE `form_covid19` ADD `tested_by` VARCHAR(255) NULL DEFAULT NULL AFTER `sample_condition`;
+
+
+
+UPDATE `system_config` SET `value` = '4.2.8' WHERE `system_config`.`name` = 'version';
+-- Version 4.2.8  -- Amit -- 14-Dec-2020
