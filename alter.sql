@@ -2029,7 +2029,7 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 DELETE FROM `global_config` WHERE name = 'hepatitis_report_type';
 
 -- Prasath 09-Dec-2020
-UPDATE `privileges` SET  `display_name` = "Suppressed Target report"  where `privilege_name` = 'vlSuppressedTargetReport.php'
+UPDATE `privileges` SET  `display_name` = "Suppressed Target report"  where `privilege_name` = 'vlSuppressedTargetReport.php';
 -- Thana 10-Dec-2020
 ALTER TABLE `vl_imported_controls` ADD `tested_by` VARCHAR(255) NULL DEFAULT NULL AFTER `lot_expiration_date`;
 

@@ -8,6 +8,6 @@ CREATE TABLE `audit_vlsm`.`vl_request_form` SELECT * from `vlsm`.`vl_request_for
 DELIMITER //
 CREATE TRIGGER `vlsm`.`audit_vl_request_form` AFTER UPDATE ON `vlsm`.`vl_request_form`
 FOR EACH ROW BEGIN  
-    INSERT INTO `audit_vlsm`.`vl_request_form` SELECT * FROM `vlsm`.`vl_request_form` where `vlsm`.`vl_sample_id` = NEW.vl_sample_id;
+    INSERT INTO `audit_vlsm`.`vl_request_form` SELECT * FROM `vlsm`.`vl_request_form` where `vlsm`.vl_request_form.`vl_sample_id` = `audit_vlsm`.NEW.vl_sample_id;
 END;//
 DELIMITER ;
