@@ -13,7 +13,7 @@ class Hepatitis
 
     protected $db = null;
     protected $table = 'form_hepatitis';
-    protected $shortCode = 'VLHEP';
+    protected $shortCode = 'H';
 
     public function __construct($db = null)
     {
