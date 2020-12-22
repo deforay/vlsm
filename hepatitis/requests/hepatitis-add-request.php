@@ -267,7 +267,7 @@ if (file_exists($fileArray[$arr['vl_form']])) {
         }
     }
 
-    function insertSampleCode(formId, hepatitisSampleId, sampleCode, sampleCodeKey, sampleCodeFormat, countryId, sampleCollectionDate, provinceCode = null, provinceId = null) {
+    function insertSampleCode(formId, hepatitisTestType, hepatitisSampleId, sampleCode, sampleCodeKey, sampleCodeFormat, countryId, sampleCollectionDate, provinceCode = null, provinceId = null) {
         $.blockUI();
         $.post("/hepatitis/requests/insert-sample.php", {
             sampleCode: $("#" + sampleCode).val(),
@@ -276,6 +276,7 @@ if (file_exists($fileArray[$arr['vl_form']])) {
             countryId: countryId,
             sampleCollectionDate: $("#" + sampleCollectionDate).val(),
             provinceCode: provinceCode,
+            prefix: $("#" + hepatitisTestType).val(),
             provinceId: provinceId
         },
         function(data) {
