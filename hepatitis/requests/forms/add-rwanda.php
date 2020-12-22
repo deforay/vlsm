@@ -77,14 +77,28 @@ foreach ($pdResult as $provinceName) {
                                                 <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"></span>
                                                 <input type="hidden" id="sampleCode" name="sampleCode" />
                                             </td>
+                                            <td><label for="hepatitisTestType">Type of Hepatitis Test </label><span class="mandatory">*</span></td>
+                                            <td>
+                                                <select class="form-control isRequired" name="hepatitisTestType" id="hepatitisTestType" title="Please choose type hepatitis test" style="width:100%;" onchange="sampleCodeGeneration();">
+                                                    <option value="">--Select--</option>
+                                                    <option value="HBV">HBV</option>
+                                                    <option value="HCV">HCV</option>
+                                                </select>
+                                            </td>
                                         <?php } else { ?>
                                             <td><label for="sampleCode">Sample ID </label><span class="mandatory">*</span></td>
                                             <td>
                                                 <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Sample ID" title="Please enter sample id" style="width:100%;" onchange="checkSampleNameValidation('form_hepatitis','<?php echo $sampleCode; ?>',this.id,null,'The sample id that you entered already exists. Please try another sample id',null)" readonly/>
                                             </td>
+                                            <td><label for="hepatitisTestType">Type of Hepatitis Test </label><span class="mandatory">*</span></td>
+                                            <td>
+                                                <select class="form-control isRequired" name="hepatitisTestType" id="hepatitisTestType" title="Please choose type hepatitis test" style="width:100%;" onchange="sampleCodeGeneration();">
+                                                    <option value="">--Select--</option>
+                                                    <option value="HBV">HBV</option>
+                                                    <option value="HCV">HCV</option>
+                                                </select>
+                                            </td>
                                         <?php } ?>
-                                        <td></td>
-                                        <td></td>
                                         <td></td>
                                         <td></td>
                                     </tr>
@@ -583,7 +597,8 @@ foreach ($pdResult as $provinceName) {
         if (pName != '' && sDate != '') {
             $.post("/hepatitis/requests/generate-sample-code.php", {
                     sDate: sDate,
-                    pName: pName
+                    pName: pName,
+                    prefix : $('#hepatitisTestType').val()
                 },
                 function(data) {
                     var sCodeKey = JSON.parse(data);
@@ -674,7 +689,7 @@ foreach ($pdResult as $provinceName) {
             <?php
             if ($arr['hepatitis_sample_code'] == 'auto' || $arr['hepatitis_sample_code'] == 'YY' || $arr['hepatitis_sample_code'] == 'MMYY') {
             ?>
-                insertSampleCode('addHepatitisRequestForm', 'hepatitisSampleId', 'sampleCode', 'sampleCodeKey', 'sampleCodeFormat', 3, 'sampleCollectionDate');
+                insertSampleCode('addHepatitisRequestForm', 'hepatitisTestType', 'hepatitisSampleId', 'sampleCode', 'sampleCodeKey', 'sampleCodeFormat', 3, 'sampleCollectionDate');
             <?php
             } else {
             ?>
@@ -694,6 +709,9 @@ foreach ($pdResult as $provinceName) {
         });
         $('#province').select2({
             placeholder: "Province"
+        });
+        $('#labId').select2({
+            placeholder: "Lab Name"
         });
 
         $('#isResultAuthorized').change(function(e) {

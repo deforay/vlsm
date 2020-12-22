@@ -110,14 +110,30 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                     <tr>
                                         <?php if ($sarr['user_type'] == 'remoteuser') { ?>
                                             <td><label for="sampleCode">Sample ID </label> </td>
-                                            <td colspan="5">
+                                            <td>
                                                 <span id="sampleCodeInText" style="width:30%;border-bottom:1px solid #333;"><?php echo ($sCode != '') ? $sCode : $hepatitisInfo[$sampleCode]; ?></span>
                                                 <input type="hidden" class="<?php echo $sampleClass; ?>" id="sampleCode" name="sampleCode" value="<?php echo ($sCode != '') ? $sCode : $hepatitisInfo[$sampleCode]; ?>" />
                                             </td>
+                                            <td><label for="hepatitisTestType">Type of Hepatitis Test </label><span class="mandatory">*</span></td>
+                                            <td>
+                                                <select class="form-control disabled" name="hepatitisTestType" id="hepatitisTestType" title="Please choose type hepatitis test" style="width:100%;" disabled>
+                                                    <option value="">--Select--</option>
+                                                    <option value="HBV" <?php echo (isset($hepatitisInfo['hepatitis_test_type']) && $hepatitisInfo['hepatitis_test_type'] == 'HBV')?"selected='selected'":"";?>>HBV</option>
+                                                    <option value="HCV" <?php echo (isset($hepatitisInfo['hepatitis_test_type']) && $hepatitisInfo['hepatitis_test_type'] == 'HCV')?"selected='selected'":"";?>>HCV</option>
+                                                </select>
+                                            </td>
                                         <?php } else { ?>
                                             <td><label for="sampleCode">Sample ID </label><span class="mandatory">*</span> </td>
-                                            <td colspan="5">
-                                                <input type="text" readonly value="<?php echo ($sCode != '') ? $sCode : $hepatitisInfo[$sampleCode]; ?>" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Sample ID" title="Please enter Sample ID" style="width:30%;" onchange="" />
+                                            <td>
+                                                <input type="text" readonly value="<?php echo ($sCode != '') ? $sCode : $hepatitisInfo[$sampleCode]; ?>" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Sample ID" title="Please enter Sample ID" style="width:100%;" onchange="" />
+                                            </td>
+                                            <td><label for="hepatitisTestType">Type of Hepatitis Test </label><span class="mandatory">*</span></td>
+                                            <td>
+                                                <select class="form-control isRequired" name="hepatitisTestType" id="hepatitisTestType" title="Please choose type hepatitis test" style="width:100%;">
+                                                    <option value="">--Select--</option>
+                                                    <option value="HBV" <?php echo (isset($hepatitisInfo['hepatitis_test_type']) && $hepatitisInfo['hepatitis_test_type'] == 'HBV')?"selected='selected'":"";?>>HBV</option>
+                                                    <option value="HCV" <?php echo (isset($hepatitisInfo['hepatitis_test_type']) && $hepatitisInfo['hepatitis_test_type'] == 'HCV')?"selected='selected'":"";?>>HCV</option>
+                                                </select>
                                             </td>
                                         <?php } ?>
                                     </tr>
@@ -679,6 +695,10 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         $('#province').select2({
             placeholder: "Province"
         });
+        $('#labId').select2({
+            placeholder: "Lab Name"
+        });
+
         getfacilityProvinceDetails($("#facilityId"));
         checkIsResultAuthorized();
     });

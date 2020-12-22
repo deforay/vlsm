@@ -2044,3 +2044,6 @@ ALTER TABLE `form_covid19` ADD `tested_by` VARCHAR(255) NULL DEFAULT NULL AFTER 
 
 UPDATE `system_config` SET `value` = '4.2.8' WHERE `system_config`.`name` = 'version';
 -- Version 4.2.8  -- Amit -- 14-Dec-2020
+
+-- Thana 22-Dec-2020
+ALTER TABLE `form_hepatitis` ADD `hepatitis_test_type` VARCHAR(255) NULL DEFAULT NULL AFTER `external_sample_code`;

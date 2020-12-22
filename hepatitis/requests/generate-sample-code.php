@@ -26,5 +26,11 @@ if (isset($_POST['sampleFrom'])) {
   $sampleFrom = '';
 }
 
+if (isset($_POST['prefix'])) {
+  $prefix = $_POST['prefix'];
+} else {
+  $prefix = '';
+}
 
-echo $hepatitisModel->generateHepatitisSampleCode($province, $sampleCollectionDate, $sampleFrom);
+
+echo $hepatitisModel->generateHepatitisSampleCode($prefix, $province, $sampleCollectionDate, $sampleFrom);

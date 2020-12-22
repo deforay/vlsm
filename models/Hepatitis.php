@@ -20,7 +20,7 @@ class Hepatitis
         $this->db = $db;
     }
 
-    public function generateHepatitisSampleCode($provinceCode, $sampleCollectionDate, $sampleFrom = null, $provinceId = '', $maxCodeKeyVal = null)
+    public function generateHepatitisSampleCode($prefix, $provinceCode, $sampleCollectionDate, $sampleFrom = null, $provinceId = '', $maxCodeKeyVal = null)
     {
 
         $general = new \Vlsm\Models\General($this->db);
@@ -103,8 +103,9 @@ class Hepatitis
             $remotePrefix = $remotePrefix . "R";
             //$sampleCodeFormat = 'auto2';
         }
-
-
+        if(isset($prefix) && $prefix != ""){
+            $prefixFromConfig = $prefix;
+        }
         if ($sampleCodeFormat == 'auto') {
             //$pNameVal = explode("##", $provinceCode);
             $sCodeKey['sampleCode'] = ($remotePrefix . $provinceCode . $autoFormatedString . $sCodeKey['maxId']);

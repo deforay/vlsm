@@ -19,8 +19,7 @@ try {
     $provinceCode = (isset($_POST['provinceCode']) && !empty($_POST['provinceCode'])) ? $_POST['provinceCode'] : null;
     $provinceId = (isset($_POST['provinceId']) && !empty($_POST['provinceId'])) ? $_POST['provinceId'] : null;
     $sampleCollectionDate = (isset($_POST['sampleCollectionDate']) && !empty($_POST['sampleCollectionDate'])) ? $_POST['sampleCollectionDate'] : null;
-
-
+    $prefix = (isset($_POST['prefix']) && !empty($_POST['prefix'])) ? $_POST['prefix'] : null;
 
     if (empty($sampleCollectionDate)) {
         echo 0;
@@ -34,7 +33,7 @@ try {
             exit();
         }
     }
-    $sampleJson = $hepatitisModel->generateHepatitisSampleCode($provinceCode, $sampleCollectionDate, null, $provinceId);
+    $sampleJson = $hepatitisModel->generateHepatitisSampleCode($prefix, $provinceCode, $sampleCollectionDate, null, $provinceId);
     $sampleData = json_decode($sampleJson, true);
 
     $sampleDate = explode(" ", $_POST['sampleCollectionDate']);
