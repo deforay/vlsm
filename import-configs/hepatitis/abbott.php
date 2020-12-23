@@ -33,7 +33,6 @@ try {
     }
     if (move_uploaded_file($_FILES['resultFile']['tmp_name'], TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName)) {
 
-
         $bquery = "select MAX(batch_code_key) from batch_details";
         $bvlResult = $db->rawQuery($bquery);
         if ($bvlResult[0]['MAX(batch_code_key)'] != '' && $bvlResult[0]['MAX(batch_code_key)'] != null) {
@@ -44,7 +43,6 @@ try {
         }
 
         $newBatchCode = date('Ymd') . $maxBatchCodeKey;
-
 
         //load the CSV document from a file path
         $csv = Reader::createFromPath(TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName, 'r');
@@ -59,15 +57,7 @@ try {
             $metaRecords[$topRecord[0]] = $topRecord[1];
         }
 
-
-
-
-
         $csv->setHeaderOffset(20); //set the CSV header offset - including empty lines
-
-
-
-
 
         // get records starting from the specified row number
         // remember this does not count empty lines
@@ -122,11 +112,9 @@ try {
 
             $batchCode = "";
 
-
             if ($sampleCode == "") {
                 $sampleCode = $sampleType . $m;
             }
-
 
             if (!isset($infoFromFile[$sampleCode])) {
                 $infoFromFile[$sampleCode] = array(
@@ -141,12 +129,6 @@ try {
                 );
             }
         }
-
-
-
-
-
-
 
         $inc = 0;
         foreach ($infoFromFile as $sampleCode => $d) {
