@@ -79,7 +79,7 @@ foreach ($pdResult as $provinceName) {
                                             </td>
                                             <td><label for="hepatitisTestType">Type of Hepatitis Test </label><span class="mandatory">*</span></td>
                                             <td>
-                                                <select class="form-control isRequired" name="hepatitisTestType" id="hepatitisTestType" title="Please choose type hepatitis test" style="width:100%;" onchange="sampleCodeGeneration();">
+                                                <select class="form-control isRequired" name="hepatitisTestType" id="hepatitisTestType" title="Please choose type hepatitis test" style="width:100%;" onchange="sampleCodeGeneration();hepatitisTestTypeFn(this.value);">
                                                     <option value="">--Select--</option>
                                                     <option value="HBV">HBV</option>
                                                     <option value="HCV">HCV</option>
@@ -92,7 +92,7 @@ foreach ($pdResult as $provinceName) {
                                             </td>
                                             <td><label for="hepatitisTestType">Type of Hepatitis Test </label><span class="mandatory">*</span></td>
                                             <td>
-                                                <select class="form-control isRequired" name="hepatitisTestType" id="hepatitisTestType" title="Please choose type hepatitis test" style="width:100%;" onchange="sampleCodeGeneration();">
+                                                <select class="form-control isRequired" name="hepatitisTestType" id="hepatitisTestType" title="Please choose type hepatitis test" style="width:100%;" onchange="sampleCodeGeneration();hepatitisTestTypeFn(this.value);">
                                                     <option value="">--Select--</option>
                                                     <option value="HBV">HBV</option>
                                                     <option value="HCV">HCV</option>
@@ -355,18 +355,18 @@ foreach ($pdResult as $provinceName) {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th><label for="HBsAg">HBsAg Result</label></th>
-                                    <td>
-                                        <select class="form-control" name="HBsAg" id="HBsAg" title="Please choose HBsAg result">
+                                    <th class="hbvFields"><label for="HBsAg">HBsAg Result</label></th>
+                                    <td class="hbvFields">
+                                        <select class="hbvFields form-control" name="HBsAg" id="HBsAg" title="Please choose HBsAg result">
                                             <option value=''> -- Select -- </option>
                                             <option value='positive'>Positive</option>
                                             <option value='negative'>Negative</option>
                                             <option value='intermediate'>Intermediate</option>
                                         </select>
                                     </td>
-                                    <th><label for="antiHcv">Anti-HCV Result</label></th>
-                                    <td>
-                                        <select class="form-control" name="antiHcv" id="antiHcv" title="Please choose Anti-HCV result">
+                                    <th class="hcvFields"><label for="antiHcv">Anti-HCV Result</label></th>
+                                    <td class="hcvFields">
+                                        <select class="hcvFields form-control" name="antiHcv" id="antiHcv" title="Please choose Anti-HCV result">
                                             <option value=''> -- Select -- </option>
                                             <option value='positive'>Positive</option>
                                             <option value='negative'>Negative</option>
@@ -445,27 +445,27 @@ foreach ($pdResult as $provinceName) {
                                             <td><input class="form-control date rejection-show" type="text" name="rejectionDate" id="rejectionDate" placeholder="Select Rejection Date" /></td>
                                         </tr>
                                         <tr>
-                                            <th><label for="hcv">HCV VL Result</label></th>
-                                            <td>
-                                                <select class="labSecInput form-control rejected-input" name="hcv" id="hcv">
+                                            <th class="hcvFields"><label for="hcv">HCV VL Result</label></th>
+                                            <td class="hcvFields">
+                                                <select class="hcvFields labSecInput form-control rejected-input" name="hcv" id="hcv">
                                                     <?= $general->generateSelectOptions($hepatitisResults, null, '-- Select --'); ?>
                                                 </select>
                                             </td>
-                                            <th><label for="hbv">HBV VL Result</label></th>
-                                            <td>
-                                                <select class="labSecInput form-control rejected-input" name="hbv" id="hbv">
+                                            <th class="hbvFields"><label for="hbv">HBV VL Result</label></th>
+                                            <td class="hbvFields">
+                                                <select class="hbvFields labSecInput form-control rejected-input" name="hbv" id="hbv">
                                                     <?= $general->generateSelectOptions($hepatitisResults, null, '-- Select --'); ?>
                                                 </select>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th><label for="hcvCount">HCV VL Count</label></th>
-                                            <td>
-                                                <input type="text" class="labSecInput form-control rejected-input" placeholder="Enter HCV Count" title="Please enter HCV Count" name="hcvCount" id="hcvCount">
+                                            <th class="hcvFields"><label for="hcvCount">HCV VL Count</label></th>
+                                            <td class="hcvFields">
+                                                <input type="text" class="hcvFields labSecInput form-control rejected-input" placeholder="Enter HCV Count" title="Please enter HCV Count" name="hcvCount" id="hcvCount">
                                             </td>
-                                            <th><label for="hbvCount">HBV VL Count</label></th>
-                                            <td>
-                                                <input type="text" class="labSecInput form-control rejected-input" placeholder="Enter HBV Count" title="Please enter HBV Count" name="hbvCount" id="hbvCount">
+                                            <th class="hbvFields"><label for="hbvCount">HBV VL Count</label></th>
+                                            <td class="hbvFields">
+                                                <input type="text" class="hbvFields labSecInput form-control rejected-input" placeholder="Enter HBV Count" title="Please enter HBV Count" name="hbvCount" id="hbvCount">
                                             </td>
                                         </tr>
                                         <tr>
@@ -592,13 +592,15 @@ foreach ($pdResult as $provinceName) {
     }
 
     function sampleCodeGeneration() {
+
         var pName = $("#province").val();
         var sDate = $("#sampleCollectionDate").val();
+        var hepatitisTestType = $("#hepatitisTestType").val();
         if (pName != '' && sDate != '') {
             $.post("/hepatitis/requests/generate-sample-code.php", {
                     sDate: sDate,
                     pName: pName,
-                    prefix : $('#hepatitisTestType').val()
+                    prefix : hepatitisTestType
                 },
                 function(data) {
                     var sCodeKey = JSON.parse(data);
@@ -675,7 +677,12 @@ foreach ($pdResult as $provinceName) {
         } else{
             checkresult = false;
             alert("Please select test result for screening");
-            $('#HBsAg').focus();
+            if($('#hepatitisTestType').val() == 'HBV'){
+                $('#HBsAg').focus();
+            }
+            if($('#hepatitisTestType').val() == 'HCV'){
+                $('#antiHcv').focus();
+            }
         }
 
         if ($('#isResultAuthorized').val() != "yes") {
@@ -736,6 +743,44 @@ foreach ($pdResult as $provinceName) {
             $('#authorizedBy,#authorizedOn').prop('disabled', false);
             $('#authorizedBy,#authorizedOn').removeClass('disabled');
             $('#authorizedBy,#authorizedOn').addClass('isRequired');
+        }
+    }
+    
+    function hepatitisTestTypeFn(val){
+        if(val == 'HBV'){
+            option1 = 'Initial HBV VL'; 
+            option2 = 'Follow up HBV VL'; 
+            $('.hcvFields,#reasonVlTest').val('');
+            $('.hcvFields').hide();
+            $('.hbvFields').show();
+            $("#reasonVlTest option[value='Initial HCV VL']").remove();
+            $("#reasonVlTest option[value='SVR12 HCV VL']").remove();
+            
+            if ($("#reasonVlTest option[value='"+option1+"']").length == 0) {
+                $('#reasonVlTest').append(`
+                <option value="${option1}"> ${option1} </option>`); 
+            }
+            if ($("#reasonVlTest option[value='"+option2+"']").length == 0) {
+                $('#reasonVlTest').append(`
+                <option value="${option2}"> ${option2} </option>`); 
+            }
+        } else if(val == 'HCV'){
+            option1 = 'Initial HCV VL'; 
+            option2 = 'SVR12 HCV VL';
+            $('.hbvFields,#reasonVlTest').val('');
+            $('.hbvFields').hide();
+            $('.hcvFields').show();
+            $("#reasonVlTest option[value='Initial HBV VL']").remove();
+            $("#reasonVlTest option[value='Follow up HBV VL']").remove();
+            
+            if ($("#reasonVlTest option[value='"+option1+"']").length == 0) {
+                $('#reasonVlTest').append(`
+                <option value="${option1}"> ${option1} </option>`); 
+            }
+            if ($("#reasonVlTest option[value='"+option2+"']").length == 0) {
+                $('#reasonVlTest').append(`
+                <option value="${option2}"> ${option2} </option>`); 
+            }
         }
     }
 </script>
