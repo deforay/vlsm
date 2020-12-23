@@ -1019,7 +1019,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 								</a>
 								<ul class="treeview-menu">
 									<?php if (isset($_SESSION['privileges']) && in_array("addImportResult.php", $_SESSION['privileges'])) { ?>
-										<li class="allMenu hepatitisImportResultMenu"><a href="/import-result/addImportResult.php?t=<?php echo base64_encode('covid19'); ?>"><i class="fa fa-circle-o"></i> Import Result From File</a></li>
+										<li class="allMenu hepatitisImportResultMenu"><a href="/import-result/addImportResult.php?t=<?php echo base64_encode('hepatitis'); ?>"><i class="fa fa-circle-o"></i> Import Result From File</a></li>
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("hepatitis-manual-results.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu hepatitisResultsMenu"><a href="/hepatitis/results/hepatitis-manual-results.php"><i class="fa fa-circle-o"></i> Enter Result Manually</a></li>
