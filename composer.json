@@ -5,7 +5,8 @@
         "setasign/fpdi": "^2.3",
         "tecnickcom/tcpdf": "^6.3",
         "phpmailer/phpmailer": "^6.1",
-        "thingengineer/mysqli-database-class": "dev-master"
+        "thingengineer/mysqli-database-class": "dev-master",
+        "aranyasen/hl7": "^2.0"
     },
     "autoload": {
         "psr-4": {

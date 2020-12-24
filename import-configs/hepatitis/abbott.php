@@ -1,9 +1,8 @@
 <?php
 
 // File included in addImportResultHelper.php
-use League\Csv\Reader;
-use League\Csv\Statement;
 
+use Aranyasen\HL7\Message;
 
 try {
 
@@ -33,6 +32,9 @@ try {
     }
     if (move_uploaded_file($_FILES['resultFile']['tmp_name'], TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName)) {
 
+        $file_info = new finfo(FILEINFO_MIME); // object oriented approach!
+        $mime_type = $file_info->buffer(file_get_contents(TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName)); // e.g. gives "image/jpeg"
+
         $bquery = "select MAX(batch_code_key) from batch_details";
         $bvlResult = $db->rawQuery($bquery);
         if ($bvlResult[0]['MAX(batch_code_key)'] != '' && $bvlResult[0]['MAX(batch_code_key)'] != null) {
@@ -44,92 +46,146 @@ try {
 
         $newBatchCode = date('Ymd') . $maxBatchCodeKey;
 
-        //load the CSV document from a file path
-        $csv = Reader::createFromPath(TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName, 'r');
-        $csv->setDelimiter("\t");
+        $m = 1;
+        $skipTillRow = 23;
 
-        $stmt = new Statement();
-        $topRecords = $stmt->limit(18)->process($csv);
+        $sampleIdCol = 1;
+        $sampleTypeCol = 2;
+        $resultCol = 5;
+        $txtValCol = 6;
 
-        $metaRecords = array();
-        foreach ($topRecords as $topRecord) {
-            if (empty($topRecord[0])) continue;
-            $metaRecords[$topRecord[0]] = $topRecord[1];
-        }
+        $batchCodeVal = "";
+        $flagCol = 10;
+        $testDateCol = 11;
 
-        $csv->setHeaderOffset(20); //set the CSV header offset - including empty lines
+        $lotNumberCol = 12;
+        $reviewByCol = '';
+        $lotExpirationDateCol = 13;
 
-        // get records starting from the specified row number
-        // remember this does not count empty lines
-        // So in your file you may have the data starting from line 20
-        // but there are 2 empty lines, so we instruct to offset 18
-        $records = $stmt->offset(18)->process($csv);
-        $m = 0;
-        $infoFromFile = array();
-        foreach ($records as $record) {
-            $m++;
+        if (strpos($mime_type, 'text/plain') !== false) {
+            $infoFromFile = array();
+            $testDateRow = "";
+            $skip = 23;
 
-            $sampleCode = "";
-            $batchCode = "";
-            $sampleType = "";
-            $txtVal = "";
-            $resultFlag = "";
+            $row = 1;
+            if (($handle = fopen(TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName, "r")) !== false) {
+                
+                while (($sheetData = fgetcsv($handle, 10000, ",")) !== FALSE) {
+                    $num = count($sheetData);
+                    
 
-            $sampleCode = $record['SAMPLE ID'];
-            $sampleType = $record['SAMPLE TYPE'];
+                    // Create a Message object from a HL7 string
+                    $msg = new Message($sheetData[0]); // Either \n or \r can be used as segment endings
+                    $pid = $msg->getSegmentByIndex(1);
+                    echo $pid->getField(3); // prints 'abcd'
+                    echo $msg->toString(true); // Prints entire HL7 string
 
-            //$batchCode = $record[$batchCodeCol];
-            $resultFlag = $record['FLAGS'];
-            //$reviewBy = $record[$reviewByCol];
+                    // Get the first segment
+                    $msg->getFirstSegmentInstance('PID'); // Returns the first PID segment. Same as $msg->getSegmentsByName('PID')[0];
 
-            // Changing date to European format for strtotime - https://stackoverflow.com/a/5736255
+                    // Check if a segment is present in the message object
+                    $msg->hasSegment('PID'); // return true or false based on whether PID is present in the $msg object
 
-            $testingDate = date('Y-m-d H:i', strtotime($metaRecords['RUN COMPLETION TIME']));
-            $result = '';
+                    // Check if a message is empty
+                    $msg = new Message();
+                    $msg->isempty(); // Returns true
+                    
+                    echo "<pre>";print_r($msg->toString(true));echo "</pre>";die;
+                    $row++;
+                    if ($row < $skip) {
+                        if ($row == 8) {
+                            $timestamp = DateTime::createFromFormat('!m/d/Y h:i:s A', $sheetData[1]);
+                            if (!empty($timestamp)) {
+                                $timestamp = $timestamp->getTimestamp();
+                                $testingDate = date('Y-m-d H:i', ($timestamp));
+                            } else {
+                                $testingDate = null;
+                            }
+                        }
+                        // continue;
+                    }
+                    $sampleCode = "";
+                    $batchCode = "";
+                    $sampleType = "";
+                    $resultFlag = "";
+                    echo "<pre>";print_r($sheetData);echo "</pre>";die;
 
-            $result = strtolower($record['INTERPRETATION']);
+                    $sampleCode = $sheetData[$sampleIdCol];
+
+                    if ($sampleCode == "SAMPLE ID" || $sampleCode == "") {
+                        continue;
+                    }
+
+                    $sampleType = $sheetData[$sampleTypeCol];
+
+                    $batchCode = $sheetData[$batchCodeCol];
+                    $resultFlag = $sheetData[$flagCol];
+                    //$reviewBy = $sheetData[$reviewByCol];
+
+                    $result = '';
+
+                    if (strpos(strtolower($sheetData[$resultCol]), 'not detected') !== false) {
+                        $result = 'negative';
+                    } else if ((strpos(strtolower($sheetData[$resultCol]), 'detected') !== false) || (strpos(strtolower($sheetData[$resultCol]), 'passed') !== false)) {
+                        $result = 'positive';
+                    } else {
+                        $result = 'indeterminate';
+                    }
 
 
+                    $lotNumberVal = $sheetData[$lotNumberCol];
+                    if (trim($sheetData[$lotExpirationDateCol]) != '') {
+                        $timestamp = DateTime::createFromFormat('!m/d/Y', $sheetData[$lotExpirationDateCol]);
+                        if (!empty($timestamp)) {
+                            $timestamp = $timestamp->getTimestamp();
+                            $lotExpirationDateVal = date('Y-m-d H:i', $timestamp);
+                        } else {
+                            $lotExpirationDateVal = null;
+                        }
+                    }
 
-            $lotNumberVal = $record['REAGENT LOT NUMBER'];
-            
-            if (trim($record["REAGENT LOT EXPIRATION DATE"]) != '') {
-                $lotExpirationDateVal = (date('Y-m-d', strtotime($record["REAGENT LOT EXPIRATION DATE"])));
-            }
+                    $sampleType = $sheetData[$sampleTypeCol];
+                    if ($sampleType == 'Patient') {
+                        $sampleType = 'S';
+                    } else if ($sampleType == 'Control') {
 
-            if ($sampleType == 'Patient') {
-                $sampleType = 'S';
-            } else if ($sampleType == 'Control') {
+                        if ($sampleCode == 'HIV_HIPOS') {
+                            $sampleType = 'HPC';
+                            $sampleCode = $sampleCode . '-' . $lotNumberVal;
+                        } else if ($sampleCode == 'HIV_LOPOS') {
+                            $sampleType = 'LPC';
+                            $sampleCode = $sampleCode . '-' . $lotNumberVal;
+                        } else if ($sampleCode == 'HIV_NEG') {
+                            $sampleType = 'NC';
+                            $sampleCode = $sampleCode . '-' . $lotNumberVal;
+                        }
+                    }
 
-                if ($sampleCode == 'COV-2_POS') {
-                    $sampleType = 'HPC';
-                    $sampleCode = $sampleCode . '-' . $lotNumberVal;
-                } else if ($sampleCode == 'COV-2_NEG') {
-                    $sampleType = 'NC';
-                    $sampleCode = $sampleCode . '-' . $lotNumberVal;
+                    $batchCode = "";
+
+
+                    if ($sampleCode == "") {
+                        $sampleCode = $sampleType . $m;
+                    }
+
+                    if (!isset($infoFromFile[$sampleCode])) {
+                        $infoFromFile[$sampleCode] = array(
+                            "sampleCode" => $sampleCode,
+                            "resultFlag" => $resultFlag,
+                            "testingDate" => $testingDate,
+                            "sampleType" => $sampleType,
+                            "batchCode" => $batchCode,
+                            "lotNumber" => $lotNumberVal,
+                            "result" => $result,
+                            "lotExpirationDate" => $lotExpirationDateVal,
+                        );
+                    }
+
+                    $m++;
                 }
             }
-
-            $batchCode = "";
-
-            if ($sampleCode == "") {
-                $sampleCode = $sampleType . $m;
-            }
-
-            if (!isset($infoFromFile[$sampleCode])) {
-                $infoFromFile[$sampleCode] = array(
-                    "sampleCode" => $sampleCode,
-                    "resultFlag" => $resultFlag,
-                    "testingDate" => $testingDate,
-                    "sampleType" => $sampleType,
-                    "batchCode" => $batchCode,
-                    "lotNumber" => $lotNumberVal,
-                    "result" => $result,
-                    "lotExpirationDate" => $lotExpirationDateVal,
-                );
-            }
         }
-
+        echo "<pre>";print_r($infoFromFile);echo "</pre>";die;
         $inc = 0;
         foreach ($infoFromFile as $sampleCode => $d) {
             if ($d['sampleCode'] == $d['sampleType'] . $inc) {
@@ -159,7 +215,7 @@ try {
                 $data['batch_code'] = $batchCode;
             }
             //get user name
-            if (isset($d['reviewBy']) && $d['reviewBy'] != '') {
+            if (!empty($d['reviewBy'])) {
                 $uQuery = "select user_name,user_id from user_details where user_name='" . $d['reviewBy'] . "'";
                 $uResult = $db->rawQuery($uQuery);
                 if ($uResult) {
@@ -196,7 +252,7 @@ try {
             } else {
                 $data['sample_details'] = 'New Sample';
             }
-            //echo "<pre>";var_dump($data);echo "</pre>";continue;
+            echo "<pre>";print_r($data);echo "</pre>";continue;
             if ($sampleCode != '' || $batchCode != '' || $sampleType != '') {
                 $data['result_imported_datetime'] = $general->getDateTime();
                 $data['imported_by'] = $_SESSION['userId'];

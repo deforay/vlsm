@@ -20,4 +20,5 @@ return array(
     'Matrix\\' => array($vendorDir . '/markbaker/matrix/classes/src'),
     'League\\Csv\\' => array($vendorDir . '/league/csv/src'),
     'Complex\\' => array($vendorDir . '/markbaker/complex/classes/src'),
+    'Aranyasen\\' => array($vendorDir . '/aranyasen/hl7/src'),
 );
