@@ -15,7 +15,7 @@ if (!empty($tResult['sample_review_by'])) {
 }
 
 $module = $tResult['module'];
-
+echo "<pre>";print_r($module);die;
 
 $general = new \Vlsm\Models\General($db);
 $arr = $general->getGlobalConfig();
@@ -43,6 +43,14 @@ if ($module == 'vl') {
 
 	//sample rejection reason
 	$rejectionQuery = "SELECT * FROM r_covid19_sample_rejection_reasons where rejection_reason_status = 'active'";
+	$rejectionResult = $db->rawQuery($rejectionQuery);
+} else if ($module == 'hepatitis') {
+
+	$rejectionTypeQuery = "SELECT DISTINCT rejection_type FROM r_hepatitis_sample_rejection_reasons WHERE rejection_reason_status ='active'";
+	$rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
+
+	//sample rejection reason
+	$rejectionQuery = "SELECT * FROM r_hepatitis_sample_rejection_reasons where rejection_reason_status = 'active'";
 	$rejectionResult = $db->rawQuery($rejectionQuery);
 } else {
 	die('You seem to have reached this page by mistake. Please contact support if you need assistance.');

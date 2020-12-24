@@ -1,5 +1,56 @@
 [
     {
+        "name": "aranyasen/hl7",
+        "version": "2.0.1",
+        "version_normalized": "2.0.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/senaranya/HL7.git",
+            "reference": "786bdc1388fba9421ae59eddfa2e77e8f194c35a"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/senaranya/HL7/zipball/786bdc1388fba9421ae59eddfa2e77e8f194c35a",
+            "reference": "786bdc1388fba9421ae59eddfa2e77e8f194c35a",
+            "shasum": ""
+        },
+        "require": {
+            "ext-mbstring": "*",
+            "ext-sockets": "*",
+            "php": ">=7.2"
+        },
+        "require-dev": {
+            "dms/phpunit-arraysubset-asserts": "^0.1.0",
+            "ext-pcntl": "*",
+            "phpunit/phpunit": "^8"
+        },
+        "time": "2020-11-09T02:29:01+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "0.1.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Aranyasen\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Aranya Sen",
+                "email": "sen.aranya@gmail.com",
+                "role": "Owner"
+            }
+        ],
+        "description": "HL7 parser, generator and sender."
+    },
+    {
         "name": "league/csv",
         "version": "9.6.1",
         "version_normalized": "9.6.1.0",
@@ -71,12 +122,6 @@
             "read",
             "transform",
             "write"
-        ],
-        "funding": [
-            {
-                "url": "https://github.com/sponsors/nyamsprod",
-                "type": "github"
-            }
         ]
     },
     {
@@ -140,12 +185,6 @@
         "keywords": [
             "stream",
             "zip"
-        ],
-        "funding": [
-            {
-                "url": "https://opencollective.com/zipstream",
-                "type": "open_collective"
-            }
         ]
     },
     {
@@ -428,13 +467,7 @@
                 "name": "Brent R. Matzelle"
             }
         ],
-        "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-        "funding": [
-            {
-                "url": "https://github.com/synchro",
-                "type": "github"
-            }
-        ]
+        "description": "PHPMailer is a full-featured email creation and transfer class for PHP"
     },
     {
         "name": "phpoffice/phpspreadsheet",
@@ -803,12 +836,6 @@
             "fpdf",
             "fpdi",
             "pdf"
-        ],
-        "funding": [
-            {
-                "url": "https://tidelift.com/funding/github/packagist/setasign/fpdi",
-                "type": "tidelift"
-            }
         ]
     },
     {
@@ -874,20 +901,6 @@
             "polyfill",
             "portable",
             "shim"
-        ],
-        "funding": [
-            {
-                "url": "https://symfony.com/sponsor",
-                "type": "custom"
-            },
-            {
-                "url": "https://github.com/fabpot",
-                "type": "github"
-            },
-            {
-                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                "type": "tidelift"
-            }
         ]
     },
     {
