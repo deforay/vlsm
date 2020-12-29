@@ -150,11 +150,11 @@ try {
 		'travel_return_date'                  => isset($_POST['returnDate']) ? $general->dateFormat($_POST['returnDate']) : null,
 		'sample_received_at_vl_lab_datetime'  => isset($_POST['sampleReceivedDate']) ? $_POST['sampleReceivedDate'] : null,
 		'sample_condition'  				  => isset($_POST['sampleCondition']) ? $_POST['sampleCondition'] : (isset($_POST['specimenQuality']) ? $_POST['specimenQuality'] : null),
-		'lab_technician' 					  => (isset($_POST['labTechnician']) && $_POST['labTechnician'] != '') ? $_POST['labTechnician'] :  $_SESSION['userId'],
+		// 'lab_technician' 					  => (isset($_POST['labTechnician']) && $_POST['labTechnician'] != '') ? $_POST['labTechnician'] :  $_SESSION['userId'],
 		'is_sample_rejected'                  => isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
 		'result'                              => isset($_POST['result']) ? $_POST['result'] : null,
 		'other_diseases'                      => (isset($_POST['otherDiseases']) && $_POST['result'] != 'positive') ? $_POST['otherDiseases'] : null,
-		'tested_by'                       	  => isset($_POST['testedBy']) ? $_POST['testedBy'] : null,
+		// 'tested_by'                       	  => isset($_POST['testedBy']) ? $_POST['testedBy'] : null,
 		'is_result_authorised'                => isset($_POST['isResultAuthorized']) ? $_POST['isResultAuthorized'] : null,
 		'authorized_by'                       => isset($_POST['authorizedBy']) ? $_POST['authorizedBy'] : null,
 		'authorized_on' 					  => isset($_POST['authorizedOn']) ? $general->dateFormat($_POST['authorizedOn']) : null,
@@ -162,18 +162,28 @@ try {
 		'result_status'                       => $status,
 		'data_sync'                           => 0,
 		'reason_for_sample_rejection'         => (isset($_POST['sampleRejectionReason']) && $_POST['isSampleRejected'] == 'yes') ? $_POST['sampleRejectionReason'] : null,
-		'request_created_by'                  => $_SESSION['userId'],
+		// 'request_created_by'                  =>,
 		'request_created_datetime'            => $general->getDateTime(),
 		'sample_registered_at_lab'            => $general->getDateTime(),
-		'last_modified_by'                    => $_SESSION['userId'],
+		// 'last_modified_by'                    => $_SESSION['userId'],
 		'last_modified_datetime'              => $general->getDateTime()
 	);
 	$lock = $general->getGlobalConfig('lock_approved_covid19_samples');
     if($status == 7 && $lock == 'yes'){
 		$covid19Data['locked'] = 'yes';
 	}
+	if(isset($_POST['api']) && $_POST['api'] = "yes")
+	{
+
+	}
+	else
+	{
+		$covid19Data['request_created_by'] =  $_SESSION['userId'];
+		$covid19Data['last_modified_by'] =  $_SESSION['userId'];
+		$covid19Data['lab_technician'] = (isset($_POST['labTechnician']) && $_POST['labTechnician'] != '') ? $_POST['labTechnician'] :  $_SESSION['userId'];
+	}
 	// echo "<pre>";
-	// print_r($covid19Data);die;
+	// print_r($_POST);die;
 
 	$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 	$db->delete("covid19_patient_symptoms");
@@ -188,7 +198,7 @@ try {
 			$db->insert("covid19_patient_symptoms", $symptomData);
 		}
 	}
-
+	
 	$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 	$db->delete("covid19_reasons_for_testing");
 	if (!empty($_POST['reasonDetails'])) {
@@ -200,6 +210,7 @@ try {
 		//var_dump($reasonData);
 		$db->insert("covid19_reasons_for_testing", $reasonData);
 	}
+	
 //die;
 	$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 	$db->delete("covid19_patient_comorbidities");
@@ -213,8 +224,8 @@ try {
 			$db->insert("covid19_patient_comorbidities", $comorbidityData);
 		}
 	}
-
-	// echo "<pre>";print_r($_POST['testName']);die;
+	
+	// echo "<pre>";print_r($_POST);die;
 	if (isset($_POST['covid19SampleId']) && $_POST['covid19SampleId'] != '' && ($_POST['isSampleRejected'] == 'no' || $_POST['isSampleRejected'] == '')) {
 		if (isset($_POST['testName']) && count($_POST['testName']) > 0) {
 			foreach ($_POST['testName'] as $testKey => $testKitName) {
@@ -248,26 +259,43 @@ try {
 		// echo "<pre>"; print_r($covid19Data);die;
 		$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 		$id = $db->update($tableName, $covid19Data);
+		// print_r($covid19Data);die;
 	}
-
-	if ($id > 0) {
-		$_SESSION['alertMsg'] = "Covid-19 test request added successfully";
-		//Add event log
-		$eventType = 'covid-19-add-request';
-		$action = ucwords($_SESSION['userName']) . ' added a new Covid-19 request data with the sample id ' . $_POST['covid19SampleId'];
-		$resource = 'covid-19-add-request';
-
-		$general->activityLog($eventType, $action, $resource);
-	} else {
-		$_SESSION['alertMsg'] = "Unable to add this Covid-19 sample. Please try again later";
+	// print_r($_POST);die;
+	if(isset($_POST['api']) && $_POST['api'] = "yes")
+	{
+		$payload = array(
+			        'status' => 'success',
+			        'timestamp' => time(),
+			        'message' => 'Successfully added.'
+			    );
+			   
+			
+			    http_response_code(200);
+			    echo json_encode($payload);
+			    exit(0);
 	}
-	if(isset($_POST['saveNext']) && $_POST['saveNext'] == 'next' && (isset($_POST['quickForm']) && $_POST['quickForm'] == "quick")){
-		header("location:/covid-19/requests/covid-19-quick-add.php");
-	} else{
-		if (isset($_POST['saveNext']) && $_POST['saveNext'] == 'next') {
-			header("location:/covid-19/requests/covid-19-add-request.php");
+	else
+	{
+		if ($id > 0) {
+			$_SESSION['alertMsg'] = "Covid-19 test request added successfully";
+			//Add event log
+			$eventType = 'covid-19-add-request';
+			$action = ucwords($_SESSION['userName']) . ' added a new Covid-19 request data with the sample id ' . $_POST['covid19SampleId'];
+			$resource = 'covid-19-add-request';
+	
+			$general->activityLog($eventType, $action, $resource);
 		} else {
-			header("location:/covid-19/requests/covid-19-requests.php");
+			$_SESSION['alertMsg'] = "Unable to add this Covid-19 sample. Please try again later";
+		}
+		if(isset($_POST['saveNext']) && $_POST['saveNext'] == 'next' && (isset($_POST['quickForm']) && $_POST['quickForm'] == "quick")){
+			header("location:/covid-19/requests/covid-19-quick-add.php");
+		} else{
+			if (isset($_POST['saveNext']) && $_POST['saveNext'] == 'next') {
+				header("location:/covid-19/requests/covid-19-add-request.php");
+			} else {
+				header("location:/covid-19/requests/covid-19-requests.php");
+			}
 		}
 	}
 } catch (Exception $exc) {
