@@ -1,4 +1,8 @@
 <?php
+
+///  if you change anyting in this file make sure Api file for covid 19 add also 
+// Path   /vlsm/api/covid-19/v1/add-request.php
+
 ob_start();
 if (session_status() == PHP_SESSION_NONE) {
 	session_start();
