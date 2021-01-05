@@ -186,15 +186,25 @@ try {
 		'result_status' 									=> $status,
 		'data_sync' 										=> 0,
 		'reason_for_sample_rejection' 						=> isset($_POST['sampleRejectionReason']) ? $_POST['sampleRejectionReason'] : null,
-		'request_created_by' 								=> $_SESSION['userId'],
+		// 'request_created_by' 								=> $_SESSION['userId'],
 		'request_created_datetime' 							=> $general->getDateTime(),
 		'sample_registered_at_lab' 							=> $general->getDateTime(),
-		'last_modified_by' 									=> $_SESSION['userId'],
+		// 'last_modified_by' 									=> $_SESSION['userId'],
 		'last_modified_datetime' 							=> $general->getDateTime()
 	);
 	$lock = $general->getGlobalConfig('lock_approved_eid_samples');
 	if ($status == 7 && $lock == 'yes') {
 		$eidData['locked'] = 'yes';
+	}
+
+	if(isset($_POST['api']) && $_POST['api'] = "yes")
+	{
+
+	}
+	else
+	{
+		$eidData['request_created_by'] =  $_SESSION['userId'];
+		$eidData['last_modified_by'] =  $_SESSION['userId'];
 	}
 
 	/* echo "<pre>";
@@ -204,31 +214,46 @@ try {
 		$db = $db->where('eid_id', $_POST['eidSampleId']);
 		$id = $db->update($tableName, $eidData);
 	}
-
-	if ($id > 0) {
-		$_SESSION['alertMsg'] = "EID request added successfully";
-		//Add event log
-		$eventType = 'add-eid-request-drc';
-		$action = ucwords($_SESSION['userName']) . ' added a new EID request data with the sample id ' . $_POST['eidSampleId'];
-		$resource = 'eid-request-drc';
-
-		$general->activityLog($eventType, $action, $resource);
-
-		// $data=array(
-		// 'event_type'=>$eventType,
-		// 'action'=>$action,
-		// 'resource'=>$resource,
-		// 'date_time'=>$general->getDateTime()
-		// );
-		// $db->insert($tableName1,$data);
-
-	} else {
-		$_SESSION['alertMsg'] = "Please try again later";
+	if(isset($_POST['api']) && $_POST['api'] = "yes")
+	{
+		$payload = array(
+			        'status' => 'success',
+			        'timestamp' => time(),
+			        'message' => 'Successfully added.'
+			    );
+			   
+			
+			    http_response_code(200);
+			    echo json_encode($payload);
+			    exit(0);
 	}
-	if (isset($_POST['saveNext']) && $_POST['saveNext'] == 'next') {
-		header("location:/eid/requests/eid-add-request.php");
-	} else {
-		header("location:/eid/requests/eid-requests.php");
+	else
+	{
+		if ($id > 0) {
+			$_SESSION['alertMsg'] = "EID request added successfully";
+			//Add event log
+			$eventType = 'add-eid-request-drc';
+			$action = ucwords($_SESSION['userName']) . ' added a new EID request data with the sample id ' . $_POST['eidSampleId'];
+			$resource = 'eid-request-drc';
+
+			$general->activityLog($eventType, $action, $resource);
+
+			// $data=array(
+			// 'event_type'=>$eventType,
+			// 'action'=>$action,
+			// 'resource'=>$resource,
+			// 'date_time'=>$general->getDateTime()
+			// );
+			// $db->insert($tableName1,$data);
+
+		} else {
+			$_SESSION['alertMsg'] = "Please try again later";
+		}
+		if (isset($_POST['saveNext']) && $_POST['saveNext'] == 'next') {
+			header("location:/eid/requests/eid-add-request.php");
+		} else {
+			header("location:/eid/requests/eid-requests.php");
+		}
 	}
 } catch (Exception $exc) {
 	error_log($exc->getMessage());

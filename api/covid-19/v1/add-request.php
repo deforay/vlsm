@@ -12,10 +12,6 @@ header('Content-Type: application/json');
 
 $general = new \Vlsm\Models\General($db);
 
-$tableName = "form_covid19";
-$tableName1 = "activity_log";
-$testTableName = 'covid19_tests';
-
 
 $data = json_decode(file_get_contents("php://input"),true);
 $data['api'] = "yes";
