@@ -16,7 +16,7 @@ $general = new \Vlsm\Models\General($db);
 $data = json_decode(file_get_contents("php://input"),true);
 $data['api'] = "yes";
 $_POST = $data;
-include_once(APPLICATION_PATH . '/covid-19/requests/covid-19-edit-request-helper.php');
+include_once(APPLICATION_PATH . '/eid/requests/eid-add-request-helper.php');
 
 try {
 
