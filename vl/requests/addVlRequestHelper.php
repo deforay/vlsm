@@ -335,7 +335,7 @@ try {
 		$payload = array(
 			        'status' => 'success',
 			        'timestamp' => time(),
-			        'message' => 'Successfully updated.'
+			        'message' => 'Successfully added.'
 			    );
 			   
 			
