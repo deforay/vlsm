@@ -277,7 +277,7 @@ try {
           'funding_source' => (isset($_POST['fundingSource']) && trim($_POST['fundingSource']) != '') ? base64_decode($_POST['fundingSource']) : NULL,
           'implementing_partner' => (isset($_POST['implementingPartner']) && trim($_POST['implementingPartner']) != '') ? base64_decode($_POST['implementingPartner']) : NULL,
           'reason_for_vl_result_changes' => $reasonForChanges,
-          'last_modified_by' => $_SESSION['userId'],
+          // 'last_modified_by' => $_SESSION['userId'],
           'last_modified_datetime' => $general->getDateTime(),
           'manual_result_entry' => 'yes',
           'data_sync' => 0,
@@ -287,6 +287,12 @@ try {
      if($lock == 'yes' && $_POST['status'] == 7){
           $vldata['locked'] = 'yes';
      }
+     if(isset($_POST['api']) && $_POST['api'] = "yes")
+     {
+
+     }
+	else
+		$vldata['last_modified_by'] =  $_SESSION['userId'];
      if ($sarr['user_type'] == 'remoteuser') {
           $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] :  NULL;
      } else if ($_POST['sampleCodeCol'] != '') {
@@ -298,28 +304,44 @@ try {
 
      $db = $db->where('vl_sample_id', $_POST['vlSampleId']);
      $id = $db->update($tableName, $vldata);
-     if ($id > 0) {
-          $_SESSION['alertMsg'] = "VL request updated successfully";
-          //Add event log
+     if(isset($_POST['api']) && $_POST['api'] = "yes")
+	{
+		$payload = array(
+			        'status' => 'success',
+			        'timestamp' => time(),
+			        'message' => 'Successfully updated.'
+			    );
+			   
+			
+			    http_response_code(200);
+			    echo json_encode($payload);
+			    exit(0);
+	}
+	else
+	{
+          if ($id > 0) {
+               $_SESSION['alertMsg'] = "VL request updated successfully";
+               //Add event log
 
-          $eventType = 'update-vl-request-sudan';
-          $action = ucwords($_SESSION['userName']) . ' updated a request data with the sample code ' . $_POST['sampleCode'];
-          $resource = 'vl-request-ss';
+               $eventType = 'update-vl-request-sudan';
+               $action = ucwords($_SESSION['userName']) . ' updated a request data with the sample code ' . $_POST['sampleCode'];
+               $resource = 'vl-request-ss';
 
-          $general->activityLog($eventType, $action, $resource);
+               $general->activityLog($eventType, $action, $resource);
 
-          //   $data=array(
-          //        'event_type'=>$eventType,
-          //        'action'=>$action,
-          //        'resource'=>$resource,
-          //        'date_time'=>$general->getDateTime()
-          //   );
-          //   $db->insert($tableName1,$data);
+               //   $data=array(
+               //        'event_type'=>$eventType,
+               //        'action'=>$action,
+               //        'resource'=>$resource,
+               //        'date_time'=>$general->getDateTime()
+               //   );
+               //   $db->insert($tableName1,$data);
 
-     } else {
-          $_SESSION['alertMsg'] = "Please try again later";
+          } else {
+               $_SESSION['alertMsg'] = "Please try again later";
+          }
+          header("location:vlRequest.php");
      }
-     header("location:vlRequest.php");
 } catch (Exception $exc) {
      error_log($exc->getMessage());
      error_log($exc->getTraceAsString());
