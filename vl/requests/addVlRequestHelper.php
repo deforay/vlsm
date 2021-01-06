@@ -273,9 +273,9 @@ try {
         'result_status' => $status,
         'funding_source' => (isset($_POST['fundingSource']) && trim($_POST['fundingSource']) != '') ? base64_decode($_POST['fundingSource']) : NULL,
         'implementing_partner' => (isset($_POST['implementingPartner']) && trim($_POST['implementingPartner']) != '') ? base64_decode($_POST['implementingPartner']) : NULL,
-        'request_created_by' => $_SESSION['userId'],
+        // 'request_created_by' => $_SESSION['userId'],
         'request_created_datetime' => $general->getDateTime(),
-        'last_modified_by' => $_SESSION['userId'],
+        // 'last_modified_by' => $_SESSION['userId'],
         'last_modified_datetime' => $general->getDateTime(),
         'manual_result_entry' => 'yes',
         'vl_result_category' => $vl_result_category
@@ -284,6 +284,16 @@ try {
     if ($lock == 'yes' && $status == 7) {
         $vldata['locked'] = 'yes';
     }
+
+    if(isset($_POST['api']) && $_POST['api'] = "yes")
+	{
+
+	}
+	else
+	{
+		$vldata['request_created_by'] =  $_SESSION['userId'];
+		$vldata['last_modified_by'] =  $_SESSION['userId'];
+	}
     $vldata['patient_first_name'] = $general->crypto('encrypt', $_POST['patientFirstName'], $vldata['patient_art_no']);
 
     if (isset($_POST['vlSampleId']) && $_POST['vlSampleId'] != '') {
@@ -320,41 +330,56 @@ try {
         $vldata['sample_code_format'] = (isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat'] != '') ? $_POST['sampleCodeFormat'] :  NULL;
         $id = $db->insert($tableName, $vldata);
     }
+    if(isset($_POST['api']) && $_POST['api'] = "yes")
+	{
+		$payload = array(
+			        'status' => 'success',
+			        'timestamp' => time(),
+			        'message' => 'Successfully updated.'
+			    );
+			   
+			
+			    http_response_code(200);
+			    echo json_encode($payload);
+			    exit(0);
+	}
+	else
+	{
+        if ($id > 0) {
+            $_SESSION['alertMsg'] = "VL request added successfully";
+            //Add event log
 
-    if ($id > 0) {
-        $_SESSION['alertMsg'] = "VL request added successfully";
-        //Add event log
+            $eventType = 'add-vl-request-sudan';
+            $action = ucwords($_SESSION['userName']) . ' added a new request data with the sample code ' . $_POST['sampleCode'];
+            $resource = 'vl-request-ss';
 
-        $eventType = 'add-vl-request-sudan';
-        $action = ucwords($_SESSION['userName']) . ' added a new request data with the sample code ' . $_POST['sampleCode'];
-        $resource = 'vl-request-ss';
+            $general->activityLog($eventType, $action, $resource);
 
-        $general->activityLog($eventType, $action, $resource);
+            //  $data=array(
+            //  'event_type'=>$eventType,
+            //  'action'=>$action,
+            //  'resource'=>$resource,
+            //  'date_time'=>$general->getDateTime()
+            //  );
+            //  $db->insert($tableName1,$data);
 
-        //  $data=array(
-        //  'event_type'=>$eventType,
-        //  'action'=>$action,
-        //  'resource'=>$resource,
-        //  'date_time'=>$general->getDateTime()
-        //  );
-        //  $db->insert($tableName1,$data);
+            $barcode = "";
+            if (isset($_POST['printBarCode']) && $_POST['printBarCode'] == 'on') {
+                $s = $_POST['sampleCode'];
+                $facQuery = "SELECT * FROM facility_details where facility_id=" . $_POST['fName'];
+                $facResult = $db->rawQuery($facQuery);
+                $f = ucwords($facResult[0]['facility_name']) . " | " . $_POST['sampleCollectionDate'];
+                $barcode = "?barcode=true&s=$s&f=$f";
+            }
 
-        $barcode = "";
-        if (isset($_POST['printBarCode']) && $_POST['printBarCode'] == 'on') {
-            $s = $_POST['sampleCode'];
-            $facQuery = "SELECT * FROM facility_details where facility_id=" . $_POST['fName'];
-            $facResult = $db->rawQuery($facQuery);
-            $f = ucwords($facResult[0]['facility_name']) . " | " . $_POST['sampleCollectionDate'];
-            $barcode = "?barcode=true&s=$s&f=$f";
-        }
-
-        if (isset($_POST['saveNext']) && $_POST['saveNext'] == 'next') {
-            header("location:addVlRequest.php");
+            if (isset($_POST['saveNext']) && $_POST['saveNext'] == 'next') {
+                header("location:addVlRequest.php");
+            } else {
+                header("location:vlRequest.php");
+            }
         } else {
-            header("location:vlRequest.php");
+            $_SESSION['alertMsg'] = "Please try again later";
         }
-    } else {
-        $_SESSION['alertMsg'] = "Please try again later";
     }
 } catch (Exception $exc) {
     error_log($exc->getMessage());
