@@ -16,8 +16,8 @@ $general = new \Vlsm\Models\General($db);
 $data = json_decode(file_get_contents("php://input"),true);
 $data['api'] = "yes";
 $_POST = $data;
+// print_r(APPLICATION_PATH . '/vl/requests/addVlRequestHelper.php');die;
 include_once(APPLICATION_PATH . '/vl/requests/addVlRequestHelper.php');
-
 try {
 
 } catch (Exception $exc) {
