@@ -12,14 +12,20 @@ $vlTestReasonTable = "r_vl_test_reasons";
 $fDetails = "facility_details";
 $vl_result_category = NULL;
 try {
-     $validateField = array($_POST['sampleCode'], $_POST['sampleCollectionDate']);
-     $chkValidation = $general->checkMandatoryFields($validateField);
-     if ($chkValidation) {
-          $_SESSION['alertMsg'] = "Please enter all mandatory fields to save the test request";
-          header("location:editVlRequest.php?id=" . base64_encode($_POST['vlSampleId']));
-          die;
+     if(isset($_POST['api']) && $_POST['api'] = "yes")
+	{
+	}
+	else
+	{
+          $validateField = array($_POST['sampleCode'], $_POST['sampleCollectionDate']);
+          $chkValidation = $general->checkMandatoryFields($validateField);
+          if ($chkValidation) {
+               $_SESSION['alertMsg'] = "Please enter all mandatory fields to save the test request";
+               header("location:editVlRequest.php?id=" . base64_encode($_POST['vlSampleId']));
+               die;
+          }
      }
-     //system config
+          //system config
      $systemConfigQuery = "SELECT * from system_config";
      $systemConfigResult = $db->query($systemConfigQuery);
      $sarr = array();
