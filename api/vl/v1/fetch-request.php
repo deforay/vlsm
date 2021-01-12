@@ -11,12 +11,29 @@ ini_set('memory_limit', -1);
 header('Content-Type: application/json');
 
 $general = new \Vlsm\Models\General($db);
-// $userDb = new \Vlsm\Models\Users($db);
-// $user = null;
+$userDb = new \Vlsm\Models\Users($db);
+$user = null;
 // The request has to send an Authorization Bearer token 
-
+$auth = $general->getHeader('Authorization');
+if (!empty($auth)) {
+    $authToken = str_replace("Bearer ", "", $auth);
+    /* Check if API token exists */
+    $user = $userDb->getAuthToken($authToken);
+}
 
 // If authentication fails then do not proceed
+if (empty($user) || empty($user['user_id'])) {
+    $response = array(
+        'status' => 'failed',
+        'timestamp' => time(),
+        'error' => 'Bearer Token Invalid',
+        'data' => array()
+    );
+    http_response_code(401);
+    echo json_encode($response);
+    exit(0);
+}
+
 
 
 try {
