@@ -11,9 +11,31 @@ ini_set('memory_limit', -1);
 header('Content-Type: application/json');
 
 $general = new \Vlsm\Models\General($db);
-
+$userDb = new \Vlsm\Models\Users($db);
+$user = null;
 
 $data = json_decode(file_get_contents("php://input"),true);
+if(isset($data['api_token']) && $data['api_token']!='')
+{
+    $auth = $data['api_token'];
+    $authToken = str_replace("Bearer ", "", $auth);
+    /* Check if API token exists */
+    $user = $userDb->getAuthToken($authToken);
+}
+// If authentication fails then do not proceed
+if (empty($user) || empty($user['user_id'])) {
+    $response = array(
+        'status' => 'failed',
+        'timestamp' => time(),
+        'error' => 'Bearer Token Invalid',
+        'data' => array()
+    );
+    http_response_code(401);
+    echo json_encode($response);
+    exit(0);
+}
+
+// $data = json_decode(file_get_contents("php://input"),true);
 $data['api'] = "yes";
 $_POST = $data;
 include_once(APPLICATION_PATH . '/covid-19/requests/covid-19-edit-request-helper.php');
