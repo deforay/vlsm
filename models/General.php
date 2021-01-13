@@ -419,6 +419,20 @@ class General
         }
     }
 
+    public function getHttpValue($key)
+    {
+        // print_r($_SERVER);die;
+        foreach($_SERVER as $header=>$value) { 
+            if (substr($header,0,5)=="HTTP_") { 
+                $header=str_replace(" ","-",ucwords(strtolower(str_replace("_"," ",substr($header,5))))); 
+                if (strtolower($key) == strtolower($header)) {
+                    return $value;
+                }
+            }
+        } 
+        // return $out; 
+    }
+
     public function getTestingPlatforms($testType = null)
     {
 

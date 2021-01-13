@@ -14,7 +14,7 @@ $general = new \Vlsm\Models\General($db);
 $userDb = new \Vlsm\Models\Users($db);
 $user = null;
 // The request has to send an Authorization Bearer token 
-$auth = $general->getHeader('Authorization');
+$auth = $general->getHttpValue('Authorization');
 if (!empty($auth)) {
     $authToken = str_replace("Bearer ", "", $auth);
     /* Check if API token exists */
