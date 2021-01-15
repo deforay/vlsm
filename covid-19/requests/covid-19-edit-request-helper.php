@@ -160,11 +160,11 @@ try {
 		'travel_return_date'                  => isset($_POST['returnDate']) ? $general->dateFormat($_POST['returnDate']) : null,
 		'sample_received_at_vl_lab_datetime'  => isset($_POST['sampleReceivedDate']) ? $_POST['sampleReceivedDate'] : null,
 		'sample_condition'  				  => isset($_POST['sampleCondition']) ? $_POST['sampleCondition'] : (isset($_POST['specimenQuality']) ? $_POST['specimenQuality'] : null),
-		'lab_technician' 					  => (isset($_POST['labTechnician']) && $_POST['labTechnician'] != '') ? $_POST['labTechnician'] :  $_SESSION['userId'],
+		// 'lab_technician' 					  => (isset($_POST['labTechnician']) && $_POST['labTechnician'] != '') ? $_POST['labTechnician'] :  $_SESSION['userId'],
 		'is_sample_rejected'                  => isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
 		'result'                              => isset($_POST['result']) ? $_POST['result'] : null,
 		'other_diseases'                      => (isset($_POST['otherDiseases']) && $_POST['result'] != 'positive') ? $_POST['otherDiseases'] : null,
-		'tested_by'                       	  => isset($_POST['testedBy']) ? $_POST['testedBy'] : null,
+		// 'tested_by'                       	  => isset($_POST['testedBy']) ? $_POST['testedBy'] : null,
 		'is_result_authorised'                => isset($_POST['isResultAuthorized']) ? $_POST['isResultAuthorized'] : null,
 		'authorized_by'                       => isset($_POST['authorizedBy']) ? $_POST['authorizedBy'] : null,
 		'authorized_on' 					  => isset($_POST['authorizedOn']) ? $general->dateFormat($_POST['authorizedOn']) : null,
@@ -182,6 +182,15 @@ try {
 		$covid19Data['locked'] = 'yes';
 	}
 
+	if(isset($_POST['api']) && $_POST['api'] = "yes")
+	{
+
+	}
+	else
+	{
+		$covid19Data['last_modified_by'] =  $_SESSION['userId'];
+		$covid19Data['lab_technician'] = (isset($_POST['labTechnician']) && $_POST['labTechnician'] != '') ? $_POST['labTechnician'] :  $_SESSION['userId'];
+	}
 	// if ($sarr['user_type'] == 'remoteuser') {
 	// 	//$covid19Data['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] : NULL;
 	// } else {
@@ -284,27 +293,43 @@ try {
 		$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 		$id = $db->update($tableName, $covid19Data);
 	}
-	if ($id > 0 || $sid > 0 || $pid > 0) {
-		$_SESSION['alertMsg'] = "Covid-19 request updated successfully";
-		//Add event log
-		$eventType = 'update-covid-19-request';
-		$action = ucwords($_SESSION['userName']) . ' updated Covid-19 request data with the sample id ' . $_POST['covid19SampleId'];
-		$resource = 'covid-19-edit-request';
-
-		$general->activityLog($eventType, $action, $resource);
-
-		// $data=array(
-		// 'event_type'=>$eventType,
-		// 'action'=>$action,
-		// 'resource'=>$resource,
-		// 'date_time'=>$general->getDateTime()
-		// );
-		// $db->insert($tableName1,$data);
-
-	} else {
-		$_SESSION['alertMsg'] = "Please try again later";
+	if(isset($_POST['api']) && $_POST['api'] = "yes")
+	{
+		$payload = array(
+			        'status' => 'success',
+			        'timestamp' => time(),
+			        'message' => 'Successfully updated.'
+			    );
+			   
+			
+			    http_response_code(200);
+			    echo json_encode($payload);
+			    exit(0);
 	}
-	header("location:/covid-19/requests/covid-19-requests.php");
+	else
+	{
+		if ($id > 0 || $sid > 0 || $pid > 0) {
+			$_SESSION['alertMsg'] = "Covid-19 request updated successfully";
+			//Add event log
+			$eventType = 'update-covid-19-request';
+			$action = ucwords($_SESSION['userName']) . ' updated Covid-19 request data with the sample id ' . $_POST['covid19SampleId'];
+			$resource = 'covid-19-edit-request';
+
+			$general->activityLog($eventType, $action, $resource);
+
+			// $data=array(
+			// 'event_type'=>$eventType,
+			// 'action'=>$action,
+			// 'resource'=>$resource,
+			// 'date_time'=>$general->getDateTime()
+			// );
+			// $db->insert($tableName1,$data);
+
+		} else {
+			$_SESSION['alertMsg'] = "Please try again later";
+		}
+		header("location:/covid-19/requests/covid-19-requests.php");
+	}
 } catch (Exception $exc) {
 	error_log($exc->getMessage());
 	error_log($exc->getTraceAsString());

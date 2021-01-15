@@ -35,11 +35,10 @@ if (empty($user) || empty($user['user_id'])) {
     exit(0);
 }
 
-// $data = json_decode(file_get_contents("php://input"),true);
 $data['api'] = "yes";
 $_POST = $data;
-include_once(APPLICATION_PATH . '/covid-19/requests/covid-19-add-request-helper.php');
-
+// print_r(APPLICATION_PATH . '/vl/requests/addVlRequestHelper.php');die;
+include_once(APPLICATION_PATH . '/vl/requests/addVlRequestHelper.php');
 try {
 
 } catch (Exception $exc) {
