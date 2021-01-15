@@ -64,7 +64,13 @@ if (count($interfaceInfo) > 0) {
                         $logVal = $vlResult;
                         $vlResult = $absVal = $absDecimalVal = round((float) round(pow(10, $logVal) * 100) / 100);
                     } else {
-                        if (strpos($vlResult, "<") !== false) {
+                        if ($vlResult == "< Titer min") {
+                            $absDecimalVal = 20;
+                            $txtVal = $vlResult = $absVal = "<20";
+                        } else if ($vlResult == "> Titer max") {
+                            $absDecimalVal = 10000000;
+                            $txtVal = $vlResult = $absVal = ">1000000";
+                        } else if (strpos($vlResult, "<") !== false) {
                             $logVal = str_replace("<", "", $vlResult);
                             $absDecimalVal = round((float) round(pow(10, $logVal) * 100) / 100);
                             $txtVal = $vlResult = $absVal = "< " . trim($absDecimalVal);
@@ -104,7 +110,13 @@ if (count($interfaceInfo) > 0) {
                     $absDecimalVal = (float) trim($vlResult);
                     $logVal = round(log10($absDecimalVal), 2);
                 } else {
-                    if (strpos($vlResult, "<") !== false) {
+                    if ($vlResult == "< Titer min") {
+                        $absDecimalVal = 20;
+                        $txtVal = $vlResult = $absVal = "<20";
+                    } else if ($vlResult == "> Titer max") {
+                        $absDecimalVal = 10000000;
+                        $txtVal = $vlResult = $absVal = ">1000000";
+                    } else if (strpos($vlResult, "<") !== false) {
                         $vlResult = str_replace("<", "", $vlResult);
                         $absDecimalVal = (float) trim($vlResult);
                         $logVal = round(log10($absDecimalVal), 2);
