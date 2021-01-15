@@ -2047,3 +2047,9 @@ UPDATE `system_config` SET `value` = '4.2.8' WHERE `system_config`.`name` = 'ver
 
 -- Thana 22-Dec-2020
 ALTER TABLE `form_hepatitis` ADD `hepatitis_test_type` VARCHAR(255) NULL DEFAULT NULL AFTER `external_sample_code`;
+
+
+-- Amit Dec 24 2020
+ALTER TABLE `covid19_reasons_for_testing` ADD PRIMARY KEY( `covid19_id`, `reasons_id`);
+ALTER TABLE `s_vlsm_instance` ADD PRIMARY KEY(`vlsm_instance_id`);
+ALTER TABLE `user_admin_details` ADD PRIMARY KEY(`user_admin_id`);
