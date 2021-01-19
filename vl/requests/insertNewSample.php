@@ -1,6 +1,4 @@
 <?php
-include_once '../../startup.php';
-
 
 $general = new \Vlsm\Models\General($db);
 $vlModel = new \Vlsm\Models\Vl($db);

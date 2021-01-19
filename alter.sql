@@ -2053,3 +2053,8 @@ ALTER TABLE `form_hepatitis` ADD `hepatitis_test_type` VARCHAR(255) NULL DEFAULT
 ALTER TABLE `covid19_reasons_for_testing` ADD PRIMARY KEY( `covid19_id`, `reasons_id`);
 ALTER TABLE `s_vlsm_instance` ADD PRIMARY KEY(`vlsm_instance_id`);
 ALTER TABLE `user_admin_details` ADD PRIMARY KEY(`user_admin_id`);
+
+
+-- Amit Jan 19 2021
+
+ALTER TABLE `form_covid19` CHANGE `is_sample_rejected` `is_sample_rejected` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;

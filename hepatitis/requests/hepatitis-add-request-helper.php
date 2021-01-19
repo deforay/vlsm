@@ -3,7 +3,6 @@ ob_start();
 if (session_status() == PHP_SESSION_NONE) {
 	session_start();
 }
-include_once '../../startup.php';
 
 
 $general = new \Vlsm\Models\General($db);
