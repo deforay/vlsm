@@ -2058,3 +2058,8 @@ ALTER TABLE `user_admin_details` ADD PRIMARY KEY(`user_admin_id`);
 -- Amit Jan 19 2021
 
 ALTER TABLE `form_covid19` CHANGE `is_sample_rejected` `is_sample_rejected` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;
+
+
+
+UPDATE `system_config` SET `value` = '4.2.9' WHERE `system_config`.`name` = 'version';
+-- Version 4.2.9  -- Amit -- 19-Jan-2021
