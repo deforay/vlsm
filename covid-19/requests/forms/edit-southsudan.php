@@ -736,10 +736,9 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
         }
         $("#provinceCode").val($("#province").find(":selected").attr("data-code"));
         $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
-        /* flag = deforayValidator.init({
+        flag = deforayValidator.init({
             formId: 'editCovid19RequestForm'
-        }); */
-        flag = true;
+        });
         if (flag) {
             document.getElementById('editCovid19RequestForm').submit();
         }
@@ -909,7 +908,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                 } else {
                     $('#result,.disabled-field').prop('disabled', false);
                     $('#result,.disabled-field').removeClass('disabled');
-                    $('#result,.disabled-field').addClass('isRequired');
+                    // $('#result,.disabled-field').addClass('isRequired');
                 }
                 if (itemLength[i].value != '') {
                     $('#labId').addClass('isRequired');
