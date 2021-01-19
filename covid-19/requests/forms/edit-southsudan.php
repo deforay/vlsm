@@ -736,9 +736,10 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
         }
         $("#provinceCode").val($("#province").find(":selected").attr("data-code"));
         $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
-        flag = deforayValidator.init({
+        /* flag = deforayValidator.init({
             formId: 'editCovid19RequestForm'
-        });
+        }); */
+        flag = true;
         if (flag) {
             document.getElementById('editCovid19RequestForm').submit();
         }
