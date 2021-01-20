@@ -15,7 +15,7 @@ if (!empty($tResult['sample_review_by'])) {
 }
 
 $module = $tResult['module'];
-echo "<pre>";print_r($module);die;
+// echo "<pre>";print_r($module);die;
 
 $general = new \Vlsm\Models\General($db);
 $arr = $general->getGlobalConfig();
