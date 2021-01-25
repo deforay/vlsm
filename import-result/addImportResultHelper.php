@@ -1,14 +1,10 @@
 <?php
 
-use HL7;
-
 ob_start();
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 #require_once('../startup.php');  
-require APPLICATION_PATH . '/vendor/aranyasen/hl7/src/HL7.php';
-require APPLICATION_PATH . '/vendor/aranyasen/hl7/src/HL7/Message.php';
 
 $confFileName = base64_decode($_POST['machineName']);
 $globalConfigQuery = "SELECT * FROM global_config";
