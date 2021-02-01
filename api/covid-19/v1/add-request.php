@@ -42,7 +42,6 @@ $sampleFrom = '';
 $data['api'] = "yes";
 $_POST = $data;
 include_once(APPLICATION_PATH . '/covid-19/requests/insert-sample.php');
-print_r($_POST['covid19SampleId']);
 include_once(APPLICATION_PATH . '/covid-19/requests/covid-19-add-request-helper.php');
 
 try {
