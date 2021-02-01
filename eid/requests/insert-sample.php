@@ -35,22 +35,42 @@ if ($globalConfig['vl_form'] == 5) {
 $sampleJson = $eidModel->generateEIDSampleCode($provinceCode, $sampleCollectionDate, null, $provinceId);
 $sampleData = json_decode($sampleJson, true);
 
-
-$sampleDate = explode(" ", $_POST['sampleCollectionDate']);
-$_POST['sampleCollectionDate'] = $general->dateFormat($sampleDate[0]) . " " . $sampleDate[1];
-
+if (isset($_POST['api']) && $_POST['api'] = "yes") {
+}
+else
+{
+    $sampleDate = explode(" ", $_POST['sampleCollectionDate']);
+    $_POST['sampleCollectionDate'] = $general->dateFormat($sampleDate[0]) . " " . $sampleDate[1];
+}
+if(!isset($_POST['countryId']) || $_POST['countryId'] !='')
+        $_POST['countryId'] = '';
 
 $eidData = array();
-$eidData = array(
-    'vlsm_country_id' => $_POST['countryId'],
-    'sample_collection_date' => $_POST['sampleCollectionDate'],
-    'province_id' => $provinceId,
-    'vlsm_instance_id' => $_SESSION['instanceId'],
-    'request_created_by' => $_SESSION['userId'],
-    'request_created_datetime' => $general->getDateTime(),
-    'last_modified_by' => $_SESSION['userId'],
-    'last_modified_datetime' => $general->getDateTime()
-);
+if (isset($_POST['api']) && $_POST['api'] = "yes") {
+    $eidData = array(
+        'vlsm_country_id' => $_POST['countryId'],
+        'sample_collection_date' => $_POST['sampleCollectionDate'],
+        'province_id' => $provinceId,
+        'vlsm_instance_id' => '',
+        'request_created_by' => '',
+        'request_created_datetime' => $general->getDateTime(),
+        'last_modified_by' => '',
+        'last_modified_datetime' => $general->getDateTime()
+    );
+}
+else
+{
+    $eidData = array(
+        'vlsm_country_id' => $_POST['countryId'],
+        'sample_collection_date' => $_POST['sampleCollectionDate'],
+        'province_id' => $provinceId,
+        'vlsm_instance_id' => $_SESSION['instanceId'],
+        'request_created_by' => $_SESSION['userId'],
+        'request_created_datetime' => $general->getDateTime(),
+        'last_modified_by' => $_SESSION['userId'],
+        'last_modified_datetime' => $general->getDateTime()
+    );
+}
 
 if ($systemConfig['user_type'] == 'remoteuser') {
     $eidData['remote_sample_code'] = $sampleData['sampleCode'];
@@ -65,10 +85,14 @@ if ($systemConfig['user_type'] == 'remoteuser') {
     $eidData['remote_sample'] = 'no';
     $eidData['result_status'] = 6;
 }
-
-if (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '' && $_POST['sampleCollectionDate'] != null && $_POST['sampleCollectionDate'] != '') {
-
+if (isset($_POST['api']) && $_POST['api'] = "yes") {
     $id = $db->insert("eid_form", $eidData);
+    $_POST['eidSampleId'] = $id;
+} else {
+    if (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '' && $_POST['sampleCollectionDate'] != null && $_POST['sampleCollectionDate'] != '') {
+
+        $id = $db->insert("eid_form", $eidData);
+    }
 }
 if ($id > 0) {
     echo $id;

@@ -38,6 +38,7 @@ if (empty($user) || empty($user['user_id'])) {
 // $data = json_decode(file_get_contents("php://input"),true);
 $data['api'] = "yes";
 $_POST = $data;
+include_once(APPLICATION_PATH . '/eid/requests/insert-sample.php');
 include_once(APPLICATION_PATH . '/eid/requests/eid-add-request-helper.php');
 
 try {
