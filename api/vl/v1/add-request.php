@@ -38,6 +38,7 @@ if (empty($user) || empty($user['user_id'])) {
 $data['api'] = "yes";
 $_POST = $data;
 // print_r(APPLICATION_PATH . '/vl/requests/addVlRequestHelper.php');die;
+include_once(APPLICATION_PATH . '/vl/requests/insertNewSample.php');
 include_once(APPLICATION_PATH . '/vl/requests/addVlRequestHelper.php');
 try {
 
