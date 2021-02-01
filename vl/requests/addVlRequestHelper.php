@@ -322,6 +322,7 @@ try {
                 header("location:addVlRequest.php");
             }
         }
+        // print_r($_POST['sampleCode']);die;
 
         if ($sarr['user_type'] == 'remoteuser') {
             $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] :  NULL;
