@@ -30,21 +30,46 @@ $sampleJson = $vlModel->generateVLSampleID($provinceCode, $sampleCollectionDate,
 $sampleData = json_decode($sampleJson, true);
 
 
-$sampleDate = explode(" ", $_POST['sampleCollectionDate']);
-$_POST['sampleCollectionDate'] = $general->dateFormat($sampleDate[0]) . " " . $sampleDate[1];
 
+if (isset($_POST['api']) && $_POST['api'] = "yes") {
+}
+else
+{
+    $sampleDate = explode(" ", $_POST['sampleCollectionDate']);
+    $_POST['sampleCollectionDate'] = $general->dateFormat($sampleDate[0]) . " " . $sampleDate[1];
+
+}
+if(!isset($_POST['countryId']) || $_POST['countryId'] !='')
+        $_POST['countryId'] = '';
 
 $vlData = array();
-$vlData = array(
-    'vlsm_country_id' => $_POST['countryId'],
-    'sample_collection_date' => $_POST['sampleCollectionDate'],
-    'vlsm_instance_id' => $_SESSION['instanceId'],
-    'province_id' => $provinceId,
-    'request_created_by' => $_SESSION['userId'],
-    'request_created_datetime' => $general->getDateTime(),
-    'last_modified_by' => $_SESSION['userId'],
-    'last_modified_datetime' => $general->getDateTime()
-);
+
+
+if (isset($_POST['api']) && $_POST['api'] = "yes") {
+    $vlData = array(
+        'vlsm_country_id' => $_POST['countryId'],
+        'sample_collection_date' => $_POST['sampleCollectionDate'],
+        'vlsm_instance_id' => '',
+        'province_id' => $provinceId,
+        'request_created_by' => '',
+        'request_created_datetime' => $general->getDateTime(),
+        'last_modified_by' => '',
+        'last_modified_datetime' => $general->getDateTime()
+    );
+}
+else
+{
+    $vlData = array(
+        'vlsm_country_id' => $_POST['countryId'],
+        'sample_collection_date' => $_POST['sampleCollectionDate'],
+        'vlsm_instance_id' => $_SESSION['instanceId'],
+        'province_id' => $provinceId,
+        'request_created_by' => $_SESSION['userId'],
+        'request_created_datetime' => $general->getDateTime(),
+        'last_modified_by' => $_SESSION['userId'],
+        'last_modified_datetime' => $general->getDateTime()
+    );
+}
 
 if ($systemConfig['user_type'] == 'remoteuser') {
     $vlData['remote_sample_code'] = $sampleData['sampleCode'];
@@ -59,9 +84,13 @@ if ($systemConfig['user_type'] == 'remoteuser') {
     $vlData['remote_sample'] = 'no';
     $vlData['result_status'] = 6;
 }
-
-if (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '' && $_POST['sampleCollectionDate'] != null && $_POST['sampleCollectionDate'] != '') {
+if (isset($_POST['api']) && $_POST['api'] = "yes") {
     $id = $db->insert("vl_request_form", $vlData);
+    $_POST['vlSampleId'] = $id;
+} else {
+    if (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '' && $_POST['sampleCollectionDate'] != null && $_POST['sampleCollectionDate'] != '') {
+        $id = $db->insert("vl_request_form", $vlData);
+    }
 }
 if ($id > 0) {
     echo $id;

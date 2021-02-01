@@ -91,7 +91,7 @@ try {
     }
 
     //update facility code
-    if (trim($_POST['fCode']) != '') {
+    if (isset($_POST['fCode']) && trim($_POST['fCode']) != '') {
         $fData = array('facility_code' => $_POST['fCode']);
         $db = $db->where('facility_id', $_POST['fName']);
         $id = $db->update($fDetails, $fData);
@@ -298,7 +298,9 @@ try {
 	{
 		$vldata['request_created_by'] =  $_SESSION['userId'];
 		$vldata['last_modified_by'] =  $_SESSION['userId'];
-	}
+    }
+    if(!isset($_POST['patientFirstName']) || $_POST['patientFirstName'] !='')
+        $_POST['patientFirstName'] = '';
     $vldata['patient_first_name'] = $general->crypto('encrypt', $_POST['patientFirstName'], $vldata['patient_art_no']);
 
     if (isset($_POST['vlSampleId']) && $_POST['vlSampleId'] != '') {
