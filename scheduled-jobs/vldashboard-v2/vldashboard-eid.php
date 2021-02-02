@@ -16,7 +16,7 @@ try {
     $instanceUpdateOn = $db->getValue('s_vlsm_instance', 'eid_last_dash_sync');
 
     if (!empty($instanceUpdateOn)) {
-        $db->where('last_modified_datetime', $instanceUpdateOn, ">=");
+        $db->where('last_modified_datetime', $instanceUpdateOn, ">");
     }
 
     $db->orderBy("last_modified_datetime", "ASC");
