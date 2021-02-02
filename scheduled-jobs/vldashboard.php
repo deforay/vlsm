@@ -54,7 +54,7 @@ try {
                         ";
 
         if ($instanceUpdateOn != "") {
-            $sQuery .= " AND DATE(vl.last_modified_datetime) >= '$instanceUpdateOn'";
+            $sQuery .= " AND DATE(vl.last_modified_datetime) > '$instanceUpdateOn'";
         }
 
         $sQuery .= " ORDER BY vl.last_modified_datetime ASC ";
