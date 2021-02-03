@@ -17,15 +17,15 @@ $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-
 $id = base64_decode($_GET['id']);
 //global config
 
-$batchQuery = "SELECT * from batch_details as b_d LEFT JOIN import_config as i_c ON i_c.config_id=b_d.machine where batch_id=$id";
-$batchInfo = $db->query($batchQuery);
-$bQuery = "SELECT vl.sample_code,vl.sample_batch_id,vl.covid19_id,vl.facility_id,vl.result,vl.result_status,f.facility_name,f.facility_code FROM form_covid19 as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE  (vl.is_sample_rejected IS NULL OR vl.is_sample_rejected = '' OR vl.is_sample_rejected = 'no') AND (vl.reason_for_sample_rejection IS NULL OR vl.reason_for_sample_rejection ='' OR vl.reason_for_sample_rejection = 0) AND vl.sample_code!='' AND vl.sample_batch_id = $id ORDER BY vl.last_modified_datetime ASC";
+$batchQuery = "SELECT * from batch_details as b_d LEFT JOIN import_config as i_c ON i_c.config_id=b_d.machine where batch_id=?";
+$batchInfo = $db->rawQuery($batchQuery, array($id));
+$bQuery = "SELECT vl.sample_code,vl.sample_batch_id,vl.covid19_id,vl.facility_id,vl.result,vl.result_status,f.facility_name,f.facility_code FROM form_covid19 as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE  (vl.is_sample_rejected IS NULL OR vl.is_sample_rejected = '' OR vl.is_sample_rejected = 'no') AND (vl.reason_for_sample_rejection IS NULL OR vl.reason_for_sample_rejection ='' OR vl.reason_for_sample_rejection = 0) AND vl.sample_code!='' AND vl.sample_batch_id = ? ORDER BY vl.last_modified_datetime ASC";
 //error_log($bQuery);die;
-$batchResultresult = $db->rawQuery($bQuery);
+$batchResultresult = $db->rawQuery($bQuery, array($id));
 
-$query = "SELECT vl.sample_code,vl.sample_batch_id,vl.covid19_id,vl.facility_id,vl.result,vl.result_status,f.facility_name,f.facility_code FROM form_covid19 as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE (vl.sample_batch_id IS NULL OR vl.sample_batch_id = '') AND (vl.is_sample_rejected IS NULL OR vl.is_sample_rejected = '' OR vl.is_sample_rejected = 'no') AND (vl.reason_for_sample_rejection IS NULL OR vl.reason_for_sample_rejection ='' OR vl.reason_for_sample_rejection = 0) AND (vl.result is NULL or vl.result = '') AND vl.sample_code!='' ORDER BY vl.last_modified_datetime ASC";
+$query = "SELECT vl.sample_code,vl.sample_batch_id,vl.covid19_id,vl.facility_id,vl.result,vl.result_status,f.facility_name,f.facility_code FROM form_covid19 as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE (vl.sample_batch_id IS NULL OR vl.sample_batch_id = '') AND (vl.is_sample_rejected IS NULL OR vl.is_sample_rejected = '' OR vl.is_sample_rejected = 'no') AND (vl.reason_for_sample_rejection IS NULL OR vl.reason_for_sample_rejection ='' OR vl.reason_for_sample_rejection = 0) AND (vl.result is NULL or vl.result = '') AND vl.sample_code!='' AND vl.vlsm_country_id = ? ORDER BY vl.last_modified_datetime ASC";
 //error_log($query);die;
-$result = $db->rawQuery($query);
+$result = $db->rawQuery($query, array($arr['vl_form']));
 $result = array_merge($batchResultresult, $result);
 
 //Get active machines
@@ -77,9 +77,7 @@ $testPlatformResult = $general->getTestingPlatforms('covid19');
 
 	<!-- Main content -->
 	<section class="content">
-		
 		<div class="box box-default">
-			<!-- <pre><?php print_r($result); ?></pre> -->
 			<div class="box-header with-border">
 				<div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
 			</div>

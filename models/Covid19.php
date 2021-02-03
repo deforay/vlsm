@@ -340,6 +340,6 @@ class Covid19
         if (empty($formId)) {
             return null;
         }
-        return $this->db->rawQueryOne("SELECT * FROM covid19_reasons_for_testing WHERE `covid19_id` = $formId");
+        return $this->db->rawQueryOne("SELECT * FROM covid19_reasons_for_testing WHERE `covid19_id` = ?", array($formId));
     }
 }

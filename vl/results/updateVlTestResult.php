@@ -49,8 +49,8 @@ $vlTestReasonResult = $db->query($vlTestReasonQuery);
 $suspectedTreatmentFailureAtQuery = "SELECT DISTINCT vl_sample_suspected_treatment_failure_at FROM vl_request_form where vlsm_country_id='" . $arr['vl_form'] . "'";
 $suspectedTreatmentFailureAtResult = $db->rawQuery($suspectedTreatmentFailureAtQuery);
 
-$vlQuery = "SELECT * from vl_request_form where vl_sample_id=$id";
-$vlQueryInfo = $db->rawQueryOne($vlQuery);
+$vlQuery = "SELECT * from vl_request_form where vl_sample_id=?";
+$vlQueryInfo = $db->rawQueryOne($vlQuery, array($id));
 
 if (isset($vlQueryInfo['patient_dob']) && trim($vlQueryInfo['patient_dob']) != '' && $vlQueryInfo['patient_dob'] != '0000-00-00') {
 	$vlQueryInfo['patient_dob'] = $general->humanDateFormat($vlQueryInfo['patient_dob']);

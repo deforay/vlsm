@@ -24,7 +24,7 @@ foreach ($sampleResult as $sampleRow) {
     // ONLY IF SAMPLE CODE IS NOT ALREADY GENERATED
     if ($sampleRow['sample_code'] == null || $sampleRow['sample_code'] == '' || $sampleRow['sample_code'] == 'null') {
 
-        $sampleJson = $hepatitisObj->generatehepatitisSampleCode($provinceCode, $general->humanDateFormat($sampleRow['sample_collection_date']));
+        $sampleJson = $hepatitisObj->generatehepatitisSampleCode('',$provinceCode, $general->humanDateFormat($sampleRow['sample_collection_date']));
         $sampleData = json_decode($sampleJson, true);
         $hepatitisData = array();
         $hepatitisData['sample_code'] = $sampleData['sampleCode'];

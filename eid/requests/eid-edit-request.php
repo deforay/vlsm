@@ -61,8 +61,8 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
 
 $id = base64_decode($_GET['id']);
 //$id = ($_GET['id']);
-$eidQuery = "SELECT * from eid_form where eid_id=$id";
-$eidInfo = $db->rawQueryOne($eidQuery);
+$eidQuery = "SELECT * from eid_form where eid_id=?";
+$eidInfo = $db->rawQueryOne($eidQuery, array($id));
 
 
 $sampleResult = $general->fetchDataFromTable('r_eid_sample_type', "status = 'active'");

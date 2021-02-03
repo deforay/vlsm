@@ -5,8 +5,8 @@ include_once(APPLICATION_PATH . '/header.php');
 //#require_once('../startup.php');  
 
 $id = base64_decode($_GET['id']);
-$sQuery = "SELECT * from import_config where config_id=$id";
-$sInfo = $db->rawQueryOne($sQuery);
+$sQuery = "SELECT * from import_config where config_id=?";
+$sInfo = $db->rawQueryOne($sQuery, array($id));
 
 if (!empty($sInfo['supported_tests'])) {
 	$sInfo['supported_tests'] = json_decode($sInfo['supported_tests'], true);
