@@ -17,9 +17,9 @@ $importedBy = $_SESSION['userId'];
 $import_decided = (isset($arr['import_non_matching_sample']) && $arr['import_non_matching_sample'] == 'no') ? 'INNER JOIN' : 'LEFT JOIN';
 
 
-$tQuery = "SELECT `module` FROM `temp_sample_import` WHERE `imported_by` ='" . $_SESSION['userId'] . "' limit 1";
+$tQuery = "SELECT `module` FROM `temp_sample_import` WHERE `imported_by` =? limit 1";
 
-$tResult = $db->rawQueryOne($tQuery);
+$tResult = $db->rawQueryOne($tQuery, array($_SESSION['userId']));
 
 $module = $tResult['module'];
 

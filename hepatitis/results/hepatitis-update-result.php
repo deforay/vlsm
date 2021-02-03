@@ -48,8 +48,8 @@ foreach($riskFactorsResult as $riskFactors){
 }
 $riskFactorsInfo = $hepatitisDb->getRiskFactorsByHepatitisId($id);
 
-$hepatitisQuery = "SELECT * FROM form_hepatitis where hepatitis_id=$id";
-$hepatitisInfo = $db->rawQueryOne($hepatitisQuery);
+$hepatitisQuery = "SELECT * FROM form_hepatitis where hepatitis_id=?";
+$hepatitisInfo = $db->rawQueryOne($hepatitisQuery, array($id));
 
 //sample rejection reason
 $rejectionTypeQuery = "SELECT DISTINCT rejection_type FROM r_hepatitis_sample_rejection_reasons WHERE rejection_reason_status ='active'";

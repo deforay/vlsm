@@ -49,8 +49,8 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
 
 $id = base64_decode($_GET['id']);
 //$id = ($_GET['id']);
-$covid19Query = "SELECT * from form_covid19 where covid19_id=$id";
-$covid19Info = $db->rawQueryOne($covid19Query);
+$covid19Query = "SELECT * from form_covid19 where covid19_id=?";
+$covid19Info = $db->rawQueryOne($covid19Query,array($id));
 
 $covid19TestQuery = "SELECT * from covid19_tests where covid19_id=$id ORDER BY test_id ASC";
 $covid19TestInfo = $db->rawQuery($covid19TestQuery);

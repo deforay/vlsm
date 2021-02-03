@@ -9,9 +9,9 @@ $configResult = $db->query($configQuery);
 $country = $configResult[0]['value'];
 
 $id=base64_decode($_GET['id']);
-$pQuery = "Select * from covid19_positive_confirmation_manifest where manifest_id='".$id."'";
+$pQuery = "Select * from covid19_positive_confirmation_manifest where manifest_id=?";
 // echo $pQuery;die;
-$pResult = $db->rawQueryOne($pQuery);
+$pResult = $db->rawQueryOne($pQuery, array($id));
 
 $sCode = 'sample_code';
 $module = 'C19';

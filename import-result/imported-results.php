@@ -5,9 +5,9 @@ $tsQuery = "SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
 $userQuery = "SELECT * FROM user_details where status='active'";
 $userResult = $db->rawQuery($userQuery);
-$tQuery = "SELECT module, sample_review_by FROM temp_sample_import WHERE imported_by ='" . $_SESSION['userId'] . "' limit 1";
+$tQuery = "SELECT module, sample_review_by FROM temp_sample_import WHERE imported_by =? limit 1";
 
-$tResult = $db->rawQueryOne($tQuery);
+$tResult = $db->rawQueryOne($tQuery, array($_SESSION['userId']));
 if (!empty($tResult['sample_review_by'])) {
 	$reviewBy = $tResult['sample_review_by'];
 } else {

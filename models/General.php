@@ -170,8 +170,8 @@ class General
             return false;
         }
 
-        $pQuery = "SELECT * FROM province_details WHERE province_code like '$code'";
-        $pResult = $this->db->rawQueryOne($pQuery);
+        $pQuery = "SELECT * FROM province_details WHERE province_code like ?";
+        $pResult = $this->db->rawQueryOne($pQuery, array($code));
 
         if ($pQuery) {
             return $pResult['province_id'];
