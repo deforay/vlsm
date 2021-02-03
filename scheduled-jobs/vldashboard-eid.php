@@ -47,7 +47,7 @@ try {
                         LEFT JOIN r_eid_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection";
 
         if ($instanceUpdateOn != "") {
-            $sQuery .= " WHERE DATE(vl.last_modified_datetime) >= $instanceUpdateOn";
+            $sQuery .= " WHERE DATE(vl.last_modified_datetime) > $instanceUpdateOn";
         }
 
         $sQuery .= " ORDER BY vl.last_modified_datetime ASC ";
