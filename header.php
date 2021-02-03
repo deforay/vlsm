@@ -7,8 +7,8 @@ if (!isset($_SESSION['userId'])) {
 $general = new \Vlsm\Models\General($db);
 
 /* Crosss Login Block Start */
-$crossLoginQuery = "SELECT `login_id`,`password`,`user_name` FROM `user_details` WHERE user_id = '" . $_SESSION['userId'] . "'";
-$crossLoginResult = $db->rawQueryOne($crossLoginQuery);
+$crossLoginQuery = "SELECT `login_id`,`password`,`user_name` FROM `user_details` WHERE user_id = ?";
+$crossLoginResult = $db->rawQueryOne($crossLoginQuery,array($_SESSION['userId']));
 /* Crosss Login Block End */
 
 $arr = $general->getGlobalConfig();
