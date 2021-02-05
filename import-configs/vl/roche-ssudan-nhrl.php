@@ -244,7 +244,7 @@ try {
             }
             $inc++;
         }
-       setcookie('refno', $refno, time() + (86400 * 30), "/");
+       setcookie('refno', $refno, time() + (86400 * 30), '/; samesite=strict');
     }
 
     $_SESSION['alertMsg'] = "Results imported successfully";
