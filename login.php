@@ -33,7 +33,29 @@ if (file_exists(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs/bg.jpg")) {
   $path = '/configs/bg.png';
 }
 
+
 ?>
+
+ <!-- CSRF TOKEN -->
+ <?php
+  session_start();
+  function generate_token() {
+    // Check if a token is present for the current session
+    if(!isset($_SESSION["csrf_token"])) {
+        // No token present, generate a new one
+        $token = bin2hex(random_bytes(64));
+
+        $_SESSION["csrf_token"] = $token;
+    } else {
+        // Reuse the token
+        $token = $_SESSION["csrf_token"];
+    }
+    // print_r($token);die;
+    return $token;
+  }
+?>
+
+
 <!DOCTYPE html>
 <html>
 
@@ -43,7 +65,6 @@ if (file_exists(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs/bg.jpg")) {
   <title><?php echo $shortName; ?> | Login</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-
 
   <?php if (isset($sarr['user_type']) && $sarr['user_type'] == 'remoteuser') { ?>
     <link rel="apple-touch-icon" sizes="180x180" href="/vlsts-icons/apple-touch-icon.png">
@@ -126,6 +147,7 @@ if (file_exists(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs/bg.jpg")) {
         <div style="padding-top:10px;" class="panel-body">
           <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
           <form id="loginForm" name="loginForm" class="form-horizontal" role="form" method="post" action="loginProcess.php" onsubmit="validateNow();return false;">
+          <input type="hidden" name="csrf_token" value="<?php echo generate_token();?>" />
             <div style="margin-bottom: 5px" class="input-group">
               <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
               <input id="login-username" type="text" class="form-control isRequired" name="username" value="" placeholder="User Name" title="Please enter the user name">
@@ -148,17 +170,6 @@ if (file_exists(APPLICATION_PATH . DIRECTORY_SEPARATOR . "configs/bg.jpg")) {
     </div>
   </div>
   <div style="padding:1% 2%;width:100%;position:absolute;bottom:1.5%;color:#fff;background:rgba(0,0,0,0);">
-    <!-- <span>
-        <a id="download-form" href="#" style="color:#fff;text-decoration:underline;">Download VL Form</a>
-        <select id="country" name="country" class="form-control" style="width:200px;display:none;">
-            <option value=""> -- Select Country -- </option>
-            <option value="6">South Sudan</option>
-            <option value="5">Rwanda</option>
-            <option value="3">DRC</option>
-            <option value="4">Zambia</option>
-        </select>
-        <a id="download" href="#" style="color:#fff;text-decoration:underline;display:none;"><h5>Click here to Download</h5></a>
-        </span> -->
     <span class="pull-right" style="font-weight:bold;">v <?php echo VERSION; ?></span>
   </div>
   <script src="/assets/js/deforayValidation.js"></script>
