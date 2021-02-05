@@ -22,47 +22,46 @@ if (empty($sarr['lab_name'])) {
     exit(0);
 }
 
-
-// VIRAL LOAD REQUESTS
-
-$url = $systemConfig['remoteURL'] . '/remote/remote/getRequests.php';
-$data = array(
-    'labName' => $sarr['lab_name'],
-    'module' => 'vl',
-    "Key" => "vlsm-lab-data--",
-);
-$columnList = array();
-
-//open connection
-$ch = curl_init($url);
-$json_data = json_encode($data);
-curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt(
-    $ch,
-    CURLOPT_HTTPHEADER,
-    array(
-        'Content-Type: application/json',
-        'Content-Length: ' . strlen($json_data)
-    )
-);
-// execute post
-$curl_response = curl_exec($ch);
-
-//close connection
-curl_close($ch);
-$apiResult = json_decode($curl_response, true);
-
+$type = $_GET['type'];
+$pkg = $_GET['pkg'];
 /*
  ****************************************************************
  * VIRAL LOAD TEST REQUESTS
  ****************************************************************
  */
+$request = array();
 if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) {
-    $request = array();
     //$remoteSampleCodeList = array();
 
+    $url = $systemConfig['remoteURL'] . '/remote/remote/getRequests.php';
+    $data = array(
+        'labName' => $sarr['lab_name'],
+        'module' => 'vl',
+        "Key" => "vlsm-lab-data--",
+    );
+    if(isset($type) && trim($type) == "vl" && isset($pkg) && trim($pkg) != ""){
+        $data['pkg'] = $pkg;
+    }
+    $columnList = array();
+    //open connection
+    $ch = curl_init($url);
+    $json_data = json_encode($data);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt(
+        $ch,
+        CURLOPT_HTTPHEADER,
+        array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($json_data)
+        )
+    );
+    // execute post
+    $curl_response = curl_exec($ch);
+    //close connection
+    curl_close($ch);
+    $apiResult = json_decode($curl_response, true);
 
     if (!empty($apiResult) && is_array($apiResult) && count($apiResult) > 0) {
         $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='vl_request_form'";
@@ -154,6 +153,9 @@ if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] ==
         'module' => 'eid',
         "Key" => "vlsm-lab-data--",
     );
+    if(isset($type) && trim($type) == "eid" && isset($pkg) && trim($pkg) != ""){
+        $data['pkg'] = $pkg;
+    }
     //open connection
     $ch = curl_init($url);
     $json_data = json_encode($data);
@@ -260,6 +262,9 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
         'module' => 'covid19',
         "Key" => "vlsm-lab-data--",
     );
+    if(isset($type) && trim($type) == "covid19" && isset($pkg) && trim($pkg) != ""){
+        $data['pkg'] = $pkg;
+    }
     //open connection
     $ch = curl_init($url);
     $json_data = json_encode($data);
@@ -400,4 +405,8 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
             //}
         }
     }
+}
+
+if(isset($type) && trim($type) != "" && isset($pkg) && trim($pkg) != ""){
+    return 1;
 }

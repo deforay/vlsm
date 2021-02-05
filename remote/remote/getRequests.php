@@ -34,9 +34,11 @@ if (!empty($fMapResult)) {
 $vlQuery = "SELECT * FROM vl_request_form WHERE $condition 
           AND last_modified_datetime > SUBDATE( NOW(), INTERVAL $dataSyncInterval DAY) 
           AND data_sync=0";
-
 //$vlQuery="SELECT * FROM vl_request_form WHERE $condition AND data_sync=0";
+/* Remote Syn only package code matches */
+if(!empty($data['pkg']) && !empty($data['module']) && $data['module'] == 'vl'){
+  $vlQuery.= " AND sample_package_code like '".$data['pkg']."%'";
+}
 
 $vlRemoteResult = $db->rawQuery($vlQuery);
-
 echo json_encode($vlRemoteResult);
