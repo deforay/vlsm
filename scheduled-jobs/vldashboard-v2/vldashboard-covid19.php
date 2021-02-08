@@ -77,7 +77,7 @@ try {
     $result = curl_exec($ch);
     curl_close($ch);
 
-    echo "<pre>";print_r($result);die;
+    // echo "<pre>";print_r($result);die;
     $deResult = json_decode($result, true);
 
     if (isset($deResult['status']) && trim($deResult['status']) == 'success') {
