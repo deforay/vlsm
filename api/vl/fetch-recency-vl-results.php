@@ -38,6 +38,7 @@ $sampleCode = !empty($_REQUEST['s']) ? explode(",", filter_var($_REQUEST['s'], F
 $recencyId = !empty($_REQUEST['r']) ? explode(",", filter_var($_REQUEST['r'], FILTER_SANITIZE_STRING)) : null;
 $from = !empty($_REQUEST['f']) ? filter_var($_REQUEST['f'], FILTER_SANITIZE_STRING) : null;
 $to = !empty($_REQUEST['t']) ? filter_var($_REQUEST['t'], FILTER_SANITIZE_STRING) : null;;
+$orderSortType = !empty($_REQUEST['orderSortType']) ? filter_var($_REQUEST['orderSortType'], FILTER_SANITIZE_STRING) : null;;
 
 if (!$sampleCode && !$recencyId && (!$from || !$to)) {
     $response = array(
@@ -65,6 +66,7 @@ try {
                     vl.sample_tested_datetime,
                     vl.is_sample_rejected,
                     vl.result,
+                    vl.result_value_log,
                     samptype.sample_name as `specimen_type`,
                     sampstatus.status_name as `sample_status`,
                     f.facility_name as `collection_facility_name`,
@@ -98,7 +100,11 @@ try {
         $sQuery .= " AND DATE(last_modified_datetime) between '$from' AND '$to' ";
     }
 
-    $sQuery .= " ORDER BY last_modified_datetime ASC ";
+    if (empty($orderSortType)) {
+        $orderSortType = 'ASC'; // if Order Sort Type is not defined we treat it as ASC by default
+    }
+
+    $sQuery .= " ORDER BY last_modified_datetime $orderSortType ";
     $rowData = $db->rawQuery($sQuery);
 
     // No data found
