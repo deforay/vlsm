@@ -2063,3 +2063,7 @@ ALTER TABLE `form_covid19` CHANGE `is_sample_rejected` `is_sample_rejected` VARC
 
 UPDATE `system_config` SET `value` = '4.2.9' WHERE `system_config`.`name` = 'version';
 -- Version 4.2.9  -- Amit -- 19-Jan-2021
+
+-- Thana 09-02-2021
+UPDATE `privileges` SET `privilege_name` = 'covid19MonthlyThresholdReport.php' WHERE `privileges`.`privilege_id` = 145;
+UPDATE `privileges` SET `privilege_name` = 'eidMonthlyThresholdReport.php' WHERE `privileges`.`privilege_id` = 144;
