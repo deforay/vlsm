@@ -111,8 +111,7 @@ $sQuery = "SELECT DATE_FORMAT(DATE(vl.sample_tested_datetime), '%b-%Y') as month
           FROM testing_labs as tl INNER JOIN vl_request_form as vl ON vl.lab_id=tl.facility_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id";
 
 // vl_request_form
-//   health_facilities
-//echo $sQuery;die;
+// health_facilities
 $start_date = '';
 $end_date = '';
 if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != '') {
@@ -139,14 +138,6 @@ if (isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate']) != '') {
 
 if (isset($sWhere) && $sWhere != "") {
      $sWhere = ' where ' . $sWhere;
-
-     // if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != '') {
-     //      if (trim($start_date) == trim($end_date)) {
-     //           $sWhere = $sWhere . ' AND DATE(vl.sample_collection_date) = "' . $start_date . '"';
-     //      } else {
-     //           $sWhere = $sWhere . ' AND DATE(vl.sample_collection_date) >= "' . $start_date . '" AND DATE(vl.sample_collection_date) <= "' . $end_date . '"';
-     //      }
-     // }
      if (isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate']) != '') {
           if (trim($sTestDate) == trim($eTestDate)) {
                $sWhere = $sWhere . ' AND DATE(vl.sample_tested_datetime) = "' . $sTestDate . '"';
@@ -154,26 +145,7 @@ if (isset($sWhere) && $sWhere != "") {
                $sWhere = $sWhere . ' AND DATE(vl.sample_tested_datetime) >= "' . $sTestDate . '" AND DATE(vl.sample_tested_datetime) <= "' . $eTestDate . '"';
           }
      }
-
-     // if (isset($_POST['facilityName']) && $_POST['facilityName'] != '') {
-     //      $sWhere = $sWhere . ' AND vl.lab_id = "' . $_POST['facilityName'] . '"';
-     // }
-
-     // if (isset($_POST['district']) && trim($_POST['district']) != '') {
-     //      $sWhere = $sWhere . " AND f.facility_district LIKE '%" . $_POST['district'] . "%' ";
-     // }
-     // if (isset($_POST['state']) && trim($_POST['state']) != '') {
-     //      $sWhere = $sWhere . " AND f.facility_state LIKE '%" . $_POST['state'] . "%' ";
-     // }
 } else {
-     // if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != '') {
-     //      if (trim($start_date) == trim($end_date)) {
-     //           $sWhere = 'where DATE(vl.sample_collection_date) = "' . $start_date . '"';
-     //      } else {
-     //           $setWhr = ' where ';
-     //           $sWhere = ' where DATE(vl.sample_collection_date) >= "' . $start_date . '" AND DATE(vl.sample_collection_date) <= "' . $end_date . '"';
-     //      }
-     // }
      if (isset($_POST['facilityName']) && trim($_POST['facilityName']) != '') {
           $fac = explode(',', $_POST['facilityName']);
           $out = '';
@@ -217,21 +189,9 @@ $sWhere .= " AND tl.test_type = 'vl'";
 
 
 $sQuery = $sQuery . ' ' . $sWhere . ' GROUP BY f.facility_id, YEAR(vl.sample_tested_datetime), MONTH(vl.sample_tested_datetime)';
-// $sQuery = $sQuery.' '. "group by DATE_FORMAT(DATE(vl.sample_tested_datetime), '%b-%Y');";
 // echo $sQuery;die;
 $_SESSION['vlMonitoringThresholdReportQuery'] = $sQuery;
-
-// if (isset($sOrder) && $sOrder != "") {
-//      $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
-//      $sQuery = $sQuery . ' order by ' . $sOrder;
-// }
-
-// if (isset($sLimit) && isset($sOffset)) {
-//      $sQuery = $sQuery . ' LIMIT ' . $sOffset . ',' . $sLimit;
-// }
-// die($sQuery);
 $rResult = $db->rawQuery($sQuery);
-// echo "<pre>";print_r($rResult);die;
 /* Data set length after filtering */
 
 $aResultFilterTotal = $db->rawQuery($sQuery);
@@ -239,133 +199,52 @@ $iFilteredTotal = count($aResultFilterTotal);
 
 /* Total data set length */
 $aResultTotal =  $db->rawQuery($sQuery);
-// $aResultTotal = $countResult->fetch_row();
 $iTotal = count($aResultTotal);
 
 /*
-          * Output
-          */
-               $output = array(
-                    "sEcho" => intval($_POST['sEcho']),
-                    // "iTotalRecords" => $cnt,
-                    // "iTotalDisplayRecords" => $iFilteredTotal,
-                    "aaData" => array()
-               );
+* Output
+*/
+$output = array(
+     "sEcho" => intval($_POST['sEcho']),
+     // "iTotalRecords" => $cnt,
+     // "iTotalDisplayRecords" => $iFilteredTotal,
+     "aaData" => array()
+);
           
-// print_r($rResult);die;
-/* $res = array();
-foreach ($rResult as $aRow) {
-     $row = array();
-     if( isset($res[$aRow['facility_id']]))
-     {
-          if(isset($res[$aRow['facility_id']][$aRow['monthrange']]))
-          {
-               if(trim($aRow['is_sample_rejected'])  == 'yes')
-                    $row['totalRejected'] = $res[$aRow['facility_id']][$aRow['monthrange']]['totalRejected']  + 1;
-               else
-                    $row['totalRejected'] = $res[$aRow['facility_id']][$aRow['monthrange']]['totalRejected'];
-               if(trim($aRow['sample_tested_datetime'])  == NULL  && trim($aRow['sample_collection_date']) != '')
-                    $row['totalReceived'] = $res[$aRow['facility_id']][$aRow['monthrange']]['totalReceived']  + 1;
-               else
-                    $row['totalReceived'] = $res[$aRow['facility_id']][$aRow['monthrange']]['totalReceived'];
-               $row['facility_name'] = ucwords($aRow['facility_name']);
-               $row['monthrange'] = $aRow['monthrange'];
-                $row['monthly_target'] = $aRow['monthly_target'];
-               $row['totalCollected'] = $res[$aRow['facility_id']][$aRow['monthrange']]['totalCollected']  + 1;
-               $res[$aRow['facility_id']][$aRow['monthrange']] = $row;
-          }
-          else
-          {
-               if(trim($aRow['is_sample_rejected'])  == 'yes')
-                    $row['totalRejected'] = $res[$aRow['facility_id']][$aRow['monthrange']]['totalRejected']  + 1;
-               else
-                    $row['totalRejected'] = 0;
-               if(trim($aRow['sample_tested_datetime'])  == NULL  && trim($aRow['sample_collection_date']) != '')
-                    $row['totalReceived'] = $res[$aRow['facility_id']][$aRow['monthrange']]['totalReceived']  + 1;
-               else
-                    $row['totalReceived'] = 0;
-               $row['facility_name'] = ucwords($aRow['facility_name']);
-               $row['monthrange'] = $aRow['monthrange'];
-                $row['monthly_target'] = $aRow['monthly_target'];
-               $row['totalCollected'] = $res[$aRow['facility_id']][$aRow['monthrange']]['totalCollected']  + 1;
-               $res[$aRow['facility_id']][$aRow['monthrange']] = $row;
-          }
-     }
-     else
-     {
-          if(trim($aRow['is_sample_rejected'])  == 'yes')
-                    $row['totalRejected'] = $res[$aRow['facility_id']][$aRow['monthrange']]['totalRejected']  + 1;
-               else
-                    $row['totalRejected'] = 0;
-          if(trim($aRow['sample_tested_datetime'])  == NULL  && trim($aRow['sample_collection_date']) != '')
-                    $row['totalReceived'] = $res[$aRow['facility_id']][$aRow['monthrange']]['totalReceived']  + 1;
-               else
-                    $row['totalReceived'] = 0;
-          $row['facility_name'] = ucwords($aRow['facility_name']);
-          $row['monthrange'] = $aRow['monthrange'];
-           $row['monthly_target'] = $aRow['monthly_target'];
-          $row['totalCollected'] = 1;
-          $res[$aRow['facility_id']][$aRow['monthrange']] = $row;
-     }
-} */
-// echo "<pre>";print_r($res);die;
-// print_r($_POST);die;
 $cnt = 0;
 foreach($rResult as $rowData)
 {
-     // foreach($resultData as $rowData)
-     // {
-          if($_POST['targetType'] == 1)
-          {
+     $targetType1 = false;
+     $targetType2 = false;
+     $targetType3 = false;
+     if($_POST['targetType'] == 1){
+          if($rowData['monthly_target'] > $rowData['totalCollected'])
+          { 
+               $targetType1 = true;
+          }
+     } else if($_POST['targetType'] == 2){
 
-               if($rowData['monthly_target'] > $rowData['totalCollected'])
-               { 
-                    $cnt++;
-                    $data = array();
-                    $data[] = ucwords($rowData['facility_name']);
-                    $data[] = $rowData['monthrange'];
-                    $data[] = $rowData['totalReceived'];
-                    $data[] = $rowData['totalRejected'];
-                    $data[] = $rowData['totalCollected'];
-                    $data[] = $rowData['monthly_target'];
-                    // print_r($data);die;
-                    $output['aaData'][] = $data;
-              }
+          if($rowData['monthly_target'] < $rowData['totalCollected'])
+          { 
+               $targetType2 = true;
           }
-          else if($_POST['targetType'] == 2)
-          {
+     } else if($_POST['targetType'] == 3){
+          $targetType3 = true;
+     }
 
-               if($rowData['monthly_target'] < $rowData['totalCollected'])
-               { 
-                    $cnt++;
-                    $data = array();
-                    $data[] = ucwords($rowData['facility_name']);
-                    $data[] = $rowData['monthrange'];
-                    $data[] = $rowData['totalReceived'];
-                    $data[] = $rowData['totalRejected'];
-                    $data[] = $rowData['totalCollected'];
-                    $data[] = $rowData['monthly_target'];
-                    // print_r($data);die;
-                    $output['aaData'][] = $data;
-              }
-          }
-          else if($_POST['targetType'] == 3)
-          {
-                    $cnt++;
-                    $data = array();
-                    $data[] = ucwords($rowData['facility_name']);
-                    $data[] = $rowData['monthrange'];
-                    $data[] = $rowData['totalReceived'];
-                    $data[] = $rowData['totalRejected'];
-                    $data[] = $rowData['totalCollected'];
-                    $data[] = $rowData['monthly_target'];
-                    // print_r($data);die;
-                    $output['aaData'][] = $data;
-          }
-     // }
+     if($targetType1 || $targetType2 || $targetType3){
+          $cnt++;
+          $data = array();
+          $data[] = ucwords($rowData['facility_name']);
+          $data[] = $rowData['monthrange'];
+          $data[] = $rowData['totalReceived'];
+          $data[] = $rowData['totalRejected'];
+          $data[] = $rowData['totalCollected'];
+          $data[] = $rowData['monthly_target'];
+          $output['aaData'][] = $data;
+     }
 
 }   
 $output['iTotalDisplayRecords'] = $cnt;
 $output['iTotalRecords'] = $cnt;
-// $output['aaData'] = $data;
 echo json_encode($output);

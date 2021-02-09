@@ -143,6 +143,12 @@ $sharedPrivileges = array(
 	'hepatitis-test-reasons.php'					=> 'hepatitis-sample-type.php',
 	'add-hepatitis-test-reasons.php'				=> 'hepatitis-sample-type.php',
 	'edit-hepatitis-test-reasons.php'				=> 'hepatitis-sample-type.php',
+	'vlTestingTargetReport.php'						=> 'vlMonthlyThresholdReport.php',
+	'eidTestingTargetReport.php'					=> 'eidMonthlyThresholdReport.php',
+	'covid19TestingTargetReport.php'				=> 'covid19MonthlyThresholdReport.php',
+	'vlSuppressedTargetReport.php'					=> 'vlMonthlyThresholdReport.php',
+	'eidSuppressedTargetReport.php'					=> 'eidMonthlyThresholdReport.php',
+	'covid19SuppressedTargetReport.php'				=> 'covid19MonthlyThresholdReport.php',
 	
 );
 // Does the current file share privileges with another privilege ?
@@ -252,7 +258,6 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 	$hepatitisManagementMenuAccess = false;
 }
 // HEPATITIS Menu end
-
 ?>
 <!DOCTYPE html>
 <html lang="en-US">
@@ -853,7 +858,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 									if (isset($_SESSION['privileges']) && in_array("eid-clinic-report.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu eidClinicReport"><a href="/eid/management/eid-clinic-report.php"><i class="fa fa-circle-o"></i> Clinic Report</a></li>
 									<?php } 
-									if (isset($_SESSION['privileges']) && in_array("eidMonthlyThresholdReport.PHP", $_SESSION['privileges'])) { ?>
+									if (isset($_SESSION['privileges']) && in_array("eidMonthlyThresholdReport.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu eidMonthlyThresholdReport"><a href="/eid/management/eidTestingTargetReport.php"><i class="fa fa-circle-o"></i> EID Testing Target Report</a></li>
 									<?php } ?>
 								</ul>
@@ -958,7 +963,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 									if (isset($_SESSION['privileges']) && in_array("covid-19-clinic-report.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu covid19ClinicReportMenu"><a href="/covid-19/management/covid-19-clinic-report.php"><i class="fa fa-circle-o"></i> Clinic Report</a></li>
 									<?php } 
-									if (isset($_SESSION['privileges']) && in_array("covid19MonthlyThresholdReport.PHP", $_SESSION['privileges'])) { ?>
+									if (isset($_SESSION['privileges']) && in_array("covid19MonthlyThresholdReport.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu covid19MonthlyThresholdReport"><a href="/covid-19/management/covid19TestingTargetReport.php"><i class="fa fa-circle-o"></i>COVID-19 Testing Target Report</a></li>
 									<?php } ?>
 								</ul>
