@@ -22,8 +22,8 @@ if (empty($sarr['lab_name'])) {
     exit(0);
 }
 
-$type = $_GET['type'];
-$pkg = $_GET['pkg'];
+$type = !empty($_GET['type']) ? $_GET['type'] : null;
+$pkg = !empty($_GET['pkg']) ? $_GET['pkg'] : null;
 /*
  ****************************************************************
  * VIRAL LOAD TEST REQUESTS
@@ -39,7 +39,7 @@ if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == t
         'module' => 'vl',
         "Key" => "vlsm-lab-data--",
     );
-    if(isset($type) && trim($type) == "vl" && isset($pkg) && trim($pkg) != ""){
+    if(!empty($type) && trim($type) == "vl" && !empty($pkg) && trim($pkg) != ""){
         $data['pkg'] = $pkg;
     }
     $columnList = array();
