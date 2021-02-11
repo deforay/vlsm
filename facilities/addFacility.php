@@ -361,7 +361,7 @@ $pResult = $db->rawQuery($pQuery);
 	function getTestType() {
 		var facility = $("#facilityType").val();
 		var testType = $("#testType").val();
-		if (facility && (testType.length > 0) && facility == '2') {
+		if (facility && (testType.length > 0) ) {
 			var div = '<table class="table table-bordered table-striped"><thead><th> Test Type</th> <th> Monthly Target <span class="mandatory">*</span></th><th>Suppressed Monthly Target <span class="mandatory">*</span></th> </thead><tbody>';
 			for (var i = 0; i < testType.length; i++) {
 				var testOrg = '';
