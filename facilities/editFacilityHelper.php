@@ -69,6 +69,7 @@ try {
 			'report_email' => $email,
 			'contact_person' => $_POST['contactPerson'],
 			'facility_type' => $_POST['facilityType'],
+			'test_type' => implode(', ', $_POST['testType']), 
 			'testing_points' => $_POST['testingPoints'],
 			'header_text' => $_POST['headerText'],
 			'updated_datetime' => $general->getDateTime(),
