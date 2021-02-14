@@ -2067,3 +2067,7 @@ UPDATE `system_config` SET `value` = '4.2.9' WHERE `system_config`.`name` = 'ver
 -- Thana 09-02-2021
 UPDATE `privileges` SET `privilege_name` = 'covid19MonthlyThresholdReport.php' WHERE `privileges`.`privilege_id` = 145;
 UPDATE `privileges` SET `privilege_name` = 'eidMonthlyThresholdReport.php' WHERE `privileges`.`privilege_id` = 144;
+
+
+--Prastah M 11-Feb-2021
+ALTER TABLE facility_details add column test_type VARCHAR(255) NULL;

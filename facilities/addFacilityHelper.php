@@ -11,7 +11,7 @@ include_once(APPLICATION_PATH . '/includes/ImageResize.php');
 
 $general = new \Vlsm\Models\General($db);
 
-
+// print_r($_POST);die;
 $tableName = "facility_details";
 $tableName1 = "province_details";
 $tableName2 = "vl_user_facility_map";
@@ -80,6 +80,7 @@ try {
 			'report_email' => $email,
 			'contact_person' => $_POST['contactPerson'],
 			'facility_type' => $_POST['facilityType'],
+			'test_type' => implode(', ', $_POST['testType']), 
 			'testing_points' => $_POST['testingPoints'],
 			'header_text' => $_POST['headerText'],
 			'updated_datetime' => $general->getDateTime(),

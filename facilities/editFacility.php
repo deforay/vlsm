@@ -282,18 +282,18 @@ if (count($testTypeInfo) > 0) {
 								<div class="form-group">
 									<label for="testType" class="col-lg-4 control-label">Test Type</label>
 									<div class="col-lg-7">
-										<select type="text" class="" id="testType" name="testType" title="Choose one test type" onchange="getTestType();" multiple>
-											<option value="vl" <?php if (preg_match("/vl/i", $editTestType)) {
+										<select type="text" class="" id="testType" name="testType[]" title="Choose one test type" onchange="getTestType();" multiple>
+											<option value="vl" <?php if (preg_match("/vl/i", $facilityInfo[0]['test_type'])) {
 																	echo "selected='selected'";
 																}  ?>>Viral Load</option>
-											<option value="eid" <?php if (preg_match("/eid/i", $editTestType)) {
+											<option value="eid" <?php if (preg_match("/eid/i", $facilityInfo[0]['test_type'])) {
 																	echo "selected='selected'";
 																}  ?>>Early Infant Diagnosis</option>
-											<option value="covid19" <?php if (preg_match("/covid19/i", $editTestType)) {
+											<option value="covid19" <?php if (preg_match("/covid19/i", $facilityInfo[0]['test_type'])) {
 																		echo "selected='selected'";
 																	}  ?>>Covid-19</option>
 											<?php if(isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) {?> 
-												<option value='hepatitis' <?php echo (preg_match("/hepatitis/i", $editTestType)) ? "selected='selected'" : '';  ?>>Hepatitis</option>
+												<option value='hepatitis' <?php echo (preg_match("/hepatitis/i", $facilityInfo[0]['test_type'])) ? "selected='selected'" : '';  ?>>Hepatitis</option>
 											<?php } ?>
 										</select>
 									</div>
@@ -527,7 +527,7 @@ if (count($testTypeInfo) > 0) {
 		if (first == 1) {
 			var facility = $("#facilityType").val();
 			var testType = $("#testType").val();
-			if (facility && (testType.length > 0) ) {
+			if (facility && (testType.length > 0) && facility == '2') {
 				var div = '<table class="table table-bordered table-striped"><thead><th> Test Type</th> <th> Monthly Target <span class="mandatory">*</span></th><th>Suppressed Monthly Target <span class="mandatory">*</span></th> </thead><tbody>';
 				for (var i = 0; i < testType.length; i++) {
 					var testOrg = '';
