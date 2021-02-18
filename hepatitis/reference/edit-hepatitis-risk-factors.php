@@ -3,7 +3,7 @@ ob_start();
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 $id = base64_decode($_GET['id']);
-$riskfactorQuery = "SELECT * from r_hepatitis_rick_factors where riskfactor_id=$id";
+$riskfactorQuery = "SELECT * from r_hepatitis_risk_factors where riskfactor_id=$id";
 $riskfactorInfo = $db->query($riskfactorQuery);
 ?>
 <!-- Content Wrapper. Contains page content -->
@@ -34,7 +34,7 @@ $riskfactorInfo = $db->query($riskfactorQuery);
 								<div class="form-group">
 									<label for="riskFactorName" class="col-lg-4 control-label">Risk Factor Name<span class="mandatory">*</span></label>
 									<div class="col-lg-7">
-										<input type="text" class="form-control isRequired" id="riskFactorName" name="riskFactorName" value="<?php echo $riskfactorInfo[0]['riskfactor_name']; ?>" placeholder="Risk Factor Name" title="Please enter Risk Factor name" onblur="checkNameValidation('r_hepatitis_rick_factors','riskfactor_name',this,'<?php echo "riskfactor_id##" . $id; ?>','The Risk Factor name that you entered already exists.Enter another name',null)" />
+										<input type="text" class="form-control isRequired" id="riskFactorName" name="riskFactorName" value="<?php echo $riskfactorInfo[0]['riskfactor_name']; ?>" placeholder="Risk Factor Name" title="Please enter Risk Factor name" onblur="checkNameValidation('r_hepatitis_risk_factors','riskfactor_name',this,'<?php echo "riskfactor_id##" . $id; ?>','The Risk Factor name that you entered already exists.Enter another name',null)" />
                                         <input type="hidden" class="form-control isRequired" id="riskFactorId" name="riskFactorId" value="<?php echo base64_encode($riskfactorInfo[0]['riskfactor_id']); ?>" />
 									</div>
 								</div>

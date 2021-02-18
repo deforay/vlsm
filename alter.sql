@@ -2071,3 +2071,7 @@ UPDATE `privileges` SET `privilege_name` = 'eidMonthlyThresholdReport.php' WHERE
 
 --Prastah M 11-Feb-2021
 ALTER TABLE facility_details add column test_type VARCHAR(255) NULL;
+
+
+-- Amit 18-Feb-2020
+RENAME TABLE `r_hepatitis_rick_factors` TO `r_hepatitis_risk_factors`;

@@ -60,7 +60,7 @@ if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['he
         'r_hepatitis_sample_rejection_reasons',
         'r_hepatitis_sample_type',
         'r_hepatitis_results',
-        'r_hepatitis_rick_factors',
+        'r_hepatitis_risk_factors',
         'r_hepatitis_test_reasons',
     );
     $referenceTables = array_merge($referenceTables, $hepatitisTables);

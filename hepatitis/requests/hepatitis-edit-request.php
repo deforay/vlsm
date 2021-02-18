@@ -49,7 +49,7 @@ $comorbidityInfo = $hepatitisDb->getComorbidityByHepatitisId($id);
 
 // Risk Factors
 $riskFactorsData = array();
-$riskFactorsQuery = "SELECT DISTINCT riskfactor_id, riskfactor_name FROM r_hepatitis_rick_factors WHERE riskfactor_status ='active'";
+$riskFactorsQuery = "SELECT DISTINCT riskfactor_id, riskfactor_name FROM r_hepatitis_risk_factors WHERE riskfactor_status ='active'";
 $riskFactorsResult = $db->rawQuery($riskFactorsQuery);
 foreach($riskFactorsResult as $riskFactors){
     $riskFactorsData[$riskFactors['riskfactor_id']] = ucwords($riskFactors['riskfactor_name']);
