@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 #require_once('../startup.php');  
 
-$tableName = "r_hepatitis_rick_factors";
+$tableName = "r_hepatitis_risk_factors";
 $primaryKey = "riskfactor_id";
 //system config
 $systemConfigQuery = "SELECT * from system_config";
@@ -96,7 +96,7 @@ for ($i = 0; $i < count($aColumns); $i++) {
          * Get data to display
         */
 
-$sQuery = "SELECT * FROM r_hepatitis_rick_factors";
+$sQuery = "SELECT * FROM r_hepatitis_risk_factors";
 
 if (isset($sWhere) && $sWhere != "") {
     $sWhere = ' where ' . $sWhere;
@@ -117,11 +117,11 @@ $rResult = $db->rawQuery($sQuery);
 // print_r($rResult);
 /* Data set length after filtering */
 
-$aResultFilterTotal = $db->rawQuery("SELECT * FROM r_hepatitis_rick_factors $sWhere order by $sOrder");
+$aResultFilterTotal = $db->rawQuery("SELECT * FROM r_hepatitis_risk_factors $sWhere order by $sOrder");
 $iFilteredTotal = count($aResultFilterTotal);
 
 /* Total data set length */
-$aResultTotal =  $db->rawQuery("select COUNT(riskfactor_id) as total FROM r_hepatitis_rick_factors");
+$aResultTotal =  $db->rawQuery("select COUNT(riskfactor_id) as total FROM r_hepatitis_risk_factors");
 // $aResultTotal = $countResult->fetch_row();
 //print_r($aResultTotal);
 $iTotal = $aResultTotal[0]['total'];

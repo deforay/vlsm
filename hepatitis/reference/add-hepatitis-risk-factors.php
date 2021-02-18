@@ -32,7 +32,7 @@ include_once(APPLICATION_PATH . '/header.php');
 								<div class="form-group">
 									<label for="riskFactorName" class="col-lg-4 control-label">Risk Factor Name<span class="mandatory">*</span></label>
 									<div class="col-lg-7">
-										<input type="text" class="form-control isRequired" id="riskFactorName" name="riskFactorName" placeholder="Risk Factor Name" title="Please enter Risk Factor name" onblur="checkNameValidation('r_hepatitis_rick_factors','riskfactor_name',this,null,'The Risk Factor name that you entered already exists.Enter another name',null)" />
+										<input type="text" class="form-control isRequired" id="riskFactorName" name="riskFactorName" placeholder="Risk Factor Name" title="Please enter Risk Factor name" onblur="checkNameValidation('r_hepatitis_risk_factors','riskfactor_name',this,null,'The Risk Factor name that you entered already exists.Enter another name',null)" />
 									</div>
 								</div>
 							</div>

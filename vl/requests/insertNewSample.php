@@ -40,7 +40,7 @@ else
 
 }
 if(!isset($_POST['countryId']) || $_POST['countryId'] !='')
-        $_POST['countryId'] = '';
+        $_POST['countryId'] = null;
 
 $vlData = array();
 
