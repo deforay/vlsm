@@ -1,4 +1,5 @@
 <?php
+// This is a template file
 require_once(APPLICATION_PATH . '/system/system.php');
 
 
