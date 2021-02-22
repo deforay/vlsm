@@ -8,7 +8,7 @@ $general = new \Vlsm\Models\General($db);
 
 /* Crosss Login Block Start */
 $crossLoginQuery = "SELECT `login_id`,`password`,`user_name` FROM `user_details` WHERE user_id = ?";
-$crossLoginResult = $db->rawQueryOne($crossLoginQuery,array($_SESSION['userId']));
+$crossLoginResult = $db->rawQueryOne($crossLoginQuery, array($_SESSION['userId']));
 /* Crosss Login Block End */
 
 $arr = $general->getGlobalConfig();
@@ -149,7 +149,7 @@ $sharedPrivileges = array(
 	'vlSuppressedTargetReport.php'					=> 'vlMonthlyThresholdReport.php',
 	'eidSuppressedTargetReport.php'					=> 'eidMonthlyThresholdReport.php',
 	'covid19SuppressedTargetReport.php'				=> 'covid19MonthlyThresholdReport.php',
-	
+
 );
 // Does the current file share privileges with another privilege ?
 $currentFileName = isset($sharedPrivileges[$currentFileName]) ? $sharedPrivileges[$currentFileName] : $currentFileName;
@@ -608,7 +608,8 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 											</li>
 										</ul>
 									</li>
-								<?php } if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true && isset($_SESSION['privileges']) && in_array("hepatitis-sample-type.php", $_SESSION['privileges'])) { ?>
+								<?php }
+								if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true && isset($_SESSION['privileges']) && in_array("hepatitis-sample-type.php", $_SESSION['privileges'])) { ?>
 									<li class="treeview hepatitis-reference-manage">
 										<a href="#"><i class="fa fa-flask"></i>
 											Hepatitis
@@ -761,9 +762,9 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("vlMonthlyThresholdReport.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu vlMonthlyThresholdReport"><a href="/vl/program-management/vlTestingTargetReport.php"><i class="fa fa-circle-o"></i>VL Testing Target Report</a></li>
-									<?php } 
+									<?php }
 									if (isset($_SESSION['privileges']) && in_array("vlSuppressedTargetReport.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu vlSuppressedMonthlyThresholdReport"><a href="/vl/program-management/vlSuppressedTargetReport.php"><i class="fa fa-circle-o"></i>VL Suppression Target Report</a></li>
+										<li class="allMenu vlSuppressedMonthlyThresholdReport"><a href="/vl/program-management/vlSuppressedTargetReport.php"><i class="fa fa-circle-o"></i>VL Suppression Target Report</a></li>
 									<?php } ?>
 								</ul>
 							</li>
@@ -857,7 +858,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("eid-clinic-report.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu eidClinicReport"><a href="/eid/management/eid-clinic-report.php"><i class="fa fa-circle-o"></i> Clinic Report</a></li>
-									<?php } 
+									<?php }
 									if (isset($_SESSION['privileges']) && in_array("eidMonthlyThresholdReport.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu eidMonthlyThresholdReport"><a href="/eid/management/eidTestingTargetReport.php"><i class="fa fa-circle-o"></i> EID Testing Target Report</a></li>
 									<?php } ?>
@@ -962,7 +963,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("covid-19-clinic-report.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu covid19ClinicReportMenu"><a href="/covid-19/management/covid-19-clinic-report.php"><i class="fa fa-circle-o"></i> Clinic Report</a></li>
-									<?php } 
+									<?php }
 									if (isset($_SESSION['privileges']) && in_array("covid19MonthlyThresholdReport.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu covid19MonthlyThresholdReport"><a href="/covid-19/management/covid19TestingTargetReport.php"><i class="fa fa-circle-o"></i>COVID-19 Testing Target Report</a></li>
 									<?php } ?>
@@ -1003,6 +1004,11 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 									if (isset($_SESSION['privileges']) && in_array("hepatitis-batches.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu hepatitisBatchCodeMenu">
 											<a href="/hepatitis/batch/hepatitis-batches.php"><i class="fa fa-circle-o"></i> Manage Batch</a>
+										</li>
+									<?php }
+									if (isset($_SESSION['privileges']) && in_array("specimenReferralManifestList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
+										<li class="allMenu specimenReferralManifestListMenu">
+											<a href="/specimen-referral-manifest/specimenReferralManifestList.php?t=<?php echo base64_encode('hepatitis'); ?>"><i class="fa fa-circle-o"></i> Hepatitis Specimen Manifest</a>
 										</li>
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("specimenReferralManifestList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
@@ -1062,7 +1068,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 									<?php }
 									if (isset($_SESSION['privileges']) && in_array("hepatitis-clinic-report.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu hepatitisClinicReportMenu"><a href="/hepatitis/management/hepatitis-clinic-report.php"><i class="fa fa-circle-o"></i> Clinic Report</a></li>
-									<?php } 
+									<?php }
 									if (isset($_SESSION['privileges']) && in_array("hepatitis-testing-target-report.php", $_SESSION['privileges'])) { ?>
 										<li class="allMenu hepatitisMonthlyThresholdReport"><a href="/hepatitis/management/hepatitis-testing-target-report.php"><i class="fa fa-circle-o"></i>Hepatitis Testing Target Report</a></li>
 									<?php } ?>
