@@ -11,8 +11,9 @@ $facilitiesDb = new \Vlsm\Models\Facilities($db);
 
 $module = isset($_GET['t']) ? base64_decode($_GET['t']) : 'vl';
 $testingLabs = $facilitiesDb->getTestingLabs($module);
-$module = ($module == 'covid19') ? 'C19' : $module;
-$packageNo = strtoupper($module) . date('ymd') .  $general->generateRandomString(6);
+$shortCode = ($module == 'covid19') ? 'C19' : $module;
+$shortCode = ($module == 'hepatitis') ? 'HEP' : $module;
+$packageNo = strtoupper($shortCode) . date('ymd') .  $general->generateRandomString(6);
 
 ?>
 <link href="/assets/css/multi-select.css" rel="stylesheet" />
