@@ -257,27 +257,46 @@
 		$(".allMenu").removeClass('active');
 		$(".vlRequestMailMenu").addClass('active');
 	} else if (splitsUrl == 'specimenReferralManifestList.php' || splitsUrl == 'addSpecimenReferralManifest.php' || splitsUrl == 'editSpecimenReferralManifest.php') {
-		$(".request").addClass('active');
-		$(".allMenu").removeClass('active');
-		$(".specimenReferralManifestListMenu").addClass('active');
+		searchStr = $(location).attr('search');
+		if (searchStr == '?t=' + btoa('vl')) {
+			$(".allMenu").removeClass('active');
+			$(".request").addClass('active');
+			$(".specimenReferralManifestListVLMenu").addClass('active');
+		} else if (searchStr == '?t=' + btoa('eid')) {
+			$(".allMenu").removeClass('active');
+			$(".eidRequest").addClass('active');
+			$(".specimenReferralManifestListEIDMenu").addClass('active');
+		} else if (searchStr == '?t=' + btoa('covid19')) {
+			$(".allMenu").removeClass('active');
+			$(".covid19Request").addClass('active');
+			$(".specimenReferralManifestListC19Menu").addClass('active');
+		} else if (searchStr == '?t=' + btoa('hepatitis')) {
+			$(".allMenu").removeClass('active');
+			$(".hepatitisRequest").addClass('active');
+			$(".specimenReferralManifestListHepMenu").addClass('active');
+		}
 	} else if (splitsUrl == 'vlResultMail.php' || splitsUrl == 'vlResultMailConfirm.php') {
 		$(".test").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".vlResultMailMenu").addClass('active');
 	} else if (splitsUrl == 'addImportResult.php' || splitsUrl == 'imported-results.php' || splitsUrl == 'importedStatistics.php') {
 		searchStr = $(location).attr('search');
-		if (searchStr == '?t=dmw=') { // VIRAL LOAD
+		if (searchStr == '?t=' + btoa('vl')) {
 			$(".test").addClass('active');
 			$(".allMenu").removeClass('active');
 			$(".importResultMenu").addClass('active');
-		} else if (searchStr == '?t=Y292aWQxOQ==') { // Covid-19
+		} else if (searchStr == '?t=' + btoa('covid19')) {
 			$(".allMenu").removeClass('active');
 			$(".covid19Results").addClass('active');
 			$(".covid19ImportResultMenu").addClass('active');
-		} else { // EID
+		} else if (searchStr == '?t=' + btoa('eid')) {
 			$(".eidResults").addClass('active');
 			$(".allMenu").removeClass('active');
 			$(".eidImportResultMenu").addClass('active');
+		} else if (searchStr == '?t=' + btoa('hepatitis')) {
+			$(".hepatitisResults").addClass('active');
+			$(".allMenu").removeClass('active');
+			$(".hepatitisImportResultMenu").addClass('active');
 		}
 	} else if (splitsUrl == 'vlPrintResult.php') {
 		$(".program").addClass('active');
@@ -327,12 +346,11 @@
 		$(".program").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".vlMonthlyThresholdReport").addClass('active');
-	}else if (splitsUrl == 'vlSuppressedTargetReport.php') {
+	} else if (splitsUrl == 'vlSuppressedTargetReport.php') {
 		$(".program").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".vlSuppressedMonthlyThresholdReport").addClass('active');
-	}
-	 else if (splitsUrl == 'generate.php') {
+	} else if (splitsUrl == 'generate.php') {
 		$(".qr").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".generateQRCode").addClass('active');
@@ -593,33 +611,32 @@
 		$(".hepatitis-reference-manage").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".hepatitis-results").addClass('active');
-	}else if (splitsUrl == 'hepatitis-sample-status.php') {
+	} else if (splitsUrl == 'hepatitis-sample-status.php') {
 		$(".manage").removeClass('active');
 		$(".hepatitisProgramMenu").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".hepatitisSampleStatus").addClass('active');
-	}
-	else if (splitsUrl == 'hepatitis-export-data.php') {
+	} else if (splitsUrl == 'hepatitis-export-data.php') {
 		$(".manage").removeClass('active');
 		$(".hepatitisProgramMenu").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".hepatitisExportResult").addClass('active');
-	}else if (splitsUrl == 'hepatitis-print-results.php') {
+	} else if (splitsUrl == 'hepatitis-print-results.php') {
 		$(".manage").removeClass('active');
 		$(".hepatitisProgramMenu").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".hepatitisPrintResults").addClass('active');
-	}else if (splitsUrl == 'hepatitis-sample-rejection-report.php') {
+	} else if (splitsUrl == 'hepatitis-sample-rejection-report.php') {
 		$(".manage").removeClass('active');
 		$(".hepatitisProgramMenu").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".hepatitisSampleRejectionReport").addClass('active');
-	}else if (splitsUrl == 'hepatitis-clinic-report.php') {
+	} else if (splitsUrl == 'hepatitis-clinic-report.php') {
 		$(".manage").removeClass('active');
 		$(".hepatitisProgramMenu").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".hepatitisClinicReportMenu").addClass('active');
-	}else if (splitsUrl == 'hepatitis-testing-target-report.php') {
+	} else if (splitsUrl == 'hepatitis-testing-target-report.php') {
 		$(".manage").removeClass('active');
 		$(".hepatitisProgramMenu").addClass('active');
 		$(".allMenu").removeClass('active');

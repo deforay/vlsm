@@ -178,7 +178,7 @@ $global = $general->getGlobalConfig();
 						<input type="hidden" name="packageId" value="<?php echo $pResult[0]['package_id']; ?>" />
 						<input type="hidden" class="form-control isRequired" id="module" name="module" placeholder="" title="" readonly value="<?php echo $module; ?>" />
 						<a id="packageSubmit" class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
-						<a href="specimenReferralManifestList.php" class="btn btn-default"> Cancel</a>
+						<a href="javascript:history.go(-1);" class="btn btn-default"> Cancel</a>
 					</div>
 					<!-- /.box-footer -->
 				</form>

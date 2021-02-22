@@ -51,14 +51,14 @@ foreach ($labTechnicians as $labTech) {
 $comorbidityData = array();
 $comorbidityQuery = "SELECT DISTINCT comorbidity_id, comorbidity_name FROM r_hepatitis_comorbidities WHERE comorbidity_status ='active'";
 $comorbidityResult = $db->rawQuery($comorbidityQuery);
-foreach($comorbidityResult as $comorbidity){
+foreach ($comorbidityResult as $comorbidity) {
     $comorbidityData[$comorbidity['comorbidity_id']] = ucwords($comorbidity['comorbidity_name']);
 }
 // Risk Factors
 $riskFactorsData = array();
 $riskFactorsQuery = "SELECT DISTINCT riskfactor_id, riskfactor_name FROM r_hepatitis_risk_factors WHERE riskfactor_status ='active'";
 $riskFactorsResult = $db->rawQuery($riskFactorsQuery);
-foreach($riskFactorsResult as $riskFactors){
+foreach ($riskFactorsResult as $riskFactors) {
     $riskFactorsData[$riskFactors['riskfactor_id']] = ucwords($riskFactors['riskfactor_name']);
 }
 
@@ -207,7 +207,7 @@ if (file_exists($fileArray[$arr['vl_form']])) {
                 });
             },
             onSelect: function(e) {
-                
+
             },
             yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
         }).click(function() {
@@ -270,27 +270,27 @@ if (file_exists($fileArray[$arr['vl_form']])) {
     function insertSampleCode(formId, hepatitisTestType, hepatitisSampleId, sampleCode, sampleCodeKey, sampleCodeFormat, countryId, sampleCollectionDate, provinceCode = null, provinceId = null) {
         $.blockUI();
         $.post("/hepatitis/requests/insert-sample.php", {
-            sampleCode: $("#" + sampleCode).val(),
-            sampleCodeKey: $("#" + sampleCodeKey).val(),
-            sampleCodeFormat: $("#" + sampleCodeFormat).val(),
-            countryId: countryId,
-            sampleCollectionDate: $("#" + sampleCollectionDate).val(),
-            provinceCode: provinceCode,
-            prefix: $("#" + hepatitisTestType).val(),
-            provinceId: provinceId
-        },
-        function(data) {
-            if (data > 0) {
-                $.unblockUI();
-                document.getElementById("hepatitisSampleId").value = data;
-                document.getElementById(formId).submit();
-            } else {
-                $.unblockUI();
-                //$("#sampleCollectionDate").val('');
-                sampleCodeGeneration();
-                alert("We could not save this form. Please try saving again.");
-            }
-        });
+                sampleCode: $("#" + sampleCode).val(),
+                sampleCodeKey: $("#" + sampleCodeKey).val(),
+                sampleCodeFormat: $("#" + sampleCodeFormat).val(),
+                countryId: countryId,
+                sampleCollectionDate: $("#" + sampleCollectionDate).val(),
+                provinceCode: provinceCode,
+                prefix: $("#" + hepatitisTestType).val(),
+                provinceId: provinceId
+            },
+            function(data) {
+                if (data > 0) {
+                    $.unblockUI();
+                    document.getElementById("hepatitisSampleId").value = data;
+                    document.getElementById(formId).submit();
+                } else {
+                    $.unblockUI();
+                    //$("#sampleCollectionDate").val('');
+                    sampleCodeGeneration();
+                    alert("We could not save this form. Please try saving again.");
+                }
+            });
 
         $("#hepatitisPlatform").on("change", function() {
             if (this.value != "") {
@@ -306,16 +306,16 @@ if (file_exists($fileArray[$arr['vl_form']])) {
 
     function getMachine(value) {
         $.post("/import-configs/get-config-machine-by-config.php", {
-            configName: value,
-            machine: '',
-            testType: 'hepatitis'
-        },
-        function(data) {
-            $('#machineName').html('');
-            if (data != "") {
-                $('#machineName').append(data);
-            }
-        });
+                configName: value,
+                machine: '',
+                testType: 'hepatitis'
+            },
+            function(data) {
+                $('#machineName').html('');
+                if (data != "") {
+                    $('#machineName').append(data);
+                }
+            });
     }
 </script>
 <?php include_once(APPLICATION_PATH . '/footer.php');
