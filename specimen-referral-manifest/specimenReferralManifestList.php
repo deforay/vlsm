@@ -137,7 +137,7 @@ include_once(APPLICATION_PATH . '/header.php');
       manifestFileName = "generateVLManifest.php";
     } else if (module == 'eid') {
       manifestFileName = "generateEIDManifest.php";
-    }else if (module == 'C19') {
+    }else if (module == 'covid19') {
       manifestFileName = "generateCovid19Manifest.php";
     } else if (module == 'hepatitis') {
       manifestFileName = "generateHepatitisManifest.php";

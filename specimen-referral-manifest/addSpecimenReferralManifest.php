@@ -11,8 +11,13 @@ $facilitiesDb = new \Vlsm\Models\Facilities($db);
 
 $module = isset($_GET['t']) ? base64_decode($_GET['t']) : 'vl';
 $testingLabs = $facilitiesDb->getTestingLabs($module);
-$shortCode = ($module == 'covid19') ? 'C19' : $module;
-$shortCode = ($module == 'hepatitis') ? 'HEP' : $module;
+if ($module == 'covid19') {
+	$shortCode = 'C19';
+} else if ($module == 'hepatitis') {
+	$shortCode = 'HEP';
+}else{
+	$shortCode = $module;
+}
 $packageNo = strtoupper($shortCode) . date('ymd') .  $general->generateRandomString(6);
 
 ?>

@@ -29,7 +29,7 @@ try {
             } else if ($_POST['module'] == 'eid') {
                 $db = $db->where('sample_package_id', $lastId);
                 $db->update('eid_form', $value);
-            } else if ($_POST['module'] == 'C19') {
+            } else if ($_POST['module'] == 'covid19') {
                 $db = $db->where('covid19_id', $_POST['sampleCode'][$j]);
                 $db->update('form_covid19', $value);
             } else if ($_POST['module'] == 'hepatitis') {
@@ -49,7 +49,7 @@ try {
                 } else if ($_POST['module'] == 'eid') {
                     $db = $db->where('eid_id', $_POST['sampleCode'][$j]);
                     $db->update('eid_form', $value);
-                } else if ($_POST['module'] == 'C19') {
+                } else if ($_POST['module'] == 'covid19') {
                     $db = $db->where('covid19_id', $_POST['sampleCode'][$j]);
                     $db->update('form_covid19', $value);
                 } else if ($_POST['module'] == 'hepatitis') {
