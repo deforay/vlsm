@@ -56,6 +56,8 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
     $sampleSuggestionDisplay = 'display:block;';
 }
 
+$facility = $general->generateSelectOptions($healthFacilities, null, '-- Select --');
+
 ?>
 
 

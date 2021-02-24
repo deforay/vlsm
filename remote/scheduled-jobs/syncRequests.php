@@ -2,7 +2,7 @@
 //this file is get the value from remote and update in lab db
 
 //if (php_sapi_name() == 'cli') {
-    require_once(dirname(__FILE__) . "/../../startup.php");
+require_once(dirname(__FILE__) . "/../../startup.php");
 //}
 
 $general = new \Vlsm\Models\General($db);
@@ -39,7 +39,7 @@ if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == t
         'module' => 'vl',
         "Key" => "vlsm-lab-data--",
     );
-    if(!empty($type) && trim($type) == "vl" && !empty($pkg) && trim($pkg) != ""){
+    if (!empty($type) && trim($type) == "vl" && !empty($pkg) && trim($pkg) != "") {
         $data['pkg'] = $pkg;
     }
     $columnList = array();
@@ -153,7 +153,7 @@ if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] ==
         'module' => 'eid',
         "Key" => "vlsm-lab-data--",
     );
-    if(isset($type) && trim($type) == "eid" && isset($pkg) && trim($pkg) != ""){
+    if (isset($type) && trim($type) == "eid" && isset($pkg) && trim($pkg) != "") {
         $data['pkg'] = $pkg;
     }
     //open connection
@@ -262,7 +262,7 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
         'module' => 'covid19',
         "Key" => "vlsm-lab-data--",
     );
-    if(isset($type) && trim($type) == "covid19" && isset($pkg) && trim($pkg) != ""){
+    if (isset($type) && trim($type) == "covid19" && isset($pkg) && trim($pkg) != "") {
         $data['pkg'] = $pkg;
     }
     //open connection
@@ -304,12 +304,13 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
         'data_sync'
     );
 
-    $columnList = array_diff($columnList, $removeKeys);
+    
 
     if (!empty($apiResult) && is_array($apiResult) && count($apiResult) > 0) {
         $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='form_covid19'";
         $allColResult = $db->rawQuery($allColumns);
         $columnList = array_map('current', $allColResult);
+        $columnList = array_diff($columnList, $removeKeys);
         foreach ($apiResult as $key => $remoteData) {
             $request = array();
             foreach ($columnList as $colName) {
@@ -407,6 +408,147 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
     }
 }
 
-if(isset($type) && trim($type) != "" && isset($pkg) && trim($pkg) != ""){
+
+/*
+****************************************************************
+* Hepatitis TEST REQUESTS
+****************************************************************
+*/
+$request = array();
+//$remoteSampleCodeList = array();
+if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) {
+    $url = $systemConfig['remoteURL'] . '/remote/remote/hepatitis-test-requests.php';
+    $data = array(
+        'labName' => $sarr['lab_name'],
+        'module' => 'hepatitis',
+        "Key" => "vlsm-lab-data--",
+    );
+    if (isset($type) && trim($type) == "hepatitis" && isset($pkg) && trim($pkg) != "") {
+        $data['pkg'] = $pkg;
+    }
+    //open connection
+    $ch = curl_init($url);
+    $json_data = json_encode($data);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt(
+        $ch,
+        CURLOPT_HTTPHEADER,
+        array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($json_data)
+        )
+    );
+    // execute post
+    $curl_response = curl_exec($ch);
+
+    //close connection
+    curl_close($ch);
+    $apiData = json_decode($curl_response, true);
+
+    $apiResult = !empty($apiData['result']) ? $apiData['result'] : null;
+
+    $removeKeys = array(
+        'hepatitis_id',
+        'sample_batch_id',
+        'result',
+        'hcv_vl_result',
+        'hbv_vl_result',
+        'hcv_vl_count',
+        'hbv_vl_count',
+        'sample_tested_datetime',
+        'sample_received_at_vl_lab_datetime',
+        'result_dispatched_datetime',
+        'is_sample_rejected',
+        'reason_for_sample_rejection',
+        'result_approved_by',
+        'request_created_by',
+        'last_modified_by',
+        'request_created_datetime',
+        'data_sync'
+    );
+
+    
+
+    if (!empty($apiResult) && is_array($apiResult) && count($apiResult) > 0) {
+        $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='form_hepatitis'";
+        $allColResult = $db->rawQuery($allColumns);
+        $columnList = array_map('current', $allColResult);
+        $columnList = array_diff($columnList, $removeKeys);
+        foreach ($apiResult as $key => $remoteData) {
+            $request = array();
+            foreach ($columnList as $colName) {
+                if (isset($remoteData[$colName])) {
+                    $request[$colName] = $remoteData[$colName];
+                } else {
+                    $request[$colName] = null;
+                }
+            }
+
+
+            $comorbidities = (isset($apiData['comorbidities'][$request['hepatitis_id']]) && !empty($apiData['comorbidities'][$request['hepatitis_id']])) ? $apiData['comorbidities'][$request['hepatitis_id']] : array();
+            $risks = (isset($apiData['risks'][$request['hepatitis_id']]) && !empty($apiData['risks'][$request['hepatitis_id']])) ? $apiData['risks'][$request['hepatitis_id']] : array();
+
+
+            //$remoteSampleCodeList[] = $request['remote_sample_code'];
+            $request['last_modified_datetime'] = $general->getDateTime();
+
+            //check exist remote
+            $exsvlQuery = "SELECT hepatitis_id,sample_code FROM form_hepatitis AS vl WHERE remote_sample_code='" . $request['remote_sample_code'] . "'";
+
+            $exsvlResult = $db->query($exsvlQuery);
+            if ($exsvlResult) {
+
+                $dataToUpdate = array();
+                $dataToUpdate['sample_package_code'] = $request['sample_package_code'];
+                $dataToUpdate['sample_package_id'] = $request['sample_package_id'];
+
+                $db = $db->where('hepatitis_id', $exsvlResult[0]['hepatitis_id']);
+                $id = $db->update('form_hepatitis', $dataToUpdate);
+            } else {
+                if (!empty($request['sample_collection_date'])) {
+                    $request['request_created_by'] = 0;
+                    $request['last_modified_by'] = 0;
+                    $request['request_created_datetime'] = $general->getDateTime();
+                    //$request['result_status'] = 6;
+                    $request['data_sync'] = 0; //column data_sync value is 1 equal to data_sync done.value 0 is not done.
+                    $id = $db->insert('form_hepatitis', $request);
+                }
+            }
+
+
+            $db = $db->where('hepatitis_id', $id);
+            $db->delete("hepatitis_patient_comorbidities");
+            if (isset($comorbidities) && !empty($comorbidities)) {
+
+                foreach ($comorbidities as $id => $value) {
+                    $comorbidityData = array();
+                    $comorbidityData["hepatitis_id"] = $_POST['hepatitisSampleId'];
+                    $comorbidityData["comorbidity_id"] = $id;
+                    $comorbidityData["comorbidity_detected"] = (isset($value) && $value == 'other') ? $_POST['comorbidityOther'][$id] : $value;
+                    $db->insert("hepatitis_patient_comorbidities", $comorbidityData);
+                }
+            }
+
+            $db = $db->where('hepatitis_id', $id);
+            $db->delete("hepatitis_risk_factors");
+            if (isset($risks) && !empty($risks)) {
+
+                foreach ($risks as  $id => $value) {
+                    $riskFactorsData = array();
+                    $riskFactorsData["hepatitis_id"] = $_POST['hepatitisSampleId'];
+                    $riskFactorsData["riskfactors_id"] = $id;
+                    $riskFactorsData["riskfactors_detected"] = (isset($value) && $value == 'other') ? $_POST['riskFactorsOther'][$id] : $value;;
+                    $db->insert("hepatitis_risk_factors", $riskFactorsData);
+                }
+            }
+        }
+    }
+}
+
+
+
+if (isset($type) && trim($type) != "" && isset($pkg) && trim($pkg) != "") {
     return 1;
 }

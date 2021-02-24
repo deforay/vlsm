@@ -378,10 +378,14 @@ class General
     public function generateSelectOptions($optionList, $selectedOptions = array(), $emptySelectText = false)
     {
 
+        if(empty($optionList)){
+            return '';
+        }
         $response = '';
         if ($emptySelectText !== false) {
             $response .= "<option value=''>$emptySelectText</option>";
         }
+        
         foreach ($optionList as $optId => $optName) {
             $selectedText = '';
             if (!empty($selectedOptions)) {

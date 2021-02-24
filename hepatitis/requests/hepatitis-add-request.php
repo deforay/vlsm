@@ -84,6 +84,7 @@ $specimenTypeResult = $general->fetchDataFromTable('r_hepatitis_sample_type', "s
 
 // Import machine config
 $testPlatformResult = $general->getTestingPlatforms('hepatitis');
+$testPlatformList = array();
 foreach ($testPlatformResult as $row) {
     $testPlatformList[$row['machine_name']] = $row['machine_name'];
 }

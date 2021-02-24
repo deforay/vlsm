@@ -227,3 +227,63 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
         //}
     }
 }
+
+// Hepatitis TEST RESULTS
+
+if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) {
+
+    $hepQuery = "SELECT hep.*, a.user_name as 'approved_by_name' 
+                    FROM `form_hepatitis` AS hep 
+                    LEFT JOIN `user_details` AS a ON hep.result_approved_by = a.user_id 
+                    WHERE result_status NOT IN (9) 
+                    AND sample_code !='' 
+                    AND sample_code is not null 
+                    AND data_sync=0"; // AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
+
+    $hepLabResult = $db->rawQuery($hepQuery);
+
+    $forms = array();
+    foreach ($hepLabResult as $row) {
+        $forms[] = $row['hepatitis_id'];
+    }
+
+    $hepatitisObj = new \Vlsm\Models\Hepatitis($db);
+    $risks = $hepatitisObj->getRiskFactorsByHepatitisId($forms);
+    $comorbidities = $hepatitisObj->getComorbidityByHepatitisId($forms);
+
+    $url = $systemConfig['remoteURL'] . '/remote/remote/hepatitis-test-results.php';
+    $data = array(
+        "result" => $hepLabResult,
+        "testResults" => $testResults,
+        "risks" => $risks,
+        "comorbidities" => $comorbidities,
+        "Key" => "vlsm-lab-data--",
+    );
+
+    //open connection
+    $ch = curl_init($url);
+    $json_data = json_encode($data);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt(
+        $ch,
+        CURLOPT_HTTPHEADER,
+        array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($json_data)
+        )
+    );
+    // execute post
+    $curl_response = curl_exec($ch);
+    //close connection
+    curl_close($ch);
+    $result = json_decode($curl_response, true);
+
+    if (!empty($result) && count($result) > 0) {
+        //foreach ($result as $code) {
+        $db = $db->where("sample_code IN ('" . implode("','", $result) . "')");
+        $id = $db->update('form_hepatitis', array('data_sync' => 1));
+        //}
+    }
+}
