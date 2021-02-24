@@ -529,7 +529,7 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 											<div class="form-group">
 												<label for="eid_max_length" class="col-lg-2 control-label">Maximum Sample Code Length <span class="mandatory " style="display:<?php echo ($arr['eid_sample_code'] == 'auto') ? 'none' : 'block'; ?>">*</span></label>
 												<div class="col-lg-10">
-													<input type="text" class="form-control checkNum isNumeric <?php echo ($arr['sample_code'] == 'auto' || 'MMYY' || 'YY') ? '' : 'isRequired'; ?>" id="eid_max_length" name="eid_max_length" <?php echo ($arr['eid_sample_code'] == 'auto' || 'MMYY' || 'YY') ? 'readonly' : ''; ?> placeholder="Max" title="Please enter sample code max length" value="<?php echo ($arr['eid_sample_code'] == 'auto') ? '' : $arr['max_length']; ?>" style="max-width:60px;" />
+													<input type="text" class="form-control checkNum isNumeric <?php echo ($arr['eid_sample_code'] == 'auto' || 'MMYY' || 'YY') ? '' : 'isRequired'; ?>" id="eid_max_length" name="eid_max_length" <?php echo ($arr['eid_sample_code'] == 'auto' || 'MMYY' || 'YY') ? 'readonly' : ''; ?> placeholder="Max" title="Please enter sample code max length" value="<?php echo ($arr['eid_sample_code'] == 'auto') ? '' : $arr['max_length']; ?>" style="max-width:60px;" />
 												</div>
 											</div>
 										</div>
@@ -641,7 +641,7 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 												</div>
 												<label for="covid19_max_length" class="col-lg-2 control-label">Maximum Sample Code Length <span class="mandatory " style="display:<?php echo ($arr['covid19_sample_code'] == 'auto') ? 'none' : 'block'; ?>">*</span></label>
 												<div class="col-lg-4">
-													<input type="text" class="form-control checkNum isNumeric <?php echo ($arr['sample_code'] == 'auto' || 'MMYY' || 'YY') ? '' : 'isRequired'; ?>" id="covid19_max_length" name="covid19_max_length" <?php echo ($arr['covid19_sample_code'] == 'auto' || 'MMYY' || 'YY') ? 'readonly' : ''; ?> placeholder="Max" title="Please enter sample code max length" value="<?php echo ($arr['covid19_sample_code'] == 'auto') ? '' : $arr['max_length']; ?>" />
+													<input type="text" class="form-control checkNum isNumeric <?php echo ($arr['covid19_sample_code'] == 'auto' || 'MMYY' || 'YY') ? '' : 'isRequired'; ?>" id="covid19_max_length" name="covid19_max_length" <?php echo ($arr['covid19_sample_code'] == 'auto' || 'MMYY' || 'YY') ? 'readonly' : ''; ?> placeholder="Max" title="Please enter sample code max length" value="<?php echo ($arr['covid19_sample_code'] == 'auto') ? '' : $arr['max_length']; ?>" />
 												</div>
 											</div>
 										</div>
@@ -757,7 +757,7 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 												</div>
 												<label for="hepatitis_max_length" class="col-lg-2 control-label">Maximum Sample Code Length <span class="mandatory " style="display:<?php echo ($arr['hepatitis_sample_code'] == 'auto') ? 'none' : 'block'; ?>">*</span></label>
 												<div class="col-lg-4">
-													<input type="text" class="form-control checkNum isNumeric <?php echo ($arr['sample_code'] == 'auto' || 'MMYY' || 'YY') ? '' : 'isRequired'; ?>" id="hepatitis_max_length" name="hepatitis_max_length" <?php echo ($arr['hepatitis_sample_code'] == 'auto' || 'MMYY' || 'YY') ? 'readonly' : ''; ?> placeholder="Max" title="Please enter sample code max length" value="<?php echo ($arr['hepatitis_sample_code'] == 'auto') ? '' : $arr['max_length']; ?>" />
+													<input type="text" class="form-control checkNum isNumeric <?php echo ($arr['hepatitis_sample_code'] == 'auto' || 'MMYY' || 'YY') ? '' : 'isRequired'; ?>" id="hepatitis_max_length" name="hepatitis_max_length" <?php echo ($arr['hepatitis_sample_code'] == 'auto' || 'MMYY' || 'YY') ? 'readonly' : ''; ?> placeholder="Max" title="Please enter sample code max length" value="<?php echo ($arr['hepatitis_sample_code'] == 'auto') ? '' : $arr['max_length']; ?>" />
 												</div>
 											</div>
 										</div>

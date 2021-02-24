@@ -1,5 +1,5 @@
 <?php
-// imported in covid-19-add-request.php based on country in global config
+// imported in hepatitis-add-request.php based on country in global config
 
 ob_start();
 
@@ -36,6 +36,8 @@ $province .= "<option value=''> -- Select -- </option>";
 foreach ($pdResult as $provinceName) {
     $province .= "<option data-code='" . $provinceName['province_code'] . "' data-province-id='" . $provinceName['province_id'] . "' data-name='" . $provinceName['province_name'] . "' value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
+
+$facility = $general->generateSelectOptions($healthFacilities, null, '-- Select --');
 
 ?>
 

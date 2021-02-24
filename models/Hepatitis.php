@@ -133,30 +133,59 @@ class Hepatitis
         return json_encode($sCodeKey);
     }
 
-    public function getComorbidityByHepatitisId($id)
+    public function getComorbidityByHepatitisId($formId)
     {
-        $comorbidityData = array();
-        if(isset($id) && $id != ""){
-            $comorbidityQuery = "SELECT DISTINCT comorbidity_id, comorbidity_detected FROM hepatitis_patient_comorbidities WHERE hepatitis_id = " .$id;
-            $comorbidityResult = $this->db->rawQuery($comorbidityQuery);
-            foreach($comorbidityResult as $comorbidity){
-                $comorbidityData[$comorbidity['comorbidity_id']] = $comorbidity['comorbidity_detected'];
+
+        if (empty($formId)) {
+            return null;
+        }
+
+        $response = array();
+        // Using this in sync requests/results
+        if (is_array($formId)) {
+
+            $results = $this->db->rawQuery("SELECT * FROM hepatitis_patient_comorbidities WHERE `hepatitis_id` IN (" . implode(",", $formId) . ")");
+
+            foreach ($results as $row) {
+                $response[$row['hepatitis_id']][$row['comorbidity_id']] = $row['comorbidity_detected'];
+            }
+        } else {
+
+            $results = $this->db->rawQuery("SELECT * FROM hepatitis_patient_comorbidities WHERE `hepatitis_id` = $formId");
+
+            foreach ($results as $row) {
+                $response[$row['comorbidity_id']] = $row['comorbidity_detected'];
             }
         }
-        return $comorbidityData;
+        return $response;
     }
     
-    public function getRiskFactorsByHepatitisId($id)
+    public function getRiskFactorsByHepatitisId($formId)
     {
-        $riskFactorsData = array();
-        if(isset($id) && $id != ""){
-            $riskFactorQuery = "SELECT DISTINCT riskfactors_id, riskfactors_detected FROM hepatitis_risk_factors WHERE hepatitis_id = " .$id;
-            $riskFactorsResult = $this->db->rawQuery($riskFactorQuery);
-            foreach($riskFactorsResult as $riskFactor){
-                $riskFactorsData[$riskFactor['riskfactors_id']] = $riskFactor['riskfactors_detected'];
+
+        if (empty($formId)) {
+            return null;
+        }
+
+        $response = array();
+        // Using this in sync requests/results
+        if (is_array($formId)) {
+
+            $results = $this->db->rawQuery("SELECT * FROM hepatitis_risk_factors WHERE `hepatitis_id` IN (" . implode(",", $formId) . ")");
+
+            foreach ($results as $row) {
+                $response[$row['hepatitis_id']][$row['riskfactors_id']] = $row['riskfactors_detected'];
+            }
+        } else {
+
+            $results = $this->db->rawQuery("SELECT * FROM hepatitis_risk_factors WHERE `hepatitis_id` = $formId");
+
+            foreach ($results as $row) {
+                $response[$row['riskfactors_id']] = $row['riskfactors_detected'];
             }
         }
-        return $riskFactorsData;
+        return $response;
+        
     }
 
     public function getHepatitisResults()
