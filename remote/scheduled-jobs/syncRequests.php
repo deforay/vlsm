@@ -313,6 +313,7 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
         $columnList = array_diff($columnList, $removeKeys);
         foreach ($apiResult as $key => $remoteData) {
             $request = array();
+            $covid19Id = $remoteData['covid19_id'];
             foreach ($columnList as $colName) {
                 if (isset($remoteData[$colName])) {
                     $request[$colName] = $remoteData[$colName];
@@ -324,9 +325,9 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
             // before we unset the covid19_id field, let us fetch the
             // test results, comorbidities and symptoms
 
-            $symptoms = (isset($apiData['symptoms'][$request['covid19_id']]) && !empty($apiData['symptoms'][$request['covid19_id']])) ? $apiData['symptoms'][$request['covid19_id']] : array();
-            $comorbidities = (isset($apiData['comorbidities'][$request['covid19_id']]) && !empty($apiData['comorbidities'][$request['covid19_id']])) ? $apiData['comorbidities'][$request['covid19_id']] : array();
-            $testResults = (isset($apiData['testResults'][$request['covid19_id']]) && !empty($apiData['testResults'][$request['covid19_id']])) ? $apiData['testResults'][$request['covid19_id']] : array();
+            $symptoms = (isset($apiData['symptoms'][$covid19Id]) && !empty($apiData['symptoms'][$covid19Id])) ? $apiData['symptoms'][$covid19Id] : array();
+            $comorbidities = (isset($apiData['comorbidities'][$covid19Id]) && !empty($apiData['comorbidities'][$covid19Id])) ? $apiData['comorbidities'][$covid19Id] : array();
+            $testResults = (isset($apiData['testResults'][$covid19Id]) && !empty($apiData['testResults'][$covid19Id])) ? $apiData['testResults'][$covid19Id] : array();
 
 
             //$remoteSampleCodeList[] = $request['remote_sample_code'];
@@ -350,7 +351,8 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
                 $dataToUpdate['sample_package_id'] = $request['sample_package_id'];
 
                 $db = $db->where('covid19_id', $exsvlResult[0]['covid19_id']);
-                $id = $db->update('form_covid19', $dataToUpdate);
+                $db->update('form_covid19', $dataToUpdate);
+                $id = $exsvlResult[0]['covid19_id'];
             } else {
                 if (!empty($request['sample_collection_date'])) {
                     $request['request_created_by'] = 0;
@@ -358,7 +360,8 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
                     $request['request_created_datetime'] = $general->getDateTime();
                     //$request['result_status'] = 6;
                     $request['data_sync'] = 0; //column data_sync value is 1 equal to data_sync done.value 0 is not done.
-                    $id = $db->insert('form_covid19', $request);
+                    $db->insert('form_covid19', $request);
+                    $id = $db->getInsertId();
                 }
             }
 
@@ -478,6 +481,7 @@ if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['he
         $columnList = array_diff($columnList, $removeKeys);
         foreach ($apiResult as $key => $remoteData) {
             $request = array();
+            $hepatitisId = $remoteData['hepatitis_id'];
             foreach ($columnList as $colName) {
                 if (isset($remoteData[$colName])) {
                     $request[$colName] = $remoteData[$colName];
@@ -487,8 +491,8 @@ if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['he
             }
 
 
-            $comorbidities = (isset($apiData['comorbidities'][$request['hepatitis_id']]) && !empty($apiData['comorbidities'][$request['hepatitis_id']])) ? $apiData['comorbidities'][$request['hepatitis_id']] : array();
-            $risks = (isset($apiData['risks'][$request['hepatitis_id']]) && !empty($apiData['risks'][$request['hepatitis_id']])) ? $apiData['risks'][$request['hepatitis_id']] : array();
+            $comorbidities = (isset($apiData['comorbidities'][$hepatitisId]) && !empty($apiData['comorbidities'][$hepatitisId])) ? $apiData['comorbidities'][$hepatitisId] : array();
+            $risks = (isset($apiData['risks'][$hepatitisId]) && !empty($apiData['risks'][$hepatitisId])) ? $apiData['risks'][$hepatitisId] : array();
 
 
             //$remoteSampleCodeList[] = $request['remote_sample_code'];
@@ -505,7 +509,8 @@ if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['he
                 $dataToUpdate['sample_package_id'] = $request['sample_package_id'];
 
                 $db = $db->where('hepatitis_id', $exsvlResult[0]['hepatitis_id']);
-                $id = $db->update('form_hepatitis', $dataToUpdate);
+                $db->update('form_hepatitis', $dataToUpdate);
+                $id = $exsvlResult[0]['hepatitis_id'];
             } else {
                 if (!empty($request['sample_collection_date'])) {
                     $request['request_created_by'] = 0;
@@ -513,7 +518,8 @@ if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['he
                     $request['request_created_datetime'] = $general->getDateTime();
                     //$request['result_status'] = 6;
                     $request['data_sync'] = 0; //column data_sync value is 1 equal to data_sync done.value 0 is not done.
-                    $id = $db->insert('form_hepatitis', $request);
+                    $db->insert('form_hepatitis', $request);
+                    $id = $db->getInsertId();
                 }
             }
 
@@ -522,11 +528,11 @@ if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['he
             $db->delete("hepatitis_patient_comorbidities");
             if (isset($comorbidities) && !empty($comorbidities)) {
 
-                foreach ($comorbidities as $id => $value) {
+                foreach ($comorbidities as $comoId => $comoValue) {
                     $comorbidityData = array();
-                    $comorbidityData["hepatitis_id"] = $_POST['hepatitisSampleId'];
-                    $comorbidityData["comorbidity_id"] = $id;
-                    $comorbidityData["comorbidity_detected"] = (isset($value) && $value == 'other') ? $_POST['comorbidityOther'][$id] : $value;
+                    $comorbidityData["hepatitis_id"] = $id;
+                    $comorbidityData["comorbidity_id"] = $comoId;
+                    $comorbidityData["comorbidity_detected"] = $comoValue;
                     $db->insert("hepatitis_patient_comorbidities", $comorbidityData);
                 }
             }
@@ -535,11 +541,11 @@ if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['he
             $db->delete("hepatitis_risk_factors");
             if (isset($risks) && !empty($risks)) {
 
-                foreach ($risks as  $id => $value) {
+                foreach ($risks as  $riskId => $riskValue) {
                     $riskFactorsData = array();
-                    $riskFactorsData["hepatitis_id"] = $_POST['hepatitisSampleId'];
-                    $riskFactorsData["riskfactors_id"] = $id;
-                    $riskFactorsData["riskfactors_detected"] = (isset($value) && $value == 'other') ? $_POST['riskFactorsOther'][$id] : $value;;
+                    $riskFactorsData["hepatitis_id"] = $id;
+                    $riskFactorsData["riskfactors_id"] = $riskId;
+                    $riskFactorsData["riskfactors_detected"] = $riskValue;
                     $db->insert("hepatitis_risk_factors", $riskFactorsData);
                 }
             }

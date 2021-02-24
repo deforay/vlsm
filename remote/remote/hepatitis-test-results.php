@@ -84,20 +84,22 @@ if (count($data['result']) > 0) {
         $sResult = $db->rawQuery($sQuery);
         if ($sResult) {
             $db = $db->where('hepatitis_id', $sResult[0]['hepatitis_id']);
-            $id = $db->update('form_hepatitis', $lab);
+            $db->update('form_hepatitis', $lab);
+            $id = $sResult[0]['hepatitis_id'];
         } else {
-            $id = $db->insert('form_hepatitis', $lab);
+            $db->insert('form_hepatitis', $lab);
+            $id = $db->getInsertId();
         }
 
         $db = $db->where('hepatitis_id', $id);
         $db->delete("hepatitis_patient_comorbidities");
         if (isset($comorbidities) && !empty($comorbidities)) {
 
-            foreach ($comorbidities as $id => $value) {
+            foreach ($comorbidities as $comoId => $comoValue) {
                 $comorbidityData = array();
-                $comorbidityData["hepatitis_id"] = $_POST['hepatitisSampleId'];
-                $comorbidityData["comorbidity_id"] = $id;
-                $comorbidityData["comorbidity_detected"] = (isset($value) && $value == 'other') ? $_POST['comorbidityOther'][$id] : $value;
+                $comorbidityData["hepatitis_id"] = $id;
+                $comorbidityData["comorbidity_id"] = $comoId;
+                $comorbidityData["comorbidity_detected"] = $comoValue;
                 $db->insert("hepatitis_patient_comorbidities", $comorbidityData);
             }
         }
@@ -106,11 +108,11 @@ if (count($data['result']) > 0) {
         $db->delete("hepatitis_risk_factors");
         if (isset($risks) && !empty($risks)) {
 
-            foreach ($risks as  $id => $value) {
+            foreach ($risks as  $riskId => $riskValue) {
                 $riskFactorsData = array();
-                $riskFactorsData["hepatitis_id"] = $_POST['hepatitisSampleId'];
-                $riskFactorsData["riskfactors_id"] = $id;
-                $riskFactorsData["riskfactors_detected"] = (isset($value) && $value == 'other') ? $_POST['riskFactorsOther'][$id] : $value;;
+                $riskFactorsData["hepatitis_id"] = $id;
+                $riskFactorsData["riskfactors_id"] = $riskId;
+                $riskFactorsData["riskfactors_detected"] = $riskValue;
                 $db->insert("hepatitis_risk_factors", $riskFactorsData);
             }
         }
