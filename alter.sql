@@ -2073,5 +2073,9 @@ UPDATE `privileges` SET `privilege_name` = 'eidMonthlyThresholdReport.php' WHERE
 ALTER TABLE facility_details add column test_type VARCHAR(255) NULL;
 
 
--- Amit 18-Feb-2020
+-- Amit 18-Feb-2021
 RENAME TABLE `r_hepatitis_rick_factors` TO `r_hepatitis_risk_factors`;
+
+
+UPDATE `system_config` SET `value` = '4.3.0' WHERE `system_config`.`name` = 'version';
+-- Version 4.3.0  -- Amit -- 24-Feb-2021
