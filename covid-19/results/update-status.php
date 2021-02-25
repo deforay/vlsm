@@ -10,9 +10,10 @@ try {
     $lock = $general->getGlobalConfig('lock_approved_covid19_samples');
     for ($i = 0; $i < count($id); $i++) {
         $status = array(
-            'result_status'         => $_POST['status'],
-            'result_approved_by'    =>  $_SESSION['userId'],
-            'data_sync'             => 0
+            'result_status'             => $_POST['status'],
+            'result_approved_by'        =>  $_SESSION['userId'],
+            'result_approved_datetime'  =>  $general->getDateTime(),
+            'data_sync'                 => 0
         );
         if ($_POST['status'] == '4') {
             $status['result'] = null;
