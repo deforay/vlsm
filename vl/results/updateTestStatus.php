@@ -10,9 +10,10 @@ try {
     $id = explode(",", $_POST['id']);
     for ($i = 0; $i < count($id); $i++) {
         $status = array(
-            'result_status'         => $_POST['status'],
-            'result_approved_by'    => $_SESSION['userId'],
-            'data_sync'             => 0
+            'result_status'             => $_POST['status'],
+            'result_approved_by'        => $_SESSION['userId'],
+            'result_approved_datetime'  =>  $general->getDateTime(),
+            'data_sync'                 => 0
         );
         
         if ($_POST['status'] == '4') {

@@ -58,6 +58,7 @@ if (count($data['result']) > 0) {
         if (isset($remoteData['approved_by_name']) && $remoteData['approved_by_name'] != '') {
 
             $lab['result_approved_by'] = $usersModel->addUserIfNotExists($remoteData['approved_by_name']);
+            $lab['result_approved_datetime'] =  $general->getDateTime();
             // we dont need this now
             //unset($remoteData['approved_by_name']);
         }
