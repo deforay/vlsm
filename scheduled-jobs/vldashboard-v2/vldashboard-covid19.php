@@ -21,7 +21,7 @@ try {
     $db->orderBy("last_modified_datetime", "ASC");
     
     $rResult = $db->get('form_covid19', 5000);
-    
+
     if (empty($rResult)) {
         exit(0);
     }
@@ -84,7 +84,6 @@ try {
         $data = array(
             'covid19_last_dash_sync' => (!empty($lastUpdate) ? $lastUpdate : $general->getDateTime())
         );
-        
         $db->update('s_vlsm_instance', $data);
     }
     $general->removeDirectory(TEMP_PATH . DIRECTORY_SEPARATOR . $filename);

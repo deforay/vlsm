@@ -8,22 +8,38 @@ ob_start();
 $general = new \Vlsm\Models\General($db);
 $id = base64_decode($_GET['id']);
 
-
+$showPatientName = false;
 if (isset($_GET['type']) && $_GET['type'] == 'vl') {
     $refTable = "vl_request_form";
     $refPrimaryColumn = "vl_sample_id";
     $patientIdColumn = 'patient_art_no';
+    $patientFirstName = 'patient_first_name';
+    $patientLastName = 'patient_last_name';
     $worksheetName = 'Viral Load Test Worksheet';
 } else if (isset($_GET['type']) && $_GET['type'] == 'eid') {
     $refTable = "eid_form";
     $refPrimaryColumn = "eid_id";
     $patientIdColumn = 'child_id';
+    $patientFirstName = 'child_name';
+    $patientLastName = 'child_surname';
     $worksheetName = 'EID Test Worksheet';
 }else if (isset($_GET['type']) && $_GET['type'] == 'covid19') {
     $refTable = "form_covid19";
     $refPrimaryColumn = "covid19_id";
     $patientIdColumn = 'patient_id';
+    $patientFirstName = 'patient_name';
+    $patientLastName = 'patient_surname';
     $worksheetName = 'Covid-19 Test Worksheet';
+}else if (isset($_GET['type']) && $_GET['type'] == 'hepatitis') {
+    $refTable = "form_hepatitis";
+    $refPrimaryColumn = "hepatitis_id";
+    $patientIdColumn = 'patient_id';
+    $patientFirstName = 'patient_name';
+    $patientLastName = 'patient_surname';
+    $worksheetName = 'Hepatitis Test Worksheet';
+
+    $showPatientName = true;
+
 }
 
 
@@ -45,7 +61,7 @@ if ($id > 0) {
     $bQuery = "SELECT * from batch_details as b_d LEFT JOIN import_config as i_c ON i_c.config_id=b_d.machine where batch_id=$id";
     $bResult = $db->query($bQuery);
 
-    $dateQuery = "SELECT sample_tested_datetime,result_reviewed_datetime from $refTable where sample_batch_id='" . $id . "' AND (sample_tested_datetime IS NOT NULL AND sample_tested_datetime not like '' AND sample_tested_datetime!= '00000-00-00 00:00:00') LIMIT 1";
+    $dateQuery = "SELECT sample_tested_datetime,result_reviewed_datetime from $refTable where sample_batch_id='" . $id . "' AND (sample_tested_datetime IS NOT NULL AND sample_tested_datetime not like '' AND sample_tested_datetime!= '0000-00-00 00:00:00') LIMIT 1";
     $dateResult = $db->query($dateQuery);
     $resulted = '';
     $reviewed = '';
@@ -176,7 +192,7 @@ if ($id > 0) {
                 // }
                 $xplodJsonToArray = explode("_", $jsonToArray[$j]);
                 if (count($xplodJsonToArray) > 1 && $xplodJsonToArray[0] == "s") {
-                    $sampleQuery = "SELECT sample_code,result,lot_number,lot_expiration_date,$patientIdColumn from $refTable where $refPrimaryColumn =$xplodJsonToArray[1]";
+                    $sampleQuery = "SELECT sample_code,result,lot_number,lot_expiration_date,$patientIdColumn, $patientFirstName, $patientLastName from $refTable where $refPrimaryColumn =$xplodJsonToArray[1]";
                     $sampleResult = $db->query($sampleQuery);
 
                     $params = $pdf->serializeTCPDFtagParameters(array($sampleResult[0]['sample_code'], $barcodeFormat, '', '', '', 7, 0.25, array('border' => false, 'align' => 'C', 'padding' => 1, 'fgcolor' => array(0, 0, 0), 'bgcolor' => array(255, 255, 255), 'text' => false, 'font' => 'helvetica', 'fontsize' => 7, 'stretchtext' => 2), 'N'));
@@ -285,12 +301,17 @@ if ($id > 0) {
                 }
                 $lotDetails = $sample['lot_number'] . $lotExpirationDate;
 
+                $patientIdentifier = $sample[$patientIdColumn];
+                if($showPatientName){
+                    $patientIdentifier = trim($patientIdentifier . " " .$patientFirstName." ".$patientLastName);
+                }
+
                 $tbl .= '<table nobr="true" cellspacing="0" cellpadding="2" style="width:100%;">';
                 $tbl .= '<tr nobr="true" style="border-bottom:1px solid #333 !important;width:100%;">';
                 $tbl .= '<td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">' . $sampleCounter . '.</td>';
                 $tbl .= '<td align="center" width="20%" style="vertical-align:middle;border-bottom:1px solid #333;">' . $sample['sample_code'] . '</td>';
                 $tbl .= '<td align="center" width="35%" style="vertical-align:middle;border-bottom:1px solid #333;"><tcpdf method="write1DBarcode" params="' . $params . '" /></td>';
-                $tbl .= '<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">' . $sample[$patientIdColumn] . '</td>';
+                $tbl .= '<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">' . $patientIdentifier . '</td>';
                 $tbl .= '<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">' . $lotDetails . '</td>';
                 $tbl .= '<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">' . $sample['result'] . '</td>';
                 $tbl .= '</tr>';
