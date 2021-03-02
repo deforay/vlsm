@@ -890,7 +890,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 											<a href="/covid-19/requests/covid-19-add-request.php"><i class="fa fa-circle-o"></i> Add New Request</a>
 										</li>
 									<?php }
-									if (isset($_SESSION['privileges']) && in_array("addSamplesFromManifest.php", $_SESSION['privileges'])) { ?>
+									if (isset($_SESSION['privileges']) && in_array("addSamplesFromManifest.php", $_SESSION['privileges'])  && ($sarr['user_type'] != 'remoteuser')) { ?>
 										<li class="allMenu addSamplesFromManifestCovid19Menu">
 											<a href="/covid-19/requests/addSamplesFromManifest.php"><i class="fa fa-circle-o"></i> Add Samples from Manifest</a>
 										</li>
@@ -996,7 +996,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 											<a href="/hepatitis/requests/hepatitis-add-request.php"><i class="fa fa-circle-o"></i> Add New Request</a>
 										</li>
 									<?php }
-									if (isset($_SESSION['privileges']) && in_array("add-samples-from-manifest.php", $_SESSION['privileges'])) { ?>
+									if (isset($_SESSION['privileges']) && in_array("add-samples-from-manifest.php", $_SESSION['privileges']) && ($sarr['user_type'] != 'remoteuser')) { ?>
 										<li class="allMenu addSamplesFromManifestHepatitisMenu">
 											<a href="/hepatitis/requests/add-samples-from-manifest.php"><i class="fa fa-circle-o"></i> Add Samples from Manifest</a>
 										</li>
