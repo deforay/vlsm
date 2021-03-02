@@ -2079,3 +2079,10 @@ RENAME TABLE `r_hepatitis_rick_factors` TO `r_hepatitis_risk_factors`;
 
 UPDATE `system_config` SET `value` = '4.3.0' WHERE `system_config`.`name` = 'version';
 -- Version 4.3.0  -- Amit -- 24-Feb-2021
+
+-- Amit 01-Mar-2021
+ALTER TABLE `vl_request_form` CHANGE `vlsm_country_id` `vlsm_country_id` INT(11) NULL DEFAULT NULL;
+ALTER TABLE `eid_form` CHANGE `vlsm_country_id` `vlsm_country_id` INT(11) NULL DEFAULT NULL;
+ALTER TABLE `form_covid19` CHANGE `vlsm_country_id` `vlsm_country_id` INT(11) NULL DEFAULT NULL;
+ALTER TABLE `form_hepatitis` CHANGE `vlsm_country_id` `vlsm_country_id` INT(11) NULL DEFAULT NULL;
+
