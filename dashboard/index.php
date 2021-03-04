@@ -51,6 +51,9 @@ $facilityCount = $facilityTotal[0]['total'];
 				<?php if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true && array_intersect($_SESSION['module'], array('covid19'))) {  ?>
 					<li><a href="#covid19Dashboard" data-toggle="tab" onclick="generateDashboard('covid19');">Covid-19 Tests</a></li>
 				<?php } ?>
+				<?php if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true && array_intersect($_SESSION['module'], array('hepatitis'))) {  ?>
+					<li><a href="#hepatitisDashboard" data-toggle="tab" onclick="generateDashboard('hepatitis');">Hepatitis Tests</a></li>
+				<?php } ?>
 				<?php
 				if (isset($recencyConfig['vlsync']) && $recencyConfig['vlsync'] == true) {  ?>
 					<li><a href="#recencyDashboard" data-toggle="tab" onclick="generateDashboard('recency')">Confirmation Tests for Recency</a></li>
@@ -213,6 +216,48 @@ $facilityCount = $facilityTotal[0]['total'];
 
 				<?php } ?>
 				<!-- COVID-19 END -->
+
+<!-- Hepatitis START-->
+<?php if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true && array_intersect($_SESSION['module'], array('hepatitis'))) {  ?>
+
+<div class="tab-pane fade in" id="hepatitisDashboard">
+	<!-- COVID-19 content -->
+	<section class="content">
+	<div id="contCovid"> </div>
+		<!-- Small boxes (Stat box) -->
+		<div class="row" style="padding-top:10px;padding-bottom:20px;">
+			<div class="col-lg-7">
+				<form autocomplete="off">
+					<table class="table searchTable" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:0px;width: 98%;margin-bottom: 0px;">
+						<tr>
+							<td style="vertical-align:middle;"><b>Date Range&nbsp;:</b></td>
+							<td>
+								<input type="text" id="hepatitisSampleCollectionDate" name="hepatitisSampleCollectionDate" class="form-control" placeholder="Select Collection Date" style="width:220px;background:#fff;" />
+							</td>
+							<td colspan="3">&nbsp;<input type="button" onclick="generateDashboard('hepatitis')" value="Search" class="searchBtn btn btn-success btn-sm">
+								&nbsp;<button class="btn btn-danger btn-sm" onclick="resetSearchVlRequestData('hepatitis');"><span>Reset</span></button>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+		<div class="row">
+			<div id="covid19SampleResultDetails"></div>
+			<div class="box-body" id="covid19NoOfSampleCount"></div>
+			<div id="covid19PieChartDiv"></div>
+		</div>
+		
+		<!-- /.row -->
+		<!-- Main row -->
+		<!-- /.row (main row) -->
+	</section>
+	<!-- /. Hepatitis content -->
+</div>
+
+<?php } ?>
+<!-- COVID-19 END -->
+
 			</div>
 		</div>
 	</section>
@@ -307,6 +352,16 @@ $facilityCount = $facilityTotal[0]['total'];
 				function(data) {
 					if (data != '') {
 						$("#covid19SampleResultDetails").html(data);
+					}
+				});
+		} else if (requestType == 'hepatitis') {
+			$.post("/dashboard/getSampleResult.php", {
+					sampleCollectionDate: $("#hepatitisSampleCollectionDate").val(),
+					type: 'covid19'
+				},
+				function(data) {
+					if (data != '') {
+						$("#hepatitisSampleResultDetails").html(data);
 					}
 				});
 		}

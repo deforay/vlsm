@@ -44,6 +44,7 @@ try {
         'vlsm_country_id' => $_POST['countryId'],
         'sample_collection_date' => $_POST['sampleCollectionDate'],
         'vlsm_instance_id' => $_SESSION['instanceId'],
+        'hepatitis_test_type' => $prefix,
         'province_id' => $provinceId,
         'request_created_by' => $_SESSION['userId'],
         'request_created_datetime' => $general->getDateTime(),
