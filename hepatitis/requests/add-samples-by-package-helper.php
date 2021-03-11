@@ -12,7 +12,6 @@ $sampleQuery = "SELECT hepatitis_id, hepatitis_test_type, sample_collection_date
 $sampleResult = $db->query($sampleQuery);
 $status = 0;
 foreach ($sampleResult as $sampleRow) {
-    echo "<pre>";print_r($sampleRow);die;
     $provinceCode = null;
     if (isset($sampleRow['province_id']) && !empty($sampleRow['province_id'])) {
         $provinceQuery = "SELECT * FROM province_details WHERE province_id= " . $sampleRow['province_id'];
