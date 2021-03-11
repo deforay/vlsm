@@ -52,7 +52,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
     </section>
     <!-- Main content -->
     <section class="content">
-        
+
         <div class="box box-default">
             <div class="box-header with-border">
 
@@ -76,31 +76,23 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         <?php if ($sarr['user_type'] == 'remoteuser') { ?>
                                             <td><label for="sampleCode">Sample ID </label></td>
                                             <td>
-                                                <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"></span>
+                                                <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;">Will be Auto-Generated</span>
                                                 <input type="hidden" id="sampleCode" name="sampleCode" />
-                                            </td>
-                                            <td><label for="hepatitisTestType">Type of Hepatitis Test </label><span class="mandatory">*</span></td>
-                                            <td>
-                                                <select class="form-control isRequired" name="hepatitisTestType" id="hepatitisTestType" title="Please choose type hepatitis test" style="width:100%;" onchange="sampleCodeGeneration();hepatitisTestTypeFn(this.value);">
-                                                    <option value="">--Select--</option>
-                                                    <option value="HBV">HBV</option>
-                                                    <option value="HCV">HCV</option>
-                                                </select>
                                             </td>
                                         <?php } else { ?>
                                             <td><label for="sampleCode">Sample ID </label><span class="mandatory">*</span></td>
                                             <td>
-                                                <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Sample ID" title="Please enter sample id" style="width:100%;" onchange="checkSampleNameValidation('form_hepatitis','<?php echo $sampleCode; ?>',this.id,null,'The sample id that you entered already exists. Please try another sample id',null)" readonly/>
-                                            </td>
-                                            <td><label for="hepatitisTestType">Type of Hepatitis Test </label><span class="mandatory">*</span></td>
-                                            <td>
-                                                <select class="form-control isRequired" name="hepatitisTestType" id="hepatitisTestType" title="Please choose type hepatitis test" style="width:100%;" onchange="sampleCodeGeneration();hepatitisTestTypeFn(this.value);">
-                                                    <option value="">--Select--</option>
-                                                    <option value="HBV">HBV</option>
-                                                    <option value="HCV">HCV</option>
-                                                </select>
+                                                <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Sample ID" title="Please enter sample id" style="width:100%;" onchange="checkSampleNameValidation('form_hepatitis','<?php echo $sampleCode; ?>',this.id,null,'The sample id that you entered already exists. Please try another sample id',null)" readonly />
                                             </td>
                                         <?php } ?>
+                                        <td><label for="hepatitisTestType">Type of Hepatitis Test </label><span class="mandatory">*</span></td>
+                                        <td>
+                                            <select class="form-control isRequired" name="hepatitisTestType" id="hepatitisTestType" title="Please choose type of test" style="width:100%;" onchange="sampleCodeGeneration();hepatitisTestTypeFn(this.value);">
+                                                <option>--Select--</option>
+                                                <option value="HBV">HBV</option>
+                                                <option value="HCV">HCV</option>
+                                            </select>
+                                        </td>
                                         <td></td>
                                         <td></td>
                                     </tr>
@@ -149,18 +141,18 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             </select>
                                         </td>
                                         <?php if ($sarr['user_type'] == 'remoteuser') { ?>
-                                        <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
-                                        <td>
-                                            <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;">
-                                                <option value=""> -- Select -- </option>
-                                                <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
-                                            </select>
-                                        </td>
-                                        <?php } else{ ?> 
+                                            <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
+                                            <td>
+                                                <select name="labId" id="labId" class="form-control isRequired" title="Please select Testing Lab name" style="width:100%;">
+                                                    <option value=""> -- Select -- </option>
+                                                    <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
+                                                </select>
+                                            </td>
+                                        <?php } else { ?>
                                             <th></th>
                                             <td></td>
                                         <?php } ?>
-                                    
+
                                 </table>
                                 <br>
                                 <hr style="border: 1px solid #ccc;">
@@ -254,9 +246,9 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         <td style="width:35% !important">
                                             <select name="testNumber" id="testNumber" class="form-control" title="Please choose ubudehe">
                                                 <option value="">-- Select --</option>
-                                                <?php foreach(array('A','B','C','D','E') as $val){ ?>
-                                                    <option value="<?php echo $val;?>"><?php echo $val;?></option>
-                                                <?php }?>
+                                                <?php foreach (array('A', 'B', 'C', 'D', 'E') as $val) { ?>
+                                                    <option value="<?php echo $val; ?>"><?php echo $val; ?></option>
+                                                <?php } ?>
                                             </select>
                                         </td>
                                         <th style="width:15% !important"></th>
@@ -270,28 +262,28 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             <h4>COMORBIDITIES</h4>
                                         </th>
                                     </tr>
-                                    <?php foreach($comorbidityData as $id=>$name){ ?>
+                                    <?php foreach ($comorbidityData as $id => $name) { ?>
                                         <tr>
                                             <th>
-                                                <label for="riskFactors"><?php echo ucwords($name);?></label>
+                                                <label for="riskFactors"><?php echo ucwords($name); ?></label>
                                             </th>
                                             <td>
-                                                <select name="comorbidity[<?php echo $id;?>]" id="comorbidity<?php echo $id;?>" class="form-control" title="Please choose <?php echo ucwords($name);?>" style="width:100%"  onchange="comorbidity(this,<?php echo $id;?>);">
+                                                <select name="comorbidity[<?php echo $id; ?>]" id="comorbidity<?php echo $id; ?>" class="form-control" title="Please choose <?php echo ucwords($name); ?>" style="width:100%" onchange="comorbidity(this,<?php echo $id; ?>);">
                                                     <option value="">-- Select --</option>
                                                     <option value="yes">Yes</option>
                                                     <option value="no">No</option>
                                                     <option value="other">Others</option>
                                                 </select>
                                             </td>
-                                            
-                                            <th class="show-comorbidity<?php echo $id;?>" style="display:none;">
-                                                <label for="comorbidityOther<?php echo $id;?>">Enter other comorbidity for <?php echo ucwords($name);?></label>
+
+                                            <th class="show-comorbidity<?php echo $id; ?>" style="display:none;">
+                                                <label for="comorbidityOther<?php echo $id; ?>">Enter other comorbidity for <?php echo ucwords($name); ?></label>
                                             </th>
-                                            <td class="show-comorbidity<?php echo $id;?>" style="display:none;">
-                                                <input name="comorbidityOther[<?php echo $id;?>]" id="comorbidityOther<?php echo $id;?>" placeholder="Enter other comorbidity" type="text" class="form-control" title="Please enter <?php echo ucwords($name);?> others" style="width:100%">
+                                            <td class="show-comorbidity<?php echo $id; ?>" style="display:none;">
+                                                <input name="comorbidityOther[<?php echo $id; ?>]" id="comorbidityOther<?php echo $id; ?>" placeholder="Enter other comorbidity" type="text" class="form-control" title="Please enter <?php echo ucwords($name); ?> others" style="width:100%">
                                             </td>
                                         </tr>
-                                    <?php }?>
+                                    <?php } ?>
                                 </table>
                                 <table class="table">
                                     <tr>
@@ -299,28 +291,28 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             <h4>HEPATITIS RISK FACTORS</h4>
                                         </th>
                                     </tr>
-                                    <?php foreach($riskFactorsData as $id=>$name){ ?>
+                                    <?php foreach ($riskFactorsData as $id => $name) { ?>
                                         <tr>
                                             <th>
-                                                <label for="riskFactors"><?php echo ucwords($name);?></label>
+                                                <label for="riskFactors"><?php echo ucwords($name); ?></label>
                                             </th>
                                             <td>
-                                                <select name="riskFactors[<?php echo $id;?>]" id="riskFactors<?php echo $id;?>" class="form-control" title="Please choose <?php echo ucwords($name);?>" style="width:100%"  onchange="riskfactor(this,<?php echo $id;?>);">
+                                                <select name="riskFactors[<?php echo $id; ?>]" id="riskFactors<?php echo $id; ?>" class="form-control" title="Please choose <?php echo ucwords($name); ?>" style="width:100%" onchange="riskfactor(this,<?php echo $id; ?>);">
                                                     <option value="">-- Select --</option>
                                                     <option value="yes">Yes</option>
                                                     <option value="no">No</option>
                                                     <option value="other">Others</option>
                                                 </select>
                                             </td>
-                                            
-                                            <th class="show-riskfactor<?php echo $id;?>" style="display:none;">
-                                                <label for="riskFactors">Enter other risk factor for <?php echo ucwords($name);?></label>
+
+                                            <th class="show-riskfactor<?php echo $id; ?>" style="display:none;">
+                                                <label for="riskFactors">Enter other risk factor for <?php echo ucwords($name); ?></label>
                                             </th>
-                                            <td class="show-riskfactor<?php echo $id;?>" style="display:none;">
-                                                <input name="riskFactorsOther[<?php echo $id;?>]" id="riskFactorsOther<?php echo $id;?>" placeholder="Enter other risk factor" type="text" class="form-control" title="Please enter <?php echo ucwords($name);?> others" style="width:100%">
+                                            <td class="show-riskfactor<?php echo $id; ?>" style="display:none;">
+                                                <input name="riskFactorsOther[<?php echo $id; ?>]" id="riskFactorsOther<?php echo $id; ?>" placeholder="Enter other risk factor" type="text" class="form-control" title="Please enter <?php echo ucwords($name); ?> others" style="width:100%">
                                             </td>
                                         </tr>
-                                    <?php }?>
+                                    <?php } ?>
                                     <tr>
                                         <th><label for="HbvVaccination">HBV vaccination</label></th>
                                         <td>
@@ -380,7 +372,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                     <th><label for="testTypeRequested">Purpose of Test</label></th>
                                     <td>
                                         <select class="form-control" name="testTypeRequested" id="testTypeRequested" title="Please choose purpose of test">
-                                        <?= $general->generateSelectOptions($testReasonResults, null, '-- Select --'); ?>
+                                            <?= $general->generateSelectOptions($testReasonResults, null, '-- Select --'); ?>
                                         </select>
                                     </td>
                                 </tr>
@@ -485,7 +477,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         <tr>
                                             <th>Is Result Authorized ?</th>
                                             <td>
-                                                <select name="isResultAuthorized" id="isResultAuthorized" class="labSecInput disabled-field form-control rejected-input" title="Is Result authorized ?" style="width:100%">
+                                                <select name=" isResultAuthorized" id="isResultAuthorized" class="labSecInput disabled-field form-control rejected-input" title="Is Result authorized ?" style="width:100%">
                                                     <option value="">-- Select --</option>
                                                     <option value='yes'> Yes </option>
                                                     <option value='no'> No </option>
@@ -538,22 +530,22 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
     provinceName = true;
     facilityName = true;
 
-    function comorbidity(obj,id){
-        if(obj.value == 'other'){
-            $('.show-comorbidity'+id).show();
+    function comorbidity(obj, id) {
+        if (obj.value == 'other') {
+            $('.show-comorbidity' + id).show();
             $('#comorbidityOther').addClass('isRequired');
-        } else{
-            $('.show-comorbidity'+id).hide();
+        } else {
+            $('.show-comorbidity' + id).hide();
             $('#comorbidityOther').removeClass('isRequired');
         }
     }
-    
-    function riskfactor(obj,id){
-        if(obj.value == 'other'){
-            $('.show-riskfactor'+id).show();
+
+    function riskfactor(obj, id) {
+        if (obj.value == 'other') {
+            $('.show-riskfactor' + id).show();
             $('#riskFactorsOther').addClass('isRequired');
-        } else{
-            $('.show-riskfactor'+id).hide();
+        } else {
+            $('.show-riskfactor' + id).hide();
             $('#riskFactorsOther').removeClass('isRequired');
         }
     }
@@ -602,7 +594,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
             $.post("/hepatitis/requests/generate-sample-code.php", {
                     sDate: sDate,
                     pName: pName,
-                    prefix : hepatitisTestType
+                    prefix: hepatitisTestType
                 },
                 function(data) {
                     var sCodeKey = JSON.parse(data);
@@ -669,20 +661,20 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
 
     function validateNow() {
         $('#labId').removeClass('isRequired');
-        $('.labSecInput').each(function(){
-            if ($(this).val()){
+        $('.labSecInput').each(function() {
+            if ($(this).val()) {
                 $('#labId').addClass('isRequired');
             }
         });
-        if($('#antiHcv').val() != "" || $('#HBsAg').val() != ""){
+        if ($('#antiHcv').val() != "" || $('#HBsAg').val() != "") {
             checkresult = true;
-        } else{
+        } else {
             checkresult = false;
             alert("Please select test result for screening");
-            if($('#hepatitisTestType').val() == 'HBV'){
+            if ($('#hepatitisTestType').val() == 'HBV') {
                 $('#HBsAg').focus();
             }
-            if($('#hepatitisTestType').val() == 'HCV'){
+            if ($('#hepatitisTestType').val() == 'HCV') {
                 $('#antiHcv').focus();
             }
         }
@@ -747,41 +739,41 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
             $('#authorizedBy,#authorizedOn').addClass('isRequired');
         }
     }
-    
-    function hepatitisTestTypeFn(val){
-        if(val == 'HBV'){
-            option1 = 'Initial HBV VL'; 
-            option2 = 'Follow up HBV VL'; 
+
+    function hepatitisTestTypeFn(val) {
+        if (val == 'HBV') {
+            option1 = 'Initial HBV VL';
+            option2 = 'Follow up HBV VL';
             $('.hcvFields,#reasonVlTest').val('');
             $('.hcvFields').hide();
             $('.hbvFields').show();
             $("#reasonVlTest option[value='Initial HCV VL']").remove();
             $("#reasonVlTest option[value='SVR12 HCV VL']").remove();
-            
-            if ($("#reasonVlTest option[value='"+option1+"']").length == 0) {
+
+            if ($("#reasonVlTest option[value='" + option1 + "']").length == 0) {
                 $('#reasonVlTest').append(`
-                <option value="${option1}"> ${option1} </option>`); 
+                <option value="${option1}"> ${option1} </option>`);
             }
-            if ($("#reasonVlTest option[value='"+option2+"']").length == 0) {
+            if ($("#reasonVlTest option[value='" + option2 + "']").length == 0) {
                 $('#reasonVlTest').append(`
-                <option value="${option2}"> ${option2} </option>`); 
+                <option value="${option2}"> ${option2} </option>`);
             }
-        } else if(val == 'HCV'){
-            option1 = 'Initial HCV VL'; 
+        } else if (val == 'HCV') {
+            option1 = 'Initial HCV VL';
             option2 = 'SVR12 HCV VL';
             $('.hbvFields,#reasonVlTest').val('');
             $('.hbvFields').hide();
             $('.hcvFields').show();
             $("#reasonVlTest option[value='Initial HBV VL']").remove();
             $("#reasonVlTest option[value='Follow up HBV VL']").remove();
-            
-            if ($("#reasonVlTest option[value='"+option1+"']").length == 0) {
+
+            if ($("#reasonVlTest option[value='" + option1 + "']").length == 0) {
                 $('#reasonVlTest').append(`
-                <option value="${option1}"> ${option1} </option>`); 
+                <option value="${option1}"> ${option1} </option>`);
             }
-            if ($("#reasonVlTest option[value='"+option2+"']").length == 0) {
+            if ($("#reasonVlTest option[value='" + option2 + "']").length == 0) {
                 $('#reasonVlTest').append(`
-                <option value="${option2}"> ${option2} </option>`); 
+                <option value="${option2}"> ${option2} </option>`);
             }
         }
     }
