@@ -36,8 +36,18 @@ try {
     }
     $sampleJson = $covid19Model->generateCovid19SampleCode($provinceCode, $sampleCollectionDate, null, $provinceId);
     $sampleData = json_decode($sampleJson, true);
-    
+    $rowData = false;
     if (isset($_POST['api']) && $_POST['api'] = "yes") {
+        if($_POST['sampleCode'] != "" && !empty($_POST['sampleCode'])){
+            $sQuery = "SELECT covid19_id, sample_code, sample_code_format, sample_code_key, remote_sample_code, remote_sample_code_format, remote_sample_code_key FROM form_covid19 where sample_code like '".$_POST['sampleCode']."' or remote_sample_code like '".$_POST['sampleCode']."' limit 1";
+            // die($sQuery);
+            $rowData = $db->rawQueryOne($sQuery);
+            if($rowData){
+                $sampleData['sampleCode'] = (!empty($rowData['sample_code']))?$rowData['sample_code']:$rowData['remote_sample_code'];
+                $sampleData['sampleCodeFormat'] = (!empty($rowData['sample_code_format']))?$rowData['sample_code_format']:$rowData['remote_sample_code_format'];
+                $sampleData['sampleCodeKey'] = (!empty($rowData['sample_code_key']))?$rowData['sample_code_key']:$rowData['remote_sample_code_key'];
+            }
+        }
     }
     else
     {
@@ -86,20 +96,30 @@ try {
         $covid19Data['remote_sample'] = 'no';
         $covid19Data['result_status'] = 6;
     }
+    // echo "<pre>";
+	// print_r($rowData);die;
     $id = 0;
-    if (isset($_POST['api']) && $_POST['api'] = "yes") {
-        $id = $db->insert("form_covid19", $covid19Data);
-        $_POST['covid19SampleId'] = $id;
-	} else {
-        if (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '' && $_POST['sampleCollectionDate'] != null && $_POST['sampleCollectionDate'] != '') {
+    if($rowData){
+        $db = $db->where('covid19_id', $rowData['covid19_id']);
+		$id = $db->update("form_covid19", $covid19Data);
+        $_POST['covid19SampleId'] = $rowData['covid19_id'];
+    } else{
+
+        if (isset($_POST['api']) && $_POST['api'] = "yes") {
             $id = $db->insert("form_covid19", $covid19Data);
+            $_POST['covid19SampleId'] = $id;
+        } else {
+            if (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '' && $_POST['sampleCollectionDate'] != null && $_POST['sampleCollectionDate'] != '') {
+                $id = $db->insert("form_covid19", $covid19Data);
+            }
         }
     }
-    
-    if ($id > 0) {
-        echo $id;
-    } else {
-        echo 0;
+    if($_POST['hl7'] != "yes"){
+        if ($id > 0) {
+            echo $id;
+        } else {
+            echo 0;
+        }
     }
 } catch (Exception $e) {
     echo 'Message: ' . $e->getMessage();

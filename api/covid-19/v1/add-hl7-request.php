@@ -18,9 +18,9 @@ $c19Db = new \Vlsm\Models\Covid19($db);
 try {
     
     $hl7Msg = file_get_contents("php://input");
-    if(isset($data['api_token']) && $data['api_token']!='')
-    {
-        $auth = $data['api_token'];
+    // The request has to send an Authorization Bearer token 
+    $auth = $general->getHeader('Authorization');
+    if (!empty($auth)) {
         $authToken = str_replace("Bearer ", "", $auth);
         // Check if API token exists
         $user = $userDb->getAuthToken($authToken);
@@ -72,7 +72,6 @@ try {
         $data['testNumber'] = $spm->getField(26);
         // die($spm->getField(10));
         $facilityDetails = $facilityDb->getFacilityByName($spm->getField(10));
-
         if (!empty($facilityDetails[0]) && $facilityDetails[0] != "") {
             $data['facilityId'] = $facilityDetails[0]['facility_id'];
             $data['provinceCode'] = $facilityDetails[0]['province_code'];
@@ -135,17 +134,35 @@ try {
         $data['countryName'] = $zai->getField(9);
         $data['returnDate'] = $zai->getField(10);
     }
-
+    
+    $data['formId'] = $general->getGlobalConfig('vl_form');
+    $sQuery = "SELECT vlsm_instance_id from s_vlsm_instance";
+    $rowData = $db->rawQuery($sQuery);
+    $data['instanceId'] = $rowData[0]['vlsm_instance_id'];
     // print_r($data);die;
     $sampleFrom = '';
 
     $data['api'] = "yes";
+    $data['hl7'] = "yes";
     $_POST = $data;
 
     include_once(APPLICATION_PATH . '/covid-19/requests/insert-sample.php');
     include_once(APPLICATION_PATH . '/covid-19/requests/covid-19-add-request-helper.php');
     if($id > 0){
-        $ackResponse = new ACK($msg);
+        $ack = new ACK($msg);
+        $returnString = $ack->toString(true);
+        if (strpos($returnString, 'MSH') === false) {
+            echo "Failed to send HL7 to 'IP' => $ip, 'Port' => $port";
+        }
+        $msa = $ack->getSegmentsByName('MSA')[0];
+        $ackCode = $msa->getAcknowledgementCode();
+        if ($ackCode[1] === 'A') {
+            echo "Recieved ACK from remote\n";
+        }
+        else {
+            echo "Recieved NACK from remote\n";
+            echo "Error text: " . $msa->getTextMessage();
+        };
     }
 } catch (Exception $exc) {
 
