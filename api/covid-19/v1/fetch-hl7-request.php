@@ -7,10 +7,7 @@ use Aranyasen\HL7\Message;
 use Aranyasen\HL7\Segment;
 use Aranyasen\HL7\Segments\MSH;
 use Aranyasen\HL7\Segments\PID;
-// PURPOSE : Fetch Results using serial_no field which is used to
-// store the recency id from third party apps (for eg. in DRC)
-
-// serial_no field in db was unused so we decided to use it to store recency id
+use Aranyasen\HL7\Segments\OBX;
 
 ini_set('memory_limit', -1);
 header('Content-Type: application/json');
@@ -19,7 +16,8 @@ $general = new \Vlsm\Models\General($db);
 $userDb = new \Vlsm\Models\Users($db);
 $user = null;
 // The request has to send an Authorization Bearer token 
-/* $auth = $general->getHttpValue('Authorization');
+$auth = $general->getHeader('Authorization');
+// print_r($auth);die;
 if (!empty($auth)) {
     $authToken = str_replace("Bearer ", "", $auth);
     // Check if API token exists
@@ -36,7 +34,7 @@ if (empty($user) || empty($user['user_id'])) {
     http_response_code(401);
     echo json_encode($response);
     exit(0);
-} */
+}
 
 try {
 
@@ -75,7 +73,7 @@ try {
                         LEFT JOIN r_covid19_sample_type as rst ON rst.sample_id=vl.specimen_type 
                         LEFT JOIN r_covid19_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection 
                         LEFT JOIN r_funding_sources as r_f_s ON r_f_s.funding_source_id=vl.funding_source 
-                        LEFT JOIN r_implementation_partners as r_i_p ON r_i_p.i_partner_id=vl.implementing_partner limit 1";
+                        LEFT JOIN r_implementation_partners as r_i_p ON r_i_p.i_partner_id=vl.implementing_partner limit 5";
 
 
 
@@ -96,75 +94,111 @@ try {
     // $sQuery .= " ORDER BY last_modified_datetime ASC ";
     $rowData = $db->rawQuery($sQuery);
 
-    // echo "<pre>";print_r($rowData);die;
     $response = array();
     $msg = new Message();
     $msh = new MSH();
     $msg->addSegment($msh); // Message is: "MSH|^~\&|||||20171116140058|||2017111614005840157||2.3|\n"
     foreach($rowData as $row){
+        // die(strtoupper(substr($row['patient_gender'],0,1)));
+        $check = (in_array($row['patient_gender'], array("female", "male", "other")))?$row['patient_gender']:"other";
+        $sex = strtoupper(substr($check,0,1));
         /* Patient Information */
         $pid = new PID();
         $pid->setPatientID($row['patient_id']);
         $pid->setPatientName($row['patient_name']);
-        $pid->setMothersMaidenName($row['patient_surname']);
-        $pid->setDateTimeOfBirth(strtotime($row['patient_dob']));
-        $pid->setSex(strtoupper(substr($row['patient_gender'],0,1)));
+        $pid->setMothersMaidenName([$row['patient_name'], $row['patient_surname']]);
+        $pid->setDateTimeOfBirth($row['patient_dob']);
+        $pid->setSex($sex);
         $pid->setPatientAddress($row['patient_address']);
+        $pid->setCountryCode($row['patient_district']);
         $pid->setPhoneNumberHome($row['patient_phone_number']);
-        $pid->setCountryCode($row['country_code2']);
+        $pid->setSSNNumber($row['external_sample_code']);
+        $pid->setNationality($row['nationality']);
         $msg->setSegment($pid, 1);
-        /* Clinic Information Details */
-        $cid = new Segment('CID');
-        $cid->setField(2, $row['remote_sample_code']);
-        $cid->setField(3, $row['facility_code']);
-        $cid->setField(5, $row['facility_state']);
-        $cid->setField(6, $row['facility_district']);
-        $cid->setField(7, $row['funding_source_name']);
-        $cid->setField(8, $row['i_partner_name']);
-        $msg->setSegment($cid, 2);
         /* Sample Information */
         $spm = new Segment('SPM');
         $spm->setField(2, $row['sample_code']);
         $spm->setField(4, $row['sample_name']);
         $spm->setField(10, $row['facility_name']);
-        $spm->setField(17, strtotime($row['sample_collection_date']));
+        $spm->setField(12, $row['is_sample_collected']);
+        $spm->setField(17, $row['sample_collection_date']);
         $spm->setField(18, $row['sample_received_at_vl_lab_datetime']);
         $spm->setField(21, $row['reason_for_sample_rejection']);
         $spm->setField(24, $row['sample_condition']);
-        $msg->setSegment($spm, 3);
-        /* Laboratory Information */
-        $lap = new Segment('LAB');
-        $lap->setField(1, $row['labName']);
-        $lap->setField(2, $row['sample_received_at_hub_datetime']);
-        $lap->setField(4, $row['result']);
-        $lap->setField(5, $row['result_printed_datetime']);
-        $lap->setField(6, $row['test_reason_name']);
-        $lap->setField(7, $row['type_of_test_requested']);
-        $lap->setField(9, $row['batch_code']);
-        $lap->setField(10, $row['is_sample_rejected']);
-        $lap->setField(12, $row['rejection_reason_name']);
-        $lap->setField(13, $row['reviewedBy']);
-        $lap->setField(14, $row['approvedBy']);
-        $lap->setField(15, $row['labTechnician']);
-        $lap->setField(16, $row['approver_comments']);
-        $msg->setSegment($lap, 4);
+        $spm->setField(26, $row['test_number']);
+        $msg->setSegment($spm, 2);
         /* OBR Section */
         $obr = new Segment('OBR');
         $obr->setField(1, $row['status_name']);
+        $obr->setField(5, $row['priority_status']);
+        $obr->setField(6, $row['request_created_datetime']);
+        $obr->setField(14, $row['sample_received_at_hub_datetime']);
         $obr->setField(15, $row['source_of_alert']);
-        $msg->setSegment($obr, 5);
-        
+        $obr->setField(25, $row['result_status']);
+        $obr->setField(26, $row['result']);
+        $msg->setSegment($obr, 3);
+        /* Clinic Custom Fields Information Details */
+        $zci = new Segment('ZCI');
+        $zci->setField(1, $row['is_sample_post_mortem']);
+        $zci->setField(2, $row['number_of_days_sick']);
+        $zci->setField(3, $row['date_of_symptom_onset']);
+        $zci->setField(4, $row['date_of_initial_consultation']);
+        $zci->setField(5, $row['fever_temp']);
+        $zci->setField(6, $row['medical_history']);
+        $zci->setField(7, $row['recent_hospitalization']);
+        $zci->setField(8, $row['temperature_measurement_method']);
+        $zci->setField(9, $row['respiratory_rate']);
+        $zci->setField(10, $row['oxygen_saturation']);
+        $zci->setField(11, $row['other_diseases']);
+        $msg->setSegment($zci, 4);
+        /* Patient Custom Fields Information Details */
+        $zpi = new Segment('ZPI');
+        $zpi->setField(1, $row['patient_occupation']);
+        $zpi->setField(2, $row['patient_city']);
+        $zpi->setField(3, $row['patient_province']);
+        $zpi->setField(4, $row['patient_age']);
+        $zpi->setField(5, $row['is_patient_pregnant']);
+        $zpi->setField(6, $row['does_patient_smoke']);
+        $zpi->setField(7, $row['patient_lives_with_children']);
+        $zpi->setField(8, $row['patient_cares_for_children']);
+        $zpi->setField(9, $row['close_contacts']);
+        $zpi->setField(10, $row['contact_with_confirmed_case']);
+        $msg->setSegment($zpi, 5);
+        /* Airline Information Details */
+        $zai = new Segment('ZAI');
+        $zai->setField(1, $row['patient_passport_number']);
+        $zai->setField(2, $row['flight_airline']);
+        $zai->setField(3, $row['flight_seat_no']);
+        $zai->setField(4, $row['flight_arrival_datetime']);
+        $zai->setField(5, $row['flight_airport_of_departure']);
+        $zai->setField(6, $row['flight_transit']);
+        $zai->setField(7, $row['reason_of_visit']);
+        $zai->setField(8, $row['has_recent_travel_history']);
+        $zai->setField(9, $row['travel_country_names']);
+        $zai->setField(10, $row['travel_return_date']);
+        $msg->setSegment($zai, 6);
+        /*  System Variables Details */
+        $zsv = new Segment('ZSV');
+        $zsv->setField(1, $row['is_result_authorised']);
+        $zsv->setField(2, $row['authorized_by']);
+        $zsv->setField(3, $row['authorized_on']);
+        $zsv->setField(4, $row['rejection_on']);
+        $zsv->setField(5, $row['request_created_datetime']);
+        $msg->setSegment($zsv, 7);
+        /*  Observation Details */
+        $obx = new OBX;
+        $obx->setObservationValue($row['result']);
+        $msg->setSegment($obx, 8);
 
         $response[] = $msg->toString(true); 
     }
-    echo $msg->toString(true);die;
     // No data found
     if (!$rowData) {
         $response = array(
             'status' => 'failed',
             'timestamp' => time(),
             'error' => 'No matching data',
-            'data' => $rowData
+            'data' => $response
 
         );
         // if (isset($user['token-updated']) && $user['token-updated'] == true) {
@@ -178,12 +212,9 @@ try {
     $payload = array(
         'status' => 'success',
         'timestamp' => time(),
-        'data' => $rowData
+        'data' => $response
     );
-    // if (isset($user['token-updated']) && $user['token-updated'] == true) {
-    //     $payload['token'] = $user['newToken'];
-    // }
-
+   
     http_response_code(200);
     echo json_encode($payload);
     exit(0);

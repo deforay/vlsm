@@ -3,20 +3,20 @@
 session_unset(); // no need of session in json response
 
 use Aranyasen\HL7\Message;
-use Aranyasen\HL7\Segments\PID;
-// PURPOSE : Fetch Results using serial_no field which is used to
-// store the recency id from third party apps (for eg. in DRC)
-
-// serial_no field in db was unused so we decided to use it to store recency id
+use Aranyasen\HL7\Messages\ACK;
 
 ini_set('memory_limit', -1);
 header('Content-Type: application/json');
-
+$c19Model = new \Vlsm\Models\Covid19($db);
 $general = new \Vlsm\Models\General($db);
 $userDb = new \Vlsm\Models\Users($db);
 $user = null;
 
+$general = new \Vlsm\Models\General($db);
+$facilityDb = new \Vlsm\Models\Facilities($db);
+$c19Db = new \Vlsm\Models\Covid19($db);
 try {
+    
     $hl7Msg = file_get_contents("php://input");
     if(isset($data['api_token']) && $data['api_token']!='')
     {
@@ -25,7 +25,6 @@ try {
         // Check if API token exists
         $user = $userDb->getAuthToken($authToken);
     }
-
     // If authentication fails then do not proceed
     if (empty($user) || empty($user['user_id'])) {
         $response = array(
@@ -38,6 +37,7 @@ try {
         echo json_encode($response);
         exit(0);
     }
+    $msg = new Message($hl7Msg);
     /* Patient Information */
     if ($msg->hasSegment('PID')) {
         $pid = $msg->getSegmentByIndex(1);
@@ -135,12 +135,18 @@ try {
         $data['countryName'] = $zai->getField(9);
         $data['returnDate'] = $zai->getField(10);
     }
-    // echo $msg->toString(true);
+
+    // print_r($data);die;
+    $sampleFrom = '';
+
     $data['api'] = "yes";
     $_POST = $data;
-    // print_r(APPLICATION_PATH . '/vl/requests/addVlRequestHelper.php');die;
-    include_once(APPLICATION_PATH . '/vl/requests/insertNewSample.php');
-    include_once(APPLICATION_PATH . '/vl/requests/addVlRequestHelper.php');
+
+    include_once(APPLICATION_PATH . '/covid-19/requests/insert-sample.php');
+    include_once(APPLICATION_PATH . '/covid-19/requests/covid-19-add-request-helper.php');
+    if($id > 0){
+        $ackResponse = new ACK($msg);
+    }
 } catch (Exception $exc) {
 
     http_response_code(500);

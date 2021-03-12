@@ -143,6 +143,17 @@ class Covid19
         return $response;
     }
 
+    public function getCovid19SampleTypesByName($name = "")
+    {   
+        $where = "";
+        if(!empty($name)){
+            $where = " AND sample_name LIKE '$name%'";
+        }
+        $query = "SELECT * FROM r_covid19_sample_type where status='active'$where";
+        // die($query);
+        return $this->db->rawQuery($query);
+    }
+
     public function insertCovid19Tests($covid19SampleId, $testKitName = null, $labId = null, $sampleTestedDatetime = null, $result = null)
     {
         $covid19TestData = array(
