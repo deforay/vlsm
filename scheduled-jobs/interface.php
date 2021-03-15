@@ -65,7 +65,7 @@ if (count($interfaceInfo) > 0) {
 
 
     foreach ($interfaceInfo as $key => $result) {
-        if(empty($result['test_id']))  continue;
+        if (empty($result['test_id']))  continue;
         $tableInfo = array();
         foreach ($availableModules as $individualIdColumn => $individualTableName) {
             $tableQuery = "SELECT * FROM $individualTableName WHERE sample_code = '" . $result['test_id'] . "'";
@@ -240,22 +240,70 @@ if (count($interfaceInfo) > 0) {
             $absVal = null;
             $logVal = null;
             $txtVal = null;
-            $testType = strtolower($result['hepatitis_test_type']);
+            $testType = strtolower($tableInfo['hepatitis_test_type']);
             if ($testType == 'hbv') {
                 $resultField = "hbv_vl_count";
-            } else {
-                $resultField = "hcv_vl_count";
-            }
-            //set result in result fields
-            if (trim($result['results']) != "") {
+                $otherField = "hcv_vl_count";
+            } else if ($testType == 'hcv') { {
+                    $resultField = "hcv_vl_count";
+                    $otherField = "hbv_vl_count";
+                }
+                //set result in result fields
+                if (trim($result['results']) != "") {
 
-                $hepatitisResult = trim($result['results']);
-                $unit = trim($result['test_unit']);
+                    $hepatitisResult = trim($result['results']);
+                    $unit = trim($result['test_unit']);
 
-                if (strpos($unit, 'Log') !== false) {
+                    if (strpos($unit, 'Log') !== false) {
+                        if (is_numeric($hepatitisResult)) {
+                            $logVal = $hepatitisResult;
+                            $hepatitisResult = $absVal = $absDecimalVal = round((float) round(pow(10, $logVal) * 100) / 100);
+                        } else {
+                            if ($hepatitisResult == "< Titer min") {
+                                $absDecimalVal = 20;
+                                $txtVal = $hepatitisResult = $absVal = "<20";
+                            } else if ($hepatitisResult == "> Titer max") {
+                                $absDecimalVal = 10000000;
+                                $txtVal = $hepatitisResult = $absVal = ">1000000";
+                            } else if (strpos($hepatitisResult, "<") !== false) {
+                                $logVal = str_replace("<", "", $hepatitisResult);
+                                $absDecimalVal = round((float) round(pow(10, $logVal) * 100) / 100);
+                                $txtVal = $hepatitisResult = $absVal = "< " . trim($absDecimalVal);
+                            } else if (strpos($hepatitisResult, ">") !== false) {
+                                $logVal = str_replace(">", "", $hepatitisResult);
+                                $absDecimalVal = round((float) round(pow(10, $logVal) * 100) / 100);
+                                $txtVal = $hepatitisResult = $absVal = "> " . trim($absDecimalVal);
+                            } else {
+                                $hepatitisResult = $txtVal = trim($result['results']);
+                            }
+                        }
+                    }
+                    if (strpos($unit, '10') !== false) {
+                        $unitArray = explode(".", $unit);
+                        $exponentArray = explode("*", $unitArray[0]);
+                        $multiplier = pow($exponentArray[0], $exponentArray[1]);
+                        $hepatitisResult = $hepatitisResult * $multiplier;
+                        $unit = $unitArray[1];
+                    }
+
+                    if (strpos($hepatitisResult, 'E+') !== false || strpos($hepatitisResult, 'E-') !== false) {
+                        if (strpos($hepatitisResult, '< 2.00E+1') !== false) {
+                            $hepatitisResult = "< 20";
+                            //$vlResultCategory = 'Suppressed';
+                        } else {
+                            $vlResultArray = explode("(", $hepatitisResult);
+                            $exponentArray = explode("E", $vlResultArray[0]);
+                            $multiplier = pow(10, $exponentArray[1]);
+                            $hepatitisResult = round($exponentArray[0] * $multiplier, 2);
+                            $absDecimalVal = (float) trim($hepatitisResult);
+                            $logVal = round(log10($absDecimalVal), 2);
+                        }
+                    }
+
                     if (is_numeric($hepatitisResult)) {
-                        $logVal = $hepatitisResult;
-                        $hepatitisResult = $absVal = $absDecimalVal = round((float) round(pow(10, $logVal) * 100) / 100);
+                        $absVal = (float) trim($hepatitisResult);
+                        $absDecimalVal = (float) trim($hepatitisResult);
+                        $logVal = round(log10($absDecimalVal), 2);
                     } else {
                         if ($hepatitisResult == "< Titer min") {
                             $absDecimalVal = 20;
@@ -264,108 +312,64 @@ if (count($interfaceInfo) > 0) {
                             $absDecimalVal = 10000000;
                             $txtVal = $hepatitisResult = $absVal = ">1000000";
                         } else if (strpos($hepatitisResult, "<") !== false) {
-                            $logVal = str_replace("<", "", $hepatitisResult);
-                            $absDecimalVal = round((float) round(pow(10, $logVal) * 100) / 100);
-                            $txtVal = $hepatitisResult = $absVal = "< " . trim($absDecimalVal);
+                            $hepatitisResult = str_replace("<", "", $hepatitisResult);
+                            $absDecimalVal = (float) trim($hepatitisResult);
+                            $logVal = round(log10($absDecimalVal), 2);
+                            $absVal = "< " . (float) trim($hepatitisResult);
                         } else if (strpos($hepatitisResult, ">") !== false) {
-                            $logVal = str_replace(">", "", $hepatitisResult);
-                            $absDecimalVal = round((float) round(pow(10, $logVal) * 100) / 100);
-                            $txtVal = $hepatitisResult = $absVal = "> " . trim($absDecimalVal);
+                            $hepatitisResult = str_replace(">", "", $hepatitisResult);
+                            $absDecimalVal = (float) trim($hepatitisResult);
+                            $logVal = round(log10($absDecimalVal), 2);
+                            $absVal = "> " . (float) trim($hepatitisResult);
                         } else {
-                            $hepatitisResult = $txtVal = trim($result['results']);
+                            $txtVal = trim($result['results']);
                         }
                     }
                 }
-                if (strpos($unit, '10') !== false) {
-                    $unitArray = explode(".", $unit);
-                    $exponentArray = explode("*", $unitArray[0]);
-                    $multiplier = pow($exponentArray[0], $exponentArray[1]);
-                    $hepatitisResult = $hepatitisResult * $multiplier;
-                    $unit = $unitArray[1];
+
+                $userId = $usersModel->addUserIfNotExists($result['tested_by']);
+
+                $data = array(
+                    'lab_id' => $labId,
+                    'tested_by' => $userId,
+                    'result_approved_by' => $userId,
+                    'result_approved_datetime' => $result['authorised_date_time'],
+                    'sample_tested_datetime' => $result['result_accepted_date_time'],
+                    $resultField => $hepatitisResult,
+                    $otherField => NULL,
+                    'hepatitis_test_platform' => $result['machine_used'],
+                    'result_status' => 7,
+                    'data_sync' => 0
+                );
+
+                if ($hepatitisLock == 'yes' && $data['result_status'] == 7) {
+                    $data['locked'] = 'yes';
                 }
-
-                if (strpos($hepatitisResult, 'E+') !== false || strpos($hepatitisResult, 'E-') !== false) {
-                    if (strpos($hepatitisResult, '< 2.00E+1') !== false) {
-                        $hepatitisResult = "< 20";
-                        //$vlResultCategory = 'Suppressed';
-                    } else {
-                        $vlResultArray = explode("(", $hepatitisResult);
-                        $exponentArray = explode("E", $vlResultArray[0]);
-                        $multiplier = pow(10, $exponentArray[1]);
-                        $hepatitisResult = round($exponentArray[0] * $multiplier, 2);
-                        $absDecimalVal = (float) trim($hepatitisResult);
-                        $logVal = round(log10($absDecimalVal), 2);
-                    }
+                $db = $db->where('hepatitis_id', $tableInfo['hepatitis_id']);
+                $vlUpdateId = $db->update('form_hepatitis', $data);
+                $numberOfResults++;
+                if ($vlUpdateId) {
+                    $interfaceData = array(
+                        'lims_sync_status' => 1,
+                        'lims_sync_date_time' => date('Y-m-d H:i:s'),
+                    );
+                    $interfacedb = $interfacedb->where('id', $result['id']);
+                    $interfaceUpdateId = $interfacedb->update('orders', $interfaceData);
                 }
-
-                if (is_numeric($hepatitisResult)) {
-                    $absVal = (float) trim($hepatitisResult);
-                    $absDecimalVal = (float) trim($hepatitisResult);
-                    $logVal = round(log10($absDecimalVal), 2);
-                } else {
-                    if ($hepatitisResult == "< Titer min") {
-                        $absDecimalVal = 20;
-                        $txtVal = $hepatitisResult = $absVal = "<20";
-                    } else if ($hepatitisResult == "> Titer max") {
-                        $absDecimalVal = 10000000;
-                        $txtVal = $hepatitisResult = $absVal = ">1000000";
-                    } else if (strpos($hepatitisResult, "<") !== false) {
-                        $hepatitisResult = str_replace("<", "", $hepatitisResult);
-                        $absDecimalVal = (float) trim($hepatitisResult);
-                        $logVal = round(log10($absDecimalVal), 2);
-                        $absVal = "< " . (float) trim($hepatitisResult);
-                    } else if (strpos($hepatitisResult, ">") !== false) {
-                        $hepatitisResult = str_replace(">", "", $hepatitisResult);
-                        $absDecimalVal = (float) trim($hepatitisResult);
-                        $logVal = round(log10($absDecimalVal), 2);
-                        $absVal = "> " . (float) trim($hepatitisResult);
-                    } else {
-                        $txtVal = trim($result['results']);
-                    }
-                }
-            }
-
-            $userId = $usersModel->addUserIfNotExists($result['tested_by']);
-
-            $data = array(
-                'lab_id' => $labId,
-                'tested_by' => $userId,
-                'result_approved_by' => $userId,
-                'result_approved_datetime' => $result['authorised_date_time'],
-                'sample_tested_datetime' => $result['result_accepted_date_time'],
-                $resultField => $hepatitisResult,
-                'hepatitis_test_platform' => $result['machine_used'],
-                'result_status' => 7,
-                'data_sync' => 0
-            );
-
-            if ($hepatitisLock == 'yes' && $data['result_status'] == 7) {
-                $data['locked'] = 'yes';
-            }
-            $db = $db->where('hepatitis_id', $tableInfo['hepatitis_id']);
-            $vlUpdateId = $db->update('form_hepatitis', $data);
-            $numberOfResults++;
-            if ($vlUpdateId) {
+            } else {
                 $interfaceData = array(
-                    'lims_sync_status' => 1,
+                    'lims_sync_status' => 2,
                     'lims_sync_date_time' => date('Y-m-d H:i:s'),
                 );
                 $interfacedb = $interfacedb->where('id', $result['id']);
                 $interfaceUpdateId = $interfacedb->update('orders', $interfaceData);
             }
-        } else {
-            $interfaceData = array(
-                'lims_sync_status' => 2,
-                'lims_sync_date_time' => date('Y-m-d H:i:s'),
-            );
-            $interfacedb = $interfacedb->where('id', $result['id']);
-            $interfaceUpdateId = $interfacedb->update('orders', $interfaceData);
         }
-    }
 
 
-    if ($numberOfResults > 0) {
-        $importedBy = isset($_SESSION['userId']) ? $_SESSION['userId'] : 'AUTO';
-        $general->resultImportStats($numberOfResults, 'interface', $importedBy);
+        if ($numberOfResults > 0) {
+            $importedBy = isset($_SESSION['userId']) ? $_SESSION['userId'] : 'AUTO';
+            $general->resultImportStats($numberOfResults, 'interface', $importedBy);
+        }
     }
 }
