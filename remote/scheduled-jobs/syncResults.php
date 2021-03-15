@@ -242,21 +242,18 @@ if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['he
 
     $hepLabResult = $db->rawQuery($hepQuery);
 
-    $forms = array();
-    foreach ($hepLabResult as $row) {
-        $forms[] = $row['hepatitis_id'];
-    }
+    // $forms = array();
+    // foreach ($hepLabResult as $row) {
+    //     $forms[] = $row['hepatitis_id'];
+    // }
 
-    $hepatitisObj = new \Vlsm\Models\Hepatitis($db);
-    $risks = $hepatitisObj->getRiskFactorsByHepatitisId($forms);
-    $comorbidities = $hepatitisObj->getComorbidityByHepatitisId($forms);
+    // $hepatitisObj = new \Vlsm\Models\Hepatitis($db);
+    // $risks = $hepatitisObj->getRiskFactorsByHepatitisId($forms);
+    // $comorbidities = $hepatitisObj->getComorbidityByHepatitisId($forms);
 
     $url = $systemConfig['remoteURL'] . '/remote/remote/hepatitis-test-results.php';
     $data = array(
         "result" => $hepLabResult,
-        "testResults" => $testResults,
-        "risks" => $risks,
-        "comorbidities" => $comorbidities,
         "Key" => "vlsm-lab-data--",
     );
 

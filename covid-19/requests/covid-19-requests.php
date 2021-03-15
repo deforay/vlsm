@@ -144,7 +144,11 @@ $batResult = $db->rawQuery($batQuery);
 									<th>Sample Collection<br /> Date</th>
 									<th>Batch Code</th>
 									<th>Facility Name</th>
-									<th>Patient ID</th>
+									<?php if($formId == 1) {?>
+										<th>Case ID</th>	
+									<?php }else {?>
+										<th>Patient ID</th>
+									<?php }?>
 									<th>Patient Name</th>
 									<th>Province/State</th>
 									<th>District/County</th>

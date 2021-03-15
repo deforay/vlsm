@@ -190,6 +190,20 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                     $end_date = $general->dateFormat(trim($s_c_date[1]));
                }
           }
+
+          $rstart_date = '';
+          $rend_date = '';
+          if(isset($_POST['sampleRecievedDate']) && trim($_POST['sampleRecievedDate'])!= ''){
+               $s_r_date = explode("to", $_POST['sampleRecievedDate']);
+               //print_r($s_r_date);die;
+               if (isset($s_r_date[0]) && trim($s_r_date[0]) != "") {
+                    $rstart_date = $general->dateFormat(trim($s_r_date[0]));
+               }
+               if (isset($s_r_date[1]) && trim($s_r_date[1]) != "") {
+                    $rend_date = $general->dateFormat(trim($s_r_date[1]));
+               }
+          }
+
           $sTestDate = '';
           $eTestDate = '';
           if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
@@ -225,6 +239,13 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                          $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
                     }else{
                          $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+                    }
+               }
+               if(isset($_POST['sampleRecievedDate']) && trim($_POST['sampleRecievedDate'])!= ''){
+                    if (trim($rstart_date) == trim($rend_date)) {
+                         $sWhere = $sWhere.' AND DATE(vl.sample_registered_at_lab) = "'.$rstart_date.'"';
+                    }else{
+                         $sWhere = $sWhere.' AND DATE(vl.sample_registered_at_lab) >= "'.$rstart_date.'" AND DATE(vl.sample_registered_at_lab) <= "'.$rend_date.'"';
                     }
                }
                if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
@@ -271,6 +292,20 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                          $setWhr = 'where';
                          $sWhere=' where '.$sWhere;
                          $sWhere = $sWhere.' DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+                    }
+               }
+
+               if(isset($_POST['sampleRecievedDate']) && trim($_POST['sampleRecievedDate'])!= ''){
+                    if(isset($setWhr)){
+                         if (trim($rstart_date) == trim($rend_date)) {
+                              $sWhere = $sWhere.' AND DATE(vl.sample_registered_at_lab) = "'.$rstart_date.'"';
+                         }else{
+                              $sWhere = $sWhere.' AND DATE(vl.sample_registered_at_lab) >= "'.$rstart_date.'" AND DATE(vl.sample_registered_at_lab) <= "'.$rend_date.'"';
+                         }
+                    }else{
+                         $setWhr = 'where';
+                         $sWhere=' where '.$sWhere;
+                         $sWhere = $sWhere.' DATE(vl.sample_registered_at_lab) >= "'.$rstart_date.'" AND DATE(vl.sample_registered_at_lab) <= "'.$rend_date.'"';
                     }
                }
                if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){

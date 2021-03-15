@@ -214,7 +214,21 @@ if (file_exists($fileArray[$arr['vl_form']])) {
             }
         });
     });
-
+    function showPatientList() {
+        $("#showEmptyResult").hide();
+        if ($.trim($("#artPatientNo").val()) != '') {
+            $.post("/vl/requests/checkPatientExist.php", {
+                    artPatientNo: $("#artPatientNo").val()
+                },
+                function(data) {
+                    if (data >= '1') {
+                        showModal('patientModal.php?artNo=' + $.trim($("#artPatientNo").val()), 900, 520);
+                    } else {
+                        $("#showEmptyResult").show();
+                    }
+                });
+        }
+    }
     function checkSampleNameValidation(tableName, fieldName, id, fnct, alrt) {
         if ($.trim($("#" + id).val()) != '') {
             $.blockUI();

@@ -204,8 +204,8 @@ foreach ($rResult as $aRow) {
      $row[] = $patientFname. " " . $patientLname;
      $row[] = ucwords($aRow['facility_state']);
      $row[] = ucwords($aRow['facility_district']);
-     $row[] = ucwords($hepatitisResults[$aRow['hcv_vl_result']]);
-     $row[] = ucwords($hepatitisResults[$aRow['hbv_vl_result']]);
+     $row[] = $aRow['hcv_vl_count'];
+     $row[] = $aRow['hbv_vl_count'];
      $row[] = $aRow['last_modified_datetime'];
      $row[] = ucwords($aRow['status_name']);
      
