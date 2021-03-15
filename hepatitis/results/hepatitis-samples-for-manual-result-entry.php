@@ -29,13 +29,13 @@ $primaryKey = "hepatitis_id";
 * you want to insert a non-database field (for example a counter or static image)
 */
 $sampleCode = 'sample_code';
-$aColumns = array('vl.sample_code', 'vl.remote_sample_code', 'b.batch_code', 'vl.patient_id', 'CONCAT(vl.patient_name, vl.patient_surname)', 'f.facility_name', 'vl.hcv_vl_result', 'vl.hbv_vl_result', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
-$orderColumns = array('vl.sample_code', 'vl.remote_sample_code', 'b.batch_code', 'vl.patient_id', 'vl.patient_name', 'f.facility_name',  'vl.hcv_vl_result', 'vl.hbv_vl_result', 'vl.last_modified_datetime', 'ts.status_name');
+$aColumns = array('vl.sample_code', 'vl.remote_sample_code', 'b.batch_code', 'vl.patient_id', 'CONCAT(vl.patient_name, vl.patient_surname)', 'f.facility_name', 'vl.hcv_vl_count', 'vl.hbv_vl_count', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
+$orderColumns = array('vl.sample_code', 'vl.remote_sample_code', 'b.batch_code', 'vl.patient_id', 'vl.patient_name', 'f.facility_name',  'vl.hcv_vl_count', 'vl.hbv_vl_count', 'vl.last_modified_datetime', 'ts.status_name');
 if ($sarr['user_type'] == 'remoteuser') {
      $sampleCode = 'remote_sample_code';
 } else if ($sarr['user_type'] == 'standalone') {
-     $aColumns = array('vl.sample_code', 'b.batch_code', 'vl.patient_id', 'vl.patient_name', 'f.facility_name', 'vl.hcv_vl_result', 'vl.hbv_vl_result', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
-     $orderColumns = array('vl.sample_code', 'b.batch_code', 'vl.patient_id', 'vl.patient_name', 'f.facility_name', 'vl.hcv_vl_result', 'vl.hbv_vl_result', 'vl.last_modified_datetime', 'ts.status_name');
+     $aColumns = array('vl.sample_code', 'b.batch_code', 'vl.patient_id', 'vl.patient_name', 'f.facility_name', 'vl.hcv_vl_count', 'vl.hbv_vl_count', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
+     $orderColumns = array('vl.sample_code', 'b.batch_code', 'vl.patient_id', 'vl.patient_name', 'f.facility_name', 'vl.hcv_vl_count', 'vl.hbv_vl_count', 'vl.last_modified_datetime', 'ts.status_name');
 }
 if (isset($_POST['vlPrint']) && $_POST['vlPrint'] == 'print') {
      array_unshift($orderColumns, "vl.hepatitis_id");
@@ -167,9 +167,9 @@ if (isset($sWhere) && $sWhere != "") {
      }
      if (isset($_POST['status']) && trim($_POST['status']) != '') {
           if ($_POST['status'] == 'no_result') {
-               $statusCondition = ' AND (vl.hcv_vl_result is NULL OR vl.hcv_vl_result  ="" OR vl.hbv_vl_result is NULL OR vl.hbv_vl_result  ="") AND vl.result_status != 4';
+               $statusCondition = ' AND (vl.hcv_vl_count is NULL OR vl.hcv_vl_count  ="" OR vl.hbv_vl_count is NULL OR vl.hbv_vl_count  ="") AND vl.result_status != 4';
           } else if ($_POST['status'] == 'result') {
-               $statusCondition = ' AND ((vl.hcv_vl_result is NOT NULL OR vl.hcv_vl_result  !="" OR vl.hbv_vl_result is NOT NULL OR vl.hbv_vl_result  !="") AND vl.result_status != 4)';
+               $statusCondition = ' AND ((vl.hcv_vl_count is NOT NULL OR vl.hcv_vl_count  !="" OR vl.hbv_vl_count is NOT NULL OR vl.hbv_vl_count  !="") AND vl.result_status != 4)';
           } else {
                $statusCondition = ' AND vl.result_status=4';
           }
@@ -217,9 +217,9 @@ if (isset($sWhere) && $sWhere != "") {
      if (isset($_POST['status']) && trim($_POST['status']) != '') {
           if (isset($setWhr)) {
                if ($_POST['status'] == 'no_result') {
-                    $statusCondition = ' AND  (vl.hcv_vl_result is NULL OR vl.hcv_vl_result  ="" OR vl.hbv_vl_result is NULL OR vl.hbv_vl_result  ="")  AND vl.result_status !=4 ';
+                    $statusCondition = ' AND  (vl.hcv_vl_count is NULL OR vl.hcv_vl_count  ="" OR vl.hbv_vl_count is NULL OR vl.hbv_vl_count  ="")  AND vl.result_status !=4 ';
                } else if ($_POST['status'] == 'result') {
-                    $statusCondition = ' AND ((vl.hcv_vl_result is NOT NULL OR vl.hcv_vl_result  !="" OR vl.hbv_vl_result is NOT NULL OR vl.hbv_vl_result  !="")  AND vl.result_status !=4 )';
+                    $statusCondition = ' AND ((vl.hcv_vl_count is NOT NULL OR vl.hcv_vl_count  !="" OR vl.hbv_vl_count is NOT NULL OR vl.hbv_vl_count  !="")  AND vl.result_status !=4 )';
                } else {
                     $statusCondition = ' AND vl.result_status=4';
                }
@@ -228,9 +228,9 @@ if (isset($sWhere) && $sWhere != "") {
                $setWhr = 'where';
                $sWhere = ' where ' . $sWhere;
                if ($_POST['status'] == 'no_result') {
-                    $statusCondition = '  (vl.hcv_vl_result is NULL OR vl.hcv_vl_result  ="" OR vl.hbv_vl_result is NULL OR vl.hbv_vl_result  ="")  AND vl.result_status !=4 ';
+                    $statusCondition = '  (vl.hcv_vl_count is NULL OR vl.hcv_vl_count  ="" OR vl.hbv_vl_count is NULL OR vl.hbv_vl_count  ="")  AND vl.result_status !=4 ';
                } else if ($_POST['status'] == 'result') {
-                    $statusCondition = ' ((vl.hcv_vl_result is NOT NULL OR vl.hcv_vl_result  !="" OR vl.hbv_vl_result is NOT NULL OR vl.hbv_vl_result  !="")  AND vl.result_status !=4 )';
+                    $statusCondition = ' ((vl.hcv_vl_count is NOT NULL OR vl.hcv_vl_count  !="" OR vl.hbv_vl_count is NOT NULL OR vl.hbv_vl_count  !="")  AND vl.result_status !=4 )';
                } else {
                     $statusCondition = ' vl.result_status=4';
                }
@@ -262,13 +262,13 @@ $dWhere = '';
 if (isset($_POST['vlPrint']) && $_POST['vlPrint'] == 'print') {
      if (!isset($_POST['status']) || trim($_POST['status']) == '') {
           if (trim($sWhere) != '') {
-               $sWhere = $sWhere . " AND ((vl.result_status = 7 AND (vl.hcv_vl_result is NULL AND vl.hcv_vl_result  ='' AND vl.hbv_vl_result is NULL AND vl.hbv_vl_result  ='')) OR (vl.result_status = 4 AND (vl.hcv_vl_result is NULL AND vl.hcv_vl_result  ='' AND vl.hbv_vl_result is NULL AND vl.hbv_vl_result  =''))) AND (result_printed_datetime is NULL OR result_printed_datetime like '')";
+               $sWhere = $sWhere . " AND ((vl.result_status = 7 AND (vl.hcv_vl_count is NULL AND vl.hcv_vl_count  ='' AND vl.hbv_vl_count is NULL AND vl.hbv_vl_count  ='')) OR (vl.result_status = 4 AND (vl.hcv_vl_count is NULL AND vl.hcv_vl_count  ='' AND vl.hbv_vl_count is NULL AND vl.hbv_vl_count  =''))) AND (result_printed_datetime is NULL OR result_printed_datetime like '')";
           } else {
-               $sWhere = "WHERE ((vl.result_status = 7 AND (vl.hcv_vl_result is NULL AND vl.hcv_vl_result  ='' AND vl.hbv_vl_result is NULL AND vl.hbv_vl_result  ='')) OR (vl.hcv_vl_result is NULL AND vl.hcv_vl_result  ='' AND vl.hbv_vl_result is NULL AND vl.hbv_vl_result  =''))) AND (result_printed_datetime is NULL OR result_printed_datetime like '')";
+               $sWhere = "WHERE ((vl.result_status = 7 AND (vl.hcv_vl_count is NULL AND vl.hcv_vl_count  ='' AND vl.hbv_vl_count is NULL AND vl.hbv_vl_count  ='')) OR (vl.hcv_vl_count is NULL AND vl.hcv_vl_count  ='' AND vl.hbv_vl_count is NULL AND vl.hbv_vl_count  =''))) AND (result_printed_datetime is NULL OR result_printed_datetime like '')";
           }
      }
      $sWhere = $sWhere . " AND vl.vlsm_country_id='" . $arr['vl_form'] . "'";
-     $dWhere = "WHERE ((vl.result_status = 7 AND (vl.hcv_vl_result is NULL AND vl.hcv_vl_result  ='' AND vl.hbv_vl_result is NULL AND vl.hbv_vl_result  ='')) OR (vl.result_status = 4 AND (vl.hcv_vl_result is NULL AND vl.hcv_vl_result  ='' AND vl.hbv_vl_result is NULL AND vl.hbv_vl_result  =''))) AND vl.vlsm_country_id='" . $arr['vl_form'] . "' AND (result_printed_datetime is NULL OR result_printed_datetime like '')";
+     $dWhere = "WHERE ((vl.result_status = 7 AND (vl.hcv_vl_count is NULL AND vl.hcv_vl_count  ='' AND vl.hbv_vl_count is NULL AND vl.hbv_vl_count  ='')) OR (vl.result_status = 4 AND (vl.hcv_vl_count is NULL AND vl.hcv_vl_count  ='' AND vl.hbv_vl_count is NULL AND vl.hbv_vl_count  =''))) AND vl.vlsm_country_id='" . $arr['vl_form'] . "' AND (result_printed_datetime is NULL OR result_printed_datetime like '')";
 } else {
      if (trim($sWhere) != '') {
           $sWhere = $sWhere . " AND vl.vlsm_country_id='" . $arr['vl_form'] . "' AND vl.result_status!=9";
@@ -339,8 +339,8 @@ foreach ($rResult as $aRow) {
      $row[] = ($aRow['facility_name']);
      $row[] = $aRow['patient_id'];
      $row[] = $aRow['patient_name'] . " " . $aRow['patient_surname'];
-     $row[] = ucwords($hepatitisResults[$aRow['hcv_vl_result']]);
-     $row[] = ucwords($hepatitisResults[$aRow['hbv_vl_result']]);
+     $row[] = $aRow['hcv_vl_count'];
+     $row[] = $aRow['hbv_vl_count'];
 
      if (isset($aRow['last_modified_datetime']) && trim($aRow['last_modified_datetime']) != '' && $aRow['last_modified_datetime'] != '0000-00-00 00:00:00') {
           $xplodDate = explode(" ", $aRow['last_modified_datetime']);
