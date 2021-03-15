@@ -132,8 +132,8 @@ $batResult = $db->rawQuery($batQuery);
 									<th>Patient Name</th>
 									<th>Province/State</th>
 									<th>District/County</th>
-									<th>HCV VL Result</th>
-									<th>HBV VL Result</th>
+									<th>HCV VL Count</th>
+									<th>HBV VL Count</th>
 									<th>Last Modified On</th>
 									<th>Status</th>
 									<?php if (isset($_SESSION['privileges']) && (in_array("hepatitis-edit-request.php", $_SESSION['privileges'])) || (in_array("hepatitis-view-request.php", $_SESSION['privileges']))) { ?>

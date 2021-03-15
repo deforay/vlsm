@@ -68,7 +68,7 @@ if (count($interfaceInfo) > 0) {
         if(empty($result['test_id']))  continue;
         $tableInfo = array();
         foreach ($availableModules as $individualIdColumn => $individualTableName) {
-            $tableQuery = "SELECT $individualIdColumn FROM $individualTableName WHERE sample_code = '" . $result['test_id'] . "'";
+            $tableQuery = "SELECT * FROM $individualTableName WHERE sample_code = '" . $result['test_id'] . "'";
             $tableInfo = $db->rawQueryOne($tableQuery);
             if (isset($tableInfo[$individualIdColumn]) && !empty($tableInfo[$individualIdColumn])) {
                 break;
