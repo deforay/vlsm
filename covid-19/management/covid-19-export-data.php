@@ -69,16 +69,14 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 							<td>
 								<input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:220px;background:#fff;" />
 							</td>
+							<th>Sample Received At Lab</th>
+							<td>
+								<input type="text" id="sampleRecievedDate" name="sampleRecievedDate" class="form-control" placeholder="Select Recieved Date" readonly style="width:220px;background:#fff;" />
+							</td>
 							<th>Facility Name</th>
 							<td>
 								<select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple" style="width:220px;">
 								<?= $facilitiesDropdown; ?>
-								</select>
-							</td>
-							<th>Testing Lab</th>
-							<td>
-								<select class="form-control" id="vlLab" name="vlLab" title="Please select vl lab" style="width:220px;">
-									<?= $testingLabsDropdown; ?>
 								</select>
 							</td>
 						</tr>
@@ -134,6 +132,14 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 									?>
 										<option value="<?php echo base64_encode($implementingPartner['i_partner_id']); ?>"><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
 									<?php } ?>
+								</select>
+							</td>
+						</tr>
+						<tr>
+						<th>Testing Lab</th>
+							<td>
+								<select class="form-control" id="vlLab" name="vlLab" title="Please select vl lab" style="width:220px;">
+									<?= $testingLabsDropdown; ?>
 								</select>
 							</td>
 						</tr>
@@ -242,7 +248,7 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 		$("#facilityName").select2({
 			placeholder: "Select Facilities"
 		});
-		$('#sampleCollectionDate,#sampleTestDate,#printDate').daterangepicker({
+		$('#sampleCollectionDate,#sampleTestDate,#printDate,#sampleRecievedDate').daterangepicker({
 				format: 'DD-MMM-YYYY',
 				separator: ' to ',
 				startDate: moment().subtract(29, 'days'),
@@ -361,6 +367,10 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 					"value": $("#sampleCollectionDate").val()
 				});
 				aoData.push({
+					"name": "sampleRecievedDate",
+					"value": $("#sampleRecievedDate").val()
+				});
+				aoData.push({
 					"name": "sampleTestDate",
 					"value": $("#sampleTestDate").val()
 				});
@@ -438,6 +448,7 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 		oTable.fnDraw();
 		$.post(fileName, {
 				Sample_Collection_Date: $("#sampleCollectionDate").val(),
+				Sample_Recieved_Date: $("#sampleRecievedDate").val(),
 				Batch_Code: $("#batchCode  option:selected").text(),
 				Facility_Name: $("#facilityName  option:selected").text(),
 				sample_Test_Date: $("#sampleTestDate").val(),
