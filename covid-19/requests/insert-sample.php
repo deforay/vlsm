@@ -34,23 +34,28 @@ try {
             exit();
         }
     }
-    $sampleJson = $covid19Model->generateCovid19SampleCode($provinceCode, $sampleCollectionDate, null, $provinceId);
-    $sampleData = json_decode($sampleJson, true);
+    
     $rowData = false;
     if (isset($_POST['api']) && $_POST['api'] = "yes") {
         if($_POST['sampleCode'] != "" && !empty($_POST['sampleCode'])){
-            $sQuery = "SELECT covid19_id, sample_code, sample_code_format, sample_code_key, remote_sample_code, remote_sample_code_format, remote_sample_code_key FROM form_covid19 where sample_code like '".$_POST['sampleCode']."' or remote_sample_code like '".$_POST['sampleCode']."' limit 1";
+            $sQuery = "SELECT covid19_id, sample_code, sample_code_format, sample_code_key, remote_sample_code, remote_sample_code_format, remote_sample_code_key FROM form_covid19 where sample_code like '%".$_POST['sampleCode']."%' or remote_sample_code like '%".$_POST['sampleCode']."%' limit 1";
             // die($sQuery);
             $rowData = $db->rawQueryOne($sQuery);
             if($rowData){
                 $sampleData['sampleCode'] = (!empty($rowData['sample_code']))?$rowData['sample_code']:$rowData['remote_sample_code'];
                 $sampleData['sampleCodeFormat'] = (!empty($rowData['sample_code_format']))?$rowData['sample_code_format']:$rowData['remote_sample_code_format'];
                 $sampleData['sampleCodeKey'] = (!empty($rowData['sample_code_key']))?$rowData['sample_code_key']:$rowData['remote_sample_code_key'];
+            }else{
+                $sampleJson = $covid19Model->generateCovid19SampleCode($provinceCode, $sampleCollectionDate, null, $provinceId);
+                $sampleData = json_decode($sampleJson, true);
             }
+        } else{
+            $sampleJson = $covid19Model->generateCovid19SampleCode($provinceCode, $sampleCollectionDate, null, $provinceId);
+            $sampleData = json_decode($sampleJson, true);
         }
-    }
-    else
-    {
+    }else {
+        $sampleJson = $covid19Model->generateCovid19SampleCode($provinceCode, $sampleCollectionDate, null, $provinceId);
+        $sampleData = json_decode($sampleJson, true);
         $sampleDate = explode(" ", $_POST['sampleCollectionDate']);
         $_POST['sampleCollectionDate'] = $general->dateFormat($sampleDate[0]) . " " . $sampleDate[1];
     }
