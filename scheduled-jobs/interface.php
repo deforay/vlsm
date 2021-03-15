@@ -286,6 +286,10 @@ if (count($interfaceInfo) > 0) {
                     if (strpos($hepatitisResult, '< 2.00E+1') !== false) {
                         $hepatitisResult = "< 20";
                         //$vlResultCategory = 'Suppressed';
+                    } else if (strpos($hepatitisResult, '>') !== false) {
+                        $hepatitisResult = str_replace(">", "", $hepatitisResult);
+                        $absDecimalVal = (float) $hepatitisResult;
+                        $txtVal = $hepatitisResult = $absVal = "> " . trim($absDecimalVal);
                     } else {
                         $resultArray = explode("(", $hepatitisResult);
                         $exponentArray = explode("E", $resultArray[0]);
