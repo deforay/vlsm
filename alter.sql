@@ -2086,3 +2086,5 @@ ALTER TABLE `eid_form` CHANGE `vlsm_country_id` `vlsm_country_id` INT(11) NULL D
 ALTER TABLE `form_covid19` CHANGE `vlsm_country_id` `vlsm_country_id` INT(11) NULL DEFAULT NULL;
 ALTER TABLE `form_hepatitis` CHANGE `vlsm_country_id` `vlsm_country_id` INT(11) NULL DEFAULT NULL;
 
+-- Amit 13-Mar-2021
+ALTER TABLE `form_hepatitis` ADD `tested_by` VARCHAR(255) NULL DEFAULT NULL AFTER `result`;
