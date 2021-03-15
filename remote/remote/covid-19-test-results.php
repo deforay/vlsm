@@ -104,34 +104,6 @@ if (count($data['result']) > 0) {
             }
         }
 
-        $db = $db->where('covid19_id', $id);
-        $db->delete("covid19_patient_comorbidities");
-        if (isset($comorbidities) && !empty($comorbidities)) {
-
-            foreach ($comorbidities as $comoId => $comoValue) {
-                $comorbidityData = array();
-                $comorbidityData["covid19_id"] = $id;
-                $comorbidityData["comorbidity_id"] = $comoId;
-                $comorbidityData["comorbidity_detected"] = $comoValue;
-                $db->insert("covid19_patient_comorbidities", $comorbidityData);
-            }
-        }
-        $db = $db->where('covid19_id', $id);
-        $db->delete("covid19_tests");
-        if (isset($testResults) && !empty($testResults)) {
-
-            foreach ($testResults as $testValue) {
-                $covid19TestData = array(
-                    'covid19_id'                => $id,
-                    'test_name'                 => $testValue['test_name'],
-                    'facility_id'               => $testValue['facility_id'],
-                    'sample_tested_datetime'    => $testValue['sample_tested_datetime'],
-                    'result'                    => $testValue['result'],
-                );
-                $db->insert("covid19_tests", $covid19TestData);
-            }
-        }
-
         if ($id > 0 && isset($lab['sample_code'])) {
             $sampleCode[] = $lab['sample_code'];
         }

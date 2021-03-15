@@ -15,6 +15,7 @@ $general = new \Vlsm\Models\General($vlsmDb);
 
 $labId = $general->getSystemConfig('lab_name');
 
+
 if (empty($labId)) {
     echo "No Lab ID set in System Config";
     exit(0);
@@ -29,26 +30,52 @@ $interfacedb = new MysqliDb(
 );
 
 
-
 //$general = new \Vlsm\Models\General($vlsmDb);
 
 //$lowVlResults = $general->getLowVLResultTextFromImportConfigs();
 
-
-
 //get the value from interfacing DB
-$interfaceQuery = "SELECT * FROM orders WHERE result_status = 1 AND lims_sync_status=0";
+$interfaceQuery = "SELECT * FROM `orders` WHERE `result_status` = 1 AND `lims_sync_status`=0";
 
-$interfaceInfo = $interfacedb->query($interfaceQuery);
+$interfaceInfo = $interfacedb->rawQuery($interfaceQuery);
+
 $numberOfResults = 0;
 if (count($interfaceInfo) > 0) {
-    $vllock = $general->getGlobalConfig('lock_approved_vl_samples');
-    $eidlock = $general->getGlobalConfig('lock_approved_eid_samples');
-    foreach ($interfaceInfo as $key => $result) {
-        $vlQuery = "SELECT vl_sample_id FROM vl_request_form WHERE sample_code = '" . $result['test_id'] . "'";
-        $vlInfo = $db->rawQueryOne($vlQuery);
 
-        if (isset($vlInfo['vl_sample_id'])) {
+    $availableModules = array();
+
+    if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) {
+        $availableModules['vl_sample_id'] = 'vl_request_form';
+        $vllock = $general->getGlobalConfig('lock_approved_vl_samples');
+    }
+
+    if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) {
+        $availableModules['eid_id'] = 'eid_form';
+        $eidlock = $general->getGlobalConfig('lock_approved_eid_samples');
+    }
+
+    if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) {
+        $availableModules['covid19_id'] = 'form_covid19';
+    }
+
+    if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) {
+        $availableModules['hepatitis_id'] = 'form_hepatitis';
+        $hepatitisLock = array();
+    }
+
+
+    foreach ($interfaceInfo as $key => $result) {
+        if (empty($result['test_id']))  continue;
+        $tableInfo = array();
+        foreach ($availableModules as $individualIdColumn => $individualTableName) {
+            $tableQuery = "SELECT * FROM $individualTableName WHERE sample_code = '" . $result['test_id'] . "'";
+            $tableInfo = $db->rawQueryOne($tableQuery);
+            if (isset($tableInfo[$individualIdColumn]) && !empty($tableInfo[$individualIdColumn])) {
+                break;
+            }
+        }
+
+        if (isset($tableInfo['vl_sample_id'])) {
             $absDecimalVal = null;
             $absVal = null;
             $logVal = null;
@@ -96,10 +123,9 @@ if (count($interfaceInfo) > 0) {
                         $vlResult = "< 20";
                         //$vlResultCategory = 'Suppressed';
                     } else {
-                        $vlResultArray = explode("(", $vlResult);
-                        $exponentArray = explode("E", $vlResultArray[0]);
-                        $multiplier = pow(10, $exponentArray[1]);
-                        $vlResult = round($exponentArray[0] * $multiplier, 2);
+                        $resultArray = explode("(", $vlResult);
+                        $exponentArray = explode("E", $resultArray[0]);
+                        $vlResult = (float) $resultArray[0];
                         $absDecimalVal = (float) trim($vlResult);
                         $logVal = round(log10($absDecimalVal), 2);
                     }
@@ -152,7 +178,7 @@ if (count($interfaceInfo) > 0) {
             if ($vllock == 'yes' && $data['result_status'] == 7) {
                 $data['locked'] = 'yes';
             }
-            $db = $db->where('vl_sample_id', $vlInfo['vl_sample_id']);
+            $db = $db->where('vl_sample_id', $tableInfo['vl_sample_id']);
             $vlUpdateId = $db->update('vl_request_form', $data);
             $numberOfResults++;
             if ($vlUpdateId) {
@@ -163,62 +189,180 @@ if (count($interfaceInfo) > 0) {
                 $interfacedb = $interfacedb->where('id', $result['id']);
                 $interfaceUpdateId = $interfacedb->update('orders', $interfaceData);
             }
-        } else {
+        } else if (isset($tableInfo['eid_id'])) {
 
-            $eidQuery = "SELECT eid_id FROM eid_form WHERE sample_code = '" . $result['test_id'] . "'";
-            $eidInfo = $db->rawQueryOne($eidQuery);
-            if (isset($eidInfo['eid_id'])) {
+            $absDecimalVal = null;
+            $absVal = null;
+            $logVal = null;
+            $txtVal = null;
+            //set result in result fields
+            if (trim($result['results']) != "") {
 
-                $absDecimalVal = null;
-                $absVal = null;
-                $logVal = null;
-                $txtVal = null;
-                //set result in result fields
-                if (trim($result['results']) != "") {
-
-                    if (strpos(strtolower($result['results']), 'not detected') !== false) {
-                        $eidResult = 'negative';
-                    } else if ((strpos(strtolower($result['results']), 'detected') !== false) || (strpos(strtolower($result['results']), 'passed') !== false)) {
-                        $eidResult = 'positive';
-                    } else {
-                        $eidResult = 'indeterminate';
-                    }
+                if (strpos(strtolower($result['results']), 'not detected') !== false) {
+                    $eidResult = 'negative';
+                } else if ((strpos(strtolower($result['results']), 'detected') !== false) || (strpos(strtolower($result['results']), 'passed') !== false)) {
+                    $eidResult = 'positive';
+                } else {
+                    $eidResult = 'indeterminate';
                 }
+            }
 
-                $data = array(
-                    'tested_by' => $result['tested_by'],
-                    'result_approved_by' => $result['tested_by'],
-                    'result_approved_datetime' => $result['authorised_date_time'],
-                    'sample_tested_datetime' => $result['result_accepted_date_time'],
-                    'result' => $eidResult,
-                    'eid_test_platform' => $result['machine_used'],
-                    'result_status' => 7,
-                    'data_sync' => 0
-                );
-                if ($eidlock['lock_approved_eid_samples'] == 'yes' && $data['result_status'] == 7) {
-                    $data['locked'] = 'yes';
-                }
-                $db = $db->where('eid_id', $eidInfo['eid_id']);
-                $eidUpdateId = $db->update('eid_form', $data);
-                $numberOfResults++;
-                if ($eidUpdateId) {
-                    $interfaceData = array(
-                        'lims_sync_status' => 1,
-                        'lims_sync_date_time' => date('Y-m-d H:i:s'),
-                    );
-                    $interfacedb = $interfacedb->where('id', $result['id']);
-                    $interfaceUpdateId = $interfacedb->update('orders', $interfaceData);
-                }
-            } else {
+            $data = array(
+                'tested_by' => $result['tested_by'],
+                'result_approved_by' => $result['tested_by'],
+                'result_approved_datetime' => $result['authorised_date_time'],
+                'sample_tested_datetime' => $result['result_accepted_date_time'],
+                'result' => $eidResult,
+                'eid_test_platform' => $result['machine_used'],
+                'result_status' => 7,
+                'data_sync' => 0
+            );
+            if ($eidlock['lock_approved_eid_samples'] == 'yes' && $data['result_status'] == 7) {
+                $data['locked'] = 'yes';
+            }
+            $db = $db->where('eid_id', $eidInfo['eid_id']);
+            $eidUpdateId = $db->update('eid_form', $data);
+            $numberOfResults++;
+            if ($eidUpdateId) {
                 $interfaceData = array(
-                    'lims_sync_status' => 2,
+                    'lims_sync_status' => 1,
                     'lims_sync_date_time' => date('Y-m-d H:i:s'),
                 );
                 $interfacedb = $interfacedb->where('id', $result['id']);
                 $interfaceUpdateId = $interfacedb->update('orders', $interfaceData);
             }
+        } else if (isset($tableInfo['covid19_id'])) {
+        } else if (isset($tableInfo['hepatitis_id'])) {
+
+
+            $absDecimalVal = null;
+            $absVal = null;
+            $logVal = null;
+            $txtVal = null;
+            $testType = strtolower($tableInfo['hepatitis_test_type']);
+            if ($testType == 'hbv') {
+                $resultField = "hbv_vl_count";
+                $otherField = "hcv_vl_count";
+            } else if ($testType == 'hcv') {
+                $resultField = "hcv_vl_count";
+                $otherField = "hbv_vl_count";
+            }
+            //set result in result fields
+            if (trim($result['results']) != "") {
+
+                $hepatitisResult = trim($result['results']);
+                $unit = trim($result['test_unit']);
+
+                if (strpos($unit, 'Log') !== false) {
+                    if (is_numeric($hepatitisResult)) {
+                        $logVal = $hepatitisResult;
+                        $hepatitisResult = $absVal = $absDecimalVal = round((float) round(pow(10, $logVal) * 100) / 100);
+                    } else {
+                        if ($hepatitisResult == "< Titer min") {
+                            $absDecimalVal = 20;
+                            $txtVal = $hepatitisResult = $absVal = "<20";
+                        } else if ($hepatitisResult == "> Titer max") {
+                            $absDecimalVal = 10000000;
+                            $txtVal = $hepatitisResult = $absVal = ">1000000";
+                        } else if (strpos($hepatitisResult, "<") !== false) {
+                            $logVal = str_replace("<", "", $hepatitisResult);
+                            $absDecimalVal = round((float) round(pow(10, $logVal) * 100) / 100);
+                            $txtVal = $hepatitisResult = $absVal = "< " . trim($absDecimalVal);
+                        } else if (strpos($hepatitisResult, ">") !== false) {
+                            $logVal = str_replace(">", "", $hepatitisResult);
+                            $absDecimalVal = round((float) round(pow(10, $logVal) * 100) / 100);
+                            $txtVal = $hepatitisResult = $absVal = "> " . trim($absDecimalVal);
+                        } else {
+                            $hepatitisResult = $txtVal = trim($result['results']);
+                        }
+                    }
+                } else if (strpos($unit, '10') !== false) {
+                    $unitArray = explode(".", $unit);
+                    $exponentArray = explode("*", $unitArray[0]);
+                    $multiplier = pow($exponentArray[0], $exponentArray[1]);
+                    $hepatitisResult = $hepatitisResult * $multiplier;
+                    $unit = $unitArray[1];
+                } else if (strpos($hepatitisResult, 'E+') !== false || strpos($hepatitisResult, 'E-') !== false) {
+                    if (strpos($hepatitisResult, '< 2.00E+1') !== false) {
+                        $hepatitisResult = "< 20";
+                        //$vlResultCategory = 'Suppressed';
+                    } else if (strpos($hepatitisResult, '>') !== false) {
+                        $hepatitisResult = str_replace(">", "", $hepatitisResult);
+                        $absDecimalVal = (float) $hepatitisResult;
+                        $txtVal = $hepatitisResult = $absVal = "> " . trim($absDecimalVal);
+                    } else {
+                        $resultArray = explode("(", $hepatitisResult);
+                        $exponentArray = explode("E", $resultArray[0]);
+                        $hepatitisResult = (float) $resultArray[0];
+                        $absDecimalVal = (float) trim($hepatitisResult);
+                        $logVal = round(log10($absDecimalVal), 2);
+                    }
+                } else if (is_numeric($hepatitisResult)) {
+                    $absVal = (float) trim($hepatitisResult);
+                    $absDecimalVal = (float) trim($hepatitisResult);
+                    $logVal = round(log10($absDecimalVal), 2);
+                } else {
+                    if ($hepatitisResult == "< Titer min") {
+                        $absDecimalVal = 20;
+                        $txtVal = $hepatitisResult = $absVal = "<20";
+                    } else if ($hepatitisResult == "> Titer max") {
+                        $absDecimalVal = 10000000;
+                        $txtVal = $hepatitisResult = $absVal = ">1000000";
+                    } else if (strpos($hepatitisResult, "<") !== false) {
+                        $hepatitisResult = str_replace("<", "", $hepatitisResult);
+                        $absDecimalVal = (float) trim($hepatitisResult);
+                        $logVal = round(log10($absDecimalVal), 2);
+                        $absVal = "< " . (float) trim($hepatitisResult);
+                    } else if (strpos($hepatitisResult, ">") !== false) {
+                        $hepatitisResult = str_replace(">", "", $hepatitisResult);
+                        $absDecimalVal = (float) trim($hepatitisResult);
+                        $logVal = round(log10($absDecimalVal), 2);
+                        $absVal = "> " . (float) trim($hepatitisResult);
+                    } else {
+                        $txtVal = trim($result['results']);
+                    }
+                }
+            }
+
+            $userId = $usersModel->addUserIfNotExists($result['tested_by']);
+
+            $data = array(
+                'lab_id' => $labId,
+                'tested_by' => $userId,
+                'result_approved_by' => $userId,
+                'result_approved_datetime' => $result['authorised_date_time'],
+                'sample_tested_datetime' => $result['result_accepted_date_time'],
+                $resultField => $hepatitisResult,
+                $otherField => NULL,
+                'hepatitis_test_platform' => $result['machine_used'],
+                'result_status' => 7,
+                'data_sync' => 0
+            );
+
+            if ($hepatitisLock == 'yes' && $data['result_status'] == 7) {
+                $data['locked'] = 'yes';
+            }
+            $db = $db->where('hepatitis_id', $tableInfo['hepatitis_id']);
+            $vlUpdateId = $db->update('form_hepatitis', $data);
+            $numberOfResults++;
+            if ($vlUpdateId) {
+                $interfaceData = array(
+                    'lims_sync_status' => 1,
+                    'lims_sync_date_time' => date('Y-m-d H:i:s'),
+                );
+                $interfacedb = $interfacedb->where('id', $result['id']);
+                $interfaceUpdateId = $interfacedb->update('orders', $interfaceData);
+            }
+        } else {
+            $interfaceData = array(
+                'lims_sync_status' => 2,
+                'lims_sync_date_time' => date('Y-m-d H:i:s'),
+            );
+            $interfacedb = $interfacedb->where('id', $result['id']);
+            $interfaceUpdateId = $interfacedb->update('orders', $interfaceData);
         }
     }
+
 
     if ($numberOfResults > 0) {
         $importedBy = isset($_SESSION['userId']) ? $_SESSION['userId'] : 'AUTO';

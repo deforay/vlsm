@@ -92,32 +92,6 @@ if (count($data['result']) > 0) {
             $id = $db->getInsertId();
         }
 
-        $db = $db->where('hepatitis_id', $id);
-        $db->delete("hepatitis_patient_comorbidities");
-        if (isset($comorbidities) && !empty($comorbidities)) {
-
-            foreach ($comorbidities as $comoId => $comoValue) {
-                $comorbidityData = array();
-                $comorbidityData["hepatitis_id"] = $id;
-                $comorbidityData["comorbidity_id"] = $comoId;
-                $comorbidityData["comorbidity_detected"] = $comoValue;
-                $db->insert("hepatitis_patient_comorbidities", $comorbidityData);
-            }
-        }
-
-        $db = $db->where('hepatitis_id', $id);
-        $db->delete("hepatitis_risk_factors");
-        if (isset($risks) && !empty($risks)) {
-
-            foreach ($risks as  $riskId => $riskValue) {
-                $riskFactorsData = array();
-                $riskFactorsData["hepatitis_id"] = $id;
-                $riskFactorsData["riskfactors_id"] = $riskId;
-                $riskFactorsData["riskfactors_detected"] = $riskValue;
-                $db->insert("hepatitis_risk_factors", $riskFactorsData);
-            }
-        }
-
         if ($id > 0 && isset($lab['sample_code'])) {
             $sampleCode[] = $lab['sample_code'];
         }

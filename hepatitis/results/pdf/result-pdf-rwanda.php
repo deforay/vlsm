@@ -2,7 +2,7 @@
 
 // this file is included in hepatitis/results/generate-result-pdf.php
 $hepatitisDb = new \Vlsm\Models\Hepatitis($db);
-$hepatitisResults = $hepatitisDb->getHepatitisResults();
+//$hepatitisResults = $hepatitisDb->getHepatitisResults();
 
 $resultFilename = '';
 
@@ -151,50 +151,6 @@ if (sizeof($requestResult) > 0) {
         $showMessage = '';
         $tndMessage = '';
         $messageTextSize = '12px';
-
-        // Smily for HCV Result
-        $smileyContenthcv = '';
-        if ($result['hcv_vl_result'] != NULL && trim($result['hcv_vl_result']) != '') {
-            $resultType = is_numeric($result['hcv_vl_result']);
-            if ($result['hcv_vl_result'] == 'positive') {
-                $vlResult = $result['hcv_vl_result'];
-                //$smileyContenthcv = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_frown.png" alt="smile_face"/>';
-            } else if ($result['hcv_vl_result'] == 'negative') {
-                $vlResult = $result['hcv_vl_result'];
-                $smileyContenthcv = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_smile.png" alt="smile_face"/>';
-            } else if ($result['hcv_vl_result'] == 'indeterminate') {
-                $vlResult = $result['hcv_vl_result'];
-                $smileyContenthcv = '';
-            }
-        }
-        if (isset($arr['show_smiley']) && trim($arr['show_smiley']) == "no") {
-            $smileyContenthcv = '';
-        }
-        if ($result['result_status'] == '4') {
-            $smileyContenthcv = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/cross.png" alt="rejected"/>';
-        }
-        
-        // Smily for HBV Result
-        $smileyContenthbv = '';
-        if ($result['hbv_vl_result'] != NULL && trim($result['hbv_vl_result']) != '') {
-            $resultType = is_numeric($result['hbv_vl_result']);
-            if ($result['hbv_vl_result'] == 'positive') {
-                $vlResult = $result['hbv_vl_result'];
-                //$smileyContenthbv = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_frown.png" alt="smile_face"/>';
-            } else if ($result['hbv_vl_result'] == 'negative') {
-                $vlResult = $result['hbv_vl_result'];
-                $smileyContenthbv = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_smile.png" alt="smile_face"/>';
-            } else if ($result['hbv_vl_result'] == 'indeterminate') {
-                $vlResult = $result['hbv_vl_result'];
-                $smileyContenthbv = '';
-            }
-        }
-        if (isset($arr['show_smiley']) && trim($arr['show_smiley']) == "no") {
-            $smileyContenthbv = '';
-        }
-        if ($result['result_status'] == '4') {
-            $smileyContenthbv = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/cross.png" alt="rejected"/>';
-        }
 
         $html = '';
         $html .= '<table style="padding:0px 2px 2px 2px;">';
@@ -354,7 +310,7 @@ if (sizeof($requestResult) > 0) {
             $html .= '<tr>';
                 $html .= '<td colspan="3">';
                     $html .= '<table style="padding:2px;">';
-                        if((isset($result['hcv_vl_result']) && $result['hcv_vl_result'] != "") && (isset($result['hbv_vl_result']) && $result['hbv_vl_result'] != "")){
+                        if((isset($result['hcv_vl_count']) && $result['hcv_vl_count'] != "") && (isset($result['hbv_vl_count']) && $result['hbv_vl_count'] != "")){
                             $html .= '<tr>';
                                 $html .= '<td colspan="2" style="line-height:50px;font-size:14px;text-align:left;">&nbsp;&nbsp;<b>TEST REQUESTED : </b>'.$result['sample_tested_datetime'].'</td>';
                             $html .= '</tr>';
@@ -362,22 +318,22 @@ if (sizeof($requestResult) > 0) {
                                 $html .= '<td colspan="2" style="line-height:2px;"></td>';
                             $html .= '</tr>';
                             $html .= '<tr style="background-color:#dbdbdb;">';
-                                if(isset($result['hcv_vl_result']) && $result['hcv_vl_result'] != ""){
-                                    $html .= '<td style="line-height:50px;font-size:14px;font-weight:bold;text-align:left;">&nbsp;&nbsp;HCV VL RESULTS : '.ucwords($hepatitisResults[$result['hcv_vl_result']]).'</td>';
+                                if(isset($result['hcv_vl_count']) && $result['hcv_vl_count'] != ""){
+                                    $html .= '<td style="line-height:50px;font-size:14px;font-weight:bold;text-align:left;">&nbsp;&nbsp;HCV VL RESULTS : '.($result['hcv_vl_count']).'</td>';
                                 }
-                                if(isset($result['hbv_vl_result']) && $result['hbv_vl_result'] != ""){
-                                    $html .= '<td style="line-height:50px;font-size:14px;font-weight:bold;text-align:left;">&nbsp;&nbsp;HBV VL RESULTS : '.ucwords($hepatitisResults[$result['hbv_vl_result']]).'</td>';
+                                if(isset($result['hbv_vl_count']) && $result['hbv_vl_count'] != ""){
+                                    $html .= '<td style="line-height:50px;font-size:14px;font-weight:bold;text-align:left;">&nbsp;&nbsp;HBV VL RESULTS : '.($result['hbv_vl_count']).'</td>';
                                 }
                             $html .= '</tr>';
                         } else{
                             $resultTxt = "Result";
                             $resultVal = "";
-                            if(isset($result['hcv_vl_result']) && $result['hcv_vl_result'] != ""){
+                            if(isset($result['hcv_vl_count']) && $result['hcv_vl_count'] != ""){
                                 $resultTxt = "HCV VL Result";
-                                $resultVal = ucwords($hepatitisResults[$result['hcv_vl_result']]);
-                            } else if(isset($result['hbv_vl_result']) && $result['hbv_vl_result'] != ""){
+                                $resultVal = ($result['hcv_vl_count']);
+                            } else if(isset($result['hbv_vl_count']) && $result['hbv_vl_count'] != ""){
                                 $resultTxt = "HBV VL Result";
-                                $resultVal = ucwords($hepatitisResults[$result['hbv_vl_result']]);
+                                $resultVal = ($result['hbv_vl_count']);
                             }
                             $html .= '<tr style="background-color:#dbdbdb;">';
                                 $html .= '<td style="line-height:50px;font-size:16px;font-weight:bold;text-align:left;">&nbsp;&nbsp;<b>TEST REQUESTED : </b>'.$result['sample_tested_datetime'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.$resultTxt.' : '.$resultVal.'</td>';
@@ -480,7 +436,7 @@ if (sizeof($requestResult) > 0) {
             $html .= '</tr>';
         $html .= '</table>';
 
-        if (($result['hcv_vl_result'] != '' || $result['hbv_vl_result'] != '') || (($result['hcv_vl_result'] == '' || $result['hbv_vl_result'] == '') && $result['result_status'] == '4')) {
+        if (($result['hcv_vl_count'] != '' || $result['hbv_vl_count'] != '') || (($result['hcv_vl_count'] == '' || $result['hbv_vl_count'] == '') && $result['result_status'] == '4')) {
             $pdf->writeHTML($html);
             $pdf->lastPage();
             $filename = $pathFront . DIRECTORY_SEPARATOR . 'p' . $page . '.pdf';
