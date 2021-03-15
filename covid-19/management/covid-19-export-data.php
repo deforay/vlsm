@@ -108,9 +108,9 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 							<td>
 								<select name="status" id="status" class="form-control" title="Please choose status">
 									<option value=""> -- Select -- </option>
-									<option value="7">Accepted</option>
-									<option value="4">Rejected</option>
-									<option value="6">Awaiting Clinic Approval</option>
+									<?php foreach ($tsResult as $sampleStatus) { ?>
+										<option value="<?php echo $sampleStatus['status_id']; ?>"> <?php echo $sampleStatus['status_name']; ?> </option>
+									<?php } ?>
 								</select>
 							</td>
 
