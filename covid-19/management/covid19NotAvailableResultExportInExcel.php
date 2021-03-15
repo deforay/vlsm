@@ -24,9 +24,9 @@ if (isset($_SESSION['resultNotAvailable']) && trim($_SESSION['resultNotAvailable
     $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
     $output = array();
     $sheet = $excel->getActiveSheet();
-    $headings = array('Sample Code', 'Remote Sample Code', "Facility Name", "Child Id.", "Child's Name", "Sample Collection Date", "Lab Name");
+    $headings = array('Sample Code', 'Remote Sample Code', "Facility Name", "Patient Id.", "Patient Name", "Sample Collection Date", "Lab Name");
     if ($sarr['user_type'] == 'standalone') {
-        $headings = array('Sample Code', "Facility Name", "Child Id.", "Child's Name", "Sample Collection Date", "Lab Name");
+        $headings = array('Sample Code', "Facility Name", "Patient Id.", "Patient Name", "Sample Collection Date", "Lab Name");
     }
 
     $colNo = 1;
