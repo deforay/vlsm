@@ -2069,7 +2069,7 @@ UPDATE `privileges` SET `privilege_name` = 'covid19MonthlyThresholdReport.php' W
 UPDATE `privileges` SET `privilege_name` = 'eidMonthlyThresholdReport.php' WHERE `privileges`.`privilege_id` = 144;
 
 
---Prastah M 11-Feb-2021
+-- Prastah M 11-Feb-2021
 ALTER TABLE facility_details add column test_type VARCHAR(255) NULL;
 
 
