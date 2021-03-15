@@ -29,13 +29,13 @@ $primaryKey = "hepatitis_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
 $sampleCode = 'sample_code';
-$aColumns = array('vl.sample_code', 'vl.remote_sample_code', 'b.batch_code', 'vl.patient_id', 'CONCAT(vl.patient_name, vl.patient_surname)', 'f.facility_name', 'vl.hcv_vl_result', 'vl.hbv_vl_result', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
-$orderColumns = array('vl.sample_code', 'vl.remote_sample_code', 'b.batch_code', 'vl.patient_id', 'vl.patient_name', 'f.facility_name', 'vl.hcv_vl_result', 'vl.hbv_vl_result', 'vl.last_modified_datetime', 'ts.status_name');
+$aColumns = array('vl.sample_code', 'vl.remote_sample_code', 'b.batch_code', 'vl.patient_id', 'CONCAT(vl.patient_name, vl.patient_surname)', 'f.facility_name', 'vl.hcv_vl_count', 'vl.hbv_vl_count', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
+$orderColumns = array('vl.sample_code', 'vl.remote_sample_code', 'b.batch_code', 'vl.patient_id', 'vl.patient_name', 'f.facility_name', 'vl.hcv_vl_count', 'vl.hbv_vl_count', 'vl.last_modified_datetime', 'ts.status_name');
 if ($sarr['user_type'] == 'remoteuser') {
 	$sampleCode = 'remote_sample_code';
 } else if ($sarr['user_type'] == 'standalone') {
-	$aColumns = array('vl.sample_code', 'b.batch_code', 'vl.patient_id', 'CONCAT(vl.patient_name, vl.patient_surname)', 'f.facility_name',  'vl.hcv_vl_result', 'vl.hbv_vl_result', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
-	$orderColumns = array('vl.sample_code', 'b.batch_code', 'vl.patient_id', 'vl.patient_name', 'f.facility_name', 'vl.hcv_vl_result', 'vl.hbv_vl_result', 'vl.last_modified_datetime', 'ts.status_name');
+	$aColumns = array('vl.sample_code', 'b.batch_code', 'vl.patient_id', 'CONCAT(vl.patient_name, vl.patient_surname)', 'f.facility_name',  'vl.hcv_vl_count', 'vl.hbv_vl_count', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
+	$orderColumns = array('vl.sample_code', 'b.batch_code', 'vl.patient_id', 'vl.patient_name', 'f.facility_name', 'vl.hcv_vl_count', 'vl.hbv_vl_count', 'vl.last_modified_datetime', 'ts.status_name');
 }
 if (isset($_POST['vlPrint']) && $_POST['vlPrint'] == 'print') {
 	array_unshift($orderColumns, "vl.hepatitis_id");
@@ -130,8 +130,8 @@ $sQuery = 	 "SELECT hepatitis_id,
 							vl.patient_surname,
 							f.facility_name, 
 							vl.result,
-							vl.hcv_vl_result,
-							vl.hbv_vl_result,
+							vl.hcv_vl_count,
+							vl.hbv_vl_count,
 							vl.sample_received_at_hub_datetime,							
 							vl.sample_received_at_vl_lab_datetime,
 							vl.last_modified_datetime,
@@ -253,13 +253,13 @@ $dWhere = '';
 if (isset($_POST['vlPrint']) && $_POST['vlPrint'] == 'print') {
 	if (!isset($_POST['status']) || trim($_POST['status']) == '') {
 		if (trim($sWhere) != '') {
-			$sWhere = $sWhere . " AND ((vl.result_status = 7 AND (vl.hcv_vl_result is NOT NULL OR vl.hcv_vl_result not like '' OR vl.hbv_vl_result is NOT NULL OR vl.hbv_vl_result not like '')) OR (vl.result_status = 4 AND (vl.hcv_vl_result is NULL AND vl.hcv_vl_result like '' AND vl.hbv_vl_result is NULL AND vl.hbv_vl_result like ''))) AND result_printed_datetime is NOT NULL AND result_printed_datetime not like ''";
+			$sWhere = $sWhere . " AND ((vl.result_status = 7 AND (vl.hcv_vl_count is NOT NULL OR vl.hcv_vl_count not like '' OR vl.hbv_vl_count is NOT NULL OR vl.hbv_vl_count not like '')) OR (vl.result_status = 4 AND (vl.hcv_vl_count is NULL AND vl.hcv_vl_count like '' AND vl.hbv_vl_count is NULL AND vl.hbv_vl_count like ''))) AND result_printed_datetime is NOT NULL AND result_printed_datetime not like ''";
 		} else {
-			$sWhere = "WHERE ((vl.result_status = 7 AND (vl.hcv_vl_result is NOT NULL OR vl.hcv_vl_result not like '' OR vl.hbv_vl_result is NOT NULL OR vl.hbv_vl_result not like '')) OR (vl.result_status = 4 AND (vl.hcv_vl_result is NULL AND vl.hcv_vl_result like '' AND vl.hbv_vl_result is NULL AND vl.hbv_vl_result like ''))) AND result_printed_datetime is NOT NULL AND result_printed_datetime not like ''";
+			$sWhere = "WHERE ((vl.result_status = 7 AND (vl.hcv_vl_count is NOT NULL OR vl.hcv_vl_count not like '' OR vl.hbv_vl_count is NOT NULL OR vl.hbv_vl_count not like '')) OR (vl.result_status = 4 AND (vl.hcv_vl_count is NULL AND vl.hcv_vl_count like '' AND vl.hbv_vl_count is NULL AND vl.hbv_vl_count like ''))) AND result_printed_datetime is NOT NULL AND result_printed_datetime not like ''";
 		}
 	}
 	$sWhere = $sWhere . " AND vl.vlsm_country_id='" . $arr['vl_form'] . "'";
-	$dWhere = "WHERE ((vl.result_status = 7 AND (vl.hcv_vl_result is NOT NULL OR vl.hcv_vl_result not like '' OR vl.hbv_vl_result is NOT NULL OR vl.hbv_vl_result not like '')) OR (vl.result_status = 4 AND (vl.hcv_vl_result is NULL OR vl.hcv_vl_result ='' OR vl.hbv_vl_result is NULL OR vl.hbv_vl_result like ''))) AND vl.vlsm_country_id='" . $arr['vl_form'] . "' AND result_printed_datetime is NOT NULL AND result_printed_datetime not like ''";
+	$dWhere = "WHERE ((vl.result_status = 7 AND (vl.hcv_vl_count is NOT NULL OR vl.hcv_vl_count not like '' OR vl.hbv_vl_count is NOT NULL OR vl.hbv_vl_count not like '')) OR (vl.result_status = 4 AND (vl.hcv_vl_count is NULL OR vl.hcv_vl_count ='' OR vl.hbv_vl_count is NULL OR vl.hbv_vl_count like ''))) AND vl.vlsm_country_id='" . $arr['vl_form'] . "' AND result_printed_datetime is NOT NULL AND result_printed_datetime not like ''";
 }
 if ($sarr['user_type'] == 'remoteuser') {
 	//$sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
@@ -334,8 +334,8 @@ foreach ($rResult as $aRow) {
 	$row[] = $aRow['patient_id'];
 	$row[] = $patientFname . " " . $patientLname;
 	$row[] = ($aRow['facility_name']);
-	$row[] = ucwords($hepatitisResults[$aRow['hcv_vl_result']]);
-	$row[] = ucwords($hepatitisResults[$aRow['hbv_vl_result']]);
+	$row[] = $aRow['hcv_vl_count'];
+	$row[] = $aRow['hbv_vl_count'];
 	if (isset($aRow['last_modified_datetime']) && trim($aRow['last_modified_datetime']) != '' && $aRow['last_modified_datetime'] != '0000-00-00 00:00:00') {
 		$xplodDate = explode(" ", $aRow['last_modified_datetime']);
 		$aRow['last_modified_datetime'] = $general->humanDateFormat($xplodDate[0]) . " " . $xplodDate[1];
