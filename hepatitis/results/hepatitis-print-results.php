@@ -160,7 +160,7 @@ $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-
                                                         <th>Patient Name</th>
                                                         <th>Facility Name</th>
                                                         <th>HCV VL Result</th>
-									                    <th>HBV VL Result</th>
+                                                        <th>HBV VL Result</th>
                                                         <th>Last Modified On</th>
                                                         <th>Status</th>
                                                         <th>Action</th>
@@ -276,8 +276,8 @@ $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-
                                                         <th>Patient ID</th>
                                                         <th>Patient Name</th>
                                                         <th>Facility Name</th>
-                                                        <th>HCV VL Result</th>
-									                    <th>HBV VL Result</th>
+                                                        <th>HCV VL Count</th>
+                                                        <th>HBV VL Count</th>
                                                         <th>Last Modified On</th>
                                                         <th>Status</th>
                                                         <th>Action</th>
