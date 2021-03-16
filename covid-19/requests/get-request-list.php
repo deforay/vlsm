@@ -91,7 +91,10 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
 
                     for ($i = 0; $i < $colSize; $i++) {
                     if ($i < $colSize - 1) {
-                    $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search ) . "%' OR ";
+                         if($aColumns[$i] == "CONCAT(vl.patient_name, vl.patient_surname)")
+                              $sWhereSub .= "vl.patient_name LIKE '%" . ($search ) . "%' OR vl.patient_surname LIKE '%" . ($search ) . "%' OR ";     
+                         else
+                              $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search ) . "%' OR ";
                     } else {
                     $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search ) . "%' ";
                     }
@@ -242,7 +245,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
           if (isset($sLimit) && isset($sOffset)) {
                $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
           }
-          //echo $sQuery;die;
+          // echo $sQuery;die;
           $rResult = $db->rawQuery($sQuery);
           /* Data set length after filtering */
           $aResultFilterTotal =$db->rawQuery("SELECT vl.covid19_id FROM form_covid19 as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere");
