@@ -7,11 +7,8 @@ use Aranyasen\HL7\Messages\ACK;
 
 ini_set('memory_limit', -1);
 header('Content-Type: application/json');
-$c19Model = new \Vlsm\Models\Covid19($db);
-$general = new \Vlsm\Models\General($db);
-$userDb = new \Vlsm\Models\Users($db);
 $user = null;
-
+$userDb = new \Vlsm\Models\Users($db);
 $general = new \Vlsm\Models\General($db);
 $facilityDb = new \Vlsm\Models\Facilities($db);
 $c19Db = new \Vlsm\Models\Covid19($db);
