@@ -625,6 +625,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
           $("#patientPhoneNumber").val(patientArray[8]);
             $("#patientGender").val(patientArray[2]);
             $("#patientAge").val(patientArray[4]);
+            $("#patientDob").val(patientArray[3]);
      }
 
     function sampleCodeGeneration() {

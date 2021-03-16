@@ -12,7 +12,7 @@ $arr = array();
 for ($i = 0; $i < sizeof($cResult); $i++) {
   $arr[$cResult[$i]['name']] = $cResult[$i]['value'];
 }
-$pQuery = "SELECT * FROM vl_request_form as vl inner join facility_details as fd ON fd.facility_id=vl.facility_id where vlsm_country_id='" . $arr['vl_form'] . "' AND (patient_art_no like '%" . $artNo . "%' OR patient_first_name like '%" . $artNo . "%' OR patient_middle_name like '%" . $artNo . "%' OR patient_last_name like '%" . $artNo . "%')";
+$pQuery = "SELECT * FROM form_covid19 as vl inner join facility_details as fd ON fd.facility_id=vl.facility_id where vlsm_country_id='" . $arr['vl_form'] . "' AND (patient_id like '%" . $artNo . "%' OR patient_name like '%" . $artNo . "%' OR patient_surname like '%" . $artNo . "%' OR patient_phone_number like '%" . $artNo . "%')";
 $pResult = $db->rawQuery($pQuery);
 ?>
 <link rel="stylesheet" media="all" type="text/css" href="/assets/css/jquery-ui.1.11.0.css" />
@@ -77,16 +77,16 @@ $pResult = $db->rawQuery($pQuery);
                 <?php
                 $artNoList = array();
                 foreach ($pResult as $patient) {
-                  $value = $patient['patient_art_no'] . strtolower($patient['patient_first_name']) . strtolower($patient['patient_last_name']) . $patient['patient_age_in_years'] . strtolower($patient['patient_gender']) . strtolower($patient['facility_name']);
+                  $value = $patient['patient_id'] . strtolower($patient['patient_name']) . strtolower($patient['patient_surname']) . $patient['patient_age_in_years'] . strtolower($patient['patient_gender']) . strtolower($patient['facility_name']);
                   if (!in_array($value, $artNoList)) {
                     $artNoList[] = $value;
-                    $patientDetails = $patient['patient_first_name'] . "##" . $patient['patient_last_name'] . "##" . $patient['patient_gender'] . "##" . $general->humanDateFormat($patient['patient_dob']) . "##" . $patient['patient_age_in_years'] . "##" . $patient['patient_age_in_months'] . "##" . $patient['is_patient_pregnant'] . "##" . $patient['is_patient_breastfeeding'] . "##" . $patient['patient_mobile_number'] . "##" . $patient['consent_to_receive_sms'] . "##" . $general->humanDateFormat($patient['treatment_initiated_date']) . "##" . $patient['current_regimen'] . "##" . $general->humanDateFormat($patient['last_viral_load_date']) . "##" . $patient['last_viral_load_result'] . "##" . $patient['number_of_enhanced_sessions'] . "##" . $patient['patient_art_no'];
+                    $patientDetails = $patient['patient_name'] . "##" . $patient['patient_surname'] . "##" . $patient['patient_gender'] . "##" . $general->humanDateFormat($patient['patient_dob']) . "##" . $patient['patient_age'] . "##" . $patient['patient_age'] . "##" . $patient['is_patient_pregnant'] . "##" . $patient['is_patient_breastfeeding'] . "##" . $patient['patient_phone_number'] .  "##" . $patient['patient_id'];
                 ?>
                     <tr>
                       <td><input type="radio" id="patient<?php echo $patient['vl_sample_id']; ?>" name="patient" value="<?php echo $patientDetails; ?>" onclick="getPatientDetails(this.value);"></td>
-                      <td><?php echo $patient['patient_art_no']; ?></td>
-                      <td><?php echo ucfirst($patient['patient_first_name']) . " " . $patient['patient_last_name']; ?></td>
-                      <td><?php echo $patient['patient_age_in_years']; ?></td>
+                      <td><?php echo $patient['patient_id']; ?></td>
+                      <td><?php echo ucfirst($patient['patient_name']) . " " . $patient['patient_surname']; ?></td>
+                      <td><?php echo $patient['patient_age']; ?></td>
                       <td><?php echo ucwords(str_replace("_", " ", $patient['patient_gender'])); ?></td>
                       <td><?php echo ucwords($patient['facility_name']); ?></td>
                     </tr>

@@ -217,7 +217,7 @@ if (file_exists($fileArray[$arr['vl_form']])) {
     function showPatientList() {
         $("#showEmptyResult").hide();
         if ($.trim($("#artPatientNo").val()) != '') {
-            $.post("/vl/requests/checkPatientExist.php", {
+            $.post("/covid-19/requests/checkPatientExist.php", {
                     artPatientNo: $("#artPatientNo").val()
                 },
                 function(data) {
