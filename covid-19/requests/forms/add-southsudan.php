@@ -252,7 +252,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
 
                                         <th>State</th>
                                         <td>
-                                            <select class="form-control select2" name="patientProvince" id="patientProvince" title="Please Case State" onchange="getPatientDistrictDetails(this);" style="width:100%;">
+                                            <select class="form-control " name="patientProvince" id="patientProvince" title="Please Case State" onchange="getPatientDistrictDetails(this);" style="width:100%;">
                                                 <?php echo $province; ?>
                                             </select>
                                         </td>
@@ -619,13 +619,22 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
 
     function setPatientDetails(pDetails) {
           patientArray = pDetails.split("##");
-          console.log(patientArray);
+        //   console.log(patientArray);
+            $("#patientProvince").val(patientArray[14]+'##'+patientArray[16]).trigger('change');
           $("#firstName").val(patientArray[0]);
           $("#lastName").val(patientArray[1]);
           $("#patientPhoneNumber").val(patientArray[8]);
             $("#patientGender").val(patientArray[2]);
             $("#patientAge").val(patientArray[4]);
             $("#patientDob").val(patientArray[3]);
+            $("#patientId").val(patientArray[9]);
+            $("#patientPassportNumber").val(patientArray[10]);
+            $("#patientAddress").text(patientArray[11]);
+            $("#patientNationality").select2('val',patientArray[12]);
+            $("#patientCity").val(patientArray[13]);
+            // $('#patientProvince').select2('data', {"province-id": patientArray[17], code: patientArray[16], name:patientArray[14]});
+            
+            setTimeout(function(){ $("#patientDistrict").val( patientArray[15]).trigger('change'); }, 3000);
      }
 
     function sampleCodeGeneration() {
@@ -735,6 +744,10 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
 
         $('#patientNationality').select2({
             placeholder: "Select Nationality"
+        });
+
+         $('#patientProvince').select2({
+            placeholder: "Select Province"
         });
 
         $('#isResultAuthorized').change(function(e) {

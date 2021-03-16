@@ -12,8 +12,9 @@ $arr = array();
 for ($i = 0; $i < sizeof($cResult); $i++) {
   $arr[$cResult[$i]['name']] = $cResult[$i]['value'];
 }
-$pQuery = "SELECT * FROM form_covid19 as vl inner join facility_details as fd ON fd.facility_id=vl.facility_id where vlsm_country_id='" . $arr['vl_form'] . "' AND (patient_id like '%" . $artNo . "%' OR patient_name like '%" . $artNo . "%' OR patient_surname like '%" . $artNo . "%' OR patient_phone_number like '%" . $artNo . "%')";
+$pQuery = "SELECT * FROM form_covid19 as vl inner join facility_details as fd ON fd.facility_id=vl.facility_id  Left JOIN province_details as pd ON fd.facility_state=pd.province_name where vlsm_country_id='" . $arr['vl_form'] . "' AND (patient_id like '%" . $artNo . "%' OR patient_name like '%" . $artNo . "%' OR patient_surname like '%" . $artNo . "%' OR patient_phone_number like '%" . $artNo . "%')";
 $pResult = $db->rawQuery($pQuery);
+// print_r($pResult);die;
 ?>
 <link rel="stylesheet" media="all" type="text/css" href="/assets/css/jquery-ui.1.11.0.css" />
 <!-- Bootstrap 3.3.6 -->
@@ -80,7 +81,7 @@ $pResult = $db->rawQuery($pQuery);
                   $value = $patient['patient_id'] . strtolower($patient['patient_name']) . strtolower($patient['patient_surname']) . $patient['patient_age_in_years'] . strtolower($patient['patient_gender']) . strtolower($patient['facility_name']);
                   if (!in_array($value, $artNoList)) {
                     $artNoList[] = $value;
-                    $patientDetails = $patient['patient_name'] . "##" . $patient['patient_surname'] . "##" . $patient['patient_gender'] . "##" . $general->humanDateFormat($patient['patient_dob']) . "##" . $patient['patient_age'] . "##" . $patient['patient_age'] . "##" . $patient['is_patient_pregnant'] . "##" . $patient['is_patient_breastfeeding'] . "##" . $patient['patient_phone_number'] .  "##" . $patient['patient_id'];
+                    $patientDetails = $patient['patient_name'] . "##" . $patient['patient_surname'] . "##" . $patient['patient_gender'] . "##" . $general->humanDateFormat($patient['patient_dob']) . "##" . $patient['patient_age'] . "##" . $patient['patient_age'] . "##" . $patient['is_patient_pregnant'] . "##" . $patient['is_patient_breastfeeding'] . "##" . $patient['patient_phone_number'] .  "##" . $patient['patient_id'].  "##" . $patient['patient_passport_number'].  "##" . $patient['patient_address'].  "##" . $patient['patient_nationality'].  "##" . $patient['patient_city'].  "##" . $patient['patient_province'].  "##" . $patient['patient_district'].  "##" . $patient['province_code'].  "##" . $patient['province_id'];
                 ?>
                     <tr>
                       <td><input type="radio" id="patient<?php echo $patient['vl_sample_id']; ?>" name="patient" value="<?php echo $patientDetails; ?>" onclick="getPatientDetails(this.value);"></td>
