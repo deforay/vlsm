@@ -291,7 +291,7 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
 
     ?>
         Highcharts.setOptions({
-            colors: ['#FF0000', '#50B432','#d8424d']
+            colors: ['#FF0000', '#50B432','#ada99c']
         });
         $('#covid19SamplesOverview').highcharts({
             chart: {
