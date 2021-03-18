@@ -139,4 +139,14 @@ class Vl
             $res = 'suppressed';
         return $res;
     }
+
+    public function getVlSampleTypesByName($name = "")
+    {   
+        $where = "";
+        if(!empty($name)){
+            $where = " AND sample_name LIKE '$name%'";
+        }
+        $query = "SELECT * FROM r_vl_sample_type where status='active'$where";
+        return $this->db->rawQuery($query);
+    }
 }

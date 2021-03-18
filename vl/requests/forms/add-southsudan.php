@@ -911,7 +911,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
           if (flag) {
                $.blockUI();
                <?php if ($arr['sample_code'] == 'auto' || $arr['sample_code'] == 'YY' || $arr['sample_code'] == 'MMYY') { ?>
-                    insertSampleCode('vlRequestFormSs', 'vlSampleId', 'sampleCode', 'sampleCodeKey', 'sampleCodeFormat', 1, 'sampleCollectionDate');
+                    insertSampleCode('vlRequestFormSs', 'vlSampleId', 'sampleCode', 'sampleCodeKey', 'sampleCodeFormat', '1', 'sampleCollectionDate');
                <?php } else { ?>
                     document.getElementById('vlRequestFormSs').submit();
                <?php } ?>
