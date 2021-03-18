@@ -268,7 +268,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 	<title><?php echo $shortName . " | " . ((isset($title) && $title != null && $title != "") ? $title : "VLSM"); ?></title>
 	<!-- Tell the browser to be responsive to screen width -->
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-
+	<meta name="viewport" content="width=1024">
 
 	<?php if (isset($sarr['user_type']) && $sarr['user_type'] == 'remoteuser') { ?>
 		<link rel="apple-touch-icon" sizes="180x180" href="/vlsts-icons/apple-touch-icon.png">
@@ -495,7 +495,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 								<?php }
 								if (isset($_SESSION['privileges']) && in_array("globalConfig.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu globalConfigMenu">
-										<a href="/global-config/globalConfig.php"><i class="fa fa-circle-o"></i> General Configuration</a>
+										<a href="/global-config/editGlobalConfig.php"><i class="fa fa-circle-o"></i> General Configuration</a>
 									</li>
 								<?php }
 								if (isset($_SESSION['privileges']) && in_array("importConfig.php", $_SESSION['privileges'])) { ?>
