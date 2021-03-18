@@ -51,9 +51,16 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 	<section class="content">
 		
 		<div class="box box-default">
-			<!--<div class="box-header with-border">
-          <div class="pull-right" style="font-size:15px;"> </div>
-        </div>-->
+			<div class="box-header with-border">
+          <div class="pull-right" style="font-size:15px;"> 
+		  <?php if (isset($_SESSION['privileges']) && in_array("editGlobalConfig.php", $_SESSION['privileges']) && !isset($_GET['e'])) { ?>
+				<div class="col-sm-6 pull-right">
+					<a href="editGlobalConfig.php?e=1" class="btn btn-primary pull-right"> <i class="fa fa-pencil"></i> Edit General Config</a>
+				</div>
+			<?php } ?>
+			<br>
+		  </div>
+        </div>
 			<!-- /.box-header -->
 			<div class="box-body">
 				<!-- form start -->
