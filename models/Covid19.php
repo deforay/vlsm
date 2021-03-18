@@ -150,7 +150,6 @@ class Covid19
             $where = " AND sample_name LIKE '$name%'";
         }
         $query = "SELECT * FROM r_covid19_sample_type where status='active'$where";
-        // die($query);
         return $this->db->rawQuery($query);
     }
 

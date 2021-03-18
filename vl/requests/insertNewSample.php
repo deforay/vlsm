@@ -39,9 +39,9 @@ else
     $_POST['sampleCollectionDate'] = $general->dateFormat($sampleDate[0]) . " " . $sampleDate[1];
 
 }
-if(!isset($_POST['countryId']) || $_POST['countryId'] !='')
-        $_POST['countryId'] = null;
-
+if(!isset($_POST['countryId']) || $_POST['countryId'] ==''){
+    $_POST['countryId'] = null;
+}
 $vlData = array();
 
 
@@ -84,6 +84,7 @@ if ($systemConfig['user_type'] == 'remoteuser') {
     $vlData['remote_sample'] = 'no';
     $vlData['result_status'] = 6;
 }
+$id = 0;
 if (isset($_POST['api']) && $_POST['api'] = "yes") {
     $id = $db->insert("vl_request_form", $vlData);
     $_POST['vlSampleId'] = $id;
@@ -92,6 +93,7 @@ if (isset($_POST['api']) && $_POST['api'] = "yes") {
         $id = $db->insert("vl_request_form", $vlData);
     }
 }
+
 if ($id > 0) {
     echo $id;
 } else {

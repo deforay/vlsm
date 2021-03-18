@@ -11,6 +11,8 @@ $general = new \Vlsm\Models\General($db);
 $userDb = new \Vlsm\Models\Users($db);
 $facilityDb = new \Vlsm\Models\Facilities($db);
 $c19Db = new \Vlsm\Models\Covid19($db);
+$vlDb = new \Vlsm\Models\Vl($db);
+
 $user = null;
 try {
     // The request has to send an Authorization Bearer token 
