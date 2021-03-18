@@ -495,7 +495,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 								<?php }
 								if (isset($_SESSION['privileges']) && in_array("globalConfig.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu globalConfigMenu">
-										<a href="/global-config/globalConfig.php"><i class="fa fa-circle-o"></i> General Configuration</a>
+										<a href="/global-config/editGlobalConfig.php"><i class="fa fa-circle-o"></i> General Configuration</a>
 									</li>
 								<?php }
 								if (isset($_SESSION['privileges']) && in_array("importConfig.php", $_SESSION['privileges'])) { ?>
