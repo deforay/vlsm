@@ -85,19 +85,23 @@ $tResult = $db->rawQuery($tQuery);
 
 $vlSuppressionQuery = "SELECT   COUNT(covid19_id) as total,
                                 SUM(CASE
-                                        WHEN (vl.result = 'positive') THEN 1
+                                        WHEN (vl.result = 'positive' and vl.result!='' and vl.result is not null) THEN 1
                                             ELSE 0
                                         END) AS positiveResult,
                                 (SUM(CASE
-                                        WHEN (vl.result = 'negative') THEN 1
+                                        WHEN (vl.result = 'negative' and vl.result!='' and vl.result is not null) THEN 1
                                             ELSE 0
                                         END)) AS negativeResult,
+                                (SUM(CASE
+                                        WHEN (vl.is_sample_rejected = 'yes' ) THEN 1
+                                            ELSE 0
+                                        END)) AS rejectedResult,
                                 status_id,
                                 status_name 
                                 
                                 FROM form_covid19 as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.vlsm_country_id='" . $configFormResult[0]['value'] . "' $whereCondition";
 
-$sWhere = " AND (vl.result!='' and vl.result is not null) ";
+// $sWhere = " AND (vl.result!='' and vl.result is not null) ";
 
 if (isset($_POST['batchCode']) && trim($_POST['batchCode']) != '') {
     $sWhere .= ' AND b.batch_code = "' . $_POST['batchCode'] . '"';
@@ -283,11 +287,11 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
 
     }
 
-    if (isset($vlSuppressionResult) && (isset($vlSuppressionResult['positiveResult']) || isset($vlSuppressionResult['negativeResult']))) {
+    if (isset($vlSuppressionResult) && (isset($vlSuppressionResult['positiveResult']) || isset($vlSuppressionResult['negativeResult']) || isset($vlSuppressionResult['rejectedResult']))) {
 
     ?>
         Highcharts.setOptions({
-            colors: ['#FF0000', '#50B432']
+            colors: ['#FF0000', '#50B432','#ada99c']
         });
         $('#covid19SamplesOverview').highcharts({
             chart: {
@@ -331,6 +335,10 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
                     {
                         name: 'Negative',
                         y: <?php echo (isset($vlSuppressionResult['negativeResult']) && $vlSuppressionResult['negativeResult'] > 0) > 0 ? $vlSuppressionResult['negativeResult'] : 0; ?>
+                    },
+                    {
+                        name: 'Rejected',
+                        y: <?php echo (isset($vlSuppressionResult['rejectedResult']) && $vlSuppressionResult['rejectedResult'] > 0) > 0 ? $vlSuppressionResult['rejectedResult'] : 0; ?>
                     },
                 ]
             }]
