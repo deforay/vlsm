@@ -34,7 +34,7 @@ include_once(APPLICATION_PATH . '/header.php');
 						</select>
 						<?php if (isset($_SESSION['privileges']) && in_array("editGlobalConfig.php", $_SESSION['privileges'])) { ?>
 							<div class="col-sm-6 pull-right">
-								<a href="editGlobalConfig.php" class="btn btn-primary pull-right"> <i class="fa fa-pencil"></i> Edit General Config</a>
+								<a href="editGlobalConfig.php?e=1" class="btn btn-primary pull-right"> <i class="fa fa-pencil"></i> Edit General Config</a>
 							</div>
 						<?php } ?>
 						<br>
