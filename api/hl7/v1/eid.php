@@ -138,10 +138,10 @@ if ($type[1] == 'RES') {
         $obx->setObservationValue($row['result']);
         $msg->setSegment($obx, 7);
 
-        $hl7Data[] = $msg->toString(true);
+        $hl7Data .= $msg->toString(true);
     }
     // No data found
-    if (!$rowData) {
+    /* if (!$rowData) {
         $response = array(
             'status' => 'failed',
             'timestamp' => time(),
@@ -165,6 +165,9 @@ if ($type[1] == 'RES') {
     // print_r($hl7Data);die;
     http_response_code(200);
     echo json_encode($payload);
+    exit(0); */
+    echo $hl7Data;die;
+    http_response_code(200);
     exit(0);
 }
 
