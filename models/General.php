@@ -505,12 +505,12 @@ class General
         return $rejReaons;
     }
 
-    public function getVlStatusByName($name = "", $condtionField, $tableName, $id)
+    public function getValueByName($name = "", $condtionField, $tableName, $id)
     {   
         $where = "";
         if(!empty($name)){
-            $where = " AND ".$condtionField." LIKE '$name%'";
-            $query = "SELECT * FROM ".$tableName." where status='active'$where";
+            $where = $condtionField." LIKE '$name%'";
+            $query = "SELECT * FROM ".$tableName." where ".$where;
             $result =  $this->db->rawQuery($query);
             return $result[0][$id];
         }else{
