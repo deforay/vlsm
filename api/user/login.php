@@ -8,9 +8,9 @@ $general = new \Vlsm\Models\General($db);
 $input = json_decode(file_get_contents("php://input"),true);
 
 try {
-    if (isset($input['username']) && !empty($input['username']) && isset($input['password']) && !empty($input['password'])) {
+    if (isset($input['userName']) && !empty($input['userName']) && isset($input['password']) && !empty($input['password'])) {
         
-        $username = $db->escape($input['username']);
+        $username = $db->escape($input['userName']);
         $password = $db->escape($input['password']);
         // $systemConfig['passwordSalt']='PUT-A-RANDOM-STRING-HERE';
         $password = sha1($password . $systemConfig['passwordSalt']);
