@@ -60,6 +60,9 @@ try {
     if ($type[0] == "VL") {
         include("vl.php");
     }
+    if ($type[0] == "EID") {
+        include("eid.php");
+    }
 } catch (Exception $exc) {
 
     http_response_code(500);

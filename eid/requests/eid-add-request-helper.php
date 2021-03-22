@@ -28,11 +28,17 @@ try {
 		$instanceId = $_SESSION['instanceId'];
 	}
 
-	if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != "") {
-		$sampleCollectionDate = explode(" ", $_POST['sampleCollectionDate']);
-		$_POST['sampleCollectionDate'] = $general->dateFormat($sampleCollectionDate[0]) . " " . $sampleCollectionDate[1];
-	} else {
-		$_POST['sampleCollectionDate'] = NULL;
+	if (empty($instanceId) && $_POST['instanceId']) {
+		$instanceId = $_POST['instanceId'];
+	}
+
+	if($_POST['hl7'] != "yes"){
+		if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != "") {
+			$sampleCollectionDate = explode(" ", $_POST['sampleCollectionDate']);
+			$_POST['sampleCollectionDate'] = $general->dateFormat($sampleCollectionDate[0]) . " " . $sampleCollectionDate[1];
+		} else {
+			$_POST['sampleCollectionDate'] = NULL;
+		}
 	}
 	
 	if (isset($_POST['approvedOnDateTime']) && trim($_POST['approvedOnDateTime']) != "") {
@@ -43,11 +49,13 @@ try {
 	}
 
 	//Set sample received date
-	if (isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate']) != "") {
-		$sampleReceivedDate = explode(" ", $_POST['sampleReceivedDate']);
-		$_POST['sampleReceivedDate'] = $general->dateFormat($sampleReceivedDate[0]) . " " . $sampleReceivedDate[1];
-	} else {
-		$_POST['sampleReceivedDate'] = NULL;
+	if($_POST['hl7'] != "yes"){
+		if (isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate']) != "") {
+			$sampleReceivedDate = explode(" ", $_POST['sampleReceivedDate']);
+			$_POST['sampleReceivedDate'] = $general->dateFormat($sampleReceivedDate[0]) . " " . $sampleReceivedDate[1];
+		} else {
+			$_POST['sampleReceivedDate'] = NULL;
+		}
 	}
 
 	if (isset($_POST['sampleTestedDateTime']) && trim($_POST['sampleTestedDateTime']) != "") {
@@ -158,7 +166,7 @@ try {
 		'mother_vl_result' 									=> $motherVlResult,
 		'mother_hiv_status' 								=> isset($_POST['mothersHIVStatus']) ? $_POST['mothersHIVStatus'] : null,
 		'pcr_test_performed_before' 						=> isset($_POST['pcrTestPerformedBefore']) ? $_POST['pcrTestPerformedBefore'] : null,
-		'previous_pcr_result' 									=> isset($_POST['prePcrTestResult']) ? $_POST['prePcrTestResult'] : null,
+		'previous_pcr_result' 								=> isset($_POST['prePcrTestResult']) ? $_POST['prePcrTestResult'] : null,
 		'last_pcr_date' 									=> isset($_POST['previousPCRTestDate']) ? $_POST['previousPCRTestDate'] : null,
 		'reason_for_pcr' 									=> isset($_POST['pcrTestReason']) ? $_POST['pcrTestReason'] : null,
 		'has_infant_stopped_breastfeeding' 					=> isset($_POST['hasInfantStoppedBreastfeeding']) ? $_POST['hasInfantStoppedBreastfeeding'] : null,
@@ -206,8 +214,8 @@ try {
 		$eidData['last_modified_by'] =  $_SESSION['userId'];
 	}
 
-	/* echo "<pre>";
-	print_r($eidData);die; */
+	// echo "<pre>";
+	// print_r($eidData);die;
 
 	if (isset($_POST['eidSampleId']) && $_POST['eidSampleId'] != '') {
 		$db = $db->where('eid_id', $_POST['eidSampleId']);
@@ -215,16 +223,20 @@ try {
 	}
 	if(isset($_POST['api']) && $_POST['api'] = "yes")
 	{
-		$payload = array(
-			        'status' => 'success',
-			        'timestamp' => time(),
-			        'message' => 'Successfully added.'
-			    );
-			   
+		if($_POST['hl7'] == "yes"){
+			return $id;
+		} else{
+			$payload = array(
+				'status' => 'success',
+				'timestamp' => time(),
+				'message' => 'Successfully added.'
+			);
 			
-			    http_response_code(200);
-			    echo json_encode($payload);
-			    exit(0);
+		
+			http_response_code(200);
+			echo json_encode($payload);
+			exit(0);
+		}
 	}
 	else
 	{

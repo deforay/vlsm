@@ -66,7 +66,7 @@ try {
         $covid19Data = array(
             'vlsm_country_id' => $_POST['countryId'],
             'sample_collection_date' => $_POST['sampleCollectionDate'],
-            'vlsm_instance_id' => (isset($_SESSION['instanceId']) && $_SESSION['instanceId'] != "")?$_SESSION['instanceId']:$_POST['instanceId'],
+            'vlsm_instance_id' => $_POST['instanceId'],
             'province_id' => $provinceId,
             'request_created_by' => '',
             'request_created_datetime' => $general->getDateTime(),
