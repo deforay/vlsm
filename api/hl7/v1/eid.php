@@ -98,12 +98,12 @@ if ($type[1] == 'RES') {
         $msg->setSegment($spm, 2);
         /* OBR Section */
         $obr = new Segment('OBR');
-        $obr->setField(1, $row['status_name']);
         $obr->setField(6, $row['request_created_datetime']);
         $obr->setField(10, ['COLLECT', $row['reqCreatedBy']]);
         $obr->setField(14, $row['sample_received_at_hub_datetime']);
         $obr->setField(15, $row['funding_source_name']);
         $obr->setField(16, ['', '', $row['i_partner_name'], '', '', '']);
+        $obr->setField(25, $row['status_name']);
         $obr->setField(26, $row['result']);
         $obr->setField(33, [$row['sample_requestor_name'], '']);
         $msg->setSegment($obr, 3);
@@ -211,8 +211,8 @@ if ($type[1] == 'REQ') {
     /* OBR Section */
     if ($msg->hasSegment('OBR')) {
         $obr = $msg->getSegmentByIndex(3);
-        if ($obr->getField(1) != "" && !empty($obr->getField(1))) {
-            $vlResultStatus = $general->getValueByName($obr->getField(1), 'status_name', 'r_sample_status', 'status_id');
+        if ($obr->getField(25) != "" && !empty($obr->getField(25))) {
+            $vlResultStatus = $general->getValueByName($obr->getField(25), 'status_name', 'r_sample_status', 'status_id');
             $data['result_status'] = $vlResultStatus;
         }else{
             $data['result_status'] = null;
