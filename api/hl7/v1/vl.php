@@ -103,13 +103,13 @@ if ($type[1] == 'RES') {
         $msg->setSegment($spm, 2);
         /* OBR Section */
         $obr = new Segment('OBR');
-        $obr->setField(1, $row['status_name']);
         $obr->setField(6, $row['request_created_datetime']);
         $obr->setField(9, $row['result_value_absolute']);
         $obr->setField(10, ['COLLECT', $row['reqCreatedBy']]);
         $obr->setField(14, $row['sample_received_at_hub_datetime']);
         $obr->setField(15, $row['funding_source_name']);
         $obr->setField(16, ['', '', $row['i_partner_name'], '', '', '']);
+        $obr->setField(25, $row['status_name']);
         $obr->setField(26, $row['result']);
         $msg->setSegment($obr, 3);
         /* Patient Custom Fields Information Details */
@@ -227,8 +227,8 @@ if ($type[1] == 'REQ') {
         } else{
             $data['fundingSource'] = null;
         }
-        if ($obr->getField(1) != "" && !empty($obr->getField(1))) {
-            $vlResultStatus = $general->getValueByName($obr->getField(1), 'status_name', 'r_sample_status', 'status_id');
+        if ($obr->getField(25) != "" && !empty($obr->getField(25))) {
+            $vlResultStatus = $general->getValueByName($obr->getField(25), 'status_name', 'r_sample_status', 'status_id');
             $data['result_status'] = $vlResultStatus;
         }else{
             $data['result_status'] = null;

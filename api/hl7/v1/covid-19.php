@@ -107,11 +107,11 @@ if ($type[1] == 'RES') {
         $msg->setSegment($spm, 2);
         /* OBR Section */
         $obr = new Segment('OBR');
-        $obr->setField(1, $row['status_name']);
         $obr->setField(5, $row['priority_status']);
         $obr->setField(6, $row['request_created_datetime']);
         $obr->setField(14, $row['sample_received_at_hub_datetime']);
         $obr->setField(15, $row['funding_source_name']);
+        $obr->setField(25, $row['status_name']);
         $obr->setField(26, $row['result']);
         $obr->setField(33, [$row['lab_technician'], '']);
         $msg->setSegment($obr, 3);
@@ -251,8 +251,8 @@ if ($type[1] == 'REQ') {
         $data['sourceOfAlertPOE'] = $obr->getField(15);
         // $data['result_status'] = $obr->getField(25);
         $data['result'] = $obr->getField(26);
-        if ($spm->getField(1) != "" && !empty($spm->getField(1))) {
-            $vlResultStatus = $general->getValueByName($spm->getField(1), 'status_name', 'r_sample_status', 'status_id');
+        if ($obr->getField(25) != "" && !empty($obr->getField(25))) {
+            $vlResultStatus = $general->getValueByName($obr->getField(25), 'status_name', 'r_sample_status', 'status_id');
             $data['result_status'] = $vlResultStatus[0]['status_id'];
         }
     }
