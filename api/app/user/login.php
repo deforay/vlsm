@@ -1,7 +1,6 @@
 <?php
-
 header('Content-Type: application/json');
-require_once('../../startup.php');
+require_once('../../../startup.php');
 
 
 $general = new \Vlsm\Models\General($db);
