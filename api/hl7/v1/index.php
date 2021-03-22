@@ -46,11 +46,13 @@ try {
     if ($msg->hasSegment('ZFL')) {
         $filters = $msg->getSegmentsByName('ZFL');
     }
-    $filter = (array)$filters[0];
-    $search = (array)$filter;
-    foreach ($filter as $search) {
-        $search = $search;
-        break;
+    if ($type[1] == 'RES') {
+        $filter = (array)$filters[0];
+        $search = (array)$filter;
+        foreach ($filter as $search) {
+            $search = $search;
+            break;
+        }
     }
     if ($type[0] == "COVID19") {
         include("covid-19.php");

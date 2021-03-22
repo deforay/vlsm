@@ -49,13 +49,14 @@ try {
             $db->insert('province_details', array('province_name' => $splitProvince[0], 'province_code' => $splitProvince[1]));
         }
     }
-    if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != "") {
-        $sampleDate = explode(" ", $_POST['sampleCollectionDate']);
-        $_POST['sampleCollectionDate'] = $general->dateFormat($sampleDate[0]) . " " . $sampleDate[1];
-    } else {
-        $_POST['sampleCollectionDate'] = NULL;
+    if($_POST['hl7'] != "yes"){
+        if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != "") {
+            $sampleDate = explode(" ", $_POST['sampleCollectionDate']);
+            $_POST['sampleCollectionDate'] = $general->dateFormat($sampleDate[0]) . " " . $sampleDate[1];
+        } else {
+            $_POST['sampleCollectionDate'] = NULL;
+        }
     }
-
     if (isset($_POST['dob']) && trim($_POST['dob']) != "") {
         $_POST['dob'] = $general->dateFormat($_POST['dob']);
     } else {
@@ -110,16 +111,22 @@ try {
     if (isset($_SESSION['instanceId'])) {
         $instanceId = $_SESSION['instanceId'];
     }
+
+    if (empty($instanceId) && $_POST['instanceId']) {
+		$instanceId = $_POST['instanceId'];
+	}
     $testingPlatform = '';
     if (isset($_POST['testingPlatform']) && trim($_POST['testingPlatform']) != '') {
         $platForm = explode("##", $_POST['testingPlatform']);
         $testingPlatform = $platForm[0];
     }
-    if (isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate']) != "") {
-        $sampleReceivedDateLab = explode(" ", $_POST['sampleReceivedDate']);
-        $_POST['sampleReceivedDate'] = $general->dateFormat($sampleReceivedDateLab[0]) . " " . $sampleReceivedDateLab[1];
-    } else {
-        $_POST['sampleReceivedDate'] = NULL;
+    if($_POST['hl7'] != "yes"){
+        if (isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate']) != "") {
+            $sampleReceivedDateLab = explode(" ", $_POST['sampleReceivedDate']);
+            $_POST['sampleReceivedDate'] = $general->dateFormat($sampleReceivedDateLab[0]) . " " . $sampleReceivedDateLab[1];
+        } else {
+            $_POST['sampleReceivedDate'] = NULL;
+        }
     }
     if (isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab']) != "") {
         $sampleReceivedDateLab = explode(" ", $_POST['sampleTestingDateAtLab']);
@@ -302,6 +309,8 @@ try {
     if(!isset($_POST['patientFirstName']) || $_POST['patientFirstName'] !='')
         $_POST['patientFirstName'] = '';
     $vldata['patient_first_name'] = $general->crypto('encrypt', $_POST['patientFirstName'], $vldata['patient_art_no']);
+    $id = 0;
+    // echo "<pre>";print_r($vldata);die;
 
     if (isset($_POST['vlSampleId']) && $_POST['vlSampleId'] != '') {
         $db = $db->where('vl_sample_id', $_POST['vlSampleId']);
@@ -338,21 +347,20 @@ try {
         $vldata['sample_code_format'] = (isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat'] != '') ? $_POST['sampleCodeFormat'] :  NULL;
         $id = $db->insert($tableName, $vldata);
     }
-    if(isset($_POST['api']) && $_POST['api'] = "yes")
-	{
-		$payload = array(
-			        'status' => 'success',
-			        'timestamp' => time(),
-			        'message' => 'Successfully added.'
-			    );
-			   
-			
-			    http_response_code(200);
-			    echo json_encode($payload);
-			    exit(0);
-	}
-	else
-	{
+    if (!empty($_POST['api']) && $_POST['api'] = "yes") {
+		if($_POST['hl7'] == "yes"){
+			return $id;
+		} else{
+			$payload = array(
+				'status' => 'success',
+				'timestamp' => time(),
+				'message' => 'Successfully added.'
+			);
+			http_response_code(200);
+			echo json_encode($payload);
+			exit(0);
+		}
+	}else{
         if ($id > 0) {
             $_SESSION['alertMsg'] = "VL request added successfully";
             //Add event log

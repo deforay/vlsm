@@ -92,8 +92,6 @@ try {
 		$status = 4;
 	}
 
-
-
 	$covid19Data = array(
 		'vlsm_instance_id'                    => $instanceId,
 		'vlsm_country_id'                     => $_POST['formId'],
