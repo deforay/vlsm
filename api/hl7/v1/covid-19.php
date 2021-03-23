@@ -354,8 +354,8 @@ if ($type[1] == 'REQ') {
         $msh->setMessageType(["COVID19", "REQ"]);
         $spm = new Segment('SPM');
         $spm->setField(2, $covid19Data['sample_code']);
-        $msg->setSegment($spm, 3);
-        $ack = new ACK($msg, $msh, [$spm]);
+        $msg->setSegment($spm, 1);
+        $ack = new ACK($msg, $msh);
         $returnString = $ack->toString(true);
         echo $returnString;
         /* if (strpos($returnString, 'MSH') === false) {
