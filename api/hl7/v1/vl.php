@@ -80,6 +80,11 @@ if ($type[1] == 'RES') {
     // die($sQuery);
     $rowData = $db->rawQuery($sQuery);
     foreach ($rowData as $row) {
+        /* MSH Information */
+        $msh = new MSH();
+        $msh->setSendingFacility($row['facility_name']);
+        $msh->setReceivingApplication("VLSM");
+        $msh->setReceivingFacility($row['labName']);
         /* Patient Information */
         $check = (in_array($row['patient_gender'], array("female", "male", "other"))) ? $row['patient_gender'] : "other";
         $sex = strtoupper(substr($check, 0, 1));
@@ -178,9 +183,26 @@ if ($type[1] == 'RES') {
 }
 
 if ($type[1] == 'REQ') {
+    /* MSH Information */
+    if ($msg->hasSegment('MSH')) {
+        $msh = $msg->getSegmentByIndex(0);
+        $facilityDetails = $facilityDb->getFacilityByName($msh->getField(4));
+        if (!empty($facilityDetails[0]) && $facilityDetails[0] != "") {
+            $data['fName'] = $facilityDetails[0]['facility_id'];
+            $data['provinceCode'] = $facilityDetails[0]['province_code'];
+        }
+        
+        if ($msh->getField(6) != "" && !empty($msh->getField(6))) {
+            $returnId = $general->getValueByName($msh->getField(6), 'facility_name', 'facility_details', 'facility_id');
+            $data['labId'] = $returnId;
+        }
+    }
     /* Patient Information */
     if ($msg->hasSegment('PID')) {
         $pid = $msg->getSegmentByIndex(1);
+        $data['artNo'] = $pid->getField(2);
+        $data['patientFirstName'] = $pid->getField(5);
+        $data['dob'] = $pid->getField(7);
         if ($pid->getField(8) == "F") {
             $gender = "female";
         } else if ($pid->getField(8) == "M") {
@@ -188,35 +210,25 @@ if ($type[1] == 'REQ') {
         } else if ($pid->getField(8) == "O") {
             $gender = "other";
         }
-        $name = $pid->getField(5);
-        $data['artNo'] = $pid->getField(2);
-        $data['patientFirstName'] = $name[0];
-        $data['dob'] = $pid->getField(7);
         $data['gender'] = $gender;
         $data['patientPhoneNumber'] = $pid->getField(13);
     }
     /* Sample Information */
     if ($msg->hasSegment('SPM')) {
         $spm = $msg->getSegmentByIndex(2);
-        $data['sampleCode'] = $spm->getField(2);
-        $data['sampleCollectionDate'] = $spm->getField(17);
-        $data['sampleReceivedDate'] = $spm->getField(18);
+        
         if ($spm->getField(1) != "" && !empty($spm->getField(1))) {
             $respondID = $general->getValueByName($spm->getField(1), 'rejection_reason_name', 'r_vl_sample_rejection_reasons', 'rejection_reason_id');
             $data['sampleRejectionReason'] = $respondID;
         }
-        $data['sampleRejectionReason'] = $spm->getField(21);
-        // $data['dateOfArtInitiation'] = $spm->getField(24);
-        // die($spm->getField(10));
-        $facilityDetails = $facilityDb->getFacilityByName($spm->getField(10));
-        if (!empty($facilityDetails[0]) && $facilityDetails[0] != "") {
-            $data['fName'] = $facilityDetails[0]['facility_id'];
-            $data['provinceCode'] = $facilityDetails[0]['province_code'];
-        }
+        $data['sampleCode'] = $spm->getField(2);
         if ($spm->getField(4) != "" && !empty($spm->getField(4))) {
             $vlSampleDetails = $vlDb->getVlSampleTypesByName($spm->getField(4));
             $data['specimenType'] = $vlSampleDetails[0]['sample_id'];
         }
+        $data['sampleCollectionDate'] = $spm->getField(17);
+        $data['sampleReceivedDate'] = $spm->getField(18);
+        $data['sampleRejectionReason'] = $spm->getField(21);
     }
     /* OBR Section */
     if ($msg->hasSegment('OBR')) {

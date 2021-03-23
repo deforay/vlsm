@@ -208,11 +208,6 @@ if ($type[1] == 'RES') {
 if ($type[1] == 'REQ') {
     $msg = new Message($hl7Msg);
     /* MSH Information */
-    $msh = new MSH();
-    $msh->setSendingFacility($row['facility_name']);
-    $msh->setReceivingApplication("VLSM");
-    $msh->setReceivingFacility($row['labName']);
-    /* Patient Information */
     if ($msg->hasSegment('MSH')) {
         $msh = $msg->getSegmentByIndex(0);
         $facilityDetails = $facilityDb->getFacilityByName($msh->getField(4));

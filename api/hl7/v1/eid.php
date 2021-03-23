@@ -76,6 +76,11 @@ if ($type[1] == 'RES') {
     // die($sQuery);
     $rowData = $db->rawQuery($sQuery);
     foreach ($rowData as $row) {
+        /* MSH Information */
+        $msh = new MSH();
+        $msh->setSendingFacility($row['facility_name']);
+        $msh->setReceivingApplication("VLSM");
+        $msh->setReceivingFacility($row['labName']);
         /* Patient Information */
         $check = (in_array($row['child_gender'], array("female", "male", "other"))) ? $row['child_gender'] : "other";
         $sex = strtoupper(substr($check, 0, 1));
@@ -172,7 +177,20 @@ if ($type[1] == 'RES') {
 }
 
 if ($type[1] == 'REQ') {
-    // echo "<pre>";print_r($msg->getSegmentsByName('PID'));die;
+    /* MSH Information */
+    if ($msg->hasSegment('MSH')) {
+        $msh = $msg->getSegmentByIndex(0);
+        $facilityDetails = $facilityDb->getFacilityByName($msh->getField(4));
+        if (!empty($facilityDetails[0]) && $facilityDetails[0] != "") {
+            $data['facilityId'] = $facilityDetails[0]['facility_id'];
+            $data['provinceCode'] = $facilityDetails[0]['province_code'];
+        }
+        
+        if ($msh->getField(6) != "" && !empty($msh->getField(6))) {
+            $returnId = $general->getValueByName($msh->getField(6), 'facility_name', 'facility_details', 'facility_id');
+            $data['labId'] = $returnId;
+        }
+    }
     /* Patient Information */
     if ($msg->hasSegment('PID')) {
         $pid = $msg->getSegmentByIndex(1);
@@ -196,15 +214,9 @@ if ($type[1] == 'REQ') {
         $data['sampleCode'] = $spm->getField(2);
         $data['sampleCollectionDate'] = $spm->getField(17);
         $data['sampleReceivedDate'] = $spm->getField(18);
-        if ($spm->getField(1) != "" && !empty($spm->getField(1))) {
-            $respondID = $general->getValueByName($spm->getField(1), 'rejection_reason_name', 'r_vl_sample_rejection_reasons', 'rejection_reason_id');
+        if ($spm->getField(21) != "" && !empty($spm->getField(21))) {
+            $respondID = $general->getValueByName($spm->getField(21), 'rejection_reason_name', 'r_eid_sample_rejection_reasons', 'rejection_reason_id');
             $data['sampleRejectionReason'] = $respondID;
-        }
-        $facilityDetails = $facilityDb->getFacilityByName($spm->getField(10));
-        if (!empty($facilityDetails[0]) && $facilityDetails[0] != "") {
-            $data['facilityId'] = $facilityDetails[0]['facility_id'];
-            $data['provinceId'] = $facilityDetails[0]['province_id'];
-            $data['provinceCode'] = $facilityDetails[0]['province_code'];
         }
         if ($spm->getField(4) != "" && !empty($spm->getField(4))) {
             $vlSampleDetails = $vlDb->getVlSampleTypesByName($spm->getField(4));
