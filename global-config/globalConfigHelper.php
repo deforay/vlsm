@@ -285,7 +285,7 @@ try {
     $resource = 'general-config';
 
     $general->activityLog($eventType, $action, $resource);
-    header("location:globalConfig.php");
+    header("location:editGlobalConfig.php");
 } catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());
