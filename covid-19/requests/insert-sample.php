@@ -59,7 +59,7 @@ try {
         $sampleDate = explode(" ", $_POST['sampleCollectionDate']);
         $_POST['sampleCollectionDate'] = $general->dateFormat($sampleDate[0]) . " " . $sampleDate[1];
     }
-    if(!isset($_POST['countryId']) || $_POST['countryId'] !='')
+    if(!isset($_POST['countryId']) || $_POST['countryId'] =='')
         $_POST['countryId'] = '';
     $covid19Data = array();
     if (isset($_POST['api']) && $_POST['api'] = "yes") {
@@ -101,8 +101,8 @@ try {
         $covid19Data['remote_sample'] = 'no';
         $covid19Data['result_status'] = 6;
     }
-    // echo "<pre>";
-	// print_r($rowData);die;
+    /* echo "<pre>";
+	print_r($covid19Data);die; */
     $id = 0;
     if($rowData){
         $db = $db->where('covid19_id', $rowData['covid19_id']);
