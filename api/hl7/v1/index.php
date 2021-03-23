@@ -54,7 +54,7 @@ try {
             break;
         }
     }
-    if ($type[0] == "COVID19") {
+    if ($type[0] == "COVID-19") {
         include("covid-19.php");
     }
     if ($type[0] == "VL") {
