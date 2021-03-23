@@ -2088,3 +2088,6 @@ ALTER TABLE `form_hepatitis` CHANGE `vlsm_country_id` `vlsm_country_id` INT(11) 
 
 -- Amit 13-Mar-2021
 ALTER TABLE `form_hepatitis` ADD `tested_by` VARCHAR(255) NULL DEFAULT NULL AFTER `result`;
+
+-- Thanaseelan 23-Mar-2021
+ALTER TABLE `form_covid19` ADD `source_of_request` VARCHAR(255) NULL DEFAULT NULL AFTER `lot_number`;

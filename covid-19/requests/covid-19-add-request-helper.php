@@ -60,19 +60,19 @@ try {
 	} else {
 		$_POST['sampleTestedDateTime'] = NULL;
 	}
-
+	
 	if (!empty($_POST['arrivalDateTime']) && trim($_POST['arrivalDateTime']) != "") {
 		$arrivalDate = explode(" ", $_POST['arrivalDateTime']);
 		$_POST['arrivalDateTime'] = $general->dateFormat($arrivalDate[0]) . " " . $arrivalDate[1];
 	} else {
 		$_POST['arrivalDateTime'] = NULL;
 	}
-
-
+	
+	
 	if (empty(trim($_POST['sampleCode']))) {
 		$_POST['sampleCode'] = NULL;
 	}
-
+	
 	if ($sarr['user_type'] == 'remoteuser') {
 		$sampleCode = 'remote_sample_code';
 		$sampleCodeKey = 'remote_sample_code_key';
@@ -80,18 +80,21 @@ try {
 		$sampleCode = 'sample_code';
 		$sampleCodeKey = 'sample_code_key';
 	}
-
+	
 	$status = 6;
 	if ($sarr['user_type'] == 'remoteuser') {
 		$status = 9;
 	}
-
-
+	
+	
 	if (isset($_POST['isSampleRejected']) && $_POST['isSampleRejected'] == 'yes') {
 		$_POST['result'] = null;
 		$status = 4;
 	}
-
+	if($_POST['hl7'] != "yes" && !empty($_POST['patientDob'])){
+		$_POST['patientDob'] = $general->dateFormat($_POST['patientDob']);
+	}
+	
 	$covid19Data = array(
 		'vlsm_instance_id'                    => $instanceId,
 		'vlsm_country_id'                     => $_POST['formId'],
@@ -108,7 +111,7 @@ try {
 		'patient_id'                          => !empty($_POST['patientId']) ? $_POST['patientId'] : null,
 		'patient_name'                        => !empty($_POST['firstName']) ? $_POST['firstName'] : null,
 		'patient_surname'                     => !empty($_POST['lastName']) ? $_POST['lastName'] : null,
-		'patient_dob'                         => !empty($_POST['patientDob']) ? $general->dateFormat($_POST['patientDob']) : null,
+		'patient_dob'                         => !empty($_POST['patientDob']) ? $_POST['patientDob'] : null,
 		'patient_gender'                      => !empty($_POST['patientGender']) ? $_POST['patientGender'] : null,
 		'is_patient_pregnant'                 => !empty($_POST['isPatientPregnant']) ? $_POST['isPatientPregnant'] : null,
 		'patient_age'                         => !empty($_POST['patientAge']) ? $_POST['patientAge'] : null,
@@ -253,6 +256,12 @@ try {
 		$covid19Data['sample_tested_datetime'] = null;
 	}
 	$id = 0;
+	$covid19Data['source_of_request'] = 'web';
+	if (!empty($_POST['api']) && $_POST['api'] = "yes") {
+		$covid19Data['source_of_request'] = 'api';
+	} else if($_POST['hl7'] == "yes"){
+		$covid19Data['source_of_request'] = 'hl7';
+	}
 	if (!empty($_POST['covid19SampleId'])) {
 		// echo "<pre>"; print_r($covid19Data);die;
 		$db = $db->where('covid19_id', $_POST['covid19SampleId']);

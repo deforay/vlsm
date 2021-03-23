@@ -78,6 +78,11 @@ if ($type[1] == 'RES') {
     // die($sQuery);
     $rowData = $db->rawQuery($sQuery);
     foreach ($rowData as $row) {
+        /* MSH Information */
+        $msh = new MSH();
+        $msh->setSendingFacility($row['facility_name']);
+        $msh->setReceivingApplication("VLSM");
+        $msh->setReceivingFacility($row['labName']);
         /* Patient Information */
         $check = (in_array($row['patient_gender'], array("female", "male", "other"))) ? $row['patient_gender'] : "other";
         $sex = strtoupper(substr($check, 0, 1));
@@ -97,11 +102,11 @@ if ($type[1] == 'RES') {
         $spm = new Segment('SPM');
         $spm->setField(2, $row['sample_code']);
         $spm->setField(4, $row['sample_name']);
-        $spm->setField(10, $row['facility_name']);
+        // $spm->setField(10, $row['facility_name']);
         $spm->setField(12, $row['is_sample_collected']);
         $spm->setField(17, $row['sample_collection_date']);
         $spm->setField(18, $row['sample_received_at_vl_lab_datetime']);
-        $spm->setField(21, $row['test_reason_name']);
+        $spm->setField(21, $row['rejection_reason_name']);
         $spm->setField(24, $row['sample_condition']);
         $spm->setField(26, $row['test_number']);
         $msg->setSegment($spm, 2);
@@ -113,6 +118,7 @@ if ($type[1] == 'RES') {
         $obr->setField(15, $row['funding_source_name']);
         $obr->setField(25, $row['status_name']);
         $obr->setField(26, $row['result']);
+        $obr->setField(31, $row['test_reason_name']);
         $obr->setField(33, [$row['lab_technician'], '']);
         $msg->setSegment($obr, 3);
         /* Clinic Custom Fields Information Details */
@@ -141,6 +147,8 @@ if ($type[1] == 'RES') {
         $zpi->setField(8, $row['patient_cares_for_children']);
         $zpi->setField(9, $row['close_contacts']);
         $zpi->setField(10, $row['contact_with_confirmed_case']);
+        $zpi->setField(11, $row['source_of_alert']);
+        $zpi->setField(12, $row['external_sample_code']);
         $msg->setSegment($zpi, 5);
         /* Airline Information Details */
         $zai = new Segment('ZAI');
@@ -199,6 +207,25 @@ if ($type[1] == 'RES') {
 
 if ($type[1] == 'REQ') {
     $msg = new Message($hl7Msg);
+    /* MSH Information */
+    $msh = new MSH();
+    $msh->setSendingFacility($row['facility_name']);
+    $msh->setReceivingApplication("VLSM");
+    $msh->setReceivingFacility($row['labName']);
+    /* Patient Information */
+    if ($msg->hasSegment('MSH')) {
+        $msh = $msg->getSegmentByIndex(0);
+        $facilityDetails = $facilityDb->getFacilityByName($msh->getField(4));
+        if (!empty($facilityDetails[0]) && $facilityDetails[0] != "") {
+            $data['facilityId'] = $facilityDetails[0]['facility_id'];
+            $data['provinceCode'] = $facilityDetails[0]['province_code'];
+        }
+        
+        if ($msh->getField(6) != "" && !empty($msh->getField(6))) {
+            $returnId = $general->getValueByName($msh->getField(6), 'facility_name', 'facility_details', 'facility_id');
+            $data['labId'] = $returnId;
+        }
+    }
     /* Patient Information */
     if ($msg->hasSegment('PID')) {
         $pid = $msg->getSegmentByIndex(1);
@@ -220,39 +247,46 @@ if ($type[1] == 'REQ') {
         $data['patientPhoneNumber'] = $pid->getField(13);
         $data['patientNationality'] = $pid->getField(28);
     }
+    // print_r($msg->getSegmentsByName("SPM"));die;
     /* Sample Information */
     if ($msg->hasSegment('SPM')) {
         $spm = $msg->getSegmentByIndex(2);
         $data['sampleCode'] = $spm->getField(2);
         // $data['sample_name'] = $spm->getField(4);
-        $data['isSampleCollected'] = $spm->getField(12);
-        $data['sampleCollectionDate'] = $spm->getField(17);
-        $data['sampleReceivedDate'] = $spm->getField(18);
-        $data['sampleRejectionReason'] = $spm->getField(21);
-        $data['sampleCondition'] = $spm->getField(24);
-        $data['testNumber'] = $spm->getField(26);
-        // die($spm->getField(10));
-        $facilityDetails = $facilityDb->getFacilityByName($spm->getField(10));
-        if (!empty($facilityDetails[0]) && $facilityDetails[0] != "") {
-            $data['facilityId'] = $facilityDetails[0]['facility_id'];
-            $data['provinceCode'] = $facilityDetails[0]['province_code'];
-        }
         if ($spm->getField(4) != "" && !empty($spm->getField(4))) {
             $c19Details = $c19Db->getCovid19SampleTypesByName($spm->getField(4));
             $data['specimenType'] = $c19Details[0]['sample_id'];
         }
+        
+        $data['isSampleCollected'] = $spm->getField(12);
+        $data['sampleCollectionDate'] = $spm->getField(17);
+        $data['sampleReceivedDate'] = $spm->getField(18);
+        if ($spm->getField(21) != "" && !empty($spm->getField(21))) {
+            $returnId = $general->getValueByName($spm->getField(21), 'rejection_reason_name', 'r_covid19_sample_rejection_reasons', 'rejection_reason_id');
+            $data['sampleRejectionReason'] = $returnId;
+        }
+        $data['sampleCondition'] = $spm->getField(24);
+        $data['testNumber'] = $spm->getField(26);
+        // die($spm->getField(10));
     }
     /* OBR Section */
     if ($msg->hasSegment('OBR')) {
         $obr = $msg->getSegmentByIndex(3);
         $data['priorityStatus'] = $obr->getField(5);
         $data['sample_received_at_hub_datetime'] = $obr->getField(14);
-        $data['sourceOfAlertPOE'] = $obr->getField(15);
+        if ($obr->getField(15) != "" && !empty($obr->getField(15))) {
+            $returnId = $general->getValueByName($obr->getField(15), 'funding_source_name', 'r_funding_sources', 'funding_source_id');
+            $data['fundingSource'] = $returnId;
+        }
         // $data['result_status'] = $obr->getField(25);
         $data['result'] = $obr->getField(26);
         if ($obr->getField(25) != "" && !empty($obr->getField(25))) {
             $vlResultStatus = $general->getValueByName($obr->getField(25), 'status_name', 'r_sample_status', 'status_id');
-            $data['result_status'] = $vlResultStatus[0]['status_id'];
+            $data['result_status'] = $vlResultStatus;
+        }
+        if ($obr->getField(31) != "" && !empty($obr->getField(31))) {
+            $returnId = $general->getValueByName($obr->getField(31), 'test_reason_name', 'r_covid19_test_reasons', 'test_reason_id');
+            $data['reasonForCovid19Test'] = $returnId;
         }
     }
 
@@ -272,8 +306,9 @@ if ($type[1] == 'REQ') {
         $data['otherDiseases'] = $zci->getField(11);
     }
     /* Patient Custom Fields Information Details */
+    // print_r($msg->getSegmentsByName('ZPI'));die;
     if ($msg->hasSegment('ZPI')) {
-        $zpi = $msg->getSegmentByIndex(5);
+        $zpi = $msg->getSegmentByIndex(4);
         $data['patientOccupation'] = $zpi->getField(1);
         $data['patientCity'] = $zpi->getField(2);
         $data['patientProvince'] = $zpi->getField(3);
@@ -284,6 +319,8 @@ if ($type[1] == 'REQ') {
         $data['patientCaresForChildren'] = $zpi->getField(8);
         $data['closeContacts'] = $zpi->getField(9);
         $data['contactWithConfirmedCase'] = $zpi->getField(10);
+        $data['sourceOfAlertPOE'] = $zpi->getField(11);
+        $data['externalSampleCode'] = $zpi->getField(12);
     }
     /* Airline Information Details */
     if ($msg->hasSegment('ZAI')) {
@@ -305,7 +342,7 @@ if ($type[1] == 'REQ') {
     $rowData = $db->rawQuery($sQuery);
     $data['instanceId'] = $rowData[0]['vlsm_instance_id'];
     $sampleFrom = '';
-    
+    // echo "<pre>";print_r($data);die;
     $data['api'] = "yes";
     $data['hl7'] = "yes";
     $_POST = $data;
@@ -315,7 +352,10 @@ if ($type[1] == 'REQ') {
     if ($id > 0) {
         $msh = new MSH();
         $msh->setMessageType(["COVID19", "REQ"]);
-        $ack = new ACK($msg, $msh);
+        $spm = new Segment('SPM');
+        $spm->setField(2, $covid19Data['sample_code']);
+        $msg->setSegment($spm, 3);
+        $ack = new ACK($msg, $msh, [$spm]);
         $returnString = $ack->toString(true);
         echo $returnString;
         /* if (strpos($returnString, 'MSH') === false) {
