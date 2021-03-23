@@ -36,7 +36,7 @@ try {
             $data['user'] = $admin;
             $data['form'] = $configFormResult[0]['value'];
             $data['api_token'] = $randomString;
-            print_r($data);die;
+            // print_r($data);die;
             $payload = array(
                 'status' => 1,
                 'message'=>'Login Success',
