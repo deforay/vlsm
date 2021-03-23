@@ -933,7 +933,7 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 							<input type="hidden" class="readPage" name="removedLogoImage" id="removedLogoImage" />
 							<input type="hidden" class="readPage" name="removedInstanceLogoImage" id="removedInstanceLogoImage" />
 							<a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
-							<a href="globalConfig.php" class="btn btn-default"> Cancel</a>
+							<a href="editGlobalConfig.php" class="btn btn-default"> Cancel</a>
 						</div>
 						<!-- /.box-footer -->
 				</form>
