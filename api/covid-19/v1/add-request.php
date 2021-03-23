@@ -15,6 +15,7 @@ $userDb = new \Vlsm\Models\Users($db);
 $user = null;
 
 $data = json_decode(file_get_contents("php://input"),true);
+// echo "<pre>";print_r($data);die;
 if(isset($data['api_token']) && $data['api_token']!='')
 {
     $auth = $data['api_token'];
@@ -35,10 +36,13 @@ if (empty($user) || empty($user['user_id'])) {
     exit(0);
 }
 $sampleFrom = '';
-// echo $c19Model->generateCovid19SampleCode($data['province'], $data['sampleCollectionDate'], $sampleFrom);
-// die;
-// $data = json_decode(file_get_contents("php://input"),true);
-// insertSampleCode('addCovid19RequestForm', 'covid19SampleId', 'sampleCode', 'sampleCodeKey', 'sampleCodeFormat', 3, 'sampleCollectionDate');
+// echo "<pre>";print_r($data);die;
+$data['formId'] = $data['countryId'] = $general->getGlobalConfig('vl_form');
+$sQuery = "SELECT vlsm_instance_id from s_vlsm_instance";
+$rowData = $db->rawQuery($sQuery);
+$data['instanceId'] = $rowData[0]['vlsm_instance_id'];
+$sampleFrom = '';
+
 $data['api'] = "yes";
 $_POST = $data;
 include_once(APPLICATION_PATH . '/covid-19/requests/insert-sample.php');
