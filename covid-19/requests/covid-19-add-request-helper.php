@@ -263,7 +263,6 @@ try {
 		$covid19Data['source_of_request'] = 'hl7';
 	}
 	if (!empty($_POST['covid19SampleId'])) {
-		// echo "<pre>"; print_r($covid19Data);die;
 		$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 		$id = $db->update($tableName, $covid19Data);
 	}
