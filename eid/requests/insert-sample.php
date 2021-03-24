@@ -3,7 +3,6 @@ ob_start();
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-
 #require_once('../../startup.php');
 
 
@@ -99,6 +98,7 @@ try {
         $eidData['remote_sample'] = 'no';
         $eidData['result_status'] = 6;
     }
+    // echo "<br>".$eidData['result_status'];
     $id = 0;
     if($rowData){
         $db = $db->where('eid_id', $rowData['eid_id']);

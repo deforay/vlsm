@@ -58,7 +58,11 @@ try {
         }
     }
     if (isset($_POST['dob']) && trim($_POST['dob']) != "") {
-        $_POST['dob'] = $general->dateFormat($_POST['dob']);
+        if($_POST['hl7'] == "yes"){
+            $_POST['dob'] = $_POST['dob'];
+        }else{
+            $_POST['dob'] = $general->dateFormat($_POST['dob']);
+        }
     } else {
         $_POST['dob'] = NULL;
     }
