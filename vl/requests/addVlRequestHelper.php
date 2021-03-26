@@ -46,20 +46,14 @@ try {
             $db->insert('province_details', array('province_name' => $splitProvince[0], 'province_code' => $splitProvince[1]));
         }
     }
-    if ($_POST['hl7'] != "yes") {
-        if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != "") {
-            $sampleDate = explode(" ", $_POST['sampleCollectionDate']);
-            $_POST['sampleCollectionDate'] = $general->dateFormat($sampleDate[0]) . " " . $sampleDate[1];
-        } else {
-            $_POST['sampleCollectionDate'] = NULL;
-        }
+    if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != "") {
+        $sampleDate = explode(" ", $_POST['sampleCollectionDate']);
+        $_POST['sampleCollectionDate'] = $general->dateFormat($sampleDate[0]) . " " . $sampleDate[1];
+    } else {
+        $_POST['sampleCollectionDate'] = NULL;
     }
     if (isset($_POST['dob']) && trim($_POST['dob']) != "") {
-        if($_POST['hl7'] == "yes"){
-            $_POST['dob'] = $_POST['dob'];
-        }else{
-            $_POST['dob'] = $general->dateFormat($_POST['dob']);
-        }
+        $_POST['dob'] = $general->dateFormat($_POST['dob']);
     } else {
         $_POST['dob'] = NULL;
     }
@@ -121,13 +115,11 @@ try {
         $platForm = explode("##", $_POST['testingPlatform']);
         $testingPlatform = $platForm[0];
     }
-    if ($_POST['hl7'] != "yes") {
-        if (isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate']) != "") {
-            $sampleReceivedDateLab = explode(" ", $_POST['sampleReceivedDate']);
-            $_POST['sampleReceivedDate'] = $general->dateFormat($sampleReceivedDateLab[0]) . " " . $sampleReceivedDateLab[1];
-        } else {
-            $_POST['sampleReceivedDate'] = NULL;
-        }
+    if (isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate']) != "") {
+        $sampleReceivedDateLab = explode(" ", $_POST['sampleReceivedDate']);
+        $_POST['sampleReceivedDate'] = $general->dateFormat($sampleReceivedDateLab[0]) . " " . $sampleReceivedDateLab[1];
+    } else {
+        $_POST['sampleReceivedDate'] = NULL;
     }
     if (isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab']) != "") {
         $sampleReceivedDateLab = explode(" ", $_POST['sampleTestingDateAtLab']);
@@ -297,7 +289,10 @@ try {
     if ($lock == 'yes' && $status == 7) {
         $vldata['locked'] = 'yes';
     }
-
+    $vldata['source_of_request'] = 'web';
+	if (!empty($_POST['api']) && $_POST['api'] = "yes") {
+		$vldata['source_of_request'] = 'api';
+	}
     if (isset($_POST['api']) && $_POST['api'] = "yes") {
     } else {
         $vldata['request_created_by'] =  $_SESSION['userId'];
@@ -344,18 +339,14 @@ try {
         $id = $db->insert($tableName, $vldata);
     }
     if (!empty($_POST['api']) && $_POST['api'] = "yes") {
-        if ($_POST['hl7'] == "yes") {
-            return $id;
-        } else {
-            $payload = array(
-                'status' => 'success',
-                'timestamp' => time(),
-                'message' => 'Successfully added.'
-            );
-            http_response_code(200);
-            echo json_encode($payload);
-            exit(0);
-        }
+        $payload = array(
+            'status' => 'success',
+            'timestamp' => time(),
+            'message' => 'Successfully added.'
+        );
+        http_response_code(200);
+        echo json_encode($payload);
+        exit(0);
     } else {
         if ($id > 0) {
             $_SESSION['alertMsg'] = "VL request added successfully";

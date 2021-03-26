@@ -196,7 +196,7 @@ if (!empty($search[1])) {
     http_response_code(200);
 }
  
-if ($type[1] == 'REQ') {
+if ($type[1] == 'REQ' || $type[1] == 'UPI') {
     /* MSH Information */
     if ($msg->hasSegment('MSH')) {
         $msh = $msg->getSegmentByIndex(0);
@@ -317,19 +317,17 @@ if ($type[1] == 'REQ') {
     $sampleCollectionDate = (isset($_POST['sampleCollectionDate']) && !empty($_POST['sampleCollectionDate'])) ? $_POST['sampleCollectionDate'] : null;
 
     $eidDublicateData = false;
-    if($_POST['sampleCode'] != "" && !empty($_POST['sampleCode'])){
-        $sQuery = "SELECT eid_id, sample_code, sample_code_format, sample_code_key, remote_sample_code, remote_sample_code_format, remote_sample_code_key FROM eid_form where sample_code like '%".$_POST['sampleCode']."%' or remote_sample_code like '%".$_POST['sampleCode']."%' limit 1";
-        // die($sQuery);
-        $eidDublicateData = $db->rawQueryOne($sQuery);
-        if($eidDublicateData){
-            $sampleData['sampleCode'] = (!empty($eidDublicateData['sample_code']))?$eidDublicateData['sample_code']:$eidDublicateData['remote_sample_code'];
-            $sampleData['sampleCodeFormat'] = (!empty($eidDublicateData['sample_code_format']))?$eidDublicateData['sample_code_format']:$eidDublicateData['remote_sample_code_format'];
-            $sampleData['sampleCodeKey'] = (!empty($eidDublicateData['sample_code_key']))?$eidDublicateData['sample_code_key']:$eidDublicateData['remote_sample_code_key'];
-        }else{
-            $sampleJson = $eidModel->generateEIDSampleCode($provinceCode, $sampleCollectionDate, null, $provinceId);
-            $sampleData = json_decode($sampleJson, true);
-        }
-    } else{
+    $sQuery = "SELECT eid_id, sample_code, sample_code_format, sample_code_key, remote_sample_code, remote_sample_code_format, remote_sample_code_key FROM eid_form 
+            where 
+                (sample_code like '%".$_POST['sampleCode']."%' or remote_sample_code like '%".$_POST['sampleCode']."%')
+                AND (child_id like '%".$_POST['childId']."%' AND child_dob like '%".$_POST['childDob']."%' AND child_gender like '%".$_POST['childGender']."%') limit 1";
+    // die($sQuery);
+    $eidDublicateData = $db->rawQueryOne($sQuery);
+    if($eidDublicateData){
+        $sampleData['sampleCode'] = (!empty($eidDublicateData['sample_code']))?$eidDublicateData['sample_code']:$eidDublicateData['remote_sample_code'];
+        $sampleData['sampleCodeFormat'] = (!empty($eidDublicateData['sample_code_format']))?$eidDublicateData['sample_code_format']:$eidDublicateData['remote_sample_code_format'];
+        $sampleData['sampleCodeKey'] = (!empty($eidDublicateData['sample_code_key']))?$eidDublicateData['sample_code_key']:$eidDublicateData['remote_sample_code_key'];
+    }else{
         $sampleJson = $eidModel->generateEIDSampleCode($provinceCode, $sampleCollectionDate, null, $provinceId);
         $sampleData = json_decode($sampleJson, true);
     }
@@ -438,6 +436,7 @@ if ($type[1] == 'REQ') {
         if ($status == 7 && $lock == 'yes') {
             $eidData['locked'] = 'yes';
         }
+        $eidData['source_of_request'] = 'hl7';
         if (isset($_POST['eidSampleId']) && $_POST['eidSampleId'] != '') {
             $db = $db->where('eid_id', $_POST['eidSampleId']);
             $id = $db->update($tableName, $eidData);
@@ -456,5 +455,6 @@ if ($type[1] == 'REQ') {
         $ack = new ACK($msg, $msh, [$sampleCode]);
         $returnString = $ack->toString(true);
         echo $returnString;
+        unset($ack);
     }
 }

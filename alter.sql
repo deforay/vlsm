@@ -2102,3 +2102,7 @@ UPDATE `privileges` SET `resource_id` = 'import-results', `display_name` = 'Impo
 
 ALTER TABLE `temp_sample_import` ADD `test_type` VARCHAR(255) NULL DEFAULT NULL AFTER `sample_type`;
 ALTER TABLE `form_hepatitis` ADD `imported_date_time` DATETIME NULL DEFAULT NULL AFTER `import_machine_file_name`;
+
+-- Thana 26-Mar-2021
+ALTER TABLE `eid_form` ADD `source_of_request` VARCHAR(50) NULL DEFAULT NULL AFTER `lot_number`;
+ALTER TABLE `vl_request_form` ADD `source_of_request` VARCHAR(50) NULL DEFAULT NULL AFTER `vldash_sync`;
