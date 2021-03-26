@@ -50,12 +50,9 @@ try {
                     'control_type' => $rResult[0]['sample_type'],
                     'lot_number' => $rResult[0]['lot_number'],
                     'lot_expiration_date' => $rResult[0]['lot_expiration_date'],
-                    'sample_tested_datetime' => $rResult[0]['sample_tested_datetime'],
-                    //'is_sample_rejected'=>'yes',
-                    //'reason_for_sample_rejection'=>$rResult[0]['reason_for_sample_rejection'],
+                    'sample_tested_datetime'        => !empty($rResult[0]['sample_tested_datetime']) ? $rResult[0]['sample_tested_datetime'] : $general->getDateTime(),
                     'result' => $rResult[0]['result'],
                     'tested_by' => $_POST['testBy'],
-                    'sample_tested_datetime' => $general->getDateTime(),
                     'approver_comments' => $comments,
                     'result_reviewed_by' => $rResult[0]['result_reviewed_by'],
                     'result_reviewed_datetime' => $general->getDateTime(),
@@ -88,11 +85,6 @@ try {
             } else {
 
                 $data = array(
-
-                    //'sample_received_at_vl_lab_datetime' => $rResult[0]['sample_received_at_vl_lab_datetime'],
-                    //'sample_tested_datetime'=>$rResult[0]['sample_tested_datetime'],
-                    //'result_dispatched_datetime' => $rResult[0]['result_dispatched_datetime'],
-                    //'result_reviewed_datetime' => $rResult[0]['result_reviewed_datetime'],
                     'result_reviewed_by' => $_POST['reviewedBy'],
                     'eid_test_platform' => $rResult[0]['vl_test_platform'],
                     'import_machine_name' => $rResult[0]['import_machine_name'],

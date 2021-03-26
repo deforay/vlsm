@@ -11,11 +11,8 @@ $vlTestReasonTable = "r_vl_test_reasons";
 $fDetails = "facility_details";
 $vl_result_category = NULL;
 try {
-    if(isset($_POST['api']) && $_POST['api'] = "yes")
-	{
-	}
-	else
-	{
+    if (isset($_POST['api']) && $_POST['api'] = "yes") {
+    } else {
         $validateField = array($_POST['sampleCode'], $_POST['sampleCollectionDate']);
         $chkValidation = $general->checkMandatoryFields($validateField);
         if ($chkValidation) {
@@ -49,7 +46,7 @@ try {
             $db->insert('province_details', array('province_name' => $splitProvince[0], 'province_code' => $splitProvince[1]));
         }
     }
-    if($_POST['hl7'] != "yes"){
+    if ($_POST['hl7'] != "yes") {
         if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != "") {
             $sampleDate = explode(" ", $_POST['sampleCollectionDate']);
             $_POST['sampleCollectionDate'] = $general->dateFormat($sampleDate[0]) . " " . $sampleDate[1];
@@ -113,14 +110,14 @@ try {
     }
 
     if (empty($instanceId) && $_POST['instanceId']) {
-		$instanceId = $_POST['instanceId'];
-	}
+        $instanceId = $_POST['instanceId'];
+    }
     $testingPlatform = '';
     if (isset($_POST['testingPlatform']) && trim($_POST['testingPlatform']) != '') {
         $platForm = explode("##", $_POST['testingPlatform']);
         $testingPlatform = $platForm[0];
     }
-    if($_POST['hl7'] != "yes"){
+    if ($_POST['hl7'] != "yes") {
         if (isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate']) != "") {
             $sampleReceivedDateLab = explode(" ", $_POST['sampleReceivedDate']);
             $_POST['sampleReceivedDate'] = $general->dateFormat($sampleReceivedDateLab[0]) . " " . $sampleReceivedDateLab[1];
@@ -139,7 +136,7 @@ try {
         $sampleReceivedAtHubOn = explode(" ", $_POST['sampleReceivedAtHubOn']);
         $_POST['sampleReceivedAtHubOn'] = $general->dateFormat($sampleReceivedAtHubOn[0]) . " " . $sampleReceivedAtHubOn[1];
     } else {
-            $_POST['sampleReceivedAtHubOn'] = NULL;
+        $_POST['sampleReceivedAtHubOn'] = NULL;
     }
 
     if (isset($_POST['sampleReceivedAtHubOn']) && trim($_POST['sampleReceivedAtHubOn']) != "") {
@@ -148,7 +145,7 @@ try {
     } else {
         $_POST['sampleReceivedAtHubOn'] = NULL;
     }
-    
+
     if (isset($_POST['approvedOnDateTime']) && trim($_POST['approvedOnDateTime']) != "") {
         $approvedOnDateTime = explode(" ", $_POST['approvedOnDateTime']);
         $_POST['approvedOnDateTime'] = $general->dateFormat($approvedOnDateTime[0]) . " " . $approvedOnDateTime[1];
@@ -297,17 +294,12 @@ try {
         $vldata['locked'] = 'yes';
     }
 
-    if(isset($_POST['api']) && $_POST['api'] = "yes")
-	{
-
-	}
-	else
-	{
-		$vldata['request_created_by'] =  $_SESSION['userId'];
-		$vldata['last_modified_by'] =  $_SESSION['userId'];
+    if (isset($_POST['api']) && $_POST['api'] = "yes") {
+    } else {
+        $vldata['request_created_by'] =  $_SESSION['userId'];
+        $vldata['last_modified_by'] =  $_SESSION['userId'];
     }
-    if(!isset($_POST['patientFirstName']) || $_POST['patientFirstName'] !='')
-        $_POST['patientFirstName'] = '';
+
     $vldata['patient_first_name'] = $general->crypto('encrypt', $_POST['patientFirstName'], $vldata['patient_art_no']);
     $id = 0;
     // echo "<pre>";print_r($vldata);die;
@@ -348,19 +340,19 @@ try {
         $id = $db->insert($tableName, $vldata);
     }
     if (!empty($_POST['api']) && $_POST['api'] = "yes") {
-		if($_POST['hl7'] == "yes"){
-			return $id;
-		} else{
-			$payload = array(
-				'status' => 'success',
-				'timestamp' => time(),
-				'message' => 'Successfully added.'
-			);
-			http_response_code(200);
-			echo json_encode($payload);
-			exit(0);
-		}
-	}else{
+        if ($_POST['hl7'] == "yes") {
+            return $id;
+        } else {
+            $payload = array(
+                'status' => 'success',
+                'timestamp' => time(),
+                'message' => 'Successfully added.'
+            );
+            http_response_code(200);
+            echo json_encode($payload);
+            exit(0);
+        }
+    } else {
         if ($id > 0) {
             $_SESSION['alertMsg'] = "VL request added successfully";
             //Add event log

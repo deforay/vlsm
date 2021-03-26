@@ -40,7 +40,7 @@ try {
                     'control_type'                  => $rResult[0]['sample_type'],
                     'lot_number'                    => $rResult[0]['lot_number'],
                     'lot_expiration_date'           => $rResult[0]['lot_expiration_date'],
-                    'sample_tested_datetime'        => $rResult[0]['sample_tested_datetime'],
+                    'sample_tested_datetime'        => !empty($rResult[0]['sample_tested_datetime']) ? $rResult[0]['sample_tested_datetime'] : $general->getDateTime(),
                     //'is_sample_rejected'=>'yes',
                     //'reason_for_sample_rejection'=>$rResult[0]['reason_for_sample_rejection'],
                     'result_value_log'              => $rResult[0]['result_value_log'],
@@ -49,7 +49,6 @@ try {
                     'result_value_absolute_decimal' => $rResult[0]['result_value_absolute_decimal'],
                     'result'                        => $rResult[0]['result'],
                     'tested_by'                     => $_POST['testBy'],
-                    'sample_tested_datetime'        => $general->getDateTime(),
                     'approver_comments'             => $comments,
                     'result_reviewed_by'            => $rResult[0]['result_reviewed_by'],
                     'result_reviewed_datetime'      => $general->getDateTime(),
@@ -85,11 +84,6 @@ try {
             } else {
 
                 $data = array(
-                    //'lab_name' => $rResult[0]['lab_name'],
-                    //'lab_contact_person' => $rResult[0]['lab_contact_person'],
-                    //'lab_phone_number' => $rResult[0]['lab_phone_number'],
-                    //'sample_received_at_vl_lab_datetime' => $rResult[0]['sample_received_at_vl_lab_datetime'],
-                    //'sample_tested_datetime'=>$rResult[0]['sample_tested_datetime'],
                     'result_reviewed_datetime' => $rResult[0]['result_reviewed_datetime'],
                     'result_reviewed_by' => $_POST['reviewedBy'],
                     'vl_test_platform' => $rResult[0]['vl_test_platform'],
