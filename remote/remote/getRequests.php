@@ -3,8 +3,6 @@
 $data = json_decode(file_get_contents('php://input'), true);
 include(dirname(__FILE__) . "/../../startup.php");
 
-
-
 $labId = $data['labName'];
 
 if (empty($labId)) {

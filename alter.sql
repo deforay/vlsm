@@ -2091,3 +2091,14 @@ ALTER TABLE `form_hepatitis` ADD `tested_by` VARCHAR(255) NULL DEFAULT NULL AFTE
 
 -- Thanaseelan 23-Mar-2021
 ALTER TABLE `form_covid19` ADD `source_of_request` VARCHAR(255) NULL DEFAULT NULL AFTER `lot_number`;
+
+
+
+INSERT INTO `resources` (`resource_id`, `module`, `display_name`) VALUES ('import-results', 'common', 'Import Results using file Import');
+
+UPDATE `privileges` SET `resource_id` = 'import-results', `display_name` = 'Import Results from File' WHERE `privileges`.`privilege_id` = 19; 
+
+-- Amit 26-Mar-2021
+
+ALTER TABLE `temp_sample_import` ADD `test_type` VARCHAR(255) NULL DEFAULT NULL AFTER `sample_type`;
+ALTER TABLE `form_hepatitis` ADD `imported_date_time` DATETIME NULL DEFAULT NULL AFTER `import_machine_file_name`;

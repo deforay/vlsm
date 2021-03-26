@@ -5,7 +5,7 @@ if (session_status() == PHP_SESSION_NONE) {
 #require_once('../../startup.php');
 
 
-$formConfigQuery = "SELECT * from global_config where name='vl_form'";
+$formConfigQuery = "SELECT * FROM `global_config` WHERE `name`='vl_form'";
 $configResult = $db->query($formConfigQuery);
 $arr = array();
 // now we create an associative array so that we can easily create view variables
@@ -13,7 +13,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
     $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
 //system config
-$systemConfigQuery = "SELECT * FROM system_config";
+$systemConfigQuery = "SELECT * FROM `system_config`";
 $systemConfigResult = $db->query($systemConfigQuery);
 $sarr = array();
 // now we create an associative array so that we can easily create view variables
@@ -24,7 +24,7 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
 $general = new \Vlsm\Models\General($db);
 $hepatitisDb = new \Vlsm\Models\Hepatitis($db);
 
-$hepatitisResults = $hepatitisDb->getHepatitisResults();
+//$hepatitisResults = $hepatitisDb->getHepatitisResults();
 
 $tableName = "form_hepatitis";
 $primaryKey = "hepatitis_id";
