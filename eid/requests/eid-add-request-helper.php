@@ -73,8 +73,12 @@ try {
 	}
 
 	if (isset($_POST['childDob']) && trim($_POST['childDob']) != "") {
-		$childDob = explode(" ", $_POST['childDob']);
-		$_POST['childDob'] = $general->dateFormat($childDob[0]) . " " . $childDob[1];
+		if($_POST['hl7'] == "yes"){
+			
+		}else{
+			$childDob = explode(" ", $_POST['childDob']);
+			$_POST['childDob'] = $general->dateFormat($childDob[0]) . " " . $childDob[1];
+		}
 	} else {
 		$_POST['childDob'] = NULL;
 	}
@@ -215,7 +219,7 @@ try {
 	}
 
 	// echo "<pre>";
-	// print_r($eidData);die;
+	// print_r($_POST);die;
 
 	if (isset($_POST['eidSampleId']) && $_POST['eidSampleId'] != '') {
 		$db = $db->where('eid_id', $_POST['eidSampleId']);
