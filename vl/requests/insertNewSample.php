@@ -112,10 +112,8 @@ if($rowData){
     }
 }
 
-if($_POST['hl7'] != "yes"){
-    if ($id > 0) {
-        echo $id;
-    } else {
-        echo 0;
-    }
+if ($id > 0) {
+    echo $id;
+} else {
+    echo 0;
 }

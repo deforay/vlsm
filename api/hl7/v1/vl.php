@@ -204,7 +204,7 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
     http_response_code(200);
 }
 
-if ($type[1] == 'REQ') {
+if ($type[1] == 'REQ' || $type[1] == 'UPI') {
     /* MSH Information */
     if ($msg->hasSegment('MSH')) {
         $msh = $msg->getSegmentByIndex(0);
@@ -309,22 +309,21 @@ if ($type[1] == 'REQ') {
     $provinceId = (isset($_POST['provinceId']) && !empty($_POST['provinceId'])) ? $_POST['provinceId'] : null;
     $sampleCollectionDate = (isset($_POST['sampleCollectionDate']) && !empty($_POST['sampleCollectionDate'])) ? $_POST['sampleCollectionDate'] : null;
 
-    if($_POST['sampleCode'] != "" && !empty($_POST['sampleCode'])){
-        $sQuery = "SELECT vl_sample_id, sample_code, sample_code_format, sample_code_key, remote_sample_code, remote_sample_code_format, remote_sample_code_key FROM vl_request_form where sample_code like '%".$_POST['sampleCode']."%' or remote_sample_code like '%".$_POST['sampleCode']."%' limit 1";
-        // die($sQuery);
-        $vlDublicateData = $db->rawQueryOne($sQuery);
-        if($vlDublicateData){
-            $sampleData['sampleCode'] = (!empty($vlDublicateData['sample_code']))?$vlDublicateData['sample_code']:$vlDublicateData['remote_sample_code'];
-            $sampleData['sampleCodeFormat'] = (!empty($vlDublicateData['sample_code_format']))?$vlDublicateData['sample_code_format']:$vlDublicateData['remote_sample_code_format'];
-            $sampleData['sampleCodeKey'] = (!empty($vlDublicateData['sample_code_key']))?$vlDublicateData['sample_code_key']:$vlDublicateData['remote_sample_code_key'];
-        }else{
-            $sampleJson = $vlModel->generateVLSampleID($provinceCode, $sampleCollectionDate, null, $provinceId);
-            $sampleData = json_decode($sampleJson, true);
-        }
+    $sQuery = "SELECT vl_sample_id, sample_code, sample_code_format, sample_code_key, remote_sample_code, remote_sample_code_format, remote_sample_code_key FROM vl_request_form 
+                where 
+                    (sample_code like '%".$_POST['sampleCode']."%' or remote_sample_code like '%".$_POST['sampleCode']."%')
+                    AND (patient_art_no like '%".$_POST['artNo']."%' AND patient_dob like '%".$_POST['dob']."%' AND patient_gender like '%".$_POST['gender']."%') limit 1";
+    // die($sQuery);
+    $vlDublicateData = $db->rawQueryOne($sQuery);
+    if($vlDublicateData){
+        $sampleData['sampleCode'] = (!empty($vlDublicateData['sample_code']))?$vlDublicateData['sample_code']:$vlDublicateData['remote_sample_code'];
+        $sampleData['sampleCodeFormat'] = (!empty($vlDublicateData['sample_code_format']))?$vlDublicateData['sample_code_format']:$vlDublicateData['remote_sample_code_format'];
+        $sampleData['sampleCodeKey'] = (!empty($vlDublicateData['sample_code_key']))?$vlDublicateData['sample_code_key']:$vlDublicateData['remote_sample_code_key'];
     }else{
         $sampleJson = $vlModel->generateVLSampleID($provinceCode, $sampleCollectionDate, null, $provinceId);
         $sampleData = json_decode($sampleJson, true);
     }
+    
     $vlData = array(
         'vlsm_country_id' => $_POST['countryId'],
         'sample_collection_date' => $_POST['sampleCollectionDate'],
@@ -358,7 +357,7 @@ if ($type[1] == 'REQ') {
         $id = $db->insert("vl_request_form", $vlData);
         $_POST['vlSampleId'] = $id;
     }
-    // print_r($_POST);die;
+    // print_r($vlData);die;
     if(isset($vlData) && count($vlData) > 0){
         $tableName = "vl_request_form";
         $tableName1 = "activity_log";
@@ -441,6 +440,7 @@ if ($type[1] == 'REQ') {
         if ($lock == 'yes' && $status == 7) {
             $vldata['locked'] = 'yes';
         }
+        $vldata['source_of_request'] = 'hl7';
         if (isset($_POST['vlSampleId']) && $_POST['vlSampleId'] != '') {
             $db = $db->where('vl_sample_id', $_POST['vlSampleId']);
             $id = $db->update($tableName, $vldata);
@@ -482,5 +482,6 @@ if ($type[1] == 'REQ') {
         $ack = new ACK($msg, $msh);
         $returnString = $ack->toString(true);
         echo $returnString;
+        unset($ack);
     }
 }

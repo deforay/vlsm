@@ -229,7 +229,7 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
     http_response_code(200);
 }
 
-if ($type[1] == 'REQ') {
+if ($type[1] == 'REQ' || $type[1] == 'UPI') {
     $msg = new Message($hl7Msg);
     /* MSH Information */
     if ($msg->hasSegment('MSH')) {
@@ -371,23 +371,20 @@ if ($type[1] == 'REQ') {
     $sampleCollectionDate = (isset($_POST['sampleCollectionDate']) && !empty($_POST['sampleCollectionDate'])) ? $_POST['sampleCollectionDate'] : null;
     
     $c19DublicateData = false;
-    if($_POST['sampleCode'] != "" && !empty($_POST['sampleCode'])){
-        $sQuery = "SELECT covid19_id, sample_code, sample_code_format, sample_code_key, remote_sample_code, remote_sample_code_format, remote_sample_code_key FROM form_covid19 where sample_code like '%".$_POST['sampleCode']."%' or remote_sample_code like '%".$_POST['sampleCode']."%' limit 1";
-        // die($sQuery);
-        $c19DublicateData = $db->rawQueryOne($sQuery);
-        if($c19DublicateData){
-            $sampleData['sampleCode'] = (!empty($c19DublicateData['sample_code']))?$c19DublicateData['sample_code']:$c19DublicateData['remote_sample_code'];
-            $sampleData['sampleCodeFormat'] = (!empty($c19DublicateData['sample_code_format']))?$c19DublicateData['sample_code_format']:$c19DublicateData['remote_sample_code_format'];
-            $sampleData['sampleCodeKey'] = (!empty($c19DublicateData['sample_code_key']))?$c19DublicateData['sample_code_key']:$c19DublicateData['remote_sample_code_key'];
-        }else{
-            $sampleJson = $covid19Model->generateCovid19SampleCode($provinceCode, $sampleCollectionDate, null, $provinceId);
-            $sampleData = json_decode($sampleJson, true);
-        }
-    } else{
+    $sQuery = "SELECT covid19_id, sample_code, sample_code_format, sample_code_key, remote_sample_code, remote_sample_code_format, remote_sample_code_key FROM form_covid19 
+                where 
+                    (sample_code like '%".$_POST['sampleCode']."%' or remote_sample_code like '%".$_POST['sampleCode']."%')
+                    AND (patient_id like '%".$_POST['patientId']."%' AND patient_dob like '%".$_POST['patientDob']."%' AND patient_gender like '%".$_POST['patientGender']."%' AND patient_district like '%".$_POST['patientDistrict']."%') limit 1";
+    // die($sQuery);
+    $c19DublicateData = $db->rawQueryOne($sQuery);
+    if($c19DublicateData){
+        $sampleData['sampleCode'] = (!empty($c19DublicateData['sample_code']))?$c19DublicateData['sample_code']:$c19DublicateData['remote_sample_code'];
+        $sampleData['sampleCodeFormat'] = (!empty($c19DublicateData['sample_code_format']))?$c19DublicateData['sample_code_format']:$c19DublicateData['remote_sample_code_format'];
+        $sampleData['sampleCodeKey'] = (!empty($c19DublicateData['sample_code_key']))?$c19DublicateData['sample_code_key']:$c19DublicateData['remote_sample_code_key'];
+    }else{
         $sampleJson = $covid19Model->generateCovid19SampleCode($provinceCode, $sampleCollectionDate, null, $provinceId);
         $sampleData = json_decode($sampleJson, true);
     }
-   
     if(!isset($_POST['countryId']) || $_POST['countryId'] =='')
         $_POST['countryId'] = '';
     $covid19Data = array(
@@ -517,6 +514,7 @@ if ($type[1] == 'REQ') {
         if ($status == 7 && $lock == 'yes') {
             $covid19Data['locked'] = 'yes';
         }
+        $covid19Data['source_of_request'] = 'hl7';
         $id = 0;
 	    $covid19Data['source_of_request'] = 'hl7';
         if (!empty($_POST['covid19SampleId'])) {
@@ -534,17 +532,5 @@ if ($type[1] == 'REQ') {
         $returnString = $ack->toString(true);
         echo $returnString;
         unset($ack);
-        /* if (strpos($returnString, 'MSH') === false) {
-                echo "Failed to send HL7 to 'IP' => $ip, 'Port' => $port";
-            }
-            $msa = $ack->getSegmentsByName('MSA')[0];
-            $ackCode = $msa->getAcknowledgementCode();
-            print_r($ackCode);die;
-            if ($ackCode === 'A') {
-                echo "Recieved ACK from remote\n";
-            } else {
-                echo "Recieved NACK from remote\n";
-                echo "Error text: " . $msa->getTextMessage();
-            } */
     }
 }
