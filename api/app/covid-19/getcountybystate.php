@@ -5,9 +5,9 @@ require_once('../../../startup.php');
 
 $general = new \Vlsm\Models\General($db);
 $input = json_decode(file_get_contents("php://input"),true);
-$queryParams = array($input['apiToken'], $input['userId']);
+$queryParams = array($input['authToken'], $input['userId']);
 $admin = $db->rawQuery("SELECT user_id,user_name,phone_number,login_id,status FROM user_details as ud WHERE ud.api_token = ? AND ud.user_id = ? ", $queryParams);
-if (isset($input['apiToken']) && !empty($input['apiToken']) && isset($input['userId']) && !empty($input['userId']) && isset($input['province']) && !empty($input['province'])) {
+if (isset($input['authToken']) && !empty($input['authToken']) && isset($input['userId']) && !empty($input['userId']) && isset($input['province']) && !empty($input['province'])) {
     if(count($admin) > 0)
     {
         $data = array();
