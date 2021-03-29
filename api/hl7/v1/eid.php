@@ -6,6 +6,7 @@ use Aranyasen\HL7\Segments\PID;
 use Aranyasen\HL7\Segments\OBX;
 use Aranyasen\HL7\Messages\ACK;
 use Aranyasen\HL7\Segments\MSH;
+use Aranyasen\HL7\Segments\MSA;
 
 $eidModel = new \Vlsm\Models\Eid($db);
 
@@ -46,17 +47,19 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
             LEFT JOIN r_eid_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection 
             LEFT JOIN r_funding_sources as r_f_s ON r_f_s.funding_source_id=vl.funding_source 
             LEFT JOIN r_implementation_partners as r_i_p ON r_i_p.i_partner_id=vl.implementing_partner";
-
-if (!empty($search[1])) {
+    $where = "";
+    if (!empty($search[1])) {
         $date = $search[1];
-        if(isset($where) && count($where) != ""){
+        if(isset($where) && trim($where) != ""){
+            $where .= " AND ";
+        } else{
             $where .= " WHERE ";
         }
         $where .= "(DATE(sample_collection_date) between '$date[0]' AND '$date[1]')";
     }
 
     if (!empty($search[2])) {
-        if(isset($where) && count($where) != ""){
+        if(isset($where) && trim($where) != ""){
             $where .= " AND ";
         } else{
             $where .= " WHERE ";
@@ -66,7 +69,7 @@ if (!empty($search[1])) {
     }
 
     if (!empty($search[3])) {
-        if(isset($where) && count($where) != ""){
+        if(isset($where) && trim($where) != ""){
             $where .= " AND ";
         } else{
             $where .= " WHERE ";
@@ -76,7 +79,7 @@ if (!empty($search[1])) {
     }
 
     if (!empty($search[4])) {
-        if(isset($where) && count($where) != ""){
+        if(isset($where) && trim($where) != ""){
             $where .= " AND ";
         } else{
             $where .= " WHERE ";
@@ -86,7 +89,7 @@ if (!empty($search[1])) {
     }
 
     if (!empty($search[5])) {
-        if(isset($where) && count($where) != ""){
+        if(isset($where) && trim($where) != ""){
             $where .= " AND ";
         } else{
             $where .= " WHERE ";
@@ -95,7 +98,7 @@ if (!empty($search[1])) {
     }
 
     if (!empty($search[6]) && $search[6] == "yes") {
-        if(isset($where) && count($where) != ""){
+        if(isset($where) && trim($where) != ""){
             $where .= " AND ";
         } else{
             $where .= " WHERE ";
@@ -103,7 +106,7 @@ if (!empty($search[1])) {
         $where .= " (vl.sample_tested_datetime != null AND vl.sample_tested_datetime not like '') ";
     }
     if (!empty($search[7]) && $search[7] != "") {
-        if(isset($where) && count($where) != ""){
+        if(isset($where) && trim($where) != ""){
             $where .= " AND ";
         } else{
             $where .= " WHERE ";
@@ -111,7 +114,7 @@ if (!empty($search[1])) {
         $where .= " (vl.sample_code like '".$search[7]."%' OR vl.remote_sample_code like '".$search[7]."%') ";
     }
     if($type[1] == 'QRY'){
-        if(isset($where) && count($where) != ""){
+        if(isset($where) && trim($where) != ""){
             $where .= " AND ";
         } else{
             $where .= " WHERE ";
@@ -122,78 +125,90 @@ if (!empty($search[1])) {
     $sQuery .= $where;
     // die($sQuery);
     $rowData = $db->rawQuery($sQuery);
-    foreach ($rowData as $row) {
-        /* MSH Information */
-        $msh = new MSH();
-        $msh->setSendingFacility($row['facility_name']);
-        $msh->setReceivingApplication("VLSM");
-        $msh->setReceivingFacility($row['labName']);
-        /* Patient Information */
-        $check = (in_array($row['child_gender'], array("female", "male", "other"))) ? $row['child_gender'] : "other";
-        $sex = strtoupper(substr($check, 0, 1));
-        $pid = new PID();
-        $pid->setPatientID($row['child_id']);
-        $pid->setPatientName($row['child_name']);
-        $pid->setMothersMaidenName($row['mother_name']);
-        $pid->setDateTimeOfBirth($row['child_dob']);
-        $pid->setSex($sex);
-        $pid->setPhoneNumberHome($row['caretaker_address']);
-        $msg->setSegment($pid, 1);
-        /* Sample Information */
-        $spm = new Segment('SPM');
-        $spm->setField(2, $row['sample_code']);
-        $spm->setField(4, $row['sample_name']);
-        $spm->setField(10, $row['facility_name']);
-        $spm->setField(17, $row['sample_collection_date']);
-        $spm->setField(18, $row['sample_received_at_vl_lab_datetime']);
-        $spm->setField(21, $row['rejection_reason_name']);
-        $msg->setSegment($spm, 2);
-        /* OBR Section */
-        $obr = new Segment('OBR');
-        $obr->setField(6, $row['request_created_datetime']);
-        $obr->setField(10, ['COLLECT', $row['reqCreatedBy']]);
-        $obr->setField(14, $row['sample_received_at_hub_datetime']);
-        $obr->setField(15, $row['funding_source_name']);
-        $obr->setField(16, ['', '', $row['i_partner_name'], '', '', '']);
-        $obr->setField(25, $row['status_name']);
-        $obr->setField(26, $row['result']);
-        $obr->setField(33, [$row['sample_requestor_name'], '']);
-        $msg->setSegment($obr, 3);
-        /* Patient Custom Fields Information Details */
-        $zpi = new Segment('ZPI');
-        $zpi->setField(1, $row['child_age']);
-        $zpi->setField(2, $row['child_treatment']);
-        $zpi->setField(3, $row['mother_id']);
-        $msg->setSegment($zpi, 4);
-        /* Infant and Mother's Health Information Details */
-        $zim = new Segment('ZIM');
-        $zim->setField(1, $row['mother_hiv_status']);
-        $zim->setField(2, $row['mother_treatment']);
-        $zim->setField(3, $row['mother_treatment_initiation_date']);
-        $zim->setField(4, $row['rapid_test_performed']);
-        $zim->setField(5, $row['rapid_test_date']);
-        $zim->setField(6, $row['rapid_test_result']);
-        $zim->setField(7, $row['has_infant_stopped_breastfeeding']);
-        $zim->setField(8, $row['age_breastfeeding_stopped_in_months']);
-        $zim->setField(9, $row['pcr_test_performed_before']);
-        $zim->setField(10, $row['previous_pcr_result']);
-        $zim->setField(11, $row['last_pcr_date']);
-        $zim->setField(12, $row['reason_for_pcr']);
-        $msg->setSegment($zim, 5);
-        /*  System Variables Details */
-        $zsv = new Segment('ZSV');
-        $zsv->setField(2, $row['approvedBy']);
-        $zsv->setField(3, $row['result_approved_datetime']);
-        $msg->setSegment($zsv, 6);
-        /*  Observation Details */
-        $obx = new OBX;
-        $obx->setObservationValue($row['result']);
-        $msg->setSegment($obx, 7);
+    if($rowData && count($rowData) > 0){
 
-        $hl7Data .= $msg->toString(true);
+        foreach ($rowData as $row) {
+            /* MSH Information */
+            $msh = new MSH();
+            $msh->setSendingFacility($row['facility_name']);
+            $msh->setReceivingApplication("VLSM");
+            $msh->setReceivingFacility($row['labName']);
+            /* Patient Information */
+            $check = (in_array($row['child_gender'], array("female", "male", "other"))) ? $row['child_gender'] : "other";
+            $sex = strtoupper(substr($check, 0, 1));
+            $pid = new PID();
+            $pid->setPatientID($row['child_id']);
+            $pid->setPatientName($row['child_name']);
+            $pid->setMothersMaidenName($row['mother_name']);
+            $pid->setDateTimeOfBirth($row['child_dob']);
+            $pid->setSex($sex);
+            $pid->setPhoneNumberHome($row['caretaker_address']);
+            $msg->setSegment($pid, 1);
+            /* Sample Information */
+            $spm = new Segment('SPM');
+            $spm->setField(2, $row['sample_code']);
+            $spm->setField(4, $row['sample_name']);
+            $spm->setField(10, $row['facility_name']);
+            $spm->setField(17, $row['sample_collection_date']);
+            $spm->setField(18, $row['sample_received_at_vl_lab_datetime']);
+            $spm->setField(21, $row['rejection_reason_name']);
+            $msg->setSegment($spm, 2);
+            /* OBR Section */
+            $obr = new Segment('OBR');
+            $obr->setField(6, $row['request_created_datetime']);
+            $obr->setField(10, ['COLLECT', $row['reqCreatedBy']]);
+            $obr->setField(14, $row['sample_received_at_hub_datetime']);
+            $obr->setField(15, $row['funding_source_name']);
+            $obr->setField(16, ['', '', $row['i_partner_name'], '', '', '']);
+            $obr->setField(25, $row['status_name']);
+            $obr->setField(26, $row['result']);
+            $obr->setField(33, [$row['sample_requestor_name'], '']);
+            $msg->setSegment($obr, 3);
+            /* Patient Custom Fields Information Details */
+            $zpi = new Segment('ZPI');
+            $zpi->setField(1, $row['child_age']);
+            $zpi->setField(2, $row['child_treatment']);
+            $zpi->setField(3, $row['mother_id']);
+            $msg->setSegment($zpi, 4);
+            /* Infant and Mother's Health Information Details */
+            $zim = new Segment('ZIM');
+            $zim->setField(1, $row['mother_hiv_status']);
+            $zim->setField(2, $row['mother_treatment']);
+            $zim->setField(3, $row['mother_treatment_initiation_date']);
+            $zim->setField(4, $row['rapid_test_performed']);
+            $zim->setField(5, $row['rapid_test_date']);
+            $zim->setField(6, $row['rapid_test_result']);
+            $zim->setField(7, $row['has_infant_stopped_breastfeeding']);
+            $zim->setField(8, $row['age_breastfeeding_stopped_in_months']);
+            $zim->setField(9, $row['pcr_test_performed_before']);
+            $zim->setField(10, $row['previous_pcr_result']);
+            $zim->setField(11, $row['last_pcr_date']);
+            $zim->setField(12, $row['reason_for_pcr']);
+            $msg->setSegment($zim, 5);
+            /*  System Variables Details */
+            $zsv = new Segment('ZSV');
+            $zsv->setField(2, $row['approvedBy']);
+            $zsv->setField(3, $row['result_approved_datetime']);
+            $msg->setSegment($zsv, 6);
+            /*  Observation Details */
+            $obx = new OBX;
+            $obx->setObservationValue($row['result']);
+            $msg->setSegment($obx, 7);
+    
+            $hl7Data .= $msg->toString(true);
+            echo $hl7Data;die;
+        }
+        // http_response_code(200);
+    } else{
+        $msh = new MSH();
+        $msh->setMessageType(["EID", "RES"]);
+        $ack = new ACK($msg, $msh);
+        $ack->setAckCode('AR', "Data not found");
+        $returnString = $ack->toString(true);
+        echo $returnString;
+        // http_response_code(204);
+        unset($ack);
     }
-    echo $hl7Data;die;
-    http_response_code(200);
 }
  
 if ($type[1] == 'REQ' || $type[1] == 'UPI') {
@@ -451,10 +466,10 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
         }
         $msh = new MSH();
         $msh->setMessageType(["EID", "REQ"]);
-        // $msh->setField(20, $sampleCode);
         $ack = new ACK($msg, $msh, [$sampleCode]);
         $returnString = $ack->toString(true);
         echo $returnString;
         unset($ack);
+        http_response_code(201);
     }
 }

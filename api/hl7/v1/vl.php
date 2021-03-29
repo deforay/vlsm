@@ -50,10 +50,10 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
             LEFT JOIN r_vl_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection 
             LEFT JOIN r_funding_sources as r_f_s ON r_f_s.funding_source_id=vl.funding_source 
             LEFT JOIN r_implementation_partners as r_i_p ON r_i_p.i_partner_id=vl.implementing_partner";
-
+    $where = "";
     if (!empty($search[1])) {
         $date = $search[1];
-        if(isset($where) && count($where) != ""){
+        if(isset($where) && trim($where) != ""){
             $where .= " AND ";
         } else{
             $where .= " WHERE ";
@@ -62,7 +62,7 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
     }
 
     if (!empty($search[2])) {
-        if(isset($where) && count($where) != ""){
+        if(isset($where) && trim($where) != ""){
             $where .= " AND ";
         } else{
             $where .= " WHERE ";
@@ -72,7 +72,7 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
     }
 
     if (!empty($search[3])) {
-        if(isset($where) && count($where) != ""){
+        if(isset($where) && trim($where) != ""){
             $where .= " AND ";
         } else{
             $where .= " WHERE ";
@@ -82,7 +82,7 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
     }
 
     if (!empty($search[4])) {
-        if(isset($where) && count($where) != ""){
+        if(isset($where) && trim($where) != ""){
             $where .= " AND ";
         } else{
             $where .= " WHERE ";
@@ -92,7 +92,7 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
     }
 
     if (!empty($search[5])) {
-        if(isset($where) && count($where) != ""){
+        if(isset($where) && trim($where) != ""){
             $where .= " AND ";
         } else{
             $where .= " WHERE ";
@@ -101,7 +101,7 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
     }
 
     if (!empty($search[6]) && $search[6] == "yes") {
-        if(isset($where) && count($where) != ""){
+        if(isset($where) && trim($where) != ""){
             $where .= " AND ";
         } else{
             $where .= " WHERE ";
@@ -109,7 +109,7 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
         $where .= " (vl.sample_tested_datetime != null AND vl.sample_tested_datetime not like '') ";
     } 
     if (!empty($search[7]) && $search[7] != "") {
-        if(isset($where) && count($where) != ""){
+        if(isset($where) && trim($where) != ""){
             $where .= " AND ";
         } else{
             $where .= " WHERE ";
@@ -117,7 +117,7 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
         $where .= " (vl.sample_code like '".$search[7]."%' OR vl.remote_sample_code like '".$search[7]."%') ";
     }
     if($type[1] == 'QRY'){
-        if(isset($where) && count($where) != ""){
+        if(isset($where) && trim($where) != ""){
             $where .= " AND ";
         } else{
             $where .= " WHERE ";
@@ -128,80 +128,92 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
     $sQuery .= $where;
     // die($sQuery);
     $rowData = $db->rawQuery($sQuery);
-    foreach ($rowData as $row) {
-        /* MSH Information */
-        $msh = new MSH();
-        $msh->setSendingFacility($row['facility_name']);
-        $msh->setReceivingApplication("VLSM");
-        $msh->setReceivingFacility($row['labName']);
-        /* Patient Information */
-        $check = (in_array($row['patient_gender'], array("female", "male", "other"))) ? $row['patient_gender'] : "other";
-        $sex = strtoupper(substr($check, 0, 1));
-        $pid = new PID();
-        $pid->setPatientID($row['patient_art_no']);
-        $pid->setPatientName([$row['patient_first_name'], $row['patient_last_name']]);
-        // $pid->setMothersMaidenName($row['patient_last_name']);
-        $pid->setDateTimeOfBirth($row['patient_dob']);
-        $pid->setSex($sex);
-        $pid->setPhoneNumberHome($row['patient_mobile_number']);
-        $msg->setSegment($pid, 1);
-        /* Sample Information */
-        $spm = new Segment('SPM');
-        $spm->setField(2, $row['sample_code']);
-        $spm->setField(4, $row['sample_name']);
-        $spm->setField(10, $row['facility_name']);
-        $spm->setField(17, $row['sample_collection_date']);
-        $spm->setField(18, $row['sample_received_at_vl_lab_datetime']);
-        $spm->setField(21, $row['test_reason_name']);
-        // $spm->setField(24, $row['treatment_initiated_date']);
-        $msg->setSegment($spm, 2);
-        /* OBR Section */
-        $obr = new Segment('OBR');
-        $obr->setField(6, $row['request_created_datetime']);
-        $obr->setField(9, $row['result_value_absolute']);
-        $obr->setField(10, ['COLLECT', $row['reqCreatedBy']]);
-        $obr->setField(14, $row['sample_received_at_hub_datetime']);
-        $obr->setField(15, $row['funding_source_name']);
-        $obr->setField(16, ['', '', $row['i_partner_name'], '', '', '']);
-        $obr->setField(25, $row['status_name']);
-        $obr->setField(26, $row['result']);
-        $msg->setSegment($obr, 3);
-        /* Patient Custom Fields Information Details */
-        $zpi = new Segment('ZPI');
-        $zpi->setField(1, $row['patient_age_in_years']);
-        $zpi->setField(2, $row['patient_age_in_months']);
-        $zpi->setField(3, $row['is_patient_pregnant']);
-        $zpi->setField(4, $row['is_patient_breastfeeding']);
-        $msg->setSegment($zpi, 4);
-        /* Indication for VL Testing Information Details */
-        $zai = new Segment('ZIT');
-        $zpi->setField(1, $row['current_regimen']);
-        $zpi->setField(2, $row['date_of_initiation_of_current_regimen']);
-        $zpi->setField(3, $row['consent_to_receive_sms']);
-        $zpi->setField(4, $row['arv_adherance_percentage']);
-        $zpi->setField(5, $row['last_vl_date_routine']);
-        $zpi->setField(6, $row['last_vl_result_routine']);
-        $zai->setField(7, $row['last_vl_date_failure_ac']);
-        $zai->setField(8, $row['last_vl_result_failure_ac']);
-        $zai->setField(9, $row['last_vl_date_failure']);
-        $zai->setField(10, $row['last_vl_result_failure']);
-        $msg->setSegment($zai, 5);
-        /*  System Variables Details */
-        $zsv = new Segment('ZSV');
-        $zsv->setField(1, $row['is_result_authorised']);
-        $zsv->setField(2, $row['result_approved_by']);
-        $zsv->setField(3, $row['result_approved_datetime']);
-        $zsv->setField(4, $row['request_created_datetime']);
-        $msg->setSegment($zsv, 6);
-        /*  Observation Details */
-        $obx = new OBX;
-        $obx->setObservationValue($row['result']);
-        $msg->setSegment($obx, 7);
+    if($rowData && count($rowData) > 0){
 
-        $hl7Data.= $msg->toString(true);
+        foreach ($rowData as $row) {
+            /* MSH Information */
+            $msh = new MSH();
+            $msh->setSendingFacility($row['facility_name']);
+            $msh->setReceivingApplication("VLSM");
+            $msh->setReceivingFacility($row['labName']);
+            /* Patient Information */
+            $check = (in_array($row['patient_gender'], array("female", "male", "other"))) ? $row['patient_gender'] : "other";
+            $sex = strtoupper(substr($check, 0, 1));
+            $pid = new PID();
+            $pid->setPatientID($row['patient_art_no']);
+            $pid->setPatientName([$row['patient_first_name'], $row['patient_last_name']]);
+            // $pid->setMothersMaidenName($row['patient_last_name']);
+            $pid->setDateTimeOfBirth($row['patient_dob']);
+            $pid->setSex($sex);
+            $pid->setPhoneNumberHome($row['patient_mobile_number']);
+            $msg->setSegment($pid, 1);
+            /* Sample Information */
+            $spm = new Segment('SPM');
+            $spm->setField(2, $row['sample_code']);
+            $spm->setField(4, $row['sample_name']);
+            $spm->setField(10, $row['facility_name']);
+            $spm->setField(17, $row['sample_collection_date']);
+            $spm->setField(18, $row['sample_received_at_vl_lab_datetime']);
+            $spm->setField(21, $row['test_reason_name']);
+            // $spm->setField(24, $row['treatment_initiated_date']);
+            $msg->setSegment($spm, 2);
+            /* OBR Section */
+            $obr = new Segment('OBR');
+            $obr->setField(6, $row['request_created_datetime']);
+            $obr->setField(9, $row['result_value_absolute']);
+            $obr->setField(10, ['COLLECT', $row['reqCreatedBy']]);
+            $obr->setField(14, $row['sample_received_at_hub_datetime']);
+            $obr->setField(15, $row['funding_source_name']);
+            $obr->setField(16, ['', '', $row['i_partner_name'], '', '', '']);
+            $obr->setField(25, $row['status_name']);
+            $obr->setField(26, $row['result']);
+            $msg->setSegment($obr, 3);
+            /* Patient Custom Fields Information Details */
+            $zpi = new Segment('ZPI');
+            $zpi->setField(1, $row['patient_age_in_years']);
+            $zpi->setField(2, $row['patient_age_in_months']);
+            $zpi->setField(3, $row['is_patient_pregnant']);
+            $zpi->setField(4, $row['is_patient_breastfeeding']);
+            $msg->setSegment($zpi, 4);
+            /* Indication for VL Testing Information Details */
+            $zai = new Segment('ZIT');
+            $zpi->setField(1, $row['current_regimen']);
+            $zpi->setField(2, $row['date_of_initiation_of_current_regimen']);
+            $zpi->setField(3, $row['consent_to_receive_sms']);
+            $zpi->setField(4, $row['arv_adherance_percentage']);
+            $zpi->setField(5, $row['last_vl_date_routine']);
+            $zpi->setField(6, $row['last_vl_result_routine']);
+            $zai->setField(7, $row['last_vl_date_failure_ac']);
+            $zai->setField(8, $row['last_vl_result_failure_ac']);
+            $zai->setField(9, $row['last_vl_date_failure']);
+            $zai->setField(10, $row['last_vl_result_failure']);
+            $msg->setSegment($zai, 5);
+            /*  System Variables Details */
+            $zsv = new Segment('ZSV');
+            $zsv->setField(1, $row['is_result_authorised']);
+            $zsv->setField(2, $row['result_approved_by']);
+            $zsv->setField(3, $row['result_approved_datetime']);
+            $zsv->setField(4, $row['request_created_datetime']);
+            $msg->setSegment($zsv, 6);
+            /*  Observation Details */
+            $obx = new OBX;
+            $obx->setObservationValue($row['result']);
+            $msg->setSegment($obx, 7);
+    
+            $hl7Data.= $msg->toString(true);
+            echo $hl7Data;die;
+        }
+        // http_response_code(200);
+    }else{
+        $msh = new MSH();
+        $msh->setMessageType(["VL", "RES"]);
+        $ack = new ACK($msg, $msh);
+        $ack->setAckCode('AR', "Data not found");
+        $returnString = $ack->toString(true);
+        echo $returnString;
+        // http_response_code(204);
+        unset($ack);
     }
-    echo $hl7Data;die;
-    http_response_code(200);
 }
 
 if ($type[1] == 'REQ' || $type[1] == 'UPI') {
