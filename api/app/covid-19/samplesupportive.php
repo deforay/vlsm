@@ -45,6 +45,7 @@ if (isset($input['apiToken']) && !empty($input['apiToken']) && isset($input['use
         $data['healthFacilities'] = $facilitiesDb->getHealthFacilities('covid19');
         $data['covid19ReasonsForTesting'] = $covid19Obj->getCovid19ReasonsForTesting();
         $data['specimenTypeResult'] = $covid19Obj->getCovid19SampleTypes();
+        $data['testingLabs'] = $facilitiesDb->getTestingLabs('covid19');
         //Implementing partner list
         $implementingPartnerQry = "SELECT * FROM r_implementation_partners WHERE i_partner_status='active' ORDER BY i_partner_name ASC";
         $data['implementingPartnerList'] = $db->query($implementingPartnerQry);
