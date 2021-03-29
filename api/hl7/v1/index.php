@@ -36,32 +36,33 @@ try {
     }
 
     $hl7Msg = file_get_contents("php://input");
-
-    $msg = new Message($hl7Msg);
-    // To get the type of test
-    $msh = $msg->getSegmentByIndex(0);
-    $type = $msh->getField(9);
-
-    // Get if have any filters
-    if ($msg->hasSegment('ZFL')) {
-        $filters = $msg->getSegmentsByName('ZFL');
-    }
-    if ($type[1] == 'RES') {
-        $filter = (array)$filters[0];
-        $search = (array)$filter;
-        foreach ($filter as $search) {
-            $search = $search;
-            break;
+    foreach(explode("MSH", $hl7Msg) as $hl7){
+        if(isset($hl7) && !empty($hl7) && trim($hl7) != ""){
+            $hl7 = 'MSH'.$hl7;
+            $msg = new Message($hl7);
+            // To get the type of test
+            $msh = $msg->getSegmentByIndex(0);
+            $type = $msh->getField(9);
+            // Get if have any filters
+            if ($msg->hasSegment('ZFL')) {
+                $filters = $msg->getSegmentsByName('ZFL')[0];
+            }
+            if ($type[1] == 'RES' || $type[1] == 'QRY') {
+                foreach ((array)$filters as $search) {
+                    $search = $search;
+                    break;
+                }
+            }
+            if ($type[0] == "COVID-19") {
+                include("covid-19.php");
+            }
+            if ($type[0] == "VL") {
+                include("vl.php");
+            }
+            if ($type[0] == "EID") {
+                include("eid.php");
+            }
         }
-    }
-    if ($type[0] == "COVID19") {
-        include("covid-19.php");
-    }
-    if ($type[0] == "VL") {
-        include("vl.php");
-    }
-    if ($type[0] == "EID") {
-        include("eid.php");
     }
 } catch (Exception $exc) {
 

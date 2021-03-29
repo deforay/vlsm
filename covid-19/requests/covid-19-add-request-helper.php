@@ -36,23 +36,19 @@ try {
 	if (empty($instanceId) && $_POST['instanceId']) {
 		$instanceId = $_POST['instanceId'];
 	}
-	if($_POST['hl7'] != "yes"){
-		if (!empty($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != "") {
-			$sampleCollectionDate = explode(" ", $_POST['sampleCollectionDate']);
-			$_POST['sampleCollectionDate'] = $general->dateFormat($sampleCollectionDate[0]) . " " . $sampleCollectionDate[1];
-		} else {
-			$_POST['sampleCollectionDate'] = NULL;
-		}
+	if (!empty($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != "") {
+		$sampleCollectionDate = explode(" ", $_POST['sampleCollectionDate']);
+		$_POST['sampleCollectionDate'] = $general->dateFormat($sampleCollectionDate[0]) . " " . $sampleCollectionDate[1];
+	} else {
+		$_POST['sampleCollectionDate'] = NULL;
 	}
 
-	if($_POST['hl7'] != "yes"){
-		//Set sample received date
-		if (!empty($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate']) != "") {
-			$sampleReceivedDate = explode(" ", $_POST['sampleReceivedDate']);
-			$_POST['sampleReceivedDate'] = $general->dateFormat($sampleReceivedDate[0]) . " " . $sampleReceivedDate[1];
-		} else {
-			$_POST['sampleReceivedDate'] = NULL;
-		}
+	//Set sample received date
+	if (!empty($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate']) != "") {
+		$sampleReceivedDate = explode(" ", $_POST['sampleReceivedDate']);
+		$_POST['sampleReceivedDate'] = $general->dateFormat($sampleReceivedDate[0]) . " " . $sampleReceivedDate[1];
+	} else {
+		$_POST['sampleReceivedDate'] = NULL;
 	}
 	if (!empty($_POST['sampleTestedDateTime']) && trim($_POST['sampleTestedDateTime']) != "") {
 		$sampleTestedDate = explode(" ", $_POST['sampleTestedDateTime']);
@@ -60,19 +56,19 @@ try {
 	} else {
 		$_POST['sampleTestedDateTime'] = NULL;
 	}
-
+	
 	if (!empty($_POST['arrivalDateTime']) && trim($_POST['arrivalDateTime']) != "") {
 		$arrivalDate = explode(" ", $_POST['arrivalDateTime']);
 		$_POST['arrivalDateTime'] = $general->dateFormat($arrivalDate[0]) . " " . $arrivalDate[1];
 	} else {
 		$_POST['arrivalDateTime'] = NULL;
 	}
-
-
+	
+	
 	if (empty(trim($_POST['sampleCode']))) {
 		$_POST['sampleCode'] = NULL;
 	}
-
+	
 	if ($sarr['user_type'] == 'remoteuser') {
 		$sampleCode = 'remote_sample_code';
 		$sampleCodeKey = 'remote_sample_code_key';
@@ -80,18 +76,21 @@ try {
 		$sampleCode = 'sample_code';
 		$sampleCodeKey = 'sample_code_key';
 	}
-
+	
 	$status = 6;
 	if ($sarr['user_type'] == 'remoteuser') {
 		$status = 9;
 	}
-
-
+	
+	
 	if (isset($_POST['isSampleRejected']) && $_POST['isSampleRejected'] == 'yes') {
 		$_POST['result'] = null;
 		$status = 4;
 	}
-
+	if(!empty($_POST['patientDob'])){
+		$_POST['patientDob'] = $general->dateFormat($_POST['patientDob']);
+	}
+	
 	$covid19Data = array(
 		'vlsm_instance_id'                    => $instanceId,
 		'vlsm_country_id'                     => $_POST['formId'],
@@ -108,7 +107,7 @@ try {
 		'patient_id'                          => !empty($_POST['patientId']) ? $_POST['patientId'] : null,
 		'patient_name'                        => !empty($_POST['firstName']) ? $_POST['firstName'] : null,
 		'patient_surname'                     => !empty($_POST['lastName']) ? $_POST['lastName'] : null,
-		'patient_dob'                         => !empty($_POST['patientDob']) ? $general->dateFormat($_POST['patientDob']) : null,
+		'patient_dob'                         => !empty($_POST['patientDob']) ? $_POST['patientDob'] : null,
 		'patient_gender'                      => !empty($_POST['patientGender']) ? $_POST['patientGender'] : null,
 		'is_patient_pregnant'                 => !empty($_POST['isPatientPregnant']) ? $_POST['isPatientPregnant'] : null,
 		'patient_age'                         => !empty($_POST['patientAge']) ? $_POST['patientAge'] : null,
@@ -253,27 +252,27 @@ try {
 		$covid19Data['sample_tested_datetime'] = null;
 	}
 	$id = 0;
+	$covid19Data['source_of_request'] = 'web';
+	if (!empty($_POST['api']) && $_POST['api'] = "yes") {
+		$covid19Data['source_of_request'] = 'api';
+	}
 	if (!empty($_POST['covid19SampleId'])) {
-		// echo "<pre>"; print_r($covid19Data);die;
 		$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 		$id = $db->update($tableName, $covid19Data);
 	}
 	// print_r($_POST);die;
 	if (!empty($_POST['api']) && $_POST['api'] = "yes") {
-		if($_POST['hl7'] == "yes"){
-			return $id;
-		} else{
-			$payload = array(
-				'status' => 'success',
-				'timestamp' => time(),
-				'message' => 'Successfully added.'
-			);
-	
-	
-			http_response_code(200);
-			echo json_encode($payload);
-			exit(0);
-		}
+		
+		$payload = array(
+			'status' => 'success',
+			'timestamp' => time(),
+			'message' => 'Successfully added.'
+		);
+
+
+		http_response_code(200);
+		echo json_encode($payload);
+		exit(0);
 	} else {
 		if ($id > 0) {
 			$_SESSION['alertMsg'] = "Covid-19 test request added successfully";

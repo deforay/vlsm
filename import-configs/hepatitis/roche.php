@@ -1,11 +1,11 @@
 <?php
 
 try {
-    $db = $db->where('imported_by', $_SESSION['userId']);
-    $db->where('module', 'vl');
+    $db->where('imported_by', $_SESSION['userId']);
+    $db->where('module', 'hepatitis');
     $db->delete('temp_sample_import');
     //set session for controller track id in hold_sample_record table
-    $cQuery  = "select MAX(import_batch_tracking) FROM hold_sample_import";
+    $cQuery  = "SELECT MAX(import_batch_tracking) FROM hold_sample_import";
     $cResult = $db->query($cQuery);
     if ($cResult[0]['MAX(import_batch_tracking)'] != '') {
         $maxId = $cResult[0]['MAX(import_batch_tracking)'] + 1;
@@ -176,6 +176,8 @@ try {
         $inc = 0;
         $refno = 0;
         foreach ($infoFromFile as $sampleCode => $d) {
+
+            
             if ($d['sampleCode'] == $d['sampleType'] . $inc) {
                 $d['sampleCode'] = '';
             }
@@ -183,17 +185,13 @@ try {
                 $refno += 1;
             }
             $data = array(
-                'module' => 'vl',
+                'module' => 'hepatitis',
                 'lab_id' => base64_decode($_POST['labId']),
-                'vl_test_platform' => $_POST['vltestPlatform'],
+                'hepatitis_test_platform' => $_POST['vltestPlatform'],
                 'import_machine_name' => $_POST['configMachineName'],
                 'result_reviewed_by' => $_SESSION['userId'],
                 'sample_code' => $d['sampleCode'],
-                'result_value_log' => $d['logVal'],
                 'sample_type' => $d['sampleType'],
-                'result_value_absolute' => $d['absVal'],
-                'result_value_text' => $d['txtVal'],
-                'result_value_absolute_decimal' => $d['absDecimalVal'],
                 'sample_tested_datetime' => $d['testingDate'],
                 'result_status' => '6',
                 'import_machine_file_name' => $fileName,
@@ -202,16 +200,6 @@ try {
                 'lot_expiration_date' => $d['lotExpirationDate']
             );
 
-            //echo "<pre>";var_dump($data);continue;
-            if ($d['absVal'] != "") {
-                $data['result'] = $d['absVal'];
-            } else if ($d['logVal'] != "") {
-                $data['result'] = $d['logVal'];
-            } else if ($d['txtVal'] != "") {
-                $data['result'] = $d['txtVal'];
-            } else {
-                $data['result'] = "";
-            }
 
             if ($batchCode == '') {
                 $data['batch_code']     = $newBatchCode;
@@ -221,7 +209,7 @@ try {
             }
             //get user name
             if ($d['reviewBy'] != '') {
-                $uQuery = "select user_name,user_id from user_details where user_name='" . $d['reviewBy'] . "'";
+                $uQuery = "SELECT user_name,user_id FROM user_details where user_name='" . $d['reviewBy'] . "'";
                 $uResult = $db->rawQuery($uQuery);
                 if ($uResult) {
                     $data['sample_review_by'] = $uResult[0]['user_id'];
@@ -238,26 +226,51 @@ try {
                 }
             }
 
-            $query    = "select facility_id,vl_sample_id,result,result_value_log,result_value_absolute,result_value_text,result_value_absolute_decimal,result_status from vl_request_form where sample_code='" . $sampleCode . "'";
-            $vlResult = $db->rawQuery($query);
+            $query    = "SELECT facility_id,hepatitis_id,hcv_vl_count,hbv_vl_count,hepatitis_test_type, result_status FROM form_hepatitis WHERE sample_code='" . $sampleCode . "'";
+            $hepResult = $db->rawQuery($query);
+
+            // $testType = strtolower($hepResult['hepatitis_test_type']);
+            // if ($testType == 'hbv') {
+            //     $resultField = "hbv_vl_count";
+            //     $otherField = "hcv_vl_count";
+            // } else if ($testType == 'hcv') {
+            //     $resultField = "hcv_vl_count";
+            //     $otherField = "hbv_vl_count";
+            // }
+
+
+
+
+            //echo "<pre>";var_dump($data);continue;
+            if ($d['absVal'] != "") {
+                $data['result'] = $d['absVal'];
+            } else if ($d['logVal'] != "") {
+                $data['result'] = $d['logVal'];
+            } else if ($d['txtVal'] != "") {
+                $data['result'] = $d['txtVal'];
+            } else {
+                $data['result'] = null;
+            }
+
+
             //insert sample controls
-            $scQuery = "select r_sample_control_name from r_sample_controls where r_sample_control_name='" . trim($d['sampleType']) . "'";
+            $scQuery = "SELECT r_sample_control_name FROM r_sample_controls WHERE r_sample_control_name='" . trim($d['sampleType']) . "'";
             $scResult = $db->rawQuery($scQuery);
             if ($scResult == false) {
                 $scData = array('r_sample_control_name' => trim($d['sampleType']));
                 $scId = $db->insert("r_sample_controls", $scData);
             }
-            if ($vlResult && $sampleCode != '') {
-                if ($vlResult[0]['result_value_log'] != '' || $vlResult[0]['result_value_absolute'] != '' || $vlResult[0]['result_value_text'] != '' || $vlResult[0]['result_value_absolute_decimal'] != '') {
+            if ($hepResult && $sampleCode != '') {
+                if ($hepResult[0]['result_value_log'] != '' || $hepResult[0]['result_value_absolute'] != '' || $hepResult[0]['result_value_text'] != '' || $hepResult[0]['result_value_absolute_decimal'] != '') {
                     $data['sample_details'] = 'Result already exists';
                 } else {
-                    if ($vlResult[0]['result_status'] != '') {
-                        $data['result_status'] = $vlResult[0]['result_status'];
+                    if ($hepResult[0]['result_status'] != '') {
+                        $data['result_status'] = $hepResult[0]['result_status'];
                     } else {
                         $data['result_status'] = '7';
                     }
                 }
-                $data['facility_id'] = $vlResult[0]['facility_id'];
+                $data['facility_id'] = $hepResult[0]['facility_id'];
             } else {
                 $data['result_status'] = '7';
                 $data['sample_details'] = 'New Sample';
@@ -284,7 +297,7 @@ try {
     if (isset($id) && $id > 0) {
         $data = array(
             'user_id' => $_SESSION['userId'],
-            'vl_sample_id' => $id,
+            'hepatitis_id' => $id,
             'test_type' => 'vl',
             'updated_on' => $general->getDateTime()
         );

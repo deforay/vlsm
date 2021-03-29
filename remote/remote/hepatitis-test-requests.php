@@ -32,21 +32,32 @@ $hepatitisQuery = "SELECT * FROM form_hepatitis WHERE $condition
           AND data_sync=0";
 
 $hepatitisRemoteResult = $db->rawQuery($hepatitisQuery);
-
-
-$forms = array();
-foreach ($hepatitisRemoteResult as $row) {
-    $forms[] = $row['hepatitis_id'];
-}
-
-$hepatitisObj = new \Vlsm\Models\Hepatitis($db);
-$comorbidities = $hepatitisObj->getComorbidityByHepatitisId($forms);
-$risks = $hepatitisObj->getRiskFactorsByHepatitisId($forms);
-
 $data = array();
-$data['result'] = $hepatitisRemoteResult;
-$data['risks'] = $risks;
-$data['comorbidities'] = $comorbidities;
 
+if (!empty($hepatitisRemoteResult) && count($hepatitisRemoteResult) > 0) {
+
+    $forms = array();
+    foreach ($hepatitisRemoteResult as $row) {
+        $forms[] = $row['hepatitis_id'];
+    }
+
+    $hepatitisObj = new \Vlsm\Models\Hepatitis($db);
+    $comorbidities = $hepatitisObj->getComorbidityByHepatitisId($forms);
+    $risks = $hepatitisObj->getRiskFactorsByHepatitisId($forms);
+
+    
+    $data['result'] = $hepatitisRemoteResult;
+    $data['risks'] = $risks;
+    $data['comorbidities'] = $comorbidities;
+
+
+    $updata = array(
+        'data_sync' => 1
+    );
+    $db->where('hepatitis_id', $forms, 'IN');
+
+    if (!$db->update('form_hepatitis', $updata))
+        error_log('update failed: ' . $db->getLastError());
+}
 
 echo json_encode($data);

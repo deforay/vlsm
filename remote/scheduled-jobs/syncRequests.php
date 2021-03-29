@@ -307,7 +307,7 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
         'data_sync'
     );
 
-    
+
 
     if (!empty($apiResult) && is_array($apiResult) && count($apiResult) > 0) {
         $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='form_covid19'";
@@ -476,7 +476,7 @@ if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['he
         'data_sync'
     );
 
-    
+
 
     if (!empty($apiResult) && is_array($apiResult) && count($apiResult) > 0) {
         $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='form_hepatitis'";
@@ -531,26 +531,37 @@ if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['he
             $db = $db->where('hepatitis_id', $id);
             $db->delete("hepatitis_patient_comorbidities");
             if (isset($comorbidities) && !empty($comorbidities)) {
-
+                $cData = array();
                 foreach ($comorbidities as $comoId => $comoValue) {
                     $comorbidityData = array();
                     $comorbidityData["hepatitis_id"] = $id;
                     $comorbidityData["comorbidity_id"] = $comoId;
                     $comorbidityData["comorbidity_detected"] = $comoValue;
-                    $db->insert("hepatitis_patient_comorbidities", $comorbidityData);
+                    $cData[] = $comorbidityData;
+                    //$db->insert("hepatitis_patient_comorbidities", $comorbidityData);
+                }
+
+                $ids = $db->insertMulti('hepatitis_patient_comorbidities', $cData);
+                if (!$ids) {
+                    error_log('insert failed: ' . $db->getLastError());
                 }
             }
 
             $db = $db->where('hepatitis_id', $id);
             $db->delete("hepatitis_risk_factors");
             if (isset($risks) && !empty($risks)) {
-
+                $rData = array();
                 foreach ($risks as  $riskId => $riskValue) {
                     $riskFactorsData = array();
                     $riskFactorsData["hepatitis_id"] = $id;
                     $riskFactorsData["riskfactors_id"] = $riskId;
                     $riskFactorsData["riskfactors_detected"] = $riskValue;
-                    $db->insert("hepatitis_risk_factors", $riskFactorsData);
+                    $rData[] = $riskFactorsData;
+                    //$db->insert("hepatitis_risk_factors", $riskFactorsData);
+                }
+                $ids = $db->insertMulti('hepatitis_risk_factors', $rData);
+                if (!$ids) {
+                    error_log('insert failed: ' . $db->getLastError());
                 }
             }
         }
