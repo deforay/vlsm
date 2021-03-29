@@ -3,6 +3,9 @@
 session_unset(); // no need of session in json response
 
 use Aranyasen\HL7\Message;
+use function PHPSTORM_META\type;
+use Aranyasen\HL7\Messages\ACK;
+use Aranyasen\HL7\Segments\MSH;
 
 ini_set('memory_limit', -1);
 header('Content-Type: application/json');
@@ -53,14 +56,26 @@ try {
                     break;
                 }
             }
-            if ($type[0] == "COVID-19") {
-                include("covid-19.php");
-            }
-            if ($type[0] == "VL") {
-                include("vl.php");
-            }
-            if ($type[0] == "EID") {
-                include("eid.php");
+
+            if(isset($type) && count($type) > 0 && in_array($type[0], array("COVID-19", "VL", "EID"))){
+
+                if ($type[0] == "COVID-19") {
+                    include("covid-19.php");
+                }
+                if ($type[0] == "VL") {
+                    include("vl.php");
+                }
+                if ($type[0] == "EID") {
+                    include("eid.php");
+                }
+            }else{
+                $msh = new MSH();
+                $ack = new ACK($msg, $msh);
+                $ack->setAckCode('AR', "Message Type not found");
+                $returnString = $ack->toString(true);
+                echo $returnString;
+                // http_response_code(204);
+                unset($ack);
             }
         }
     }
