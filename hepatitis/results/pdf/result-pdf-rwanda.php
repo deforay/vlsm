@@ -321,7 +321,7 @@ if (sizeof($requestResult) > 0) {
                                 if(isset($result['hcv_vl_count']) && $result['hcv_vl_count'] != ""){
                                     $html .= '<td style="line-height:50px;font-size:14px;font-weight:bold;text-align:left;">&nbsp;&nbsp;HCV VL RESULTS : '.($result['hcv_vl_count']).'</td>';
                                 }
-                                if(isset($result['hbv_vl_count']) && $result['hbv_vl_count'] != ""){
+                                else if(isset($result['hbv_vl_count']) && $result['hbv_vl_count'] != ""){
                                     $html .= '<td style="line-height:50px;font-size:14px;font-weight:bold;text-align:left;">&nbsp;&nbsp;HBV VL RESULTS : '.($result['hbv_vl_count']).'</td>';
                                 }
                             $html .= '</tr>';

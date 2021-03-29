@@ -7,7 +7,11 @@ use Aranyasen\HL7\Segments\OBX;
 use Aranyasen\HL7\Messages\ACK;
 use Aranyasen\HL7\Segments\MSH;
 
-if ($type[1] == 'RES') {
+$eidModel = new \Vlsm\Models\Eid($db);
+
+$globalConfig = $general->getGlobalConfig();
+$systemConfig = $general->getSystemConfig();
+if ($type[1] == 'RES' || $type[1] == 'QRY') {
     $sQuery = "SELECT 
             vl.*,
             rtr.test_reason_name,
@@ -43,39 +47,87 @@ if ($type[1] == 'RES') {
             LEFT JOIN r_funding_sources as r_f_s ON r_f_s.funding_source_id=vl.funding_source 
             LEFT JOIN r_implementation_partners as r_i_p ON r_i_p.i_partner_id=vl.implementing_partner";
 
-
-    if (!empty($search[1])) {
+if (!empty($search[1])) {
         $date = $search[1];
-        $sQuery .= " AND DATE(sample_collection_date) between '$date[0]' AND '$date[1]' ";
+        if(isset($where) && count($where) != ""){
+            $where .= " WHERE ";
+        }
+        $where .= "(DATE(sample_collection_date) between '$date[0]' AND '$date[1]')";
     }
 
     if (!empty($search[2])) {
+        if(isset($where) && count($where) != ""){
+            $where .= " AND ";
+        } else{
+            $where .= " WHERE ";
+        }
         $specimen = implode("','", $search[2]);
-        $sQuery .= " AND rst.sample_name IN ('" . $specimen . "') ";
+        $where .= " rst.sample_name IN ('" . $specimen . "') ";
     }
 
     if (!empty($search[3])) {
+        if(isset($where) && count($where) != ""){
+            $where .= " AND ";
+        } else{
+            $where .= " WHERE ";
+        }
         $facilities = implode("','", $search[3]);
-        $sQuery .= " AND f.facility_name IN ('" . $facilities . "') ";
+        $where .= " f.facility_name IN ('" . $facilities . "') ";
     }
 
     if (!empty($search[4])) {
+        if(isset($where) && count($where) != ""){
+            $where .= " AND ";
+        } else{
+            $where .= " WHERE ";
+        }
         $labs = implode("','", $search[4]);
-        $sQuery .= " AND l_f.facility_name IN ('" . $labs . "') ";
+        $where .= " l_f.facility_name IN ('" . $labs . "') ";
     }
 
     if (!empty($search[5])) {
-        $sQuery .= " AND vl.is_sample_rejected ='" . $search[5] . "' ";
+        if(isset($where) && count($where) != ""){
+            $where .= " AND ";
+        } else{
+            $where .= " WHERE ";
+        }
+        $where .= " vl.is_sample_rejected ='" . $search[5] . "' ";
     }
 
     if (!empty($search[6]) && $search[6] == "yes") {
-        $sQuery .= " AND (vl.sample_tested_datetime != null AND vl.sample_tested_datetime not like '') ";
-    } else {
-        $sQuery .= " AND (vl.sample_tested_datetime == null OR vl.sample_tested_datetime like '') ";
+        if(isset($where) && count($where) != ""){
+            $where .= " AND ";
+        } else{
+            $where .= " WHERE ";
+        }
+        $where .= " (vl.sample_tested_datetime != null AND vl.sample_tested_datetime not like '') ";
     }
+    if (!empty($search[7]) && $search[7] != "") {
+        if(isset($where) && count($where) != ""){
+            $where .= " AND ";
+        } else{
+            $where .= " WHERE ";
+        }
+        $where .= " (vl.sample_code like '".$search[7]."%' OR vl.remote_sample_code like '".$search[7]."%') ";
+    }
+    if($type[1] == 'QRY'){
+        if(isset($where) && count($where) != ""){
+            $where .= " AND ";
+        } else{
+            $where .= " WHERE ";
+        }
+        $where .= " (vl.result ='' OR vl.result IS NULL OR vl.result LIKE '')";
+        $where .= " AND (vl.is_sample_rejected ='no' OR vl.is_sample_rejected IS NULL OR vl.is_sample_rejected LIKE 'no' OR vl.is_sample_rejected like '')";
+    }
+    $sQuery .= $where;
     // die($sQuery);
     $rowData = $db->rawQuery($sQuery);
     foreach ($rowData as $row) {
+        /* MSH Information */
+        $msh = new MSH();
+        $msh->setSendingFacility($row['facility_name']);
+        $msh->setReceivingApplication("VLSM");
+        $msh->setReceivingFacility($row['labName']);
         /* Patient Information */
         $check = (in_array($row['child_gender'], array("female", "male", "other"))) ? $row['child_gender'] : "other";
         $sex = strtoupper(substr($check, 0, 1));
@@ -140,39 +192,25 @@ if ($type[1] == 'RES') {
 
         $hl7Data .= $msg->toString(true);
     }
-    // No data found
-    /* if (!$rowData) {
-        $response = array(
-            'status' => 'failed',
-            'timestamp' => time(),
-            'error' => 'No matching data',
-            'data' => $hl7Data
-
-        );
-        // if (isset($user['token-updated']) && $user['token-updated'] == true) {
-        //     $response['token'] = $user['newToken'];
-        // }
-        http_response_code(200);
-        echo json_encode($response);
-        exit(0);
-    }
-
-    $payload = array(
-        'status' => 'success',
-        'timestamp' => time(),
-        'data' => $hl7Data
-    );
-    // print_r($hl7Data);die;
-    http_response_code(200);
-    echo json_encode($payload);
-    exit(0); */
     echo $hl7Data;die;
     http_response_code(200);
-    exit(0);
 }
-
-if ($type[1] == 'REQ') {
-    // echo "<pre>";print_r($msg->getSegmentsByName('PID'));die;
+ 
+if ($type[1] == 'REQ' || $type[1] == 'UPI') {
+    /* MSH Information */
+    if ($msg->hasSegment('MSH')) {
+        $msh = $msg->getSegmentByIndex(0);
+        $facilityDetails = $facilityDb->getFacilityByName($msh->getField(4));
+        if (!empty($facilityDetails[0]) && $facilityDetails[0] != "") {
+            $data['facilityId'] = $facilityDetails[0]['facility_id'];
+            $data['provinceCode'] = $facilityDetails[0]['province_code'];
+        }
+        
+        if ($msh->getField(6) != "" && !empty($msh->getField(6))) {
+            $returnId = $general->getValueByName($msh->getField(6), 'facility_name', 'facility_details', 'facility_id');
+            $data['labId'] = $returnId;
+        }
+    }
     /* Patient Information */
     if ($msg->hasSegment('PID')) {
         $pid = $msg->getSegmentByIndex(1);
@@ -196,19 +234,13 @@ if ($type[1] == 'REQ') {
         $data['sampleCode'] = $spm->getField(2);
         $data['sampleCollectionDate'] = $spm->getField(17);
         $data['sampleReceivedDate'] = $spm->getField(18);
-        if ($spm->getField(1) != "" && !empty($spm->getField(1))) {
-            $respondID = $general->getValueByName($spm->getField(1), 'rejection_reason_name', 'r_vl_sample_rejection_reasons', 'rejection_reason_id');
+        if ($spm->getField(21) != "" && !empty($spm->getField(21))) {
+            $respondID = $general->getValueByName($spm->getField(21), 'rejection_reason_name', 'r_eid_sample_rejection_reasons', 'rejection_reason_id');
             $data['sampleRejectionReason'] = $respondID;
         }
-        $facilityDetails = $facilityDb->getFacilityByName($spm->getField(10));
-        if (!empty($facilityDetails[0]) && $facilityDetails[0] != "") {
-            $data['facilityId'] = $facilityDetails[0]['facility_id'];
-            $data['provinceId'] = $facilityDetails[0]['province_id'];
-            $data['provinceCode'] = $facilityDetails[0]['province_code'];
-        }
         if ($spm->getField(4) != "" && !empty($spm->getField(4))) {
-            $vlSampleDetails = $vlDb->getVlSampleTypesByName($spm->getField(4));
-            $data['specimenType'] = $vlSampleDetails[0]['sample_id'];
+            $respondID = $general->getValueByName($spm->getField(4), 'sample_name', 'r_eid_sample_type', 'sample_id');
+            $data['specimenType'] = $respondID;
         }
     }
     /* OBR Section */
@@ -240,8 +272,8 @@ if ($type[1] == 'REQ') {
             $data['implementingPartner'] = $respondID;
         }
         $data['result'] = $obr->getField(26);
-        $sampleRequestorName = $obr->getField(33);
-        $data['sampleRequestorName'] = $sampleRequestorName[1];
+        $sampleRequestorName = explode("^", $obr->getField(33));
+        $data['sampleRequestorName'] = $sampleRequestorName[0];
     }
     /* Patient Custom Fields Information Details */
     if ($msg->hasSegment('ZPI')) {
@@ -271,19 +303,158 @@ if ($type[1] == 'REQ') {
     $sQuery = "SELECT vlsm_instance_id from s_vlsm_instance";
     $rowData = $db->rawQuery($sQuery);
     $data['instanceId'] = $rowData[0]['vlsm_instance_id'];
-    // print_r($data);die;
+    // print_r($data);
     $sampleFrom = '';
 
     $data['api'] = "yes";
     $data['hl7'] = "yes";
     $_POST = $data;
-    include_once(APPLICATION_PATH . '/eid/requests/insert-sample.php');
-    include_once(APPLICATION_PATH . '/eid/requests/eid-add-request-helper.php');
-    if ($id > 0) {
+    $id = 0;
+    // include_once(APPLICATION_PATH . '/eid/requests/insert-sample.php');
+
+    $provinceCode = (isset($_POST['provinceCode']) && !empty($_POST['provinceCode'])) ? $_POST['provinceCode'] : null;
+    $provinceId = (isset($_POST['provinceId']) && !empty($_POST['provinceId'])) ? $_POST['provinceId'] : null;
+    $sampleCollectionDate = (isset($_POST['sampleCollectionDate']) && !empty($_POST['sampleCollectionDate'])) ? $_POST['sampleCollectionDate'] : null;
+
+    $eidDublicateData = false;
+    $sQuery = "SELECT eid_id, sample_code, sample_code_format, sample_code_key, remote_sample_code, remote_sample_code_format, remote_sample_code_key FROM eid_form 
+            where 
+                (sample_code like '%".$_POST['sampleCode']."%' or remote_sample_code like '%".$_POST['sampleCode']."%')
+                AND (child_id like '%".$_POST['childId']."%' AND child_dob like '%".$_POST['childDob']."%' AND child_gender like '%".$_POST['childGender']."%') limit 1";
+    // die($sQuery);
+    $eidDublicateData = $db->rawQueryOne($sQuery);
+    if($eidDublicateData){
+        $sampleData['sampleCode'] = (!empty($eidDublicateData['sample_code']))?$eidDublicateData['sample_code']:$eidDublicateData['remote_sample_code'];
+        $sampleData['sampleCodeFormat'] = (!empty($eidDublicateData['sample_code_format']))?$eidDublicateData['sample_code_format']:$eidDublicateData['remote_sample_code_format'];
+        $sampleData['sampleCodeKey'] = (!empty($eidDublicateData['sample_code_key']))?$eidDublicateData['sample_code_key']:$eidDublicateData['remote_sample_code_key'];
+    }else{
+        $sampleJson = $eidModel->generateEIDSampleCode($provinceCode, $sampleCollectionDate, null, $provinceId);
+        $sampleData = json_decode($sampleJson, true);
+    }
+    
+    $eidData = array(
+        'vlsm_country_id' => $_POST['formId'],
+        'sample_collection_date' => $_POST['sampleCollectionDate'],
+        'vlsm_instance_id' => $_POST['instanceId'],
+        'province_id' => $provinceId,
+        'request_created_by' => '',
+        'request_created_datetime' => $general->getDateTime(),
+        'last_modified_by' => '',
+        'last_modified_datetime' => $general->getDateTime()
+    );
+
+    if ($systemConfig['user_type'] == 'remoteuser') {
+        $eidData['remote_sample_code'] = $sampleData['sampleCode'];
+        $eidData['remote_sample_code_format'] = $sampleData['sampleCodeFormat'];
+        $eidData['remote_sample_code_key'] = $sampleData['sampleCodeKey'];
+        $eidData['remote_sample'] = 'yes';
+        $eidData['result_status'] = 9;
+    } else {
+        $eidData['sample_code'] = $sampleData['sampleCode'];
+        $eidData['sample_code_format'] = $sampleData['sampleCodeFormat'];
+        $eidData['sample_code_key'] = $sampleData['sampleCodeKey'];
+        $eidData['remote_sample'] = 'no';
+        $eidData['result_status'] = 6;
+    }
+    // echo "<br>".$eidData['result_status'];
+    $id = 0;
+    if($eidDublicateData){
+        $db = $db->where('eid_id', $eidDublicateData['eid_id']);
+		$id = $db->update("eid_form", $eidData);
+        $_POST['eidSampleId'] = $eidDublicateData['eid_id'];
+    } else{
+        $id = $db->insert("eid_form", $eidData);
+        $_POST['eidSampleId'] = $id;
+    }
+    if(isset($eidData) && count($eidData) > 0){
+        $tableName = "eid_form";
+        $tableName1 = "activity_log";
+        $instanceId = $_POST['instanceId'];
+        if ($sarr['user_type'] == 'remoteuser') {
+            $sampleCode = 'remote_sample_code';
+            $sampleCodeKey = 'remote_sample_code_key';
+        } else {
+            $sampleCode = 'sample_code';
+            $sampleCodeKey = 'sample_code_key';
+        }
+        $status = 6;
+        if ($sarr['user_type'] == 'remoteuser') {
+            $status = 9;
+        }
+
+
+        if (isset($_POST['isSampleRejected']) && $_POST['isSampleRejected'] == 'yes') {
+            $_POST['result'] = null;
+            $status = 4;
+        }
+        $eidData = array(
+            'vlsm_instance_id' 									=> $instanceId,
+            'vlsm_country_id' 									=> $_POST['formId'],
+            'sample_code_key' 									=> isset($_POST['sampleCodeKey']) ? $_POST['sampleCodeKey'] : null,
+            'sample_code_format' 								=> isset($_POST['sampleCodeFormat']) ? $_POST['sampleCodeFormat'] : null,
+            'facility_id' 										=> isset($_POST['facilityId']) ? $_POST['facilityId'] : null,
+            'province_id' 										=> isset($_POST['provinceId']) ? $_POST['provinceId'] : null,
+            'lab_id' 											=> isset($_POST['labId']) ? $_POST['labId'] : null,
+            'implementing_partner' 								=> isset($_POST['implementingPartner']) ? $_POST['implementingPartner'] : null,
+            'funding_source' 									=> isset($_POST['fundingSource']) ? $_POST['fundingSource'] : null,
+            'mother_id' 										=> isset($_POST['mothersId']) ? $_POST['mothersId'] : null,
+            'caretaker_phone_number' 							=> isset($_POST['caretakerPhoneNumber']) ? $_POST['caretakerPhoneNumber'] : null,
+            'mother_name'	 									=> isset($_POST['mothersName']) ? $_POST['mothersName'] : null,
+            'mother_treatment' 									=> isset($_POST['motherTreatment']) ? implode(",", $_POST['motherTreatment']) : null,
+            'mother_treatment_initiation_date' 					=> isset($_POST['motherTreatmentInitiationDate']) ? $_POST['motherTreatmentInitiationDate'] : null,
+            'child_id' 											=> isset($_POST['childId']) ? $_POST['childId'] : null,
+            'child_name' 										=> isset($_POST['childName']) ? $_POST['childName'] : null,
+            'child_dob' 										=> isset($_POST['childDob']) ? $_POST['childDob'] : null,
+            'child_gender' 										=> isset($_POST['childGender']) ? $_POST['childGender'] : null,
+            'child_age' 										=> isset($_POST['childAge']) ? $_POST['childAge'] : null,
+            'child_treatment' 									=> isset($_POST['childTreatment']) ? implode(",", $_POST['childTreatment']) : null,
+            'mother_hiv_status' 								=> isset($_POST['mothersHIVStatus']) ? $_POST['mothersHIVStatus'] : null,
+            'pcr_test_performed_before' 						=> isset($_POST['pcrTestPerformedBefore']) ? $_POST['pcrTestPerformedBefore'] : null,
+            'previous_pcr_result' 								=> isset($_POST['prePcrTestResult']) ? $_POST['prePcrTestResult'] : null,
+            'last_pcr_date' 									=> isset($_POST['previousPCRTestDate']) ? $_POST['previousPCRTestDate'] : null,
+            'reason_for_pcr' 									=> isset($_POST['pcrTestReason']) ? $_POST['pcrTestReason'] : null,
+            'has_infant_stopped_breastfeeding' 					=> isset($_POST['hasInfantStoppedBreastfeeding']) ? $_POST['hasInfantStoppedBreastfeeding'] : null,
+            'age_breastfeeding_stopped_in_months' 				=> isset($_POST['ageBreastfeedingStopped']) ? $_POST['ageBreastfeedingStopped'] : null,
+            'specimen_type' 									=> isset($_POST['specimenType']) ? $_POST['specimenType'] : null,
+            'sample_collection_date' 							=> isset($_POST['sampleCollectionDate']) ? $_POST['sampleCollectionDate'] : null,
+            'sample_requestor_name' 							=> isset($_POST['sampleRequestorName']) ? $_POST['sampleRequestorName'] : null,
+            'rapid_test_performed' 								=> isset($_POST['rapidTestPerformed']) ? $_POST['rapidTestPerformed'] : null,
+            'rapid_test_date' 									=> isset($_POST['rapidtestDate']) ? $_POST['rapidtestDate'] : null,
+            'rapid_test_result' 								=> isset($_POST['rapidTestResult']) ? $_POST['rapidTestResult'] : null,
+            'sample_received_at_vl_lab_datetime' 				=> isset($_POST['sampleReceivedDate']) ? $_POST['sampleReceivedDate'] : null,
+            'is_sample_rejected' 								=> isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
+            'result' 											=> isset($_POST['result']) ? $_POST['result'] : null,
+            'tested_by' 										=> (isset($_POST['testedBy']) && $_POST['testedBy'] != '') ? $_POST['testedBy'] :  NULL,
+            'result_status' 									=> $status,
+            'data_sync' 										=> 0,
+            'reason_for_sample_rejection' 						=> isset($_POST['sampleRejectionReason']) ? $_POST['sampleRejectionReason'] : null,
+            'request_created_datetime' 							=> $general->getDateTime(),
+            'sample_registered_at_lab' 							=> $general->getDateTime(),
+            'last_modified_datetime' 							=> $general->getDateTime()
+        );
+        $lock = $general->getGlobalConfig('lock_approved_eid_samples');
+        if ($status == 7 && $lock == 'yes') {
+            $eidData['locked'] = 'yes';
+        }
+        $eidData['source_of_request'] = 'hl7';
+        if (isset($_POST['eidSampleId']) && $_POST['eidSampleId'] != '') {
+            $db = $db->where('eid_id', $_POST['eidSampleId']);
+            $id = $db->update($tableName, $eidData);
+        }
+        // include_once(APPLICATION_PATH . '/eid/requests/eid-add-request-helper.php');
+    }
+    if ($id > 0 && isset($eidData) && count($eidData) > 0) {
+        if ($systemConfig['user_type'] == 'remoteuser') {
+            $sampleCode = $eidData['remote_sample_code'];
+        }else{
+            $sampleCode = $eidData['sample_code'];
+        }
         $msh = new MSH();
         $msh->setMessageType(["EID", "REQ"]);
-        $ack = new ACK($msg, $msh);
+        // $msh->setField(20, $sampleCode);
+        $ack = new ACK($msg, $msh, [$sampleCode]);
         $returnString = $ack->toString(true);
         echo $returnString;
+        unset($ack);
     }
 }

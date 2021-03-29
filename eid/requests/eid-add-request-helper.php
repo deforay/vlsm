@@ -32,13 +32,11 @@ try {
 		$instanceId = $_POST['instanceId'];
 	}
 
-	if($_POST['hl7'] != "yes"){
-		if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != "") {
-			$sampleCollectionDate = explode(" ", $_POST['sampleCollectionDate']);
-			$_POST['sampleCollectionDate'] = $general->dateFormat($sampleCollectionDate[0]) . " " . $sampleCollectionDate[1];
-		} else {
-			$_POST['sampleCollectionDate'] = NULL;
-		}
+	if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != "") {
+		$sampleCollectionDate = explode(" ", $_POST['sampleCollectionDate']);
+		$_POST['sampleCollectionDate'] = $general->dateFormat($sampleCollectionDate[0]) . " " . $sampleCollectionDate[1];
+	} else {
+		$_POST['sampleCollectionDate'] = NULL;
 	}
 	
 	if (isset($_POST['approvedOnDateTime']) && trim($_POST['approvedOnDateTime']) != "") {
@@ -49,13 +47,11 @@ try {
 	}
 
 	//Set sample received date
-	if($_POST['hl7'] != "yes"){
-		if (isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate']) != "") {
-			$sampleReceivedDate = explode(" ", $_POST['sampleReceivedDate']);
-			$_POST['sampleReceivedDate'] = $general->dateFormat($sampleReceivedDate[0]) . " " . $sampleReceivedDate[1];
-		} else {
-			$_POST['sampleReceivedDate'] = NULL;
-		}
+	if (isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate']) != "") {
+		$sampleReceivedDate = explode(" ", $_POST['sampleReceivedDate']);
+		$_POST['sampleReceivedDate'] = $general->dateFormat($sampleReceivedDate[0]) . " " . $sampleReceivedDate[1];
+	} else {
+		$_POST['sampleReceivedDate'] = NULL;
 	}
 
 	if (isset($_POST['sampleTestedDateTime']) && trim($_POST['sampleTestedDateTime']) != "") {
@@ -203,7 +199,10 @@ try {
 	if ($status == 7 && $lock == 'yes') {
 		$eidData['locked'] = 'yes';
 	}
-
+	$eidData['source_of_request'] = 'web';
+	if (!empty($_POST['api']) && $_POST['api'] = "yes") {
+		$eidData['source_of_request'] = 'api';
+	}
 	if(isset($_POST['api']) && $_POST['api'] = "yes")
 	{
 
@@ -215,7 +214,7 @@ try {
 	}
 
 	// echo "<pre>";
-	// print_r($eidData);die;
+	// print_r($_POST);die;
 
 	if (isset($_POST['eidSampleId']) && $_POST['eidSampleId'] != '') {
 		$db = $db->where('eid_id', $_POST['eidSampleId']);
@@ -223,20 +222,16 @@ try {
 	}
 	if(isset($_POST['api']) && $_POST['api'] = "yes")
 	{
-		if($_POST['hl7'] == "yes"){
-			return $id;
-		} else{
-			$payload = array(
-				'status' => 'success',
-				'timestamp' => time(),
-				'message' => 'Successfully added.'
-			);
-			
+		$payload = array(
+			'status' => 'success',
+			'timestamp' => time(),
+			'message' => 'Successfully added.'
+		);
 		
-			http_response_code(200);
-			echo json_encode($payload);
-			exit(0);
-		}
+	
+		http_response_code(200);
+		echo json_encode($payload);
+		exit(0);
 	}
 	else
 	{

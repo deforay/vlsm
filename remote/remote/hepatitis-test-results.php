@@ -35,8 +35,8 @@ if (count($data['result']) > 0) {
         // before we unset the hepatitis_id field, let us fetch the
         // test results, comorbidities and symptoms
 
-        $risks = (isset($data['risks'][$lab['hepatitis_id']]) && !empty($data['symptoms'][$lab['hepatitis_id']])) ? $data['risks'][$lab['hepatitis_id']] : array();
-        $comorbidities = (isset($data['comorbidities'][$lab['hepatitis_id']]) && !empty($data['comorbidities'][$lab['hepatitis_id']])) ? $data['comorbidities'][$lab['hepatitis_id']] : array();
+        //$risks = (isset($data['risks'][$lab['hepatitis_id']]) && !empty($data['symptoms'][$lab['hepatitis_id']])) ? $data['risks'][$lab['hepatitis_id']] : array();
+        //$comorbidities = (isset($data['comorbidities'][$lab['hepatitis_id']]) && !empty($data['comorbidities'][$lab['hepatitis_id']])) ? $data['comorbidities'][$lab['hepatitis_id']] : array();
 
 
         //remove fields that we DO NOT NEED here
@@ -86,6 +86,7 @@ if (count($data['result']) > 0) {
         if ($sResult) {
             $db = $db->where('hepatitis_id', $sResult[0]['hepatitis_id']);
             $db->update('form_hepatitis', $lab);
+            error_log(var_export($lab, true));
             $id = $sResult[0]['hepatitis_id'];
         } else {
             $db->insert('form_hepatitis', $lab);

@@ -238,6 +238,7 @@ if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['he
                     WHERE result_status NOT IN (9) 
                     AND sample_code !='' 
                     AND sample_code is not null 
+                    AND (hcv_vl_count NOT LIKE '' AND hcv_vl_count is NOT NULL AND hbv_vl_count NOT LIKE '' AND hbv_vl_count is NOT NULL)
                     AND data_sync=0"; // AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
 
     $hepLabResult = $db->rawQuery($hepQuery);

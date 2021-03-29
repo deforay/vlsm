@@ -1,6 +1,6 @@
 <?php
 if (session_status() == PHP_SESSION_NONE) {
-     session_start();
+    session_start();
 }
 #require_once('../../startup.php');  
 
@@ -16,7 +16,7 @@ $systemConfigResult = $db->query($systemConfigQuery);
 $sarr = array();
 // now we create an associative array so that we can easily create view variables
 for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
-     $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+    $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
 }
 $general = new \Vlsm\Models\General($db);
 $tableName = "vl_request_form";
@@ -29,34 +29,33 @@ SUM(CASE WHEN (vl_result_category IS NOT NULL AND vl_result_category LIKE 'suppr
 SUM(IF(vl_result_category LIKE 'suppressed%', (((IF(vl_result_category LIKE 'suppressed%',1,0))/tl.suppressed_monthly_target) * 100), 0)) as supp_percent
  FROM testing_labs as tl INNER JOIN vl_request_form as vl ON vl.lab_id=tl.facility_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  ";
 
-$sWhere = $sWhere . ' where  vl.vlsm_country_id="' . $formId . '" AND vl.result_status!=9';
+$sWhere = ' WHERE  vl.vlsm_country_id="' . $formId . '" AND vl.result_status!=9';
 if (isset($_POST['facilityName']) && count($_POST['facilityName']) > 0) {
-     $fac = $_POST['facilityName'];
-     $out = '';
-     for($s=0; $s < count($fac); $s++)
-     {
-          if($out)
-          $out = $out.',"'.$fac[$s].'"';
-          else
-          $out = '("'.$fac[$s].'"';
-     }
-     $out = $out.')';
-     if (isset($sWhere)) {
-          $sWhere = $sWhere . ' AND vl.lab_id IN ' . $out . '';
-     }//  else {
-          //      $setWhr = 'where';
-          //      $sWhere = ' where ' . $sWhere;
-          //      $sWhere = $sWhere . ' vl.lab_id IN ' . $out . '';
-          // }
+    $fac = $_POST['facilityName'];
+    $out = '';
+    for ($s = 0; $s < count($fac); $s++) {
+        if ($out)
+            $out = $out . ',"' . $fac[$s] . '"';
+        else
+            $out = '("' . $fac[$s] . '"';
+    }
+    $out = $out . ')';
+    if (isset($sWhere)) {
+        $sWhere = $sWhere . ' AND vl.lab_id IN ' . $out . '';
+    } //  else {
+    //      $setWhr = 'where';
+    //      $sWhere = ' where ' . $sWhere;
+    //      $sWhere = $sWhere . ' vl.lab_id IN ' . $out . '';
+    // }
 
-     
+
 }
 if (!empty($facilityMap)) {
     $sWhere .= " AND vl.facility_id IN ($facilityMap) ";
 }
-$sWhere .= " AND tl.test_type = 'vl' " ;
+$sWhere .= " AND tl.test_type = 'vl' ";
 
-$sQuery = $sQuery . ' ' . $sWhere. ' GROUP BY f.facility_id, YEAR(vl.sample_tested_datetime), MONTH(vl.sample_tested_datetime)';
+$sQuery = $sQuery . ' ' . $sWhere . ' GROUP BY f.facility_id, YEAR(vl.sample_tested_datetime), MONTH(vl.sample_tested_datetime)';
 
 // $_SESSION['vlSuppressedTargetReportQuery'] = $sQuery;
 // die($sQuery);
@@ -116,8 +115,7 @@ foreach ($rResult as $aRow) {
 // $_SESSION['vlSuppressedTargetReportResult'] = json_encode($res);
 // echo json_encode($res);die;
 
-foreach($rResult as $subRow)
-{
+foreach ($rResult as $subRow) {
     $res[$subRow['monthrange']][$subRow['facility_id']]['totalSuppressed']   = $subRow['totalSuppressed'];
     $res[$subRow['monthrange']][$subRow['facility_id']]['totalCollected']    = $subRow['totalCollected'];
     $res[$subRow['monthrange']][$subRow['facility_id']]['facility_name']     = $subRow['facility_name'];
@@ -126,36 +124,32 @@ foreach($rResult as $subRow)
 
 ksort($res);
 end($res);
-if(isset($_POST['monthYear']) && $_POST['monthYear']!='')
-{
-    $monthYear = '01-'.$_POST['monthYear'];
+if (isset($_POST['monthYear']) && $_POST['monthYear'] != '') {
+    $monthYear = '01-' . $_POST['monthYear'];
     $mon = date('Y-M', strtotime($monthYear));
     $resArray = $res[$mon];
     // print_r($mon);
     // print_r($res);die;
-}
-else
-{
+} else {
     $monthYear = key($res);
     $resArray = end($res);
 }
 
-if(isset($_POST['targetType'])  && $_POST['targetType']!='')
-{
-    $returnVal = 0 ;
-    foreach($rResult as $subRow)
-    {
+if (isset($_POST['targetType'])  && $_POST['targetType'] != '') {
+    $returnVal = 0;
+    foreach ($rResult as $subRow) {
         /* foreach($row as $subRow)
         { */
-            if($subRow['totalSuppressed'] < $subRow['suppressed_monthly_target'])
-            {
-                $returnVal = 1;
-                echo $returnVal;die;
-            }
+        if ($subRow['totalSuppressed'] < $subRow['suppressed_monthly_target']) {
+            $returnVal = 1;
+            echo $returnVal;
+            die;
+        }
         // }
 
     }
-    echo $returnVal;die;
+    echo $returnVal;
+    die;
 }
 ?>
 <div class="col-xs-12 labAverageTatDiv">
@@ -166,69 +160,70 @@ if(isset($_POST['targetType'])  && $_POST['targetType']!='')
     </div>
 </div>
 <script>
-$('#eidLabAverageTat').highcharts({
-            chart: {
-                type: 'column'
-            },
+    $('#eidLabAverageTat').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'VL Suppressed Testing Target'
+        },
+        exporting: {
+            chartOptions: {
+                subtitle: {
+                    text: 'VL Suppressed Testing Target',
+                }
+            }
+        },
+        credits: {
+            enabled: false
+        },
+        xAxis: {
+            //  categories: ["21 Mar", "22 Mar", "23 Mar", "24 Mar", "25 Mar", "26 Mar", "27 Mar"]
+            categories: [<?php
+                            echo "'" . $monthYear . "',";
+                            ?>]
+        },
+        yAxis: {
             title: {
-                text: 'VL Suppressed Testing Target'
+                text: 'No of target in month %'
             },
-            exporting: {
-                chartOptions: {
-                    subtitle: {
-                        text: 'VL Suppressed Testing Target',
-                    }
+            labels: {
+                formatter: function() {
+                    return this.value;
                 }
-            },
-            credits: {
-                enabled: false
-            },
-            xAxis: {
-               //  categories: ["21 Mar", "22 Mar", "23 Mar", "24 Mar", "25 Mar", "26 Mar", "27 Mar"]
-                categories: [<?php
-                                        echo "'" . $monthYear . "',";
-                                ?>]
-            },
-            yAxis: {
-                title: {
-                    text: 'No of target in month %'
-                },
-                labels: {
-                    formatter: function() {
-                        return this.value;
-                    }
-                },
-               
-            },
-          
-        tooltip: {
-                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                '<td style="padding:0"><b>{point.y:.1f} %</b></td></tr>',
-                footerFormat: '</table>',
-                shared: true,
-                useHTML: true
-            },
-            plotOptions: {
-                column: {
-                pointPadding: 0.2,
-                borderWidth: 0
-                }
-            },
-            series: [
-            <?php  foreach ($resArray as $tRow) {  $color = sprintf("#%06x",rand(0,16777215));?>
-            {
-                name: '<?php echo  $tRow['facility_name']; ?>',
-                   // data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
-                   data: [
-                        <?php
-                            echo  $tRow['supp_percent'] ;
-                        ?>
-                   ],
-                //    color:' <?php // echo  $color; ?>'
             },
 
-        <?php  } ?>
+        },
+
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f} %</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [
+            <?php foreach ($resArray as $tRow) {
+                $color = sprintf("#%06x", rand(0, 16777215)); ?> {
+                    name: '<?php echo  $tRow['facility_name']; ?>',
+                    // data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
+                    data: [
+                        <?php
+                        echo  $tRow['supp_percent'];
+                        ?>
+                    ],
+                    //    color:' <?php // echo  $color; 
+                                    ?>'
+                },
+
+            <?php  } ?>
         ]
-        });
+    });
 </script>
