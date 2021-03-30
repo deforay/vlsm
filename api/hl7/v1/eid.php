@@ -48,14 +48,49 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
             LEFT JOIN r_funding_sources as r_f_s ON r_f_s.funding_source_id=vl.funding_source 
             LEFT JOIN r_implementation_partners as r_i_p ON r_i_p.i_partner_id=vl.implementing_partner";
     $where = "";
-    if (!empty($search[1])) {
-        $date = $search[1];
+    if (!empty($dateRange[1])) {
+        $date = $dateRange[1];
         if(isset($where) && trim($where) != ""){
             $where .= " AND ";
         } else{
             $where .= " WHERE ";
         }
         $where .= "(DATE(sample_collection_date) between '$date[0]' AND '$date[1]')";
+    }
+    if (!empty($pidF[2])) {
+        if(isset($where) && trim($where) != ""){
+            $where .= " AND ";
+        } else{
+            $where .= " WHERE ";
+        }
+        $where .= " vl.child_id IN ('" . $pidF[2] . "') ";
+    }
+    
+    if (!empty($spmF[4])) {
+        if(isset($where) && trim($where) != ""){
+            $where .= " AND ";
+        } else{
+            $where .= " WHERE ";
+        }
+        $where .= " rst.sample_name IN ('" . $spmF[4] . "') ";
+    }
+
+    if (!empty($mshF[4])) {
+        if(isset($where) && trim($where) != ""){
+            $where .= " AND ";
+        } else{
+            $where .= " WHERE ";
+        }
+        $where .= " f.facility_name IN ('" . $mshF[4] . "') ";
+    }
+
+    if (!empty($mshF[6])) {
+        if(isset($where) && trim($where) != ""){
+            $where .= " AND ";
+        } else{
+            $where .= " WHERE ";
+        }
+        $where .= " l_f.facility_name IN ('" . $mshF[6] . "') ";
     }
 
     if (!empty($search[2])) {
@@ -64,40 +99,10 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
         } else{
             $where .= " WHERE ";
         }
-        $specimen = implode("','", $search[2]);
-        $where .= " rst.sample_name IN ('" . $specimen . "') ";
+        $where .= " vl.is_sample_rejected ='" . $search[2] . "' ";
     }
 
-    if (!empty($search[3])) {
-        if(isset($where) && trim($where) != ""){
-            $where .= " AND ";
-        } else{
-            $where .= " WHERE ";
-        }
-        $facilities = implode("','", $search[3]);
-        $where .= " f.facility_name IN ('" . $facilities . "') ";
-    }
-
-    if (!empty($search[4])) {
-        if(isset($where) && trim($where) != ""){
-            $where .= " AND ";
-        } else{
-            $where .= " WHERE ";
-        }
-        $labs = implode("','", $search[4]);
-        $where .= " l_f.facility_name IN ('" . $labs . "') ";
-    }
-
-    if (!empty($search[5])) {
-        if(isset($where) && trim($where) != ""){
-            $where .= " AND ";
-        } else{
-            $where .= " WHERE ";
-        }
-        $where .= " vl.is_sample_rejected ='" . $search[5] . "' ";
-    }
-
-    if (!empty($search[6]) && $search[6] == "yes") {
+    if (!empty($search[3]) && $search[3] == "yes") {
         if(isset($where) && trim($where) != ""){
             $where .= " AND ";
         } else{
@@ -105,13 +110,13 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
         }
         $where .= " (vl.sample_tested_datetime != null AND vl.sample_tested_datetime not like '') ";
     }
-    if (!empty($search[7]) && $search[7] != "") {
+    if (!empty($spmF[2]) && $spmF[2] != "") {
         if(isset($where) && trim($where) != ""){
             $where .= " AND ";
         } else{
             $where .= " WHERE ";
         }
-        $where .= " (vl.sample_code like '".$search[7]."%' OR vl.remote_sample_code like '".$search[7]."%') ";
+        $where .= " (vl.sample_code like '".$spmF[2]."%' OR vl.remote_sample_code like '".$spmF[2]."%') ";
     }
     if($type[1] == 'QRY'){
         if(isset($where) && trim($where) != ""){
@@ -456,17 +461,21 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
             $db = $db->where('eid_id', $_POST['eidSampleId']);
             $id = $db->update($tableName, $eidData);
         }
-        // include_once(APPLICATION_PATH . '/eid/requests/eid-add-request-helper.php');
+        $sQuery = "SELECT eid_id, sample_code, remote_sample_code FROM eid_form where eid_id = ".$_POST['eidSampleId'];
+        $savedSamples = $db->rawQueryOne($sQuery);
     }
     if ($id > 0 && isset($eidData) && count($eidData) > 0) {
-        if ($systemConfig['user_type'] == 'remoteuser') {
-            $sampleCode = $eidData['remote_sample_code'];
-        }else{
-            $sampleCode = $eidData['sample_code'];
+        if ($savedSamples['sample_code'] != '') {
+            $sampleCode = $savedSamples['sample_code'];
+        } else {
+            $sampleCode = $savedSamples['remote_sample_code'];
         }
         $msh = new MSH();
         $msh->setMessageType(["EID", "REQ"]);
-        $ack = new ACK($msg, $msh, [$sampleCode]);
+        $ack = new ACK($msg, $msh);
+        $spm = new Segment('SPM');
+        $spm->setField(2, $sampleCode);
+        $ack->setSegment($spm, 2);
         $returnString = $ack->toString(true);
         echo $returnString;
         unset($ack);

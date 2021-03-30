@@ -47,16 +47,28 @@ try {
             $msh = $msg->getSegmentByIndex(0);
             $type = $msh->getField(9);
             // Get if have any filters
+            if ($msg->hasSegment('MSH')) {
+                $mshF = (array)$msg->getSegmentsByName('MSH')[0];
+                $mshF = array_shift($mshF);
+            }
+            if ($msg->hasSegment('PID')) {
+                $pidF = (array)$msg->getSegmentsByName('PID')[0];
+                $pidF = array_shift($pidF);
+            }
+            if ($msg->hasSegment('SPM')) {
+                $spmF = (array)$msg->getSegmentsByName('SPM')[0];
+                $spmF = array_shift($spmF);
+            }
             if ($msg->hasSegment('ZFL')) {
-                $filters = $msg->getSegmentsByName('ZFL')[0];
+                $dateRange = (array)$msg->getSegmentsByName('ZFL')[0];
+                $dateRange = array_shift($dateRange);
             }
-            if ($type[1] == 'RES' || $type[1] == 'QRY') {
-                foreach ((array)$filters as $search) {
-                    $search = $search;
-                    break;
-                }
-            }
-
+            
+            // print_r($mshF);
+            // print_r($pidF);
+            // print_r($spmF);
+            // print_r($dateRange);
+            // die;
             if(isset($type) && count($type) > 0 && in_array($type[0], array("COVID-19", "VL", "EID"))){
 
                 if ($type[0] == "COVID-19") {
