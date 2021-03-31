@@ -45,7 +45,7 @@ try {
         // echo "<pre>";print_r($resultArray);die;
 
         foreach ($resultArray as $rowIndex => $rowData) {
-            if (isset($rowData['A']) && !empty($rowData['A'])) {
+            // if (isset($rowData['A']) && !empty($rowData['A'])) {
                 $sampleCode = $general->getDublicateDataFromField('eid_form', 'sample_code', $rowData['B']);
 
                 // NOT ADDED
@@ -146,7 +146,7 @@ try {
                     $db = $db->where('eid_id', $lastId);
                     $db->update($tableName, $eidData);
                 }
-            }
+            // }
         }
         $_SESSION['alertMsg'] = "Data imported successfully";
     }

@@ -450,7 +450,7 @@ class General
 
     public function getDublicateDataFromField($tablename, $fieldname, $fieldValue, $lab = "")
     {
-        $query = "SELECT * FROM $tablename WHERE $fieldname =  '$fieldValue'";
+        $query = 'SELECT * FROM '.$tablename.' WHERE '.$fieldname.' =  "'.$fieldValue.'"';
         if ($lab != "") {
             $query .= " AND $lab like 2";
         }
