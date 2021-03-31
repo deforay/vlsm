@@ -103,7 +103,7 @@ try {
                     'child_name'                                        => isset($rowData['G']) ? $rowData['G'] : null,
                     // 'child_dob'                                         => isset($rowData['H']) ? date('Y-M-d',strtotime($rowData['H'])) : null,
                     'child_gender'                                      => isset($rowData['I']) ? $rowData['I'] : null,
-                    'child_age'                                         => isset($rowData['H']) ? $general->ageInMonth($rowData['H']) : null,
+                    // 'child_age'                                         => isset($rowData['H']) ? $general->ageInMonth($rowData['H']) : null,
                     'mother_id'                                         => isset($rowData['J']) ? $rowData['J'] : null,
                     'caretaker_phone_number'                            => isset($rowData['K']) ? $rowData['K'] : null,
                     'caretaker_address'                                 => isset($rowData['L']) ? $rowData['L'] : null,
