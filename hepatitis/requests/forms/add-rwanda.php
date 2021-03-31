@@ -88,7 +88,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         <td><label for="hepatitisTestType">Type of Hepatitis Test </label><span class="mandatory">*</span></td>
                                         <td>
                                             <select class="form-control isRequired" name="hepatitisTestType" id="hepatitisTestType" title="Please choose type of test" style="width:100%;" onchange="sampleCodeGeneration();hepatitisTestTypeFn(this.value);">
-                                                <option>--Select--</option>
+                                                <option value="">--Select--</option>
                                                 <option value="HBV">HBV</option>
                                                 <option value="HCV">HCV</option>
                                             </select>
@@ -590,7 +590,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
         var pName = $("#province").val();
         var sDate = $("#sampleCollectionDate").val();
         var hepatitisTestType = $("#hepatitisTestType").val();
-        if (pName != '' && sDate != '') {
+        if (pName != '' && sDate != '' && hepatitisTestType != '') {
             $.post("/hepatitis/requests/generate-sample-code.php", {
                     sDate: sDate,
                     pName: pName,
