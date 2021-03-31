@@ -101,7 +101,7 @@ try {
                     'facility_id'                                       => isset($facility['facility_id']) ? $facility['facility_id'] : null,
                     'child_id'                                          => isset($rowData['F']) ? $rowData['F'] : null,
                     'child_name'                                        => isset($rowData['G']) ? $rowData['G'] : null,
-                    'child_dob'                                         => isset($rowData['H']) ? date('Y-M-d',strtotime($rowData['H'])) : null,
+                    // 'child_dob'                                         => isset($rowData['H']) ? date('Y-M-d',strtotime($rowData['H'])) : null,
                     'child_gender'                                      => isset($rowData['I']) ? $rowData['I'] : null,
                     'child_age'                                         => isset($rowData['H']) ? $general->ageInMonth($rowData['H']) : null,
                     'mother_id'                                         => isset($rowData['J']) ? $rowData['J'] : null,
