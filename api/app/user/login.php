@@ -4,6 +4,8 @@ require_once('../../../startup.php');
 
 
 $general = new \Vlsm\Models\General($db);
+$app = new \Vlsm\Models\App($db);
+
 $input = json_decode(file_get_contents("php://input"),true);
 
 try {
@@ -17,14 +19,8 @@ try {
         $admin = $db->rawQuery("SELECT user_id,user_name,phone_number,login_id,status FROM user_details as ud WHERE ud.login_id = ? AND ud.password = ? AND ud.status = ?", $queryParams);
         if (count($admin) > 0) {
             
-            //add random key
-            $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            $randomString = '';
-        
-            for ($i = 0; $i < 33; $i++) {
-                $index = rand(0, strlen($characters) - 1);
-                $randomString .= $characters[$index];
-            }
+            $randomString = $app->generateAuthToken();
+            
             $userData['api_token'] = $randomString;
             $userData['api_token_generated_datetime'] = $general->getDateTime();
             $db = $db->where('user_id', $admin[0]['user_id']);
