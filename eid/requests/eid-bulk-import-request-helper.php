@@ -4,7 +4,7 @@ ob_start();
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-
+ini_set('memory_limit', -1);
 $arr = array();
 $general = new \Vlsm\Models\General($db);
 $usersModel = new \Vlsm\Models\Users($db);
