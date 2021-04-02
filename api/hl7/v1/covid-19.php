@@ -249,7 +249,7 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
 }
 
 if ($type[1] == 'REQ' || $type[1] == 'UPI') {
-    $msg = new Message($hl7Msg);
+    // $msg = new Message($hl7Msg);
     /* MSH Information */
     if ($msg->hasSegment('MSH')) {
         $msh = $msg->getSegmentByIndex(0);
@@ -275,7 +275,7 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
             $gender = "other";
         }
         $name = $pid->getField(6);
-        $data['patientId'] = $pid->getField(1);
+        $data['patientId'] = $pid->getField(2);
         $data['firstName'] = $name[0];
         $data['lastName'] = $name[1];
         $data['patientDob'] = $pid->getField(7);
@@ -543,6 +543,7 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
         $sQuery = "SELECT covid19_id, sample_code, remote_sample_code FROM form_covid19 where covid19_id = ".$_POST['covid19SampleId'];
         $savedSamples = $db->rawQueryOne($sQuery);
     }
+    $returnString = "";
     // print_r($savedSamples);die;
     if ($id > 0 && isset($covid19Data) && count($covid19Data) > 0) {
         if ($savedSamples['sample_code'] != '') {
@@ -550,13 +551,13 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
         } else {
             $sampleCode = $savedSamples['remote_sample_code'];
         }
-        $msh = new MSH();
+        /* $msh = new MSH();
         $msh->setMessageType(["COVID19", "REQ"]);
         $ack = new ACK($msg, $msh);
-        $spm = new Segment('SPM');
+        $spm = new Segment('SPM'); */
         $spm->setField(2, $sampleCode);
-        $ack->setSegment($spm, 2);
-        $returnString = $ack->toString(true);
+        // $ack->setSegment($spm, 2);
+        $returnString = $msg->toString(true);
         echo $returnString;
         unset($ack);
     }

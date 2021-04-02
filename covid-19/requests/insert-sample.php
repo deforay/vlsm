@@ -119,10 +119,12 @@ try {
             }
         }
     }
-    if ($id > 0) {
-        echo $id;
-    } else {
-        echo 0;
+    if (isset($_POST['api']) && $_POST['api'] != "yes") {
+        if ($id > 0) {
+            echo $id;
+        } else {
+            echo 0;
+        }
     }
 } catch (Exception $e) {
     echo 'Message: ' . $e->getMessage();
