@@ -352,4 +352,13 @@ class Covid19
         }
         return $this->db->rawQueryOne("SELECT * FROM covid19_reasons_for_testing WHERE `covid19_id` = ?", array($formId));
     }
+
+    public function fetchAllDetailsBySampleCode($sampleCode)
+    {
+        if (empty($sampleCode)) {
+            return null;
+        }
+        $sQuery = "SELECT * FROM form_covid19 WHERE sample_code like '$sampleCode%' OR remote_sample_code LIKE '$sampleCode%'";
+        return $this->db->rawQueryOne($sQuery);
+    }
 }
