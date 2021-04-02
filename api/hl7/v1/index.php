@@ -39,6 +39,7 @@ try {
     }
 
     $hl7Msg = file_get_contents("php://input");
+    // print_r(explode("MSH", $hl7Msg));die;
     foreach(explode("MSH", $hl7Msg) as $hl7){
         if(isset($hl7) && !empty($hl7) && trim($hl7) != ""){
             $hl7 = 'MSH'.$hl7;

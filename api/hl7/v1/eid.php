@@ -470,13 +470,13 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
         } else {
             $sampleCode = $savedSamples['remote_sample_code'];
         }
-        $msh = new MSH();
+        /* $msh = new MSH();
         $msh->setMessageType(["EID", "REQ"]);
         $ack = new ACK($msg, $msh);
-        $spm = new Segment('SPM');
+        $spm = new Segment('SPM'); */
         $spm->setField(2, $sampleCode);
-        $ack->setSegment($spm, 2);
-        $returnString = $ack->toString(true);
+        // $ack->setSegment($spm, 2);
+        $returnString = $msg->toString(true);
         echo $returnString;
         unset($ack);
         http_response_code(201);
