@@ -33,7 +33,7 @@ if (isset($_POST['type']) && trim($_POST['type']) == 'eid') {
     $samplesRejectedChart   = "covid19SamplesRejectedChart";
     $samplesWaitingChart    = "covid19SamplesWaitingChart";
 } else if (isset($_POST['type']) && trim($_POST['type']) == 'hepatitis') {
-    $table = "form_covid19";
+    $table = "form_hepatitis";
     $samplesReceivedChart   = "hepatitisSamplesReceivedChart";
     $samplesTestedChart     = "hepatitisSamplesTestedChart";
     $samplesRejectedChart   = "hepatitisSamplesRejectedChart";
@@ -109,9 +109,6 @@ if ($table == "eid_form") {
 
     $waitingQuery = "SELECT COUNT(vl_sample_id) as total FROM " . $table . " as vl JOIN facility_details as f ON f.facility_id=vl.facility_id WHERE $whereCondition vl.vlsm_country_id = '" . $configFormResult[0]['value'] . "' " . " AND (sample_collection_date < DATE_SUB(NOW(), INTERVAL 6 MONTH)) AND (vl.result is null or vl.result = '') AND (vl.is_sample_rejected like 'no' or vl.is_sample_rejected is null or vl.is_sample_rejected = '')";
 }
-//echo print_r($_POST);
-//echo "<br>";
-//echo $waitingQuery;die;
 $waitingResult[$i] = $db->rawQuery($waitingQuery); //waiting result
 if ($waitingResult[$i][0]['total'] != 0) {
     $waitingTotal = $waitingTotal + $waitingResult[$i][0]['total'];
@@ -181,7 +178,6 @@ if ($table == "eid_form") {
     }
     $sampleRejectedQuery = 'SELECT DATE(vl.sample_collection_date) as `collection_date`, COUNT(vl_sample_id) as `count` FROM ' . $table . ' as vl JOIN facility_details as f ON f.facility_id=vl.facility_id where ' . $whereCondition . ' vl.is_sample_rejected="yes" AND DATE(vl.sample_collection_date) <= "' . $cDate . '" AND DATE(vl.sample_collection_date) >= "' . $lastSevenDay . '" GROUP BY `collection_date` order by `collection_date`';
 }
-
 $tRes = $db->rawQuery($sampleRejectedQuery); //overall result
 $rejectedResult = array();
 foreach ($tRes as $tRow) {
