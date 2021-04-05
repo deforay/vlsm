@@ -243,9 +243,9 @@ $facilityCount = $facilityTotal[0]['total'];
 			</div>
 		</div>
 		<div class="row">
-			<div id="covid19SampleResultDetails"></div>
-			<div class="box-body" id="covid19NoOfSampleCount"></div>
-			<div id="covid19PieChartDiv"></div>
+			<div id="hepatitisSampleResultDetails"></div>
+			<div class="box-body" id="hepatitisNoOfSampleCount"></div>
+			<div id="hepatitisPieChartDiv"></div>
 		</div>
 		
 		<!-- /.row -->
@@ -275,7 +275,7 @@ $facilityCount = $facilityTotal[0]['total'];
 		$("#myTabContent div:first-child table.searchTable .searchBtn").trigger("click");
 
 
-		$('#vlSampleCollectionDate,#eidSampleCollectionDate,#covid19SampleCollectionDate,#recencySampleCollectionDate').daterangepicker({
+		$('#vlSampleCollectionDate,#eidSampleCollectionDate,#covid19SampleCollectionDate,#recencySampleCollectionDate,#hepatitisSampleCollectionDate').daterangepicker({
 				format: 'DD-MMM-YYYY',
 				separator: ' to ',
 				startDate: moment().subtract(30, 'days'),
@@ -309,6 +309,8 @@ $facilityCount = $facilityTotal[0]['total'];
 			loadVlRequestData();
 		else if(requestType == 'covid19')
 			loadCovid19RequestData();
+		else if(requestType == 'hepatitis')
+			loadHepatitisRequestData();
 		loadVlSuppressedData();
 	}
 
@@ -357,7 +359,7 @@ $facilityCount = $facilityTotal[0]['total'];
 		} else if (requestType == 'hepatitis') {
 			$.post("/dashboard/getSampleResult.php", {
 					sampleCollectionDate: $("#hepatitisSampleCollectionDate").val(),
-					type: 'covid19'
+					type: 'hepatitis'
 				},
 				function(data) {
 					if (data != '') {
@@ -579,6 +581,30 @@ $facilityCount = $facilityTotal[0]['total'];
 					
 					
 				});
+    $.unblockUI();
+  }
+  
+  function loadHepatitisRequestData() {
+    $.blockUI();
+    
+	$.post("/hepatitis/management/get-hepatitis-monthly-threshold-report.php", {
+		targetType: '1',
+	},
+	function(data) {
+		var data = JSON.parse(data);
+		console.log(data['aaData'].length);
+		if(data['aaData'].length > 0)
+		{
+			var div ='<div class="alert alert-danger alert-dismissible" role="alert" style="background-color: #ff909f !important">\
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close" style="text-indent: 0px"><span aria-hidden="true" style="font-size: larger;font-weight: bolder;color: #000000;">&times;</span></button>\
+				<span >'+data['aaData'].length+' Covid-19 testing labs did not meet the monthly test target.  </span><a href="/hepatitis/management/hepatitis-testing-target-report.php" target="_blank"> more </a>\
+				</div>';
+			$("#contCovid").html(div);
+		}
+		// toastr.info('Are you the 6 fingered man?')
+		
+		
+	});
     $.unblockUI();
   }
 </script>
