@@ -2106,3 +2106,19 @@ ALTER TABLE `form_hepatitis` ADD `imported_date_time` DATETIME NULL DEFAULT NULL
 -- Thana 26-Mar-2021
 ALTER TABLE `eid_form` ADD `source_of_request` VARCHAR(50) NULL DEFAULT NULL AFTER `lot_number`;
 ALTER TABLE `vl_request_form` ADD `source_of_request` VARCHAR(50) NULL DEFAULT NULL AFTER `vldash_sync`;
+
+-- Thana 05-Apr-2021
+CREATE TABLE `lab_report_signatories` (
+ `signatory_id` int NOT NULL AUTO_INCREMENT,
+ `name_of_signatory` varchar(255) DEFAULT NULL,
+ `designation` varchar(255) DEFAULT NULL,
+ `signature` varchar(255) DEFAULT NULL,
+ `test_types` varchar(255) DEFAULT NULL,
+ `lab_id` int DEFAULT NULL,
+ `display_order` varchar(50) DEFAULT NULL,
+ `added_on` datetime DEFAULT NULL,
+ `added_by` varchar(255) DEFAULT NULL,
+ `signatory_status` varchar(255) DEFAULT NULL,
+ PRIMARY KEY (`signatory_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+ALTER TABLE `lab_report_signatories` ADD FOREIGN KEY (`lab_id`) REFERENCES `facility_details`(`facility_id`) ON DELETE RESTRICT ON UPDATE RESTRICT; 
