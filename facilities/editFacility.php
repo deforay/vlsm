@@ -31,6 +31,11 @@ $selectedResult = $db->rawQuery($selectedQuery);
 
 $testTypeQuery = "SELECT * from testing_labs where facility_id=$id";
 $testTypeInfo = $db->query($testTypeQuery);
+
+$signQuery = "SELECT * from lab_report_signatories where lab_id=?";
+$signResults = $db->rawQuery($signQuery, array($id));
+// echo "<pre>";
+// print_r($signResults);die;
 $editTestType = '';
 $div = '';
 if (count($testTypeInfo) > 0) {
@@ -344,7 +349,88 @@ if (count($testTypeInfo) > 0) {
 							</div>
 						</div>
 					</div>
-
+					
+					<div class="row">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Designation</th>
+									<th>Upload Sign</th>
+									<th>Test Types</th>
+									<th>Display Order</th>
+									<th>Status</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody id="signDetails">
+								<?php if(isset($signResults) && !empty($signResults)){
+									foreach($signResults as $key=>$row){ ?>
+										<tr>
+											<td style="width:14%;"><input value="<?php echo $row['name_of_signatory']?>" type="text" class="form-control" name="signName[]" id="signName<?php echo ($key+1);?>" placeholder="Name" title="Please enter the name"></td>
+											<td style="width:14%;"><input value="<?php echo $row['designation']?>" type="text" class="form-control" name="designation[]" id="designation<?php echo ($key+1);?>" placeholder="Designation" title="Please enter the Designation"></td>
+											<td style="width:10%;">
+												<?php $lmSign = "/uploads/labs/".$row['lab_id']."/signatures/".$row['signature'];
+												$show = "style='display:block'";
+												if(isset($row['signature']) && $row['signature'] != ""){
+													$show = "style='display:none'";
+													?>
+													<span id="spanClass<?php echo ($key+1);?>"><a href="javascript:void(0);" onclick="showFile(<?php echo ($key+1);?>);"><span class="alert-danger" style="padding: 5px;border-radius: 50%;margin-top: 0px;float: right;">X</span></a><img src="<?php echo $lmSign;?>" style=""/></span>
+												<?php }
+												?>
+												<input <?php echo $show;?>  class="showFile<?php echo ($key+1);?>" type="file" name="signature[]" id="signature<?php echo ($key+1);?>" placeholder="Signature" title="Please enter the Signature">
+											</td>
+											<td style="width:14%;">
+												<select type="text" class="select2" id="testSignType<?php echo ($key+1);?>" name="testSignType[<?php echo ($key+1);?>][]" title="Choose one test type" multiple>
+													<option value="vl" <?php echo (isset($row['test_types']) && in_array("vl", explode(",", $row['test_types'])))?'selected="selected"':'';?>>Viral Load</option>
+													<option value="eid" <?php echo (isset($row['test_types']) && in_array("eid", explode(",", $row['test_types'])))?'selected="selected"':'';?>>Early Infant Diagnosis</option>
+													<option value="covid19" <?php echo (isset($row['test_types']) && in_array("covid19", explode(",", $row['test_types'])))?'selected="selected"':'';?>>Covid-19</option>
+													<option value='hepatitis' <?php echo (isset($row['test_types']) && in_array("hepatitis", explode(",", $row['test_types'])))?'selected="selected"':'';?>>Hepatitis</option>
+												</select>
+											</td>
+											<td style="width:14%;"><input value="<?php echo $row['display_order']?>" type="text" class="form-control" name="sortOrder[]" id="sortOrder<?php echo ($key+1);?>" placeholder="Display Order" title="Please enter the Display Order"></td>
+											<td style="width:14%;">
+												<select class="form-control" id="signStatus<?php echo ($key+1);?>" name="signStatus[]" title="Please select the status">
+													<option value="active" <?php echo (isset($row['test_types']) && $row['test_types'] == 'active')?'selected="selected"':'';?>>Active</option>
+													<option value="inactive" <?php echo (isset($row['test_types']) && $row['test_types'] == 'inactive')?'selected="selected"':'';?>>Inactive</option>
+												</select>
+											</td>
+											<td style="vertical-align:middle;text-align: center;width:10%;">
+												<a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="addNewRow();"><i class="fa fa-plus"></i></a>&nbsp;
+												<a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeNewRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
+											</td>
+										</tr>
+									<?php }
+								}else{?>
+									<tr>
+										<td style="width:14%;"><input type="text" class="form-control" name="signName[]" id="signName1" placeholder="Name" title="Please enter the name"></td>
+										<td style="width:14%;"><input type="text" class="form-control" name="designation[]" id="designation1" placeholder="Designation" title="Please enter the Designation"></td>
+										<td style="width:10%;"><input type="file" name="signature[]" id="signature1" placeholder="Signature" title="Please enter the Signature"></td>
+										<td style="width:14%;">
+											<select type="text" class="select2" id="testSignType1" name="testSignType[1][]" title="Choose one test type" multiple>
+												<option value="vl">Viral Load</option>
+												<option value="eid">Early Infant Diagnosis</option>
+												<option value="covid19">Covid-19</option>
+												<option value='hepatitis'>Hepatitis</option>
+											</select>
+										</td>
+										<td style="width:14%;"><input type="text" class="form-control" name="sortOrder[]" id="sortOrder1" placeholder="Display Order" title="Please enter the Display Order"></td>
+										<td style="width:14%;">
+											<select class="form-control" id="signStatus1" name="signStatus[]" title="Please select the status">
+												<option value="active">Active</option>
+												<option value="inactive">Inactive</option>
+											</select>
+										</td>
+										<td style="vertical-align:middle;text-align: center;width:10%;">
+											<a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="addNewRow();"><i class="fa fa-plus"></i></a>&nbsp;
+											<a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeNewRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
+										</td>
+									</tr>
+								<?php } ?>
+							</tbody>
+						</table>
+					</div>
+					
 					<div class="row" id="userDetails">
 						<?php if (($facilityInfo[0]['facility_type'] == 1 || $facilityInfo[0]['facility_type'] == 4) && ($sarr['user_type'] == 'remoteuser')) { ?>
 							<h4>User Facility Map Details</h4>
@@ -410,6 +496,10 @@ if (count($testTypeInfo) > 0) {
 		$("#testType").multipleSelect({
 			placeholder: 'Select Test Type',
 			width: '100%'
+		});
+		$(".select2").multipleSelect({
+			placeholder: 'Select Test Type',
+			width: '150px'
 		});
 
 	});
@@ -561,6 +651,58 @@ if (count($testTypeInfo) > 0) {
 			}
 		}
 		first = 1;
+	}
+
+	let testCounter = document.getElementById("signDetails").rows.length;
+
+	function addNewRow() {
+        testCounter++;
+        let rowString = `<tr>
+			<td style="width:14%;"><input type="text" class="form-control" name="signName[]" id="signName${testCounter}" placeholder="Name" title="Please enter the name"></td>
+			<td style="width:14%;"><input type="text" class="form-control" name="designation[]" id="designation${testCounter}" placeholder="Designation" title="Please enter the Designation"></td>
+			<td style="width:14%;"><input type="file" name="signature[]" id="signature${testCounter}" placeholder="Signature" title="Please enter the Signature"></td>
+			<td style="width:14%;">
+				<select type="text" class="select2" id="testSignType${testCounter}" name="testSignType[${testCounter}][]" title="Choose one test type" multiple>
+					<option value="vl">Viral Load</option>
+					<option value="eid">Early Infant Diagnosis</option>
+					<option value="covid19">Covid-19</option>
+					<option value='hepatitis'>Hepatitis</option>
+				</select>
+			</td>
+			<td style="width:14%;"><input type="text" class="form-control" name="sortOrder[]" id="sortOrder${testCounter}" placeholder="Display Order" title="Please enter the Display Order"></td>
+			<td style="width:14%;">
+				<select class="form-control" id="signStatus${testCounter}" name="signStatus[]" title="Please select the status">
+					<option value="active">Active</option>
+					<option value="inactive">Inactive</option>
+				</select>
+			</td>
+			<td style="vertical-align:middle;text-align: center;width:10%;">
+				<a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="addNewRow();"><i class="fa fa-plus"></i></a>&nbsp;
+				<a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeNewRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
+			</td>
+		</tr>`;
+		$("#signDetails").append(rowString);
+
+		$("#testSignType"+testCounter).multipleSelect({
+			placeholder: 'Select Test Type',
+			width: '150px'
+		});
+    }
+
+    function removeNewRow(el) {
+        $(el).fadeOut("slow", function() {
+            el.parentNode.removeChild(el);
+            rl = document.getElementById("signDetails").rows.length;
+            if (rl == 0) {
+                testCounter = 0;
+                addNewRow();
+            }
+        });
+    }
+
+	function showFile(count){
+		$('#spanClass'+count).hide();
+		$('.showFile'+count).show();
 	}
 </script>
 <?php

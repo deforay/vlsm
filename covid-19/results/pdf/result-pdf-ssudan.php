@@ -88,6 +88,9 @@ if (sizeof($requestResult) > 0) {
         $patientFname = ucwords($general->crypto('decrypt', $result['patient_name'], $result['patient_id']));
         $patientLname = ucwords($general->crypto('decrypt', $result['patient_surname'], $result['patient_id']));
 
+        $signQuery = "SELECT * from lab_report_signatories where lab_id=? AND test_types like '%covid19%' AND signatory_status like 'active'";
+        $signResults = $db->rawQuery($signQuery, array($result['lab_id']));
+
         $currentTime = $general->getDateTime();
         $_SESSION['aliasPage'] = $page;
         if (!isset($result['labName'])) {
@@ -402,15 +405,18 @@ if (sizeof($requestResult) > 0) {
         $html .= '<td style="line-height:17px;font-size:13px;font-weight:bold;text-align:left;border-bottom:1px solid #67b3ff;border-left:1px solid #67b3ff;">SIGNATURE</td>';
         $html .= '<td style="line-height:17px;font-size:13px;font-weight:bold;text-align:left;border-bottom:1px solid #67b3ff;border-left:1px solid #67b3ff;">DATE & TIME</td>';
         $html .= '</tr>';
-
-        $lmSign = "/uploads/covid-19/{$countryFormId}/pdf/lm.png";
-        $html .= '<tr>';
-        $html .= '<td style="line-height:17px;font-size:11px;text-align:left;font-weight:bold;border-bottom:1px solid #67b3ff;">Laboratory Manager</td>';
-        $html .= '<td style="line-height:17px;font-size:11px;text-align:left;border-bottom:1px solid #67b3ff;border-left:1px solid #67b3ff;">James Ayei  Maror</td>';
-        $html .= '<td style="line-height:17px;font-size:11px;text-align:left;border-bottom:1px solid #67b3ff;border-left:1px solid #67b3ff;"><img src="' . $lmSign . '" style="width:30px;"></td>';
-        $html .= '<td style="line-height:17px;font-size:11px;text-align:left;border-bottom:1px solid #67b3ff;border-left:1px solid #67b3ff;">' . date('d-M-Y H:i:s a') . '</td>';
-        $html .= '</tr>';
-
+        if(isset($signResults) && !empty($signResults)){
+            foreach($signResults as $key=>$row){
+                $lmSign = "/uploads/labs/".$row['lab_id']."/signatures/".$row['signature'];
+                $html .= '<tr>';
+                $html .= '<td style="line-height:17px;font-size:11px;text-align:left;font-weight:bold;border-bottom:1px solid #67b3ff;">'.$row['designation'].'</td>';
+                $html .= '<td style="line-height:17px;font-size:11px;text-align:left;border-bottom:1px solid #67b3ff;border-left:1px solid #67b3ff;">'.$row['name_of_signatory'].'</td>';
+                $html .= '<td style="line-height:17px;font-size:11px;text-align:left;border-bottom:1px solid #67b3ff;border-left:1px solid #67b3ff;"><img src="' . $lmSign . '" style="width:30px;"></td>';
+                $html .= '<td style="line-height:17px;font-size:11px;text-align:left;border-bottom:1px solid #67b3ff;border-left:1px solid #67b3ff;">' . date('d-M-Y H:i:s a') . '</td>';
+                $html .= '</tr>';
+            }
+        }
+/* 
         $lqSign = "/uploads/covid-19/{$countryFormId}/pdf/lq.png";
         $html .= '<tr>';
         $html .= '<td style="line-height:17px;font-size:11px;text-align:left;font-weight:bold;border-bottom:1px solid #67b3ff;">Laboratory Quality Manager</td>';
@@ -425,7 +431,7 @@ if (sizeof($requestResult) > 0) {
         $html .= '<td style="line-height:17px;font-size:11px;text-align:left;border-bottom:1px solid #67b3ff;border-left:1px solid #67b3ff;">Dr. Simon Deng Nyicar</td>';
         $html .= '<td style="line-height:17px;font-size:11px;text-align:left;border-bottom:1px solid #67b3ff;border-left:1px solid #67b3ff;"><img src="' . $lsSign . '" style="width:30px;"></td>';
         $html .= '<td style="line-height:17px;font-size:11px;text-align:left;border-bottom:1px solid #67b3ff;border-left:1px solid #67b3ff;">' . date('d-M-Y H:i:s a') . '</td>';
-        $html .= '</tr>';
+        $html .= '</tr>'; */
         $html .= '</table>';
         $html .= '</td>';
         $html .= '</tr>';

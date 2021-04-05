@@ -254,6 +254,48 @@ $pResult = $db->rawQuery($pQuery);
 							</div>
 						</div>
 
+						<div class="row">
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>Designation</th>
+										<th>Upload Sign</th>
+										<th>Test Types</th>
+										<th>Display Order</th>
+										<th>Status</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+								<tbody id="signDetails">
+									<tr>
+										<td style="width:14%;"><input type="text" class="form-control" name="signName[]" id="signName1" placeholder="Name" title="Please enter the name"></td>
+										<td style="width:14%;"><input type="text" class="form-control" name="designation[]" id="designation1" placeholder="Designation" title="Please enter the Designation"></td>
+										<td style="width:10%;"><input type="file" name="signature[]" id="signature1" placeholder="Signature" title="Please enter the Signature"></td>
+										<td style="width:14%;">
+											<select type="text" class="select2" id="testSignType1" name="testSignType[1][]" title="Choose one test type" multiple>
+												<option value="vl">Viral Load</option>
+												<option value="eid">Early Infant Diagnosis</option>
+												<option value="covid19">Covid-19</option>
+												<option value='hepatitis'>Hepatitis</option>
+											</select>
+										</td>
+										<td style="width:14%;"><input type="text" class="form-control" name="sortOrder[]" id="sortOrder1" placeholder="Display Order" title="Please enter the Display Order"></td>
+										<td style="width:14%;">
+											<select class="form-control" id="signStatus1" name="signStatus[]" title="Please select the status">
+												<option value="active">Active</option>
+												<option value="inactive">Inactive</option>
+											</select>
+										</td>
+										<td style="vertical-align:middle;text-align: center;width:10%;">
+											<a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="addNewRow();"><i class="fa fa-plus"></i></a>&nbsp;
+											<a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeNewRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
 						<div class="row" id="userDetails">
 
 						</div>
@@ -287,6 +329,10 @@ $pResult = $db->rawQuery($pQuery);
 		$("#testType").multipleSelect({
 			placeholder: 'Select Test Type',
 			width: '100%'
+		});
+		$(".select2").multipleSelect({
+			placeholder: 'Select Test Type',
+			width: '150px'
 		});
 
 	});
@@ -390,6 +436,52 @@ $pResult = $db->rawQuery($pQuery);
 			$("#testDetails").html('');
 		}
 	}
+	let testCounter = 1;
+
+	function addNewRow() {
+        testCounter++;
+        let rowString = `<tr>
+			<td style="width:14%;"><input type="text" class="form-control" name="signName[]" id="signName${testCounter}" placeholder="Name" title="Please enter the name"></td>
+			<td style="width:14%;"><input type="text" class="form-control" name="designation[]" id="designation${testCounter}" placeholder="Designation" title="Please enter the Designation"></td>
+			<td style="width:14%;"><input type="file" name="signature[]" id="signature${testCounter}" placeholder="Signature" title="Please enter the Signature"></td>
+			<td style="width:14%;">
+				<select type="text" class="select2" id="testSignType${testCounter}" name="testSignType[${testCounter}][]" title="Choose one test type" multiple>
+					<option value="vl">Viral Load</option>
+					<option value="eid">Early Infant Diagnosis</option>
+					<option value="covid19">Covid-19</option>
+					<option value='hepatitis'>Hepatitis</option>
+				</select>
+			</td>
+			<td style="width:14%;"><input type="text" class="form-control" name="sortOrder[]" id="sortOrder${testCounter}" placeholder="Display Order" title="Please enter the Display Order"></td>
+			<td style="width:14%;">
+				<select class="form-control" id="signStatus${testCounter}" name="signStatus[]" title="Please select the status">
+					<option value="active">Active</option>
+					<option value="inactive">Inactive</option>
+				</select>
+			</td>
+			<td style="vertical-align:middle;text-align: center;width:10%;">
+				<a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="addNewRow();"><i class="fa fa-plus"></i></a>&nbsp;
+				<a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeNewRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
+			</td>
+		</tr>`;
+		$("#signDetails").append(rowString);
+
+		$("#testSignType"+testCounter).multipleSelect({
+			placeholder: 'Select Test Type',
+			width: '150px'
+		});
+    }
+
+    function removeNewRow(el) {
+        $(el).fadeOut("slow", function() {
+            el.parentNode.removeChild(el);
+            rl = document.getElementById("signDetails").rows.length;
+            if (rl == 0) {
+                testCounter = 0;
+                addNewRow();
+            }
+        });
+    }
 </script>
 
 <?php
