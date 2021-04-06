@@ -9,7 +9,7 @@ $pQuery = "SELECT * FROM province_details";
 $pResult = $db->rawQuery($pQuery);
 ?>
 <style>
-	.ms-choice{
+	.ms-choice {
 		border: 0px solid #aaa;
 	}
 </style>
@@ -70,7 +70,7 @@ $pResult = $db->rawQuery($pQuery);
 								<div class="form-group">
 									<label for="facilityType" class="col-lg-4 control-label">Facility Type <span class="mandatory">*</span> </label>
 									<div class="col-lg-7">
-										<select class="form-control isRequired" id="facilityType" name="facilityType" title="Please select facility type" onchange="<?php echo ($sarr['user_type'] == 'remoteuser') ? 'getFacilityUser();' : ''; ?>; getTestType();">
+										<select class="form-control isRequired" id="facilityType" name="facilityType" title="Please select facility type" onchange="<?php echo ($sarr['user_type'] == 'remoteuser') ? 'getFacilityUser();' : ''; ?>; getTestType(); showSignature(this.value);">
 											<option value=""> -- Select -- </option>
 											<?php
 											foreach ($fResult as $type) {
@@ -210,14 +210,20 @@ $pResult = $db->rawQuery($pQuery);
 								<div class="form-group">
 									<label for="testType" class="col-lg-4 control-label">Test Type</label>
 									<div class="col-lg-7">
-										<select type="text" class="" id="testType" name="testType[]" title="Choose one test type" onchange="getTestType();" multiple>
-											<option value="vl">Viral Load</option>
-											<option value="eid">Early Infant Diagnosis</option>
-											<option value="covid19">Covid-19</option>
-											<?php if(isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) {?> 
+										<?php if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) { ?>
+											<select type="text" class="" id="testType" name="testType[]" title="Choose one test type" onchange="getTestType();" multiple>
+												<option value="vl">Viral Load</option>
+											<?php } ?>
+											<?php if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) { ?>
+												<option value="eid">Early Infant Diagnosis</option>
+											<?php } ?>
+											<?php if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) { ?>
+												<option value="covid19">Covid-19</option>
+											<?php } ?>
+											<?php if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) { ?>
 												<option value='hepatitis'>Hepatitis</option>
 											<?php } ?>
-										</select>
+											</select>
 									</div>
 								</div>
 							</div>
@@ -254,7 +260,7 @@ $pResult = $db->rawQuery($pQuery);
 							</div>
 						</div>
 
-						<div class="row">
+						<div class="row" style="display:none;" id="signatureDiv">
 							<table class="table table-bordered">
 								<thead>
 									<tr>
@@ -300,7 +306,7 @@ $pResult = $db->rawQuery($pQuery);
 
 						</div>
 
-						<div class="row" id="testDetails">
+						<div class="row" id="testDetails" style="display:none;">
 
 						</div>
 
@@ -350,6 +356,14 @@ $pResult = $db->rawQuery($pQuery);
 		if (flag) {
 			$.blockUI();
 			document.getElementById('addFacilityForm').submit();
+		}
+	}
+
+	function showSignature(facilityType) {
+		if (facilityType == 2) {
+			$("#signatureDiv").show();
+		} else {
+			$("#signatureDiv").hide();
 		}
 	}
 
@@ -420,8 +434,7 @@ $pResult = $db->rawQuery($pQuery);
 				} else if (testType[i] == 'covid19') {
 					testOrg = 'Covid-19';
 					var extraDiv = '<td></td>';
-				}
-				else if (testType[i] == 'hepatitis') {
+				} else if (testType[i] == 'hepatitis') {
 					testOrg = 'Hepatitis';
 					var extraDiv = '<td></td>';
 				}
@@ -439,8 +452,8 @@ $pResult = $db->rawQuery($pQuery);
 	let testCounter = 1;
 
 	function addNewRow() {
-        testCounter++;
-        let rowString = `<tr>
+		testCounter++;
+		let rowString = `<tr>
 			<td style="width:14%;"><input type="text" class="form-control" name="signName[]" id="signName${testCounter}" placeholder="Name" title="Please enter the name"></td>
 			<td style="width:14%;"><input type="text" class="form-control" name="designation[]" id="designation${testCounter}" placeholder="Designation" title="Please enter the Designation"></td>
 			<td style="width:14%;"><input type="file" name="signature[]" id="signature${testCounter}" placeholder="Signature" title="Please enter the Signature"></td>
@@ -466,22 +479,22 @@ $pResult = $db->rawQuery($pQuery);
 		</tr>`;
 		$("#signDetails").append(rowString);
 
-		$("#testSignType"+testCounter).multipleSelect({
+		$("#testSignType" + testCounter).multipleSelect({
 			placeholder: 'Select Test Type',
 			width: '150px'
 		});
-    }
+	}
 
-    function removeNewRow(el) {
-        $(el).fadeOut("slow", function() {
-            el.parentNode.removeChild(el);
-            rl = document.getElementById("signDetails").rows.length;
-            if (rl == 0) {
-                testCounter = 0;
-                addNewRow();
-            }
-        });
-    }
+	function removeNewRow(el) {
+		$(el).fadeOut("slow", function() {
+			el.parentNode.removeChild(el);
+			rl = document.getElementById("signDetails").rows.length;
+			if (rl == 0) {
+				testCounter = 0;
+				addNewRow();
+			}
+		});
+	}
 </script>
 
 <?php

@@ -13,7 +13,7 @@ $chkvlLabQuery = "SELECT * from vl_facility_map as vlfm where vl_lab_id IN(" . $
 $chkvlLabResult = $db->rawQuery($chkvlLabQuery);
 $chkHcQuery = "SELECT * from vl_facility_map as vlfm where facility_id IN(" . $id . ")";
 $chkHcResult = $db->rawQuery($chkHcQuery);
-$fType = ($facilityInfo[0]['facility_type'] == 1) ? 4 : 1;
+$fType = $facilityInfo[0]['facility_type'];
 $vlfmQuery = "SELECT GROUP_CONCAT(DISTINCT vlfm.user_id SEPARATOR ',') as userId FROM vl_user_facility_map as vlfm join facility_details as fd ON fd.facility_id=vlfm.facility_id where facility_type = " . $fType;
 $vlfmResult = $db->rawQuery($vlfmQuery);
 $uQuery = "SELECT * FROM user_details";
@@ -69,7 +69,8 @@ if (count($testTypeInfo) > 0) {
 // print_r($editTestType);die;
 ?>
 <style>
-	.ms-choice, .ms-choice:focus{
+	.ms-choice,
+	.ms-choice:focus {
 		border: 0px solid #aaa0 !important;
 	}
 </style>
@@ -130,7 +131,7 @@ if (count($testTypeInfo) > 0) {
 								<div class="form-group">
 									<label for="facilityType" class="col-lg-4 control-label">Facility Type <span class="mandatory">*</span> </label>
 									<div class="col-lg-7">
-										<select class="form-control isRequired" id="facilityType" name="facilityType" title="Please select facility type" onchange="<?php echo ($sarr['user_type'] == 'remoteuser') ? 'getFacilityUser()' : ''; ?>;getTestType()">
+										<select class="form-control isRequired" id="facilityType" name="facilityType" title="Please select facility type" onchange="<?php echo ($sarr['user_type'] == 'remoteuser') ? 'getFacilityUser()' : ''; ?>;getTestType(); showSignature(this.value);">
 											<option value=""> -- Select -- </option>
 											<?php
 											$k = 10;
@@ -297,7 +298,7 @@ if (count($testTypeInfo) > 0) {
 											<option value="covid19" <?php if (preg_match("/covid19/i", $facilityInfo[0]['test_type'])) {
 																		echo "selected='selected'";
 																	}  ?>>Covid-19</option>
-											<?php if(isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) {?> 
+											<?php if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) { ?>
 												<option value='hepatitis' <?php echo (preg_match("/hepatitis/i", $facilityInfo[0]['test_type'])) ? "selected='selected'" : '';  ?>>Hepatitis</option>
 											<?php } ?>
 										</select>
@@ -349,8 +350,8 @@ if (count($testTypeInfo) > 0) {
 							</div>
 						</div>
 					</div>
-					
-					<div class="row">
+
+					<div class="row" id="signatureDiv" style="display:none;">
 						<table class="table table-bordered">
 							<thead>
 								<tr>
@@ -364,35 +365,35 @@ if (count($testTypeInfo) > 0) {
 								</tr>
 							</thead>
 							<tbody id="signDetails">
-								<?php if(isset($signResults) && !empty($signResults)){
-									foreach($signResults as $key=>$row){ ?>
+								<?php if (isset($signResults) && !empty($signResults)) {
+									foreach ($signResults as $key => $row) { ?>
 										<tr>
-											<td style="width:14%;"><input value="<?php echo $row['name_of_signatory']?>" type="text" class="form-control" name="signName[]" id="signName<?php echo ($key+1);?>" placeholder="Name" title="Please enter the name"></td>
-											<td style="width:14%;"><input value="<?php echo $row['designation']?>" type="text" class="form-control" name="designation[]" id="designation<?php echo ($key+1);?>" placeholder="Designation" title="Please enter the Designation"></td>
+											<td style="width:14%;"><input value="<?php echo $row['name_of_signatory'] ?>" type="text" class="form-control" name="signName[]" id="signName<?php echo ($key + 1); ?>" placeholder="Name" title="Please enter the name"></td>
+											<td style="width:14%;"><input value="<?php echo $row['designation'] ?>" type="text" class="form-control" name="designation[]" id="designation<?php echo ($key + 1); ?>" placeholder="Designation" title="Please enter the Designation"></td>
 											<td style="width:10%;">
-												<?php $lmSign = "/uploads/labs/".$row['lab_id']."/signatures/".$row['signature'];
+												<?php $lmSign = "/uploads/labs/" . $row['lab_id'] . "/signatures/" . $row['signature'];
 												$show = "style='display:block'";
-												if(isset($row['signature']) && $row['signature'] != ""){
+												if (isset($row['signature']) && $row['signature'] != "") {
 													$show = "style='display:none'";
-													?>
-													<span id="spanClass<?php echo ($key+1);?>"><a href="javascript:void(0);" onclick="showFile(<?php echo ($key+1);?>);"><span class="alert-danger" style="padding: 5px;border-radius: 50%;margin-top: 0px;float: right;">X</span></a><img src="<?php echo $lmSign;?>" style=""/></span>
+												?>
+													<span id="spanClass<?php echo ($key + 1); ?>"><a href="javascript:void(0);" onclick="showFile(<?php echo ($key + 1); ?>);"><span class="alert-danger" style="padding: 5px;border-radius: 50%;margin-top: 0px;float: right;">X</span></a><img src="<?php echo $lmSign; ?>" style="" /></span>
 												<?php }
 												?>
-												<input <?php echo $show;?>  class="showFile<?php echo ($key+1);?>" type="file" name="signature[]" id="signature<?php echo ($key+1);?>" placeholder="Signature" title="Please enter the Signature">
+												<input <?php echo $show; ?> class="showFile<?php echo ($key + 1); ?>" type="file" name="signature[]" id="signature<?php echo ($key + 1); ?>" placeholder="Signature" title="Please enter the Signature">
 											</td>
 											<td style="width:14%;">
-												<select type="text" class="select2" id="testSignType<?php echo ($key+1);?>" name="testSignType[<?php echo ($key+1);?>][]" title="Choose one test type" multiple>
-													<option value="vl" <?php echo (isset($row['test_types']) && in_array("vl", explode(",", $row['test_types'])))?'selected="selected"':'';?>>Viral Load</option>
-													<option value="eid" <?php echo (isset($row['test_types']) && in_array("eid", explode(",", $row['test_types'])))?'selected="selected"':'';?>>Early Infant Diagnosis</option>
-													<option value="covid19" <?php echo (isset($row['test_types']) && in_array("covid19", explode(",", $row['test_types'])))?'selected="selected"':'';?>>Covid-19</option>
-													<option value='hepatitis' <?php echo (isset($row['test_types']) && in_array("hepatitis", explode(",", $row['test_types'])))?'selected="selected"':'';?>>Hepatitis</option>
+												<select type="text" class="select2" id="testSignType<?php echo ($key + 1); ?>" name="testSignType[<?php echo ($key + 1); ?>][]" title="Choose one test type" multiple>
+													<option value="vl" <?php echo (isset($row['test_types']) && in_array("vl", explode(",", $row['test_types']))) ? 'selected="selected"' : ''; ?>>Viral Load</option>
+													<option value="eid" <?php echo (isset($row['test_types']) && in_array("eid", explode(",", $row['test_types']))) ? 'selected="selected"' : ''; ?>>Early Infant Diagnosis</option>
+													<option value="covid19" <?php echo (isset($row['test_types']) && in_array("covid19", explode(",", $row['test_types']))) ? 'selected="selected"' : ''; ?>>Covid-19</option>
+													<option value='hepatitis' <?php echo (isset($row['test_types']) && in_array("hepatitis", explode(",", $row['test_types']))) ? 'selected="selected"' : ''; ?>>Hepatitis</option>
 												</select>
 											</td>
-											<td style="width:14%;"><input value="<?php echo $row['display_order']?>" type="text" class="form-control" name="sortOrder[]" id="sortOrder<?php echo ($key+1);?>" placeholder="Display Order" title="Please enter the Display Order"></td>
+											<td style="width:14%;"><input value="<?php echo $row['display_order'] ?>" type="text" class="form-control" name="sortOrder[]" id="sortOrder<?php echo ($key + 1); ?>" placeholder="Display Order" title="Please enter the Display Order"></td>
 											<td style="width:14%;">
-												<select class="form-control" id="signStatus<?php echo ($key+1);?>" name="signStatus[]" title="Please select the status">
-													<option value="active" <?php echo (isset($row['test_types']) && $row['test_types'] == 'active')?'selected="selected"':'';?>>Active</option>
-													<option value="inactive" <?php echo (isset($row['test_types']) && $row['test_types'] == 'inactive')?'selected="selected"':'';?>>Inactive</option>
+												<select class="form-control" id="signStatus<?php echo ($key + 1); ?>" name="signStatus[]" title="Please select the status">
+													<option value="active" <?php echo (isset($row['test_types']) && $row['test_types'] == 'active') ? 'selected="selected"' : ''; ?>>Active</option>
+													<option value="inactive" <?php echo (isset($row['test_types']) && $row['test_types'] == 'inactive') ? 'selected="selected"' : ''; ?>>Inactive</option>
 												</select>
 											</td>
 											<td style="vertical-align:middle;text-align: center;width:10%;">
@@ -401,7 +402,7 @@ if (count($testTypeInfo) > 0) {
 											</td>
 										</tr>
 									<?php }
-								}else{?>
+								} else { ?>
 									<tr>
 										<td style="width:14%;"><input type="text" class="form-control" name="signName[]" id="signName1" placeholder="Name" title="Please enter the name"></td>
 										<td style="width:14%;"><input type="text" class="form-control" name="designation[]" id="designation1" placeholder="Designation" title="Please enter the Designation"></td>
@@ -430,7 +431,7 @@ if (count($testTypeInfo) > 0) {
 							</tbody>
 						</table>
 					</div>
-					
+
 					<div class="row" id="userDetails">
 						<?php if (($facilityInfo[0]['facility_type'] == 1 || $facilityInfo[0]['facility_type'] == 4) && ($sarr['user_type'] == 'remoteuser')) { ?>
 							<h4>User Facility Map Details</h4>
@@ -466,7 +467,7 @@ if (count($testTypeInfo) > 0) {
 							</div>
 						<?php } ?>
 					</div>
-					<div class="row" id="testDetails">
+					<div class="row" id="testDetails" style="display:none;">
 						<?php echo $div; ?>
 					</div>
 			</div>
@@ -501,6 +502,10 @@ if (count($testTypeInfo) > 0) {
 			placeholder: 'Select Test Type',
 			width: '150px'
 		});
+
+		<?php if (isset($fType) && $fType == 2) { ?>
+			showSignature(2);
+		<?php } ?>
 
 	});
 	var selVal = [];
@@ -613,6 +618,14 @@ if (count($testTypeInfo) > 0) {
 		$("#removedLabLogoImage").val(img);
 	}
 
+	function showSignature(facilityType) {
+		if (facilityType == 2) {
+			$("#signatureDiv").show();
+		} else {
+			$("#signatureDiv").hide();
+		}
+	}
+
 	function getTestType() {
 		if (first == 1) {
 			var facility = $("#facilityType").val();
@@ -656,8 +669,8 @@ if (count($testTypeInfo) > 0) {
 	let testCounter = document.getElementById("signDetails").rows.length;
 
 	function addNewRow() {
-        testCounter++;
-        let rowString = `<tr>
+		testCounter++;
+		let rowString = `<tr>
 			<td style="width:14%;"><input type="text" class="form-control" name="signName[]" id="signName${testCounter}" placeholder="Name" title="Please enter the name"></td>
 			<td style="width:14%;"><input type="text" class="form-control" name="designation[]" id="designation${testCounter}" placeholder="Designation" title="Please enter the Designation"></td>
 			<td style="width:14%;"><input type="file" name="signature[]" id="signature${testCounter}" placeholder="Signature" title="Please enter the Signature"></td>
@@ -683,26 +696,26 @@ if (count($testTypeInfo) > 0) {
 		</tr>`;
 		$("#signDetails").append(rowString);
 
-		$("#testSignType"+testCounter).multipleSelect({
+		$("#testSignType" + testCounter).multipleSelect({
 			placeholder: 'Select Test Type',
 			width: '150px'
 		});
-    }
+	}
 
-    function removeNewRow(el) {
-        $(el).fadeOut("slow", function() {
-            el.parentNode.removeChild(el);
-            rl = document.getElementById("signDetails").rows.length;
-            if (rl == 0) {
-                testCounter = 0;
-                addNewRow();
-            }
-        });
-    }
+	function removeNewRow(el) {
+		$(el).fadeOut("slow", function() {
+			el.parentNode.removeChild(el);
+			rl = document.getElementById("signDetails").rows.length;
+			if (rl == 0) {
+				testCounter = 0;
+				addNewRow();
+			}
+		});
+	}
 
-	function showFile(count){
-		$('#spanClass'+count).hide();
-		$('.showFile'+count).show();
+	function showFile(count) {
+		$('#spanClass' + count).hide();
+		$('.showFile' + count).show();
 	}
 </script>
 <?php
