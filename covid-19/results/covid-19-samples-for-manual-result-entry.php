@@ -1,26 +1,31 @@
 <?php
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+     session_start();
 }
 #require_once('../../startup.php');
 
 
-$formConfigQuery = "SELECT * from global_config where name='vl_form'";
-$configResult = $db->query($formConfigQuery);
-$arr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($configResult); $i++) {
-     $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
-}
-//system config
-$systemConfigQuery = "SELECT * from system_config";
-$systemConfigResult = $db->query($systemConfigQuery);
-$sarr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
-     $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
-}
+// $formConfigQuery = "SELECT * FROM global_config WHERE name='vl_form'";
+// $configResult = $db->query($formConfigQuery);
+// $arr = array();
+// // now we create an associative array so that we can easily create view variables
+// for ($i = 0; $i < sizeof($configResult); $i++) {
+//      $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+// }
+// //system config
+// $systemConfigQuery = "SELECT * from system_config";
+// $systemConfigResult = $db->query($systemConfigQuery);
+// $sarr = array();
+// // now we create an associative array so that we can easily create view variables
+// for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+//      $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+// }
 $general = new \Vlsm\Models\General($db);
+
+
+$arr = $general->getGlobalConfig();
+$sarr = $general->getSystemConfig();
+
 
 $covid19Results = $general->getCovid19Results();
 
@@ -324,8 +329,8 @@ $output = array(
 foreach ($rResult as $aRow) {
      $row = array();
      $print = '<a href="covid-19-update-result.php?id=' . base64_encode($aRow['covid19_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Enter Result</a>';
-     if($aRow['result_status'] == 7 && $aRow['locked'] == 'yes'){
-          if( isset($_SESSION['privileges']) && !in_array("edit-locked-covid19-samples", $_SESSION['privileges'])){
+     if ($aRow['result_status'] == 7 && $aRow['locked'] == 'yes') {
+          if (isset($_SESSION['privileges']) && !in_array("edit-locked-covid19-samples", $_SESSION['privileges'])) {
                $print = '<a href="javascript:void(0);" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Locked" disabled><i class="fa fa-lock"> Locked</i></a>';
           }
      }
