@@ -23,7 +23,8 @@ class SouthSudan_PDF extends MYPDF
                 $this->writeHTMLCell(0, 0, 40, 7, $this->text, 0, 0, 0, true, 'L', true);
                 if (trim($this->lab) != '') {
                     $this->SetFont('helvetica', 'B', 11);
-                    $this->writeHTMLCell(0, 0, 40, 15, strtoupper($this->lab), 0, 0, 0, true, 'L', true);
+                    // $this->writeHTMLCell(0, 0, 40, 15, strtoupper($this->lab), 0, 0, 0, true, 'L', true);
+                    $this->writeHTMLCell(0, 0, 40, 15, "PUBLIC HEALTH LABORATORY", 0, 0, 0, true, 'L', true);
                 }
 
                 $this->SetFont('helvetica', '', 9);
