@@ -51,7 +51,7 @@ $data['province'] = $db->query($pdQuery);
 $covid19Obj = new \Vlsm\Models\Covid19($db);
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
 
-$data['healthFacilities'] = $app->generateSelectOptions($facilitiesDb->getHealthFacilities('covid19'));
+$data['healthFacilities'] = $app->getHealthFacilities('covid19', $check['data']['user_id'], true, 1);
 $data['covid19ReasonsForTesting'] = $app->generateSelectOptions($covid19Obj->getCovid19ReasonsForTesting());
 $data['specimenTypeResult'] = $app->generateSelectOptions($covid19Obj->getCovid19SampleTypes());
 $data['testingLabs'] = $app->generateSelectOptions($facilitiesDb->getTestingLabs('covid19'));
