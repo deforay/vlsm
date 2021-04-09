@@ -57,8 +57,8 @@ try {
         $id = $db->update("form_covid19", $covid19Data);
         $_POST['covid19SampleId'] = $rowData['covid19_id'];
     } else {
-        $id = $db->insert("form_covid19", $covid19Data);
-        $_POST['covid19SampleId'] = $id;
+        // $id = $db->insert("form_covid19", $covid19Data);
+        // $_POST['covid19SampleId'] = $id;
     }
 } catch (Exception $exc) {
 	error_log($exc->getMessage());

@@ -217,8 +217,7 @@ try {
 		$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 		$id = $db->update($tableName, $covid19Data);
 	}
-    $c19Result = $c19Model->fetchAllDetailsBySampleCode($sampleData['sampleCode']);
-    // print_r($c19Result);die;
+    $c19Result = $app->fetchAllDetailsBySampleCode($sampleData['sampleCode']);
     $payload = array(
         'status' => 'success',
         'timestamp' => time(),
