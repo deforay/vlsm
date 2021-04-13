@@ -19,9 +19,7 @@ if (!empty($auth)) {
     $authToken = str_replace("Bearer ", "", $auth);
     /* Check if API token exists */
     $user = $userDb->getAuthToken($authToken);
-    print_r($user);die;
 }
-
 // If authentication fails then do not proceed
 if (empty($user) || empty($user['user_id'])) {
     $response = array(
