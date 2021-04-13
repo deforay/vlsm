@@ -39,16 +39,16 @@ try {
         foreach ($resultArray as $rowIndex => $rowData) {
             // echo "<pre>";print_r($rowData);die;
             if (isset($rowData['A']) && !empty($rowData['A'])) {
-                $sampleCode = $general->getDublicateDataFromField('form_covid19', 'sample_code', $rowData['A']);
+                $sampleCode = $general->getDuplicateDataFromField('form_covid19', 'sample_code', $rowData['A']);
 
-                $facility = $general->getDublicateDataFromField('facility_details', 'facility_name', $rowData['D']);
-                $testReason = $general->getDublicateDataFromField('r_covid19_test_reasons', 'test_reason_name', $rowData['R']);
-                $sampleType = $general->getDublicateDataFromField('r_covid19_sample_type', 'sample_name', $rowData['T']);
-                $labName = $general->getDublicateDataFromField('facility_details', 'facility_name', $rowData['W'], 'facility_type');
-                $rejectionReason = $general->getDublicateDataFromField('r_covid19_sample_rejection_reasons', 'rejection_reason_name', $rowData['Y']);
+                $facility = $general->getDuplicateDataFromField('facility_details', 'facility_name', $rowData['D']);
+                $testReason = $general->getDuplicateDataFromField('r_covid19_test_reasons', 'test_reason_name', $rowData['R']);
+                $sampleType = $general->getDuplicateDataFromField('r_covid19_sample_type', 'sample_name', $rowData['T']);
+                $labName = $general->getDuplicateDataFromField('facility_details', 'facility_name', $rowData['W'], 'facility_type');
+                $rejectionReason = $general->getDuplicateDataFromField('r_covid19_sample_rejection_reasons', 'rejection_reason_name', $rowData['Y']);
 
-                $result = $general->getDublicateDataFromField('r_covid19_results', 'result', $rowData['AI']);
-                $resultStatus = $general->getDublicateDataFromField('r_sample_status', 'status_name', $rowData['AM']);
+                $result = $general->getDuplicateDataFromField('r_covid19_results', 'result', $rowData['AI']);
+                $resultStatus = $general->getDuplicateDataFromField('r_sample_status', 'status_name', $rowData['AM']);
                 $labTechnician = $usersModel->addUserIfNotExists($rowData['AP']);
 
                 if (trim($rowData['S']) != '') {

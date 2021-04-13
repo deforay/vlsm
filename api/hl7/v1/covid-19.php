@@ -389,17 +389,17 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
     $provinceId = (isset($_POST['provinceId']) && !empty($_POST['provinceId'])) ? $_POST['provinceId'] : null;
     $sampleCollectionDate = (isset($_POST['sampleCollectionDate']) && !empty($_POST['sampleCollectionDate'])) ? $_POST['sampleCollectionDate'] : null;
     
-    $c19DublicateData = false;
+    $c19DuplicateData = false;
     $sQuery = "SELECT covid19_id, sample_code, sample_code_format, sample_code_key, remote_sample_code, remote_sample_code_format, remote_sample_code_key FROM form_covid19 
                 where 
                     (sample_code like '%".$_POST['sampleCode']."%' or remote_sample_code like '%".$_POST['sampleCode']."%')
                     AND (patient_id like '%".$_POST['patientId']."%' AND patient_dob like '%".$_POST['patientDob']."%' AND patient_gender like '%".$_POST['patientGender']."%' AND patient_district like '%".$_POST['patientDistrict']."%') limit 1";
     // die($sQuery);
-    $c19DublicateData = $db->rawQueryOne($sQuery);
-    if($c19DublicateData){
-        $sampleData['sampleCode'] = (!empty($c19DublicateData['sample_code']))?$c19DublicateData['sample_code']:$c19DublicateData['remote_sample_code'];
-        $sampleData['sampleCodeFormat'] = (!empty($c19DublicateData['sample_code_format']))?$c19DublicateData['sample_code_format']:$c19DublicateData['remote_sample_code_format'];
-        $sampleData['sampleCodeKey'] = (!empty($c19DublicateData['sample_code_key']))?$c19DublicateData['sample_code_key']:$c19DublicateData['remote_sample_code_key'];
+    $c19DuplicateData = $db->rawQueryOne($sQuery);
+    if($c19DuplicateData){
+        $sampleData['sampleCode'] = (!empty($c19DuplicateData['sample_code']))?$c19DuplicateData['sample_code']:$c19DuplicateData['remote_sample_code'];
+        $sampleData['sampleCodeFormat'] = (!empty($c19DuplicateData['sample_code_format']))?$c19DuplicateData['sample_code_format']:$c19DuplicateData['remote_sample_code_format'];
+        $sampleData['sampleCodeKey'] = (!empty($c19DuplicateData['sample_code_key']))?$c19DuplicateData['sample_code_key']:$c19DuplicateData['remote_sample_code_key'];
     }else{
         $sampleJson = $covid19Model->generateCovid19SampleCode($provinceCode, $sampleCollectionDate, null, $provinceId);
         $sampleData = json_decode($sampleJson, true);
@@ -431,10 +431,10 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
         $covid19Data['result_status'] = 6;
     }
     $id = 0;
-    if($c19DublicateData){
-        $db = $db->where('covid19_id', $c19DublicateData['covid19_id']);
+    if($c19DuplicateData){
+        $db = $db->where('covid19_id', $c19DuplicateData['covid19_id']);
 		$id = $db->update("form_covid19", $covid19Data);
-        $_POST['covid19SampleId'] = $c19DublicateData['covid19_id'];
+        $_POST['covid19SampleId'] = $c19DuplicateData['covid19_id'];
     } else{
         $id = $db->insert("form_covid19", $covid19Data);
         $_POST['covid19SampleId'] = $id;

@@ -47,11 +47,11 @@ class App
             if($response['data']){
                 $response['status'] = true;
             }else{
-                $response['message'] = "Please check your credentials and try to log in again";
+                $response['message'] = "You are not activated try to log in again";
             }
         }else{
             $response['status'] = false;
-            $response['message'] = "Please give your credentials to continue";
+            $response['message'] = "Unauthorised access";
         }
         return $response;
     }

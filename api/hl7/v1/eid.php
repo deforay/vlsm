@@ -336,17 +336,17 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
     $provinceId = (isset($_POST['provinceId']) && !empty($_POST['provinceId'])) ? $_POST['provinceId'] : null;
     $sampleCollectionDate = (isset($_POST['sampleCollectionDate']) && !empty($_POST['sampleCollectionDate'])) ? $_POST['sampleCollectionDate'] : null;
 
-    $eidDublicateData = false;
+    $eidDuplicateData = false;
     $sQuery = "SELECT eid_id, sample_code, sample_code_format, sample_code_key, remote_sample_code, remote_sample_code_format, remote_sample_code_key FROM eid_form 
             where 
                 (sample_code like '%".$_POST['sampleCode']."%' or remote_sample_code like '%".$_POST['sampleCode']."%')
                 AND (child_id like '%".$_POST['childId']."%' AND child_dob like '%".$_POST['childDob']."%' AND child_gender like '%".$_POST['childGender']."%') limit 1";
     // die($sQuery);
-    $eidDublicateData = $db->rawQueryOne($sQuery);
-    if($eidDublicateData){
-        $sampleData['sampleCode'] = (!empty($eidDublicateData['sample_code']))?$eidDublicateData['sample_code']:$eidDublicateData['remote_sample_code'];
-        $sampleData['sampleCodeFormat'] = (!empty($eidDublicateData['sample_code_format']))?$eidDublicateData['sample_code_format']:$eidDublicateData['remote_sample_code_format'];
-        $sampleData['sampleCodeKey'] = (!empty($eidDublicateData['sample_code_key']))?$eidDublicateData['sample_code_key']:$eidDublicateData['remote_sample_code_key'];
+    $eidDuplicateData = $db->rawQueryOne($sQuery);
+    if($eidDuplicateData){
+        $sampleData['sampleCode'] = (!empty($eidDuplicateData['sample_code']))?$eidDuplicateData['sample_code']:$eidDuplicateData['remote_sample_code'];
+        $sampleData['sampleCodeFormat'] = (!empty($eidDuplicateData['sample_code_format']))?$eidDuplicateData['sample_code_format']:$eidDuplicateData['remote_sample_code_format'];
+        $sampleData['sampleCodeKey'] = (!empty($eidDuplicateData['sample_code_key']))?$eidDuplicateData['sample_code_key']:$eidDuplicateData['remote_sample_code_key'];
     }else{
         $sampleJson = $eidModel->generateEIDSampleCode($provinceCode, $sampleCollectionDate, null, $provinceId);
         $sampleData = json_decode($sampleJson, true);
@@ -378,10 +378,10 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
     }
     // echo "<br>".$eidData['result_status'];
     $id = 0;
-    if($eidDublicateData){
-        $db = $db->where('eid_id', $eidDublicateData['eid_id']);
+    if($eidDuplicateData){
+        $db = $db->where('eid_id', $eidDuplicateData['eid_id']);
 		$id = $db->update("eid_form", $eidData);
-        $_POST['eidSampleId'] = $eidDublicateData['eid_id'];
+        $_POST['eidSampleId'] = $eidDuplicateData['eid_id'];
     } else{
         $id = $db->insert("eid_form", $eidData);
         $_POST['eidSampleId'] = $id;

@@ -7,7 +7,6 @@ $general = new \Vlsm\Models\General($db);
 $app = new \Vlsm\Models\App($db);
 
 $input = json_decode(file_get_contents("php://input"),true);
-
 try {
     if (isset($input['userName']) && !empty($input['userName']) && isset($input['password']) && !empty($input['password'])) {
         
@@ -49,7 +48,7 @@ try {
     } else {
         $payload = array(
             'status' => 0,
-            'message'=>'Please Send all the credentials',
+            'message'=>'Please enter the credentials',
             'timestamp' => $general->getDateTime()
         );
     }

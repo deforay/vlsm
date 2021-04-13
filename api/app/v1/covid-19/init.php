@@ -10,7 +10,7 @@ $facilitiesDb = new \Vlsm\Models\Facilities($db);
 
 $input = json_decode(file_get_contents("php://input"),true);
 $check = $app->fetchAuthToken($input);
-if (isset($check['status']) && !empty($check['status']) && $check['status'] == false) {
+if (!$check['status']) {
     $payload = array(
         'status' => 0,
         'message'=> $check['message'],

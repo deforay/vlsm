@@ -331,11 +331,11 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
                     (sample_code like '%".$_POST['sampleCode']."%' or remote_sample_code like '%".$_POST['sampleCode']."%')
                     AND (patient_art_no like '%".$_POST['artNo']."%' AND patient_dob like '%".$_POST['dob']."%' AND patient_gender like '%".$_POST['gender']."%') limit 1";
     // die($sQuery);
-    $vlDublicateData = $db->rawQueryOne($sQuery);
-    if($vlDublicateData){
-        $sampleData['sampleCode'] = (!empty($vlDublicateData['sample_code']))?$vlDublicateData['sample_code']:$vlDublicateData['remote_sample_code'];
-        $sampleData['sampleCodeFormat'] = (!empty($vlDublicateData['sample_code_format']))?$vlDublicateData['sample_code_format']:$vlDublicateData['remote_sample_code_format'];
-        $sampleData['sampleCodeKey'] = (!empty($vlDublicateData['sample_code_key']))?$vlDublicateData['sample_code_key']:$vlDublicateData['remote_sample_code_key'];
+    $vlDuplicateData = $db->rawQueryOne($sQuery);
+    if($vlDuplicateData){
+        $sampleData['sampleCode'] = (!empty($vlDuplicateData['sample_code']))?$vlDuplicateData['sample_code']:$vlDuplicateData['remote_sample_code'];
+        $sampleData['sampleCodeFormat'] = (!empty($vlDuplicateData['sample_code_format']))?$vlDuplicateData['sample_code_format']:$vlDuplicateData['remote_sample_code_format'];
+        $sampleData['sampleCodeKey'] = (!empty($vlDuplicateData['sample_code_key']))?$vlDuplicateData['sample_code_key']:$vlDuplicateData['remote_sample_code_key'];
     }else{
         $sampleJson = $vlModel->generateVLSampleID($provinceCode, $sampleCollectionDate, null, $provinceId);
         $sampleData = json_decode($sampleJson, true);
@@ -366,10 +366,10 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
         $vlData['result_status'] = 6;
     }
     $id = 0;
-    if($vlDublicateData){
-        $db = $db->where('vl_sample_id', $vlDublicateData['vl_sample_id']);
+    if($vlDuplicateData){
+        $db = $db->where('vl_sample_id', $vlDuplicateData['vl_sample_id']);
         $id = $db->update("vl_request_form", $vlData);
-        $_POST['vlSampleId'] = $vlDublicateData['vl_sample_id'];
+        $_POST['vlSampleId'] = $vlDuplicateData['vl_sample_id'];
     } else{
         $id = $db->insert("vl_request_form", $vlData);
         $_POST['vlSampleId'] = $id;

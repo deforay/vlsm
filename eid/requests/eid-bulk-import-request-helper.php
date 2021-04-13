@@ -46,18 +46,18 @@ try {
 
         foreach ($resultArray as $rowIndex => $rowData) {
             // if (isset($rowData['A']) && !empty($rowData['A'])) {
-                $sampleCode = $general->getDublicateDataFromField('eid_form', 'sample_code', $rowData['B']);
+                $sampleCode = $general->getDuplicateDataFromField('eid_form', 'sample_code', $rowData['B']);
 
                 // NOT ADDED
-                // $testReason = $general->getDublicateDataFromField('r_covid19_test_reasons', 'test_reason_name', $rowData['P']);
-                $sampleType = $general->getDublicateDataFromField('r_eid_sample_type', 'sample_name', $rowData['AF']);
+                // $testReason = $general->getDuplicateDataFromField('r_covid19_test_reasons', 'test_reason_name', $rowData['P']);
+                $sampleType = $general->getDuplicateDataFromField('r_eid_sample_type', 'sample_name', $rowData['AF']);
                 // ADDED
-                $facility = $general->getDublicateDataFromField('facility_details', 'facility_name', $rowData['E']);
-                $state = $general->getDublicateDataFromField('province_details', 'province_name', $rowData['C']);
-                $labName = $general->getDublicateDataFromField('facility_details', 'facility_name', $rowData['AA'], 'facility_type');
-                $rejectionReason = $general->getDublicateDataFromField('r_eid_sample_rejection_reasons', 'rejection_reason_name', $rowData['AC']);
-                $result = $general->getDublicateDataFromField('r_eid_results', 'result', $rowData['AE']);
-                $resultStatus = $general->getDublicateDataFromField('r_sample_status', 'status_name', $rowData['AK']);
+                $facility = $general->getDuplicateDataFromField('facility_details', 'facility_name', $rowData['E']);
+                $state = $general->getDuplicateDataFromField('province_details', 'province_name', $rowData['C']);
+                $labName = $general->getDuplicateDataFromField('facility_details', 'facility_name', $rowData['AA'], 'facility_type');
+                $rejectionReason = $general->getDuplicateDataFromField('r_eid_sample_rejection_reasons', 'rejection_reason_name', $rowData['AC']);
+                $result = $general->getDuplicateDataFromField('r_eid_results', 'result', $rowData['AE']);
+                $resultStatus = $general->getDuplicateDataFromField('r_sample_status', 'status_name', $rowData['AK']);
 
                 if (trim($rowData['W']) != '') {
                     $sampleCollectionDate = date('Y-m-d H:i:s', strtotime($rowData['W']));
