@@ -5,6 +5,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 ini_set('memory_limit', -1);
+ini_set('max_execution_time', -1);
 $arr = array();
 $general = new \Vlsm\Models\General($db);
 $usersModel = new \Vlsm\Models\Users($db);
@@ -45,7 +46,7 @@ try {
         // echo "<pre>";print_r($resultArray);die;
 
         foreach ($resultArray as $rowIndex => $rowData) {
-            // if (isset($rowData['A']) && !empty($rowData['A'])) {
+            if (isset($rowData['B']) && !empty($rowData['B'])) {
                 $sampleCode = $general->getDuplicateDataFromField('eid_form', 'sample_code', $rowData['B']);
 
                 // NOT ADDED
@@ -146,7 +147,7 @@ try {
                     $db = $db->where('eid_id', $lastId);
                     $db->update($tableName, $eidData);
                 }
-            // }
+            }
         }
         $_SESSION['alertMsg'] = "Data imported successfully";
     }
