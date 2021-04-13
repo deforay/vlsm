@@ -448,7 +448,7 @@ class General
         return $this->db->get('import_config');
     }
 
-    public function getDublicateDataFromField($tablename, $fieldname, $fieldValue, $lab = "")
+    public function getDuplicateDataFromField($tablename, $fieldname, $fieldValue, $lab = "")
     {
         $query = 'SELECT * FROM '.$tablename.' WHERE '.$fieldname.' =  "'.$fieldValue.'"';
         if ($lab != "") {
