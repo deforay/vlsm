@@ -59,7 +59,6 @@ class Users
 
     public function getAuthToken($token)
     {
-
         $query = "SELECT * FROM $this->table WHERE api_token = ? and `status` = 'active'";
         $result = $this->db->rawQueryOne($query, array($token));
         if ($result['api_token_generated_datetime'] < date('Y-m-d H:i:s', strtotime('-30 days'))) {

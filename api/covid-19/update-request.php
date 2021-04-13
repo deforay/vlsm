@@ -9,16 +9,15 @@ session_unset(); // no need of session in json response
 
 ini_set('memory_limit', -1);
 header('Content-Type: application/json');
-$c19Model = new \Vlsm\Models\Covid19($db);
+
 $general = new \Vlsm\Models\General($db);
 $userDb = new \Vlsm\Models\Users($db);
 $user = null;
 
 $data = json_decode(file_get_contents("php://input"),true);
-// echo "<pre>";print_r($data);die;
-if(isset($data['api_token']) && $data['api_token']!='')
-{
-    $auth = $data['api_token'];
+
+$auth = $general->getHeader('Authorization');
+if (!empty($auth)) {
     $authToken = str_replace("Bearer ", "", $auth);
     /* Check if API token exists */
     $user = $userDb->getAuthToken($authToken);
@@ -35,18 +34,10 @@ if (empty($user) || empty($user['user_id'])) {
     echo json_encode($response);
     exit(0);
 }
-$sampleFrom = '';
-// echo "<pre>";print_r($data);die;
-$data['formId'] = $data['countryId'] = $general->getGlobalConfig('vl_form');
-$sQuery = "SELECT vlsm_instance_id from s_vlsm_instance";
-$rowData = $db->rawQuery($sQuery);
-$data['instanceId'] = $rowData[0]['vlsm_instance_id'];
-$sampleFrom = '';
 
 $data['api'] = "yes";
 $_POST = $data;
-include_once(APPLICATION_PATH . '/covid-19/requests/insert-sample.php');
-include_once(APPLICATION_PATH . '/covid-19/requests/covid-19-add-request-helper.php');
+include_once(APPLICATION_PATH . '/covid-19/requests/covid-19-edit-request-helper.php');
 
 try {
 
