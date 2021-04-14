@@ -113,7 +113,7 @@ class App
             }
             $where .=" f.facility_type = '$facilityType'";
         }
-        $where .= 'ORDER BY facility_name ASC';
+        $where .= ' GROUP BY facility_name ORDER BY facility_name ASC';
         $query .= $where;
         $result = $this->db->rawQuery($query);
         foreach($result as $key=>$row){
@@ -159,7 +159,7 @@ class App
             $where .=" f.status like 'active'";
         }
         
-        $where .= 'ORDER BY province_name ASC';
+        $where .= ' GROUP BY province_name ORDER BY province_name ASC';
         $query .= $where;
         $result = $this->db->rawQuery($query);
         foreach($result as $key=>$row){
