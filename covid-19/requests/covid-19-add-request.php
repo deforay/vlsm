@@ -106,6 +106,24 @@ if (file_exists($fileArray[$arr['vl_form']])) {
             $('.ui-datepicker-calendar').show();
         });
 
+        $('.date-time').datetimepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'dd-M-yy',
+            timeFormat: "HH:mm",
+            maxDate: "Today",
+            onChangeMonthYear: function(year, month, widget) {
+                setTimeout(function() {
+                    $('.ui-datepicker-calendar').show();
+                });
+            },
+            onSelect: function(e) {
+            },
+            yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+        }).click(function() {
+            $('.ui-datepicker-calendar').show();
+        });
+
         $("#patientDob").datepicker({
             changeMonth: true,
             changeYear: true,

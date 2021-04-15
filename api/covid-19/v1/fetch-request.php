@@ -12,9 +12,10 @@ header('Content-Type: application/json');
 
 $general = new \Vlsm\Models\General($db);
 $userDb = new \Vlsm\Models\Users($db);
+$facilityDb = new \Vlsm\Models\Facilities($db);
 $user = null;
 // The request has to send an Authorization Bearer token 
-$auth = $general->getHttpValue('Authorization');
+$auth = $general->getHeader('Authorization');
 if (!empty($auth)) {
     $authToken = str_replace("Bearer ", "", $auth);
     /* Check if API token exists */
@@ -32,6 +33,7 @@ if (empty($user) || empty($user['user_id'])) {
     echo json_encode($response);
     exit(0);
 }
+// print_r($user);die;
 
 try {
 
@@ -102,11 +104,18 @@ try {
                         LEFT JOIN r_implementation_partners as r_i_p ON r_i_p.i_partner_id=vl.implementing_partner";
 
 
-
-    // if (!empty($recencyId)) {
-    //     $recencyId = implode("','", $recencyId);
-    //     $sQuery .= " AND serial_no IN ('$recencyId') ";
-    // }
+    $where = " WHERE request_created_by = '".$user['user_id']."'";
+    if (!empty($user)) {
+        $facilityMap = $facilityDb->getFacilityMap($user['user_id'],1);
+        if (!empty($facilityMap)) {
+            if(isset($where) && trim($where) != ""){
+                $where .= " AND ";
+            } else{
+                $where .= " WHERE ";
+            }
+            $where .=" facility_id IN (" . $facilityMap . ")";
+        }
+    }
 
     // if (!empty($sampleCode)) {
     //     $sampleCode = implode("','", $sampleCode);
@@ -118,6 +127,7 @@ try {
     // }
 
     // $sQuery .= " ORDER BY last_modified_datetime ASC ";
+    $sQuery .= $where;
     $rowData = $db->rawQuery($sQuery);
 
     // No data found
