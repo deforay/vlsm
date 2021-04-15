@@ -180,11 +180,28 @@ try {
 		$covid19Data['locked'] = 'yes';
 	}
 
-	if(!empty($_POST['api']) && $_POST['api'] = "yes")
-	{
-
-	}
-	else
+	if(!empty($_POST['api']) && $_POST['api'] = "yes"){
+		$sampleQuery = "SELECT covid19_id FROM form_covid19 where covid19_id = ".$_POST['covid19SampleId']." limit 1";
+		$sampleExist = $db->rawQueryOne($sampleQuery);
+		$_POST['covid19SampleId'] = $sampleExist['covid19_id'];
+		if($_POST['sampleCode'] != "" && !empty($_POST['sampleCode']) && !$sampleExist){
+            $sQuery = "SELECT covid19_id, sample_code, sample_code_format, sample_code_key, remote_sample_code, remote_sample_code_format, remote_sample_code_key FROM form_covid19 where sample_code like '%".$_POST['sampleCode']."%' or remote_sample_code like '%".$_POST['sampleCode']."%' limit 1";
+            $rowData = $db->rawQueryOne($sQuery);
+            if($rowData){
+				$_POST['covid19SampleId'] = $rowData['covid19_id'];
+            }else{
+				$payload = array(
+					'status' => '0',
+					'timestamp' => time(),
+					'message' => 'No unique value found for update'
+				);
+				http_response_code(304);
+				echo json_encode($payload);
+				exit(0);
+			}
+		}
+		$covid19Data['last_modified_by'] =  $user['user_id'];
+	}else
 	{
 		$covid19Data['last_modified_by'] =  $_SESSION['userId'];
 		$covid19Data['lab_technician'] = (!empty($_POST['labTechnician']) && $_POST['labTechnician'] != '') ? $_POST['labTechnician'] :  $_SESSION['userId'];
@@ -291,18 +308,27 @@ try {
 		$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 		$id = $db->update($tableName, $covid19Data);
 	}
-	if(isset($_POST['api']) && $_POST['api'] = "yes")
-	{
-		$payload = array(
-			        'status' => 'success',
-			        'timestamp' => time(),
-			        'message' => 'Successfully updated.'
-			    );
-			   
-			
-			    http_response_code(200);
-			    echo json_encode($payload);
-			    exit(0);
+	if(isset($_POST['api']) && $_POST['api'] = "yes"){
+		if($id > 0){
+
+			$payload = array(
+				'status' => 'success',
+				'timestamp' => time(),
+				'message' => 'Successfully updated.'
+			);
+			http_response_code(200);
+			echo json_encode($payload);
+			exit(0);
+		}else{
+			$payload = array(
+				'status' => '0',
+				'timestamp' => time(),
+				'message' => 'This record already have updated record'
+			);
+			http_response_code(304);
+			echo json_encode($payload);
+			exit(0);
+		}
 	}
 	else
 	{

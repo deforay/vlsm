@@ -174,6 +174,8 @@ try {
 		$covid19Data['locked'] = 'yes';
 	}
 	if (isset($_POST['api']) && $_POST['api'] = "yes") {
+		$covid19Data['request_created_by'] =  $user['user_id'];
+		$covid19Data['last_modified_by'] =  $user['user_id'];
 	} else {
 		$covid19Data['request_created_by'] =  $_SESSION['userId'];
 		$covid19Data['last_modified_by'] =  $_SESSION['userId'];
