@@ -2,6 +2,7 @@
 // imported in covid-19-add-request.php based on country in global config
 
 ob_start();
+$covid19Obj = new \Vlsm\Models\Covid19($db);
 
 //Funding source list
 $fundingSourceQry = "SELECT * FROM r_funding_sources WHERE funding_source_status='active' ORDER BY funding_source_name ASC";
@@ -24,32 +25,39 @@ $implementingPartnerQry = "SELECT * FROM r_implementation_partners WHERE i_partn
 $implementingPartnerList = $db->query($implementingPartnerQry);
 
 
-// $configQuery = "SELECT * from global_config";
-// $configResult = $db->query($configQuery);
-// $arr = array();
-// $prefix = $arr['sample_code_prefix'];
+$covid19Results = $covid19Obj->getCovid19Results();
+$specimenTypeResult = $covid19Obj->getCovid19SampleTypes();
+
+$covid19Symptoms = $covid19Obj->getCovid19SymptomsDRC();
+$covid19SelectedSymptomsData = $covid19Obj->getCovid19SymptomsByFormId($covid19Info['covid19_id'], true);
+$covid19SelectedSymptoms = array();
+foreach ($covid19SelectedSymptomsData as $row) {
+    $covid19SelectedSymptoms[$row['symptom_id']]['value'] = $row['symptom_detected'];
+    $covid19SelectedSymptoms[$row['symptom_id']]['sDetails'] = json_decode($row['symptom_details'], true);
+}
+
+
+$covid19ReasonsForTesting = $covid19Obj->getCovid19ReasonsForTestingDRC();
+$covid19SelectedReasonsForTesting = $covid19Obj->getCovid19ReasonsForTestingByFormId($covid19Info['covid19_id']);
+$covid19SelectedReasonsDetailsForTesting = $covid19Obj->getCovid19ReasonsDetailsForTestingByFormId($covid19Info['covid19_id']);
+// To get the reason details value
+$reasonDetails = json_decode($covid19SelectedReasonsDetailsForTesting['reason_details'], true);
+
+$covid19Comorbidities = $covid19Obj->getCovid19Comorbidities();
+$covid19SelectedComorbidities = $covid19Obj->getCovid19ComorbiditiesByFormId($covid19Info['covid19_id']);
+
 
 // Getting the list of Provinces, Districts and Facilities
 
-$covid19Obj = new \Vlsm\Models\Covid19($db);
-
-
-$covid19Results = $covid19Obj->getCovid19Results();
-$specimenTypeResult = $covid19Obj->getCovid19SampleTypes();
-$covid19ReasonsForTesting = $covid19Obj->getCovid19ReasonsForTestingDRC();
-$covid19Symptoms = $covid19Obj->getCovid19SymptomsDRC();
-$covid19Comorbidities = $covid19Obj->getCovid19Comorbidities();
-
-
 $rKey = '';
-$sKey = '';
-$sFormat = '';
-$pdQuery = "SELECT * from province_details";
+$pdQuery = "SELECT * FROM province_details";
+
+
 if ($sarr['user_type'] == 'remoteuser') {
     $sampleCodeKey = 'remote_sample_code_key';
     $sampleCode = 'remote_sample_code';
     //check user exist in user_facility_map table
-    $chkUserFcMapQry = "SELECT user_id FROM vl_user_facility_map WHERE user_id='" . $_SESSION['userId'] . "'";
+    $chkUserFcMapQry = "SELECT user_id from vl_user_facility_map where user_id='" . $_SESSION['userId'] . "'";
     $chkUserFcMapResult = $db->query($chkUserFcMapQry);
     if ($chkUserFcMapResult) {
         $pdQuery = "SELECT * FROM province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='" . $_SESSION['userId'] . "' group by province_name";
@@ -66,9 +74,29 @@ $province .= "<option value=''> -- Select -- </option>";
 foreach ($pdResult as $provinceName) {
     $province .= "<option data-code='" . $provinceName['province_code'] . "' data-province-id='" . $provinceName['province_id'] . "' data-name='" . $provinceName['province_name'] . "' value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
+foreach ($implementingPartnerList as $implementingPartner) {
+    $implementingPartnerArray[$implementingPartner['i_partner_id']] = ucwords($implementingPartner['i_partner_name']);
+}
+foreach ($fundingSourceList as $fundingSource) {
+    $fundingSourceArray[$fundingSource['funding_source_id']] = ucwords($fundingSource['funding_source_name']);
+}
+$facility = $general->generateSelectOptions($healthFacilities, $covid19Info['facility_id'], '-- Select --');
+$implementingPartnerOptions = $general->generateSelectOptions($implementingPartnerArray, $covid19Info['implementing_partner'], '-- Select --');
+$fundingSourceOptions = $general->generateSelectOptions($fundingSourceArray, $covid19Info['funding_source'], '-- Select --');
 
-$facility = $general->generateSelectOptions($healthFacilities, null, '-- Select --');
-
+//suggest N°EPID when lab user add request sample
+$sampleSuggestion = '';
+$sampleSuggestionDisplay = 'display:none;';
+$sCode = (isset($_GET['c']) && $_GET['c'] != '') ? $_GET['c'] : '';
+if ($sarr['user_type'] == 'vluser' && $sCode != '') {
+    $vlObj = new \Vlsm\Models\Covid19($db);
+    $sampleCollectionDate = explode(" ", $sampleCollectionDate);
+    $sampleCollectionDate = $general->humanDateFormat($sampleCollectionDate[0]);
+    $sampleSuggestionJson = $vlObj->generateCovid19SampleCode($stateResult[0]['province_code'], $sampleCollectionDate, 'png');
+    $sampleCodeKeys = json_decode($sampleSuggestionJson, true);
+    $sampleSuggestion = $sampleCodeKeys['sampleCode'];
+    $sampleSuggestionDisplay = 'display:block;';
+}
 ?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -102,22 +130,18 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                 </div>
                                 <table class="table" style="width:100%">
                                     <tr>
-                                        <?php if ($sarr['user_type'] == 'remoteuser') { ?>
-                                            <td><label for="sampleCode">EPID</label></td>
+                                    <?php if ($sarr['user_type'] == 'remoteuser') { ?>
+                                            <td><label for="sampleCode">EPID</label> </td>
                                             <td>
-                                                <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"></span>
-                                                <input type="hidden" id="sampleCode" name="sampleCode" />
+                                                <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"><?php echo $covid19Info[$sampleCode]; ?></span>
+                                                <input type="hidden" class="<?php echo $sampleClass; ?>" id="sampleCode" name="sampleCode" value="<?php echo $covid19Info[$sampleCode]; ?>" />
                                             </td>
                                         <?php } else { ?>
-                                            <td><label for="sampleCode">EPID</label><span class="mandatory">*</span></td>
+                                            <td><label for="sampleCode">EPID</label><span class="mandatory">*</span> </td>
                                             <td>
-                                                <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" readonly="readonly" placeholder="EPID #" title="Please fill facility name and sample collection date" style="width:100%;" onchange="checkSampleNameValidation('form_covid19','<?php echo $sampleCode; ?>',this.id,null,'The EPID #that you entered already exists. Please try another EPID #,null)" />
+                                                <input type="text" readonly value="<?php echo $covid19Info[$sampleCode]; ?>" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="EPID" title="Please enter EPID" style="width:100%;" onchange="" />
                                             </td>
                                         <?php } ?>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
                                     </tr>
                                     <tr>
                                         <td><label for="province">Health Facility/Province </label><span class="mandatory">*</span></td>
@@ -145,15 +169,15 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             <!-- <select name="investigatorName" id="investigatorName" class="form-control" title="Please select a Investigator's name" style="width:100%;">
                                                 <?= $general->generateSelectOptions($labTechniciansResults, $_SESSION['userId'], '-- Select --'); ?>
                                             </select> -->
-                                            <input type="text" class="form-control" id="investigatorName" name="investigatorName" placeholder="Investigator’s name" title="Please enter Investigator’s name" style="width:100%;" />
+                                            <input type="text" class="form-control" value="<?php echo $covid19Info['investogator_name'];?>" id="investigatorName" name="investigatorName" placeholder="Investigator’s name" title="Please enter Investigator’s name" style="width:100%;" />
                                         </td>
                                         <td><label for="investigatorPhone">Investigator’s phone</label></td>
                                         <td>
-                                            <input type="text" class="form-control" id="investigatorPhone" name="investigatorPhone" placeholder="Investigator’s phone" title="Please enter Investigator’s phone" style="width:100%;" />
+                                            <input type="text" class="form-control" value="<?php echo $covid19Info['investigator_phone'];?>" id="investigatorPhone" name="investigatorPhone" placeholder="Investigator’s phone" title="Please enter Investigator’s phone" style="width:100%;" />
                                         </td>
                                         <td><label for="investigatorEmail">Investigator’s email</label></td>
                                         <td>
-                                            <input type="text" class="form-control" id="investigatorEmail" name="investigatorEmail" placeholder="Investigator’s email" title="Please enter Investigator’s email" style="width:100%;" />
+                                            <input type="text" class="form-control" value="<?php echo $covid19Info['investigator_email'];?>" id="investigatorEmail" name="investigatorEmail" placeholder="Investigator’s email" title="Please enter Investigator’s email" style="width:100%;" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -162,37 +186,29 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             <!-- <select name="clinicianName" id="clinicianName" class="form-control" title="Please select Clinician name" style="width:100%;">
                                                 <?= $general->generateSelectOptions($labTechniciansResults, $_SESSION['userId'], '-- Select --'); ?>
                                                 </select> -->
-                                            <input type="text" class="form-control" id="clinicianName" name="clinicianName" placeholder="Clinician name" title="Please enter Clinician name" style="width:100%;" />
+                                            <input type="text" class="form-control" value="<?php echo $covid19Info['clinician_name'];?>" id="clinicianName" name="clinicianName" placeholder="Clinician name" title="Please enter Clinician name" style="width:100%;" />
                                         </td>
                                         </td>
                                         <td><label for="clinicianPhone">Clinician phone</label></td>
                                         <td>
-                                            <input type="text" class="form-control" id="clinicianPhone" name="clinicianPhone" placeholder="Clinician phone" title="Please enter Clinician phone" style="width:100%;" />
+                                            <input type="text" class="form-control" value="<?php echo $covid19Info['clinician_phone'];?>" id="clinicianPhone" name="clinicianPhone" placeholder="Clinician phone" title="Please enter Clinician phone" style="width:100%;" />
                                         </td>
                                         <td><label for="investigatorEmail">Clinician email</label></td>
                                         <td>
-                                            <input type="text" class="form-control" id="clinicianEmail" name="clinicianEmail" placeholder="Clinician email" title="Please enter Clinician email" style="width:100%;" />
+                                            <input type="text" class="form-control" value="<?php echo $covid19Info['clinician_email'];?>" id="clinicianEmail" name="clinicianEmail" placeholder="Clinician email" title="Please enter Clinician email" style="width:100%;" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td><label for="supportPartner">Implementing Partner </label></td>
                                         <td>
                                             <select class="form-control select2" name="implementingPartner" id="implementingPartner" title="Please choose implementing partner" style="width:100%;">
-                                                <option value=""> -- Select -- </option>
-                                                <?php
-                                                foreach ($implementingPartnerList as $implementingPartner) {
-                                                ?>
-                                                    <option value="<?php echo ($implementingPartner['i_partner_id']); ?>"><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
-                                                <?php } ?>
+                                                <?php echo $implementingPartnerOptions;?>
                                             </select>
                                         </td>
                                         <td><label for="fundingSource">Funding Partner</label></td>
                                         <td>
                                             <select class="form-control select2" name="fundingSource" id="fundingSource" title="Please choose source of funding" style="width:100%;">
-                                                <option value=""> -- Select -- </option>
-                                                <?php foreach ($fundingSourceList as $fundingSource) { ?>
-                                                    <option value="<?php echo ($fundingSource['funding_source_id']); ?>"><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
-                                                <?php } ?>
+                                                <?php echo $fundingSourceOptions;?>
                                             </select>
                                         </td>
                                         <?php if ($sarr['user_type'] == 'remoteuser') { ?>
@@ -200,7 +216,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             <td><label for="labId">Testing Laboratory <span class="mandatory">*</span></label> </td>
                                             <td>
                                                 <select name="labId" id="labId" class="form-control select2 isRequired" title="Please select Testing Testing Laboratory" style="width:100%;">
-                                                    <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
+                                                    <?= $general->generateSelectOptions($testingLabs, $covid19Info['lab_id'], '-- Select --'); ?>
                                                 </select>
                                             </td>
                                             <!-- </tr> -->
@@ -220,26 +236,26 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                     <tr>
                                         <th style="width:15% !important"><label for="firstName">Patient first name <span class="mandatory">*</span> </label></th>
                                         <td style="width:35% !important">
-                                            <input type="text" class="form-control isRequired" id="firstName" name="firstName" placeholder="Patient first name" title="Please enter the Patient first name" style="width:100%;" />
+                                            <input type="text" class="form-control isRequired" value="<?php echo $covid19Info['patient_name'];?>" id="firstName" name="firstName" placeholder="Patient first name" title="Please enter the Patient first name" style="width:100%;" />
                                         </td>
                                         <th style="width:15% !important"><label for="lastName">Patient last name </label></th>
                                         <td style="width:35% !important">
-                                            <input type="text" class="form-control " id="lastName" name="lastName" placeholder="Patient last name" title="Please enter the Patient last name" style="width:100%;" />
+                                            <input type="text" class="form-control " value="<?php echo $covid19Info['patient_surname'];?>" id="lastName" name="lastName" placeholder="Patient last name" title="Please enter the Patient last name" style="width:100%;" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <th style="width:15% !important"><label for="patientId">Patient ID if admitted in ward <span class="mandatory">*</span> </label></th>
                                         <td style="width:35% !important">
-                                            <input type="text" class="form-control isRequired" id="patientId" name="patientId" placeholder="Patient ID" title="Please enter the Patient ID" style="width:100%;" />
+                                            <input type="text" class="form-control isRequired" value="<?php echo $covid19Info['patient_id'];?>" id="patientId" name="patientId" placeholder="Patient ID" title="Please enter the Patient ID" style="width:100%;" />
                                         </td>
                                         <th><label for="patientDob">Patient date of birth<span class="mandatory">*</span> </label></th>
                                         <td>
-                                            <input type="text" class="form-control isRequired" id="patientDob" name="patientDob" placeholder="Date of birth" title="Please enter Date of birth" style="width:100%;" onchange="calculateAgeInYears();" />
+                                            <input type="text" class="form-control isRequired" value="<?php echo $general->humanDateFormat($covid19Info['patient_dob']);?>" id="patientDob" name="patientDob" placeholder="Date of birth" title="Please enter Date of birth" style="width:100%;" onchange="calculateAgeInYears();" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>Age (years)</th>
-                                        <td><input type="number" max="150" maxlength="3" oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="patientAge" name="patientAge" placeholder="Age (in years)" title="Please enter Age (in years)" style="width:100%;" /></td>
+                                        <td><input type="number" max="150" maxlength="3" oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " value="<?php echo $covid19Info['patient_age'];?>" id="patientAge" name="patientAge" placeholder="Age (in years)" title="Please enter Age (in years)" style="width:100%;" /></td>
                                         <th><label for="patientGender">Sex <span class="mandatory">*</span> </label></th>
                                         <td>
                                             <select class="form-control isRequired" name="patientGender" id="patientGender" title="Please select the gender">
@@ -252,7 +268,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                     </tr>
                                     <tr>
                                         <th><label for="patientPhoneNumber">Patient phone</label></th>
-                                        <td><input type="text" class="form-control " id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Patient phone" title="Please enter the patient phone" style="width:100%;" /></td>
+                                        <td><input type="text" class="form-control " value="<?php echo $covid19Info['clinician_email'];?>" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Patient phone" title="Please enter the patient phone" style="width:100%;" /></td>
 
                                         <th><label for="patientProvince">Province</label></th>
                                         <td>

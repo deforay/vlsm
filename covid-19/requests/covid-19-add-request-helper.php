@@ -11,9 +11,9 @@ if (session_status() == PHP_SESSION_NONE) {
 
 $general = new \Vlsm\Models\General($db);
 
-// echo "<pre>";
-// print_r($_POST);
-// die;
+/* echo "<pre>";
+print_r($_POST);
+die; */
 
 $tableName = "form_covid19";
 $tableName1 = "activity_log";
@@ -96,6 +96,12 @@ try {
 		'vlsm_country_id'                     => $_POST['formId'],
 		'external_sample_code'                => !empty($_POST['externalSampleCode']) ? $_POST['externalSampleCode'] : null,
 		'facility_id'                         => !empty($_POST['facilityId']) ? $_POST['facilityId'] : null,
+		'investogator_name'                   => !empty($_POST['investigatorName']) ? $_POST['investigatorName'] : null,
+		'investigator_phone'                  => !empty($_POST['investigatorPhone']) ? $_POST['investigatorPhone'] : null,
+		'investigator_email'                  => !empty($_POST['investigatorEmail']) ? $_POST['investigatorEmail'] : null,
+		'clinician_name'                      => !empty($_POST['clinicianName']) ? $_POST['clinicianName'] : null,
+		'clinician_phone'                     => !empty($_POST['clinicianPhone']) ? $_POST['clinicianPhone'] : null,
+		'clinician_email'                     => !empty($_POST['clinicianEmail']) ? $_POST['clinicianEmail'] : null,
 		'test_number'                         => !empty($_POST['testNumber']) ? $_POST['testNumber'] : null,
 		'province_id'                         => !empty($_POST['provinceId']) ? $_POST['provinceId'] : null,
 		'lab_id'                              => !empty($_POST['labId']) ? $_POST['labId'] : null,
@@ -131,6 +137,8 @@ try {
 		'type_of_test_requested'              => !empty($_POST['testTypeRequested']) ? $_POST['testTypeRequested'] : null,
 		'specimen_type'                       => !empty($_POST['specimenType']) ? $_POST['specimenType'] : null,
 		'sample_collection_date'              => !empty($_POST['sampleCollectionDate']) ? $_POST['sampleCollectionDate'] : null,
+		'health_outcome'              		  => !empty($_POST['healthOutcome']) ? $_POST['healthOutcome'] : null,
+		'health_outcome_date'                 => !empty($_POST['outcomeDate']) ? $general->dateFormat($_POST['outcomeDate']) : null,
 		'is_sample_post_mortem'               => !empty($_POST['isSamplePostMortem']) ? $_POST['isSamplePostMortem'] : null,
 		'priority_status'                     => !empty($_POST['priorityStatus']) ? $_POST['priorityStatus'] : null,
 		'number_of_days_sick'                 => !empty($_POST['numberOfDaysSick']) ? $_POST['numberOfDaysSick'] : null,

@@ -59,8 +59,9 @@ try {
         $sampleDate = explode(" ", $_POST['sampleCollectionDate']);
         $_POST['sampleCollectionDate'] = $general->dateFormat($sampleDate[0]) . " " . $sampleDate[1];
     }
-    if(!isset($_POST['countryId']) || $_POST['countryId'] =='')
+    if(!isset($_POST['countryId']) || $_POST['countryId'] ==''){
         $_POST['countryId'] = '';
+    }
     $covid19Data = array();
     if (isset($_POST['api']) && $_POST['api'] = "yes") {
         $covid19Data = array(
@@ -119,12 +120,13 @@ try {
             }
         }
     }
-    if (isset($_POST['api']) && $_POST['api'] != "yes") {
-        if ($id > 0) {
-            echo $id;
-        } else {
-            echo 0;
-        }
+    if (isset($_POST['api']) && $_POST['api'] == "yes") {
+        exit();
+    }
+    if ($id > 0) {
+        echo $id;
+    } else {
+        echo 0;
     }
 } catch (Exception $e) {
     echo 'Message: ' . $e->getMessage();
