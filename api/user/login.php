@@ -13,7 +13,7 @@ try {
         // $systemConfig['passwordSalt']='PUT-A-RANDOM-STRING-HERE';
         $password = sha1($password . $systemConfig['passwordSalt']);
         $queryParams = array($username, $password);
-        $admin = $db->rawQueryOne("SELECT user_name,phone_number,status FROM user_details as ud WHERE ud.login_id = ? AND ud.password = ?", $queryParams);
+        $admin = $db->rawQueryOne("SELECT user_id,user_name,phone_number,status FROM user_details as ud WHERE ud.login_id = ? AND ud.password = ?", $queryParams);
         // print_r($admin);die;
         if (count($admin) > 0) {
             if($admin['status'] != 'active'){
@@ -27,21 +27,29 @@ try {
                 
                 $userData['api_token'] = $randomString;
                 $userData['api_token_generated_datetime'] = $general->getDateTime();
-                $db = $db->where('user_id', $admin[0]['user_id']);
+                $db = $db->where('user_id', $admin['user_id']);
                 $upId = $db->update('user_details', $userData);
-                $data = array();
-                $configFormQuery = "SELECT * FROM global_config WHERE name ='vl_form'";
-                $configFormResult = $db->rawQuery($configFormQuery);
-                $data['user'] = $admin;
-                $data['form'] = $configFormResult[0]['value'];
-                $data['api_token'] = $randomString;
-                // print_r($data);die;
-                $payload = array(
-                    'status' => 1,
-                    'message'=>'Login Success',
-                    'data' => $data,
-                    'timestamp' => $general->getDateTime()
-                );
+                if($upId){
+                    $data = array();
+                    $configFormQuery = "SELECT * FROM global_config WHERE name ='vl_form'";
+                    $configFormResult = $db->rawQuery($configFormQuery);
+                    $data['user'] = $admin;
+                    $data['form'] = $configFormResult[0]['value'];
+                    $data['api_token'] = $randomString;
+                    // print_r($data);die;
+                    $payload = array(
+                        'status' => 1,
+                        'message'=>'Login Success',
+                        'data' => $data,
+                        'timestamp' => $general->getDateTime()
+                    );
+                }else{
+                    $payload = array(
+                        'status' => 2,
+                        'message'=>'Someting went wrong. Please try again later.',
+                        'timestamp' => $general->getDateTime()
+                    );        
+                }
             }
         } else {
             $payload = array(

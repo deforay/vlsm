@@ -223,7 +223,7 @@ class App
 
     public function getSubFields($tableName, $primary, $name, $condition)
     {
-        $query = "SELECT $primary, $name from $tableName where $condition";
+        $query = "SELECT $primary, $name from $tableName where $condition group by $name";
         $result = $this->db->rawQuery($query);
         $response = array();
         foreach($result as $key=>$row){

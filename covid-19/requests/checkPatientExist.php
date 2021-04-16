@@ -1,7 +1,6 @@
 <?php
 #require_once('../../startup.php');  
 
-
 $general=new \Vlsm\Models\General($db);
 $artNo=$_POST['artPatientNo'];
 //global config
