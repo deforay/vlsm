@@ -237,38 +237,38 @@ class Covid19
     }
 
 
-    public function getCovid19TestsByFormId($formId)
+    public function getCovid19TestsByFormId($c19Id)
     {
-        if (empty($formId)) {
+        if (empty($c19Id)) {
             return null;
         }
 
         $response = array();
 
         // Using this in sync requests/results
-        if (is_array($formId)) {
-            $results = $this->db->rawQuery("SELECT * FROM covid19_tests WHERE `covid19_id` IN (" . implode(",", $formId) . ") ORDER BY test_id ASC");
+        if (is_array($c19Id)) {
+            $results = $this->db->rawQuery("SELECT * FROM covid19_tests WHERE `covid19_id` IN (" . implode(",", $c19Id) . ") ORDER BY test_id ASC");
 
             foreach ($results as $row) {
                 $response[$row['covid19_id']][$row['test_id']] = $row;
             }
         } else {
-            $response = $this->db->rawQuery("SELECT * FROM covid19_tests WHERE `covid19_id` = $formId ORDER BY test_id ASC");
+            $response = $this->db->rawQuery("SELECT * FROM covid19_tests WHERE `covid19_id` = $c19Id ORDER BY test_id ASC");
         }
 
         return $response;
     }
-    public function getCovid19SymptomsByFormId($formId, $allData = false)
+    public function getCovid19SymptomsByFormId($c19Id, $allData = false)
     {
-        if (empty($formId)) {
+        if (empty($c19Id)) {
             return null;
         }
 
         $response = array();
 
         // Using this in sync requests/results
-        if (is_array($formId)) {
-            $results = $this->db->rawQuery("SELECT * FROM covid19_patient_symptoms WHERE `covid19_id` IN (" . implode(",", $formId) . ")");
+        if (is_array($c19Id)) {
+            $results = $this->db->rawQuery("SELECT * FROM covid19_patient_symptoms WHERE `covid19_id` IN (" . implode(",", $c19Id) . ")");
 
 
             if ($allData) return $results;
@@ -277,7 +277,7 @@ class Covid19
                 $response[$row['covid19_id']][$row['symptom_id']] = $row['symptom_detected'];
             }
         } else {
-            $results = $this->db->rawQuery("SELECT * FROM covid19_patient_symptoms WHERE `covid19_id` = $formId");
+            $results = $this->db->rawQuery("SELECT * FROM covid19_patient_symptoms WHERE `covid19_id` = $c19Id");
 
             if ($allData) return $results;
 
@@ -290,25 +290,25 @@ class Covid19
     }
 
 
-    public function getCovid19ComorbiditiesByFormId($formId)
+    public function getCovid19ComorbiditiesByFormId($c19Id)
     {
-        if (empty($formId)) {
+        if (empty($c19Id)) {
             return null;
         }
 
         $response = array();
 
         // Using this in sync requests/results
-        if (is_array($formId)) {
+        if (is_array($c19Id)) {
 
-            $results = $this->db->rawQuery("SELECT * FROM covid19_patient_comorbidities WHERE `covid19_id` IN (" . implode(",", $formId) . ")");
+            $results = $this->db->rawQuery("SELECT * FROM covid19_patient_comorbidities WHERE `covid19_id` IN (" . implode(",", $c19Id) . ")");
 
             foreach ($results as $row) {
                 $response[$row['covid19_id']][$row['comorbidity_id']] = $row['comorbidity_detected'];
             }
         } else {
 
-            $results = $this->db->rawQuery("SELECT * FROM covid19_patient_comorbidities WHERE `covid19_id` = $formId");
+            $results = $this->db->rawQuery("SELECT * FROM covid19_patient_comorbidities WHERE `covid19_id` = $c19Id");
 
             foreach ($results as $row) {
                 $response[$row['comorbidity_id']] = $row['comorbidity_detected'];
@@ -319,23 +319,23 @@ class Covid19
         return $response;
     }
 
-    public function getCovid19ReasonsForTestingByFormId($formId)
+    public function getCovid19ReasonsForTestingByFormId($c19Id)
     {
-        if (empty($formId)) {
+        if (empty($c19Id)) {
             return null;
         }
 
         $response = array();
 
         // Using this in sync requests/results
-        if (is_array($formId)) {
-            $results = $this->db->rawQuery("SELECT * FROM covid19_reasons_for_testing WHERE `covid19_id` IN (" . implode(",", $formId) . ")");
+        if (is_array($c19Id)) {
+            $results = $this->db->rawQuery("SELECT * FROM covid19_reasons_for_testing WHERE `covid19_id` IN (" . implode(",", $c19Id) . ")");
 
             foreach ($results as $row) {
                 $response[$row['covid19_id']][$row['reasons_id']] = $row['reasons_detected'];
             }
         } else {
-            $results = $this->db->rawQuery("SELECT * FROM covid19_reasons_for_testing WHERE `covid19_id` = $formId");
+            $results = $this->db->rawQuery("SELECT * FROM covid19_reasons_for_testing WHERE `covid19_id` = $c19Id");
 
             foreach ($results as $row) {
                 $response[$row['reasons_id']] = $row['reasons_detected'];
@@ -345,12 +345,12 @@ class Covid19
         return $response;
     }
 
-    public function getCovid19ReasonsDetailsForTestingByFormId($formId)
+    public function getCovid19ReasonsDetailsForTestingByFormId($c19Id)
     {
-        if (empty($formId)) {
+        if (empty($c19Id)) {
             return null;
         }
-        return $this->db->rawQueryOne("SELECT * FROM covid19_reasons_for_testing WHERE `covid19_id` = ?", array($formId));
+        return $this->db->rawQueryOne("SELECT * FROM covid19_reasons_for_testing WHERE `covid19_id` = ?", array($c19Id));
     }
 
     public function fetchAllDetailsBySampleCode($sampleCode)
