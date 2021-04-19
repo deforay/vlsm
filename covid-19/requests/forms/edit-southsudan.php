@@ -549,7 +549,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                                                 </select>
                                             </td>
                                             <?php 
-                                                $disapled = (isset($covid19Info['is_result_authorised']) && $covid19Info['is_result_authorised'] == 'no')?"disapled":"";
+                                                $disapled = (isset($covid19Info['is_result_authorised']) && $covid19Info['is_result_authorised'] == 'no')?"disabled":"";
                                             ?>
                                             <th>Authorized By</th>
                                             <td><input type="text" <?php echo $disapled;?> value="<?php echo $covid19Info['authorized_by']; ?>" name="authorizedBy" id="authorizedBy" class="disabled-field form-control" placeholder="Authorized By" /></td>
@@ -918,15 +918,15 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
     <?php } ?>
 
     function checkIsResultAuthorized() {
-        if ($('#isResultAuthorized').val() == 'no') {
+        if ($('#isResultAuthorized').val() == 'yes') {
+            $('#authorizedBy,#authorizedOn').prop('disabled', false);
+            $('#authorizedBy,#authorizedOn').removeClass('disabled');
+            $('#authorizedBy,#authorizedOn').addClass('isRequired');
+        } else {
             $('#authorizedBy,#authorizedOn').val('');
             $('#authorizedBy,#authorizedOn').prop('disabled', true);
             $('#authorizedBy,#authorizedOn').addClass('disabled');
             $('#authorizedBy,#authorizedOn').removeClass('isRequired');
-        } else {
-            $('#authorizedBy,#authorizedOn').prop('disabled', false);
-            $('#authorizedBy,#authorizedOn').removeClass('disabled');
-            $('#authorizedBy,#authorizedOn').addClass('isRequired');
         }
     }
 
