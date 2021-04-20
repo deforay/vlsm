@@ -114,10 +114,9 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
             <!-- /.box-header -->
             <div class="box-body">
                 <!-- form start -->
-                <form class="form-horizontal" method="post" name="editCovid19RequestForm" id="editCovid19RequestForm" autocomplete="off" action="covid-19-edit-request-helper.php">
                     <div class="box-body">
                         <div class="box box-default">
-                            <div class="box-body">
+                            <div class="box-body disabledForm">
                                 <div class="box-header with-border sectionHeader">
                                     <h3 class="box-title">SITE INFORMATION</h3>
                                 </div>
@@ -506,6 +505,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                 </table>
                             </div>
                         </div>
+                        <form class="form-horizontal" method="post" name="updateCovid19ConfirmatoryRequestForm" id="updateCovid19ConfirmatoryRequestForm" autocomplete="off" action="covid-19-update-result-helper.php">
                         <?php if ($sarr['user_type'] != 'remoteuser') { ?>
                             <div class="box box-primary">
                                 <div class="box-body">
@@ -683,7 +683,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                             <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo (isset($sFormat) && $sFormat != '') ? $sFormat : ''; ?>" />
                             <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo (isset($sKey) && $sKey != '') ? $sKey : ''; ?>" />
                         <?php } ?>
-                        <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
+                        <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Update</a>
                         <input type="hidden" name="formId" id="formId" value="5" />
                         <input type="hidden" name="deletedRow" id="deletedRow" value="" />
                         <input type="hidden" name="covid19SampleId" id="covid19SampleId" value="<?php echo $covid19Info['covid19_id']; ?>" />
@@ -910,6 +910,17 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
 
         getfacilityProvinceDetails($("#facilityId").val());
         getPatientDistrictDetails('<?php echo $covid19Info['patient_province'];?>');
+
+        <?php if (isset($covid19Info['result']) && $covid19Info['result'] != "") { ?>
+            $("#updateCovid19ConfirmatoryRequestForm :input").prop("disabled", true);
+            $("#updateCovid19ConfirmatoryRequestForm :input").removeClass("isRequired");
+            $('.submit-btn').remove();
+        <?php } else { ?>
+            $('.disabledForm input, .disabledForm select , .disabledForm textarea, .test-name-table-input').attr('disabled', true);
+            $('.test-name-table-input').prop('disabled', true);
+        <?php } ?>
+
+        $('.enable-input input, .enable-input select , .enable-input textarea').attr('disabled', false);
     });
 
 
