@@ -98,7 +98,8 @@ try {
 		$id = $db->delete($testTableName);
 		$covid19Data['sample_tested_datetime'] = null;
 	}
-	//var_dump($covid19Data);die;
+	/* echo "<pre>";
+	print_r($covid19Data);die; */
 	$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 	$id = $db->update($tableName, $covid19Data);
 	if($id > 0){

@@ -64,6 +64,7 @@ $province = "";
 $province .= "<option value=''> -- Select -- </option>";
 foreach ($pdResult as $provinceName) {
     $province .= "<option data-code='" . $provinceName['province_code'] . "' data-province-id='" . $provinceName['province_id'] . "' data-name='" . $provinceName['province_name'] . "' value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
+    $provinceSelect .= "<option data-code='" . $provinceName['province_code'] . "' data-province-id='" . $provinceName['province_id'] . "' data-name='" . $provinceName['province_name'] . "' value='" . $provinceName['province_name'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
 $pdResult = $db->query($pdQuery);
 $provinceInfo = array();
@@ -259,15 +260,17 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                     <tr>
                                         <th><label for="patientPhoneNumber">Patient phone</label></th>
                                         <td><input type="text" class="form-control " value="<?php echo $covid19Info['patient_phone_number']; ?>" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Patient phone" title="Please enter the patient phone" style="width:100%;" /></td>
-
+                                        
+                                        <th><label for="patientAddress">Patient Address</label></th>
+                                        <td><textarea class="form-control " id="patientAddress" name="patientAddress" placeholder="Patient Address" title="Please enter the Patient Address" style="width:100%;"><?php echo $covid19Info['patient_address'];?></textarea></td>
+                                    </tr>
+                                    <tr>
                                         <th><label for="patientProvince">Province</label></th>
                                         <td>
                                             <select class="form-control " name="patientProvince" id="patientProvince" title="Please select the patient province" onchange="getPatientDistrictDetails(this.value);" style="width:100%;">
                                                 <?= $general->generateSelectOptions($provinceInfo, $covid19Info['patient_province'], '-- Select --'); ?>
                                             </select>
                                         </td>
-                                    </tr>
-                                    <tr>
                                         <th><label for="patientDistrict">District</label></th>
                                         <td>
                                             <select class="form-control select2" name="patientDistrict" id="patientDistrict" title="Please select the patient district" style="width:100%;">
@@ -275,18 +278,16 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             </select>
                                         </td>
 
-                                        <th><label for="patientCity">Village</label></th>
-                                        <td><input class="form-control" value="<?php echo $covid19Info['patient_city']; ?>" id="patientCity" name="patientCity" placeholder="City/Village" title="Please enter the City/Village" style="width:100%;"></td>
                                     </tr>
                                     <tr>
+                                        <th><label for="patientCity">Village</label></th>
+                                        <td><input class="form-control" value="<?php echo $covid19Info['patient_city']; ?>" id="patientCity" name="patientCity" placeholder="City/Village" title="Please enter the City/Village" style="width:100%;"></td>
                                         <th><label for="patientNationality">Country of origin</label></th>
                                         <td>
                                             <select name="patientNationality" id="patientNationality" class="form-control" title="Please choose Country of origin:" style="width:100%">
                                                 <?= $general->generateSelectOptions($nationalityList, $covid19Info['patient_nationality'], '-- Select --'); ?>
                                             </select>
                                         </td>
-                                        <th></th>
-                                        <td></td>
                                     </tr>
                                 </table>
 

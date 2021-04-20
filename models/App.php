@@ -201,7 +201,7 @@ class App
             $where .=" f.status like 'active'";
         }
         
-        $where .= 'ORDER BY facility_district ASC';
+        $where .= ' GROUP BY facility_district ORDER BY facility_district ASC';
         $query .= $where;
         // die($query);
         $result = $this->db->rawQuery($query);
