@@ -253,15 +253,16 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                     <tr>
                                         <th><label for="patientPhoneNumber">Patient phone</label></th>
                                         <td><input type="text" class="form-control " id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Patient phone" title="Please enter the patient phone" style="width:100%;" /></td>
-
+                                        <th><label for="patientAddress">Patient Address</label></th>
+                                        <td><textarea class="form-control " id="patientAddress" name="patientAddress" placeholder="Patient Address" title="Please enter the Patient Address" style="width:100%;"></textarea></td>
+                                    </tr>
+                                    <tr>
                                         <th><label for="patientProvince">Province</label></th>
                                         <td>
                                             <select class="form-control " name="patientProvince" id="patientProvince" title="Please select the patient province" onchange="getPatientDistrictDetails(this);" style="width:100%;">
                                                 <?php echo $province; ?>
                                             </select>
                                         </td>
-                                    </tr>
-                                    <tr>
                                         <th><label for="patientDistrict">District</label></th>
                                         <td>
                                             <select class="form-control select2" name="patientDistrict" id="patientDistrict" title="Please select the patient district" style="width:100%;">
@@ -269,18 +270,16 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             </select>
                                         </td>
 
-                                        <th><label for="patientCity">Village</label></th>
-                                        <td><input class="form-control" id="patientCity" name="patientCity" placeholder="City/Village" title="Please enter the City/Village" style="width:100%;"></td>
                                     </tr>
                                     <tr>
+                                        <th><label for="patientCity">Village</label></th>
+                                        <td><input class="form-control" id="patientCity" name="patientCity" placeholder="City/Village" title="Please enter the City/Village" style="width:100%;"></td>
                                         <th><label for="patientNationality">Country of origin</label></th>
                                         <td>
                                             <select name="patientNationality" id="patientNationality" class="form-control" title="Please choose Country of origin:" style="width:100%">
                                                 <?= $general->generateSelectOptions($nationalityList, null, '-- Select --'); ?>
                                             </select>
                                         </td>
-                                        <th></th>
-                                        <td></td>
                                     </tr>
                                 </table>
 

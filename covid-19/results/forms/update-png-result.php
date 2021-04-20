@@ -827,10 +827,10 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         $("#provinceCode").val($("#province").find(":selected").attr("data-code"));
         $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
         flag = deforayValidator.init({
-            formId: 'editCovid19RequestForm'
+            formId: 'updateCovid19ConfirmatoryRequestForm'
         });
         if (flag) {
-            document.getElementById('editCovid19RequestForm').submit();
+            document.getElementById('updateCovid19ConfirmatoryRequestForm').submit();
         }
     }
 
