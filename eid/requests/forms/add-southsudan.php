@@ -523,7 +523,6 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
 
     function setPatientDetails(pDetails) {
         patientArray = pDetails.split("##");
-          console.log(patientArray);
         $("#childId").val(patientArray[6]);
         $("#childName").val(patientArray[0]);
         $("#childDob").val(patientArray[3]);
