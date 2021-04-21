@@ -161,7 +161,21 @@ require_once($fileArray[$arr['vl_form']]);
         $('.dateTime').mask('99-aaa-9999 99:99');
     });
 
-
+    function showPatientList() {
+        $("#showEmptyResult").hide();
+        if ($.trim($("#artPatientNo").val()) != '') {
+            $.post("/eid/requests/checkPatientExist.php", {
+                    artPatientNo: $("#artPatientNo").val()
+                },
+                function(data) {
+                    if (data >= '1') {
+                        showModal('patientModal.php?artNo=' + $.trim($("#artPatientNo").val()), 900, 520);
+                    } else {
+                        $("#showEmptyResult").show();
+                    }
+                });
+        }
+    }
     function checkSampleNameValidation(tableName, fieldName, id, fnct, alrt) {
 
         if ($.trim($("#" + id).val()) != '') {
