@@ -172,6 +172,11 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                 <div class="box-header with-border">
                                     <h3 class="box-title">CHILD and MOTHER INFORMATION</h3>
                                 </div>
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Patient Information</h3>&nbsp;&nbsp;&nbsp;
+                                    <input style="width:30%;" type="text" name="artPatientNo" id="artPatientNo" class="" placeholder="Enter Case ID or Patient Name" title="Enter art number or patient name" />&nbsp;&nbsp;
+                                    <a style="margin-top:-0.35%;" href="javascript:void(0);" class="btn btn-default btn-sm" onclick="showPatientList();"><i class="fa fa-search">&nbsp;</i>Search</a><span id="showEmptyResult" style="display:none;color: #ff0000;font-size: 15px;"><b>&nbsp;No Patient Found</b></span>
+                                </div>
                                 <table class="table" style="width:100%">
 
                                     <tr>
@@ -529,6 +534,22 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
             $("#district").html("<option value=''> -- Select -- </option>");
         }
         $.unblockUI();
+    }
+
+    function setPatientDetails(pDetails) {
+        patientArray = pDetails.split("##");
+        $("#childId").val(patientArray[6]);
+        $("#childName").val(patientArray[0]);
+        $("#childDob").val(patientArray[3]);
+        $("#childGender").val(patientArray[2]);
+        $("#childAge").val(patientArray[4]);
+        $("#mothersId").val(patientArray[7]);
+        $("#caretakerPhoneNumber").val(patientArray[5]);
+        $("#caretakerAddress").text(patientArray[8]);
+
+        setTimeout(function() {
+            $("#patientDistrict").val(patientArray[15]).trigger('change');
+        }, 3000);
     }
 
     function getfacilityDistrictwise(obj) {
