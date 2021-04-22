@@ -233,6 +233,11 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                                 <div class="box-header with-border sectionHeader">
                                     <h3 class="box-title">CASE DETAILS/DEMOGRAPHICS</h3>
                                 </div>
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Patient Information</h3>&nbsp;&nbsp;&nbsp;
+                                    <input style="width:30%;" type="text" name="artPatientNo" id="artPatientNo" class="" placeholder="Enter Case ID or Patient Name" title="Enter art number or patient name" />&nbsp;&nbsp;
+                                    <a style="margin-top:-0.35%;" href="javascript:void(0);" class="btn btn-default btn-sm" onclick="showPatientList();"><i class="fa fa-search">&nbsp;</i>Search</a><span id="showEmptyResult" style="display:none;color: #ff0000;font-size: 15px;"><b>&nbsp;No Patient Found</b></span>
+                                </div>
                                 <table class="table" style="width:100%">
                                     <tr>
                                         <th style="width:15% !important"><label for="patientId">Case ID <span class="mandatory">*</span> </label></th>
@@ -639,6 +644,28 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
         $.unblockUI();
     }
 
+    function setPatientDetails(pDetails) {
+        patientArray = pDetails.split("##");
+          console.log(patientArray);
+        $("#patientProvince").val(patientArray[14]).trigger('change');
+        $("#firstName").val(patientArray[0]);
+        $("#lastName").val(patientArray[1]);
+        $("#patientPhoneNumber").val(patientArray[8]);
+        $("#patientGender").val(patientArray[2]);
+        $("#patientAge").val(patientArray[4]);
+        $("#patientDob").val(patientArray[3]);
+        $("#patientId").val(patientArray[9]);
+        $("#patientPassportNumber").val(patientArray[10]);
+        $("#patientAddress").text(patientArray[11]);
+        $("#patientNationality").select2('val', patientArray[12]);
+        $("#patientCity").val(patientArray[13]);
+        // $('#patientProvince').select2('data', {"province-id": patientArray[17], code: patientArray[16], name:patientArray[14]});
+
+        setTimeout(function() {
+            $("#patientDistrict").val(patientArray[15]).trigger('change');
+        }, 3000);
+    }
+
     function getPatientDistrictDetails(val) {
 
         $.blockUI();
@@ -658,7 +685,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                     }
                 });
         } else if (pName == '') {
-            $(obj).html("<?php echo $province; ?>");
+            $("#province").html("<?php echo $province; ?>");
             $("#patientDistrict").html("<option value=''> -- Select -- </option>");
         }
         $.unblockUI();
