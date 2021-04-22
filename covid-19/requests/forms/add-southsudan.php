@@ -264,17 +264,21 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                 <option value=""> -- Select -- </option>
                                             </select>
                                         </td>
-
-                                        <th>City/Village</th>
-                                        <td><input class="form-control" id="patientCity" name="patientCity" placeholder="Case City/Village" title="Please enter the Case City/Village" style="width:100%;"></td>
+                                        <th>Payam</th>
+                                        <td><input class="form-control" id="patientZone" name="patientZone" placeholder="Case Zone" title="Please enter the Case Zone" style="width:100%;"></td>
+                                        
                                     </tr>
                                     <tr>
+                                        <th>Boma/Village</th>
+                                        <td><input class="form-control" id="patientCity" name="patientCity" placeholder="Case Boma/Village" title="Please enter the Case Boma/Village" style="width:100%;"></td>
                                         <th>Nationality</th>
                                         <td>
                                             <select name="patientNationality" id="patientNationality" class="form-control" title="Please choose nationality" style="width:100%">
                                                 <?= $general->generateSelectOptions($nationalityList, null, '-- Select --'); ?>
                                             </select>
                                         </td>
+                                    </tr>
+                                    <tr>
                                         <th>Passport Number</th>
                                         <td><input class="form-control" id="patientPassportNumber" name="patientPassportNumber" placeholder="Passport Number" title="Please enter Passport Number" style="width:100%;"></td>
 
