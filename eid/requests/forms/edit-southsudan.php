@@ -174,7 +174,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                 </div>
                                 <div class="box-header with-border">
                                     <h3 class="box-title">Patient Information</h3>&nbsp;&nbsp;&nbsp;
-                                    <input style="width:30%;" type="text" name="artPatientNo" id="artPatientNo" class="" placeholder="Enter Case ID or Patient Name" title="Enter art number or patient name" />&nbsp;&nbsp;
+                                    <input style="width:30%;" type="text" name="artPatientNo" id="artPatientNo" class="" placeholder="Enter Infant ID or Infant Name" title="Enter art number or patient name" />&nbsp;&nbsp;
                                     <a style="margin-top:-0.35%;" href="javascript:void(0);" class="btn btn-default btn-sm" onclick="showPatientList();"><i class="fa fa-search">&nbsp;</i>Search</a><span id="showEmptyResult" style="display:none;color: #ff0000;font-size: 15px;"><b>&nbsp;No Patient Found</b></span>
                                 </div>
                                 <table class="table" style="width:100%">
