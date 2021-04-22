@@ -52,8 +52,8 @@ $id = base64_decode($_GET['id']);
 $covid19Query = "SELECT * from form_covid19 where covid19_id=?";
 $covid19Info = $db->rawQueryOne($covid19Query,array($id));
 
-$covid19TestQuery = "SELECT * from covid19_tests where covid19_id=$id ORDER BY test_id ASC";
-$covid19TestInfo = $db->rawQuery($covid19TestQuery);
+$covid19TestQuery = "SELECT * from covid19_tests where covid19_id=? ORDER BY test_id ASC";
+$covid19TestInfo = $db->rawQuery($covid19TestQuery, array($id));
 
 //var_dump($covid19TestInfo);die;
 

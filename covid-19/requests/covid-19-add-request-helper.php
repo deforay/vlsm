@@ -163,6 +163,7 @@ try {
 		// 'lab_technician' 					  => (!empty($_POST['labTechnician']) && $_POST['labTechnician'] != '') ? $_POST['labTechnician'] :  $_SESSION['userId'],
 		'is_sample_rejected'                  => !empty($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
 		'result'                              => !empty($_POST['result']) ? $_POST['result'] : null,
+		'if_have_other_diseases'              => (!empty($_POST['ifOtherDiseases'])) ? $_POST['ifOtherDiseases'] : null,
 		'other_diseases'                      => (!empty($_POST['otherDiseases']) && $_POST['result'] != 'positive') ? $_POST['otherDiseases'] : null,
 		// 'tested_by'                       	  => !empty($_POST['testedBy']) ? $_POST['testedBy'] : null,
 		'is_result_authorised'                => !empty($_POST['isResultAuthorized']) ? $_POST['isResultAuthorized'] : null,
