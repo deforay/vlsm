@@ -415,13 +415,13 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                 </div>
                                 <table class="table">
                                     <tr>
-                                        <th><label for="otherDiseases">Does the patient have another diagnosis/etiology for their illness?</label></th>
+                                        <th><label for="ifOtherDiseases">Does the patient have another diagnosis/etiology for their illness?</label></th>
                                         <td>
-                                            <select name="otherDiseases" id="otherDiseases" class="form-control" title="Please choose another diagnosis">
+                                            <select name="ifOtherDiseases" id="ifOtherDiseases" class="form-control" title="Please choose If you have another diagnosis">
                                                 <option value="">-- Select --</option>
-                                                <option value='yes' <?php echo (isset($covid19Info['other_diseases']) || $covid19Info['other_diseases'] == 'yes') ? "selected='selected'" : ""; ?>> Yes </option>
-                                                <option value='no' <?php echo (isset($covid19Info['other_diseases']) && $covid19Info['other_diseases'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
-                                                <option value='unknown' <?php echo (isset($covid19Info['other_diseases']) && $covid19Info['other_diseases'] == 'unknown') ? "selected='selected'" : ""; ?>> Unknown </option>
+                                                <option value='yes' <?php echo (isset($covid19Info['if_have_other_diseases']) || $covid19Info['if_have_other_diseases'] == 'yes') ? "selected='selected'" : ""; ?>> Yes </option>
+                                                <option value='no' <?php echo (isset($covid19Info['if_have_other_diseases']) && $covid19Info['if_have_other_diseases'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
+                                                <option value='unknown' <?php echo (isset($covid19Info['if_have_other_diseases']) && $covid19Info['if_have_other_diseases'] == 'unknown') ? "selected='selected'" : ""; ?>> Unknown </option>
                                             </select>
                                         </td>
                                         <th><label for="otherDiseases">If it is yes? Then Please specify</label></th>

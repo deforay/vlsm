@@ -344,12 +344,12 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         <td>
                                             <input class="historyfield form-control" type="text" name="overseas" id="overseas" placeholder="Overseas" title="Please enter the overseas" />
                                         </td> -->
-                                        <th><label for="countryName">If Yes, Country Name(s)</label></th>
-                                        <td>
+                                        <th style="display: none;"><label for="countryName">If Yes, Country Name(s)</label></th>
+                                        <td style="display: none;">
                                             <input class="historyfield form-control" type="text" name="countryName" id="countryName" placeholder="Country Name(s)" title="Please enter the country name(s)" />
                                         </td>
-                                        <th><label for="returnDate">Return Date</label></th>
-                                        <td>
+                                        <th style="display: none;"><label for="returnDate">Return Date</label></th>
+                                        <td style="display: none;">
                                             <input class="historyfield form-control date" type="text" name="returnDate" id="returnDate" placeholder="Return Date" title="Please enter the return date" />
                                         </td>
                                     </tr>
@@ -413,9 +413,9 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                 </div>
                                 <table class="table">
                                     <tr>
-                                        <th><label for="otherDiseases">Does the patient have another diagnosis/etiology for their illness?</label></th>
+                                        <th><label for="ifOtherDiseases">Does the patient have another diagnosis/etiology for their illness?</label></th>
                                         <td>
-                                            <select name="otherDiseases" id="otherDiseases" class="form-control" title="Please choose another diagnosis">
+                                            <select name="ifOtherDiseases" id="ifOtherDiseases" class="form-control" title="Please choose If you have another diagnosis">
                                                 <option value="">-- Select --</option>
                                                 <option value="yes">yes</option>
                                                 <option value="no">No</option>
@@ -794,7 +794,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
             <?php
             if ($arr['covid19_sample_code'] == 'auto' || $arr['covid19_sample_code'] == 'YY' || $arr['covid19_sample_code'] == 'MMYY') {
             ?>
-                insertSampleCode('addCovid19RequestForm', 'covid19SampleId', 'sampleCode', 'sampleCodeKey', 'sampleCodeFormat', 9, 'sampleCollectionDate');
+                insertSampleCode('addCovid19RequestForm', 'covid19SampleId', 'sampleCode', 'sampleCodeKey', 'sampleCodeFormat', 9, 'sampleCollectionDate', null, $('#province').val());
             <?php
             } else {
             ?>
