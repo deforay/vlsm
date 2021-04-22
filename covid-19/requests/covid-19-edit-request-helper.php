@@ -129,6 +129,7 @@ try {
 		'patient_province'                    => !empty($_POST['patientProvince']) ? $_POST['patientProvince'] : null,
 		'patient_district'                    => !empty($_POST['patientDistrict']) ? $_POST['patientDistrict'] : null,
 		'patient_city'                    	  => !empty($_POST['patientCity']) ? $_POST['patientCity'] : null,
+		'patient_zone'                    	  => !empty($_POST['patientZone']) ? $_POST['patientZone'] : null,
 		'patient_occupation'                  => !empty($_POST['patientOccupation']) ? $_POST['patientOccupation'] : null,
 		'does_patient_smoke'                  => !empty($_POST['doesPatientSmoke']) ? $_POST['doesPatientSmoke'] : null,
 		'patient_nationality'                 => !empty($_POST['patientNationality']) ? $_POST['patientNationality'] : null,
