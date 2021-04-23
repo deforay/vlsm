@@ -854,7 +854,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
             });
             checkPostive();
         <?php } ?>
-        //getPatientDistrictDetails('<?php echo $covid19Info['patient_province'];?>');
+        getPatientDistrictDetails('<?php echo $covid19Info['patient_province'];?>');
     });
 
 
