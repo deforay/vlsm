@@ -2131,3 +2131,8 @@ ALTER TABLE `form_covid19` ADD `patient_zone` VARCHAR(255) NULL DEFAULT NULL AFT
 
 -- Thana 22-Apr-2021
 ALTER TABLE `form_covid19` ADD `if_have_other_diseases` VARCHAR(50) NULL DEFAULT NULL AFTER `result`; 
+
+
+
+UPDATE `system_config` SET `value` = '4.3.1' WHERE `system_config`.`name` = 'version';
+-- Version 4.3.1  -- Amit -- 26-Apr-2021
