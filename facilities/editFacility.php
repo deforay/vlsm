@@ -289,15 +289,21 @@ if (count($testTypeInfo) > 0) {
 									<label for="testType" class="col-lg-4 control-label">Test Type</label>
 									<div class="col-lg-7">
 										<select type="text" class="" id="testType" name="testType[]" title="Choose one test type" onchange="getTestType();" multiple>
+										<?php if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) { ?>
 											<option value="vl" <?php if (preg_match("/vl/i", $facilityInfo[0]['test_type'])) {
 																	echo "selected='selected'";
 																}  ?>>Viral Load</option>
+											<?php } ?>
+											<?php if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) { ?>																
 											<option value="eid" <?php if (preg_match("/eid/i", $facilityInfo[0]['test_type'])) {
 																	echo "selected='selected'";
 																}  ?>>Early Infant Diagnosis</option>
+											<?php } ?>
+											<?php if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) { ?>					
 											<option value="covid19" <?php if (preg_match("/covid19/i", $facilityInfo[0]['test_type'])) {
 																		echo "selected='selected'";
 																	}  ?>>Covid-19</option>
+											<?php } ?>
 											<?php if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) { ?>
 												<option value='hepatitis' <?php echo (preg_match("/hepatitis/i", $facilityInfo[0]['test_type'])) ? "selected='selected'" : '';  ?>>Hepatitis</option>
 											<?php } ?>
