@@ -102,8 +102,8 @@ try {
         $covid19Data['remote_sample'] = 'no';
         $covid19Data['result_status'] = 6;
     }
-    /* echo "<pre>";
-	print_r($covid19Data);die; */
+    // echo "<pre>";
+	// print_r($covid19Data);die;
     $id = 0;
     if($rowData){
         $db = $db->where('covid19_id', $rowData['covid19_id']);
@@ -121,12 +121,13 @@ try {
         }
     }
     if (isset($_POST['api']) && $_POST['api'] == "yes") {
-        exit();
-    }
-    if ($id > 0) {
-        echo $id;
-    } else {
-        echo 0;
+        // exit();
+    }else{
+        if ($id > 0) {
+            echo $id;
+        } else {
+            echo 0;
+        }
     }
 } catch (Exception $e) {
     echo 'Message: ' . $e->getMessage();

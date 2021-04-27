@@ -327,19 +327,19 @@ try {
 				'timestamp' => time(),
 				'message' => 'Successfully updated.'
 			);
+			$app = new \Vlsm\Models\App($db);
+        	$trackId = $app->addApiTracking($user['user_id'],$_POST['covid19SampleId'],'update-record','covid19','Save the existing requested data for covid-19 from mobile APP API.');
 			http_response_code(200);
-			echo json_encode($payload);
-			exit(0);
 		}else{
 			$payload = array(
 				'status' => '0',
 				'timestamp' => time(),
-				'message' => 'This record already have updated record'
+				'message' => 'This record already have updated.'
 			);
 			http_response_code(304);
-			echo json_encode($payload);
-			exit(0);
 		}
+		echo json_encode($payload);
+		exit(0);
 	}
 	else
 	{
