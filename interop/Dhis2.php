@@ -244,6 +244,7 @@ class Dhis2
 		// curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($ch, CURLOPT_USERPWD, "$this->username:$this->password");
 		$return = curl_exec($ch);
+		var_dump($return);die;
 		$httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
 		if ($httpStatus === 200 && !empty($return)) {
@@ -270,6 +271,39 @@ class Dhis2
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: $this->getContentType()"));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+		// curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		// curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($ch, CURLOPT_USERPWD, "$this->username:$this->password");
+		$return = curl_exec($ch);
+		
+		$httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		curl_close($ch);
+
+		if ($httpStatus === 200) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	// Send PATCH request to DHIS2
+	public function patch($path, $data, $urlParams = array())
+	{
+
+		if (!$this->authenticated || empty($path) || empty($data)) return false;
+
+		if (!empty($urlParams)) {
+			$urlParams = '?' . implode("&", $urlParams);
+		} else {
+			$urlParams = "";
+		}
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $this->dhis2url . "{$path}{$urlParams}");
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: $this->getContentType()"));
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 		// curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		// curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
