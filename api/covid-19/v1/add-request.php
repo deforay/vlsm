@@ -7,16 +7,18 @@ session_unset(); // no need of session in json response
 
 // serial_no field in db was unused so we decided to use it to store recency id
 try {
-
     ini_set('memory_limit', -1);
     header('Content-Type: application/json');
     $c19Model = new \Vlsm\Models\Covid19($db);
     $general = new \Vlsm\Models\General($db);
     $userDb = new \Vlsm\Models\Users($db);
     $user = null;
-
+    
     $data = json_decode(file_get_contents("php://input"), true);
-
+    /* For API Tracking params */
+    $requestUrl = $_SERVER['REQUEST_URI'];
+    $params = file_get_contents("php://input");
+    
     $auth = $general->getHeader('Authorization');
     if (!empty($auth)) {
         $authToken = str_replace("Bearer ", "", $auth);

@@ -13,6 +13,9 @@ header('Content-Type: application/json');
 $general = new \Vlsm\Models\General($db);
 $userDb = new \Vlsm\Models\Users($db);
 $user = null;
+/* For API Tracking params */
+$requestUrl = $_SERVER['REQUEST_URI'];
+$params = file_get_contents("php://input");
 
 $data = json_decode(file_get_contents("php://input"),true);
 

@@ -2132,17 +2132,19 @@ ALTER TABLE `form_covid19` ADD `patient_zone` VARCHAR(255) NULL DEFAULT NULL AFT
 -- Thana 22-Apr-2021
 ALTER TABLE `form_covid19` ADD `if_have_other_diseases` VARCHAR(50) NULL DEFAULT NULL AFTER `result`; 
 
-
 UPDATE `system_config` SET `value` = '4.3.1' WHERE `system_config`.`name` = 'version';
 -- Version 4.3.1  -- Amit -- 26-Apr-2021
+
 -- Thana 27-Apr-2021
-CREATE TABLE `api_request_tracking` (
+CREATE TABLE `track_api_requests` (
  `api_track_id` int NOT NULL AUTO_INCREMENT,
  `requested_by` varchar(255) DEFAULT NULL,
  `requested_on` datetime DEFAULT NULL,
  `number_of_records` varchar(50) DEFAULT NULL,
  `request_type` varchar(50) DEFAULT NULL,
  `test_type` varchar(255) DEFAULT NULL,
- `details` text,
+ `api_url` text,
+ `api_params` text,
+ `data_format` varchar(255) DEFAULT NULL,
  PRIMARY KEY (`api_track_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+ ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

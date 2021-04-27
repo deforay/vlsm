@@ -281,7 +281,7 @@ try {
 				'message' => 'Successfully added.'
 			);
 			$app = new \Vlsm\Models\App($db);
-			$trackId = $app->addApiTracking($user['user_id'],$_POST['covid19SampleId'],'add-request','covid19','Created new covid-19 request from mobile APP API.');
+			$trackId = $app->addApiTracking($user['user_id'],$_POST['covid19SampleId'],'add-request','covid19',$requestUrl,$params,'json');
 			http_response_code(200);
 		}else{
 			$payload = array(
