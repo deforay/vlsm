@@ -50,8 +50,6 @@ try {
         'error' => $exc->getMessage(),
         'data' => array()
     );
-
-
     echo json_encode($payload);
 
     error_log($exc->getMessage());

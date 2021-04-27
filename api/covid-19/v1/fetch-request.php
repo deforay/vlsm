@@ -139,6 +139,7 @@ try {
             'data' => $rowData
 
         );
+        
         // if (isset($user['token-updated']) && $user['token-updated'] == true) {
         //     $response['token'] = $user['newToken'];
         // }
@@ -155,7 +156,9 @@ try {
     // if (isset($user['token-updated']) && $user['token-updated'] == true) {
     //     $payload['token'] = $user['newToken'];
     // }
-
+    $app = new \Vlsm\Models\App($db);
+    $trackId = $app->addApiTracking($user['user_id'],count($rowData),'fetch-results','covid19','Fetch results for covid-19 from mobile APP API.');
+    
     http_response_code(200);
     echo json_encode($payload);
     exit(0);
