@@ -14,6 +14,10 @@ $general = new \Vlsm\Models\General($db);
 $userDb = new \Vlsm\Models\Users($db);
 $facilityDb = new \Vlsm\Models\Facilities($db);
 $user = null;
+/* For API Tracking params */
+$requestUrl = $_SERVER['REQUEST_URI'];
+$params = file_get_contents("php://input");
+
 // The request has to send an Authorization Bearer token 
 $auth = $general->getHeader('Authorization');
 if (!empty($auth)) {
@@ -157,7 +161,7 @@ try {
     //     $payload['token'] = $user['newToken'];
     // }
     $app = new \Vlsm\Models\App($db);
-    $trackId = $app->addApiTracking($user['user_id'],count($rowData),'fetch-results','covid19','Fetch results for covid-19 from mobile APP API.');
+    $trackId = $app->addApiTracking($user['user_id'],count($rowData),'fetch-results','covid19',$requestUrl,$requestUrl,'json');
     
     http_response_code(200);
     echo json_encode($payload);
