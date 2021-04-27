@@ -2126,12 +2126,15 @@ ALTER TABLE `lab_report_signatories` ADD FOREIGN KEY (`lab_id`) REFERENCES `faci
 ALTER TABLE `form_covid19` ADD `investogator_name` VARCHAR(255) NULL DEFAULT NULL AFTER `lab_technician`, ADD `investigator_phone` VARCHAR(255) NULL DEFAULT NULL AFTER `investogator_name`, ADD `investigator_email` VARCHAR(255) NULL DEFAULT NULL AFTER `investigator_phone`, ADD `clinician_name` VARCHAR(255) NULL DEFAULT NULL AFTER `investigator_email`, ADD `clinician_phone` VARCHAR(255) NULL DEFAULT NULL AFTER `clinician_name`, ADD `clinician_email` VARCHAR(255) NULL DEFAULT NULL AFTER `clinician_phone`, ADD `health_outcome` VARCHAR(255) NULL DEFAULT NULL AFTER `clinician_email`, ADD `health_outcome_date` DATE NULL DEFAULT NULL AFTER `health_outcome`; 
 -- Thana 19-Apr-2021
 ALTER TABLE `form_covid19` ADD `suspected_case` VARCHAR(255) NULL DEFAULT NULL AFTER `date_of_symptom_onset`; 
---Prasath M 22-Apr-2021
+-- Prasath M 22-Apr-2021
 ALTER TABLE `form_covid19` ADD `patient_zone` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_district`;
 
 -- Thana 22-Apr-2021
 ALTER TABLE `form_covid19` ADD `if_have_other_diseases` VARCHAR(50) NULL DEFAULT NULL AFTER `result`; 
 
+
+UPDATE `system_config` SET `value` = '4.3.1' WHERE `system_config`.`name` = 'version';
+-- Version 4.3.1  -- Amit -- 26-Apr-2021
 -- Thana 27-Apr-2021
 CREATE TABLE `api_request_tracking` (
  `api_track_id` int NOT NULL AUTO_INCREMENT,

@@ -210,8 +210,9 @@ $pResult = $db->rawQuery($pQuery);
 								<div class="form-group">
 									<label for="testType" class="col-lg-4 control-label">Test Type</label>
 									<div class="col-lg-7">
-										<?php if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) { ?>
-											<select type="text" class="" id="testType" name="testType[]" title="Choose one test type" onchange="getTestType();" multiple>
+
+										<select type="text" class="" id="testType" name="testType[]" title="Choose one test type" onchange="getTestType();" multiple>
+											<?php if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) { ?>
 												<option value="vl">Viral Load</option>
 											<?php } ?>
 											<?php if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) { ?>
@@ -223,7 +224,7 @@ $pResult = $db->rawQuery($pQuery);
 											<?php if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) { ?>
 												<option value='hepatitis'>Hepatitis</option>
 											<?php } ?>
-											</select>
+										</select>
 									</div>
 								</div>
 							</div>
