@@ -11,13 +11,13 @@ include_once(APPLICATION_PATH . '/includes/ImageResize.php');
 
 $general = new \Vlsm\Models\General($db);
 /* echo "<pre>";
-print_r($_FILES);
-print_r($_POST);die; */
+print_r($_FILES);*/
 $tableName = "facility_details";
 $tableName1 = "province_details";
 $tableName2 = "vl_user_facility_map";
 $tableName3 ="testing_labs";
 $signTableName ="lab_report_signatories";
+// print_r($_POST);die;
 try {
 	if (isset($_POST['facilityName']) && trim($_POST['facilityName']) != "") {
 		if (trim($_POST['state']) != "") {
@@ -54,7 +54,6 @@ try {
 				}
 			}
 		}
-
 		
 		if(!empty($_POST['testingPoints'])){
 			$_POST['testingPoints'] = explode(",", $_POST['testingPoints']);
@@ -82,7 +81,7 @@ try {
 			'report_email' => $email,
 			'contact_person' => $_POST['contactPerson'],
 			'facility_type' => $_POST['facilityType'],
-			'test_type' => implode(', ', $_POST['testType']), 
+			'test_type' =>(isset($_POST['testType']) && !empty($_POST['testType'])) ?  implode(', ', $_POST['testType'])  : null, 
 			'testing_points' => $_POST['testingPoints'],
 			'header_text' => $_POST['headerText'],
 			'updated_datetime' => $general->getDateTime(),
@@ -132,51 +131,57 @@ try {
 			}
 		}
 		
-		if (isset($_FILES['signature']['name']) && $_FILES['signature']['name'] != ""  && count($_FILES['signature']['name']) > 0 && isset($_POST['signName']) && $_POST['signName'] != "" && count($_POST['signName']) > 0) {
-			foreach($_POST['signName'] as $key=>$name){
-				$signData = array(
-					'name_of_signatory'	=> $name,
-					'designation' 		=> $_POST['designation'][$key],
-					'test_types' 		=> implode(",", $_POST['testSignType'][($key+1)]),
-					'lab_id' 			=> $lastId,
-					'display_order' 	=> $_POST['sortOrder'][$key],
-					'signatory_status' 	=> $_POST['signStatus'][$key],
-					"added_by" 			=> $_SESSION['userId'],
-					"added_on" 			=> $general->getDateTime()
-				);
-				
-				$db->insert($signTableName, $signData);
-				$lastSignId = $db->getInsertId();
-				if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $lastId . DIRECTORY_SEPARATOR . 'signatures') && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs")) {
-					mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs");
+			if (isset($_FILES['signature']['name']) && $_FILES['signature']['name'] != ""  && count($_FILES['signature']['name']) > 0 && isset($_POST['signName']) && $_POST['signName'] != "" && count($_POST['signName']) > 0) {
+				foreach($_POST['signName'] as $key=>$name){
+					$signData = array(
+						'name_of_signatory'	=> $name,
+						'designation' 		=> $_POST['designation'][$key],
+						'test_types' 		=> implode(",", $_POST['testSignType'][($key+1)]),
+						'lab_id' 			=> $lastId,
+						'display_order' 	=> $_POST['sortOrder'][$key],
+						'signatory_status' 	=> $_POST['signStatus'][$key],
+						"added_by" 			=> $_SESSION['userId'],
+						"added_on" 			=> $general->getDateTime()
+					);
+					
+					$db->insert($signTableName, $signData);
+					$lastSignId = $db->getInsertId();
+					if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $lastId . DIRECTORY_SEPARATOR . 'signatures') && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs")) {
+						mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs");
+					}
+					if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $lastId) && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $lastId)) {
+						mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs"  . DIRECTORY_SEPARATOR . $lastId);
+					}
+					if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $lastId . DIRECTORY_SEPARATOR . 'signatures') && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $lastId . DIRECTORY_SEPARATOR . 'signatures')) {
+						mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $lastId . DIRECTORY_SEPARATOR . 'signatures');
+					}
+					$pathname = UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $lastId . DIRECTORY_SEPARATOR . 'signatures' .DIRECTORY_SEPARATOR;
+					$extension = strtolower(pathinfo(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_FILES['signature']['name'][$key], PATHINFO_EXTENSION));
+					$string = $general->generateRandomString(4) . ".";
+					$imageName = $string . $extension;
+					
+					if (move_uploaded_file($_FILES["signature"]["tmp_name"][$key], $pathname . $imageName)) {
+						$resizeObj = new ImageResize($pathname . $imageName);
+						$resizeObj->resizeImage(80, 80, 'auto');
+						$resizeObj->saveImage($pathname . $imageName, 100);
+						$image = array('signature' => $imageName);
+						$db = $db->where('signatory_id', $lastSignId);
+						$db->update($signTableName, $image);
+					}
 				}
-				if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $lastId) && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $lastId)) {
-					mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs"  . DIRECTORY_SEPARATOR . $lastId);
-				}
-				if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $lastId . DIRECTORY_SEPARATOR . 'signatures') && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $lastId . DIRECTORY_SEPARATOR . 'signatures')) {
-					mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $lastId . DIRECTORY_SEPARATOR . 'signatures');
-				}
-				$pathname = UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $lastId . DIRECTORY_SEPARATOR . 'signatures' .DIRECTORY_SEPARATOR;
-				$extension = strtolower(pathinfo(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_FILES['signature']['name'][$key], PATHINFO_EXTENSION));
-				$string = $general->generateRandomString(4) . ".";
-				$imageName = $string . $extension;
-				
-				if (move_uploaded_file($_FILES["signature"]["tmp_name"][$key], $pathname . $imageName)) {
-					$resizeObj = new ImageResize($pathname . $imageName);
-					$resizeObj->resizeImage(80, 80, 'auto');
-					$resizeObj->saveImage($pathname . $imageName, 100);
-					$image = array('signature' => $imageName);
-					$db = $db->where('signatory_id', $lastSignId);
-					$db->update($signTableName, $image);
-				}
-			}
 
-		}
+			}
 		
 		$_SESSION['alertMsg'] = "Facility details added successfully";
 		$general->activityLog('add-facility', $_SESSION['userName'] . ' added new facility ' . $_POST['facilityName'], 'facility');
 	}
-	header("location:facilities.php");
+	if(isset($_POST['reqForm']) && $_POST['reqForm'] != '')
+	{
+		return 1;
+	}
+	else{
+		header("location:facilities.php");
+	}
 } catch (Exception $exc) {
 	error_log($exc->getMessage());
 	error_log($exc->getTraceAsString());
