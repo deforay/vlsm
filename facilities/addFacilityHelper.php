@@ -177,6 +177,13 @@ try {
 	}
 	if(isset($_POST['reqForm']) && $_POST['reqForm'] != '')
 	{
+		$currentDateTime = $general->getDateTime();
+		$data=array(
+			'test_type'     =>"covid19",
+			'facility_id'   => $lastId,
+			'updated_datetime'  => $currentDateTime
+		);
+		$db->insert("health_facilities",$data);
 		return 1;
 	}
 	else{

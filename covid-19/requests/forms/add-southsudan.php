@@ -520,6 +520,8 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                             <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat; ?>" />
                             <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey; ?>" />
                             <input type="hidden" name="saveNext" id="saveNext" />
+                            <input type="hidden" name="testData[]" id="testData" />
+                            
                             <!-- <input type="hidden" name="pageURL" id="pageURL" value="<?php echo $_SERVER['PHP_SELF']; ?>" /> -->
                         <?php } ?>
                         <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
@@ -695,7 +697,8 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
 										<input type="text" class="form-control checkNum" id="longitude" name="longitude" placeholder="Longitude" title="Please enter longitude" />
                                             <input type="hidden" name="reqForm" id="reqForm" value="1" />
                                             <input type="hidden" name="headerText" id="headerText"  />
-                                            <input type="hidden" name="testType" id="testType"  />
+                                            <input type="hidden" name="testType[]" id="testType" value=""  />
+                                            <input type="hidden" name="selectedUser[]" id="selectedUser" />
 									</div>
 								</div>
 							</div>
@@ -711,7 +714,6 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
 
       <!-- Modal footer -->
       <div class="modal-footer">
-          <input type="hidden" name="selectedUser" id="selectedUser" />
             <a class="btn btn-primary" href="javascript:void(0);" onclick="addFacility();">Submit</a>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
       </div>
@@ -745,6 +747,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                     data: $('#addFacilityForm').serialize(),
                     success: function () {
                         // alert('form was submitted');
+                        $('#addFacility').modal('hide');
                         getfacilityDistrictwise('');
                     }
                 });
