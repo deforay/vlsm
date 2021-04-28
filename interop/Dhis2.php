@@ -244,7 +244,7 @@ class Dhis2
 		// curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($ch, CURLOPT_USERPWD, "$this->username:$this->password");
 		$return = curl_exec($ch);
-		var_dump($return);die;
+		// var_dump($return);die;
 		$httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
 		if ($httpStatus === 200 && !empty($return)) {
