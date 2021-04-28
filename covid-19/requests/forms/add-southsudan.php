@@ -746,7 +746,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                     url: '/facilities/addFacilityHelper.php',
                     data: $('#addFacilityForm').serialize(),
                     success: function () {
-                        // alert('form was submitted');
+                        alert('Facility details added successfully');
                         $('#addFacility').modal('hide');
                         getfacilityDistrictwise('');
                     }
