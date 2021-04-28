@@ -273,17 +273,26 @@ try {
 		$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 		$id = $db->update($tableName, $covid19Data);
 	}
-	// print_r($_POST);die;
-	if (!empty($_POST['api']) && $_POST['api'] = "yes") {
+	if (!empty($_POST['api']) && $_POST['api'] == "yes") {
+		if($id > 0){
+			$payload = array(
+				'status' => 'success',
+				'timestamp' => time(),
+				'message' => 'Successfully added.'
+			);
+			$app = new \Vlsm\Models\App($db);
+			$trackId = $app->addApiTracking($user['user_id'],$_POST['covid19SampleId'],'add-request','covid19',$requestUrl,$params,'json');
+			http_response_code(200);
+		}else{
+			$payload = array(
+				'status' => 'failed',
+				'timestamp' => time(),
+				'error' => 'Unable to add this Covid-19 sample. Please try again later',
+				'data' => array()
+			);
+			http_response_code(301);
+		}
 		
-		$payload = array(
-			'status' => 'success',
-			'timestamp' => time(),
-			'message' => 'Successfully added.'
-		);
-
-
-		http_response_code(200);
 		echo json_encode($payload);
 		exit(0);
 	} else {

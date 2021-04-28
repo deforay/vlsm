@@ -56,10 +56,16 @@ include_once(APPLICATION_PATH . '/header.php');
 											<div class="col-lg-8">
 												<select type="text" class="form-control" id="testType" name="testType" title="Choose one test type" onchange="selectedTestType(this.value);">
 													<option value="">--Select--</option>
-													<option value="vl">Viral Load</option>
-													<option value="eid">Early Infant Diagnosis</option>
-													<option value="covid19">Covid-19</option>
-													<?php if(isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) {?> 
+													<?php if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) { ?>
+														<option value="vl">Viral Load</option>
+													<?php } ?>
+													<?php if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) { ?>
+														<option value="eid">Early Infant Diagnosis</option>
+													<?php } ?>
+													<?php if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) { ?>
+														<option value="covid19">Covid-19</option>
+													<?php } ?>
+													<?php if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) { ?>
 														<option value='hepatitis'>Hepatitis</option>
 													<?php } ?>
 												</select>

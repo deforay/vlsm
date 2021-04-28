@@ -11,6 +11,7 @@ $covid19Model = new \Vlsm\Models\Covid19($db);
 $globalConfig = $general->getGlobalConfig();
 $systemConfig = $general->getSystemConfig();
 if ($type[1] == 'RES' || $type[1] == 'QRY') {
+    
     $sQuery = "SELECT 
             vl.*,
             rtr.test_reason_name,
@@ -125,14 +126,15 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
         } else{
             $where .= " WHERE ";
         }
-        $where .= " (vl.     ='' OR vl.result IS NULL OR vl.result LIKE '')";
+        $where .= " (vl.result ='' OR vl.result IS NULL OR vl.result LIKE '')";
         $where .= " AND (vl.is_sample_rejected ='no' OR vl.is_sample_rejected IS NULL OR vl.is_sample_rejected LIKE 'no' OR vl.is_sample_rejected like '')";
     }
     $sQuery .= $where;
     // die($sQuery);
     $rowData = $db->rawQuery($sQuery);
     if($rowData && count($rowData) > 0){
-
+        $app = new \Vlsm\Models\App($db);
+        $trackId = $app->addApiTracking($user['user_id'],count($rowData),$type[1],'covid19',$requestUrl,$hl7,'hl7');
         foreach ($rowData as $row) {
             /* MSH Information */
             $msh = new MSH();
@@ -546,6 +548,8 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
     $returnString = "";
     // print_r($savedSamples);die;
     if ($id > 0 && isset($covid19Data) && count($covid19Data) > 0) {
+        $app = new \Vlsm\Models\App($db);
+        $trackId = $app->addApiTracking($user['user_id'],$_POST['covid19SampleId'],$type[1],'covid19',$requestUrl,$hl7,'hl7');
         if ($savedSamples['sample_code'] != '') {
             $sampleCode = $savedSamples['sample_code'];
         } else {

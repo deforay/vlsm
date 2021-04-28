@@ -18,6 +18,7 @@ $vlDb = new \Vlsm\Models\Vl($db);
 
 $user = null;
 try {
+    $requestUrl = $_SERVER['REQUEST_URI'];
     // The request has to send an Authorization Bearer token 
     $auth = $general->getHeader('Authorization');
     if (!empty($auth)) {

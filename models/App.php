@@ -258,4 +258,20 @@ class App
         }
         return $this->db->rawQuery($sQuery);
     }
+
+    public function addApiTracking($user,$records,$type,$testType,$url = null, $params = null, $format =null)
+    {
+        $general = new \Vlsm\Models\General($this->db);
+        $data = array(
+            'requested_by'          => $user,
+            'requested_on'          => $general->getDateTime(),
+            'number_of_records'     => $records,
+            'request_type'          => $type,
+            'test_type'             => $testType,
+            'api_url'               => $url,
+            'api_params'            => $params,
+            'data_format'           => $format
+        );
+        return $this->db->insert("track_api_requests", $data);
+    }
 }
