@@ -172,14 +172,13 @@ try {
 
 			}
 		
-		$_SESSION['alertMsg'] = "Facility details added successfully";
-		$general->activityLog('add-facility', $_SESSION['userName'] . ' added new facility ' . $_POST['facilityName'], 'facility');
-	}
-	if(isset($_POST['reqForm']) && $_POST['reqForm'] != '')
-	{
-		$currentDateTime = $general->getDateTime();
-		$data=array(
-			'test_type'     =>"covid19",
+			$general->activityLog('add-facility', $_SESSION['userName'] . ' added new facility ' . $_POST['facilityName'], 'facility');
+		}
+		if(isset($_POST['reqForm']) && $_POST['reqForm'] != '')
+		{
+			$currentDateTime = $general->getDateTime();
+			$data=array(
+				'test_type'     =>"covid19",
 			'facility_id'   => $lastId,
 			'updated_datetime'  => $currentDateTime
 		);
@@ -187,6 +186,7 @@ try {
 		return 1;
 	}
 	else{
+		$_SESSION['alertMsg'] = "Facility details added successfully";
 		header("location:facilities.php");
 	}
 } catch (Exception $exc) {
