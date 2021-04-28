@@ -1818,6 +1818,7 @@ class TCPDF_STATIC {
 		} elseif (stream_is_local($filename) !== true) {
 			return false;
 		}
+		// print_r($filename);die;
 		return fopen($filename, $mode);
 	}
 
