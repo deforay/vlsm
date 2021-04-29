@@ -15,6 +15,7 @@ namespace League\Csv;
 
 use InvalidArgumentException;
 use php_user_filter;
+use function array_map;
 use function in_array;
 use function str_replace;
 use function strcspn;
@@ -82,6 +83,7 @@ class EncloseField extends php_user_filter
      * Static method to add the stream filter to a {@link Writer} object.
      *
      * @throws InvalidArgumentException if the sequence is malformed
+     * @throws Exception
      */
     public static function addTo(Writer $csv, string $sequence): Writer
     {
@@ -91,13 +93,10 @@ class EncloseField extends php_user_filter
             throw new InvalidArgumentException('The sequence must contain at least one character to force enclosure');
         }
 
-        $formatter = static function (array $record) use ($sequence): array {
-            foreach ($record as &$value) {
-                $value = $sequence.$value;
-            }
-            unset($value);
-
-            return $record;
+        $formatter = function (array $record) use ($sequence): array {
+            return array_map(function (?string $value) use ($sequence): string {
+                return $sequence.$value;
+            }, $record);
         };
 
         return $csv
