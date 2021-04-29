@@ -2,6 +2,80 @@
 
 All Notable changes to `Csv` will be documented in this file
 
+## 9.7.1 - 2021-04-17
+
+### Added
+
+- None
+
+### Deprecated
+
+- None
+
+### Fixed
+
+- fix writer filter [#421](https://github.com/thephpleague/csv/pull/421) by [LosingBattle](https://github.com/cpj555)
+
+### Removed
+
+- None
+
+## 9.7.0 - 2021-03-26
+
+### Added
+
+- `League\Csv\SyntaxError::duplicateColumnNames` to expose column name duplicates during header usage
+- `League\Csv\UnableToProcessCsv` as the new Exception Marker Interface
+- `League\Csv\UnavailableStream` as the new Exception
+- `League\Csv\Info::getDelimiterStats` to replace the namespace function `delimiter_detect`
+- `League\Csv\Info::fetchBOMSequence` to replace the namespace function `bom_match`
+- `League\Csv\AbstractCsv::toString` to replace `League\Csv\AbstractCsv::getContent` and `League\Csv\AbstractCsv::__toString`
+- `League\Csv\XMLConverter::create` to replace `League\Csv\XMLConverter::__construct`
+- `League\Csv\HTMLConverter::create` to replace `League\Csv\HTMLConverter::__construct`
+- `League\Csv\AbstractCsv::supportsStreamFilterOnRead` and `League\Csv\AbstractCsv::supportsStreamFilterOnWrite` to replace `League\Csv\AbstractCsv::supportsStreamFilter` and `League\Csv\AbstractCsv::getStreamFilterMode`
+
+### Deprecated
+
+- `League\Csv\delimiter_detect` use `League\Csv\Info::getDelimiterStats`
+- `League\Csv\bom_match` use `League\Csv\Info::fetchBOMSequence`
+- `League\Csv\AbstractCsv::getContent` use `League\Csv\AbstractCsv::toString`
+- `League\Csv\AbstractCsv::getStreamFilterMode` use `League\Csv\AbstractCsv::supportsStreamFilterOnRead` or `League\Csv\AbstractCsv::supportsStreamFilterOnWrite`
+- `League\Csv\AbstractCsv::supportsStreamFilter` use `League\Csv\AbstractCsv::supportsStreamFilterOnRead` or `League\Csv\AbstractCsv::supportsStreamFilterOnWrite`
+- Calling exceptions constructor, use named constructors instead.
+- `League\Csv\XMLConverter::__construct` use `League\Csv\XMLConverter::create`
+- `League\Csv\HTMLConverter::__construct` use `League\Csv\HTMLConverter::create`
+
+### Fixed
+
+- Move tests into the `src` directory
+- Fixed encoder method resolver implementation 
+- all classes marked as `@internal` are now final
+- `League\Csv\AbstractCsv::STREAM_FILTER_MODE` constant replaces `League\Csv\AbstractCsv::$stream_filter_mode`
+
+### Removed
+
+- PHP7.2 support
+- `League\Csv\AbstractCsv::$stream_filter_mode`
+
+
+## 9.6.2 - 2020-12-10
+
+### Added 
+
+- Using Github actions as development tools.
+
+### Deprecated
+
+- None
+
+### Fixed
+
+- Adding official support for PHP8 [#405](https://github.com/thephpleague/csv/pull/405) and [#406](https://github.com/thephpleague/csv/pull/406) by [Ion Bazan](https://github.com/IonBazan)
+
+### Removed
+
+- Removing Travis and Scrutinizr as development tools
+
 ## 9.6.1 - 2020-09-05
 
 ### Added 

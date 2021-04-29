@@ -42,12 +42,20 @@ class HTMLConverter
      */
     protected $xml_converter;
 
+    public static function create(): self
+    {
+        return new self();
+    }
+
     /**
-     * New Instance.
+     * DEPRECATION WARNING! This method will be removed in the next major point release.
+     *
+     * @deprecated since version 9.7.0
+     * @see HTMLConverterTest::create()
      */
     public function __construct()
     {
-        $this->xml_converter = (new XMLConverter())
+        $this->xml_converter = XMLConverter::create()
             ->rootElement('table')
             ->recordElement('tr')
             ->fieldElement('td')
@@ -75,10 +83,13 @@ class HTMLConverter
         }
 
         $table = $doc->createElement('table');
+
         $this->addHTMLAttributes($table);
         $this->appendHeaderSection('thead', $header_record, $table);
         $this->appendHeaderSection('tfoot', $footer_record, $table);
+
         $table->appendChild($this->xml_converter->rootElement('tbody')->import($records, $doc));
+
         $doc->appendChild($table);
 
         /** @var string $content */

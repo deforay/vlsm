@@ -5,7 +5,7 @@
 <a href="https://packagist.org/packages/aranyasen/hl7"><img src="https://poser.pugx.org/aranyasen/hl7/license" alt="License"></a>
 </p>
 
-**Important: Supported PHP version has been updated to 7.2+. To use this package with 7.0 or 7.1, use previous release [1.5.4](https://github.com/senaranya/HL7/tree/1.5.4)**
+**Important: Supported PHP version has been updated to 7.3+. Last supported versions: for PHP 7.2 => [2.0.2](https://github.com/senaranya/HL7/tree/2.0.2), for PHP 7.0 or 7.1 => [1.5.4](https://github.com/senaranya/HL7/tree/1.5.4)**
 
 ## Introduction
 
@@ -18,6 +18,15 @@ composer require aranyasen/hl7
 ```
 
 ## Usage
+### Import library
+```php
+// First, import classes from the library as needed...
+use Aranyasen\HL7\Message; // If Message is used
+use Aranyasen\HL7\Segment; // If Segment is used
+use Aranyasen\HL7\Segments\MSH; // If MSH is used
+// ... and so on
+```
+
 ### Parsing
 ```php
 // Create a Message object from a HL7 string
@@ -57,7 +66,7 @@ $msg->setSegment($abc, 1); // Message is now: "MSH|^~\&|||||20171116140058|||201
 $pid = new PID(); // Automatically creates PID segment, and adds segment index at PID.1
 $pid->setPatientName([$lastname, $firstname, $middlename, $suffix]); // Use a setter method to add patient's name at standard position (PID.5)
 $pid->setField('abcd', 5); // Apart from standard setter methods, you can manually set a value at any position too
-unset $pid; // Destroy the segment and decrement the id number. Useful when you want to discard a segment.
+unset($pid); // Destroy the segment and decrement the id number. Useful when you want to discard a segment.
 ```
 ```php
 // Creating multiple message objects may have an unexpected side-effect: segments start with wrong index values (Check tests/MessageTest for explanation)...
@@ -84,6 +93,13 @@ $msg->toString(true); // Returns "MSH|^~\&|1\nABC|||xxx\n"
 
 // Specify custom values for separators, HL7 version etc.
 $msg = new Message("MSH|^~\\&|1|\rPV1|1|O|^AAAA1^^^BB|", ['SEGMENT_SEPARATOR' => '\r\n', 'HL7_VERSION' => '2.3']);
+
+// Segment with separator character (~) creates sub-arrays containing each sub-segment
+$message = new Message("MSH|^~\&|||||||ADT^A01||P|2.3.1|\nPID|||3^0~4^1"); // Creates [[3,0], [4,1]]
+        
+// To create a single array instead, pass 'true' as 5th argument. This may be used to retain behavior from previous releases
+// Notice: Since this leads to a non-standard behavior, it may be removed in future
+$message = new Message("MSH|^~\&|||||||ADT^A01||P|2.3.1|\nPID|||3^0~4^1", null, false, false, true, true); // Creates ['3', '0~4', '1']
 ```
 
 ### Send messages to remote listeners
