@@ -28,6 +28,8 @@ use const STREAM_FILTER_WRITE;
  */
 class Writer extends AbstractCsv
 {
+    protected const STREAM_FILTER_MODE = STREAM_FILTER_WRITE;
+
     /**
      * callable collection to format the record before insertion.
      *
@@ -64,11 +66,6 @@ class Writer extends AbstractCsv
     protected $flush_threshold;
 
     /**
-     * {@inheritdoc}
-     */
-    protected $stream_filter_mode = STREAM_FILTER_WRITE;
-
-    /**
      * Regular expression used to detect if RFC4180 formatting is necessary.
      *
      * @var string
@@ -87,7 +84,6 @@ class Writer extends AbstractCsv
      */
     protected function resetProperties(): void
     {
-        parent::resetProperties();
         $characters = preg_quote($this->delimiter, '/').'|'.preg_quote($this->enclosure, '/');
         $this->rfc4180_regexp = '/[\s|'.$characters.']/x';
         $this->rfc4180_enclosure = $this->enclosure.$this->enclosure;
@@ -294,9 +290,9 @@ class Writer extends AbstractCsv
     /**
      * Set the flush threshold.
      *
+     * @param ?int $threshold
      *
-     * @param  ?int      $threshold
-     * @throws Exception if the threshold is a integer lesser than 1
+     * @throws InvalidArgument if the threshold is a integer lesser than 1
      */
     public function setFlushThreshold(?int $threshold): self
     {
@@ -305,7 +301,7 @@ class Writer extends AbstractCsv
         }
 
         if (null !== $threshold && 1 > $threshold) {
-            throw new InvalidArgument(__METHOD__.'() expects 1 Argument to be null or a valid integer greater or equal to 1');
+            throw InvalidArgument::dueToInvalidThreshold($threshold, __METHOD__);
         }
 
         $this->flush_threshold = $threshold;

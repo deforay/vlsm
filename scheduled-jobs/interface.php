@@ -86,39 +86,32 @@ if (count($interfaceInfo) > 0) {
                 $vlResult = trim($result['results']);
                 $unit = trim($result['test_unit']);
 
-                if (strpos($unit, 'Log') !== false) {
-                    if (is_numeric($vlResult)) {
-                        $logVal = $vlResult;
-                        $vlResult = $absVal = $absDecimalVal = round((float) round(pow(10, $logVal) * 100) / 100);
-                    } else {
-                        if ($vlResult == "< Titer min") {
-                            $absDecimalVal = 20;
-                            $txtVal = $vlResult = $absVal = "<20";
-                        } else if ($vlResult == "> Titer max") {
-                            $absDecimalVal = 10000000;
-                            $txtVal = $vlResult = $absVal = ">1000000";
-                        } else if (strpos($vlResult, "<") !== false) {
-                            $logVal = str_replace("<", "", $vlResult);
-                            $absDecimalVal = round((float) round(pow(10, $logVal) * 100) / 100);
-                            $txtVal = $vlResult = $absVal = "< " . trim($absDecimalVal);
-                        } else if (strpos($vlResult, ">") !== false) {
-                            $logVal = str_replace(">", "", $vlResult);
-                            $absDecimalVal = round((float) round(pow(10, $logVal) * 100) / 100);
-                            $txtVal = $vlResult = $absVal = "> " . trim($absDecimalVal);
-                        } else {
-                            $vlResult = $txtVal = trim($result['results']);
-                        }
-                    }
-                }
-                if (strpos($unit, '10') !== false) {
+
+
+                if (strpos($vlResult, "<") !== false) {
+                    $logVal = str_replace("<", "", $vlResult);
+                    $absDecimalVal = round((float) round(pow(10, $logVal) * 100) / 100);
+                    $txtVal = $vlResult = $absVal = "< " . trim($absDecimalVal);
+                } else if (strpos($vlResult, ">") !== false) {
+                    $logVal = str_replace(">", "", $vlResult);
+                    $absDecimalVal = round((float) round(pow(10, $logVal) * 100) / 100);
+                    $txtVal = $vlResult = $absVal = "> " . trim($absDecimalVal);
+                } else if (strpos($unit, '10') !== false) {
                     $unitArray = explode(".", $unit);
                     $exponentArray = explode("*", $unitArray[0]);
                     $multiplier = pow($exponentArray[0], $exponentArray[1]);
                     $vlResult = $vlResult * $multiplier;
                     $unit = $unitArray[1];
-                }
-
-                if (strpos($vlResult, 'E+') !== false || strpos($vlResult, 'E-') !== false) {
+                } else if (strpos($unit, 'Log') !== false && is_numeric($vlResult)) {
+                    $logVal = $vlResult;
+                    $vlResult = $absVal = $absDecimalVal = round((float) round(pow(10, $logVal) * 100) / 100);
+                } else if ($vlResult == "< Titer min") {
+                    $absDecimalVal = 20;
+                    $txtVal = $vlResult = $absVal = "<20";
+                } else if ($vlResult == "> Titer max") {
+                    $absDecimalVal = 10000000;
+                    $txtVal = $vlResult = $absVal = ">1000000";
+                } else if (strpos($vlResult, 'E+') !== false || strpos($vlResult, 'E-') !== false) {
                     if (strpos($vlResult, '< 2.00E+1') !== false) {
                         $vlResult = "< 20";
                         //$vlResultCategory = 'Suppressed';
@@ -129,33 +122,35 @@ if (count($interfaceInfo) > 0) {
                         $absDecimalVal = (float) trim($vlResult);
                         $logVal = round(log10($absDecimalVal), 2);
                     }
+                } else {
+                    $vlResult = $txtVal = trim($result['results']);
                 }
 
-                if (is_numeric($vlResult)) {
-                    $absVal = (float) trim($vlResult);
-                    $absDecimalVal = (float) trim($vlResult);
-                    $logVal = round(log10($absDecimalVal), 2);
-                } else {
-                    if ($vlResult == "< Titer min") {
-                        $absDecimalVal = 20;
-                        $txtVal = $vlResult = $absVal = "<20";
-                    } else if ($vlResult == "> Titer max") {
-                        $absDecimalVal = 10000000;
-                        $txtVal = $vlResult = $absVal = ">1000000";
-                    } else if (strpos($vlResult, "<") !== false) {
-                        $vlResult = str_replace("<", "", $vlResult);
-                        $absDecimalVal = (float) trim($vlResult);
-                        $logVal = round(log10($absDecimalVal), 2);
-                        $absVal = "< " . (float) trim($vlResult);
-                    } else if (strpos($vlResult, ">") !== false) {
-                        $vlResult = str_replace(">", "", $vlResult);
-                        $absDecimalVal = (float) trim($vlResult);
-                        $logVal = round(log10($absDecimalVal), 2);
-                        $absVal = "> " . (float) trim($vlResult);
-                    } else {
-                        $txtVal = trim($result['results']);
-                    }
-                }
+                // if (is_numeric($vlResult)) {
+                //     $absVal = (float) trim($vlResult);
+                //     $absDecimalVal = (float) trim($vlResult);
+                //     $logVal = round(log10($absDecimalVal), 2);
+                // } else {
+                //     if ($vlResult == "< Titer min") {
+                //         $absDecimalVal = 20;
+                //         $txtVal = $vlResult = $absVal = "<20";
+                //     } else if ($vlResult == "> Titer max") {
+                //         $absDecimalVal = 10000000;
+                //         $txtVal = $vlResult = $absVal = ">1000000";
+                //     } else if (strpos($vlResult, "<") !== false) {
+                //         $vlResult = str_replace("<", "", $vlResult);
+                //         $absDecimalVal = (float) trim($vlResult);
+                //         $logVal = round(log10($absDecimalVal), 2);
+                //         $absVal = "< " . (float) trim($vlResult);
+                //     } else if (strpos($vlResult, ">") !== false) {
+                //         $vlResult = str_replace(">", "", $vlResult);
+                //         $absDecimalVal = (float) trim($vlResult);
+                //         $logVal = round(log10($absDecimalVal), 2);
+                //         $absVal = "> " . (float) trim($vlResult);
+                //     } else {
+                //         $txtVal = trim($result['results']);
+                //     }
+                // }
             }
 
             $userId = $usersModel->addUserIfNotExists($result['tested_by']);

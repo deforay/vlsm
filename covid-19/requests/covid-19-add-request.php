@@ -306,4 +306,6 @@ if (file_exists($fileArray[$arr['vl_form']])) {
         $("#patientAge").val(moment().diff(dateOfBirth, 'years'));
     }
 </script>
-<?php include_once(APPLICATION_PATH . '/footer.php');
+<?php
+
+include_once(APPLICATION_PATH . '/footer.php');
