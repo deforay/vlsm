@@ -298,7 +298,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                                             </select>
                                         </td>
                                         <th>Payam</th>
-                                        <td><input class="form-control" id="patientZone" value="<?php echo $covid19Info['patient_zone']; ?>" name="patientZone" placeholder="Case Zone" title="Please enter the Case Zone" style="width:100%;"></td>
+                                        <td><input class="form-control" id="patientZone" value="<?php echo $covid19Info['patient_zone']; ?>" name="patientZone" placeholder="Case Payam" title="Please enter the Case Payam" style="width:100%;"></td>
                                         
                                     </tr>
                                     <tr>
