@@ -270,7 +270,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             </select>
                                         </td>
                                         <th>Payam</th>
-                                        <td><input class="form-control" id="patientZone" name="patientZone" placeholder="Case Zone" title="Please enter the Case Zone" style="width:100%;"></td>
+                                        <td><input class="form-control" id="patientZone" name="patientZone" placeholder="Case Payam" title="Please enter the Case Payam" style="width:100%;"></td>
                                         
                                     </tr>
                                     <tr>
@@ -986,7 +986,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
         });
 
         $('#patientProvince').select2({
-            placeholder: "Select Province"
+            placeholder: "Select Case State"
         });
 
         $('#isResultAuthorized').change(function(e) {
