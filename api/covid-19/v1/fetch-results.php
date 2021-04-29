@@ -13,7 +13,12 @@ header('Content-Type: application/json');
 $general = new \Vlsm\Models\General($db);
 $userDb = new \Vlsm\Models\Users($db);
 $facilityDb = new \Vlsm\Models\Facilities($db);
+$c19Db = new \Vlsm\Models\Covid19($db);
 $user = null;
+$input = json_decode(file_get_contents("php://input"), true);
+/* echo "<pre>";
+print_r($input);
+die; */
 /* For API Tracking params */
 $requestUrl = $_SERVER['REQUEST_URI'];
 $params = file_get_contents("php://input");
@@ -41,55 +46,26 @@ if (empty($user) || empty($user['user_id'])) {
 
 try {
 
-    $sQuery="SELECT 
-                        vl.covid19_id,
-                        vl.sample_code,
-                        vl.remote_sample_code,
-                        vl.patient_id,
-                        vl.patient_name,
-                        vl.patient_surname,
-                        vl.patient_dob,
-                        vl.patient_gender,
-                        vl.patient_age,
-                        vl.patient_province,
-                        vl.patient_district,
-                        vl.patient_nationality,
-                        vl.patient_city,
-                        vl.sample_collection_date,
-                        vl.type_of_test_requested,
-                        vl.date_of_symptom_onset,
-                        vl.sample_condition,
-                        vl.contact_with_confirmed_case,
-                        vl.has_recent_travel_history,
-                        vl.travel_country_names,
-                        vl.travel_return_date,
-                        vl.sample_tested_datetime,
-                        vl.sample_received_at_vl_lab_datetime,
-                        vl.is_sample_rejected,
+    $sQuery = "SELECT 
+                        vl.covid19_id as covid19Id,
+                        vl.sample_code as sampleCode,
+                        vl.remote_sample_code as remoteSampleCode,
+                        vl.patient_id as patientId,
+                        vl.sample_tested_datetime as sampleTestedDate,
+                        vl.sample_received_at_vl_lab_datetime as sampleReceivedDate,
+                        vl.is_sample_rejected as sampleRejected,
                         vl.result,
-                        vl.is_result_authorised,
-                        vl.approver_comments,
-                        vl.request_created_datetime,
-                        vl.result_printed_datetime,
-                        vl.testing_point,
-                        vl.source_of_alert,
-                        vl.source_of_alert_other,
-                        rtr.test_reason_name,
-                        b.batch_code,
-                        ts.status_name,
-                        rst.sample_name,
-                        f.facility_name,
+                        vl.is_result_authorised as isAuthorised,
+                        vl.approver_comments as approverComments,
+                        vl.request_created_datetime as requestedDate,
+                        vl.result_printed_datetime as resultPrintedDate,
+                        vl.testing_point as testingPoint,
                         l_f.facility_name as labName,
-                        f.facility_code,
-                        f.facility_state,
-                        f.facility_district,
                         u_d.user_name as reviewedBy,
                         a_u_d.user_name as approvedBy,
                         lt_u_d.user_name as labTechnician,
-                        rs.rejection_reason_name,
-                        r_f_s.funding_source_name,
-                        c.iso_name as nationality,
-                        r_i_p.i_partner_name 
+                        rs.rejection_reason_name as rejectionReason,
+                        vl.rejection_on as rejectionDate
                         
                         FROM form_covid19 as vl 
                         
@@ -108,34 +84,47 @@ try {
                         LEFT JOIN r_implementation_partners as r_i_p ON r_i_p.i_partner_id=vl.implementing_partner";
 
 
-    $where = " WHERE request_created_by = '".$user['user_id']."'";
+    $where = " WHERE request_created_by = '" . $user['user_id'] . "'";
     if (!empty($user)) {
-        $facilityMap = $facilityDb->getFacilityMap($user['user_id'],1);
+        $facilityMap = $facilityDb->getFacilityMap($user['user_id'], 1);
         if (!empty($facilityMap)) {
-            if(isset($where) && trim($where) != ""){
+            if (isset($where) && trim($where) != "") {
                 $where .= " AND ";
-            } else{
+            } else {
                 $where .= " WHERE ";
             }
-            $where .=" facility_id IN (" . $facilityMap . ")";
+            $where .= " facility_id IN (" . $facilityMap . ")";
         }
     }
+    /* To check the sample code filter */
+    $sampleCode = $input['sampleCode'];
+    if (!empty($sampleCode)) {
+        $sampleCode = implode("','", $sampleCode);
+        $where .= " AND sample_code IN ('$sampleCode') ";
+    }
+    /* To check the facility and date range filter */
+    $from = $input['sampleCollectionDate'][0];
+    $to = $input['sampleCollectionDate'][1];
+    $facilityId = $input['facility'];
+    if (!empty($from) && !empty($to) && !empty($facilityId)) {
+        $where .= " AND DATE(sample_collection_date) between '$from' AND '$to' ";
 
-    // if (!empty($sampleCode)) {
-    //     $sampleCode = implode("','", $sampleCode);
-    //     $sQuery .= " AND sample_code IN ('$sampleCode') ";
-    // }
+        $facilityId = implode("','", $facilityId);
+        $where .= " AND facility_id IN ('$facilityId') ";
+    }
 
-    // if (!empty($from) && !empty($to)) {
-    //     $sQuery .= " AND DATE(last_modified_datetime) between '$from' AND '$to' ";
-    // }
-
-    // $sQuery .= " ORDER BY last_modified_datetime ASC ";
+    // $sQuery .= " ORDER BY sample_collection_date ASC ";
     $sQuery .= $where;
+    // die($sQuery);
     $rowData = $db->rawQuery($sQuery);
 
     // No data found
     if (!$rowData) {
+        foreach ($rowData as $key => $row) {
+            $rowData[$key]['c19Tests'] = $c19Db->getCovid19TestsByFormId($row['covid19Id']);
+        }
+        $rowData['sampleCode'] = (isset($rowData['sampleCode']) && $rowData['sampleCode'] != "") ? $rowData['sampleCode'] : $rowData['remoteSampleCode'];
+        // array_splice($rowData, 1, 2);
         $response = array(
             'status' => 'failed',
             'timestamp' => time(),
@@ -143,7 +132,7 @@ try {
             'data' => $rowData
 
         );
-        
+
         // if (isset($user['token-updated']) && $user['token-updated'] == true) {
         //     $response['token'] = $user['newToken'];
         // }
@@ -161,8 +150,8 @@ try {
     //     $payload['token'] = $user['newToken'];
     // }
     $app = new \Vlsm\Models\App($db);
-    $trackId = $app->addApiTracking($user['user_id'],count($rowData),'fetch-results','covid19',$requestUrl,$requestUrl,'json');
-    
+    $trackId = $app->addApiTracking($user['user_id'], count($rowData), 'fetch-results', 'covid19', $requestUrl, $requestUrl, 'json');
+
     http_response_code(200);
     echo json_encode($payload);
     exit(0);

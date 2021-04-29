@@ -12,13 +12,14 @@ try {
     $c19Model = new \Vlsm\Models\Covid19($db);
     $general = new \Vlsm\Models\General($db);
     $userDb = new \Vlsm\Models\Users($db);
+    $app = new \Vlsm\Models\App($db);
     $user = null;
-    
-    $data = json_decode(file_get_contents("php://input"), true);
+
+    $input = json_decode(file_get_contents("php://input"), true);
     /* For API Tracking params */
     $requestUrl = $_SERVER['REQUEST_URI'];
     $params = file_get_contents("php://input");
-    
+
     $auth = $general->getHeader('Authorization');
     if (!empty($auth)) {
         $authToken = str_replace("Bearer ", "", $auth);
@@ -38,18 +39,35 @@ try {
         echo json_encode($response);
         exit(0);
     }
-    $sampleFrom = '';
-    $data['formId'] = $data['countryId'] = $general->getGlobalConfig('vl_form');
-    $sQuery = "SELECT vlsm_instance_id from s_vlsm_instance";
-    $rowData = $db->rawQuery($sQuery);
-    $data['instanceId'] = $rowData[0]['vlsm_instance_id'];
-    $sampleFrom = '';
-    
-    $data['api'] = "yes";
-    $_POST = $data;
-    include_once(APPLICATION_PATH . '/covid-19/requests/insert-sample.php');
-    // echo "<pre>";print_r($_POST['covid19SampleId']);die;
-    include_once(APPLICATION_PATH . '/covid-19/requests/covid-19-add-request-helper.php');
+    foreach ($input['data'] as $rootKey => $field) {
+        $data = $field;
+        /* echo "<pre>";
+        print_r($data);
+        die; */
+        $sampleFrom = '';
+        $data['formId'] = $data['countryId'] = $general->getGlobalConfig('vl_form');
+        $sQuery = "SELECT vlsm_instance_id from s_vlsm_instance";
+        $rowData = $db->rawQuery($sQuery);
+        $data['instanceId'] = $rowData[0]['vlsm_instance_id'];
+        $sampleFrom = '';
+
+        $data['api'] = "yes";
+        $_POST = $data;
+        include_once(APPLICATION_PATH . '/covid-19/requests/insert-sample.php');
+        // echo "<pre>";print_r($_POST['covid19SampleId']);die;
+        include_once(APPLICATION_PATH . '/covid-19/requests/covid-19-add-request-helper.php');
+        if (isset($responseData) && count($responseData) > 0) {
+            $payload = array(
+                'status' => 'success',
+                'timestamp' => time(),
+                'message' => 'Successfully added.',
+                'data'  => $responseData
+            );
+        }
+        http_response_code(200);
+        echo json_encode($payload);
+        exit(0);
+    }
 } catch (Exception $exc) {
 
     http_response_code(500);

@@ -32,7 +32,7 @@ try {
 	if (!empty($_SESSION['instanceId'])) {
 		$instanceId = $_SESSION['instanceId'];
 	}
-	
+
 	if (empty($instanceId) && $_POST['instanceId']) {
 		$instanceId = $_POST['instanceId'];
 	}
@@ -56,19 +56,19 @@ try {
 	} else {
 		$_POST['sampleTestedDateTime'] = NULL;
 	}
-	
+
 	if (!empty($_POST['arrivalDateTime']) && trim($_POST['arrivalDateTime']) != "") {
 		$arrivalDate = explode(" ", $_POST['arrivalDateTime']);
 		$_POST['arrivalDateTime'] = $general->dateFormat($arrivalDate[0]) . " " . $arrivalDate[1];
 	} else {
 		$_POST['arrivalDateTime'] = NULL;
 	}
-	
-	
+
+
 	if (empty(trim($_POST['sampleCode']))) {
 		$_POST['sampleCode'] = NULL;
 	}
-	
+
 	if ($sarr['user_type'] == 'remoteuser') {
 		$sampleCode = 'remote_sample_code';
 		$sampleCodeKey = 'remote_sample_code_key';
@@ -76,21 +76,21 @@ try {
 		$sampleCode = 'sample_code';
 		$sampleCodeKey = 'sample_code_key';
 	}
-	
+
 	$status = 6;
 	if ($sarr['user_type'] == 'remoteuser') {
 		$status = 9;
 	}
-	
-	
+
+
 	if (isset($_POST['isSampleRejected']) && $_POST['isSampleRejected'] == 'yes') {
 		$_POST['result'] = null;
 		$status = 4;
 	}
-	if(!empty($_POST['patientDob'])){
+	if (!empty($_POST['patientDob'])) {
 		$_POST['patientDob'] = $general->dateFormat($_POST['patientDob']);
 	}
-	
+
 	$covid19Data = array(
 		'vlsm_instance_id'                    => $instanceId,
 		'vlsm_country_id'                     => $_POST['formId'],
@@ -274,16 +274,26 @@ try {
 		$id = $db->update($tableName, $covid19Data);
 	}
 	if (!empty($_POST['api']) && $_POST['api'] == "yes") {
-		if($id > 0){
-			$payload = array(
-				'status' => 'success',
-				'timestamp' => time(),
-				'message' => 'Successfully added.'
-			);
+		if ($id > 0) {
+			$c19Data = $app->getTableDataUsingId('form_covid19', 'covid19_id', $_POST['covid19SampleId']);
+			/* echo "<pre>";
+			print_r($c19Data);
+			die; */
+			$c19SampleCode = (isset($c19Data['sample_code']) && $c19Data['sample_code']) ? $c19Data['sample_code'] : $c19Data['remote_sample_code'];
+			if (isset($_POST['localTestReqID']) && $_POST['localTestReqID'] != "") {
+				$responseData[$rootKey] = array(
+					'localTestReqID' 	=> $_POST['localTestReqID'],
+					'sampleCode' 		=> $c19SampleCode,
+				);
+			} else {
+				$responseData[$rootKey] = array(
+					'sampleCode' 		=> $c19SampleCode,
+				);
+			}
 			$app = new \Vlsm\Models\App($db);
-			$trackId = $app->addApiTracking($user['user_id'],$_POST['covid19SampleId'],'add-request','covid19',$requestUrl,$params,'json');
+			$trackId = $app->addApiTracking($user['user_id'], $_POST['covid19SampleId'], 'add-request', 'covid19', $requestUrl, $params, 'json');
 			http_response_code(200);
-		}else{
+		} else {
 			$payload = array(
 				'status' => 'failed',
 				'timestamp' => time(),
@@ -292,9 +302,6 @@ try {
 			);
 			http_response_code(301);
 		}
-		
-		echo json_encode($payload);
-		exit(0);
 	} else {
 		if ($id > 0) {
 			$_SESSION['alertMsg'] = "Covid-19 test request added successfully";
