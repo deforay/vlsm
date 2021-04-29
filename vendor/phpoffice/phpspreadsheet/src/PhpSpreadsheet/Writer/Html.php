@@ -2,6 +2,7 @@
 
 namespace PhpOffice\PhpSpreadsheet\Writer;
 
+use HTMLPurifier;
 use PhpOffice\PhpSpreadsheet\Calculation\Calculation;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
@@ -1322,7 +1323,7 @@ class Html extends BaseWriter
                 [$this, 'formatColor']
             );
             if ($cellData === $origData) {
-                $cellData = htmlspecialchars($cellData);
+                $cellData = htmlspecialchars($cellData ?? '');
             }
             if ($pSheet->getParent()->getCellXfByIndex($cell->getXfIndex())->getFont()->getSuperscript()) {
                 $cellData = '<sup>' . $cellData . '</sup>';
@@ -1788,9 +1789,13 @@ class Html extends BaseWriter
     {
         $result = '';
         if (!$this->isPdf && isset($pSheet->getComments()[$coordinate])) {
-            $result .= '<a class="comment-indicator"></a>';
-            $result .= '<div class="comment">' . nl2br($pSheet->getComment($coordinate)->getText()->getPlainText()) . '</div>';
-            $result .= PHP_EOL;
+            $sanitizer = new HTMLPurifier();
+            $sanitizedString = $sanitizer->purify($pSheet->getComment($coordinate)->getText()->getPlainText());
+            if ($sanitizedString !== '') {
+                $result .= '<a class="comment-indicator"></a>';
+                $result .= '<div class="comment">' . nl2br($sanitizedString) . '</div>';
+                $result .= PHP_EOL;
+            }
         }
 
         return $result;

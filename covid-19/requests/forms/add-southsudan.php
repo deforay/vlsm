@@ -270,7 +270,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             </select>
                                         </td>
                                         <th>Payam</th>
-                                        <td><input class="form-control" id="patientZone" name="patientZone" placeholder="Case Zone" title="Please enter the Case Zone" style="width:100%;"></td>
+                                        <td><input class="form-control" id="patientZone" name="patientZone" placeholder="Case Payam" title="Please enter the Case Payam" style="width:100%;"></td>
                                         
                                     </tr>
                                     <tr>
@@ -520,6 +520,8 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                             <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat; ?>" />
                             <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey; ?>" />
                             <input type="hidden" name="saveNext" id="saveNext" />
+                            <input type="hidden" name="testData[]" id="testData" />
+                            
                             <!-- <input type="hidden" name="pageURL" id="pageURL" value="<?php echo $_SERVER['PHP_SELF']; ?>" /> -->
                         <?php } ?>
                         <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
@@ -551,7 +553,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
 
       <!-- Modal body -->
       <div class="modal-body">
-      <form class="form-horizontal" method='post' name='addFacilityForm' id='addFacilityForm' autocomplete="off" enctype="multipart/form-data" >
+         <form class="form-horizontal" method='post' name='addFacilityForm' id='addFacilityForm' autocomplete="off" enctype="multipart/form-data" >
 					<div class="box-body">
 						<div class="row">
 							<div class="col-md-6">
@@ -695,7 +697,8 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
 										<input type="text" class="form-control checkNum" id="longitude" name="longitude" placeholder="Longitude" title="Please enter longitude" />
                                             <input type="hidden" name="reqForm" id="reqForm" value="1" />
                                             <input type="hidden" name="headerText" id="headerText"  />
-                                            <input type="hidden" name="testType" id="testType"  />
+                                            <input type="hidden" name="testType[]" id="testType" value=""  />
+                                            <input type="hidden" name="selectedUser[]" id="selectedUser" />
 									</div>
 								</div>
 							</div>
@@ -711,7 +714,6 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
 
       <!-- Modal footer -->
       <div class="modal-footer">
-          <input type="hidden" name="selectedUser" id="selectedUser" />
             <a class="btn btn-primary" href="javascript:void(0);" onclick="addFacility();">Submit</a>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
       </div>
@@ -719,7 +721,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
     </div>
   </div>
 </div>
-
+</div>
 
 
 <script type="text/javascript">
@@ -744,7 +746,8 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                     url: '/facilities/addFacilityHelper.php',
                     data: $('#addFacilityForm').serialize(),
                     success: function () {
-                        // alert('form was submitted');
+                        alert('Facility details added successfully');
+                        $('#addFacility').modal('hide');
                         getfacilityDistrictwise('');
                     }
                 });
@@ -983,7 +986,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
         });
 
         $('#patientProvince').select2({
-            placeholder: "Select Province"
+            placeholder: "Select Case State"
         });
 
         $('#isResultAuthorized').change(function(e) {

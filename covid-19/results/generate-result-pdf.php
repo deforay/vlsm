@@ -80,7 +80,7 @@ if (isset($_POST['id']) && trim($_POST['id']) != '') {
 } else {
 	$searchQuery = $allQuery;
 }
-//echo($searchQuery);die;
+// echo($searchQuery);die;
 $requestResult = $db->query($searchQuery);
 /* Test Results */
 
