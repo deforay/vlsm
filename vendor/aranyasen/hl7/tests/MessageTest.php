@@ -185,7 +185,7 @@ class MessageTest extends TestCase
         self::assertSame("MSH|^~\\&|1|\nBBB|1|\n", $msg->toString(true), 'removes non-consecutive segments');
         self::assertSame(2, $count);
     }
-    
+
     /** @test */
     public function a_new_segment_can_be_inserted_between_two_existing_segments(): void
     {
@@ -321,10 +321,17 @@ class MessageTest extends TestCase
         $msg = new Message("MSH|^~\&|||||||ORM^O01||P|2.3.1|");
         self::assertTrue($msg->isOrm());
         self::assertFalse($msg->isOru());
+        self::assertFalse($msg->isSiu());
 
         $msg = new Message("MSH|^~\&|||||||ORU^O01||P|2.3.1|");
         self::assertTrue($msg->isOru());
         self::assertFalse($msg->isOrm());
+        self::assertFalse($msg->isSiu());
+
+        $msg = new Message("MSH|^~\&|||||||SIU^S12||P|2.3.1|");
+        self::assertTrue($msg->isSiu());
+        self::assertFalse($msg->isOrm());
+        self::assertFalse($msg->isOru());
     }
 
     /**
@@ -426,5 +433,15 @@ class MessageTest extends TestCase
         self::assertSame('0', $patientIdentifierList[0][1]);
         self::assertSame('4', $patientIdentifierList[1][0]);
         self::assertSame('1', $patientIdentifierList[1][1]);
+    }
+
+    /** @test */
+    public function separation_character_can_be_ignored(): void
+    {
+        $message = new Message("MSH|^~\&|||||||ADT^A01||P|2.3.1|\nPID|||3^0~4^1", null, false, false, true, true);
+        $pid = $message->getSegmentByIndex(1);
+        $patientIdentifierList = $pid->getField(3);
+        self::assertIsArray($patientIdentifierList);
+        self::assertSame(['3', '0~4', '1'], $patientIdentifierList);
     }
 }
