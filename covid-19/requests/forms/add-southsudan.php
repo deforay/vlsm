@@ -553,7 +553,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
 
       <!-- Modal body -->
       <div class="modal-body">
-      <form class="form-horizontal" method='post' name='addFacilityForm' id='addFacilityForm' autocomplete="off" enctype="multipart/form-data" >
+         <form class="form-horizontal" method='post' name='addFacilityForm' id='addFacilityForm' autocomplete="off" enctype="multipart/form-data" >
 					<div class="box-body">
 						<div class="row">
 							<div class="col-md-6">
@@ -721,7 +721,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
     </div>
   </div>
 </div>
-
+</div>
 
 
 <script type="text/javascript">
