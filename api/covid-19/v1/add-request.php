@@ -78,7 +78,6 @@ try {
         $rowData = false;
         if ($data['sampleCode'] != "" && !empty($data['sampleCode'])) {
             $sQuery = "SELECT covid19_id, sample_code, sample_code_format, sample_code_key, remote_sample_code, remote_sample_code_format, remote_sample_code_key FROM form_covid19 where sample_code like '%" . $data['sampleCode'] . "%' or remote_sample_code like '%" . $data['sampleCode'] . "%' limit 1";
-            // die($sQuery);
             $rowData = $db->rawQueryOne($sQuery);
             if ($rowData) {
                 $sampleData['sampleCode'] = (!empty($rowData['sample_code'])) ? $rowData['sample_code'] : $rowData['remote_sample_code'];
@@ -335,6 +334,7 @@ try {
             $c19SampleCode = (isset($c19Data['sample_code']) && $c19Data['sample_code']) ? $c19Data['sample_code'] : $c19Data['remote_sample_code'];
             if (isset($data['localTestReqID']) && $data['localTestReqID'] != "") {
                 $responseData[$rootKey] = array(
+                    'status'             => 'success',
                     'localTestReqID'     => $data['localTestReqID'],
                     'sampleCode'         => $c19SampleCode,
                 );
@@ -347,12 +347,19 @@ try {
             $trackId = $app->addApiTracking($user['user_id'], $data['covid19SampleId'], 'add-request', 'covid19', $requestUrl, $params, 'json');
             http_response_code(200);
         } else {
-            $payload = array(
-                'status' => 'failed',
-                'timestamp' => time(),
-                'error' => 'Unable to add this Covid-19 sample. Please try again later',
-                'data' => array()
-            );
+            if (isset($data['localTestReqID']) && $data['localTestReqID'] != "") {
+                $responseData[$rootKey] = array(
+                    'status'             => 'faile',
+                    'localTestReqID'     => $data['localTestReqID'],
+                );
+            } else {
+                $payload = array(
+                    'status' => 'failed',
+                    'timestamp' => time(),
+                    'error' => 'Unable to add this Covid-19 sample. Please try again later',
+                    'data' => array()
+                );
+            }
             http_response_code(301);
         }
     }
