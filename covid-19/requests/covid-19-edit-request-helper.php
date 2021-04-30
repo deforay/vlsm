@@ -115,7 +115,7 @@ try {
 		'testing_point'                       => !empty($_POST['testingPoint']) ? $_POST['testingPoint'] : null,
 		'implementing_partner'                => !empty($_POST['implementingPartner']) ? $_POST['implementingPartner'] : null,
 		'source_of_alert'                	  => !empty($_POST['sourceOfAlertPOE']) ? $_POST['sourceOfAlertPOE'] : null,
-		'source_of_alert_other'               => (!empty($_POST['sourceOfAlertPOE']) && $_POST['sourceOfAlertPOE']== 'others') ? $_POST['alertPoeOthers'] : null,
+		'source_of_alert_other'               => (!empty($_POST['sourceOfAlertPOE']) && $_POST['sourceOfAlertPOE'] == 'others') ? $_POST['alertPoeOthers'] : null,
 		'funding_source'                      => !empty($_POST['fundingSource']) ? $_POST['fundingSource'] : null,
 		'patient_id'                          => !empty($_POST['patientId']) ? $_POST['patientId'] : null,
 		'patient_name'                        => !empty($_POST['firstName']) ? $_POST['firstName'] : null,
@@ -173,7 +173,7 @@ try {
 		'result'                              => !empty($_POST['result']) ? $_POST['result'] : null,
 		'if_have_other_diseases'              => (!empty($_POST['ifOtherDiseases'])) ? $_POST['ifOtherDiseases'] : null,
 		'other_diseases'                      => (!empty($_POST['otherDiseases']) && $_POST['result'] != 'positive') ? $_POST['otherDiseases'] : null,
-		// 'tested_by'                       	  => !empty($_POST['testedBy']) ? $_POST['testedBy'] : null,
+		'tested_by'                       	  => !empty($_POST['testedBy']) ? $_POST['testedBy'] : null,
 		'is_result_authorised'                => !empty($_POST['isResultAuthorized']) ? $_POST['isResultAuthorized'] : null,
 		'authorized_by'                       => !empty($_POST['authorizedBy']) ? $_POST['authorizedBy'] : null,
 		'authorized_on' 					  => !empty($_POST['authorizedOn']) ? $general->dateFormat($_POST['authorizedOn']) : null,
@@ -187,20 +187,20 @@ try {
 		'last_modified_datetime'              => $general->getDateTime()
 	);
 	$lock = $general->getGlobalConfig('lock_approved_covid19_samples');
-    if($status == 7 && $lock == 'yes'){
+	if ($status == 7 && $lock == 'yes') {
 		$covid19Data['locked'] = 'yes';
 	}
 
-	if(!empty($_POST['api']) && $_POST['api'] = "yes"){
-		$sampleQuery = "SELECT covid19_id FROM form_covid19 where covid19_id = ".$_POST['covid19SampleId']." limit 1";
+	if (!empty($_POST['api']) && $_POST['api'] = "yes") {
+		$sampleQuery = "SELECT covid19_id FROM form_covid19 where covid19_id = " . $_POST['covid19SampleId'] . " limit 1";
 		$sampleExist = $db->rawQueryOne($sampleQuery);
 		$_POST['covid19SampleId'] = $sampleExist['covid19_id'];
-		if($_POST['sampleCode'] != "" && !empty($_POST['sampleCode']) && !$sampleExist){
-            $sQuery = "SELECT covid19_id, sample_code, sample_code_format, sample_code_key, remote_sample_code, remote_sample_code_format, remote_sample_code_key FROM form_covid19 where sample_code like '%".$_POST['sampleCode']."%' or remote_sample_code like '%".$_POST['sampleCode']."%' limit 1";
-            $rowData = $db->rawQueryOne($sQuery);
-            if($rowData){
+		if ($_POST['sampleCode'] != "" && !empty($_POST['sampleCode']) && !$sampleExist) {
+			$sQuery = "SELECT covid19_id, sample_code, sample_code_format, sample_code_key, remote_sample_code, remote_sample_code_format, remote_sample_code_key FROM form_covid19 where sample_code like '%" . $_POST['sampleCode'] . "%' or remote_sample_code like '%" . $_POST['sampleCode'] . "%' limit 1";
+			$rowData = $db->rawQueryOne($sQuery);
+			if ($rowData) {
 				$_POST['covid19SampleId'] = $rowData['covid19_id'];
-            }else{
+			} else {
 				$payload = array(
 					'status' => '0',
 					'timestamp' => time(),
@@ -212,8 +212,7 @@ try {
 			}
 		}
 		$covid19Data['last_modified_by'] =  $user['user_id'];
-	}else
-	{
+	} else {
 		$covid19Data['last_modified_by'] =  $_SESSION['userId'];
 		$covid19Data['lab_technician'] = (!empty($_POST['labTechnician']) && $_POST['labTechnician'] != '') ? $_POST['labTechnician'] :  $_SESSION['userId'];
 	}
@@ -259,11 +258,11 @@ try {
 	$db->delete("covid19_reasons_for_testing");
 	if (!empty($_POST['reasonDetails'])) {
 		$reasonData = array();
-			$reasonData["covid19_id"] 		= $_POST['covid19SampleId'];
-			$reasonData["reasons_id"] 		= $_POST['reasonForCovid19Test'];
-			$reasonData["reasons_detected"]	= "yes";
-			$reasonData["reason_details"] 	= json_encode($_POST['reasonDetails']);
-			$db->insert("covid19_reasons_for_testing", $reasonData);
+		$reasonData["covid19_id"] 		= $_POST['covid19SampleId'];
+		$reasonData["reasons_id"] 		= $_POST['reasonForCovid19Test'];
+		$reasonData["reasons_detected"]	= "yes";
+		$reasonData["reason_details"] 	= json_encode($_POST['reasonDetails']);
+		$db->insert("covid19_reasons_for_testing", $reasonData);
 	}
 
 	$db = $db->where('covid19_id', $_POST['covid19SampleId']);
@@ -319,8 +318,8 @@ try {
 		$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 		$id = $db->update($tableName, $covid19Data);
 	}
-	if(isset($_POST['api']) && $_POST['api'] = "yes"){
-		if($id > 0){
+	if (isset($_POST['api']) && $_POST['api'] = "yes") {
+		if ($id > 0) {
 
 			$payload = array(
 				'status' => 'success',
@@ -328,9 +327,9 @@ try {
 				'message' => 'Successfully updated.'
 			);
 			$app = new \Vlsm\Models\App($db);
-        	$trackId = $app->addApiTracking($user['user_id'],$_POST['covid19SampleId'],'update-record','covid19',$requestUrl,$params,'json');
+			$trackId = $app->addApiTracking($user['user_id'], $_POST['covid19SampleId'], 'update-record', 'covid19', $requestUrl, $params, 'json');
 			http_response_code(200);
-		}else{
+		} else {
 			$payload = array(
 				'status' => '0',
 				'timestamp' => time(),
@@ -340,9 +339,7 @@ try {
 		}
 		echo json_encode($payload);
 		exit(0);
-	}
-	else
-	{
+	} else {
 		if ($id > 0 || $sid > 0 || $pid > 0) {
 			$_SESSION['alertMsg'] = "Covid-19 request updated successfully";
 			//Add event log
