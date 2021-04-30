@@ -37,8 +37,6 @@ class General
             $pieces[] = $keyspace[random_int(0, $max)];
         }
         return implode('', $pieces);
-
-        
     }
 
     public function generateUserID($length = 16)
@@ -225,7 +223,12 @@ class General
             $configQuery = "SELECT $fieldName from $tableName WHERE $condition";
         }
         $configResult = $this->db->query($configQuery);
-
+        if ($tableName == 'health_facilities') {
+            die($configQuery);
+            foreach ($configResult as $key => $row) {
+                $configResult[$key]['labReportSignatories'] = $this->db->query("SELECT * FROM lab_report_signatories WHERE lab_id = ?", array($row['facility_id']));
+            }
+        }
         return $configResult;
     }
 
@@ -378,14 +381,14 @@ class General
     public function generateSelectOptions($optionList, $selectedOptions = array(), $emptySelectText = false)
     {
 
-        if(empty($optionList)){
+        if (empty($optionList)) {
             return '';
         }
         $response = '';
         if ($emptySelectText !== false) {
             $response .= "<option value=''>$emptySelectText</option>";
         }
-        
+
         foreach ($optionList as $optId => $optName) {
             $selectedText = '';
             if (!empty($selectedOptions)) {
@@ -426,14 +429,14 @@ class General
     public function getHttpValue($key)
     {
         // print_r($_SERVER);die;
-        foreach($_SERVER as $header=>$value) { 
-            if (substr($header,0,5)=="HTTP_") { 
-                $header=str_replace(" ","-",ucwords(strtolower(str_replace("_"," ",substr($header,5))))); 
+        foreach ($_SERVER as $header => $value) {
+            if (substr($header, 0, 5) == "HTTP_") {
+                $header = str_replace(" ", "-", ucwords(strtolower(str_replace("_", " ", substr($header, 5)))));
                 if (strtolower($key) == strtolower($header)) {
                     return $value;
                 }
             }
-        } 
+        }
         // return $out; 
     }
 
@@ -450,7 +453,7 @@ class General
 
     public function getDuplicateDataFromField($tablename, $fieldname, $fieldValue, $lab = "")
     {
-        $query = 'SELECT * FROM '.$tablename.' WHERE '.$fieldname.' =  "'.$fieldValue.'"';
+        $query = 'SELECT * FROM ' . $tablename . ' WHERE ' . $fieldname . ' =  "' . $fieldValue . '"';
         if ($lab != "") {
             $query .= " AND $lab like 2";
         }
@@ -506,14 +509,14 @@ class General
     }
 
     public function getValueByName($name = "", $condtionField, $tableName, $id)
-    {   
+    {
         $where = "";
-        if(!empty($name)){
-            $where = $condtionField." LIKE '$name%'";
-            $query = "SELECT * FROM ".$tableName." where ".$where;
+        if (!empty($name)) {
+            $where = $condtionField . " LIKE '$name%'";
+            $query = "SELECT * FROM " . $tableName . " where " . $where;
             $result =  $this->db->rawQuery($query);
             return $result[0][$id];
-        }else{
+        } else {
             return null;
         }
     }

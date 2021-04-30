@@ -199,7 +199,7 @@ if (!empty($result['eidRejectionReasons']) && count($result['eidRejectionReasons
 
 /* for covid19 module common tables updates 
 Covid19 Rejection Reasons Updates*/
-if(!empty($result['covid19RejectionReasons']) && sizeof($result['covid19RejectionReasons']) > 0){
+if (!empty($result['covid19RejectionReasons']) && sizeof($result['covid19RejectionReasons']) > 0) {
     foreach ($result['covid19RejectionReasons'] as $reason) {
         $c19RejectionReasonQuery = "SELECT rejection_reason_id FROM r_covid19_sample_rejection_reasons WHERE rejection_reason_id=" . $reason['rejection_reason_id'];
         $c19RejectionReasonResult = $db->query($c19RejectionReasonQuery);
@@ -223,7 +223,7 @@ if(!empty($result['covid19RejectionReasons']) && sizeof($result['covid19Rejectio
     }
 }
 /* Covid19 Sample Types Updates */
-if(!empty($result['covid19SampleTypes']) && sizeof($result['covid19SampleTypes']) > 0){
+if (!empty($result['covid19SampleTypes']) && sizeof($result['covid19SampleTypes']) > 0) {
     foreach ($result['covid19SampleTypes'] as $sampleType) {
         $c19SampleTypeQuery = "SELECT sample_id FROM r_covid19_sample_type WHERE sample_id=" . $sampleType['sample_id'];
         $c19SampleTypeResult = $db->query($c19SampleTypeQuery);
@@ -245,7 +245,7 @@ if(!empty($result['covid19SampleTypes']) && sizeof($result['covid19SampleTypes']
     }
 }
 /* Covid19 Comorbidities Updates */
-if(!empty($result['covid19Comorbidities']) && sizeof($result['covid19Comorbidities']) > 0){
+if (!empty($result['covid19Comorbidities']) && sizeof($result['covid19Comorbidities']) > 0) {
     foreach ($result['covid19Comorbidities'] as $comorbidities) {
         $c19ComorbiditiesQuery = "SELECT comorbidity_id FROM r_covid19_comorbidities WHERE comorbidity_id=" . $comorbidities['comorbidity_id'];
         $c19ComorbiditiesResult = $db->query($c19ComorbiditiesQuery);
@@ -266,9 +266,9 @@ if(!empty($result['covid19Comorbidities']) && sizeof($result['covid19Comorbiditi
     }
 }
 /* Covid19 Results Updates */
-if(!empty($result['covid19Results']) && sizeof($result['covid19Results']) > 0){
+if (!empty($result['covid19Results']) && sizeof($result['covid19Results']) > 0) {
     foreach ($result['covid19Results'] as $results) {
-        $c19ResultsQuery = "SELECT result_id FROM r_covid19_results WHERE result_id='" . $results['result_id'] ."'";
+        $c19ResultsQuery = "SELECT result_id FROM r_covid19_results WHERE result_id='" . $results['result_id'] . "'";
         $c19ResultsResult = $db->query($c19ResultsQuery);
         $c19ResultsData = array(
             'result'            => $results['result'],
@@ -288,7 +288,7 @@ if(!empty($result['covid19Results']) && sizeof($result['covid19Results']) > 0){
     }
 }
 /* Covid19 Symptoms Updates */
-if(!empty($result['covid19Symptoms']) && sizeof($result['covid19Symptoms']) > 0){
+if (!empty($result['covid19Symptoms']) && sizeof($result['covid19Symptoms']) > 0) {
     foreach ($result['covid19Symptoms'] as $symptoms) {
         $c19SymptomsQuery = "SELECT symptom_id FROM r_covid19_symptoms WHERE symptom_id=" . $symptoms['symptom_id'];
         $c19SymptomsResult = $db->query($c19SymptomsQuery);
@@ -310,7 +310,7 @@ if(!empty($result['covid19Symptoms']) && sizeof($result['covid19Symptoms']) > 0)
     }
 }
 /* Covid19 ReasonForTesting Updates */
-if(!empty($result['covid19ReasonForTesting']) && sizeof($result['covid19ReasonForTesting']) > 0){
+if (!empty($result['covid19ReasonForTesting']) && sizeof($result['covid19ReasonForTesting']) > 0) {
     foreach ($result['covid19ReasonForTesting'] as $reasonForTesting) {
         $c19ReasonForTestingQuery = "SELECT test_reason_id FROM r_covid19_test_reasons WHERE test_reason_id=" . $reasonForTesting['test_reason_id'];
         $c19ReasonForTestingResult = $db->query($c19ReasonForTestingQuery);
@@ -334,7 +334,7 @@ if(!empty($result['covid19ReasonForTesting']) && sizeof($result['covid19ReasonFo
 
 /* for hepatitis module common tables updates 
 Hepatitis Rejection Reasons Updates*/
-if(!empty($result['hepatitisRejectionReasons']) && sizeof($result['hepatitisRejectionReasons']) > 0){
+if (!empty($result['hepatitisRejectionReasons']) && sizeof($result['hepatitisRejectionReasons']) > 0) {
     foreach ($result['hepatitisRejectionReasons'] as $reason) {
         $c19RejectionReasonQuery = "SELECT rejection_reason_id FROM r_hepatitis_sample_rejection_reasons WHERE rejection_reason_id=" . $reason['rejection_reason_id'];
         $c19RejectionReasonResult = $db->query($c19RejectionReasonQuery);
@@ -358,7 +358,7 @@ if(!empty($result['hepatitisRejectionReasons']) && sizeof($result['hepatitisReje
     }
 }
 /* Hepatitis Sample Types Updates */
-if(!empty($result['hepatitisSampleTypes']) && sizeof($result['hepatitisSampleTypes']) > 0){
+if (!empty($result['hepatitisSampleTypes']) && sizeof($result['hepatitisSampleTypes']) > 0) {
     foreach ($result['hepatitisSampleTypes'] as $sampleType) {
         $c19SampleTypeQuery = "SELECT sample_id FROM r_hepatitis_sample_type WHERE sample_id=" . $sampleType['sample_id'];
         $c19SampleTypeResult = $db->query($c19SampleTypeQuery);
@@ -380,7 +380,7 @@ if(!empty($result['hepatitisSampleTypes']) && sizeof($result['hepatitisSampleTyp
     }
 }
 /* Hepatitis Comorbidities Updates */
-if(!empty($result['hepatitisComorbidities']) && sizeof($result['hepatitisComorbidities']) > 0){
+if (!empty($result['hepatitisComorbidities']) && sizeof($result['hepatitisComorbidities']) > 0) {
     foreach ($result['hepatitisComorbidities'] as $comorbidities) {
         $c19ComorbiditiesQuery = "SELECT comorbidity_id FROM r_hepatitis_comorbidities WHERE comorbidity_id=" . $comorbidities['comorbidity_id'];
         $c19ComorbiditiesResult = $db->query($c19ComorbiditiesQuery);
@@ -401,9 +401,9 @@ if(!empty($result['hepatitisComorbidities']) && sizeof($result['hepatitisComorbi
     }
 }
 /* Hepatitis Results Updates */
-if(!empty($result['hepatitisResults']) && sizeof($result['hepatitisResults']) > 0){
+if (!empty($result['hepatitisResults']) && sizeof($result['hepatitisResults']) > 0) {
     foreach ($result['hepatitisResults'] as $results) {
-        $c19ResultsQuery = "SELECT result_id FROM r_hepatitis_results WHERE result_id='" . $results['result_id'] ."'";
+        $c19ResultsQuery = "SELECT result_id FROM r_hepatitis_results WHERE result_id='" . $results['result_id'] . "'";
         $c19ResultsResult = $db->query($c19ResultsQuery);
         $c19ResultsData = array(
             'result'            => $results['result'],
@@ -424,7 +424,7 @@ if(!empty($result['hepatitisResults']) && sizeof($result['hepatitisResults']) > 
 }
 
 /* Hepatitis ReasonForTesting Updates */
-if(!empty($result['hepatitisReasonForTesting']) && sizeof($result['hepatitisReasonForTesting']) > 0){
+if (!empty($result['hepatitisReasonForTesting']) && sizeof($result['hepatitisReasonForTesting']) > 0) {
     foreach ($result['hepatitisReasonForTesting'] as $reasonForTesting) {
         $c19ReasonForTestingQuery = "SELECT test_reason_id FROM r_hepatitis_test_reasons WHERE test_reason_id=" . $reasonForTesting['test_reason_id'];
         $c19ReasonForTestingResult = $db->query($c19ReasonForTestingQuery);
@@ -450,7 +450,7 @@ if(!empty($result['hepatitisReasonForTesting']) && sizeof($result['hepatitisReas
 if (!empty($result['globalConfig']) && count($result['globalConfig']) > 0) {
 
     foreach ($result['globalConfig'] as $config) {
-        $configQuery = "SELECT name FROM global_config WHERE name='" . $config['name'] ."'";
+        $configQuery = "SELECT name FROM global_config WHERE name='" . $config['name'] . "'";
         $configLocalResult = $db->query($configQuery);
         $configData = array(
             'display_name'          => $config['display_name'],
@@ -547,8 +547,9 @@ if (!empty($result['facilities']) && count($result['facilities']) > 0) {
         }
     }
 }
-
-
+/* echo "<pre>";
+print_r($result);
+die; */
 //update or insert health facilities
 if (!empty($result['healthFacilities']) && count($result['healthFacilities']) > 0) {
 
@@ -556,7 +557,7 @@ if (!empty($result['healthFacilities']) && count($result['healthFacilities']) > 
     $id = $db->delete('health_facilities');
     foreach ($result['healthFacilities'] as $healthFacility) {
         $healthFacilityData = array(
-            'test_type'         =>$healthFacility['test_type'],
+            'test_type'         => $healthFacility['test_type'],
             'facility_id'       => $healthFacility['facility_id'],
             'updated_datetime'  => $general->getDateTime()
         );
@@ -573,7 +574,7 @@ if (!empty($result['testingLabs']) && count($result['testingLabs']) > 0) {
     $id = $db->delete('testing_labs');
     foreach ($result['testingLabs'] as $testingLabs) {
         $testingLabsData = array(
-            'test_type'         =>$testingLabs['test_type'],
+            'test_type'         => $testingLabs['test_type'],
             'facility_id'       => $testingLabs['facility_id'],
             'monthly_target' => $testingLabs['monthly_target'],
             'updated_datetime'  => $general->getDateTime()

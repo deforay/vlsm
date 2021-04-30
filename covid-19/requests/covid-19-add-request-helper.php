@@ -1,8 +1,5 @@
 <?php
 
-///  if you change anyting in this file make sure Api file for covid 19 add also 
-// Path   /vlsm/api/covid-19/v1/add-request.php
-
 ob_start();
 if (session_status() == PHP_SESSION_NONE) {
 	session_start();
@@ -178,22 +175,16 @@ try {
 		'request_created_datetime'            => (isset($_POST['sampleRejectionReason']) && $_POST['isSampleRejected'] == 'yes') ? $_POST['sampleRejectionReason'] : $general->getDateTime(),
 		'sample_registered_at_lab'            => $general->getDateTime(),
 		// 'last_modified_by'                    => $_SESSION['userId'],
-		'last_modified_datetime'              => $general->getDateTime()
+		'last_modified_datetime'              => $general->getDateTime(),
+		'request_created_by'              	  => $_SESSION['userId'],
+		'last_modified_by'              	  => $_SESSION['userId'],
+		'lab_technician'              		  => (isset($_POST['labTechnician']) && $_POST['labTechnician'] != '') ? $_POST['labTechnician'] :  $_SESSION['userId'],
+		'source_of_request'                   => "web"
 	);
 	$lock = $general->getGlobalConfig('lock_approved_covid19_samples');
 	if ($status == 7 && $lock == 'yes') {
 		$covid19Data['locked'] = 'yes';
 	}
-	if (isset($_POST['api']) && $_POST['api'] = "yes") {
-		$covid19Data['request_created_by'] =  $user['user_id'];
-		$covid19Data['last_modified_by'] =  $user['user_id'];
-	} else {
-		$covid19Data['request_created_by'] =  $_SESSION['userId'];
-		$covid19Data['last_modified_by'] =  $_SESSION['userId'];
-		$covid19Data['lab_technician'] = (isset($_POST['labTechnician']) && $_POST['labTechnician'] != '') ? $_POST['labTechnician'] :  $_SESSION['userId'];
-	}
-	// echo "<pre>";
-	// print_r($covid19Data);die;
 
 	$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 	$db->delete("covid19_patient_symptoms");
@@ -266,62 +257,30 @@ try {
 	}
 	$id = 0;
 	$covid19Data['source_of_request'] = 'web';
-	if (!empty($_POST['api']) && $_POST['api'] = "yes") {
-		$covid19Data['source_of_request'] = 'api';
-	}
+
 	if (!empty($_POST['covid19SampleId'])) {
 		$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 		$id = $db->update($tableName, $covid19Data);
 	}
-	if (!empty($_POST['api']) && $_POST['api'] == "yes") {
-		if ($id > 0) {
-			$c19Data = $app->getTableDataUsingId('form_covid19', 'covid19_id', $_POST['covid19SampleId']);
-			/* echo "<pre>";
-			print_r($c19Data);
-			die; */
-			$c19SampleCode = (isset($c19Data['sample_code']) && $c19Data['sample_code']) ? $c19Data['sample_code'] : $c19Data['remote_sample_code'];
-			if (isset($_POST['localTestReqID']) && $_POST['localTestReqID'] != "") {
-				$responseData[$rootKey] = array(
-					'localTestReqID' 	=> $_POST['localTestReqID'],
-					'sampleCode' 		=> $c19SampleCode,
-				);
-			} else {
-				$responseData[$rootKey] = array(
-					'sampleCode' 		=> $c19SampleCode,
-				);
-			}
-			$app = new \Vlsm\Models\App($db);
-			$trackId = $app->addApiTracking($user['user_id'], $_POST['covid19SampleId'], 'add-request', 'covid19', $requestUrl, $params, 'json');
-			http_response_code(200);
-		} else {
-			$payload = array(
-				'status' => 'failed',
-				'timestamp' => time(),
-				'error' => 'Unable to add this Covid-19 sample. Please try again later',
-				'data' => array()
-			);
-			http_response_code(301);
-		}
-	} else {
-		if ($id > 0) {
-			$_SESSION['alertMsg'] = "Covid-19 test request added successfully";
-			//Add event log
-			$eventType = 'covid-19-add-request';
-			$action = ucwords($_SESSION['userName']) . ' added a new Covid-19 request data with the sample id ' . $_POST['covid19SampleId'];
-			$resource = 'covid-19-add-request';
 
-			$general->activityLog($eventType, $action, $resource);
+	if ($id > 0) {
+		$_SESSION['alertMsg'] = "Covid-19 test request added successfully";
+		//Add event log
+		$eventType = 'covid-19-add-request';
+		$action = ucwords($_SESSION['userName']) . ' added a new Covid-19 request data with the sample id ' . $_POST['covid19SampleId'];
+		$resource = 'covid-19-add-request';
+
+		$general->activityLog($eventType, $action, $resource);
+	} else {
+		$_SESSION['alertMsg'] = "Unable to add this Covid-19 sample. Please try again later";
+	}
+	if (!empty($_POST['saveNext']) && $_POST['saveNext'] == 'next' && (!empty($_POST['quickForm']) && $_POST['quickForm'] == "quick")) {
+		header("location:/covid-19/requests/covid-19-quick-add.php");
+	} else {
+		if (!empty($_POST['saveNext']) && $_POST['saveNext'] == 'next') {
+			header("location:/covid-19/requests/covid-19-add-request.php");
 		} else {
-			$_SESSION['alertMsg'] = "Unable to add this Covid-19 sample. Please try again later";
-		}
-		if (!empty($_POST['saveNext']) && $_POST['saveNext'] == 'next' && (!empty($_POST['quickForm']) && $_POST['quickForm'] == "quick")) {
-			header("location:/covid-19/requests/covid-19-quick-add.php");
-		} else {
-			if (!empty($_POST['saveNext']) && $_POST['saveNext'] == 'next') {
-				header("location:/covid-19/requests/covid-19-add-request.php");
-			} else {
-				header("location:/covid-19/requests/covid-19-requests.php");
-			}
+			header("location:/covid-19/requests/covid-19-requests.php");
 		}
 	}
 } catch (Exception $exc) {
