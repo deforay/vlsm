@@ -117,7 +117,7 @@ try {
     $sampleCode = $input['sampleCode'];
     if (!empty($sampleCode)) {
         $sampleCode = implode("','", $sampleCode);
-        $where .= " AND sample_code IN ('$sampleCode') ";
+        $where .= " AND (sample_code IN ('$sampleCode') OR remote_sample_code IN ('$sampleCode') )";
     }
     /* To check the facility and date range filter */
     $from = $input['sampleCollectionDate'][0];
