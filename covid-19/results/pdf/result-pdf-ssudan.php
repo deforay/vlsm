@@ -209,7 +209,7 @@ if (sizeof($requestResult) > 0) {
         if (!empty($testedByRes['user_signature'])) {
             $testUserSignaturePath = UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature" . DIRECTORY_SEPARATOR . $testedByRes['user_signature'];
         }
-        
+
         if (isset($result['sample_tested_datetime']) && trim($result['sample_tested_datetime']) != '' && $result['sample_tested_datetime'] != '0000-00-00 00:00:00') {
             $expStr = explode(" ", $result['sample_tested_datetime']);
             $result['sample_tested_datetime'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
@@ -288,7 +288,7 @@ if (sizeof($requestResult) > 0) {
         $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-left:1px solid #67b3ff;">' . $ageCalc['year'] . 'Year(s) ' . $ageCalc['months'] . 'Months</td>';
         $html .= '<td style="line-height:20px;font-size:11px;text-align:left;font-weight:bold;border-left:1px solid #67b3ff;">PHONE</td>';
         $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-left:1px solid #67b3ff;">' . $result['labPhone'] . '</td>';
-        
+
         $html .= '</tr>';
 
         $html .= '<tr>';
@@ -303,7 +303,7 @@ if (sizeof($requestResult) > 0) {
         $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-left:1px solid #67b3ff;">' . $result['nationality'] . '</td>';
         $html .= '<td style="line-height:20px;font-size:11px;text-align:left;font-weight:bold;border-left:1px solid #67b3ff;">STATE</td>';
         $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-left:1px solid #67b3ff;">' . ucwords($result['labState']) . '</td>';
-        
+
         $html .= '</tr>';
 
         $html .= '<tr>';
@@ -421,18 +421,18 @@ if (sizeof($requestResult) > 0) {
         $html .= '<td style="line-height:17px;font-size:13px;font-weight:bold;text-align:left;border-bottom:1px solid #67b3ff;border-left:1px solid #67b3ff;">SIGNATURE</td>';
         $html .= '<td style="line-height:17px;font-size:13px;font-weight:bold;text-align:left;border-bottom:1px solid #67b3ff;border-left:1px solid #67b3ff;">DATE & TIME</td>';
         $html .= '</tr>';
-        if(isset($signResults) && !empty($signResults)){
-            foreach($signResults as $key=>$row){
-                $lmSign = "/uploads/labs/".$row['lab_id']."/signatures/".$row['signature'];
+        if (isset($signResults) && !empty($signResults)) {
+            foreach ($signResults as $key => $row) {
+                $lmSign = "/uploads/labs/" . $row['lab_id'] . "/signatures/" . $row['signature'];
                 $html .= '<tr>';
-                $html .= '<td style="line-height:17px;font-size:11px;text-align:left;font-weight:bold;border-bottom:1px solid #67b3ff;">'.$row['designation'].'</td>';
-                $html .= '<td style="line-height:17px;font-size:11px;text-align:left;border-bottom:1px solid #67b3ff;border-left:1px solid #67b3ff;">'.$row['name_of_signatory'].'</td>';
+                $html .= '<td style="line-height:17px;font-size:11px;text-align:left;font-weight:bold;border-bottom:1px solid #67b3ff;">' . $row['designation'] . '</td>';
+                $html .= '<td style="line-height:17px;font-size:11px;text-align:left;border-bottom:1px solid #67b3ff;border-left:1px solid #67b3ff;">' . $row['name_of_signatory'] . '</td>';
                 $html .= '<td style="line-height:17px;font-size:11px;text-align:left;border-bottom:1px solid #67b3ff;border-left:1px solid #67b3ff;"><img src="' . $lmSign . '" style="width:30px;"></td>';
                 $html .= '<td style="line-height:17px;font-size:11px;text-align:left;border-bottom:1px solid #67b3ff;border-left:1px solid #67b3ff;">' . date('d-M-Y H:i:s a') . '</td>';
                 $html .= '</tr>';
             }
         }
-        
+
         /* 
         $lqSign = "/uploads/covid-19/{$countryFormId}/pdf/lq.png";
         $html .= '<tr>';
@@ -453,21 +453,21 @@ if (sizeof($requestResult) > 0) {
         $html .= '</td>';
         $html .= '</tr>';
         $html .= '</table>';
-        
+
         $html .= '<table>';
         $html .= '<tr>';
         $html .= '<td colspan="2" style="line-height:20px;border-bottom:2px solid #d3d3d3;"></td>';
         $html .= '</tr>';
-        
+
         $html .= '<tr>';
         $html .= '<td colspan="2" style="font-size:10px;text-align:left;width:60%;"></td>';
         $html .= '</tr>';
-        
+
         $html .= '<tr>';
         $html .= '<td style="font-size:10px;text-align:left;">Printed on : ' . $printDate . '&nbsp;&nbsp;' . $printDateTime . '</td>';
         $html .= '<td style="font-size:10px;text-align:left;width:60%;"></td>';
         $html .= '</tr>';
-        
+
         $html .= '<tr>';
         $html .= '<td colspan="2" style="font-size:10px;text-align:left;width:60%;"></td>';
         $html .= '</tr>';
