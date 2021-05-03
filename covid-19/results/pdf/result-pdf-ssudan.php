@@ -472,10 +472,10 @@ if (sizeof($requestResult) > 0) {
         $html .= '<td colspan="2" style="font-size:10px;text-align:left;width:60%;"></td>';
         $html .= '</tr>';
         $html .= '</table>';
-        $html .= '<img src="qrcode.php?id=' . $result['covid19_id'] . '"  alt="Covid-19 Report" />';
-        // $html .= '<img src="https://www.shaadidukaan.com/vogue/wp-content/uploads/2019/08/hug-kiss-images.jpg />'; '.$_SERVER['HTTP_HOST'].'/covid-19/results/   
         if ($result['result'] != '' || ($result['result'] == '' && $result['result_status'] == '4')) {
+            $Cid = base64_encode($result['covid19_id']);
             $pdf->writeHTML($html);
+            $pdf->write2DBarcode($_SERVER["HTTP_HOST"].'/covid-19/results/covid-19-pdf-results.php?id='.$Cid.'', 'QRCODE,H', 20, 200, 30, 30, $style, 'N');
             $pdf->lastPage();
             $filename = $pathFront . DIRECTORY_SEPARATOR . 'p' . $page . '.pdf';
             $pdf->Output($filename, "F");
