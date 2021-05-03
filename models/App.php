@@ -44,12 +44,12 @@ class App
         if (isset($input['authToken']) && !empty($input['authToken'])) {
             $queryParams = array($input['authToken']);
             $response['data'] = $this->db->rawQueryOne("SELECT user_id,user_name,phone_number,login_id,status FROM user_details as ud WHERE ud.api_token = ?", $queryParams);
-            if($response['data']){
+            if ($response['data']) {
                 $response['status'] = true;
-            }else{
+            } else {
                 $response['message'] = "You are not activated try to log in again";
             }
-        }else{
+        } else {
             $response['status'] = false;
             $response['message'] = "Unauthorised access";
         }
@@ -59,7 +59,7 @@ class App
     public function generateSelectOptions($options)
     {
         $i = 0;
-        foreach($options as $key=>$show){
+        foreach ($options as $key => $show) {
             $response[$i]['value'] = $key;
             $response[$i]['show'] = $show;
             $i++;
@@ -78,50 +78,50 @@ class App
         if (!empty($user)) {
             $facilityMap = $facilityDb->getFacilityMap($user);
             if (!empty($facilityMap)) {
-                if(isset($where) && trim($where) != ""){
+                if (isset($where) && trim($where) != "") {
                     $where .= " AND ";
-                } else{
+                } else {
                     $where .= " WHERE ";
                 }
-                $where .=" facility_id IN (" . $facilityMap . ")";
+                $where .= " facility_id IN (" . $facilityMap . ")";
             }
         }
 
         if (!empty($testType)) {
-            if(isset($where) && trim($where) != ""){
+            if (isset($where) && trim($where) != "") {
                 $where .= " AND ";
-            } else{
+            } else {
                 $where .= " WHERE ";
             }
-            $where .=" hf.test_type like '$testType'";
+            $where .= " hf.test_type like '$testType'";
         }
 
         if ($onlyActive) {
-            if(isset($where) && trim($where) != ""){
+            if (isset($where) && trim($where) != "") {
                 $where .= " AND ";
-            } else{
+            } else {
                 $where .= " WHERE ";
             }
-            $where .=" f.status like 'active'";
+            $where .= " f.status like 'active'";
         }
-        
+
         if ($facilityType) {
-            if(isset($where) && trim($where) != ""){
+            if (isset($where) && trim($where) != "") {
                 $where .= " AND ";
-            } else{
+            } else {
                 $where .= " WHERE ";
             }
-            $where .=" f.facility_type = '$facilityType'";
+            $where .= " f.facility_type = '$facilityType'";
         }
         $where .= ' GROUP BY facility_name ORDER BY facility_name ASC';
         $query .= $where;
         $result = $this->db->rawQuery($query);
-        foreach($result as $key=>$row){
-            $condition1 = " province_name like '".$row['province_name']."%'";
-            $condition2 = " facility_state like '".$row['province_name']."%'";
+        foreach ($result as $key => $row) {
+            $condition1 = " province_name like '" . $row['province_name'] . "%'";
+            $condition2 = " facility_state like '" . $row['province_name'] . "%'";
 
             $response[$key]['value']        = $row['facility_id'];
-            $response[$key]['show']         = $row['facility_name'].' ('.$row['facility_code'].')';
+            $response[$key]['show']         = $row['facility_name'] . ' (' . $row['facility_code'] . ')';
             /* $response[$key]['provinceId']   = $row['province_id'];
             $response[$key]['province']     = $row['province_name'];
             $response[$key]['district']     = $row['facility_district']; */
@@ -130,7 +130,7 @@ class App
         }
         return $response;
     }
-    
+
     public function getProvinceDetails($user = null, $onlyActive = false)
     {
         $facilityDb = new \Vlsm\Models\Facilities($this->db);
@@ -141,29 +141,29 @@ class App
         if (!empty($user)) {
             $facilityMap = $facilityDb->getFacilityMap($user);
             if (!empty($facilityMap)) {
-                if(isset($where) && trim($where) != ""){
+                if (isset($where) && trim($where) != "") {
                     $where .= " AND ";
-                } else{
+                } else {
                     $where .= " WHERE ";
                 }
-                $where .=" facility_id IN (" . $facilityMap . ")";
+                $where .= " facility_id IN (" . $facilityMap . ")";
             }
         }
 
         if ($onlyActive) {
-            if(isset($where) && trim($where) != ""){
+            if (isset($where) && trim($where) != "") {
                 $where .= " AND ";
-            } else{
+            } else {
                 $where .= " WHERE ";
             }
-            $where .=" f.status like 'active'";
+            $where .= " f.status like 'active'";
         }
-        
+
         $where .= ' GROUP BY province_name ORDER BY province_name ASC';
         $query .= $where;
         $result = $this->db->rawQuery($query);
-        foreach($result as $key=>$row){
-            $condition1 = " facility_state like '".$row['province_name']."%'";
+        foreach ($result as $key => $row) {
+            $condition1 = " facility_state like '" . $row['province_name'] . "%'";
 
             $response[$key]['value']    = $row['province_id'];
             $response[$key]['show']     = $row['province_name'];
@@ -172,7 +172,7 @@ class App
         }
         return $response;
     }
-    
+
     public function getDistrictDetails($user = null, $onlyActive = false)
     {
         $facilityDb = new \Vlsm\Models\Facilities($this->db);
@@ -183,31 +183,31 @@ class App
         if (!empty($user)) {
             $facilityMap = $facilityDb->getFacilityMap($user);
             if (!empty($facilityMap)) {
-                if(isset($where) && trim($where) != ""){
+                if (isset($where) && trim($where) != "") {
                     $where .= " AND ";
-                } else{
+                } else {
                     $where .= " WHERE ";
                 }
-                $where .=" facility_id IN (" . $facilityMap . ")";
+                $where .= " facility_id IN (" . $facilityMap . ")";
             }
         }
 
         if ($onlyActive) {
-            if(isset($where) && trim($where) != ""){
+            if (isset($where) && trim($where) != "") {
                 $where .= " AND ";
-            } else{
+            } else {
                 $where .= " WHERE ";
             }
-            $where .=" f.status like 'active'";
+            $where .= " f.status like 'active'";
         }
-        
+
         $where .= ' GROUP BY facility_district ORDER BY facility_district ASC';
         $query .= $where;
         // die($query);
         $result = $this->db->rawQuery($query);
-        foreach($result as $key=>$row){
-            $condition1 = " facility_district like '".$row['facility_district']."%'";
-            $condition2 = " province_name like '".$row['province_name']."%'";
+        foreach ($result as $key => $row) {
+            $condition1 = " facility_district like '" . $row['facility_district'] . "%'";
+            $condition2 = " province_name like '" . $row['province_name'] . "%'";
 
             $response[$key]['value']        = $row['facility_district'];
             $response[$key]['show']         = $row['facility_district'];
@@ -226,8 +226,8 @@ class App
         $query = "SELECT $primary, $name from $tableName where $condition group by $name";
         $result = $this->db->rawQuery($query);
         $response = array();
-        foreach($result as $key=>$row){
-            $response[$key]['value']= $row[$primary];
+        foreach ($result as $key => $row) {
+            $response[$key]['value'] = $row[$primary];
             $response[$key]['show'] = $row[$name];
         }
         return $response;
@@ -259,7 +259,7 @@ class App
         return $this->db->rawQuery($sQuery);
     }
 
-    public function addApiTracking($user,$records,$type,$testType,$url = null, $params = null, $format =null)
+    public function addApiTracking($user, $records, $type, $testType, $url = null, $params = null, $format = null)
     {
         $general = new \Vlsm\Models\General($this->db);
         $data = array(
@@ -273,5 +273,10 @@ class App
             'data_format'           => $format
         );
         return $this->db->insert("track_api_requests", $data);
+    }
+
+    public function getTableDataUsingId($tablename, $fieldName, $value)
+    {
+        return $this->db->rawQueryOne("SELECT * FROM " . $tablename . " WHERE " . $fieldName . " = " . $value);
     }
 }

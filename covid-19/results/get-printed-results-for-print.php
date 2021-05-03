@@ -318,8 +318,7 @@ foreach ($rResult as $aRow) {
 	if (isset($_POST['vlPrint']) && $_POST['vlPrint'] == 'print') {
 		$row[] = '<input type="checkbox" name="chkPrinted[]" class="checkPrintedRows" id="chkPrinted' . $aRow['covid19_id'] . '"  value="' . $aRow['covid19_id'] . '" onclick="checkedPrintedRow(this);"  />';
 		$print = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="resultPDF(' . $aRow['covid19_id'] . ',\'printData\');"><i class="fa fa-print"> Print</i></a>';
-		$CId = base64_encode($aRow['covid19_id']);
-		$print.= '<br><a href="/covid-19/results/qrcode.php?id='.$CId.'" class="btn btn-primary btn-xs" target="_blank" style="margin-right: 2px;margin-top: 3px;" title="QR Code" ><i class="fa fa-qrcode"> QR Code</i></a>';
+		
 	}
 	if ($aRow['remote_sample'] == 'yes') {
 		$decrypt = 'remote_sample_code';
