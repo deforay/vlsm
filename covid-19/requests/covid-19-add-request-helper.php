@@ -32,7 +32,7 @@ try {
 	if (!empty($_SESSION['instanceId'])) {
 		$instanceId = $_SESSION['instanceId'];
 	}
-	
+
 	if (empty($instanceId) && $_POST['instanceId']) {
 		$instanceId = $_POST['instanceId'];
 	}
@@ -56,19 +56,19 @@ try {
 	} else {
 		$_POST['sampleTestedDateTime'] = NULL;
 	}
-	
+
 	if (!empty($_POST['arrivalDateTime']) && trim($_POST['arrivalDateTime']) != "") {
 		$arrivalDate = explode(" ", $_POST['arrivalDateTime']);
 		$_POST['arrivalDateTime'] = $general->dateFormat($arrivalDate[0]) . " " . $arrivalDate[1];
 	} else {
 		$_POST['arrivalDateTime'] = NULL;
 	}
-	
-	
+
+
 	if (empty(trim($_POST['sampleCode']))) {
 		$_POST['sampleCode'] = NULL;
 	}
-	
+
 	if ($sarr['user_type'] == 'remoteuser') {
 		$sampleCode = 'remote_sample_code';
 		$sampleCodeKey = 'remote_sample_code_key';
@@ -76,21 +76,27 @@ try {
 		$sampleCode = 'sample_code';
 		$sampleCodeKey = 'sample_code_key';
 	}
-	
+
 	$status = 6;
 	if ($sarr['user_type'] == 'remoteuser') {
 		$status = 9;
 	}
-	
+
+	$resultSentToSource = null;
 	
 	if (isset($_POST['isSampleRejected']) && $_POST['isSampleRejected'] == 'yes') {
 		$_POST['result'] = null;
 		$status = 4;
+		$resultSentToSource = 'pending';
 	}
-	if(!empty($_POST['patientDob'])){
+	if (!empty($_POST['patientDob'])) {
 		$_POST['patientDob'] = $general->dateFormat($_POST['patientDob']);
 	}
-	
+
+	if (!empty($_POST['result'])) {
+		$resultSentToSource = 'pending';
+	}
+
 	$covid19Data = array(
 		'vlsm_instance_id'                    => $instanceId,
 		'vlsm_country_id'                     => $_POST['formId'],
@@ -164,6 +170,7 @@ try {
 		// 'lab_technician' 					  => (!empty($_POST['labTechnician']) && $_POST['labTechnician'] != '') ? $_POST['labTechnician'] :  $_SESSION['userId'],
 		'is_sample_rejected'                  => !empty($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
 		'result'                              => !empty($_POST['result']) ? $_POST['result'] : null,
+		'result_sent_to_source'               => $resultSentToSource,
 		'if_have_other_diseases'              => (!empty($_POST['ifOtherDiseases'])) ? $_POST['ifOtherDiseases'] : null,
 		'other_diseases'                      => (!empty($_POST['otherDiseases']) && $_POST['result'] != 'positive') ? $_POST['otherDiseases'] : null,
 		// 'tested_by'                       	  => !empty($_POST['testedBy']) ? $_POST['testedBy'] : null,
@@ -274,16 +281,16 @@ try {
 		$id = $db->update($tableName, $covid19Data);
 	}
 	if (!empty($_POST['api']) && $_POST['api'] == "yes") {
-		if($id > 0){
+		if ($id > 0) {
 			$payload = array(
 				'status' => 'success',
 				'timestamp' => time(),
 				'message' => 'Successfully added.'
 			);
 			$app = new \Vlsm\Models\App($db);
-			$trackId = $app->addApiTracking($user['user_id'],$_POST['covid19SampleId'],'add-request','covid19',$requestUrl,$params,'json');
+			$trackId = $app->addApiTracking($user['user_id'], $_POST['covid19SampleId'], 'add-request', 'covid19', $requestUrl, $params, 'json');
 			http_response_code(200);
-		}else{
+		} else {
 			$payload = array(
 				'status' => 'failed',
 				'timestamp' => time(),
@@ -292,7 +299,7 @@ try {
 			);
 			http_response_code(301);
 		}
-		
+
 		echo json_encode($payload);
 		exit(0);
 	} else {

@@ -2148,3 +2148,16 @@ CREATE TABLE `track_api_requests` (
  `data_format` varchar(255) DEFAULT NULL,
  PRIMARY KEY (`api_track_id`)
  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ -- Amit 02-May-2021
+
+ALTER TABLE `form_hepatitis` ADD `source_of_request` VARCHAR(255) NULL DEFAULT NULL AFTER `lot_number`;
+ALTER TABLE `form_hepatitis` ADD `source_data_dump` TEXT NULL DEFAULT NULL AFTER `source_of_request`;
+ALTER TABLE `form_covid19` ADD `source_data_dump` TEXT NULL DEFAULT NULL AFTER `source_of_request`;
+ALTER TABLE `eid_form` ADD `source_data_dump` TEXT NULL DEFAULT NULL AFTER `source_of_request`;
+ALTER TABLE `vl_request_form` ADD `source_data_dump` TEXT NULL DEFAULT NULL AFTER `source_of_request`;
+
+ALTER TABLE `form_hepatitis` ADD `result_sent_to_source` TEXT NULL DEFAULT NULL AFTER `source_data_dump`;
+ALTER TABLE `form_covid19` ADD `result_sent_to_source` TEXT NULL DEFAULT NULL AFTER `source_data_dump`;
+ALTER TABLE `eid_form` ADD `result_sent_to_source` TEXT NULL DEFAULT NULL AFTER `source_data_dump`;
+ALTER TABLE `vl_request_form` ADD `result_sent_to_source` TEXT NULL DEFAULT NULL AFTER `source_data_dump`;
