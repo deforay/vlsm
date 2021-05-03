@@ -28,6 +28,17 @@ try {
 		$_POST['sampleTestedDateTime'] = NULL;
 	}
 
+	$resultSentToSource = null;
+	
+	if (isset($_POST['isSampleRejected']) && $_POST['isSampleRejected'] == 'yes') {
+		$_POST['result'] = null;
+		$resultSentToSource = 'pending';
+	}
+
+	if (!empty($_POST['result'])) {
+		$resultSentToSource = 'pending';
+	}
+
 
 
 	$covid19Data = array(
@@ -38,6 +49,7 @@ try {
 		'testing_point'                       => isset($_POST['testingPoint']) ? $_POST['testingPoint'] : null,
 		'is_sample_rejected'                  => isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
 		'result'                              => isset($_POST['result']) ? $_POST['result'] : null,
+		'result_sent_to_source'               => $resultSentToSource,
 		'other_diseases'        			  => (isset($_POST['otherDiseases']) && $_POST['result'] != 'positive') ? $_POST['otherDiseases'] : null,
 		'tested_by'                       	  => isset($_POST['testedBy']) ? $_POST['testedBy'] : null,
 		'is_result_authorised'                => isset($_POST['isResultAuthorized']) ? $_POST['isResultAuthorized'] : null,
