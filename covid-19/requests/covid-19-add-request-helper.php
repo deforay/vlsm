@@ -185,22 +185,16 @@ try {
 		'request_created_datetime'            => (isset($_POST['sampleRejectionReason']) && $_POST['isSampleRejected'] == 'yes') ? $_POST['sampleRejectionReason'] : $general->getDateTime(),
 		'sample_registered_at_lab'            => $general->getDateTime(),
 		// 'last_modified_by'                    => $_SESSION['userId'],
-		'last_modified_datetime'              => $general->getDateTime()
+		'last_modified_datetime'              => $general->getDateTime(),
+		'request_created_by'              	  => $_SESSION['userId'],
+		'last_modified_by'              	  => $_SESSION['userId'],
+		'lab_technician'              		  => (isset($_POST['labTechnician']) && $_POST['labTechnician'] != '') ? $_POST['labTechnician'] :  $_SESSION['userId'],
+		'source_of_request'                   => "web"
 	);
 	$lock = $general->getGlobalConfig('lock_approved_covid19_samples');
 	if ($status == 7 && $lock == 'yes') {
 		$covid19Data['locked'] = 'yes';
 	}
-	if (isset($_POST['api']) && $_POST['api'] = "yes") {
-		$covid19Data['request_created_by'] =  $user['user_id'];
-		$covid19Data['last_modified_by'] =  $user['user_id'];
-	} else {
-		$covid19Data['request_created_by'] =  $_SESSION['userId'];
-		$covid19Data['last_modified_by'] =  $_SESSION['userId'];
-		$covid19Data['lab_technician'] = (isset($_POST['labTechnician']) && $_POST['labTechnician'] != '') ? $_POST['labTechnician'] :  $_SESSION['userId'];
-	}
-	// echo "<pre>";
-	// print_r($covid19Data);die;
 
 	$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 	$db->delete("covid19_patient_symptoms");
@@ -273,9 +267,7 @@ try {
 	}
 	$id = 0;
 	$covid19Data['source_of_request'] = 'web';
-	if (!empty($_POST['api']) && $_POST['api'] = "yes") {
-		$covid19Data['source_of_request'] = 'api';
-	}
+
 	if (!empty($_POST['covid19SampleId'])) {
 		$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 		$id = $db->update($tableName, $covid19Data);
