@@ -473,7 +473,14 @@ if (sizeof($requestResult) > 0) {
         $html .= '</tr>';
         $html .= '</table>';
         if ($result['result'] != '' || ($result['result'] == '' && $result['result_status'] == '4')) {
-            $Cid = base64_encode($result['covid19_id']);
+            $ciphering = "AES-128-CTR";
+            $iv_length = openssl_cipher_iv_length($ciphering);
+            $options = 0;
+            $simple_string = $result['covid19_id']."&&&qr";
+            $encryption_iv = $systemConfig['tryCrypt'];
+            $encryption_key = $systemConfig['tryCrypt'];
+            $Cid = openssl_encrypt($simple_string, $ciphering,
+            $encryption_key, $options, $encryption_iv);
             $pdf->writeHTML($html);
             $pdf->write2DBarcode($_SERVER["HTTP_HOST"].'/covid-19/results/covid-19-pdf-results.php?id='.$Cid.'', 'QRCODE,H', 20, 200, 30, 30, $style, 'N');
             $pdf->lastPage();

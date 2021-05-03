@@ -21,6 +21,7 @@ $systemConfig['dbPassword'] = '';
 $systemConfig['dbName']     = '';
 $systemConfig['dbPort']     = 3306;
 $systemConfig['passwordSalt']= 'PUT-A-RANDOM-STRING-HERE';
+$systemConfig['tryCrypt']= 'XTOTESTTHECRYTPD';
 
 //Please use only GMAIL ID AND PASSWORD
 $systemConfig['adminEmailUserName'] = '';
