@@ -202,7 +202,7 @@ class Dhis2
 			$urlParams = "";
 		}
 
-		var_dump($this->dhis2url . "{$path}{$urlParams}");
+		//var_dump($this->dhis2url . "{$path}{$urlParams}");
 
 
 		$ch = curl_init();
