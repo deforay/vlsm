@@ -31,6 +31,7 @@ $general = new \Vlsm\Models\General($db);
 $userDb = new \Vlsm\Models\Users($db);
 $facilityDb = new \Vlsm\Models\Facilities($db);
 $c19Db = new \Vlsm\Models\Covid19($db);
+$app = new \Vlsm\Models\App($db);
 $user = null;
 $input = json_decode(file_get_contents("php://input"), true);
 /* echo "<pre>";
@@ -65,8 +66,7 @@ try {
 
     $sQuery = "SELECT 
                         vl.covid19_id as covid19Id,
-                        vl.sample_code as sampleCode,
-                        vl.remote_sample_code as remoteSampleCode,
+                        CONCAT_WS('',vl.sample_code, vl.remote_sample_code) as sampleCode,
                         vl.patient_id as patientId,
                         vl.sample_tested_datetime as sampleTestedDate,
                         vl.sample_received_at_vl_lab_datetime as sampleReceivedDate,
@@ -77,9 +77,10 @@ try {
                         vl.request_created_datetime as requestedDate,
                         vl.result_printed_datetime as resultPrintedDate,
                         vl.testing_point as testingPoint,
+                        vl.authorized_on as authorisedOn,
                         l_f.facility_name as labName,
                         u_d.user_name as reviewedBy,
-                        a_u_d.user_name as approvedBy,
+                        a_u_d.user_name as authorisedBy,
                         lt_u_d.user_name as labTechnician,
                         rs.rejection_reason_name as rejectionReason,
                         vl.rejection_on as rejectionDate
@@ -137,10 +138,6 @@ try {
 
     // No data found
     if (!$rowData) {
-        foreach ($rowData as $key => $row) {
-            $rowData[$key]['c19Tests'] = $c19Db->getCovid19TestsByFormId($row['covid19Id']);
-        }
-        $rowData['sampleCode'] = (isset($rowData['sampleCode']) && $rowData['sampleCode'] != "") ? $rowData['sampleCode'] : $rowData['remoteSampleCode'];
         // array_splice($rowData, 1, 2);
         $response = array(
             'status' => 'failed',
@@ -158,6 +155,9 @@ try {
         exit(0);
     }
 
+    foreach ($rowData as $key => $row) {
+        $rowData[$key]['c19Tests'] = $app->getCovid19TestsCamelCaseByFormId($row['covid19Id']);
+    }
     $payload = array(
         'status' => 'success',
         'timestamp' => time(),
