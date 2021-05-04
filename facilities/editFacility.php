@@ -50,7 +50,7 @@ if (count($testTypeInfo) > 0) {
 		$testOrg = '';
 		if ($test['test_type'] == 'vl') {
 			$testOrg = 'Viral Load';
-			$extraDiv = '<td><input type="text" class=" isRequired" name="supMonTar[]" id ="supMonTar' . $tf . '" value="' . $test['suppressed_monthly_target'] . '" title="Please enter Suppressed monthly target"/></td>';
+			$extraDiv = '<td><input type="text" class="" name="supMonTar[]" id ="supMonTar' . $tf . '" value="' . $test['suppressed_monthly_target'] . '" title="Please enter Suppressed monthly target"/></td>';
 		} else if ($test['test_type'] == 'eid') {
 			$testOrg = 'Early Infant Diagnosis';
 			$extraDiv = '<td></td>';
@@ -59,7 +59,7 @@ if (count($testTypeInfo) > 0) {
 			$extraDiv = '<td></td>';
 		}
 		$div .= '<tr><td>' . $testOrg . '<input type="hidden" name="testData[]" id ="testData' . $tf . '" value="' . $test['test_type'] . '" /></td>';
-		$div .= '<td><input type="text" class=" isRequired" name="monTar[]" id ="monTar' . $tf . '" value="' . $test['monthly_target'] . '" title="Please enter monthly target"/></td>';
+		$div .= '<td><input type="text" class="" name="monTar[]" id ="monTar' . $tf . '" value="' . $test['monthly_target'] . '" title="Please enter monthly target"/></td>';
 		$div .= $extraDiv;
 		$div .= '</tr>';
 		$tf++;
@@ -289,20 +289,20 @@ if (count($testTypeInfo) > 0) {
 									<label for="testType" class="col-lg-4 control-label">Test Type</label>
 									<div class="col-lg-7">
 										<select type="text" class="" id="testType" name="testType[]" title="Choose one test type" onchange="getTestType();" multiple>
-										<?php if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) { ?>
-											<option value="vl" <?php if (preg_match("/vl/i", $facilityInfo[0]['test_type'])) {
-																	echo "selected='selected'";
-																}  ?>>Viral Load</option>
-											<?php } ?>
-											<?php if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) { ?>																
-											<option value="eid" <?php if (preg_match("/eid/i", $facilityInfo[0]['test_type'])) {
-																	echo "selected='selected'";
-																}  ?>>Early Infant Diagnosis</option>
-											<?php } ?>
-											<?php if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) { ?>					
-											<option value="covid19" <?php if (preg_match("/covid19/i", $facilityInfo[0]['test_type'])) {
+											<?php if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) { ?>
+												<option value="vl" <?php if (preg_match("/vl/i", $facilityInfo[0]['test_type'])) {
 																		echo "selected='selected'";
-																	}  ?>>Covid-19</option>
+																	}  ?>>Viral Load</option>
+											<?php } ?>
+											<?php if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) { ?>
+												<option value="eid" <?php if (preg_match("/eid/i", $facilityInfo[0]['test_type'])) {
+																		echo "selected='selected'";
+																	}  ?>>Early Infant Diagnosis</option>
+											<?php } ?>
+											<?php if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) { ?>
+												<option value="covid19" <?php if (preg_match("/covid19/i", $facilityInfo[0]['test_type'])) {
+																			echo "selected='selected'";
+																		}  ?>>Covid-19</option>
 											<?php } ?>
 											<?php if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) { ?>
 												<option value='hepatitis' <?php echo (preg_match("/hepatitis/i", $facilityInfo[0]['test_type'])) ? "selected='selected'" : '';  ?>>Hepatitis</option>
@@ -374,7 +374,7 @@ if (count($testTypeInfo) > 0) {
 								<?php if (isset($signResults) && !empty($signResults)) {
 									foreach ($signResults as $key => $row) { ?>
 										<tr>
-											<td style="width:14%;"><input value="<?php echo $row['name_of_signatory'] ?>" type="text" class="form-control" name="signName[]" id="signName<?php echo ($key + 1); ?>" placeholder="Name" title="Please enter the name"></td>
+											<td style="width:14%;"><input type="hidden" name="signId[]" id="signId<?php echo ($key + 1); ?>" value="<?php echo $row['signatory_id'] ?>" /><input value="<?php echo $row['name_of_signatory'] ?>" type="text" class="form-control" name="signName[]" id="signName<?php echo ($key + 1); ?>" placeholder="Name" title="Please enter the name"></td>
 											<td style="width:14%;"><input value="<?php echo $row['designation'] ?>" type="text" class="form-control" name="designation[]" id="designation<?php echo ($key + 1); ?>" placeholder="Designation" title="Please enter the Designation"></td>
 											<td style="width:10%;">
 												<?php $lmSign = "/uploads/labs/" . $row['lab_id'] . "/signatures/" . $row['signature'];
@@ -382,7 +382,7 @@ if (count($testTypeInfo) > 0) {
 												if (isset($row['signature']) && $row['signature'] != "") {
 													$show = "style='display:none'";
 												?>
-													<span id="spanClass<?php echo ($key + 1); ?>"><a href="javascript:void(0);" onclick="showFile(<?php echo ($key + 1); ?>);"><span class="alert-danger" style="padding: 5px;border-radius: 50%;margin-top: 0px;float: right;">X</span></a><img src="<?php echo $lmSign; ?>" style="" /></span>
+													<span id="spanClass<?php echo ($key + 1); ?>"><a href="javascript:void(0);" onclick="showFile(<?php echo ($key + 1); ?>);"><span class="alert-danger" style="padding: 5px;border-radius: 50%;margin-top: 0px;float: right;">X</span></a><img src="<?php echo $lmSign; ?>" style="width: 100px;" /></span>
 												<?php }
 												?>
 												<input <?php echo $show; ?> class="showFile<?php echo ($key + 1); ?>" type="file" name="signature[]" id="signature<?php echo ($key + 1); ?>" placeholder="Signature" title="Please enter the Signature">
@@ -404,7 +404,7 @@ if (count($testTypeInfo) > 0) {
 											</td>
 											<td style="vertical-align:middle;text-align: center;width:10%;">
 												<a class="btn btn-xs btn-primary test-name-table" href="javascript:void(0);" onclick="addNewRow();"><i class="fa fa-plus"></i></a>&nbsp;
-												<a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeNewRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
+												<a class="btn btn-xs btn-default test-name-table" href="javascript:void(0);" onclick="removeNewRow(this.parentNode.parentNode);deletedRow(<?php echo $row['signatory_id'] ?>);"><i class="fa fa-minus"></i></a>
 											</td>
 										</tr>
 									<?php }
@@ -481,6 +481,7 @@ if (count($testTypeInfo) > 0) {
 			<div class="box-footer">
 				<input type="hidden" name="selectedUser" id="selectedUser" />
 				<input type="hidden" name="removedLabLogoImage" id="removedLabLogoImage" />
+				<input type="hidden" name="deletedRow" id="deletedRow" />
 				<a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
 				<a href="facilities.php" class="btn btn-default"> Cancel</a>
 			</div>
@@ -499,6 +500,7 @@ if (count($testTypeInfo) > 0) {
 <script type="text/javascript" src="/assets/js/jasny-bootstrap.js"></script>
 
 <script type="text/javascript">
+	var deletedRowVar = [];
 	$(document).ready(function() {
 		$("#testType").multipleSelect({
 			placeholder: 'Select Test Type',
@@ -650,7 +652,7 @@ if (count($testTypeInfo) > 0) {
 						else
 							var supM = '';
 						testOrg = 'Viral Load';
-						var extraDiv = '<td><input type="text" class=" isRequired" name="supMonTar[]" id ="supMonTar' + i + '" value="' + supM + '" title="Please enter Suppressed monthly target"/></td>';
+						var extraDiv = '<td><input type="text" class="" name="supMonTar[]" id ="supMonTar' + i + '" value="' + supM + '" title="Please enter Suppressed monthly target"/></td>';
 					} else if (testType[i] == 'eid') {
 						testOrg = 'Early Infant Diagnosis';
 						var extraDiv = '<td></td>';
@@ -659,7 +661,7 @@ if (count($testTypeInfo) > 0) {
 						var extraDiv = '<td></td>';
 					}
 					div += '<tr><td>' + testOrg + '<input type="hidden" name="testData[]" id ="testData' + i + '" value="' + testType[i] + '" /></td>';
-					div += '<td><input type="text" class=" isRequired" name="monTar[]" id ="monTar' + i + '" value="' + oldMonTar + '" title="Please enter monthly target"/></td>';
+					div += '<td><input type="text" class="" name="monTar[]" id ="monTar' + i + '" value="' + oldMonTar + '" title="Please enter monthly target"/></td>';
 					div += extraDiv;
 					div += '</tr>';
 				}
@@ -722,6 +724,12 @@ if (count($testTypeInfo) > 0) {
 	function showFile(count) {
 		$('#spanClass' + count).hide();
 		$('.showFile' + count).show();
+	}
+
+	function deletedRow(val) {
+		deletedRowVar.push(val);
+		$('#deletedRow').val(deletedRowVar);
+		console.log($('#deletedRow').val());
 	}
 </script>
 <?php
