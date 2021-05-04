@@ -482,7 +482,7 @@ if (sizeof($requestResult) > 0) {
             $Cid = openssl_encrypt($simple_string, $ciphering,
             $encryption_key, $options, $encryption_iv);
             $pdf->writeHTML($html);
-            $pdf->write2DBarcode($_SERVER["HTTP_HOST"].'/covid-19/results/covid-19-pdf-results.php?id='.$Cid.'', 'QRCODE,H', 20, 200, 30, 30, $style, 'N');
+            $pdf->write2DBarcode($_SERVER["HTTP_HOST"].'/covid-19/results/view.php?q='.$Cid.'', 'QRCODE,H', 170, 200, 20, 20, $style, 'N');
             $pdf->lastPage();
             $filename = $pathFront . DIRECTORY_SEPARATOR . 'p' . $page . '.pdf';
             $pdf->Output($filename, "F");
