@@ -157,5 +157,17 @@ if ($data['Key'] == 'vlsm-get-remote') {
     }
     $response['testingLabs'] = $general->fetchDataFromTable('testing_labs', $condition);
 
+    $condition = null;
+    if (isset($data['fundingSourcesLastModified']) && !empty($data['fundingSourcesLastModified'])) {
+        $condition = "updated_datetime > '" . $data['fundingSourcesLastModified'] . "'";
+    }
+    $response['fundingSources'] = $general->fetchDataFromTable('r_funding_sources', $condition);
+
+    $condition = null;
+    if (isset($data['partnersLastModified']) && !empty($data['partnersLastModified'])) {
+        $condition = "updated_datetime > '" . $data['partnersLastModified'] . "'";
+    }
+    $response['partners'] = $general->fetchDataFromTable('r_implementation_partners', $condition);
+
     echo json_encode($response);
 }
