@@ -12,7 +12,17 @@ if($data[1]!="qr")
     include_once(APPLICATION_PATH . '/header.php');
 $id = $data[0]; 
 ?>
+<style>
+#the-canvas {
+  border: 1px solid black;
+  direction: ltr;
+}
+</style>
 <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+<script src="//mozilla.github.io/pdf.js/build/pdf.js"></script>
+
+
+<canvas id="the-canvas"></canvas>
 
 
 <script type="text/javascript">
@@ -40,11 +50,46 @@ $id = $data[0];
                     $.unblockUI();
                     alert('Unable to generate download');
                 } else {
-                    $.unblockUI();
-                    // webView.loadUrl("https://docs.google.com/viewer?url=" + data);
-                    // window.open('/uploads/' + data,"_self");
-                    window.open('/uploads/' + data, "_blank", "resizable=yes, scrollbars=yes, titlebar=yes, width=800, height=900, top=10, left=10");
-                    // window.document.location.href = './../../uploads/'+data;
+                    $.unblockUI();                
+                    var url = './../../uploads/'+data;
+                    // Loaded via <script> tag, create shortcut to access PDF.js exports.
+                    var pdfjsLib = window['pdfjs-dist/build/pdf'];
+
+                    // The workerSrc property shall be specified.
+                    pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
+                    // If absolute URL from the remote server is provided, configure the CORS
+                    // header on that server.
+
+                    // Asynchronous download of PDF
+                    var loadingTask = pdfjsLib.getDocument(url);
+                    loadingTask.promise.then(function(pdf) {
+                    
+                    // Fetch the first page
+                    var pageNumber = 1;
+                    pdf.getPage(pageNumber).then(function(page) {
+                        
+                        var scale = 1.5;
+                        var viewport = page.getViewport({scale: scale});
+
+                        // Prepare canvas using PDF page dimensions
+                        var canvas = document.getElementById('the-canvas');
+                        var context = canvas.getContext('2d');
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
+
+                        // Render PDF page into canvas context
+                        var renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                        };
+                        var renderTask = page.render(renderContext);
+                        renderTask.promise.then(function () {
+                        });
+                    });
+                    }, function (reason) {
+                    // PDF loading error
+                    console.error(reason);
+                    });
                 }
             });
     }
