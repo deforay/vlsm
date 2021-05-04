@@ -32,7 +32,8 @@ $id = $data[0];
         
         $.post("<?php echo $path; ?>", {
                 source: 'print',
-                id: id
+                id: id,
+                type:"qr",
             },
             function(data) {
                 if (data == "" || data == null || data == undefined) {
@@ -40,8 +41,10 @@ $id = $data[0];
                     alert('Unable to generate download');
                 } else {
                     $.unblockUI();
-                   
-                    window.open('/uploads/' + data,"_self");
+                    // webView.loadUrl("https://docs.google.com/viewer?url=" + data);
+                    // window.open('/uploads/' + data,"_self");
+                    window.open('/uploads/' + data, "_blank", "resizable=yes, scrollbars=yes, titlebar=yes, width=800, height=900, top=10, left=10");
+                    // window.document.location.href = './../../uploads/'+data;
                 }
             });
     }

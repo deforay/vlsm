@@ -529,5 +529,4 @@ if (sizeof($requestResult) > 0) {
         unset($_SESSION['rVal']);
     }
 }
-// print_r($html);die;
-echo $resultFilename;
+    echo $resultFilename;
