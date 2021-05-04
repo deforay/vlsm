@@ -97,4 +97,3 @@ $id = $data[0];
    
 </script>
 <?php
-include(APPLICATION_PATH . '/footer.php');
