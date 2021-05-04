@@ -222,12 +222,10 @@ class General
         } else {
             $configQuery = "SELECT $fieldName from $tableName WHERE $condition";
         }
-        // die($configQuery);
         $configResult = $this->db->query($configQuery);
         if ($tableName == 'health_facilities') {
-            die($configQuery);
             foreach ($configResult as $key => $row) {
-                $configResult[$key]['labReportSignatories'] = $this->db->query("SELECT * FROM lab_report_signatories WHERE lab_id = ?", array($row['facility_id']));
+                $configResult[$key]['labReportSignatories'] = $this->db->query("SELECT * FROM lab_report_signatories WHERE lab_id = " . $row['facility_id']);
             }
         }
         return $configResult;

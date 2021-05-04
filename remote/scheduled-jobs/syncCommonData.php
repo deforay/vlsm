@@ -21,6 +21,8 @@ $provinceLastModified = $general->getLastModifiedDateTime('province_details');
 $facilityLastModified = $general->getLastModifiedDateTime('facility_details');
 $healthFacilityLastModified = $general->getLastModifiedDateTime('health_facilities');
 $testingLabsLastModified = $general->getLastModifiedDateTime('testing_labs');
+$fundingSourcesLastModified = $general->getLastModifiedDateTime('r_funding_sources');
+$partnersLastModified = $general->getLastModifiedDateTime('r_implementation_partners');
 
 $data = array(
     'globalConfigLastModified'      => $globalConfigLastModified,
@@ -28,6 +30,8 @@ $data = array(
     'facilityLastModified'          => $facilityLastModified,
     'healthFacilityLastModified'    => $healthFacilityLastModified,
     'testingLabsLastModified'       => $testingLabsLastModified,
+    'fundingSourcesLastModified'    => $fundingSourcesLastModified,
+    'partnersLastModified'          => $partnersLastModified,
     "Key"                           => "vlsm-get-remote",
 );
 
@@ -77,7 +81,9 @@ $curl_response = curl_exec($ch);
 //close connection
 curl_close($ch);
 $result = json_decode($curl_response, true);
-// echo "<pre>";print_r($result);die;
+/* echo "<pre>";
+print_r($curl_response);
+die; */
 
 //update or insert sample type
 if (!empty($result['vlSampleTypes']) && count($result['vlSampleTypes']) > 0) {
@@ -547,9 +553,6 @@ if (!empty($result['facilities']) && count($result['facilities']) > 0) {
         }
     }
 }
-/* echo "<pre>";
-print_r($result);
-die; */
 //update or insert health facilities
 if (!empty($result['healthFacilities']) && count($result['healthFacilities']) > 0) {
 
@@ -564,6 +567,35 @@ if (!empty($result['healthFacilities']) && count($result['healthFacilities']) > 
         $lastId = 0;
         $db->insert('health_facilities', $healthFacilityData);
         $lastId = $db->getInsertId();
+
+        if (isset($healthFacility['labReportSignatories']) && count($healthFacility['labReportSignatories']) > 0) {
+            if (!file_exists(UPLOAD_PATH)) {
+                mkdir(UPLOAD_PATH);
+            }
+            if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs")) {
+                mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs");
+            }
+            if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $healthFacility['facility_id'])) {
+                mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $healthFacility['facility_id']);
+            }
+            if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $healthFacility['facility_id'] . DIRECTORY_SEPARATOR . 'signatures')) {
+                mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $healthFacility['facility_id'] . DIRECTORY_SEPARATOR . 'signatures');
+            }
+            foreach ($healthFacility['labReportSignatories'] as $sign) {
+                unset($sign['signatory_id']);
+
+                if (isset($sign['signature']) && $sign['signature'] != "") {
+                    /* To save file from the url */
+                    $filePath = $systemConfig['remoteURL'] . '/uploads/labs/' . $healthFacility['facility_id'] . '/signatures/' . $sign['signature'];
+                    $pathname = UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $healthFacility['facility_id'] . DIRECTORY_SEPARATOR . 'signatures' . DIRECTORY_SEPARATOR . $sign['signature'];
+                    if (file_put_contents($pathname, file_get_contents($filePath))) {
+                        $db = $db->where('lab_id  = "' . $healthFacility['facility_id'] . '"');
+                        $id = $db->delete('lab_report_signatories');
+                        $db->insert('lab_report_signatories', $sign);
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -582,5 +614,53 @@ if (!empty($result['testingLabs']) && count($result['testingLabs']) > 0) {
         $lastId = 0;
         $db->insert('testing_labs', $testingLabsData);
         $lastId = $db->getInsertId();
+    }
+}
+
+//update or insert funding source
+if (!empty($result['fundingSources']) && count($result['fundingSources']) > 0) {
+
+    foreach ($result['fundingSources'] as $fundingSource) {
+        $fundingQuery = "SELECT funding_source_id FROM r_funding_sources WHERE funding_source_id=" . $fundingSource['funding_source_id'];
+        $fundingSourceLocalResult = $db->query($fundingQuery);
+        $fundingSourceData = array(
+            'funding_source_name'   => $fundingSource['funding_source_name'],
+            'funding_source_status' => $fundingSource['funding_source_status'],
+            'updated_datetime'      => $general->getDateTime(),
+            'data_sync'             => $fundingSource['data_sync']
+        );
+        $lastId = 0;
+        if ($fundingSourceLocalResult) {
+            $db = $db->where('funding_source_id', $fundingSource['funding_source_id']);
+            $lastId = $db->update('r_funding_sources', $fundingSourceData);
+        } else {
+            $fundingSourceData['funding_source_id'] = $fundingSource['funding_source_id'];
+            $db->insert('r_funding_sources', $fundingSourceData);
+            $lastId = $db->getInsertId();
+        }
+    }
+}
+
+//update or insert partners
+if (!empty($result['partners']) && count($result['partners']) > 0) {
+
+    foreach ($result['partners'] as $partners) {
+        $fundingQuery = "SELECT i_partner_id FROM r_implementation_partners WHERE i_partner_id=" . $partners['i_partner_id'];
+        $partnersLocalResult = $db->query($fundingQuery);
+        $partnersData = array(
+            'i_partner_name'    => $partners['i_partner_name'],
+            'i_partner_status'  => $partners['i_partner_status'],
+            'updated_datetime'  => $general->getDateTime(),
+            'data_sync'         => $partners['data_sync']
+        );
+        $lastId = 0;
+        if ($partnersLocalResult) {
+            $db = $db->where('i_partner_id', $partners['i_partner_id']);
+            $lastId = $db->update('r_implementation_partners', $partnersData);
+        } else {
+            $partnersData['i_partner_id'] = $partners['i_partner_id'];
+            $db->insert('r_implementation_partners', $partnersData);
+            $lastId = $db->getInsertId();
+        }
     }
 }
