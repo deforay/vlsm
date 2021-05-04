@@ -222,7 +222,7 @@ class General
         } else {
             $configQuery = "SELECT $fieldName from $tableName WHERE $condition";
         }
-        die($configQuery);
+        // die($configQuery);
         $configResult = $this->db->query($configQuery);
         if ($tableName == 'health_facilities') {
             die($configQuery);
