@@ -411,10 +411,10 @@ if (sizeof($requestResult) > 0) {
         $html .= '</tr>';
         $html .= '</table>';
 
-        $html .= '<table align="center">';
+        $html .= '<table align="center" style="min-height:80px">';
         $html .= '<tr>';
         $html .= '<td  colspan="4" style="text-align:center;" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-        $html .= '<table style="width:90%;padding:3px;border:1px solid #67b3ff;">';
+        $html .= '<table style="width:80%;padding:3px;border:1px solid #67b3ff;">';
         $html .= '<tr>';
         $html .= '<td style="line-height:17px;font-size:13px;font-weight:bold;text-align:left;border-bottom:1px solid #67b3ff;">AUTHORISED BY</td>';
         $html .= '<td style="line-height:17px;font-size:13px;font-weight:bold;text-align:left;border-bottom:1px solid #67b3ff;border-left:1px solid #67b3ff;">PRINT NAME</td>';
@@ -431,6 +431,12 @@ if (sizeof($requestResult) > 0) {
                 $html .= '<td style="line-height:17px;font-size:11px;text-align:left;border-bottom:1px solid #67b3ff;border-left:1px solid #67b3ff;">' . date('d-M-Y H:i:s a') . '</td>';
                 $html .= '</tr>';
             }
+        }
+        else
+        {
+            $html .= '<tr>';
+            $html .= '<td colspan="3" style="line-height:30px;"></td>';
+            $html .= '</tr>';
         }
 
         /* 
@@ -482,7 +488,7 @@ if (sizeof($requestResult) > 0) {
             $Cid = openssl_encrypt($simple_string, $ciphering,
             $encryption_key, $options, $encryption_iv);
             $pdf->writeHTML($html);
-            $pdf->write2DBarcode($systemConfig['remoteURL'].'/covid-19/results/view.php?q='.$Cid.'', 'QRCODE,H', 170, 200, 20, 20, $style, 'N');
+            $pdf->write2DBarcode($systemConfig['remoteURL'].'/covid-19/results/view.php?q='.$Cid.'', 'QRCODE,H', 170, 170, 20, 20, $style, 'N');
             $pdf->lastPage();
             $filename = $pathFront . DIRECTORY_SEPARATOR . 'p' . $page . '.pdf';
             $pdf->Output($filename, "F");
