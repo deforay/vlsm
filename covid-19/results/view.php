@@ -1,7 +1,7 @@
 <?php
 $ciphering = "AES-128-CTR";
 $iv_length = openssl_cipher_iv_length($ciphering);
-$encryption = $_GET['id'];
+$encryption = $_GET['q'];
 $options = 0;
 $decryption_iv = $systemConfig['tryCrypt'];
 $decryption_key = $systemConfig['tryCrypt'];
@@ -16,6 +16,7 @@ $id = $data[0];
 #the-canvas {
   border: 1px solid black;
   direction: ltr;
+  margin-left: 15%;
 }
 </style>
 <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
@@ -34,7 +35,6 @@ $id = $data[0];
 
     function convertSearchResultToPdf(id) {
 
-        $.blockUI();
         <?php
         $path = '';
         $path = '/covid-19/results/generate-result-pdf.php';
@@ -47,10 +47,8 @@ $id = $data[0];
             },
             function(data) {
                 if (data == "" || data == null || data == undefined) {
-                    $.unblockUI();
                     alert('Unable to generate download');
                 } else {
-                    $.unblockUI();                
                     var url = './../../uploads/'+data;
                     // Loaded via <script> tag, create shortcut to access PDF.js exports.
                     var pdfjsLib = window['pdfjs-dist/build/pdf'];
@@ -97,4 +95,3 @@ $id = $data[0];
    
 </script>
 <?php
-include(APPLICATION_PATH . '/footer.php');
