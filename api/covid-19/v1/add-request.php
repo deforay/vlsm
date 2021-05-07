@@ -71,7 +71,6 @@ try {
         $sampleCollectionDate = (isset($data['sampleCollectionDate']) && !empty($data['sampleCollectionDate'])) ? $data['sampleCollectionDate'] : null;
 
         if (empty($sampleCollectionDate)) {
-            echo 0;
             exit();
         }
 
@@ -166,6 +165,34 @@ try {
             $status = 4;
         }
 
+        if (!empty($data['sampleCollectionDate']) && trim($data['sampleCollectionDate']) != "") {
+            $sampleCollectionDate = explode(" ", $data['sampleCollectionDate']);
+            $data['sampleCollectionDate'] = $general->dateFormat($sampleCollectionDate[0]) . " " . $sampleCollectionDate[1];
+        } else {
+            $data['sampleCollectionDate'] = NULL;
+        }
+
+        //Set sample received date
+        if (!empty($data['sampleReceivedDate']) && trim($data['sampleReceivedDate']) != "") {
+            $sampleReceivedDate = explode(" ", $data['sampleReceivedDate']);
+            $data['sampleReceivedDate'] = $general->dateFormat($sampleReceivedDate[0]) . " " . $sampleReceivedDate[1];
+        } else {
+            $data['sampleReceivedDate'] = NULL;
+        }
+        if (!empty($data['sampleTestedDateTime']) && trim($data['sampleTestedDateTime']) != "") {
+            $sampleTestedDate = explode(" ", $data['sampleTestedDateTime']);
+            $data['sampleTestedDateTime'] = $general->dateFormat($sampleTestedDate[0]) . " " . $sampleTestedDate[1];
+        } else {
+            $data['sampleTestedDateTime'] = NULL;
+        }
+
+        if (!empty($data['arrivalDateTime']) && trim($data['arrivalDateTime']) != "") {
+            $arrivalDate = explode(" ", $data['arrivalDateTime']);
+            $data['arrivalDateTime'] = $general->dateFormat($arrivalDate[0]) . " " . $arrivalDate[1];
+        } else {
+            $data['arrivalDateTime'] = NULL;
+        }
+
         $covid19Data = array(
             'vlsm_instance_id'                    => $instanceId,
             'vlsm_country_id'                     => $data['formId'],
@@ -188,7 +215,7 @@ try {
             'patient_id'                          => !empty($data['patientId']) ? $data['patientId'] : null,
             'patient_name'                        => !empty($data['firstName']) ? $data['firstName'] : null,
             'patient_surname'                     => !empty($data['lastName']) ? $data['lastName'] : null,
-            'patient_dob'                         => !empty($data['patientDob']) ? $data['patientDob'] : null,
+            'patient_dob'                         => !empty($data['patientDob']) ? $general->dateFormat($data['patientDob']) : null,
             'patient_gender'                      => !empty($data['patientGender']) ? $data['patientGender'] : null,
             'is_patient_pregnant'                 => !empty($data['isPatientPregnant']) ? $data['isPatientPregnant'] : null,
             'patient_age'                         => !empty($data['patientAge']) ? $data['patientAge'] : null,
