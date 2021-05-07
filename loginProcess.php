@@ -15,14 +15,14 @@ $systemType = $systemLabId = null;
 if ($systemInfo != false) {
     $systemType = $systemInfo['user_type'];
     $systemLabId = $systemInfo['lab_name'];
-
 }
 
 if ($_POST["csrf_token"] != $_SESSION["csrf_token"]) {
     // Reset token
     unset($_SESSION["csrf_token"]);
-    die("CSRF token validation failed");
-  }
+    $_SESSION['alertMsg'] = "Validation token has expired. Please try to login again.";
+    header("location:/login.php");
+}
 //$dashboardUrl = $general->getGlobalConfig('vldashboard_url');
 /* Crosss Login Block Start */
 $_SESSION['logged'] = false;

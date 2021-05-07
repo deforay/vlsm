@@ -445,7 +445,7 @@ $pResult = $db->rawQuery($pQuery);
 				div += '</tr>';
 			}
 			div += '</tbody></table>';
-			$("#testDetails").html(div);
+			// $("#testDetails").html(div); // commented the validation functionality code
 		} else {
 			$("#testDetails").html('');
 		}
