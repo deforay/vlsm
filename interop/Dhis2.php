@@ -12,7 +12,7 @@ class Dhis2
 	private $authenticated = false;
 
 
-	public function __construct($dhis2url, $username = "admin", $password = "district")
+	public function __construct($dhis2url, $username = "admin", $password = "district", $contentType='application/json')
 	{
 		// ensuring there is no trailing slash
 		$this->dhis2url = rtrim($dhis2url, '/');
@@ -20,6 +20,8 @@ class Dhis2
 		// Dhis2 Credentials
 		$this->username = $username;
 		$this->password = $password;
+
+		$this->contentType = $contentType;
 
 		// Let us authenticate
 		//$urlParams[] = "authOnly=true";
@@ -202,7 +204,7 @@ class Dhis2
 			$urlParams = "";
 		}
 
-		//var_dump($this->dhis2url . "{$path}{$urlParams}");
+		var_dump($this->dhis2url . "{$path}{$urlParams}");
 
 
 		$ch = curl_init();
@@ -233,7 +235,7 @@ class Dhis2
 		} else {
 			$urlParams = "";
 		}
-
+echo $this->dhis2url . "{$path}{$urlParams}";
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $this->dhis2url . "{$path}{$urlParams}");
 		curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -244,7 +246,8 @@ class Dhis2
 		// curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($ch, CURLOPT_USERPWD, "$this->username:$this->password");
 		$return = curl_exec($ch);
-		$httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		var_dump($return);die;
+		echo $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
 		if ($httpStatus === 200 && !empty($return)) {
 			return $return;
@@ -275,8 +278,10 @@ class Dhis2
 		// curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 		curl_setopt($ch, CURLOPT_USERPWD, "$this->username:$this->password");
 		$return = curl_exec($ch);
+
+		var_dump($return);die;
 		
-		$httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		echo $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
 
 		if ($httpStatus === 200) {
