@@ -3,10 +3,6 @@ ob_start();
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-#require_once('../startup.php');
-
-// Define path to guzzle directory
-require_once(APPLICATION_PATH.'/vendor/guzzle/autoload.php');
 
 $tableName = "user_details";
 $upId = 0;

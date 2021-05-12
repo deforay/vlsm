@@ -2161,3 +2161,9 @@ ALTER TABLE `form_hepatitis` ADD `result_sent_to_source` TEXT NULL DEFAULT NULL 
 ALTER TABLE `form_covid19` ADD `result_sent_to_source` TEXT NULL DEFAULT NULL AFTER `source_data_dump`;
 ALTER TABLE `eid_form` ADD `result_sent_to_source` TEXT NULL DEFAULT NULL AFTER `source_data_dump`;
 ALTER TABLE `vl_request_form` ADD `result_sent_to_source` TEXT NULL DEFAULT NULL AFTER `source_data_dump`;
+
+
+-- Amit 08 May 2021
+
+UPDATE `resources` SET `module` = 'common' WHERE `resource_id` = 'specimen-referral-manifest';
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'covid-19-requests', 'addSamplesFromManifest.php', 'Add Samples from Manifest');
