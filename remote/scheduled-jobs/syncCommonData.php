@@ -44,6 +44,8 @@ if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == t
 if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) {
     $data['eidRejectionReasonsLastModified'] = $general->getLastModifiedDateTime('r_eid_sample_rejection_reasons');
     $data['eidSampleTypesLastModified'] = $general->getLastModifiedDateTime('r_eid_sample_type');
+    $data['eidResultsLastModified'] = $general->getLastModifiedDateTime('r_eid_results ');
+    $data['eidReasonForTestingLastModified'] = $general->getLastModifiedDateTime('r_eid_test_reasons  ');
 }
 
 
@@ -81,9 +83,9 @@ $curl_response = curl_exec($ch);
 //close connection
 curl_close($ch);
 $result = json_decode($curl_response, true);
-/* echo "<pre>";
-print_r($curl_response);
-die; */
+// echo "<pre>";
+// print_r($result);
+// die;
 
 //update or insert sample type
 if (!empty($result['vlSampleTypes']) && count($result['vlSampleTypes']) > 0) {
@@ -198,6 +200,79 @@ if (!empty($result['eidRejectionReasons']) && count($result['eidRejectionReasons
         } else {
             $rejectResultData['rejection_reason_id'] = $reason['rejection_reason_id'];
             $db->insert('r_eid_sample_rejection_reasons', $rejectResultData);
+            $lastId = $db->getInsertId();
+        }
+    }
+}
+
+//update or insert sample name
+if (!empty($result['eidSampleTypes']) && count($result['eidSampleTypes']) > 0) {
+
+    foreach ($result['eidSampleTypes'] as $sample) {
+        $sampleQuery = "SELECT sample_id FROM r_eid_sample_type WHERE sample_id=" . $sample['sample_id'];
+        $sampleLocalResult = $db->query($sampleQuery);
+        $sampleData = array(
+            'sample_name'       => $sample['sample_name'],
+            'status'            => $sample['status'],
+            'data_sync'         => 1,
+            'updated_datetime'  => $sample['updated_datetime']
+        );
+        $lastId = 0;
+        if ($sampleLocalResult) {
+            $db = $db->where('sample_id', $sample['sample_id']);
+            $lastId = $db->update('r_eid_sample_type', $sampleData);
+        } else {
+            $sampleData['sample_id'] = $sample['sample_id'];
+            $db->insert('r_eid_sample_type', $sampleData);
+            $lastId = $db->getInsertId();
+        }
+    }
+}
+
+//update or insert eid results
+if (!empty($result['eidResults']) && count($result['eidResults']) > 0) {
+
+    foreach ($result['eidResults'] as $resultRow) {
+        $eidResultQuery = "SELECT result_id FROM r_eid_results WHERE result_id='" . $resultRow['result_id'] . "'";
+        $eidResultLocalResult = $db->query($eidResultQuery);
+        $eidResultData = array(
+            'result'       => $resultRow['result'],
+            'status'            => $resultRow['status'],
+            'data_sync'         => 1,
+            'updated_datetime'  => $resultRow['updated_datetime']
+        );
+        $lastId = 0;
+        if ($eidResultLocalResult) {
+            $db = $db->where('result_id', $resultRow['result_id']);
+            $lastId = $db->update('r_eid_results', $eidResultData);
+        } else {
+            $eidResultData['result_id'] = $resultRow['result_id'];
+            $db->insert('r_eid_results', $eidResultData);
+            $lastId = $db->getInsertId();
+        }
+    }
+}
+
+//update or insert eid test reason
+if (!empty($result['eidReasonForTesting']) && count($result['eidReasonForTesting']) > 0) {
+
+    foreach ($result['eidReasonForTesting'] as $reason) {
+        $eidTestReasonQuery = "SELECT test_reason_id FROM r_eid_test_reasons WHERE test_reason_id=" . $reason['test_reason_id'];
+        $eidTestReasonLocalResult = $db->query($eidTestReasonQuery);
+        $eidTestReasonData = array(
+            'test_reason_name'      => $reason['test_reason_name'],
+            'parent_reason'         => $reason['parent_reason'],
+            'test_reason_status'    => $reason['test_reason_status'],
+            'data_sync'             => 1,
+            'updated_datetime'      => $reason['updated_datetime']
+        );
+        $lastId = 0;
+        if ($eidTestReasonLocalResult) {
+            $db = $db->where('test_reason_id', $reason['test_reason_id']);
+            $lastId = $db->update('r_eid_test_reasons', $eidTestReasonData);
+        } else {
+            $eidTestReasonData['test_reason_id'] = $reason['test_reason_id'];
+            $db->insert('r_eid_test_reasons', $eidTestReasonData);
             $lastId = $db->getInsertId();
         }
     }

@@ -65,7 +65,7 @@ if ($sarr['user_type'] == 'remoteuser') {
 }
 $pdResult = $db->query($pdQuery);
 $provinceInfo = array();
-foreach($pdResult as $state){
+foreach ($pdResult as $state) {
     $provinceInfo[$state['province_name']] = ucwords($state['province_name']);
 }
 $province = "";
@@ -299,7 +299,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                                         </td>
                                         <th>Payam</th>
                                         <td><input class="form-control" id="patientZone" value="<?php echo $covid19Info['patient_zone']; ?>" name="patientZone" placeholder="Case Payam" title="Please enter the Case Payam" style="width:100%;"></td>
-                                        
+
                                     </tr>
                                     <tr>
                                         <th>Boma/Village</th>
@@ -557,15 +557,15 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                                                     <option value='no' <?php echo ($covid19Info['is_result_authorised'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
                                                 </select>
                                             </td>
-                                            <?php 
-                                                $disapled = (isset($covid19Info['is_result_authorised']) && $covid19Info['is_result_authorised'] == 'no')?"disabled":"";
+                                            <?php
+                                            $disapled = (isset($covid19Info['is_result_authorised']) && $covid19Info['is_result_authorised'] == 'no') ? "disabled" : "";
                                             ?>
                                             <th>Authorized By</th>
-                                            <td><input type="text" <?php echo $disapled;?> value="<?php echo $covid19Info['authorized_by']; ?>" name="authorizedBy" id="authorizedBy" class="disabled-field form-control" placeholder="Authorized By" /></td>
+                                            <td><input type="text" <?php echo $disapled; ?> value="<?php echo $covid19Info['authorized_by']; ?>" name="authorizedBy" id="authorizedBy" class="disabled-field form-control" placeholder="Authorized By" /></td>
                                         </tr>
                                         <tr>
                                             <th>Authorized on</td>
-                                            <td><input type="text" <?php echo $disapled;?> value="<?php echo $general->humanDateFormat($covid19Info['authorized_on']); ?>" name="authorizedOn" id="authorizedOn" class="disabled-field form-control date" placeholder="Authorized on" /></td>
+                                            <td><input type="text" <?php echo $disapled; ?> value="<?php echo $general->humanDateFormat($covid19Info['authorized_on']); ?>" name="authorizedOn" id="authorizedOn" class="disabled-field form-control date" placeholder="Authorized on" /></td>
                                             <th></th>
                                             <td></td>
                                         </tr>
@@ -646,7 +646,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
 
     function setPatientDetails(pDetails) {
         patientArray = pDetails.split("##");
-          console.log(patientArray);
+        console.log(patientArray);
         $("#patientProvince").val(patientArray[14]).trigger('change');
         $("#firstName").val(patientArray[0]);
         $("#lastName").val(patientArray[1]);
@@ -674,7 +674,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
             $.post("/includes/siteInformationDropdownOptions.php", {
                     pName: pName,
                     requestType: 'patient',
-                    dName: '<?php echo $covid19Info['patient_district'];?>',
+                    dName: '<?php echo $covid19Info['patient_district']; ?>',
                     testType: 'covid19'
 
                 },
@@ -854,7 +854,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
             });
             checkPostive();
         <?php } ?>
-        getPatientDistrictDetails('<?php echo $covid19Info['patient_province'];?>');
+        getPatientDistrictDetails('<?php echo $covid19Info['patient_province']; ?>');
     });
 
 

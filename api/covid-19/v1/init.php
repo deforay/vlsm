@@ -104,7 +104,7 @@ $data['nationalityList'] = $nationalityList;
 $typeOfTestReqList = array();
 $typeOfTestReqResult = array('Real Time RT-PCR', 'RDT-Antibody', 'RDT-Antigen', 'ELISA');
 foreach ($typeOfTestReqResult as $key => $req) {
-    $typeOfTestReqList[$key]['value'] = $req;
+    $typeOfTestReqList[$key]['value'] = ($key + 1);
     $typeOfTestReqList[$key]['show'] = $req;
 }
 $data['typeOfTestRequestList'] = $typeOfTestReqList;
@@ -115,7 +115,7 @@ foreach (range(1, 5) as $key => $req) {
     $typeOfTestReqList[$key]['value'] = $req;
     $typeOfTestReqList[$key]['show'] = $req;
 }
-$data['typeOfTestRequestList'] = $typeOfTestReqList;
+$data['testingPoint'] = $typeOfTestReqList;
 $data['testingLabsList'] = $app->getHealthFacilities('covid19', null, true, 2);
 /* Type of Test Request */
 $qualityList = array();
