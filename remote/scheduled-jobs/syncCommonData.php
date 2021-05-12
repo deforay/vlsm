@@ -1,7 +1,8 @@
 <?php
 //update common table from remote to lab db
 require_once(dirname(__FILE__) . "/../../startup.php");
-
+ini_set('memory_limit', -1);
+ini_set('max_execution_time', -1);
 
 
 if (!isset($systemConfig['remoteURL']) || $systemConfig['remoteURL'] == '') {
@@ -656,6 +657,8 @@ if (!empty($result['healthFacilities']) && count($result['healthFacilities']) > 
             if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $healthFacility['facility_id'] . DIRECTORY_SEPARATOR . 'signatures')) {
                 mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $healthFacility['facility_id'] . DIRECTORY_SEPARATOR . 'signatures');
             }
+            $db = $db->where('lab_id  = "' . $healthFacility['facility_id'] . '"');
+            $id = $db->delete('lab_report_signatories');
             foreach ($healthFacility['labReportSignatories'] as $sign) {
                 unset($sign['signatory_id']);
 
@@ -664,8 +667,6 @@ if (!empty($result['healthFacilities']) && count($result['healthFacilities']) > 
                     $filePath = $systemConfig['remoteURL'] . '/uploads/labs/' . $healthFacility['facility_id'] . '/signatures/' . $sign['signature'];
                     $pathname = UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $healthFacility['facility_id'] . DIRECTORY_SEPARATOR . 'signatures' . DIRECTORY_SEPARATOR . $sign['signature'];
                     if (file_put_contents($pathname, file_get_contents($filePath))) {
-                        $db = $db->where('lab_id  = "' . $healthFacility['facility_id'] . '"');
-                        $id = $db->delete('lab_report_signatories');
                         $db->insert('lab_report_signatories', $sign);
                     }
                 }

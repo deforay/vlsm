@@ -1,7 +1,8 @@
 <?php
 //get data from remote db send to lab db
 include(dirname(__FILE__) . "/../../startup.php");
-
+ini_set('memory_limit', -1);
+ini_set('max_execution_time', -1);
 
 $general = new \Vlsm\Models\General($db);
 
@@ -161,7 +162,11 @@ if ($data['Key'] == 'vlsm-get-remote') {
     if (isset($data['healthFacilityLastModified']) && !empty($data['healthFacilityLastModified'])) {
         $condition = "updated_datetime > '" . $data['healthFacilityLastModified'] . "'";
     }
-    $response['healthFacilities'] = $general->fetchDataFromTable('health_facilities', $condition);
+    $configResult = $general->fetchDataFromTable('health_facilities', $condition);
+    foreach ($configResult as $key => $row) {
+        $configResult[$key]['labReportSignatories'] = $this->db->query("SELECT * FROM lab_report_signatories WHERE lab_id = " . $row['facility_id']);
+    }
+    $response['healthFacilities'] = $configResult;
 
     $condition = null;
     if (isset($data['testingLabsLastModified']) && !empty($data['testingLabsLastModified'])) {

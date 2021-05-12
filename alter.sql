@@ -2165,3 +2165,6 @@ ALTER TABLE `vl_request_form` ADD `result_sent_to_source` TEXT NULL DEFAULT NULL
 -- Thana 11-May-2021
 ALTER TABLE `form_covid19` ADD `app_local_test_req_id` VARCHAR(255) NULL DEFAULT NULL AFTER `is_result_mail_sent`; 
 ALTER TABLE `r_eid_results` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `status`; 
+
+-- Thana 12-May-2021
+ALTER TABLE `user_details` ADD `testing_user` VARCHAR(50) NULL DEFAULT NULL AFTER `user_signature`; 

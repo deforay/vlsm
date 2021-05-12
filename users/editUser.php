@@ -4,7 +4,7 @@ $title = "Edit user";
 #include_once '../startup.php';
 include_once APPLICATION_PATH . '/header.php';
 $id = base64_decode($_GET['id']);
-$userQuery = "SELECT * from user_details where user_id='" . $id . "'";
+$userQuery = "SELECT * from user_details as ud INNER JOIN roles as r ON ud.role_id=r.role_id where user_id='" . $id . "'";
 $userInfo = $db->query($userQuery);
 
 $query = "SELECT * FROM roles where status='active'";
@@ -52,7 +52,7 @@ $ftResult = $db->rawQuery($fQuery);
 
      <!-- Main content -->
      <section class="content">
-          
+
           <div class="box box-default">
                <div class="box-header with-border">
                     <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
@@ -97,18 +97,18 @@ $ftResult = $db->rawQuery($fQuery);
                                              <div class="col-lg-7">
                                                   <select class="form-control isRequired" name='role' id='role' title="Please select the role">
                                                        <option value="">--Select--</option>
-                                                       <?php foreach ($result as $row) { 
-                                                            $roleCode = (isset($userInfo[0]['role_id']) && $userInfo[0]['role_id'] == $row['role_id'])? $row['role_code']:""
-                                                            ?>
-                                                            <option value="<?php echo $row['role_id'];?>" data-code="<?php echo $row['role_code'];?>" <?php echo (isset($userInfo[0]['role_id']) && $userInfo[0]['role_id'] == $row['role_id'])? "selected='selected'":"";?>><?php echo ucwords(($row['role_name']));?></option>
+                                                       <?php foreach ($result as $row) {
+                                                            $roleCode = (isset($userInfo[0]['role_id']) && $userInfo[0]['role_id'] == $row['role_id']) ? $row['role_code'] : ""
+                                                       ?>
+                                                            <option value="<?php echo $row['role_id']; ?>" data-code="<?php echo $row['role_code']; ?>" <?php echo (isset($userInfo[0]['role_id']) && $userInfo[0]['role_id'] == $row['role_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords(($row['role_name'])); ?></option>
                                                        <?php } ?>
                                                   </select>
                                              </div>
                                         </div>
                                    </div>
                               </div>
-                              
-                              <div class="row show-token" style="display: <?php echo ($userInfo[0]['role_id'] != "" && $userInfo[0]['role_id'] == "6")?'block':'none';?>;">
+
+                              <div class="row show-token" style="display: <?php echo ($userInfo[0]['role_code'] != "" && $userInfo[0]['role_code'] == "API") ? 'block' : 'none'; ?>;">
                                    <div class="col-md-6">
                                         <div class="form-group">
                                              <label for="authToken" class="col-lg-4 control-label">AuthToken <span class="mandatory">*</span></label>
@@ -120,6 +120,20 @@ $ftResult = $db->rawQuery($fQuery);
                                    <div class="col-md-6">
                                         <div class="form-group">
                                              <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="generateToken('authToken');">Generate Token</a>
+                                        </div>
+                                   </div>
+                              </div>
+                              <div class="row show-token" style="display: <?php echo ($userInfo[0]['role_code'] != "" && $userInfo[0]['role_code'] == "API") ? 'block' : 'none'; ?>;">
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="testingUser" class="col-lg-4 control-label">Testing User</label>
+                                             <div class="col-lg-7">
+                                                  <select class="form-control" name='testingUser' id='testingUser' title="Please select the testing user or not?">
+                                                       <option value="">--Select--</option>
+                                                       <option value="yes" <?php echo (isset($userInfo[0]['testing_user']) && $userInfo[0]['testing_user'] == "yes") ? "selected='selected'" : ""; ?>>Yes</option>
+                                                       <option value="no" <?php echo (isset($userInfo[0]['testing_user']) && $userInfo[0]['testing_user'] == "no") ? "selected='selected'" : ""; ?>>No</option>
+                                                  </select>
+                                             </div>
                                         </div>
                                    </div>
                               </div>
@@ -343,10 +357,10 @@ $ftResult = $db->rawQuery($fQuery);
 
           $('#role').change(function(e) {
                var selectedText = $(this).find("option:selected").attr('data-code');
-               if(selectedText == "API"){
+               if (selectedText == "API") {
                     $('.show-token').show();
                     $('#authToken').addClass('isRequired');
-               } else{
+               } else {
                     $('.show-token').hide();
                     $('#authToken').removeClass('isRequired');
                }
@@ -354,7 +368,7 @@ $ftResult = $db->rawQuery($fQuery);
 
           $('#userSignature').change(function(e) {
                const file = this.files[0];
-               const  fileType = file['type'];
+               const fileType = file['type'];
                const validImageTypes = ['image/jpg', 'image/jpeg', 'image/png'];
                if (!validImageTypes.includes(fileType)) {
                     $('#userSignature').val('');
@@ -476,15 +490,15 @@ $ftResult = $db->rawQuery($fQuery);
           $.unblockUI();
      }
 
-     function generateToken(id){
+     function generateToken(id) {
           $.post("/includes/generate-auth-token.php", {
-               size:32
-          },
-          function(data) {
-               if (data != "") {
-                    $("#"+id).val(data);
-               }
-          });
+                    size: 32
+               },
+               function(data) {
+                    if (data != "") {
+                         $("#" + id).val(data);
+                    }
+               });
      }
 </script>
 <?php

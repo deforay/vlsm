@@ -222,13 +222,7 @@ class General
         } else {
             $configQuery = "SELECT $fieldName from $tableName WHERE $condition";
         }
-        $configResult = $this->db->query($configQuery);
-        if ($tableName == 'health_facilities') {
-            foreach ($configResult as $key => $row) {
-                $configResult[$key]['labReportSignatories'] = $this->db->query("SELECT * FROM lab_report_signatories WHERE lab_id = " . $row['facility_id']);
-            }
-        }
-        return $configResult;
+        return $this->db->query($configQuery);
     }
 
     // checking if the provided field list has any empty or null values

@@ -27,7 +27,7 @@ try {
         // $systemConfig['passwordSalt']='PUT-A-RANDOM-STRING-HERE';
         $password = sha1($password . $systemConfig['passwordSalt']);
         $queryParams = array($username, $password);
-        $admin = $db->rawQueryOne("SELECT user_id,user_name,phone_number,status FROM user_details as ud WHERE ud.login_id = ? AND ud.password = ?", $queryParams);
+        $admin = $db->rawQueryOne("SELECT * FROM user_details as ud INNER JOIN roles as r ON ud.role_id=r.role_id WHERE ud.login_id = ? AND ud.password = ?", $queryParams);
         // print_r($admin);die;
 
         if ($systemConfig['user_type'] == 'remoteuser') {
@@ -40,6 +40,12 @@ try {
                 $payload = array(
                     'status' => 2,
                     'message' => 'You are not activated. Kindly contact administrator.',
+                    'timestamp' => $general->getDateTime()
+                );
+            } else if (isset($admin['role_code']) && $admin['role_code'] != "API") {
+                $payload = array(
+                    'status' => 2,
+                    'message' => 'You are not API user. Kindly contact administrator.',
                     'timestamp' => $general->getDateTime()
                 );
             } else {
@@ -56,7 +62,6 @@ try {
                     $data['user'] = $admin;
                     $data['form'] = $configFormResult[0]['value'];
                     $data['api_token'] = $randomString;
-                    $data['remoteUser'] = $remoteUser;
                     // print_r($data);die;
                     $payload = array(
                         'status' => 1,
