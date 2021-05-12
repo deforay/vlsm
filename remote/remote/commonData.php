@@ -49,6 +49,18 @@ if ($data['Key'] == 'vlsm-get-remote') {
             $condition = "updated_datetime > '" . $data['eidSampleTypesLastModified'] . "'";
         }
         $response['eidSampleTypes'] = $general->fetchDataFromTable('r_eid_sample_type', $condition);
+
+        $condition = null;
+        if (isset($data['eidResultsLastModified']) && !empty($data['eidResultsLastModified'])) {
+            $condition = "updated_datetime > '" . $data['eidResultsLastModified'] . "'";
+        }
+        $response['eidResults'] = $general->fetchDataFromTable('r_eid_results', $condition);
+
+        $condition = null;
+        if (isset($data['eidReasonForTestingLastModified']) && !empty($data['eidReasonForTestingLastModified'])) {
+            $condition = "updated_datetime > '" . $data['eidReasonForTestingLastModified'] . "'";
+        }
+        $response['eidReasonForTesting'] = $general->fetchDataFromTable('r_eid_test_reasons', $condition);
     }
 
     if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) {

@@ -7,10 +7,10 @@ if (isset($_SERVER['HTTP_ORIGIN'])) {
 }
 // Access-Control headers are received during OPTIONS requests
 if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
-    header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
-    header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+        header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
     exit(0);
 }
 header('Content-Type: application/json');
@@ -18,10 +18,10 @@ header('Content-Type: application/json');
 $general = new \Vlsm\Models\General($db);
 $app = new \Vlsm\Models\App($db);
 
-$input = json_decode(file_get_contents("php://input"),true);
+$input = json_decode(file_get_contents("php://input"), true);
 try {
     if (isset($input['userName']) && !empty($input['userName']) && isset($input['password']) && !empty($input['password'])) {
-        
+
         $username = $db->escape($input['userName']);
         $password = $db->escape($input['password']);
         // $systemConfig['passwordSalt']='PUT-A-RANDOM-STRING-HERE';
@@ -29,57 +29,64 @@ try {
         $queryParams = array($username, $password);
         $admin = $db->rawQueryOne("SELECT user_id,user_name,phone_number,status FROM user_details as ud WHERE ud.login_id = ? AND ud.password = ?", $queryParams);
         // print_r($admin);die;
+
+        if ($systemConfig['user_type'] == 'remoteuser') {
+            $remoteUser = "yes";
+        } else {
+            $remoteUser = "no";
+        }
         if (count($admin) > 0) {
-            if($admin['status'] != 'active'){
+            if ($admin['status'] != 'active') {
                 $payload = array(
                     'status' => 2,
-                    'message'=>'You are not activated. Kindly contact administrator.',
+                    'message' => 'You are not activated. Kindly contact administrator.',
                     'timestamp' => $general->getDateTime()
                 );
-            }else{
+            } else {
                 $randomString = $general->generateUserID();
-                
+
                 $userData['api_token'] = $randomString;
                 $userData['api_token_generated_datetime'] = $general->getDateTime();
                 $db = $db->where('user_id', $admin['user_id']);
                 $upId = $db->update('user_details', $userData);
-                if($upId){
+                if ($upId) {
                     $data = array();
                     $configFormQuery = "SELECT * FROM global_config WHERE name ='vl_form'";
                     $configFormResult = $db->rawQuery($configFormQuery);
                     $data['user'] = $admin;
                     $data['form'] = $configFormResult[0]['value'];
                     $data['api_token'] = $randomString;
+                    $data['remoteUser'] = $remoteUser;
                     // print_r($data);die;
                     $payload = array(
                         'status' => 1,
-                        'message'=>'Login Success',
+                        'message' => 'Login Success',
                         'data' => $data,
                         'timestamp' => $general->getDateTime()
                     );
-                }else{
+                } else {
                     $payload = array(
                         'status' => 2,
-                        'message'=>'Someting went wrong. Please try again later.',
+                        'message' => 'Someting went wrong. Please try again later.',
                         'timestamp' => $general->getDateTime()
-                    );        
+                    );
                 }
             }
         } else {
             $payload = array(
                 'status' => 2,
-                'message'=>'Please check your login credentials',
+                'message' => 'Please check your login credentials',
                 'timestamp' => $general->getDateTime()
             );
         }
     } else {
         $payload = array(
             'status' => 0,
-            'message'=>'Please enter the credentials',
+            'message' => 'Please enter the credentials',
             'timestamp' => $general->getDateTime()
         );
     }
-    
+
 
     echo json_encode($payload);
     exit(0);
