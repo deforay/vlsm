@@ -6,7 +6,8 @@
         "tecnickcom/tcpdf": "^6.3",
         "phpmailer/phpmailer": "^6.1",
         "thingengineer/mysqli-database-class": "dev-master",
-        "aranyasen/hl7": "^2.0"
+        "aranyasen/hl7": "^2.0",
+        "guzzlehttp/guzzle": "^7.3"
     },
     "autoload": {
         "psr-4": {

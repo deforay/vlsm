@@ -425,8 +425,40 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 												<div class="col-lg-4">
 													<select id="lockApprovedVlSamples" name="lockApprovedVlSamples" type="text" class="form-control readPage" title="Please select lock approved sample">
 													<option value="">--Select--</option>
-													<option value="yes" <?php echo (isset($arr['lock_approved_vl_samples']) && $arr == 'yes')?"selected='selected'":''; ?>>Yes</option>
+													<option value="yes" <?php echo (isset($arr['lock_approved_vl_samples']) && $arr['lock_approved_vl_samples'] == 'yes')?"selected='selected'":''; ?>>Yes</option>
 													<option value="no" <?php echo (isset($arr['lock_approved_vl_samples']) && $arr['lock_approved_vl_samples'] == 'no')?"selected='selected'":''; ?>>No</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+									<?php }?>
+									<?php if (isset($arr['vl_suppression_target']) && $arr['vl_suppression_target'] != '') { ?>
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for="vl_suppression_target" class="col-lg-2 control-label">VL Suppression Target<span class="mandatory ">*</span></label>
+												<div class="col-lg-4">
+													<select id="vl_suppression_target" name="vl_suppression_target" type="text" class="form-control readPage" title="Please select lock approved sample">
+													<option value="">--Select--</option>
+													<option value="yes" <?php echo (isset($arr['vl_suppression_target']) && $arr['vl_suppression_target'] == 'yes')?"selected='selected'":''; ?>>Enable</option>
+													<option value="no" <?php echo (isset($arr['vl_suppression_target']) && $arr['vl_suppression_target'] == 'no')?"selected='selected'":''; ?>>Disable</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+									<?php }?>
+									<?php if (isset($arr['vl_monthly_target']) && $arr['vl_monthly_target'] != '') { ?>
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for="vl_monthly_target" class="col-lg-2 control-label">VL Monthly Target<span class="mandatory ">*</span></label>
+												<div class="col-lg-4">
+													<select id="vl_monthly_target" name="vl_monthly_target" type="text" class="form-control readPage" title="Please select lock approved sample">
+													<option value="">--Select--</option>
+													<option value="yes" <?php echo (isset($arr['vl_monthly_target']) && $arr['vl_monthly_target'] == 'yes')?"selected='selected'":''; ?>>Enable</option>
+													<option value="no" <?php echo (isset($arr['vl_monthly_target']) && $arr['vl_monthly_target'] == 'no')?"selected='selected'":''; ?>>Disable</option>
 													</select>
 												</div>
 											</div>
