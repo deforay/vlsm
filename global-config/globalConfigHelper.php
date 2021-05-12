@@ -187,6 +187,16 @@ try {
         $db = $db->where('name', 'lock_approved_vl_samples');
         $id = $db->update($tableName, $data);
     }
+    if (isset($_POST['vl_monthly_target']) && trim($_POST['vl_monthly_target']) != "") {
+        $data = array('value' => trim($_POST['vl_monthly_target']));
+        $db = $db->where('name', 'vl_monthly_target');
+        $id = $db->update($tableName, $data);
+    }
+    if (isset($_POST['vl_suppression_target']) && trim($_POST['vl_suppression_target']) != "") {
+        $data = array('value' => trim($_POST['vl_suppression_target']));
+        $db = $db->where('name', 'vl_suppression_target');
+        $id = $db->update($tableName, $data);
+    }
     if (isset($_POST['lockApprovedEidSamples']) && trim($_POST['lockApprovedEidSamples']) != "") {
         $data = array('value' => trim($_POST['lockApprovedEidSamples']));
         $db = $db->where('name', 'lock_approved_eid_samples');

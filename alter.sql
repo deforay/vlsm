@@ -2162,9 +2162,18 @@ ALTER TABLE `form_covid19` ADD `result_sent_to_source` TEXT NULL DEFAULT NULL AF
 ALTER TABLE `eid_form` ADD `result_sent_to_source` TEXT NULL DEFAULT NULL AFTER `source_data_dump`;
 ALTER TABLE `vl_request_form` ADD `result_sent_to_source` TEXT NULL DEFAULT NULL AFTER `source_data_dump`;
 
+
+
+-- Amit 08 May 2021
+
+UPDATE `resources` SET `module` = 'common' WHERE `resource_id` = 'specimen-referral-manifest';
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'covid-19-requests', 'addSamplesFromManifest.php', 'Add Samples from Manifest');
+
 -- Thana 11-May-2021
 ALTER TABLE `form_covid19` ADD `app_local_test_req_id` VARCHAR(255) NULL DEFAULT NULL AFTER `is_result_mail_sent`; 
 ALTER TABLE `r_eid_results` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `status`; 
 
+--Prasath M 12-May-2021
+INSERT INTO `global_config` (`display_name`, `name`, `value`, `category`, `remote_sync_needed`, `updated_on`, `updated_by`, `status`) VALUES ('VL Monthly Target', 'vl_monthly_target', 'yes', 'vl', 'enable', '', '', 'active')
 -- Thana 12-May-2021
 ALTER TABLE `user_details` ADD `testing_user` VARCHAR(50) NULL DEFAULT NULL AFTER `user_signature`; 
