@@ -44,7 +44,7 @@ $ftResult = $db->rawQuery($fQuery);
 
      <!-- Main content -->
      <section class="content">
-          
+
           <div class="box box-default">
                <div class="box-header with-border">
                     <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
@@ -88,7 +88,7 @@ $ftResult = $db->rawQuery($fQuery);
                                                   <select class="form-control isRequired" name='role' id='role' title="Please select the role">
                                                        <option value="">--Select--</option>
                                                        <?php foreach ($result as $row) { ?>
-                                                            <option value="<?php echo $row['role_id'];?>" data-code="<?php echo $row['role_code'];?>"><?php echo ucwords(($row['role_name']));?></option>
+                                                            <option value="<?php echo $row['role_id']; ?>" data-code="<?php echo $row['role_code']; ?>"><?php echo ucwords(($row['role_name'])); ?></option>
                                                        <?php } ?>
                                                   </select>
                                              </div>
@@ -107,6 +107,20 @@ $ftResult = $db->rawQuery($fQuery);
                                    <div class="col-md-6">
                                         <div class="form-group">
                                              <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="generateToken('authToken');">Generate Token</a>
+                                        </div>
+                                   </div>
+                              </div>
+                              <div class="row show-token" style="display: none;">
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="testingUser" class="col-lg-4 control-label">Testing User</label>
+                                             <div class="col-lg-7">
+                                                  <select class="form-control" name='testingUser' id='testingUser' title="Please select the testing user or not?">
+                                                       <option value="">--Select--</option>
+                                                       <option value="yes">Yes</option>
+                                                       <option value="no">No</option>
+                                                  </select>
+                                             </div>
                                         </div>
                                    </div>
                               </div>
@@ -165,9 +179,6 @@ $ftResult = $db->rawQuery($fQuery);
                                              </div>
                                         </div>
                                    </div>
-
-
-
                               </div>
 
                               <div class="row" style=<?php echo $display; ?>>
@@ -294,10 +305,10 @@ $ftResult = $db->rawQuery($fQuery);
           $('#role').change(function(e) {
                $('#authToken').val('');
                var selectedText = $(this).find("option:selected").attr('data-code');
-               if(selectedText == "API"){
+               if (selectedText == "API") {
                     $('.show-token').show();
                     $('#authToken').addClass('isRequired');
-               } else{
+               } else {
                     $('.show-token').hide();
                     $('#authToken').removeClass('isRequired');
                }
@@ -305,7 +316,7 @@ $ftResult = $db->rawQuery($fQuery);
 
           $('#userSignature').change(function(e) {
                const file = this.files[0];
-               const  fileType = file['type'];
+               const fileType = file['type'];
                const validImageTypes = ['image/jpg', 'image/jpeg', 'image/png'];
                if (!validImageTypes.includes(fileType)) {
                     $('#userSignature').val('');
@@ -423,15 +434,15 @@ $ftResult = $db->rawQuery($fQuery);
           $.unblockUI();
      }
 
-     function generateToken(id){
+     function generateToken(id) {
           $.post("/includes/generate-auth-token.php", {
-               size:32
-          },
-          function(data) {
-               if (data != "") {
-                    $("#"+id).val(data);
-               }
-          });
+                    size: 32
+               },
+               function(data) {
+                    if (data != "") {
+                         $("#" + id).val(data);
+                    }
+               });
      }
 </script>
 <?php
