@@ -2172,3 +2172,7 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 -- Thana 11-May-2021
 ALTER TABLE `form_covid19` ADD `app_local_test_req_id` VARCHAR(255) NULL DEFAULT NULL AFTER `is_result_mail_sent`; 
 ALTER TABLE `r_eid_results` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `status`; 
+
+--Prasath M 12-May-2021
+INSERT INTO `global_config` (`display_name`, `name`, `value`, `category`, `remote_sync_needed`, `updated_on`, `updated_by`, `status`) VALUES ('VL Monthly Target', 'vl_monthly_target', 'yes', 'vl', 'enable', '', '', 'active')
+INSERT INTO `global_config` (`display_name`, `name`, `value`, `category`, `remote_sync_needed`, `updated_on`, `updated_by`, `status`) VALUES ('VL Suppression Target', 'vl_suppression_target', 'yes', 'vl', 'enable', '', '', 'active')
