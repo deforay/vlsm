@@ -24,14 +24,22 @@ class SouthSudan_PDF extends MYPDF
                 if (trim($this->lab) != '') {
                     $this->SetFont('helvetica', 'B', 11);
                     // $this->writeHTMLCell(0, 0, 40, 15, strtoupper($this->lab), 0, 0, 0, true, 'L', true);
-                    $this->writeHTMLCell(0, 0, 40, 15, "PUBLIC HEALTH LABORATORY", 0, 0, 0, true, 'L', true);
+                    $this->writeHTMLCell(0, 0, 40, 15, strtoupper($this->lab), 0, 0, 0, true, 'L', true);
                 }
 
                 $this->SetFont('helvetica', '', 9);
-                $this->writeHTMLCell(0, 0, 40, 21, 'Juba - Addis Ababa Road (near Mobil roundabout)', 0, 0, 0, true, 'L', true);
+                $this->writeHTMLCell(0, 0, 40, 21, $this->facilityInfo['address'], 0, 0, 0, true, 'L', true);
 
                 $this->SetFont('helvetica', '', 9);
-                $this->writeHTMLCell(0, 0, 40, 26, 'E-mail : nphlsscovid19results@gmail.com&nbsp;&nbsp;|&nbsp;&nbsp;Phone : 0929310671', 0, 0, 0, true, 'L', true);
+
+                $emil = (isset($this->facilityInfo['report_email']) && $this->facilityInfo['report_email'] != "") ? 'E-mail : ' . $this->facilityInfo['report_email'] : "";
+                $phone = (isset($this->facilityInfo['facility_mobile_numbers']) && $this->facilityInfo['facility_mobile_numbers'] != "") ? 'Phone : ' . $this->facilityInfo['facility_mobile_numbers'] : "";
+                if (isset($this->facilityInfo['report_email']) && $this->facilityInfo['report_email'] != "" && isset($this->facilityInfo['facility_mobile_numbers']) && $this->facilityInfo['facility_mobile_numbers'] != "") {
+                    $space = '&nbsp;&nbsp;|&nbsp;&nbsp;';
+                } else {
+                    $space = "";
+                }
+                $this->writeHTMLCell(0, 0, 40, 26, $emil . $space . $phone, 0, 0, 0, true, 'L', true);
 
 
                 $this->writeHTMLCell(0, 0, 10, 33, '<hr>', 0, 0, 0, true, 'C', true);
@@ -85,6 +93,9 @@ if (sizeof($requestResult) > 0) {
 
         $covid19TestQuery = "SELECT * from covid19_tests where covid19_id= " . $result['covid19_id'] . " ORDER BY test_id ASC";
         $covid19TestInfo = $db->rawQuery($covid19TestQuery);
+
+        $facilityQuery = "SELECT * from form_covid19 as c19 INNER JOIN facility_details as fd ON c19.facility_id=fd.facility_id where covid19_id= " . $result['covid19_id'] . " GROUP BY fd.facility_id LIMIT 1";
+        $facilityInfo = $db->rawQueryOne($facilityQuery);
         // echo "<pre>";print_r($covid19TestInfo);die;
         $patientFname = ucwords($general->crypto('decrypt', $result['patient_name'], $result['patient_id']));
         $patientLname = ucwords($general->crypto('decrypt', $result['patient_surname'], $result['patient_id']));
@@ -107,7 +118,7 @@ if (sizeof($requestResult) > 0) {
         }
         // create new PDF document
         $pdf = new SouthSudan_PDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->setHeading($arr['logo'], $arr['header'], $result['labName'], $title = 'COVID-19 PATIENT REPORT', $labFacilityId = null, $formId = $arr['vl_form']);
+        $pdf->setHeading($arr['logo'], $arr['header'], $result['labName'], $title = 'COVID-19 PATIENT REPORT', $labFacilityId = null, $formId = $arr['vl_form'], $facilityInfo);
         // set document information
         $pdf->SetCreator('VLSM');
         $pdf->SetTitle('Covid-19 Patient Report');
@@ -431,9 +442,7 @@ if (sizeof($requestResult) > 0) {
                 $html .= '<td style="line-height:17px;font-size:11px;text-align:left;border-bottom:1px solid #67b3ff;border-left:1px solid #67b3ff;">' . date('d-M-Y H:i:s a') . '</td>';
                 $html .= '</tr>';
             }
-        }
-        else
-        {
+        } else {
             $html .= '<tr>';
             $html .= '<td colspan="3" style="line-height:30px;"></td>';
             $html .= '</tr>';
@@ -482,13 +491,18 @@ if (sizeof($requestResult) > 0) {
             $ciphering = "AES-128-CTR";
             $iv_length = openssl_cipher_iv_length($ciphering);
             $options = 0;
-            $simple_string = $result['covid19_id']."&&&qr";
+            $simple_string = $result['covid19_id'] . "&&&qr";
             $encryption_iv = $systemConfig['tryCrypt'];
             $encryption_key = $systemConfig['tryCrypt'];
-            $Cid = openssl_encrypt($simple_string, $ciphering,
-            $encryption_key, $options, $encryption_iv);
+            $Cid = openssl_encrypt(
+                $simple_string,
+                $ciphering,
+                $encryption_key,
+                $options,
+                $encryption_iv
+            );
             $pdf->writeHTML($html);
-            $pdf->write2DBarcode($systemConfig['remoteURL'].'/covid-19/results/view.php?q='.$Cid.'', 'QRCODE,H', 170, 170, 20, 20, $style, 'N');
+            $pdf->write2DBarcode($systemConfig['remoteURL'] . '/covid-19/results/view.php?q=' . $Cid . '', 'QRCODE,H', 170, 170, 20, 20, $style, 'N');
             $pdf->lastPage();
             $filename = $pathFront . DIRECTORY_SEPARATOR . 'p' . $page . '.pdf';
             $pdf->Output($filename, "F");
@@ -535,4 +549,4 @@ if (sizeof($requestResult) > 0) {
         unset($_SESSION['rVal']);
     }
 }
-    echo $resultFilename;
+echo $resultFilename;

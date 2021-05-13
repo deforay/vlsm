@@ -92,7 +92,7 @@ class MYPDF extends TCPDF
 {
 
 	//Page header
-	public function setHeading($logo, $text, $lab, $title = null, $labFacilityId = null, $formId = null)
+	public function setHeading($logo, $text, $lab, $title = null, $labFacilityId = null, $formId = null, $facilityInfo = array())
 	{
 		$this->logo = $logo;
 		$this->text = $text;
@@ -100,6 +100,7 @@ class MYPDF extends TCPDF
 		$this->htitle = $title;
 		$this->labFacilityId = $labFacilityId;
 		$this->formId = $formId;
+		$this->facilityInfo = $facilityInfo;
 	}
 	//Page header
 	public function Header()
