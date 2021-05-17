@@ -287,16 +287,20 @@ class App
         }
 
         $response = array();
-
+        $typeOfTestReqResult = array('Real Time RT-PCR', 'RDT-Antibody', 'RDT-Antigen', 'ELISA', 'Others');
         // Using this in sync requests/results
         if (is_array($c19Id)) {
-            $results = $this->db->rawQuery("SELECT test_id as testId, covid19_id as covid19Id, facility_id as facilityId, test_name as testName, sample_tested_datetime as sampleTestedDateTime, testing_platform as testingPlatform, result FROM covid19_tests WHERE `covid19_id` IN (" . implode(",", $c19Id) . ") ORDER BY test_id ASC");
+            $results = $this->db->rawQuery("SELECT test_id as testId, covid19_id as covid19Id, facility_id as facilityId, test_name as testNameId, sample_tested_datetime as sampleTestedDateTime, testing_platform as testingPlatform, result FROM covid19_tests WHERE `covid19_id` IN (" . implode(",", $c19Id) . ") ORDER BY test_id ASC");
 
             foreach ($results as $row) {
                 $response[$row['covid19_id']][$row['test_id']] = $row;
             }
         } else {
-            $response = $this->db->rawQuery("SELECT test_id as testId, covid19_id as covid19Id, facility_id as facilityId, test_name as testName, sample_tested_datetime as sampleTestedDateTime, testing_platform as testingPlatform, result FROM covid19_tests WHERE `covid19_id` = $c19Id ORDER BY test_id ASC");
+            $results = $this->db->rawQuery("SELECT test_id as testId, covid19_id as covid19Id, facility_id as facilityId, test_name as testNameId, sample_tested_datetime as sampleTestedDateTime, testing_platform as testingPlatform, result FROM covid19_tests WHERE `covid19_id` = $c19Id ORDER BY test_id ASC");
+            foreach ($results as $key => $row) {
+                $response[$key] = $row;
+                $response[$key]['testName'] = $typeOfTestReqResult[$row['testNameId']];
+            }
         }
 
         return $response;
