@@ -76,6 +76,7 @@ try {
                         vl.patient_phone_number as phone,
                         vl.sample_collection_date as sampleCollectionDate,
                         vl.sample_tested_datetime as sampleTestedDate,
+                        vl.tested_by as testedById,
                         l_f.facility_name as labName,
                         vl.result,
                         vl.sample_received_at_vl_lab_datetime as sampleReceivedDate,
@@ -111,7 +112,8 @@ try {
                         LEFT JOIN r_implementation_partners as r_i_p ON r_i_p.i_partner_id=vl.implementing_partner";
 
 
-    $where = " WHERE request_created_by = '" . $user['user_id'] . "'";
+    $where = "";
+    // $where = " WHERE request_created_by = '" . $user['user_id'] . "'";
     if (!empty($user)) {
         $facilityMap = $facilityDb->getFacilityMap($user['user_id'], 1);
         if (!empty($facilityMap)) {
@@ -120,7 +122,7 @@ try {
             } else {
                 $where .= " WHERE ";
             }
-            $where .= " facility_id IN (" . $facilityMap . ")";
+            $where .= " vl.facility_id IN (" . $facilityMap . ")";
         }
     }
     /* To check the sample code filter */
@@ -137,7 +139,7 @@ try {
         $where .= " AND DATE(sample_collection_date) between '$from' AND '$to' ";
 
         $facilityId = implode("','", $facilityId);
-        $where .= " AND facility_id IN ('$facilityId') ";
+        $where .= " AND vl.facility_id IN ('$facilityId') ";
     }
 
     // $sQuery .= " ORDER BY sample_collection_date ASC ";
@@ -156,9 +158,8 @@ try {
 
         );
 
-        // if (isset($user['token-updated']) && $user['token-updated'] == true) {
-        //     $response['token'] = $user['newToken'];
-        // }
+        $app = new \Vlsm\Models\App($db);
+        $trackId = $app->addApiTracking($user['user_id'], count($rowData), 'fetch-results', 'covid19', $requestUrl, $params, 'json');
         http_response_code(200);
         echo json_encode($response);
         exit(0);
@@ -176,7 +177,7 @@ try {
     //     $payload['token'] = $user['newToken'];
     // }
     $app = new \Vlsm\Models\App($db);
-    $trackId = $app->addApiTracking($user['user_id'], count($rowData), 'fetch-results', 'covid19', $requestUrl, $requestUrl, 'json');
+    $trackId = $app->addApiTracking($user['user_id'], count($rowData), 'fetch-results', 'covid19', $requestUrl, $params, 'json');
 
     http_response_code(200);
     echo json_encode($payload);
@@ -190,10 +191,6 @@ try {
         'error' => $exc->getMessage(),
         'data' => array()
     );
-    if (isset($user['token-updated']) && $user['token-updated'] == true) {
-        $payload['token'] = $user['newToken'];
-    }
-
     echo json_encode($payload);
 
     error_log($exc->getMessage());

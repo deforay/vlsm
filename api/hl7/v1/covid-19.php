@@ -11,7 +11,7 @@ $covid19Model = new \Vlsm\Models\Covid19($db);
 $globalConfig = $general->getGlobalConfig();
 $systemConfig = $general->getSystemConfig();
 if ($type[1] == 'RES' || $type[1] == 'QRY') {
-    
+
     $sQuery = "SELECT 
             vl.*,
             rtr.test_reason_name,
@@ -51,79 +51,79 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
     $where = "";
     if (!empty($dateRange[1])) {
         $date = $dateRange[1];
-        if(isset($where) && trim($where) != ""){
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
         $where .= "(DATE(sample_collection_date) between '$date[0]' AND '$date[1]')";
     }
 
     if (!empty($pidF[2])) {
-        if(isset($where) && trim($where) != ""){
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
         $where .= " vl.patient_id IN ('" . $pidF[2] . "') ";
     }
 
     if (!empty($spmF[4])) {
-        if(isset($where) && trim($where) != ""){
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
         $where .= " rst.sample_name IN ('" . $spmF[4] . "') ";
     }
 
     if (!empty($mshF[4])) {
-        if(isset($where) && trim($where) != ""){
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
         $where .= " f.facility_name IN ('" . $mshF[4] . "') ";
     }
 
     if (!empty($mshF[6])) {
-        if(isset($where) && trim($where) != ""){
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
         $where .= " l_f.facility_name IN ('" . $mshF[6] . "') ";
     }
 
     if (!empty($search[2])) {
-        if(isset($where) && trim($where) != ""){
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
         $where .= " vl.is_sample_rejected ='" . $search[2] . "' ";
     }
 
     if (!empty($search[3]) && $search[3] == "yes") {
-        if(isset($where) && trim($where) != ""){
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
         $where .= " (vl.sample_tested_datetime != null AND vl.sample_tested_datetime not like '') ";
     }
     if (!empty($spmF[2]) && $spmF[2] != "") {
-        if(isset($where) && trim($where) != ""){
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
-        $where .= " (vl.sample_code like '".$spmF[2]."%' OR vl.remote_sample_code like '".$spmF[2]."%') ";
+        $where .= " (vl.sample_code like '" . $spmF[2] . "%' OR vl.remote_sample_code like '" . $spmF[2] . "%') ";
     }
-    if($type[1] == 'QRY'){
-        if(isset($where) && trim($where) != ""){
+    if ($type[1] == 'QRY') {
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
         $where .= " (vl.result ='' OR vl.result IS NULL OR vl.result LIKE '')";
@@ -132,9 +132,9 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
     $sQuery .= $where;
     // die($sQuery);
     $rowData = $db->rawQuery($sQuery);
-    if($rowData && count($rowData) > 0){
+    if ($rowData && count($rowData) > 0) {
         $app = new \Vlsm\Models\App($db);
-        $trackId = $app->addApiTracking($user['user_id'],count($rowData),$type[1],'covid19',$requestUrl,$hl7,'hl7');
+        $trackId = $app->addApiTracking($user['user_id'], count($rowData), $type[1], 'covid19', $requestUrl, $hl7, 'hl7');
         foreach ($rowData as $row) {
             /* MSH Information */
             $msh = new MSH();
@@ -233,12 +233,15 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
             $obx = new OBX;
             $obx->setObservationValue($row['result']);
             $msg->setSegment($obx, 8);
-    
+
             $hl7Data .= $msg->toString(true);
-            echo $hl7Data;die;
+            echo $hl7Data;
+            die;
         }
         // http_response_code(200);
-    }else{
+    } else {
+        $app = new \Vlsm\Models\App($db);
+        $trackId = $app->addApiTracking($user['user_id'], 0, $type[1], 'covid19', $requestUrl, $hl7, 'hl7');
         $msh = new MSH();
         $msh->setMessageType(["COVID-19", "RES"]);
         $ack = new ACK($msg, $msh);
@@ -260,7 +263,7 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
             $data['facilityId'] = $facilityDetails[0]['facility_id'];
             $data['provinceCode'] = $facilityDetails[0]['province_code'];
         }
-        
+
         if ($msh->getField(6) != "" && !empty($msh->getField(6))) {
             $returnId = $general->getValueByName($msh->getField(6), 'facility_name', 'facility_details', 'facility_id');
             $data['labId'] = $returnId;
@@ -297,7 +300,7 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
             $c19Details = $c19Db->getCovid19SampleTypesByName($spm->getField(4));
             $data['specimenType'] = $c19Details[0]['sample_id'];
         }
-        
+
         $data['isSampleCollected'] = $spm->getField(12);
         $data['sampleCollectionDate'] = $spm->getField(17);
         $data['sampleReceivedDate'] = $spm->getField(18);
@@ -390,23 +393,23 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
     $provinceCode = (isset($_POST['provinceCode']) && !empty($_POST['provinceCode'])) ? $_POST['provinceCode'] : null;
     $provinceId = (isset($_POST['provinceId']) && !empty($_POST['provinceId'])) ? $_POST['provinceId'] : null;
     $sampleCollectionDate = (isset($_POST['sampleCollectionDate']) && !empty($_POST['sampleCollectionDate'])) ? $_POST['sampleCollectionDate'] : null;
-    
+
     $c19DuplicateData = false;
     $sQuery = "SELECT covid19_id, sample_code, sample_code_format, sample_code_key, remote_sample_code, remote_sample_code_format, remote_sample_code_key FROM form_covid19 
                 where 
-                    (sample_code like '%".$_POST['sampleCode']."%' or remote_sample_code like '%".$_POST['sampleCode']."%')
-                    AND (patient_id like '%".$_POST['patientId']."%' AND patient_dob like '%".$_POST['patientDob']."%' AND patient_gender like '%".$_POST['patientGender']."%' AND patient_district like '%".$_POST['patientDistrict']."%') limit 1";
+                    (sample_code like '%" . $_POST['sampleCode'] . "%' or remote_sample_code like '%" . $_POST['sampleCode'] . "%')
+                    AND (patient_id like '%" . $_POST['patientId'] . "%' AND patient_dob like '%" . $_POST['patientDob'] . "%' AND patient_gender like '%" . $_POST['patientGender'] . "%' AND patient_district like '%" . $_POST['patientDistrict'] . "%') limit 1";
     // die($sQuery);
     $c19DuplicateData = $db->rawQueryOne($sQuery);
-    if($c19DuplicateData){
-        $sampleData['sampleCode'] = (!empty($c19DuplicateData['sample_code']))?$c19DuplicateData['sample_code']:$c19DuplicateData['remote_sample_code'];
-        $sampleData['sampleCodeFormat'] = (!empty($c19DuplicateData['sample_code_format']))?$c19DuplicateData['sample_code_format']:$c19DuplicateData['remote_sample_code_format'];
-        $sampleData['sampleCodeKey'] = (!empty($c19DuplicateData['sample_code_key']))?$c19DuplicateData['sample_code_key']:$c19DuplicateData['remote_sample_code_key'];
-    }else{
+    if ($c19DuplicateData) {
+        $sampleData['sampleCode'] = (!empty($c19DuplicateData['sample_code'])) ? $c19DuplicateData['sample_code'] : $c19DuplicateData['remote_sample_code'];
+        $sampleData['sampleCodeFormat'] = (!empty($c19DuplicateData['sample_code_format'])) ? $c19DuplicateData['sample_code_format'] : $c19DuplicateData['remote_sample_code_format'];
+        $sampleData['sampleCodeKey'] = (!empty($c19DuplicateData['sample_code_key'])) ? $c19DuplicateData['sample_code_key'] : $c19DuplicateData['remote_sample_code_key'];
+    } else {
         $sampleJson = $covid19Model->generateCovid19SampleCode($provinceCode, $sampleCollectionDate, null, $provinceId);
         $sampleData = json_decode($sampleJson, true);
     }
-    if(!isset($_POST['countryId']) || $_POST['countryId'] =='')
+    if (!isset($_POST['countryId']) || $_POST['countryId'] == '')
         $_POST['countryId'] = '';
     $covid19Data = array(
         'vlsm_country_id' => $_POST['countryId'],
@@ -418,7 +421,7 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
         'last_modified_by' => '',
         'last_modified_datetime' => $general->getDateTime()
     );
-    
+
     if ($systemConfig['user_type'] == 'remoteuser') {
         $covid19Data['remote_sample_code'] = $sampleData['sampleCode'];
         $covid19Data['remote_sample_code_format'] = $sampleData['sampleCodeFormat'];
@@ -433,15 +436,15 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
         $covid19Data['result_status'] = 6;
     }
     $id = 0;
-    if($c19DuplicateData){
+    if ($c19DuplicateData) {
         $db = $db->where('covid19_id', $c19DuplicateData['covid19_id']);
-		$id = $db->update("form_covid19", $covid19Data);
+        $id = $db->update("form_covid19", $covid19Data);
         $_POST['covid19SampleId'] = $c19DuplicateData['covid19_id'];
-    } else{
+    } else {
         $id = $db->insert("form_covid19", $covid19Data);
         $_POST['covid19SampleId'] = $id;
     }
-    if(isset($covid19Data) && count($covid19Data) > 0){
+    if (isset($covid19Data) && count($covid19Data) > 0) {
         $tableName = "form_covid19";
         $tableName1 = "activity_log";
         $testTableName = 'covid19_tests';
@@ -458,7 +461,7 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
         if ($sarr['user_type'] == 'remoteuser') {
             $status = 9;
         }
-        
+
         if (isset($_POST['isSampleRejected']) && $_POST['isSampleRejected'] == 'yes') {
             $_POST['result'] = null;
             $status = 4;
@@ -472,7 +475,7 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
             'province_id'                         => !empty($_POST['provinceId']) ? $_POST['provinceId'] : null,
             'lab_id'                              => !empty($_POST['labId']) ? $_POST['labId'] : null,
             'implementing_partner'                => !empty($_POST['implementingPartner']) ? $_POST['implementingPartner'] : null,
-            'source_of_alert'                	  => !empty($_POST['sourceOfAlertPOE']) ? $_POST['sourceOfAlertPOE'] : null,
+            'source_of_alert'                      => !empty($_POST['sourceOfAlertPOE']) ? $_POST['sourceOfAlertPOE'] : null,
             'funding_source'                      => !empty($_POST['fundingSource']) ? $_POST['fundingSource'] : null,
             'patient_id'                          => !empty($_POST['patientId']) ? $_POST['patientId'] : null,
             'patient_name'                        => !empty($_POST['firstName']) ? $_POST['firstName'] : null,
@@ -485,17 +488,17 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
             'patient_address'                     => !empty($_POST['patientAddress']) ? $_POST['patientAddress'] : null,
             'patient_province'                    => !empty($_POST['patientProvince']) ? $_POST['patientProvince'] : null,
             'patient_district'                    => !empty($_POST['patientDistrict']) ? $_POST['patientDistrict'] : null,
-            'patient_city'                    	  => !empty($_POST['patientCity']) ? $_POST['patientCity'] : null,
+            'patient_city'                          => !empty($_POST['patientCity']) ? $_POST['patientCity'] : null,
             'patient_occupation'                  => !empty($_POST['patientOccupation']) ? $_POST['patientOccupation'] : null,
             'does_patient_smoke'                  => !empty($_POST['doesPatientSmoke']) ? $_POST['doesPatientSmoke'] : null,
             'patient_nationality'                 => !empty($_POST['patientNationality']) ? $_POST['patientNationality'] : null,
             'patient_passport_number'             => !empty($_POST['patientPassportNumber']) ? $_POST['patientPassportNumber'] : null,
-            'flight_airline'                 	  => !empty($_POST['airline']) ? $_POST['airline'] : null,
-            'flight_seat_no'                 	  => !empty($_POST['seatNo']) ? $_POST['seatNo'] : null,
+            'flight_airline'                       => !empty($_POST['airline']) ? $_POST['airline'] : null,
+            'flight_seat_no'                       => !empty($_POST['seatNo']) ? $_POST['seatNo'] : null,
             'flight_arrival_datetime'             => !empty($_POST['arrivalDateTime']) ? $_POST['arrivalDateTime'] : null,
             'flight_airport_of_departure'         => !empty($_POST['airportOfDeparture']) ? $_POST['airportOfDeparture'] : null,
-            'flight_transit'          			  => !empty($_POST['transit']) ? $_POST['transit'] : null,
-            'reason_of_visit'          			  => !empty($_POST['reasonOfVisit']) ? $_POST['reasonOfVisit'] : null,
+            'flight_transit'                        => !empty($_POST['transit']) ? $_POST['transit'] : null,
+            'reason_of_visit'                        => !empty($_POST['reasonOfVisit']) ? $_POST['reasonOfVisit'] : null,
             'is_sample_collected'                 => !empty($_POST['isSampleCollected']) ? $_POST['isSampleCollected'] : null,
             'reason_for_covid19_test'             => !empty($_POST['reasonForCovid19Test']) ? $_POST['reasonForCovid19Test'] : null,
             'type_of_test_requested'              => !empty($_POST['testTypeRequested']) ? $_POST['testTypeRequested'] : null,
@@ -506,21 +509,21 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
             'number_of_days_sick'                 => !empty($_POST['numberOfDaysSick']) ? $_POST['numberOfDaysSick'] : null,
             'date_of_symptom_onset'               => !empty($_POST['dateOfSymptomOnset']) ? $general->dateFormat($_POST['dateOfSymptomOnset']) : null,
             'date_of_initial_consultation'        => !empty($_POST['dateOfInitialConsultation']) ? $general->dateFormat($_POST['dateOfInitialConsultation']) : null,
-            'fever_temp'        				  => !empty($_POST['feverTemp']) ? $_POST['feverTemp'] : null,
-            'medical_history'        			  => !empty($_POST['medicalHistory']) ? $_POST['medicalHistory'] : null,
-            'recent_hospitalization'   			  => !empty($_POST['recentHospitalization']) ? $_POST['recentHospitalization'] : null,
-            'patient_lives_with_children'		  => !empty($_POST['patientLivesWithChildren']) ? $_POST['patientLivesWithChildren'] : null,
-            'patient_cares_for_children'		  => !empty($_POST['patientCaresForChildren']) ? $_POST['patientCaresForChildren'] : null,
-            'temperature_measurement_method' 	  => !empty($_POST['temperatureMeasurementMethod']) ? $_POST['temperatureMeasurementMethod'] : null,
-            'respiratory_rate' 	  				  => !empty($_POST['respiratoryRate']) ? $_POST['respiratoryRate'] : null,
-            'oxygen_saturation'	  				  => !empty($_POST['oxygenSaturation']) ? $_POST['oxygenSaturation'] : null,
-            'close_contacts'        			  => !empty($_POST['closeContacts']) ? $_POST['closeContacts'] : null,
+            'fever_temp'                          => !empty($_POST['feverTemp']) ? $_POST['feverTemp'] : null,
+            'medical_history'                      => !empty($_POST['medicalHistory']) ? $_POST['medicalHistory'] : null,
+            'recent_hospitalization'                 => !empty($_POST['recentHospitalization']) ? $_POST['recentHospitalization'] : null,
+            'patient_lives_with_children'          => !empty($_POST['patientLivesWithChildren']) ? $_POST['patientLivesWithChildren'] : null,
+            'patient_cares_for_children'          => !empty($_POST['patientCaresForChildren']) ? $_POST['patientCaresForChildren'] : null,
+            'temperature_measurement_method'       => !empty($_POST['temperatureMeasurementMethod']) ? $_POST['temperatureMeasurementMethod'] : null,
+            'respiratory_rate'                         => !empty($_POST['respiratoryRate']) ? $_POST['respiratoryRate'] : null,
+            'oxygen_saturation'                        => !empty($_POST['oxygenSaturation']) ? $_POST['oxygenSaturation'] : null,
+            'close_contacts'                      => !empty($_POST['closeContacts']) ? $_POST['closeContacts'] : null,
             'contact_with_confirmed_case'         => !empty($_POST['contactWithConfirmedCase']) ? $_POST['contactWithConfirmedCase'] : null,
             'has_recent_travel_history'           => !empty($_POST['hasRecentTravelHistory']) ? $_POST['hasRecentTravelHistory'] : null,
             'travel_country_names'                => !empty($_POST['countryName']) ? $_POST['countryName'] : null,
             'travel_return_date'                  => !empty($_POST['returnDate']) ? $general->dateFormat($_POST['returnDate']) : null,
             'sample_received_at_vl_lab_datetime'  => !empty($_POST['sampleReceivedDate']) ? $_POST['sampleReceivedDate'] : null,
-            'sample_condition'  				  => !empty($_POST['sampleCondition']) ? $_POST['sampleCondition'] : (isset($_POST['specimenQuality']) ? $_POST['specimenQuality'] : null),
+            'sample_condition'                    => !empty($_POST['sampleCondition']) ? $_POST['sampleCondition'] : (isset($_POST['specimenQuality']) ? $_POST['specimenQuality'] : null),
             'is_sample_rejected'                  => !empty($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
             'result'                              => !empty($_POST['result']) ? $_POST['result'] : null,
             'other_diseases'                      => (!empty($_POST['otherDiseases']) && $_POST['result'] != 'positive') ? $_POST['otherDiseases'] : null,
@@ -537,19 +540,19 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
         }
         $covid19Data['source_of_request'] = 'hl7';
         $id = 0;
-	    $covid19Data['source_of_request'] = 'hl7';
+        $covid19Data['source_of_request'] = 'hl7';
         if (!empty($_POST['covid19SampleId'])) {
             $db = $db->where('covid19_id', $_POST['covid19SampleId']);
             $id = $db->update($tableName, $covid19Data);
         }
-        $sQuery = "SELECT covid19_id, sample_code, remote_sample_code FROM form_covid19 where covid19_id = ".$_POST['covid19SampleId'];
+        $sQuery = "SELECT covid19_id, sample_code, remote_sample_code FROM form_covid19 where covid19_id = " . $_POST['covid19SampleId'];
         $savedSamples = $db->rawQueryOne($sQuery);
     }
     $returnString = "";
     // print_r($savedSamples);die;
     if ($id > 0 && isset($covid19Data) && count($covid19Data) > 0) {
         $app = new \Vlsm\Models\App($db);
-        $trackId = $app->addApiTracking($user['user_id'],$_POST['covid19SampleId'],$type[1],'covid19',$requestUrl,$hl7,'hl7');
+        $trackId = $app->addApiTracking($user['user_id'], $_POST['covid19SampleId'], $type[1], 'covid19', $requestUrl, $hl7, 'hl7');
         if ($savedSamples['sample_code'] != '') {
             $sampleCode = $savedSamples['sample_code'];
         } else {

@@ -102,7 +102,7 @@ $data['nationalityList'] = $nationalityList;
 
 /* Type of Test Request */
 $typeOfTestReqList = array();
-$typeOfTestReqResult = array('Real Time RT-PCR', 'RDT-Antibody', 'RDT-Antigen', 'ELISA');
+$typeOfTestReqResult = array('Real Time RT-PCR', 'RDT-Antibody', 'RDT-Antigen', 'ELISA', 'Others');
 foreach ($typeOfTestReqResult as $key => $req) {
     $typeOfTestReqList[$key]['value'] = ($key + 1);
     $typeOfTestReqList[$key]['show'] = $req;

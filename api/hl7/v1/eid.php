@@ -50,78 +50,78 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
     $where = "";
     if (!empty($dateRange[1])) {
         $date = $dateRange[1];
-        if(isset($where) && trim($where) != ""){
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
         $where .= "(DATE(sample_collection_date) between '$date[0]' AND '$date[1]')";
     }
     if (!empty($pidF[2])) {
-        if(isset($where) && trim($where) != ""){
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
         $where .= " vl.child_id IN ('" . $pidF[2] . "') ";
     }
-    
+
     if (!empty($spmF[4])) {
-        if(isset($where) && trim($where) != ""){
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
         $where .= " rst.sample_name IN ('" . $spmF[4] . "') ";
     }
 
     if (!empty($mshF[4])) {
-        if(isset($where) && trim($where) != ""){
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
         $where .= " f.facility_name IN ('" . $mshF[4] . "') ";
     }
 
     if (!empty($mshF[6])) {
-        if(isset($where) && trim($where) != ""){
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
         $where .= " l_f.facility_name IN ('" . $mshF[6] . "') ";
     }
 
     if (!empty($search[2])) {
-        if(isset($where) && trim($where) != ""){
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
         $where .= " vl.is_sample_rejected ='" . $search[2] . "' ";
     }
 
     if (!empty($search[3]) && $search[3] == "yes") {
-        if(isset($where) && trim($where) != ""){
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
         $where .= " (vl.sample_tested_datetime != null AND vl.sample_tested_datetime not like '') ";
     }
     if (!empty($spmF[2]) && $spmF[2] != "") {
-        if(isset($where) && trim($where) != ""){
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
-        $where .= " (vl.sample_code like '".$spmF[2]."%' OR vl.remote_sample_code like '".$spmF[2]."%') ";
+        $where .= " (vl.sample_code like '" . $spmF[2] . "%' OR vl.remote_sample_code like '" . $spmF[2] . "%') ";
     }
-    if($type[1] == 'QRY'){
-        if(isset($where) && trim($where) != ""){
+    if ($type[1] == 'QRY') {
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
         $where .= " (vl.result ='' OR vl.result IS NULL OR vl.result LIKE '')";
@@ -130,9 +130,9 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
     $sQuery .= $where;
     // die($sQuery);
     $rowData = $db->rawQuery($sQuery);
-    if($rowData && count($rowData) > 0){
+    if ($rowData && count($rowData) > 0) {
         $app = new \Vlsm\Models\App($db);
-        $trackId = $app->addApiTracking($user['user_id'],count($rowData),$type[1],'eid',$requestUrl,$hl7,'hl7');
+        $trackId = $app->addApiTracking($user['user_id'], count($rowData), $type[1], 'eid', $requestUrl, $hl7, 'hl7');
         foreach ($rowData as $row) {
             /* MSH Information */
             $msh = new MSH();
@@ -200,12 +200,15 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
             $obx = new OBX;
             $obx->setObservationValue($row['result']);
             $msg->setSegment($obx, 7);
-    
+
             $hl7Data .= $msg->toString(true);
-            echo $hl7Data;die;
+            echo $hl7Data;
+            die;
         }
         // http_response_code(200);
-    } else{
+    } else {
+        $app = new \Vlsm\Models\App($db);
+        $trackId = $app->addApiTracking($user['user_id'], 0, $type[1], 'eid', $requestUrl, $hl7, 'hl7');
         $msh = new MSH();
         $msh->setMessageType(["EID", "RES"]);
         $ack = new ACK($msg, $msh);
@@ -216,7 +219,7 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
         unset($ack);
     }
 }
- 
+
 if ($type[1] == 'REQ' || $type[1] == 'UPI') {
     /* MSH Information */
     if ($msg->hasSegment('MSH')) {
@@ -226,7 +229,7 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
             $data['facilityId'] = $facilityDetails[0]['facility_id'];
             $data['provinceCode'] = $facilityDetails[0]['province_code'];
         }
-        
+
         if ($msh->getField(6) != "" && !empty($msh->getField(6))) {
             $returnId = $general->getValueByName($msh->getField(6), 'facility_name', 'facility_details', 'facility_id');
             $data['labId'] = $returnId;
@@ -270,14 +273,14 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
         if ($obr->getField(25) != "" && !empty($obr->getField(25))) {
             $vlResultStatus = $general->getValueByName($obr->getField(25), 'status_name', 'r_sample_status', 'status_id');
             $data['result_status'] = $vlResultStatus;
-        }else{
+        } else {
             $data['result_status'] = null;
         }
         $reqBy = $obr->getField(10);
         if (isset($reqBy[1]) != "" && !empty($reqBy[1])) {
             $vlResultStatus = $general->getValueByName($reqBy[1], 'user_name', 'user_details', 'user_id');
             $data['testedBy'] = $vlResultStatus;
-        }else{
+        } else {
             $data['testedBy'] = null;
         }
         // $data['priorityStatus'] = $obr->getField(5);
@@ -285,7 +288,7 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
         if ($obr->getField(15) != "" && !empty($obr->getField(15))) {
             $vlResultStatus = $general->getValueByName($obr->getField(15), 'funding_source_name', 'r_funding_sources', 'funding_source_id');
             $data['fundingSource'] = $vlResultStatus;
-        } else{
+        } else {
             $data['fundingSource'] = null;
         }
         if ($spm->getField(16) != "" && !empty($spm->getField(16))) {
@@ -320,7 +323,7 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
         $data['pcrTestReason'] = $zim->getField(12);
     }
 
-    $data['formId']= $data['countryId'] = $general->getGlobalConfig('vl_form');
+    $data['formId'] = $data['countryId'] = $general->getGlobalConfig('vl_form');
     $sQuery = "SELECT vlsm_instance_id from s_vlsm_instance";
     $rowData = $db->rawQuery($sQuery);
     $data['instanceId'] = $rowData[0]['vlsm_instance_id'];
@@ -340,19 +343,19 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
     $eidDuplicateData = false;
     $sQuery = "SELECT eid_id, sample_code, sample_code_format, sample_code_key, remote_sample_code, remote_sample_code_format, remote_sample_code_key FROM eid_form 
             where 
-                (sample_code like '%".$_POST['sampleCode']."%' or remote_sample_code like '%".$_POST['sampleCode']."%')
-                AND (child_id like '%".$_POST['childId']."%' AND child_dob like '%".$_POST['childDob']."%' AND child_gender like '%".$_POST['childGender']."%') limit 1";
+                (sample_code like '%" . $_POST['sampleCode'] . "%' or remote_sample_code like '%" . $_POST['sampleCode'] . "%')
+                AND (child_id like '%" . $_POST['childId'] . "%' AND child_dob like '%" . $_POST['childDob'] . "%' AND child_gender like '%" . $_POST['childGender'] . "%') limit 1";
     // die($sQuery);
     $eidDuplicateData = $db->rawQueryOne($sQuery);
-    if($eidDuplicateData){
-        $sampleData['sampleCode'] = (!empty($eidDuplicateData['sample_code']))?$eidDuplicateData['sample_code']:$eidDuplicateData['remote_sample_code'];
-        $sampleData['sampleCodeFormat'] = (!empty($eidDuplicateData['sample_code_format']))?$eidDuplicateData['sample_code_format']:$eidDuplicateData['remote_sample_code_format'];
-        $sampleData['sampleCodeKey'] = (!empty($eidDuplicateData['sample_code_key']))?$eidDuplicateData['sample_code_key']:$eidDuplicateData['remote_sample_code_key'];
-    }else{
+    if ($eidDuplicateData) {
+        $sampleData['sampleCode'] = (!empty($eidDuplicateData['sample_code'])) ? $eidDuplicateData['sample_code'] : $eidDuplicateData['remote_sample_code'];
+        $sampleData['sampleCodeFormat'] = (!empty($eidDuplicateData['sample_code_format'])) ? $eidDuplicateData['sample_code_format'] : $eidDuplicateData['remote_sample_code_format'];
+        $sampleData['sampleCodeKey'] = (!empty($eidDuplicateData['sample_code_key'])) ? $eidDuplicateData['sample_code_key'] : $eidDuplicateData['remote_sample_code_key'];
+    } else {
         $sampleJson = $eidModel->generateEIDSampleCode($provinceCode, $sampleCollectionDate, null, $provinceId);
         $sampleData = json_decode($sampleJson, true);
     }
-    
+
     $eidData = array(
         'vlsm_country_id' => $_POST['formId'],
         'sample_collection_date' => $_POST['sampleCollectionDate'],
@@ -379,15 +382,15 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
     }
     // echo "<br>".$eidData['result_status'];
     $id = 0;
-    if($eidDuplicateData){
+    if ($eidDuplicateData) {
         $db = $db->where('eid_id', $eidDuplicateData['eid_id']);
-		$id = $db->update("eid_form", $eidData);
+        $id = $db->update("eid_form", $eidData);
         $_POST['eidSampleId'] = $eidDuplicateData['eid_id'];
-    } else{
+    } else {
         $id = $db->insert("eid_form", $eidData);
         $_POST['eidSampleId'] = $id;
     }
-    if(isset($eidData) && count($eidData) > 0){
+    if (isset($eidData) && count($eidData) > 0) {
         $tableName = "eid_form";
         $tableName1 = "activity_log";
         $instanceId = $_POST['instanceId'];
@@ -409,49 +412,49 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
             $status = 4;
         }
         $eidData = array(
-            'vlsm_instance_id' 									=> $instanceId,
-            'vlsm_country_id' 									=> $_POST['formId'],
-            'sample_code_key' 									=> isset($_POST['sampleCodeKey']) ? $_POST['sampleCodeKey'] : null,
-            'sample_code_format' 								=> isset($_POST['sampleCodeFormat']) ? $_POST['sampleCodeFormat'] : null,
-            'facility_id' 										=> isset($_POST['facilityId']) ? $_POST['facilityId'] : null,
-            'province_id' 										=> isset($_POST['provinceId']) ? $_POST['provinceId'] : null,
-            'lab_id' 											=> isset($_POST['labId']) ? $_POST['labId'] : null,
-            'implementing_partner' 								=> isset($_POST['implementingPartner']) ? $_POST['implementingPartner'] : null,
-            'funding_source' 									=> isset($_POST['fundingSource']) ? $_POST['fundingSource'] : null,
-            'mother_id' 										=> isset($_POST['mothersId']) ? $_POST['mothersId'] : null,
-            'caretaker_phone_number' 							=> isset($_POST['caretakerPhoneNumber']) ? $_POST['caretakerPhoneNumber'] : null,
-            'mother_name'	 									=> isset($_POST['mothersName']) ? $_POST['mothersName'] : null,
-            'mother_treatment' 									=> isset($_POST['motherTreatment']) ? implode(",", $_POST['motherTreatment']) : null,
-            'mother_treatment_initiation_date' 					=> isset($_POST['motherTreatmentInitiationDate']) ? $_POST['motherTreatmentInitiationDate'] : null,
-            'child_id' 											=> isset($_POST['childId']) ? $_POST['childId'] : null,
-            'child_name' 										=> isset($_POST['childName']) ? $_POST['childName'] : null,
-            'child_dob' 										=> isset($_POST['childDob']) ? $_POST['childDob'] : null,
-            'child_gender' 										=> isset($_POST['childGender']) ? $_POST['childGender'] : null,
-            'child_age' 										=> isset($_POST['childAge']) ? $_POST['childAge'] : null,
-            'child_treatment' 									=> isset($_POST['childTreatment']) ? implode(",", $_POST['childTreatment']) : null,
-            'mother_hiv_status' 								=> isset($_POST['mothersHIVStatus']) ? $_POST['mothersHIVStatus'] : null,
-            'pcr_test_performed_before' 						=> isset($_POST['pcrTestPerformedBefore']) ? $_POST['pcrTestPerformedBefore'] : null,
-            'previous_pcr_result' 								=> isset($_POST['prePcrTestResult']) ? $_POST['prePcrTestResult'] : null,
-            'last_pcr_date' 									=> isset($_POST['previousPCRTestDate']) ? $_POST['previousPCRTestDate'] : null,
-            'reason_for_pcr' 									=> isset($_POST['pcrTestReason']) ? $_POST['pcrTestReason'] : null,
-            'has_infant_stopped_breastfeeding' 					=> isset($_POST['hasInfantStoppedBreastfeeding']) ? $_POST['hasInfantStoppedBreastfeeding'] : null,
-            'age_breastfeeding_stopped_in_months' 				=> isset($_POST['ageBreastfeedingStopped']) ? $_POST['ageBreastfeedingStopped'] : null,
-            'specimen_type' 									=> isset($_POST['specimenType']) ? $_POST['specimenType'] : null,
-            'sample_collection_date' 							=> isset($_POST['sampleCollectionDate']) ? $_POST['sampleCollectionDate'] : null,
-            'sample_requestor_name' 							=> isset($_POST['sampleRequestorName']) ? $_POST['sampleRequestorName'] : null,
-            'rapid_test_performed' 								=> isset($_POST['rapidTestPerformed']) ? $_POST['rapidTestPerformed'] : null,
-            'rapid_test_date' 									=> isset($_POST['rapidtestDate']) ? $_POST['rapidtestDate'] : null,
-            'rapid_test_result' 								=> isset($_POST['rapidTestResult']) ? $_POST['rapidTestResult'] : null,
-            'sample_received_at_vl_lab_datetime' 				=> isset($_POST['sampleReceivedDate']) ? $_POST['sampleReceivedDate'] : null,
-            'is_sample_rejected' 								=> isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
-            'result' 											=> isset($_POST['result']) ? $_POST['result'] : null,
-            'tested_by' 										=> (isset($_POST['testedBy']) && $_POST['testedBy'] != '') ? $_POST['testedBy'] :  NULL,
-            'result_status' 									=> $status,
-            'data_sync' 										=> 0,
-            'reason_for_sample_rejection' 						=> isset($_POST['sampleRejectionReason']) ? $_POST['sampleRejectionReason'] : null,
-            'request_created_datetime' 							=> $general->getDateTime(),
-            'sample_registered_at_lab' 							=> $general->getDateTime(),
-            'last_modified_datetime' 							=> $general->getDateTime()
+            'vlsm_instance_id'                                     => $instanceId,
+            'vlsm_country_id'                                     => $_POST['formId'],
+            'sample_code_key'                                     => isset($_POST['sampleCodeKey']) ? $_POST['sampleCodeKey'] : null,
+            'sample_code_format'                                 => isset($_POST['sampleCodeFormat']) ? $_POST['sampleCodeFormat'] : null,
+            'facility_id'                                         => isset($_POST['facilityId']) ? $_POST['facilityId'] : null,
+            'province_id'                                         => isset($_POST['provinceId']) ? $_POST['provinceId'] : null,
+            'lab_id'                                             => isset($_POST['labId']) ? $_POST['labId'] : null,
+            'implementing_partner'                                 => isset($_POST['implementingPartner']) ? $_POST['implementingPartner'] : null,
+            'funding_source'                                     => isset($_POST['fundingSource']) ? $_POST['fundingSource'] : null,
+            'mother_id'                                         => isset($_POST['mothersId']) ? $_POST['mothersId'] : null,
+            'caretaker_phone_number'                             => isset($_POST['caretakerPhoneNumber']) ? $_POST['caretakerPhoneNumber'] : null,
+            'mother_name'                                         => isset($_POST['mothersName']) ? $_POST['mothersName'] : null,
+            'mother_treatment'                                     => isset($_POST['motherTreatment']) ? implode(",", $_POST['motherTreatment']) : null,
+            'mother_treatment_initiation_date'                     => isset($_POST['motherTreatmentInitiationDate']) ? $_POST['motherTreatmentInitiationDate'] : null,
+            'child_id'                                             => isset($_POST['childId']) ? $_POST['childId'] : null,
+            'child_name'                                         => isset($_POST['childName']) ? $_POST['childName'] : null,
+            'child_dob'                                         => isset($_POST['childDob']) ? $_POST['childDob'] : null,
+            'child_gender'                                         => isset($_POST['childGender']) ? $_POST['childGender'] : null,
+            'child_age'                                         => isset($_POST['childAge']) ? $_POST['childAge'] : null,
+            'child_treatment'                                     => isset($_POST['childTreatment']) ? implode(",", $_POST['childTreatment']) : null,
+            'mother_hiv_status'                                 => isset($_POST['mothersHIVStatus']) ? $_POST['mothersHIVStatus'] : null,
+            'pcr_test_performed_before'                         => isset($_POST['pcrTestPerformedBefore']) ? $_POST['pcrTestPerformedBefore'] : null,
+            'previous_pcr_result'                                 => isset($_POST['prePcrTestResult']) ? $_POST['prePcrTestResult'] : null,
+            'last_pcr_date'                                     => isset($_POST['previousPCRTestDate']) ? $_POST['previousPCRTestDate'] : null,
+            'reason_for_pcr'                                     => isset($_POST['pcrTestReason']) ? $_POST['pcrTestReason'] : null,
+            'has_infant_stopped_breastfeeding'                     => isset($_POST['hasInfantStoppedBreastfeeding']) ? $_POST['hasInfantStoppedBreastfeeding'] : null,
+            'age_breastfeeding_stopped_in_months'                 => isset($_POST['ageBreastfeedingStopped']) ? $_POST['ageBreastfeedingStopped'] : null,
+            'specimen_type'                                     => isset($_POST['specimenType']) ? $_POST['specimenType'] : null,
+            'sample_collection_date'                             => isset($_POST['sampleCollectionDate']) ? $_POST['sampleCollectionDate'] : null,
+            'sample_requestor_name'                             => isset($_POST['sampleRequestorName']) ? $_POST['sampleRequestorName'] : null,
+            'rapid_test_performed'                                 => isset($_POST['rapidTestPerformed']) ? $_POST['rapidTestPerformed'] : null,
+            'rapid_test_date'                                     => isset($_POST['rapidtestDate']) ? $_POST['rapidtestDate'] : null,
+            'rapid_test_result'                                 => isset($_POST['rapidTestResult']) ? $_POST['rapidTestResult'] : null,
+            'sample_received_at_vl_lab_datetime'                 => isset($_POST['sampleReceivedDate']) ? $_POST['sampleReceivedDate'] : null,
+            'is_sample_rejected'                                 => isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
+            'result'                                             => isset($_POST['result']) ? $_POST['result'] : null,
+            'tested_by'                                         => (isset($_POST['testedBy']) && $_POST['testedBy'] != '') ? $_POST['testedBy'] :  NULL,
+            'result_status'                                     => $status,
+            'data_sync'                                         => 0,
+            'reason_for_sample_rejection'                         => isset($_POST['sampleRejectionReason']) ? $_POST['sampleRejectionReason'] : null,
+            'request_created_datetime'                             => $general->getDateTime(),
+            'sample_registered_at_lab'                             => $general->getDateTime(),
+            'last_modified_datetime'                             => $general->getDateTime()
         );
         $lock = $general->getGlobalConfig('lock_approved_eid_samples');
         if ($status == 7 && $lock == 'yes') {
@@ -462,12 +465,12 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
             $db = $db->where('eid_id', $_POST['eidSampleId']);
             $id = $db->update($tableName, $eidData);
         }
-        $sQuery = "SELECT eid_id, sample_code, remote_sample_code FROM eid_form where eid_id = ".$_POST['eidSampleId'];
+        $sQuery = "SELECT eid_id, sample_code, remote_sample_code FROM eid_form where eid_id = " . $_POST['eidSampleId'];
         $savedSamples = $db->rawQueryOne($sQuery);
     }
     if ($id > 0 && isset($eidData) && count($eidData) > 0) {
         $app = new \Vlsm\Models\App($db);
-        $trackId = $app->addApiTracking($user['user_id'],$_POST['eidSampleId'],$type[1],'eid',$requestUrl,$hl7,'hl7');
+        $trackId = $app->addApiTracking($user['user_id'], $_POST['eidSampleId'], $type[1], 'eid', $requestUrl, $hl7, 'hl7');
 
         if ($savedSamples['sample_code'] != '') {
             $sampleCode = $savedSamples['sample_code'];
