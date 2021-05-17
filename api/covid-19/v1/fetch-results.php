@@ -157,9 +157,8 @@ try {
 
         );
 
-        // if (isset($user['token-updated']) && $user['token-updated'] == true) {
-        //     $response['token'] = $user['newToken'];
-        // }
+        $app = new \Vlsm\Models\App($db);
+        $trackId = $app->addApiTracking($user['user_id'], count($rowData), 'fetch-results', 'covid19', $requestUrl, $params, 'json');
         http_response_code(200);
         echo json_encode($response);
         exit(0);
@@ -177,7 +176,7 @@ try {
     //     $payload['token'] = $user['newToken'];
     // }
     $app = new \Vlsm\Models\App($db);
-    $trackId = $app->addApiTracking($user['user_id'], count($rowData), 'fetch-results', 'covid19', $requestUrl, $requestUrl, 'json');
+    $trackId = $app->addApiTracking($user['user_id'], count($rowData), 'fetch-results', 'covid19', $requestUrl, $params, 'json');
 
     http_response_code(200);
     echo json_encode($payload);
@@ -191,10 +190,6 @@ try {
         'error' => $exc->getMessage(),
         'data' => array()
     );
-    if (isset($user['token-updated']) && $user['token-updated'] == true) {
-        $payload['token'] = $user['newToken'];
-    }
-
     echo json_encode($payload);
 
     error_log($exc->getMessage());

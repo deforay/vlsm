@@ -53,78 +53,78 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
     $where = "";
     if (!empty($dateRange[1])) {
         $date = $dateRange[1];
-        if(isset($where) && trim($where) != ""){
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
         $where .= "(DATE(sample_collection_date) between '$date[0]' AND '$date[1]')";
     }
     if (!empty($pidF[2])) {
-        if(isset($where) && trim($where) != ""){
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
         $where .= " vl.patient_art_no IN ('" . $pidF[2] . "') ";
     }
-    
+
     if (!empty($spmF[4])) {
-        if(isset($where) && trim($where) != ""){
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
         $where .= " rst.sample_name IN ('" . $spmF[4] . "') ";
     }
 
     if (!empty($mshF[4])) {
-        if(isset($where) && trim($where) != ""){
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
         $where .= " f.facility_name IN ('" . $mshF[4] . "') ";
     }
 
     if (!empty($mshF[6])) {
-        if(isset($where) && trim($where) != ""){
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
         $where .= " l_f.facility_name IN ('" . $mshF[6] . "') ";
     }
 
     if (!empty($search[2])) {
-        if(isset($where) && trim($where) != ""){
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
         $where .= " vl.is_sample_rejected ='" . $search[2] . "' ";
     }
 
     if (!empty($search[3]) && $search[3] == "yes") {
-        if(isset($where) && trim($where) != ""){
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
         $where .= " (vl.sample_tested_datetime != null AND vl.sample_tested_datetime not like '') ";
     }
     if (!empty($spmF[2]) && $spmF[2] != "") {
-        if(isset($where) && trim($where) != ""){
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
-        $where .= " (vl.sample_code like '".$spmF[2]."%' OR vl.remote_sample_code like '".$spmF[2]."%') ";
+        $where .= " (vl.sample_code like '" . $spmF[2] . "%' OR vl.remote_sample_code like '" . $spmF[2] . "%') ";
     }
-    if($type[1] == 'QRY'){
-        if(isset($where) && trim($where) != ""){
+    if ($type[1] == 'QRY') {
+        if (isset($where) && trim($where) != "") {
             $where .= " AND ";
-        } else{
+        } else {
             $where .= " WHERE ";
         }
         $where .= " (vl.result ='' OR vl.result IS NULL OR vl.result LIKE '')";
@@ -133,9 +133,9 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
     $sQuery .= $where;
     // die($sQuery);
     $rowData = $db->rawQuery($sQuery);
-    if($rowData && count($rowData) > 0){
+    if ($rowData && count($rowData) > 0) {
         $app = new \Vlsm\Models\App($db);
-        $trackId = $app->addApiTracking($user['user_id'],count($rowData),$type[1],'vl',$requestUrl,$hl7,'hl7');
+        $trackId = $app->addApiTracking($user['user_id'], count($rowData), $type[1], 'vl', $requestUrl, $hl7, 'hl7');
         foreach ($rowData as $row) {
             /* MSH Information */
             $msh = new MSH();
@@ -205,12 +205,15 @@ if ($type[1] == 'RES' || $type[1] == 'QRY') {
             $obx = new OBX;
             $obx->setObservationValue($row['result']);
             $msg->setSegment($obx, 7);
-    
-            $hl7Data.= $msg->toString(true);
-            echo $hl7Data;die;
+
+            $hl7Data .= $msg->toString(true);
+            echo $hl7Data;
+            die;
         }
         // http_response_code(200);
-    }else{
+    } else {
+        $app = new \Vlsm\Models\App($db);
+        $trackId = $app->addApiTracking($user['user_id'], 0, $type[1], 'vl', $requestUrl, $hl7, 'hl7');
         $msh = new MSH();
         $msh->setMessageType(["VL", "RES"]);
         $ack = new ACK($msg, $msh);
@@ -231,7 +234,7 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
             $data['fName'] = $facilityDetails[0]['facility_id'];
             $data['provinceCode'] = $facilityDetails[0]['province_code'];
         }
-        
+
         if ($msh->getField(6) != "" && !empty($msh->getField(6))) {
             $returnId = $general->getValueByName($msh->getField(6), 'facility_name', 'facility_details', 'facility_id');
             $data['labId'] = $returnId;
@@ -279,13 +282,13 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
         if ($obr->getField(15) != "" && !empty($obr->getField(15))) {
             $vlResultStatus = $general->getValueByName($obr->getField(15), 'funding_source_name', 'r_funding_sources', 'funding_source_id');
             $data['fundingSource'] = base64_encode($vlResultStatus);
-        } else{
+        } else {
             $data['fundingSource'] = null;
         }
         if ($obr->getField(25) != "" && !empty($obr->getField(25))) {
             $vlResultStatus = $general->getValueByName($obr->getField(25), 'status_name', 'r_sample_status', 'status_id');
             $data['result_status'] = $vlResultStatus;
-        }else{
+        } else {
             $data['result_status'] = null;
         }
     }
@@ -312,7 +315,7 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
         $data['suspendTreatmentVlValue'] = $zai->getField(10);
     }
 
-    $data['formId']= $data['countryId'] = $general->getGlobalConfig('vl_form');
+    $data['formId'] = $data['countryId'] = $general->getGlobalConfig('vl_form');
     $sQuery = "SELECT vlsm_instance_id from s_vlsm_instance";
     $rowData = $db->rawQuery($sQuery);
     $data['instanceId'] = $rowData[0]['vlsm_instance_id'];
@@ -329,19 +332,19 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
 
     $sQuery = "SELECT vl_sample_id, sample_code, sample_code_format, sample_code_key, remote_sample_code, remote_sample_code_format, remote_sample_code_key FROM vl_request_form 
                 where 
-                    (sample_code like '%".$_POST['sampleCode']."%' or remote_sample_code like '%".$_POST['sampleCode']."%')
-                    AND (patient_art_no like '%".$_POST['artNo']."%' AND patient_dob like '%".$_POST['dob']."%' AND patient_gender like '%".$_POST['gender']."%') limit 1";
+                    (sample_code like '%" . $_POST['sampleCode'] . "%' or remote_sample_code like '%" . $_POST['sampleCode'] . "%')
+                    AND (patient_art_no like '%" . $_POST['artNo'] . "%' AND patient_dob like '%" . $_POST['dob'] . "%' AND patient_gender like '%" . $_POST['gender'] . "%') limit 1";
     // die($sQuery);
     $vlDuplicateData = $db->rawQueryOne($sQuery);
-    if($vlDuplicateData){
-        $sampleData['sampleCode'] = (!empty($vlDuplicateData['sample_code']))?$vlDuplicateData['sample_code']:$vlDuplicateData['remote_sample_code'];
-        $sampleData['sampleCodeFormat'] = (!empty($vlDuplicateData['sample_code_format']))?$vlDuplicateData['sample_code_format']:$vlDuplicateData['remote_sample_code_format'];
-        $sampleData['sampleCodeKey'] = (!empty($vlDuplicateData['sample_code_key']))?$vlDuplicateData['sample_code_key']:$vlDuplicateData['remote_sample_code_key'];
-    }else{
+    if ($vlDuplicateData) {
+        $sampleData['sampleCode'] = (!empty($vlDuplicateData['sample_code'])) ? $vlDuplicateData['sample_code'] : $vlDuplicateData['remote_sample_code'];
+        $sampleData['sampleCodeFormat'] = (!empty($vlDuplicateData['sample_code_format'])) ? $vlDuplicateData['sample_code_format'] : $vlDuplicateData['remote_sample_code_format'];
+        $sampleData['sampleCodeKey'] = (!empty($vlDuplicateData['sample_code_key'])) ? $vlDuplicateData['sample_code_key'] : $vlDuplicateData['remote_sample_code_key'];
+    } else {
         $sampleJson = $vlModel->generateVLSampleID($provinceCode, $sampleCollectionDate, null, $provinceId);
         $sampleData = json_decode($sampleJson, true);
     }
-    
+
     $vlData = array(
         'vlsm_country_id' => $_POST['countryId'],
         'sample_collection_date' => $_POST['sampleCollectionDate'],
@@ -367,16 +370,16 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
         $vlData['result_status'] = 6;
     }
     $id = 0;
-    if($vlDuplicateData){
+    if ($vlDuplicateData) {
         $db = $db->where('vl_sample_id', $vlDuplicateData['vl_sample_id']);
         $id = $db->update("vl_request_form", $vlData);
         $_POST['vlSampleId'] = $vlDuplicateData['vl_sample_id'];
-    } else{
+    } else {
         $id = $db->insert("vl_request_form", $vlData);
         $_POST['vlSampleId'] = $id;
     }
     // print_r($vlData);die;
-    if(isset($vlData) && count($vlData) > 0){
+    if (isset($vlData) && count($vlData) > 0) {
         $tableName = "vl_request_form";
         $tableName1 = "activity_log";
         $vlTestReasonTable = "r_vl_test_reasons";
@@ -480,7 +483,7 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
                 }
             }
             // print_r($_POST['sampleCode']);die;
-    
+
             if ($sarr['user_type'] == 'remoteuser') {
                 $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] :  NULL;
                 $vldata['remote_sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey'] != '') ? $_POST['sampleCodeKey'] :  NULL;
@@ -493,12 +496,12 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
             $vldata['sample_code_format'] = (isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat'] != '') ? $_POST['sampleCodeFormat'] :  NULL;
             $id = $db->insert($tableName, $vldata);
         }
-        $sQuery = "SELECT vl_sample_id, sample_code, remote_sample_code FROM vl_request_form where vl_sample_id = ".$_POST['vlSampleId'];
+        $sQuery = "SELECT vl_sample_id, sample_code, remote_sample_code FROM vl_request_form where vl_sample_id = " . $_POST['vlSampleId'];
         $savedSamples = $db->rawQueryOne($sQuery);
     }
     if ($id > 0 && isset($vlData) && count($vlData) > 0) {
         $app = new \Vlsm\Models\App($db);
-        $trackId = $app->addApiTracking($user['user_id'],$_POST['vlSampleId'],$type[1],'vl',$requestUrl,$hl7,'hl7');
+        $trackId = $app->addApiTracking($user['user_id'], $_POST['vlSampleId'], $type[1], 'vl', $requestUrl, $hl7, 'hl7');
         if ($savedSamples['sample_code'] != '') {
             $sampleCode = $savedSamples['sample_code'];
         } else {
