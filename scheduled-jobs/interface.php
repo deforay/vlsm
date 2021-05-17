@@ -234,6 +234,7 @@ if (count($interfaceInfo) > 0) {
             $absVal = null;
             $logVal = null;
             $txtVal = null;
+            $otherFieldResult = null;
             $testType = strtolower($tableInfo['hepatitis_test_type']);
             if ($testType == 'hbv') {
                 $resultField = "hbv_vl_count";
@@ -330,7 +331,7 @@ if (count($interfaceInfo) > 0) {
                 'result_approved_datetime' => $result['authorised_date_time'],
                 'sample_tested_datetime' => $result['result_accepted_date_time'],
                 $resultField => $hepatitisResult,
-                $otherField => NULL,
+                $otherField => $otherFieldResult,
                 'hepatitis_test_platform' => $result['machine_used'],
                 'result_status' => 7,
                 'data_sync' => 0

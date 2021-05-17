@@ -2149,7 +2149,7 @@ CREATE TABLE `track_api_requests` (
  PRIMARY KEY (`api_track_id`)
  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
- -- Amit 02-May-2021
+-- Amit 02-May-2021
 
 ALTER TABLE `form_hepatitis` ADD `source_of_request` VARCHAR(255) NULL DEFAULT NULL AFTER `lot_number`;
 ALTER TABLE `form_hepatitis` ADD `source_data_dump` TEXT NULL DEFAULT NULL AFTER `source_of_request`;
@@ -2173,11 +2173,11 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 ALTER TABLE `form_covid19` ADD `app_local_test_req_id` VARCHAR(255) NULL DEFAULT NULL AFTER `is_result_mail_sent`; 
 ALTER TABLE `r_eid_results` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `status`; 
 
---Prasath M 12-May-2021
-INSERT INTO `global_config` (`display_name`, `name`, `value`, `category`, `remote_sync_needed`, `updated_on`, `updated_by`, `status`) VALUES ('VL Monthly Target', 'vl_monthly_target', 'yes', 'vl', 'enable', '', '', 'active')
+-- Prasath M 12-May-2021
+INSERT INTO `global_config` (`display_name`, `name`, `value`, `category`, `remote_sync_needed`, `updated_on`, `updated_by`, `status`) VALUES ('VL Monthly Target', 'vl_monthly_target', 'no', 'vl', 'enable', '', '', 'active');
 -- Thana 12-May-2021
 ALTER TABLE `user_details` ADD `testing_user` VARCHAR(50) NULL DEFAULT NULL AFTER `user_signature`; 
 
 
 UPDATE `system_config` SET `value` = '4.3.2' WHERE `system_config`.`name` = 'version';
--- Version 4.3.1  -- Amit -- 13-May-2021
+-- Version 4.3.2  -- Amit -- 13-May-2021
