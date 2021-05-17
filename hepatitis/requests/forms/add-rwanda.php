@@ -660,33 +660,40 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
 
 
     function validateNow() {
-        $('#labId').removeClass('isRequired');
-        $('.labSecInput').each(function() {
-            if ($(this).val()) {
-                $('#labId').addClass('isRequired');
-            }
-        });
-        if ($('#antiHcv').val() != "" || $('#HBsAg').val() != "") {
-            checkresult = true;
-        } else {
-            checkresult = false;
-            alert("Please select test result for screening");
-            if ($('#hepatitisTestType').val() == 'HBV') {
-                $('#HBsAg').focus();
-            }
-            if ($('#hepatitisTestType').val() == 'HCV') {
-                $('#antiHcv').focus();
-            }
-        }
 
-        if ($('#isResultAuthorized').val() != "yes") {
-            $('#authorizedBy,#authorizedOn').removeClass('isRequired');
-        }
 
         flag = deforayValidator.init({
             formId: 'addHepatitisRequestForm'
         });
-        if (flag && checkresult) {
+        if (flag) {
+
+
+            if ($('#antiHcv').val() != "" || $('#HBsAg').val() != "") {
+
+            } else {
+
+                alert("Please select test result for screening");
+                if ($('#hepatitisTestType').val() == 'HBV') {
+                    $('#HBsAg').focus();
+                }
+                if ($('#hepatitisTestType').val() == 'HCV') {
+                    $('#antiHcv').focus();
+                }
+
+                return false;
+            }
+
+            $('#labId').removeClass('isRequired');
+            $('.labSecInput').each(function() {
+                if ($(this).val()) {
+                    $('#labId').addClass('isRequired');
+                }
+            });
+
+            if ($('#isResultAuthorized').val() != "yes") {
+                $('#authorizedBy,#authorizedOn').removeClass('isRequired');
+            }
+
             <?php
             if ($arr['hepatitis_sample_code'] == 'auto' || $arr['hepatitis_sample_code'] == 'YY' || $arr['hepatitis_sample_code'] == 'MMYY') {
             ?>

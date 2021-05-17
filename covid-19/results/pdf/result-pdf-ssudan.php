@@ -24,7 +24,7 @@ class SouthSudan_PDF extends MYPDF
                 if (trim($this->lab) != '') {
                     $this->SetFont('helvetica', 'B', 11);
                     // $this->writeHTMLCell(0, 0, 40, 15, strtoupper($this->lab), 0, 0, 0, true, 'L', true);
-                    $this->writeHTMLCell(0, 0, 40, 15, strtoupper($this->lab), 0, 0, 0, true, 'L', true);
+                    $this->writeHTMLCell(0, 0, 40, 15, 'Public Health Laboratory', 0, 0, 0, true, 'L', true);
                 }
 
                 $this->SetFont('helvetica', '', 9);
@@ -45,7 +45,7 @@ class SouthSudan_PDF extends MYPDF
                 $this->writeHTMLCell(0, 0, 10, 33, '<hr>', 0, 0, 0, true, 'C', true);
                 $this->writeHTMLCell(0, 0, 10, 34, '<hr>', 0, 0, 0, true, 'C', true);
                 $this->SetFont('helvetica', 'B', 12);
-                $this->writeHTMLCell(0, 0, 20, 35, 'SARS-COV-2 Laboratory Report', 0, 0, 0, true, 'C', true);
+                $this->writeHTMLCell(0, 0, 20, 35, 'SARS-CoV-2 Laboratory Report', 0, 0, 0, true, 'C', true);
 
                 // $this->writeHTMLCell(0, 0, 25, 35, '<hr>', 0, 0, 0, true, 'C', true);
             } else {
@@ -121,7 +121,7 @@ if (sizeof($requestResult) > 0) {
         $pdf->setHeading($arr['logo'], $arr['header'], $result['labName'], $title = 'COVID-19 PATIENT REPORT', $labFacilityId = null, $formId = $arr['vl_form'], $facilityInfo);
         // set document information
         $pdf->SetCreator('VLSM');
-        $pdf->SetTitle('Covid-19 Patient Report');
+        $pdf->SetTitle('SARS-CoV-2 Patient Report');
         //$pdf->SetSubject('TCPDF Tutorial');
         //$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
