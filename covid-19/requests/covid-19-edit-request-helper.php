@@ -312,7 +312,7 @@ try {
 					} else {
 						$db->insert($testTableName, $covid19TestData);
 					}
-					// $covid19Data['sample_tested_datetime'] = date('Y-m-d H:i:s', strtotime($_POST['testDate'][$testKey]));
+					$covid19Data['sample_tested_datetime'] = date('Y-m-d H:i:s', strtotime($_POST['testDate'][$testKey]));
 				}
 			}
 		}

@@ -113,7 +113,6 @@ try {
 
 
     $where = "";
-    // $where = " WHERE request_created_by = '" . $user['user_id'] . "'";
     if (!empty($user)) {
         $facilityMap = $facilityDb->getFacilityMap($user['user_id'], 1);
         if (!empty($facilityMap)) {
@@ -123,6 +122,8 @@ try {
                 $where .= " WHERE ";
             }
             $where .= " vl.facility_id IN (" . $facilityMap . ")";
+        } else {
+            $where = " WHERE request_created_by = '" . $user['user_id'] . "'";
         }
     }
     /* To check the sample code filter */

@@ -73,12 +73,13 @@ try {
         if (empty($sampleCollectionDate)) {
             exit();
         }
-
+        $update = "no";
         $rowData = false;
         if ($data['sampleCode'] != "" && !empty($data['sampleCode'])) {
             $sQuery = "SELECT covid19_id, sample_code, sample_code_format, sample_code_key, remote_sample_code, remote_sample_code_format, remote_sample_code_key FROM form_covid19 where sample_code like '%" . $data['sampleCode'] . "%' or remote_sample_code like '%" . $data['sampleCode'] . "%' limit 1";
             $rowData = $db->rawQueryOne($sQuery);
             if ($rowData) {
+                $update = "yes";
                 $sampleData['sampleCode'] = (!empty($rowData['sample_code'])) ? $rowData['sample_code'] : $rowData['remote_sample_code'];
                 $sampleData['sampleCodeFormat'] = (!empty($rowData['sample_code_format'])) ? $rowData['sample_code_format'] : $rowData['remote_sample_code_format'];
                 $sampleData['sampleCodeKey'] = (!empty($rowData['sample_code_key'])) ? $rowData['sample_code_key'] : $rowData['remote_sample_code_key'];
@@ -392,18 +393,23 @@ try {
         $app = new \Vlsm\Models\App($db);
         $trackId = $app->addApiTracking($user['user_id'], $data['covid19SampleId'], 'add-request', 'covid19', $requestUrl, $params, 'json');
     }
+    if ($update == "yes") {
+        $msg = 'Successfully updated.';
+    } else {
+        $msg = 'Successfully added.';
+    }
     if (isset($responseData) && count($responseData) > 0) {
         $payload = array(
             'status' => 'success',
             'timestamp' => time(),
-            'message' => 'Successfully added.',
+            'message' => $msg,
             'data'  => $responseData
         );
     } else {
         $payload = array(
             'status' => 'success',
             'timestamp' => time(),
-            'message' => 'Successfully added.'
+            'message' => $msg
         );
     }
     http_response_code(200);
