@@ -2177,3 +2177,7 @@ ALTER TABLE `r_eid_results` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AF
 INSERT INTO `global_config` (`display_name`, `name`, `value`, `category`, `remote_sync_needed`, `updated_on`, `updated_by`, `status`) VALUES ('VL Monthly Target', 'vl_monthly_target', 'yes', 'vl', 'enable', '', '', 'active')
 -- Thana 12-May-2021
 ALTER TABLE `user_details` ADD `testing_user` VARCHAR(50) NULL DEFAULT NULL AFTER `user_signature`; 
+
+
+UPDATE `system_config` SET `value` = '4.3.2' WHERE `system_config`.`name` = 'version';
+-- Version 4.3.1  -- Amit -- 13-May-2021
