@@ -118,7 +118,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             </td>
                                             <td><label for="hepatitisTestType">Type of Hepatitis Test </label><span class="mandatory">*</span></td>
                                             <td>
-                                                <select class="form-control disabled" name="hepatitisTestType" id="hepatitisTestType" title="Please choose type hepatitis test" style="width:100%;" disabled onchange="hepatitisTestTypeFn(this.value);">
+                                                <select class="form-control isRequired" name="hepatitisTestType" id="hepatitisTestType" title="Please choose type hepatitis test" style="width:100%;" disabled onchange="hepatitisTestTypeFn(this.value);">
                                                     <option value="">--Select--</option>
                                                     <option value="HBV" <?php echo (isset($hepatitisInfo['hepatitis_test_type']) && $hepatitisInfo['hepatitis_test_type'] == 'HBV')?"selected='selected'":"";?>>HBV</option>
                                                     <option value="HCV" <?php echo (isset($hepatitisInfo['hepatitis_test_type']) && $hepatitisInfo['hepatitis_test_type'] == 'HCV')?"selected='selected'":"";?>>HCV</option>
