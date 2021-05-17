@@ -268,6 +268,7 @@ try {
             'result'                              => !empty($data['result']) ? $data['result'] : null,
             'if_have_other_diseases'              => (!empty($data['ifOtherDiseases'])) ? $data['ifOtherDiseases'] : null,
             'other_diseases'                      => (!empty($data['otherDiseases']) && $data['result'] != 'positive') ? $data['otherDiseases'] : null,
+            'tested_by'                           => !empty($_POST['testedBy']) ? $_POST['testedBy'] : null,
             'is_result_authorised'                => !empty($data['isResultAuthorized']) ? $data['isResultAuthorized'] : null,
             'authorized_by'                       => !empty($data['authorizedBy']) ? $data['authorizedBy'] : null,
             'authorized_on'                       => !empty($data['authorizedOn']) ? $general->dateFormat($data['authorizedOn']) : null,
@@ -371,8 +372,6 @@ try {
                     'sampleCode'         => $c19SampleCode,
                 );
             }
-            $app = new \Vlsm\Models\App($db);
-            $trackId = $app->addApiTracking($user['user_id'], $data['covid19SampleId'], 'add-request', 'covid19', $requestUrl, $params, 'json');
             http_response_code(200);
         } else {
             if (isset($data['localTestReqID']) && $data['localTestReqID'] != "") {
@@ -390,6 +389,8 @@ try {
             }
             http_response_code(301);
         }
+        $app = new \Vlsm\Models\App($db);
+        $trackId = $app->addApiTracking($user['user_id'], $data['covid19SampleId'], 'add-request', 'covid19', $requestUrl, $params, 'json');
     }
     if (isset($responseData) && count($responseData) > 0) {
         $payload = array(
