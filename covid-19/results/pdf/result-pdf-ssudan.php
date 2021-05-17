@@ -303,15 +303,15 @@ if (sizeof($requestResult) > 0) {
         $html .= '</tr>';
 
         $html .= '<tr>';
-        $html .= '<td style="line-height:20px;font-size:11px;text-align:left;font-weight:bold;">PASSPORT # / NIN </td>';
-        $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-left:1px solid #67b3ff;">' . $result['patient_passport_number'] . '</td>';
+        $html .= '<td style="line-height:20px;font-size:11px;text-align:left;font-weight:bold;">NATIONALITY</td>';
+        $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-left:1px solid #67b3ff;">' . $result['nationality'] . '</td>';
         $html .= '<td style="line-height:20px;font-size:11px;text-align:left;font-weight:bold;border-left:1px solid #67b3ff;">ADDRESS</td>';
         $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-left:1px solid #67b3ff;">' . $result['labAddress'] . '</td>';
         $html .= '</tr>';
 
         $html .= '<tr>';
-        $html .= '<td style="line-height:20px;font-size:11px;text-align:left;font-weight:bold;">NATIONALITY</td>';
-        $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-left:1px solid #67b3ff;">' . $result['nationality'] . '</td>';
+        $html .= '<td style="line-height:20px;font-size:11px;text-align:left;font-weight:bold;">PASSPORT # / NIN </td>';
+        $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-left:1px solid #67b3ff;">' . $result['patient_passport_number'] . '</td>';
         $html .= '<td style="line-height:20px;font-size:11px;text-align:left;font-weight:bold;border-left:1px solid #67b3ff;">STATE</td>';
         $html .= '<td style="line-height:20px;font-size:11px;text-align:left;border-left:1px solid #67b3ff;">' . ucwords($result['labState']) . '</td>';
 
@@ -422,7 +422,7 @@ if (sizeof($requestResult) > 0) {
         $html .= '</tr>';
         $html .= '</table>';
 
-        $html .= '<table align="center" style="min-height:80px">';
+        $html .= '<table align="center" style="min-height:120px">';
         $html .= '<tr>';
         $html .= '<td  colspan="4" style="text-align:center;" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         $html .= '<table style="width:80%;padding:3px;border:1px solid #67b3ff;">';
@@ -444,7 +444,7 @@ if (sizeof($requestResult) > 0) {
             }
         } else {
             $html .= '<tr>';
-            $html .= '<td colspan="3" style="line-height:30px;"></td>';
+            $html .= '<td colspan="5" style="line-height:50px;"></td>';
             $html .= '</tr>';
         }
 
@@ -502,7 +502,7 @@ if (sizeof($requestResult) > 0) {
                 $encryption_iv
             );
             $pdf->writeHTML($html);
-            $pdf->write2DBarcode($systemConfig['remoteURL'] . '/covid-19/results/view.php?q=' . $Cid . '', 'QRCODE,H', 170, 170, 20, 20, $style, 'N');
+            $pdf->write2DBarcode($systemConfig['remoteURL'] . '/covid-19/results/view.php?q=' . $Cid . '', 'QRCODE,H', 170, 175 , 20, 20, $style, 'N');
             $pdf->lastPage();
             $filename = $pathFront . DIRECTORY_SEPARATOR . 'p' . $page . '.pdf';
             $pdf->Output($filename, "F");
