@@ -112,7 +112,8 @@ try {
                         LEFT JOIN r_implementation_partners as r_i_p ON r_i_p.i_partner_id=vl.implementing_partner";
 
 
-    $where = " WHERE request_created_by = '" . $user['user_id'] . "'";
+    $where = "";
+    // $where = " WHERE request_created_by = '" . $user['user_id'] . "'";
     if (!empty($user)) {
         $facilityMap = $facilityDb->getFacilityMap($user['user_id'], 1);
         if (!empty($facilityMap)) {
