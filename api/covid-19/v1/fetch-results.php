@@ -76,6 +76,7 @@ try {
                         vl.patient_phone_number as phone,
                         vl.sample_collection_date as sampleCollectionDate,
                         vl.sample_tested_datetime as sampleTestedDate,
+                        vl.tested_by as testedById,
                         l_f.facility_name as labName,
                         vl.result,
                         vl.sample_received_at_vl_lab_datetime as sampleReceivedDate,
@@ -120,7 +121,7 @@ try {
             } else {
                 $where .= " WHERE ";
             }
-            $where .= " facility_id IN (" . $facilityMap . ")";
+            $where .= " vl.facility_id IN (" . $facilityMap . ")";
         }
     }
     /* To check the sample code filter */
@@ -137,7 +138,7 @@ try {
         $where .= " AND DATE(sample_collection_date) between '$from' AND '$to' ";
 
         $facilityId = implode("','", $facilityId);
-        $where .= " AND facility_id IN ('$facilityId') ";
+        $where .= " AND vl.facility_id IN ('$facilityId') ";
     }
 
     // $sQuery .= " ORDER BY sample_collection_date ASC ";
