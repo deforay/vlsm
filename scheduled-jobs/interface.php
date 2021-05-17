@@ -241,6 +241,8 @@ if (count($interfaceInfo) > 0) {
             } else if ($testType == 'hcv') {
                 $resultField = "hcv_vl_count";
                 $otherField = "hbv_vl_count";
+            }else{
+                continue;
             }
             //set result in result fields
             if (trim($result['results']) != "") {
