@@ -372,8 +372,6 @@ try {
                     'sampleCode'         => $c19SampleCode,
                 );
             }
-            $app = new \Vlsm\Models\App($db);
-            $trackId = $app->addApiTracking($user['user_id'], $data['covid19SampleId'], 'add-request', 'covid19', $requestUrl, $params, 'json');
             http_response_code(200);
         } else {
             if (isset($data['localTestReqID']) && $data['localTestReqID'] != "") {
@@ -391,6 +389,8 @@ try {
             }
             http_response_code(301);
         }
+        $app = new \Vlsm\Models\App($db);
+        $trackId = $app->addApiTracking($user['user_id'], $data['covid19SampleId'], 'add-request', 'covid19', $requestUrl, $params, 'json');
     }
     if (isset($responseData) && count($responseData) > 0) {
         $payload = array(
