@@ -74,7 +74,7 @@ foreach ($rejectionTypeResult as $type) {
     <input type="hidden" name="statusDropDownId" id="statusDropDownId" />
     <h3 style="color:red;">Choose Rejection Reason</h3>
     <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason" onchange="updateRejectionReasonStatus(this);">
-     <option value=''> -- Select -- </option>
+      <option value=''> -- Select -- </option>
       <?php echo $rejectionReason; ?>
     </select>
 
@@ -96,27 +96,27 @@ foreach ($rejectionTypeResult as $type) {
                   <option value=""> -- Select -- </option>
                   <?php
                   foreach ($batResult as $code) {
-                    ?>
+                  ?>
                     <option value="<?php echo $code['batch_code']; ?>"><?php echo $code['batch_code']; ?></option>
                   <?php
-                }
-                ?>
+                  }
+                  ?>
                 </select>
               </td>
             </tr>
             <tr>
-             
+
               <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
               <td>
                 <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple" style="width:220px;">
                   <option value=""> -- Select -- </option>
                   <?php
                   foreach ($fResult as $name) {
-                    ?>
+                  ?>
                     <option value="<?php echo $name['facility_id']; ?>"><?php echo ucwords($name['facility_name'] . "-" . $name['facility_code']); ?></option>
                   <?php
-                }
-                ?>
+                  }
+                  ?>
                 </select>
               </td>
               <td>&nbsp;<b>Show Samples that are &nbsp;:</b></td>
@@ -206,6 +206,9 @@ foreach ($rejectionTypeResult as $type) {
       placeholder: "Select Facilities"
     });
     $('#sampleCollectionDate').daterangepicker({
+        locale: {
+          cancelLabel: 'Clear'
+        },
         format: 'DD-MMM-YYYY',
         separator: ' to ',
         startDate: moment().subtract(29, 'days'),

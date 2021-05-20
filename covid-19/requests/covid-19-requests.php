@@ -81,9 +81,9 @@ $batResult = $db->rawQuery($batQuery);
 									<?= $facilitiesDropdown; ?>
 								</select>
 							</td>
-							<td ><b>Province/State&nbsp;:</b></td>
+							<td><b>Province/State&nbsp;:</b></td>
 							<td>
-								<input  type="text" id="state" name="state" class="form-control" placeholder="Enter Province/State" style="background:#fff;" onkeyup="loadVlRequestStateDistrict()" />
+								<input type="text" id="state" name="state" class="form-control" placeholder="Enter Province/State" style="background:#fff;" onkeyup="loadVlRequestStateDistrict()" />
 							</td>
 							<td><b>District/County :</b></td>
 							<td>
@@ -101,18 +101,18 @@ $batResult = $db->rawQuery($batQuery);
 							<td colspan="4">
 								<?php if (isset($_SESSION['privileges']) && in_array("covid-19-add-request.php", $_SESSION['privileges'])) { ?>
 									<a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-add-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Add new Covid-19 Request</a>
-									<?php if($arr['vl_form'] == 1 && $sarr['user_type'] != 'remoteuser'){ ?>
+									<?php if ($arr['vl_form'] == 1 && $sarr['user_type'] != 'remoteuser') { ?>
 										<a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-bulk-import-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Bulk Import Covid-19 Request</a>
-									<?php } 
+									<?php }
 									if ($formId == 1 && $sarr['user_type'] != 'remoteuser') { ?>
 										<a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-quick-add.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Quick Add Covid-19 Request</a>
-									<?php }
+								<?php }
 								} ?>
 							</td>
 						</tr>
 					</table>
 					<table id="filter" class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
-						<tr id="" >
+						<tr id="">
 							<td>
 
 								<?php
@@ -122,9 +122,9 @@ $batResult = $db->rawQuery($batQuery);
 									<?php } ?>
 
 									<a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-add-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Add new Covid-19 Request</a>
-									<?php if($arr['vl_form'] == 1 && $sarr['user_type'] != 'remoteuser'){ ?>
-									<a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-bulk-import-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Bulk Import Covid-19 Request</a>
-									<?php }
+									<?php if ($arr['vl_form'] == 1 && $sarr['user_type'] != 'remoteuser') { ?>
+										<a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-bulk-import-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Bulk Import Covid-19 Request</a>
+								<?php }
 								} ?>
 								<button style=" margin: 0px 5px; " class="btn btn-primary btn-sm pull-right" style="margin-right:5px;" onclick="hideAdvanceSearch('filter','advanceFilter');"><span>Show Advanced Search</span></button>
 							</td>
@@ -144,11 +144,11 @@ $batResult = $db->rawQuery($batQuery);
 									<th>Sample Collection<br /> Date</th>
 									<th>Batch Code</th>
 									<th>Facility Name</th>
-									<?php if($formId == 1) {?>
-										<th>Case ID</th>	
-									<?php }else {?>
+									<?php if ($formId == 1) { ?>
+										<th>Case ID</th>
+									<?php } else { ?>
 										<th>Patient ID</th>
-									<?php }?>
+									<?php } ?>
 									<th>Patient Name</th>
 									<th>Province/State</th>
 									<th>District/County</th>
@@ -241,6 +241,9 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 		});
 		loadVlRequestData();
 		$('#sampleCollectionDate').daterangepicker({
+				locale: {
+					cancelLabel: 'Clear'
+				},
 				format: 'DD-MMM-YYYY',
 				separator: ' to ',
 				startDate: moment().subtract(29, 'days'),

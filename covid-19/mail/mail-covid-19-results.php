@@ -44,7 +44,7 @@ $batchResult = $db->rawQuery($batchQuery);
 
   <!-- Main content -->
   <section class="content">
-    
+
     <div class="box box-default">
       <div class="box-header with-border">
         <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
@@ -272,6 +272,9 @@ $batchResult = $db->rawQuery($batchQuery);
       placeholder: "Select Batches"
     });
     $('#sampleCollectionDate').daterangepicker({
+        locale: {
+          cancelLabel: 'Clear'
+        },
         format: 'DD-MMM-YYYY',
         separator: ' to ',
         startDate: moment().subtract(29, 'days'),
@@ -441,7 +444,7 @@ $batchResult = $db->rawQuery($batchQuery);
     if ($.trim(pName) != '') {
       $.post("/includes/siteInformationDropdownOptions.php", {
           pName: pName,
-          testType : 'covid19'
+          testType: 'covid19'
         },
         function(data) {
           if ($.trim(data) != "") {
@@ -468,5 +471,5 @@ $batchResult = $db->rawQuery($batchQuery);
   }
 </script>
 <?php
-  include(APPLICATION_PATH . '/footer.php');
+include(APPLICATION_PATH . '/footer.php');
 ?>
