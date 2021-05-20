@@ -33,9 +33,9 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 
 
 $covid19Results = $general->getCovid19Results();
-if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda' && $arr['vl_form'] != 1)){
+if ((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] == 'rwanda' && $arr['vl_form'] != 1)) {
 	$reportType = 'generate-export-rwanda.php';
-}else{
+} else {
 	$reportType = 'generate-export-data.php';
 }
 
@@ -59,7 +59,7 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 	</section>
 	<!-- Main content -->
 	<section class="content">
-		<!-- <pre><?php print_r($arr);?></pre> -->
+		<!-- <pre><?php print_r($arr); ?></pre> -->
 		<div class="row">
 			<div class="col-xs-12">
 				<div class="box">
@@ -76,7 +76,7 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 							<th>Facility Name</th>
 							<td>
 								<select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple" style="width:220px;">
-								<?= $facilitiesDropdown; ?>
+									<?= $facilitiesDropdown; ?>
 								</select>
 							</td>
 						</tr>
@@ -136,7 +136,7 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 							</td>
 						</tr>
 						<tr>
-						<th>Testing Lab</th>
+							<th>Testing Lab</th>
 							<td>
 								<select class="form-control" id="vlLab" name="vlLab" title="Please select vl lab" style="width:220px;">
 									<?= $testingLabsDropdown; ?>
@@ -149,7 +149,7 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 
 								&nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Clear Search</span></button>
 
-								&nbsp;<button class="btn btn-success" type="button" onclick="exportInexcel('<?php echo $reportType;?>')"><i class="fa fa-cloud-download" aria-hidden="true"></i> Download</button>
+								&nbsp;<button class="btn btn-success" type="button" onclick="exportInexcel('<?php echo $reportType; ?>')"><i class="fa fa-cloud-download" aria-hidden="true"></i> Download</button>
 
 								&nbsp;<button class="btn btn-default pull-right" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
 							</td>
@@ -248,7 +248,16 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 		$("#facilityName").select2({
 			placeholder: "Select Facilities"
 		});
+
+		$('#sampleCollectionDate,#sampleTestDate,#printDate,#sampleRecievedDate').on('cancel.daterangepicker', function(ev, picker) {
+			//do something, like clearing an input
+			$(this).val('');
+		});
+
 		$('#sampleCollectionDate,#sampleTestDate,#printDate,#sampleRecievedDate').daterangepicker({
+				locale: {
+					cancelLabel: 'Clear'
+				},
 				format: 'DD-MMM-YYYY',
 				separator: ' to ',
 				startDate: moment().subtract(29, 'days'),

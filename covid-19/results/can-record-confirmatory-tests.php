@@ -194,6 +194,9 @@ if ($lastUrl1 != '' || $lastUrl2 != '') {
 			placeholder: "Select Facilities"
 		});
 		$('#sampleCollectionDate').daterangepicker({
+				locale: {
+					cancelLabel: 'Clear'
+				},
 				format: 'DD-MMM-YYYY',
 				separator: ' to ',
 				startDate: moment().subtract(29, 'days'),
