@@ -93,7 +93,7 @@ foreach ($testPlatformResult as $machine) {
 
     <!-- Main content -->
     <section class="content">
-        
+
         <div class="box box-default">
             <div class="box-header with-border">
                 <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
@@ -203,6 +203,9 @@ foreach ($testPlatformResult as $machine) {
         });
 
         $('.daterange').daterangepicker({
+                locale: {
+                    cancelLabel: 'Clear'
+                },
                 format: 'DD-MMM-YYYY',
                 separator: ' to ',
                 startDate: moment().subtract(29, 'days'),

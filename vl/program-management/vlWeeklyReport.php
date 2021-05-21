@@ -102,17 +102,23 @@ $facilityResult = $db->rawQuery($facilityQuery);
                           </tr>
                           <tr>
                             <th>
-                              <= 15 y &amp; <=1000 cp/ml </th> <th>
-                                <= 15 y &amp;>1000 cp/ml
-                            </th>
-                            <th>> 15 y &amp; Male <=1000 cp/ml </th> <th>> 15 y &amp; Male >1000 cp/ml</th>
-                            <th>> 15 y &amp; Female <=1000 cp/ml </th> <th>> 15 y &amp; Female >1000 cp/ml</th>
+                              <= 15 y &amp; <=1000 cp/ml </th>
                             <th>
-                              <=1000 cp/ml </th> <th>>1000 cp/ml
+                              <= 15 y &amp;>1000 cp/ml
                             </th>
-                            <th>Unknown Age/Sex <=1000 cp/ml </th> <th>Unknown Age/Sex >1000 cp/ml</th>
+                            <th>> 15 y &amp; Male <=1000 cp/ml </th>
+                            <th>> 15 y &amp; Male >1000 cp/ml</th>
+                            <th>> 15 y &amp; Female <=1000 cp/ml </th>
+                            <th>> 15 y &amp; Female >1000 cp/ml</th>
                             <th>
-                              <=1000 cp/ml </th> <th>>1000 cp/ml
+                              <=1000 cp/ml </th>
+                            <th>>1000 cp/ml
+                            </th>
+                            <th>Unknown Age/Sex <=1000 cp/ml </th>
+                            <th>Unknown Age/Sex >1000 cp/ml</th>
+                            <th>
+                              <=1000 cp/ml </th>
+                            <th>>1000 cp/ml
                             </th>
                           </tr>
                         </thead>
@@ -163,11 +169,16 @@ $facilityResult = $db->rawQuery($facilityQuery);
                             <th>District/County</th>
                             <th>Site Name</th>
                             <th>Total Female</th>
-                            <th>Pregnant <=1000 cp/ml </th> <th>Pregnant >1000 cp/ml</th>
-                            <th>Breastfeeding <=1000 cp/ml </th> <th>Breastfeeding >1000 cp/ml</th>
-                            <th>Age > 15 <=1000 cp/ml </th> <th>Age > 15 >1000 cp/ml</th>
-                            <th>Age Unknown <=1000 cp/ml </th> <th>Age Unknown >1000 cp/ml</th>
-                            <th>Age <=15 <=1000 cp/ml </th> <th>Age <=15>1000 cp/ml</th>
+                            <th>Pregnant <=1000 cp/ml </th>
+                            <th>Pregnant >1000 cp/ml</th>
+                            <th>Breastfeeding <=1000 cp/ml </th>
+                            <th>Breastfeeding >1000 cp/ml</th>
+                            <th>Age > 15 <=1000 cp/ml </th>
+                            <th>Age > 15 >1000 cp/ml</th>
+                            <th>Age Unknown <=1000 cp/ml </th>
+                            <th>Age Unknown >1000 cp/ml</th>
+                            <th>Age <=15 <=1000 cp/ml </th>
+                            <th>Age <=15>1000 cp/ml</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -209,6 +220,9 @@ $facilityResult = $db->rawQuery($facilityQuery);
       placeholder: "All Labs"
     });
     $('#sampleTestDate,#sampleCollectionDate,#femaleSampleTestDate,#femaleSampleCollectionDate').daterangepicker({
+        locale: {
+          cancelLabel: 'Clear'
+        },
         format: 'DD-MMM-YYYY',
         separator: ' to ',
         startDate: moment().subtract(6, 'days'),

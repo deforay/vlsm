@@ -183,7 +183,7 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
         <div class="box">
           <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width:98%;">
             <tr>
-            <td><b>Sample Test Date&nbsp;:</b></td>
+              <td><b>Sample Test Date&nbsp;:</b></td>
               <td>
                 <input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="background:#fff;" />
               </td>
@@ -193,17 +193,17 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
                   <?= $testingLabsDropdown; ?>
                 </select>
               </td>
-              
+
             </tr>
-            <tr class="testMon" >
-            <td><b>Month :</b></td>
+            <tr class="testMon">
+              <td><b>Month :</b></td>
               <td style="width: 30%;">
                 <!-- <select class="form-control" id="month" name="month" title="Please select month" > -->
-                <input type="text" class="form-control" name="month" id="month" />  
+                <input type="text" class="form-control" name="month" id="month" />
                 </select>
               </td>
             </tr>
-            
+
             <tr>
               <td colspan="4">&nbsp;<input type="button" onclick="loadVlRequestData();" value="Search" class="btn btn-success btn-sm">
                 &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
@@ -214,7 +214,7 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
           </table>
           <!-- /.box-header -->
           <div class="box-body">
-           
+
             <div class="row">
               <div id="vlSuppressChartDiv"></div>
             </div>
@@ -240,10 +240,13 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
   var oTable = null;
   $(document).ready(function() {
     $("#facilityName").multipleSelect({
-            placeholder: 'Select facility name',
-            width: '100%'
-        });
+      placeholder: 'Select facility name',
+      width: '100%'
+    });
     $('#sampleTestDate').daterangepicker({
+        locale: {
+          cancelLabel: 'Clear'
+        },
         format: 'DD-MMM-YYYY',
         separator: ' to ',
         startDate: moment().subtract(29, 'days'),
@@ -263,10 +266,10 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
         endDate = end.format('YYYY-MM-DD');
       });
     $('#sampleTestDate').val("");
-    $("#month").datepicker( {
-        format: "mm-yyyy",
-        startView: "months", 
-        minViewMode: "months"
+    $("#month").datepicker({
+      format: "mm-yyyy",
+      startView: "months",
+      minViewMode: "months"
     });
     loadVlRequestData();
   });
@@ -275,17 +278,17 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
     $.blockUI();
     var monthYear = $("#month").val();
     $.post("/vl/program-management/getSuppressedTargetReport.php", {
-					// sampleCollectionDate: $("#eidSampleCollectionDate").val(),
-					// batchCode: '',
-          monthYear: monthYear, 
-          facilityName: $("#facilityName").val(),
-				},
-				function(data) {
-					if ($.trim(data) != '') {
-						$("#vlSuppressChartDiv").html(data);
-					}
-          
-				});
+        // sampleCollectionDate: $("#eidSampleCollectionDate").val(),
+        // batchCode: '',
+        monthYear: monthYear,
+        facilityName: $("#facilityName").val(),
+      },
+      function(data) {
+        if ($.trim(data) != '') {
+          $("#vlSuppressChartDiv").html(data);
+        }
+
+      });
     $.unblockUI();
   }
 

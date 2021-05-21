@@ -36,8 +36,8 @@ $batResult = $db->rawQuery($batQuery);
 		<h1> <i class="fa fa-book"></i> Clinic Reports</h1>
 		<ol class="breadcrumb">
 			<!-- <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li> -->
-			<li > <i class="fa fa-book"></i> Hepatitis</li>
-			<li >Management</li>
+			<li> <i class="fa fa-book"></i> Hepatitis</li>
+			<li>Management</li>
 			<li class="active">Clinic Reports</li>
 		</ol>
 	</section>
@@ -415,6 +415,9 @@ $batResult = $db->rawQuery($batQuery);
 			placeholder: "Select Fields"
 		});
 		$('#hvlSampleTestDate,#rjtSampleTestDate,#noResultSampleTestDate,#sampleCollectionDate').daterangepicker({
+				locale: {
+					cancelLabel: 'Clear'
+				},
 				format: 'DD-MMM-YYYY',
 				separator: ' to ',
 				startDate: moment().subtract(29, 'days'),
