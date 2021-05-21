@@ -178,7 +178,7 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
         <div class="box">
           <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width:98%;">
             <tr>
-            <td><b>Sample Test Date&nbsp;:</b></td>
+              <td><b>Sample Test Date&nbsp;:</b></td>
               <td>
                 <input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="background:#fff;" />
               </td>
@@ -188,18 +188,18 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
                   <?= $testingLabsDropdown; ?>
                 </select>
               </td>
-              
+
             </tr>
             <tr>
-            <td><b>Target Type&nbsp;:</b></td>
+              <td><b>Target Type&nbsp;:</b></td>
               <td>
-              <select class="form-control" id="targetType" name="targetType" title="Please select Target Type" >
-                <option value="1">Monthly Targets not met</option>
-                <option value="2">Monthly Targets met</option>
-                <option value="3">Show all</option>
+                <select class="form-control" id="targetType" name="targetType" title="Please select Target Type">
+                  <option value="1">Monthly Targets not met</option>
+                  <option value="2">Monthly Targets met</option>
+                  <option value="3">Show all</option>
                 </select>
               </td>
-              </tr>
+            </tr>
             <tr>
               <td colspan="4">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
                 &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
@@ -247,10 +247,13 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
   var oTable = null;
   $(document).ready(function() {
     $("#facilityName").multipleSelect({
-            placeholder: 'Select facility name',
-            width: '100%'
-        });
+      placeholder: 'Select facility name',
+      width: '100%'
+    });
     $('#sampleTestDate').daterangepicker({
+        locale: {
+          cancelLabel: 'Clear'
+        },
         format: 'DD-MMM-YYYY',
         separator: ' to ',
         startDate: moment().subtract(29, 'days'),

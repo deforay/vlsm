@@ -34,9 +34,9 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 
 
 $hepatitisResults = $hepatitisDb->getHepatitisResults();
-if((isset($arr['hepatitis_report_type']) && $arr['hepatitis_report_type'] =='rwanda' && $arr['vl_form'] != 1)){
+if ((isset($arr['hepatitis_report_type']) && $arr['hepatitis_report_type'] == 'rwanda' && $arr['vl_form'] != 1)) {
 	$reportType = 'generate-export-rwanda.php';
-}else{
+} else {
 	$reportType = 'generate-export-data.php';
 }
 
@@ -60,7 +60,7 @@ if((isset($arr['hepatitis_report_type']) && $arr['hepatitis_report_type'] =='rwa
 	</section>
 	<!-- Main content -->
 	<section class="content">
-		<!-- <pre><?php print_r($arr);?></pre> -->
+		<!-- <pre><?php print_r($arr); ?></pre> -->
 		<div class="row">
 			<div class="col-xs-12">
 				<div class="box">
@@ -73,7 +73,7 @@ if((isset($arr['hepatitis_report_type']) && $arr['hepatitis_report_type'] =='rwa
 							<th>Facility Name</th>
 							<td>
 								<select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple" style="width:220px;">
-								<?= $facilitiesDropdown; ?>
+									<?= $facilitiesDropdown; ?>
 								</select>
 							</td>
 							<th>Testing Lab</th>
@@ -142,7 +142,7 @@ if((isset($arr['hepatitis_report_type']) && $arr['hepatitis_report_type'] =='rwa
 								</select>
 							</td>
 						</tr>
-						
+
 						<tr>
 							<th>Last Print Date</th>
 							<td>
@@ -153,7 +153,7 @@ if((isset($arr['hepatitis_report_type']) && $arr['hepatitis_report_type'] =='rwa
 
 								&nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Clear Search</span></button>
 
-								&nbsp;<button class="btn btn-success" type="button" onclick="exportInexcel('<?php echo $reportType;?>')"><i class="fa fa-cloud-download" aria-hidden="true"></i> Download</button>
+								&nbsp;<button class="btn btn-success" type="button" onclick="exportInexcel('<?php echo $reportType; ?>')"><i class="fa fa-cloud-download" aria-hidden="true"></i> Download</button>
 
 								&nbsp;<button class="btn btn-default pull-right" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
 							</td>
@@ -254,6 +254,9 @@ if((isset($arr['hepatitis_report_type']) && $arr['hepatitis_report_type'] =='rwa
 			placeholder: "Select Facilities"
 		});
 		$('#sampleCollectionDate,#sampleTestDate,#printDate').daterangepicker({
+				locale: {
+					cancelLabel: 'Clear'
+				},
 				format: 'DD-MMM-YYYY',
 				separator: ' to ',
 				startDate: moment().subtract(29, 'days'),

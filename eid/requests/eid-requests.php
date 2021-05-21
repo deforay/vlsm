@@ -52,11 +52,11 @@ $batResult = $db->rawQuery($batQuery);
 									<option value=""> -- Select -- </option>
 									<?php
 									foreach ($batResult as $code) {
-										?>
+									?>
 										<option value="<?php echo $code['batch_code']; ?>"><?php echo $code['batch_code']; ?></option>
 									<?php
-								}
-								?>
+									}
+									?>
 								</select>
 							</td>
 							<td><b>Req. Sample Type :</b></td>
@@ -76,9 +76,9 @@ $batResult = $db->rawQuery($batQuery);
 									<?= $facilitiesDropdown; ?>
 								</select>
 							</td>
-							<td ><b>Province/State&nbsp;:</b></td>
+							<td><b>Province/State&nbsp;:</b></td>
 							<td>
-								<input  type="text" id="state" name="state" class="form-control" placeholder="Enter Province/State" style="background:#fff;" onkeyup="loadVlRequestStateDistrict()" />
+								<input type="text" id="state" name="state" class="form-control" placeholder="Enter Province/State" style="background:#fff;" onkeyup="loadVlRequestStateDistrict()" />
 							</td>
 							<td><b>District/County :</b></td>
 							<td>
@@ -97,9 +97,9 @@ $batResult = $db->rawQuery($batQuery);
 								<?php
 								if (isset($_SESSION['privileges']) && in_array("eid-add-request.php", $_SESSION['privileges'])) { ?>
 									<a href="/eid/requests/eid-add-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Add new EID Request</a>
-									<?php if($formId == 1){ ?>
-									<a style=" margin: 0px 5px; " href="/eid/requests/eid-bulk-import-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Bulk Import EID Request</a>
-									<?php }
+									<?php if ($formId == 1) { ?>
+										<a style=" margin: 0px 5px; " href="/eid/requests/eid-bulk-import-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Bulk Import EID Request</a>
+								<?php }
 								} ?>
 
 								&nbsp;
@@ -108,15 +108,15 @@ $batResult = $db->rawQuery($batQuery);
 						</tr>
 					</table>
 					<table id="filter" class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
-						<tr id="" >
+						<tr id="">
 							<td>
 
 								<?php
 								if (isset($_SESSION['privileges']) && in_array("eid-add-request.php", $_SESSION['privileges'])) { ?>
 									<a href="/eid/requests/eid-add-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Add new EID Request</a>
-									<?php if($formId == 1){ ?>
-									<a style=" margin: 0px 5px; " href="/eid/requests/eid-bulk-import-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Bulk Import EID Request</a>
-									<?php }
+									<?php if ($formId == 1) { ?>
+										<a style=" margin: 0px 5px; " href="/eid/requests/eid-bulk-import-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Bulk Import EID Request</a>
+								<?php }
 								} ?>
 								&nbsp;<button class="btn btn-primary btn-sm pull-right" style="margin-right:5px;" onclick="hideAdvanceSearch('filter','advanceFilter');"><span>Show Advanced Search</span></button>
 							</td>
@@ -158,7 +158,7 @@ $batResult = $db->rawQuery($batQuery);
 						</table>
 						<?php
 						if (isset($global['bar_code_printing']) && $global['bar_code_printing'] == 'zebra-printer') {
-							?>
+						?>
 
 							<div id="printer_data_loading" style="display:none"><span id="loading_message">Loading Printer Details...</span><br />
 								<div class="progress" style="width:100%">
@@ -176,8 +176,8 @@ $batResult = $db->rawQuery($batQuery);
 							</div> <!-- /printer_select -->
 
 						<?php
-					}
-					?>
+						}
+						?>
 
 					</div>
 
@@ -197,18 +197,18 @@ $batResult = $db->rawQuery($batQuery);
 <?php
 if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off") {
 	if ($global['bar_code_printing'] == 'dymo-labelwriter-450') {
-		?>
+?>
 		<script src="/assets/js/DYMO.Label.Framework.js"></script>
 		<script src="/configs/dymo-format.js"></script>
 		<script src="/assets/js/dymo-print.js"></script>
 	<?php
-} else if ($global['bar_code_printing'] == 'zebra-printer') {
+	} else if ($global['bar_code_printing'] == 'zebra-printer') {
 	?>
 		<script src="/assets/js/zebra-browserprint.js.js"></script>
 		<script src="/configs/zebra-format.js"></script>
 		<script src="/assets/js/zebra-print.js"></script>
-	<?php
-}
+<?php
+	}
 }
 ?>
 
@@ -231,6 +231,9 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 		});
 		loadVlRequestData();
 		$('#sampleCollectionDate').daterangepicker({
+				locale: {
+					cancelLabel: 'Clear'
+				},
 				format: 'DD-MMM-YYYY',
 				separator: ' to ',
 				startDate: moment().subtract(29, 'days'),
@@ -290,7 +293,31 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 				<?php if ($sarr['user_type'] != 'standalone') { ?> {
 						"sClass": "center"
 					},
-				<?php } ?> {"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},
+				<?php } ?> {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				},
 				<?php if (isset($_SESSION['privileges']) && (in_array("editVlRequest.php", $_SESSION['privileges']))) { ?> {
 						"sClass": "center",
 						"bSortable": false

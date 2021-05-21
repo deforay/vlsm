@@ -285,6 +285,9 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 		});
 		loadVlRequestData();
 		$('#sampleCollectionDate').daterangepicker({
+				locale: {
+					cancelLabel: 'Clear'
+				},
 				format: 'DD-MMM-YYYY',
 				separator: ' to ',
 				startDate: moment().subtract(29, 'days'),
@@ -336,7 +339,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 
 	function loadVlRequestData() {
 		$.blockUI();
-		
+
 		oTable = $('#vlRequestDataTable').dataTable({
 			"oLanguage": {
 				"sLengthMenu": "_MENU_ records per page"

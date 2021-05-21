@@ -200,6 +200,9 @@ foreach ($testPlatformResult as $machine) {
         });
 
         $('.daterange').daterangepicker({
+                locale: {
+                    cancelLabel: 'Clear'
+                },
                 format: 'DD-MMM-YYYY',
                 separator: ' to ',
                 startDate: moment().subtract(29, 'days'),

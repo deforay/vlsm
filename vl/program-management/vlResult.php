@@ -61,7 +61,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 							</td>
 							<td><b>Sample Received at Lab Date&nbsp;:</b></td>
 							<td>
-							<input type="text" id="sampleReceivedDate" name="sampleReceivedDate" class="form-control" placeholder="Select Received Date" style="width:220px;background:#fff;" />
+								<input type="text" id="sampleReceivedDate" name="sampleReceivedDate" class="form-control" placeholder="Select Received Date" style="width:220px;background:#fff;" />
 							</td>
 
 							<td><b>Sample Type&nbsp;:</b></td>
@@ -70,7 +70,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 									<option value=""> -- Select -- </option>
 									<?php
 									foreach ($sResult as $type) {
-										?>
+									?>
 										<option value="<?php echo $type['sample_id']; ?>"><?php echo ucwords($type['sample_name']); ?></option>
 									<?php
 									}
@@ -102,7 +102,8 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 								<select class="form-control" id="vLoad" name="vLoad" title="Please select batch code" style="width:220px;">
 									<option value=""> -- Select -- </option>
 									<option value="<=<?php echo $arr['viral_load_threshold_limit']; ?>">
-										<= <?php echo $arr['viral_load_threshold_limit']; ?> cp/ml </option> <option value="><?php echo $arr['viral_load_threshold_limit']; ?>">> <?php echo $arr['viral_load_threshold_limit']; ?> cp/ml
+										<= <?php echo $arr['viral_load_threshold_limit']; ?> cp/ml </option>
+									<option value="><?php echo $arr['viral_load_threshold_limit']; ?>">> <?php echo $arr['viral_load_threshold_limit']; ?> cp/ml
 									</option>
 								</select>
 							</td>
@@ -160,26 +161,26 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 							</td>
 						</tr>
 						<tr>
-						<td><b>Batch Code&nbsp;:</b></td>
+							<td><b>Batch Code&nbsp;:</b></td>
 							<td>
 								<select class="form-control" id="batchCode" name="batchCode" title="Please select batch code" style="width:220px;">
 									<option value=""> -- Select -- </option>
 									<?php
 									foreach ($batResult as $code) {
-										?>
+									?>
 										<option value="<?php echo $code['batch_code']; ?>"><?php echo $code['batch_code']; ?></option>
 									<?php
 									}
 									?>
 								</select>
-							</td>							
+							</td>
 							<td><b>Funding Sources&nbsp;:</b></td>
 							<td>
 								<select class="form-control" name="fundingSource" id="fundingSource" title="Please choose funding source">
 									<option value=""> -- Select -- </option>
 									<?php
 									foreach ($fundingSourceList as $fundingSource) {
-										?>
+									?>
 										<option value="<?php echo base64_encode($fundingSource['funding_source_id']); ?>"><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
 									<?php } ?>
 								</select>
@@ -190,7 +191,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 									<option value=""> -- Select -- </option>
 									<?php
 									foreach ($implementingPartnerList as $implementingPartner) {
-										?>
+									?>
 										<option value="<?php echo base64_encode($implementingPartner['i_partner_id']); ?>"><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
 									<?php } ?>
 								</select>
@@ -283,7 +284,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 
 						<?php
 						if ($_SESSION['roleCode'] == 'ad' || $_SESSION['roleCode'] == 'AD') {
-							?>
+						?>
 							<!-- &nbsp;<button class="btn btn-success pull-right" type="button" onclick="exportInexcel('vlResultAllFieldExportInExcel.php')"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Data for Dashboard</button> -->
 						<?php } ?>
 
@@ -311,6 +312,9 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 			placeholder: "Select Facilities"
 		});
 		$('#sampleCollectionDate,#sampleTestDate,#printDate, #sampleReceivedDate').daterangepicker({
+				locale: {
+					cancelLabel: 'Clear'
+				},
 				format: 'DD-MMM-YYYY',
 				separator: ' to ',
 				startDate: moment().subtract(29, 'days'),
@@ -385,12 +389,12 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 			"aoColumns": [{
 					"sClass": "center"
 				}, <?php
-				if ($sarr['user_type'] != 'standalone') {
+					if ($sarr['user_type'] != 'standalone') {
 					?> {
 						"sClass": "center"
 					}, <?php
-				} ?> {
-					"sClass": "center"
+					} ?> {
+						"sClass": "center"
 				},
 				{
 					"sClass": "center"
@@ -512,8 +516,8 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 
 	function convertSearchResultToPdf(id) {
 		<?php
-			$path = '';
-			$path = '/vl/results/pdf/vlRequestSearchResultPdf.php'; 
+		$path = '';
+		$path = '/vl/results/pdf/vlRequestSearchResultPdf.php';
 		?>
 		$.post("<?php echo $path; ?>", {
 				source: 'print',
