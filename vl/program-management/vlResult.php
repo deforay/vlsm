@@ -311,7 +311,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 		$("#facilityName").select2({
 			placeholder: "Select Facilities"
 		});
-		$('#sampleCollectionDate,#sampleTestDate,#printDate, #sampleReceivedDate').daterangepicker({
+		$('#sampleCollectionDate,#sampleTestDate,#printDate,#sampleReceivedDate').daterangepicker({
 				locale: {
 					cancelLabel: 'Clear'
 				},
