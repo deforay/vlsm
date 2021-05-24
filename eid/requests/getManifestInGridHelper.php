@@ -18,7 +18,7 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
      $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
 }
 
-$general=new \Vlsm\Models\General($db);
+$general = new \Vlsm\Models\General($db);
 $eidResults = $general->getEidResults();
 $tableName = "eid_form";
 $primaryKey = "eid_id";
@@ -121,12 +121,12 @@ $sQuery = "SELECT * FROM eid_form as vl
 if (isset($sWhere) && $sWhere != "") {
      $sWhere = ' where ' . $sWhere;
      if (isset($_POST['samplePackageCode']) && $_POST['samplePackageCode'] != '') {
-          $sWhere = $sWhere . ' AND vl.sample_package_code LIKE "%' . $_POST['samplePackageCode'] . '%"';
+          $sWhere = $sWhere . ' sample_code IS NULL AND vl.sample_package_code LIKE "%' . $_POST['samplePackageCode'] . '%" OR remote_sample_code LIKE "' . $_POST['samplePackageCode'] . '"';
      }
 } else {
      if (isset($_POST['samplePackageCode']) && trim($_POST['samplePackageCode']) != '') {
           $sWhere = ' where ' . $sWhere;
-          $sWhere = $sWhere . ' vl.sample_package_code LIKE "%' . $_POST['samplePackageCode'] . '%"';
+          $sWhere = $sWhere . ' sample_code IS NULL AND vl.sample_package_code LIKE "%' . $_POST['samplePackageCode'] . '%" OR remote_sample_code LIKE "' . $_POST['samplePackageCode'] . '"';
      }
 }
 /* if ($sWhere != '') {
@@ -192,7 +192,7 @@ foreach ($rResult as $aRow) {
 
      $row = array();
      $row[] = $aRow['sample_code'];
-     if($sarr['user_type']!='standalone'){
+     if ($sarr['user_type'] != 'standalone') {
           $row[] = $aRow['remote_sample_code'];
      }
      $row[] = $aRow['sample_collection_date'];
@@ -202,13 +202,13 @@ foreach ($rResult as $aRow) {
      $row[] = $patientFname;
      $row[] = $aRow['mother_id'];
      $row[] = $aRow['mother_name'];
-     
+
      $row[] = ucwords($aRow['facility_state']);
      $row[] = ucwords($aRow['facility_district']);
      $row[] = $eidResults[$aRow['result']];
      $row[] = $aRow['last_modified_datetime'];
      $row[] = ucwords($aRow['status_name']);
-     
+
      $output['aaData'][] = $row;
 }
 echo json_encode($output);
