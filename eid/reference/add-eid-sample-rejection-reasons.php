@@ -1,6 +1,5 @@
 <?php
 ob_start();
-#require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 $rejReaons = $general->getRejectionReasons('eid');
 ?>
@@ -17,7 +16,7 @@ $rejReaons = $general->getRejectionReasons('eid');
 
   <!-- Main content -->
   <section class="content">
-    
+
     <div class="box box-default">
       <div class="box-header with-border">
         <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
@@ -32,7 +31,7 @@ $rejReaons = $general->getRejectionReasons('eid');
                 <div class="form-group">
                   <label for="rejectionReasonName" class="col-lg-4 control-label">Rejection Reason Name<span class="mandatory">*</span></label>
                   <div class="col-lg-7">
-                    <input type="text" class="form-control isRequired" id="rejectionReasonName" name="rejectionReasonName" placeholder="Rejection Reason Name" title="Please enter Rejection Reason name" onblur="checkNameValidation('r_eid_sample_rejection_reasons','rejection_reason_name',this,null,'The Rejection Reason name that you entered already exists.Enter another Rejection Reason name',null)"/>
+                    <input type="text" class="form-control isRequired" id="rejectionReasonName" name="rejectionReasonName" placeholder="Rejection Reason Name" title="Please enter Rejection Reason name" onblur="checkNameValidation('r_eid_sample_rejection_reasons','rejection_reason_name',this,null,'The Rejection Reason name that you entered already exists.Enter another Rejection Reason name',null)" />
                   </div>
                 </div>
               </div>
@@ -40,7 +39,7 @@ $rejReaons = $general->getRejectionReasons('eid');
                 <div class="form-group">
                   <label for="rejectionType" class="col-lg-4 control-label">Rejection Type <span class="mandatory">*</span></label>
                   <div class="col-lg-7">
-                    <select class="form-control isRequired select2" id="rejectionType" name="rejectionType" placeholder="Rejection Type" title="Please enter Rejection Type" >
+                    <select class="form-control isRequired select2" id="rejectionType" name="rejectionType" placeholder="Rejection Type" title="Please enter Rejection Type">
                       <?= $general->generateSelectOptions($rejReaons, null, '-- Select --'); ?>
                     </select>
                   </div>
@@ -52,7 +51,7 @@ $rejReaons = $general->getRejectionReasons('eid');
                 <div class="form-group">
                   <label for="rejectionReasonCode" class="col-lg-4 control-label">Rejection Reason Code<span class="mandatory">*</span></label>
                   <div class="col-lg-7">
-                    <input type="text" class="form-control isRequired" id="rejectionReasonCode" name="rejectionReasonCode" placeholder="Rejection Reason Code" title="Please enter Rejection Reason Code" onblur="checkNameValidation('r_eid_sample_rejection_reasons','rejection_reason_code',this,null,'The Rejection Reason code that you entered already exists.Enter another Rejection Reason code',null)"/>
+                    <input type="text" class="form-control isRequired" id="rejectionReasonCode" name="rejectionReasonCode" placeholder="Rejection Reason Code" title="Please enter Rejection Reason Code" onblur="checkNameValidation('r_eid_sample_rejection_reasons','rejection_reason_code',this,null,'The Rejection Reason code that you entered already exists.Enter another Rejection Reason code',null)" />
                   </div>
                 </div>
               </div>
@@ -60,9 +59,9 @@ $rejReaons = $general->getRejectionReasons('eid');
                 <div class="form-group">
                   <label for="rejectionReasonStatus" class="col-lg-4 control-label">Rejection Reason Status<span class="mandatory">*</span></label>
                   <div class="col-lg-7">
-                    <select class="form-control isRequired" id="rejectionReasonStatus" name="rejectionReasonStatus" placeholder="Rejection Reason Status" title="Please enter Rejection Reason Status"  >
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
+                    <select class="form-control isRequired" id="rejectionReasonStatus" name="rejectionReasonStatus" placeholder="Rejection Reason Status" title="Please enter Rejection Reason Status">
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
                     </select>
                   </div>
                 </div>
@@ -88,14 +87,15 @@ $rejReaons = $general->getRejectionReasons('eid');
 </div>
 
 <script type="text/javascript">
-$(document).ready(function() {
-  $(".select2").select2();
-  $(".select2").select2({
-    tags: true
+  $(document).ready(function() {
+    $(".select2").select2();
+    $(".select2").select2({
+      tags: true
+    });
   });
-});
+
   function validateNow() {
-   
+
     flag = deforayValidator.init({
       formId: 'addSampleRejcForm'
     });
@@ -127,20 +127,18 @@ $(document).ready(function() {
       });
   }
 
-  function addNewRejectionType(id){
-    checkValue = $("#"+id+" option:selected").html();
-    if(checkValue!='')
-    {
+  function addNewRejectionType(id) {
+    checkValue = $("#" + id + " option:selected").html();
+    if (checkValue != '') {
       $.post("/includes/addNewField.php", {
-        value: checkValue,
-        mode:'addNewRejectionType'
-      },
-      function(data) {
-        console.log(data)
-      });
+          value: checkValue,
+          mode: 'addNewRejectionType'
+        },
+        function(data) {
+          console.log(data)
+        });
     }
   }
-
 </script>
 
 <?php
