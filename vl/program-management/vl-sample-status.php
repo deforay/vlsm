@@ -1,6 +1,6 @@
 <?php
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+  session_start();
 }
 $title = "VL | Sample Status Report";
 #require_once('../../startup.php');
@@ -56,11 +56,11 @@ $batResult = $db->rawQuery($batQuery);
                   <option value=""> -- Select -- </option>
                   <?php
                   foreach ($batResult as $code) {
-                    ?>
+                  ?>
                     <option value="<?php echo $code['batch_code']; ?>"><?php echo $code['batch_code']; ?></option>
                   <?php
-                }
-                ?>
+                  }
+                  ?>
                 </select>
               </td>
             </tr>
@@ -71,11 +71,11 @@ $batResult = $db->rawQuery($batQuery);
                   <option value=""> -- Select -- </option>
                   <?php
                   foreach ($sResult as $type) {
-                    ?>
+                  ?>
                     <option value="<?php echo $type['sample_id']; ?>"><?php echo ucwords($type['sample_name']); ?></option>
                   <?php
-                }
-                ?>
+                  }
+                  ?>
                 </select>
               </td>
 
@@ -143,6 +143,9 @@ $batResult = $db->rawQuery($batQuery);
       placeholder: "Select Facilities"
     });
     $('#sampleCollectionDate').daterangepicker({
+        locale: {
+          cancelLabel: 'Clear'
+        },
         format: 'DD-MMM-YYYY',
         separator: ' to ',
         startDate: moment().subtract(29, 'days'),

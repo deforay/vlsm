@@ -32,11 +32,11 @@ $batResult = $db->rawQuery($batQuery);
   <section class="content-header">
     <h1><i class="fa fa-book"></i> Hepatitis Sample Status Report</h1>
     <ol class="breadcrumb">
-       <!-- <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li> -->
-       <li ><i class="fa fa-book"></i> Hepatitis</li>
-			<li >Management</li>
-       <li class="active">Hepatitis Sample Status</li>
-      </ol>
+      <!-- <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li> -->
+      <li><i class="fa fa-book"></i> Hepatitis</li>
+      <li>Management</li>
+      <li class="active">Hepatitis Sample Status</li>
+    </ol>
   </section>
 
   <!-- Main content -->
@@ -135,6 +135,9 @@ $batResult = $db->rawQuery($batQuery);
       placeholder: "Select Facilities"
     });
     $('#sampleCollectionDate').daterangepicker({
+        locale: {
+          cancelLabel: 'Clear'
+        },
         format: 'DD-MMM-YYYY',
         separator: ' to ',
         startDate: moment().subtract(29, 'days'),
