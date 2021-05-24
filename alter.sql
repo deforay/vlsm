@@ -2181,3 +2181,10 @@ ALTER TABLE `user_details` ADD `testing_user` VARCHAR(50) NULL DEFAULT NULL AFTE
 
 UPDATE `system_config` SET `value` = '4.3.2' WHERE `system_config`.`name` = 'version';
 -- Version 4.3.2  -- Amit -- 13-May-2021
+
+-- Amit 24 May 2021
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'covid-19-requests', 'covid-19-dhis2.php', 'DHIS2');
+
+
+UPDATE `system_config` SET `value` = '4.3.3' WHERE `system_config`.`name` = 'version';
+-- Version 4.3.3  -- Amit -- 24-May-2021

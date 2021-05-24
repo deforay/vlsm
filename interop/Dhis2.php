@@ -12,7 +12,7 @@ class Dhis2
 	private $authenticated = false;
 
 
-	public function __construct($dhis2url, $username = "admin", $password = "district", $contentType='application/json')
+	public function __construct($dhis2url, $username = "admin", $password = "district", $contentType = 'application/json')
 	{
 		// ensuring there is no trailing slash
 		$this->dhis2url = rtrim($dhis2url, '/');
@@ -151,19 +151,19 @@ class Dhis2
 	public function sendDataValueSets($orgUnitId, $dataSetId, $period, $completeDate, $dataValues)
 	{
 
-		if(!empty($orgUnitId)){
+		if (!empty($orgUnitId)) {
 			$data['orgUnit'] = $orgUnitId;
 		}
-		if(!empty($dataSetId)){
+		if (!empty($dataSetId)) {
 			$data['dataSet'] = $dataSetId;
 		}
-		if(!empty($completeDate)){
+		if (!empty($completeDate)) {
 			$data['completeDate'] = $completeDate;
 		}
-		if(!empty($period)){
+		if (!empty($period)) {
 			$data['period'] = $period;
 		}
-		
+
 		$data['dataValues'] = $dataValues;
 
 		return $this->post("/api/dataValueSets", json_encode($data));
@@ -204,8 +204,6 @@ class Dhis2
 			$urlParams = "";
 		}
 
-		var_dump($this->dhis2url . "{$path}{$urlParams}");
-
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $this->dhis2url . "{$path}{$urlParams}");
@@ -235,7 +233,7 @@ class Dhis2
 		} else {
 			$urlParams = "";
 		}
-echo $this->dhis2url . "{$path}{$urlParams}";
+
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $this->dhis2url . "{$path}{$urlParams}");
 		curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -246,8 +244,7 @@ echo $this->dhis2url . "{$path}{$urlParams}";
 		// curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($ch, CURLOPT_USERPWD, "$this->username:$this->password");
 		$return = curl_exec($ch);
-		var_dump($return);die;
-		echo $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		$httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
 		if ($httpStatus === 200 && !empty($return)) {
 			return $return;
@@ -278,10 +275,8 @@ echo $this->dhis2url . "{$path}{$urlParams}";
 		// curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 		curl_setopt($ch, CURLOPT_USERPWD, "$this->username:$this->password");
 		$return = curl_exec($ch);
-
-		var_dump($return);die;
 		
-		echo $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		$httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
 
 		if ($httpStatus === 200) {

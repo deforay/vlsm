@@ -98,7 +98,7 @@ try {
 
 	$hepatitisData = array(
 		'external_sample_code'                => isset($_POST['externalSampleCode']) ? $_POST['externalSampleCode'] : null,
-		'hepatitis_test_type'                 => isset($_POST['hepatitisTestType']) ? $_POST['hepatitisTestType'] : null,
+		'hepatitis_test_type'                 => isset($_POST['hepatitisTestType']) ? $_POST['hepatitisTestType'] : 'hcv',
 		'facility_id'                         => isset($_POST['facilityId']) ? $_POST['facilityId'] : null,
 		'test_number'                         => isset($_POST['testNumber']) ? $_POST['testNumber'] : null,
 		'province_id'                         => isset($_POST['provinceId']) ? $_POST['provinceId'] : null,

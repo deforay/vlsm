@@ -192,7 +192,7 @@ try {
             } else if ($testType == 'hcv') {
                 $resultField = "hcv_vl_count";
                 $otherField = "hbv_vl_count";
-            }            
+            }
 
             $data = array(
                 // 'lab_name' => $accResult[$i]['lab_name'],
