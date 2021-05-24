@@ -17,6 +17,9 @@ Thumbs.db.orig
 .gitattributes
 .gitignore
 config.production.php
+config.interop.php
+config.testing.php
+config.staging.php
 config.development.php
 index-new.php
 configs/bg.png

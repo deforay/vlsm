@@ -149,6 +149,9 @@ $sharedPrivileges = array(
 	'vlSuppressedTargetReport.php'					=> 'vlMonthlyThresholdReport.php',
 	'eidSuppressedTargetReport.php'					=> 'eidMonthlyThresholdReport.php',
 	'covid19SuppressedTargetReport.php'				=> 'covid19MonthlyThresholdReport.php',
+	'covid-19-init.php'								=> 'covid-19-dhis2.php',
+	'covid-19-send.php'								=> 'covid-19-dhis2.php',
+	'covid-19-receive.php'							=> 'covid-19-dhis2.php',
 
 );
 // Does the current file share privileges with another privilege ?
