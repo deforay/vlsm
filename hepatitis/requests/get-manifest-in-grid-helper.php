@@ -18,8 +18,8 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
      $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
 }
 
-$general=new \Vlsm\Models\General($db);
-$hepatitisObj=new \Vlsm\Models\Hepatitis($db);
+$general = new \Vlsm\Models\General($db);
+$hepatitisObj = new \Vlsm\Models\Hepatitis($db);
 $hepatitisResults = $hepatitisObj->getHepatitisResults();
 $tableName = "form_hepatitis";
 $primaryKey = "hepatitis_id";
@@ -122,12 +122,12 @@ $sQuery = "SELECT * FROM form_hepatitis as vl
 if (isset($sWhere) && $sWhere != "") {
      $sWhere = ' where ' . $sWhere;
      if (isset($_POST['samplePackageCode']) && $_POST['samplePackageCode'] != '') {
-          $sWhere = $sWhere . ' AND vl.sample_package_code LIKE "%' . $_POST['samplePackageCode'] . '%"';
+          $sWhere = $sWhere . ' sample_code IS NULL AND vl.sample_package_code LIKE "%' . $_POST['samplePackageCode'] . '%" OR remote_sample_code LIKE "' . $_POST['samplePackageCode'] . '"';
      }
 } else {
      if (isset($_POST['samplePackageCode']) && trim($_POST['samplePackageCode']) != '') {
           $sWhere = ' where ' . $sWhere;
-          $sWhere = $sWhere . ' vl.sample_package_code LIKE "%' . $_POST['samplePackageCode'] . '%"';
+          $sWhere = $sWhere . ' sample_code IS NULL AND vl.sample_package_code LIKE "%' . $_POST['samplePackageCode'] . '%" OR remote_sample_code LIKE "' . $_POST['samplePackageCode'] . '"';
      }
 }
 /* if ($sWhere != '') {
@@ -194,21 +194,21 @@ foreach ($rResult as $aRow) {
 
      $row = array();
      $row[] = $aRow['sample_code'];
-     if($sarr['user_type']!='standalone'){
+     if ($sarr['user_type'] != 'standalone') {
           $row[] = $aRow['remote_sample_code'];
      }
      $row[] = $aRow['sample_collection_date'];
      $row[] = $aRow['batch_code'];
      $row[] = ucwords($aRow['facility_name']);
      $row[] = $aRow['patient_id'];
-     $row[] = $patientFname. " " . $patientLname;
+     $row[] = $patientFname . " " . $patientLname;
      $row[] = ucwords($aRow['facility_state']);
      $row[] = ucwords($aRow['facility_district']);
      $row[] = $aRow['hcv_vl_count'];
      $row[] = $aRow['hbv_vl_count'];
      $row[] = $aRow['last_modified_datetime'];
      $row[] = ucwords($aRow['status_name']);
-     
+
      $output['aaData'][] = $row;
 }
 echo json_encode($output);
