@@ -140,6 +140,9 @@ $batResult = $db->rawQuery($batQuery);
   var endDate = "";
   $(document).ready(function() {
     $('#sampleCollectionDate').daterangepicker({
+        locale: {
+          cancelLabel: 'Clear'
+        },
         format: 'DD-MMM-YYYY',
         startDate: moment().subtract(29, 'days'),
         endDate: moment(),

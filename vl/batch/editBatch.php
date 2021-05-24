@@ -79,13 +79,13 @@ $testPlatformResult = $general->getTestingPlatforms('vl');
 
 	<!-- Main content -->
 	<section class="content">
-		
+
 		<div class="box box-default">
 			<div class="box-header with-border">
 				<div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
 			</div>
 			<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 80%;">
-				
+
 				<tr>
 					<td>&nbsp;<b>Sample Collection Date&nbsp;:</b></td>
 					<td>
@@ -246,6 +246,9 @@ $testPlatformResult = $general->getTestingPlatforms('vl');
 			placeholder: "Select Facilities"
 		});
 		$('#sampleCollectionDate').daterangepicker({
+				locale: {
+					cancelLabel: 'Clear'
+				},
 				format: 'DD-MMM-YYYY',
 				separator: ' to ',
 				startDate: moment().subtract(29, 'days'),

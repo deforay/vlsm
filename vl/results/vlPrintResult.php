@@ -114,16 +114,16 @@ $batResult = $db->rawQuery($batQuery);
 														<input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;" />
 													</td>
 													<td>
-														
+
 													</td>
 													<td>
-														
+
 													</td>
 													<td>
-														
+
 													</td>
 													<td>
-														
+
 													</td>
 												</tr>
 												<tr>
@@ -380,6 +380,9 @@ $batResult = $db->rawQuery($batQuery);
 			placeholder: "Select Facilities"
 		});
 		$('#sampleCollectionDate,#sampleTestDate,#printSampleCollectionDate,#printSampleTestDate').daterangepicker({
+				locale: {
+					cancelLabel: 'Clear'
+				},
 				format: 'DD-MMM-YYYY',
 				separator: ' to ',
 				startDate: moment().subtract(29, 'days'),

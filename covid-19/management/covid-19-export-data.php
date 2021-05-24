@@ -67,15 +67,15 @@ if ((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] == 'rwand
 						<tr>
 							<th>Sample Collection Date</th>
 							<td>
-								<input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:220px;background:#fff;" />
+								<input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="filter-input form-control" placeholder="Select Collection Date" readonly style="width:220px;background:#fff;" />
 							</td>
 							<th>Sample Received At Lab</th>
 							<td>
-								<input type="text" id="sampleRecievedDate" name="sampleRecievedDate" class="form-control" placeholder="Select Recieved Date" readonly style="width:220px;background:#fff;" />
+								<input type="text" id="sampleRecievedDate" name="sampleRecievedDate" class="filter-input form-control" placeholder="Select Recieved Date" readonly style="width:220px;background:#fff;" />
 							</td>
 							<th>Facility Name</th>
 							<td>
-								<select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple" style="width:220px;">
+								<select class="filter-input form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple" style="width:220px;">
 									<?= $facilitiesDropdown; ?>
 								</select>
 							</td>
@@ -83,12 +83,12 @@ if ((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] == 'rwand
 						<tr>
 							<th>Sample Test Date</th>
 							<td>
-								<input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;" />
+								<input type="text" id="sampleTestDate" name="sampleTestDate" class="filter-input form-control" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;" />
 							</td>
 
 							<th>Result </th>
 							<td>
-								<select class="form-control" id="vLoad" name="vLoad" title="Please select batch code" style="width:220px;">
+								<select class="filter-input form-control" id="vLoad" name="vLoad" title="Please select batch code" style="width:220px;">
 									<option value=""> -- Select -- </option>
 									<?php foreach ($covid19Results as $covid19ResultKey => $covid19ResultValue) { ?>
 										<option value="<?php echo $covid19ResultKey; ?>"> <?php echo $covid19ResultValue; ?> </option>
@@ -98,13 +98,13 @@ if ((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] == 'rwand
 
 							<th>Last Print Date</th>
 							<td>
-								<input type="text" id="printDate" name="printDate" class="form-control" placeholder="Select Print Date" readonly style="width:220px;background:#fff;" />
+								<input type="text" id="printDate" name="printDate" class="filter-input form-control" placeholder="Select Print Date" readonly style="width:220px;background:#fff;" />
 							</td>
 						</tr>
 						<tr>
 							<th>Status</th>
 							<td>
-								<select name="status" id="status" class="form-control" title="Please choose status">
+								<select name="status" id="status" class="filter-input form-control" title="Please choose status">
 									<option value=""> -- Select -- </option>
 									<?php foreach ($tsResult as $sampleStatus) { ?>
 										<option value="<?php echo $sampleStatus['status_id']; ?>"> <?php echo $sampleStatus['status_name']; ?> </option>
@@ -125,7 +125,7 @@ if ((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] == 'rwand
 							</td>
 							<th>Implementing Partners</th>
 							<td>
-								<select class="form-control" name="implementingPartner" id="implementingPartner" title="Please choose implementing partner">
+								<select class="filter-input form-control" name="implementingPartner" id="implementingPartner" title="Please choose implementing partner">
 									<option value=""> -- Select -- </option>
 									<?php
 									foreach ($implementingPartnerList as $implementingPartner) {
@@ -138,7 +138,7 @@ if ((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] == 'rwand
 						<tr>
 							<th>Testing Lab</th>
 							<td>
-								<select class="form-control" id="vlLab" name="vlLab" title="Please select vl lab" style="width:220px;">
+								<select class="filter-input form-control" id="vlLab" name="vlLab" title="Please select vl lab" style="width:220px;">
 									<?= $testingLabsDropdown; ?>
 								</select>
 							</td>
@@ -428,6 +428,16 @@ if ((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] == 'rwand
 	}
 
 	function searchVlRequestData() {
+		var flag = false;
+		$(".filter-input ").each(function() {
+			if ($(this).val() != "") {
+				flag = true;
+			}
+		});
+		if (flag == false) {
+			alert("At Least select one filter for get report");
+			return false;
+		}
 		$.blockUI();
 		oTable.fnDraw();
 		$.unblockUI();
