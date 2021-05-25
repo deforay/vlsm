@@ -7,7 +7,7 @@ if (session_status() == PHP_SESSION_NONE) {
 $general = new \Vlsm\Models\General($db);
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
 $facilityMap = $facilitiesDb->getFacilityMap($_SESSION['userId']);
-
+// $facilityMap = '3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30';
 $formId = $general->getGlobalConfig('vl_form');
 
 //system config
@@ -108,7 +108,8 @@ $sQuery = "SELECT DATE_FORMAT(DATE(vl.sample_tested_datetime), '%b-%Y') as month
           SUM(CASE WHEN (is_sample_rejected IS NOT NULL AND is_sample_rejected LIKE 'yes%') THEN 1 ELSE 0 END) as totalRejected, 
           SUM(CASE WHEN (sample_tested_datetime IS NULL AND sample_collection_date IS NOT NULL) THEN 1 ELSE 0 END) as totalReceived, 
           SUM(CASE WHEN (sample_collection_date IS NOT NULL) THEN 1 ELSE 0 END) as totalCollected
-          FROM testing_labs as tl INNER JOIN vl_request_form as vl ON vl.lab_id=tl.facility_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id";
+          FROM testing_labs as tl INNER JOIN vl_request_form as vl ON vl.lab_id=tl.facility_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
+          RIGHT JOIN vl_facility_map as fm ON vl.lab_id=fm.vl_lab_id";
 
 // vl_request_form
 // health_facilities
@@ -182,13 +183,20 @@ if ($sWhere != '') {
      $sWhere = $sWhere . ' where vl.result!="" AND vl.vlsm_country_id="' . $formId . '" AND vl.result_status!=9';
 }
 
-if (!empty($facilityMap)) {
-     $sWhere .= " AND vl.facility_id IN ($facilityMap) ";
-}
+// HAVING COUNT(c2.sid) >= 2)
+// if (!empty($facilityMap)) {
+//      $sWhere .= " AND vl.facility_id IN ($facilityMap) ";
+// }
 $sWhere .= " AND tl.test_type = 'vl'";
 
 
-$sQuery = $sQuery . ' ' . $sWhere . ' GROUP BY f.facility_id, YEAR(vl.sample_tested_datetime), MONTH(vl.sample_tested_datetime)';
+$sQuery = $sQuery . ' ' . $sWhere .' GROUP BY f.facility_id, YEAR(vl.sample_tested_datetime), MONTH(vl.sample_tested_datetime)';
+if($_POST['targetType'] == 1){
+     $sQuery = $sQuery . ' HAVING tl.monthly_target > SUM(CASE WHEN (sample_collection_date IS NOT NULL) THEN 1 ELSE 0 END) ';
+}
+else if($_POST['targetType'] == 2){
+     $sQuery = $sQuery . ' HAVING tl.monthly_target < SUM(CASE WHEN (sample_collection_date IS NOT NULL) THEN 1 ELSE 0 END) ';
+}
 // echo $sQuery;die;
 $_SESSION['vlMonitoringThresholdReportQuery'] = $sQuery;
 $rResult = $db->rawQuery($sQuery);
@@ -210,29 +218,29 @@ $output = array(
      // "iTotalDisplayRecords" => $iFilteredTotal,
      "aaData" => array()
 );
-          
+     //  print_r($sQuery);die;    
 $cnt = 0;
 foreach($rResult as $rowData)
 {
-     $targetType1 = false;
-     $targetType2 = false;
-     $targetType3 = false;
-     if($_POST['targetType'] == 1){
-          if($rowData['monthly_target'] > $rowData['totalCollected'])
-          { 
-               $targetType1 = true;
-          }
-     } else if($_POST['targetType'] == 2){
+     // $targetType1 = false;
+     // $targetType2 = false;
+     // $targetType3 = false;
+     // if($_POST['targetType'] == 1){
+     //      if($rowData['monthly_target'] > $rowData['totalCollected'])
+     //      { 
+     //           $targetType1 = true;
+     //      }
+     // } else if($_POST['targetType'] == 2){
 
-          if($rowData['monthly_target'] < $rowData['totalCollected'])
-          { 
-               $targetType2 = true;
-          }
-     } else if($_POST['targetType'] == 3){
-          $targetType3 = true;
-     }
+     //      if($rowData['monthly_target'] < $rowData['totalCollected'])
+     //      { 
+     //           $targetType2 = true;
+     //      }
+     // } else if($_POST['targetType'] == 3){
+     //      $targetType3 = true;
+     // }
 
-     if($targetType1 || $targetType2 || $targetType3){
+     // if($targetType1 || $targetType2 || $targetType3){
           $cnt++;
           $data = array();
           $data[] = ucwords($rowData['facility_name']);
@@ -242,7 +250,7 @@ foreach($rResult as $rowData)
           $data[] = $rowData['totalCollected'];
           $data[] = $rowData['monthly_target'];
           $output['aaData'][] = $data;
-     }
+     // }
 
 }   
 $output['iTotalDisplayRecords'] = $cnt;
