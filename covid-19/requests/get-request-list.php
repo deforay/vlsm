@@ -161,7 +161,12 @@ if ($sarr['user_type'] == 'remoteuser') {
           $sFilter = " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")   AND remote_sample='yes'";
      }
 } else {
-     $sWhere = $sWhere . ' AND vl.result_status!=9';
+     if (isset($where) && trim($where) != "") {
+          $where .= " AND ";
+     } else {
+          $where .= " WHERE ";
+     }
+     $sWhere = $sWhere . 'vl.result_status!=9';
      $sFilter = ' AND result_status!=9';
 }
 $sQuery = $sQuery . ' ' . $sWhere;
@@ -174,7 +179,8 @@ $_SESSION['covid19RequestSearchResultQuery'] = $sQuery;
 if (isset($sLimit) && isset($sOffset)) {
      $sQuery = $sQuery . ' LIMIT ' . $sOffset . ',' . $sLimit;
 }
-//echo $sQuery;die;
+/* echo $sQuery;
+die; */
 $rResult = $db->rawQuery($sQuery);
 /* Data set length after filtering */
 $aResultFilterTotal = $db->rawQuery("SELECT vl.covid19_id FROM form_covid19 as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere");

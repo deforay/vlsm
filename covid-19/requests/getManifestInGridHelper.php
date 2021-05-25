@@ -121,12 +121,12 @@ $sQuery = "SELECT * FROM form_covid19 as vl
 if (isset($sWhere) && $sWhere != "") {
      $sWhere = ' where ' . $sWhere;
      if (isset($_POST['samplePackageCode']) && $_POST['samplePackageCode'] != '') {
-          $sWhere = $sWhere . ' sample_code IS NULL AND vl.sample_package_code LIKE "%' . $_POST['samplePackageCode'] . '%" OR remote_sample_code LIKE "' . $_POST['samplePackageCode'] . '"';
+          $sWhere = $sWhere . ' AND vl.sample_package_code LIKE "%' . $_POST['samplePackageCode'] . '%" OR remote_sample_code LIKE "' . $_POST['samplePackageCode'] . '"';
      }
 } else {
      if (isset($_POST['samplePackageCode']) && trim($_POST['samplePackageCode']) != '') {
           $sWhere = ' where ' . $sWhere;
-          $sWhere = $sWhere . ' sample_code IS NULL AND vl.sample_package_code LIKE "%' . $_POST['samplePackageCode'] . '%" OR remote_sample_code LIKE "' . $_POST['samplePackageCode'] . '"';
+          $sWhere = $sWhere . ' vl.sample_package_code LIKE "%' . $_POST['samplePackageCode'] . '%" OR remote_sample_code LIKE "' . $_POST['samplePackageCode'] . '"';
      }
 }
 /* if ($sWhere != '') {
