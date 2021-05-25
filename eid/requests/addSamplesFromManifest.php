@@ -201,12 +201,55 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 					if (data != "") {
 						$('.activateSample').show(500);
 						$('#sampleId').val(data);
+					} else {
+						<?php if (isset($_SESSION['system']) && $_SESSION['system'] == 'vluser') { ?>
+							syncPkgRequests($("#samplePackageCode").val(), 'vl');
+						<?php } ?>
 					}
 				});
 		} else {
 			alert('Please enter the Sample Manifest Code then hit submit');
 		}
 	}
+
+	/* Remote Syn only package code matches */
+	<?php if (isset($_SESSION['system']) && $_SESSION['system'] == 'vluser') { ?>
+		var remoteUrl = '<?php echo $systemConfig['remoteURL']; ?>';
+
+		function syncPkgRequests(pkg, type) {
+			$.blockUI({
+				message: '<h3>Trying to sync Relevant Manifest Code Test Requests<br>Please wait...</h3>'
+			});
+
+			if (remoteSync && remoteUrl != null && remoteUrl != '') {
+				var jqxhr = $.ajax({
+						url: "/remote/scheduled-jobs/syncRequests.php?pkg=" + pkg + "&type=" + type,
+					})
+					.done(function(data) {
+						//console.log(data);
+						//alert( "success" );
+					})
+					.fail(function() {
+						$.unblockUI();
+						// alert("Unable to do VLSTS Remote Sync. Please contact technical team for assistance.");
+					})
+					.always(function() {
+						$.unblockUI();
+						$.post("/vl/requests/getRemoteManifestHelper.php", {
+								samplePackageCode: $("#samplePackageCode").val()
+							},
+							function(data) {
+								$.unblockUI();
+								if (data != "") {
+									$('.activateSample').show(500);
+									$('#sampleId').val(data);
+									oTable.fnDraw();
+								}
+							});
+					});
+			}
+		}
+	<?php } ?>
 
 	function activeSampleCode() {
 		$.blockUI();

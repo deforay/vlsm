@@ -92,6 +92,9 @@ $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- S
       placeholder: "Select Clinics"
     });
     $('#sampleCollectionDate').daterangepicker({
+        locale: {
+          cancelLabel: 'Clear'
+        },
         format: 'DD-MMM-YYYY',
         separator: ' to ',
         startDate: moment().subtract('days', 365),

@@ -33,9 +33,9 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 
 
 $covid19Results = $general->getCovid19Results();
-if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda' && $arr['vl_form'] != 1)){
+if ((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] == 'rwanda' && $arr['vl_form'] != 1)) {
 	$reportType = 'generate-export-rwanda.php';
-}else{
+} else {
 	$reportType = 'generate-export-data.php';
 }
 
@@ -59,7 +59,7 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 	</section>
 	<!-- Main content -->
 	<section class="content">
-		<!-- <pre><?php print_r($arr);?></pre> -->
+		<!-- <pre><?php print_r($arr); ?></pre> -->
 		<div class="row">
 			<div class="col-xs-12">
 				<div class="box">
@@ -67,28 +67,28 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 						<tr>
 							<th>Sample Collection Date</th>
 							<td>
-								<input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:220px;background:#fff;" />
+								<input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="filter-input form-control" placeholder="Select Collection Date" readonly style="width:220px;background:#fff;" />
 							</td>
 							<th>Sample Received At Lab</th>
 							<td>
-								<input type="text" id="sampleRecievedDate" name="sampleRecievedDate" class="form-control" placeholder="Select Recieved Date" readonly style="width:220px;background:#fff;" />
+								<input type="text" id="sampleRecievedDate" name="sampleRecievedDate" class="filter-input form-control" placeholder="Select Recieved Date" readonly style="width:220px;background:#fff;" />
 							</td>
 							<th>Facility Name</th>
 							<td>
-								<select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple" style="width:220px;">
-								<?= $facilitiesDropdown; ?>
+								<select class="filter-input form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple" style="width:220px;">
+									<?= $facilitiesDropdown; ?>
 								</select>
 							</td>
 						</tr>
 						<tr>
 							<th>Sample Test Date</th>
 							<td>
-								<input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;" />
+								<input type="text" id="sampleTestDate" name="sampleTestDate" class="filter-input form-control" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;" />
 							</td>
 
 							<th>Result </th>
 							<td>
-								<select class="form-control" id="vLoad" name="vLoad" title="Please select batch code" style="width:220px;">
+								<select class="filter-input form-control" id="vLoad" name="vLoad" title="Please select batch code" style="width:220px;">
 									<option value=""> -- Select -- </option>
 									<?php foreach ($covid19Results as $covid19ResultKey => $covid19ResultValue) { ?>
 										<option value="<?php echo $covid19ResultKey; ?>"> <?php echo $covid19ResultValue; ?> </option>
@@ -98,13 +98,13 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 
 							<th>Last Print Date</th>
 							<td>
-								<input type="text" id="printDate" name="printDate" class="form-control" placeholder="Select Print Date" readonly style="width:220px;background:#fff;" />
+								<input type="text" id="printDate" name="printDate" class="filter-input form-control" placeholder="Select Print Date" readonly style="width:220px;background:#fff;" />
 							</td>
 						</tr>
 						<tr>
 							<th>Status</th>
 							<td>
-								<select name="status" id="status" class="form-control" title="Please choose status">
+								<select name="status" id="status" class="filter-input form-control" title="Please choose status">
 									<option value=""> -- Select -- </option>
 									<?php foreach ($tsResult as $sampleStatus) { ?>
 										<option value="<?php echo $sampleStatus['status_id']; ?>"> <?php echo $sampleStatus['status_name']; ?> </option>
@@ -125,7 +125,7 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 							</td>
 							<th>Implementing Partners</th>
 							<td>
-								<select class="form-control" name="implementingPartner" id="implementingPartner" title="Please choose implementing partner">
+								<select class="filter-input form-control" name="implementingPartner" id="implementingPartner" title="Please choose implementing partner">
 									<option value=""> -- Select -- </option>
 									<?php
 									foreach ($implementingPartnerList as $implementingPartner) {
@@ -136,9 +136,9 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 							</td>
 						</tr>
 						<tr>
-						<th>Testing Lab</th>
+							<th>Testing Lab</th>
 							<td>
-								<select class="form-control" id="vlLab" name="vlLab" title="Please select vl lab" style="width:220px;">
+								<select class="filter-input form-control" id="vlLab" name="vlLab" title="Please select vl lab" style="width:220px;">
 									<?= $testingLabsDropdown; ?>
 								</select>
 							</td>
@@ -149,7 +149,7 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 
 								&nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Clear Search</span></button>
 
-								&nbsp;<button class="btn btn-success" type="button" onclick="exportInexcel('<?php echo $reportType;?>')"><i class="fa fa-cloud-download" aria-hidden="true"></i> Download</button>
+								&nbsp;<button class="btn btn-success" type="button" onclick="exportInexcel('<?php echo $reportType; ?>')"><i class="fa fa-cloud-download" aria-hidden="true"></i> Download</button>
 
 								&nbsp;<button class="btn btn-default pull-right" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
 							</td>
@@ -248,7 +248,16 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 		$("#facilityName").select2({
 			placeholder: "Select Facilities"
 		});
+
+		$('#sampleCollectionDate,#sampleTestDate,#printDate,#sampleRecievedDate').on('cancel.daterangepicker', function(ev, picker) {
+			//do something, like clearing an input
+			$(this).val('');
+		});
+
 		$('#sampleCollectionDate,#sampleTestDate,#printDate,#sampleRecievedDate').daterangepicker({
+				locale: {
+					cancelLabel: 'Clear'
+				},
 				format: 'DD-MMM-YYYY',
 				separator: ' to ',
 				startDate: moment().subtract(29, 'days'),
@@ -419,6 +428,16 @@ if((isset($arr['covid19_report_type']) && $arr['covid19_report_type'] =='rwanda'
 	}
 
 	function searchVlRequestData() {
+		var flag = false;
+		$(".filter-input ").each(function() {
+			if ($(this).val() != "") {
+				flag = true;
+			}
+		});
+		if (flag == false) {
+			alert("At Least select one filter for get report");
+			return false;
+		}
 		$.blockUI();
 		oTable.fnDraw();
 		$.unblockUI();
