@@ -74,24 +74,24 @@ $eidResults = $general->getEidResults();
 								<select class="form-control" id="vlLab" name="vlLab" title="Please select vl lab" style="width:220px;">
 									<?= $testingLabsDropdown; ?>
 								</select>
-                            </td>
-                            </tr>
-						<tr>                            
+							</td>
+						</tr>
+						<tr>
 							<th>Sample Test Date</th>
 							<td>
 								<input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;" />
 							</td>
-						
+
 							<th>Result </th>
 							<td>
 								<select class="form-control" id="vLoad" name="vLoad" title="Please select batch code" style="width:220px;">
 									<option value=""> -- Select -- </option>
-									    <?php foreach($eidResults as $eidResultKey => $eidResultValue){ ?>
-                                        <option value="<?php echo $eidResultKey; ?>"> <?php echo $eidResultValue; ?> </option>
-                                        <?php } ?>
+									<?php foreach ($eidResults as $eidResultKey => $eidResultValue) { ?>
+										<option value="<?php echo $eidResultKey; ?>"> <?php echo $eidResultValue; ?> </option>
+									<?php } ?>
 								</select>
-                            </td>
-                            
+							</td>
+
 							<th>Last Print Date</th>
 							<td>
 								<input type="text" id="printDate" name="printDate" class="form-control" placeholder="Select Print Date" readonly style="width:220px;background:#fff;" />
@@ -107,14 +107,14 @@ $eidResults = $general->getEidResults();
 									<option value="6">Awaiting Clinic Approval</option>
 								</select>
 							</td>
-							
+
 							<th>Funding Sources</th>
 							<td>
 								<select class="form-control" name="fundingSource" id="fundingSource" title="Please choose funding source">
 									<option value=""> -- Select -- </option>
 									<?php
 									foreach ($fundingSourceList as $fundingSource) {
-										?>
+									?>
 										<option value="<?php echo base64_encode($fundingSource['funding_source_id']); ?>"><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
 									<?php } ?>
 								</select>
@@ -125,7 +125,7 @@ $eidResults = $general->getEidResults();
 									<option value=""> -- Select -- </option>
 									<?php
 									foreach ($implementingPartnerList as $implementingPartner) {
-										?>
+									?>
 										<option value="<?php echo base64_encode($implementingPartner['i_partner_id']); ?>"><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
 									<?php } ?>
 								</select>
@@ -241,6 +241,9 @@ $eidResults = $general->getEidResults();
 			placeholder: "Select Facilities"
 		});
 		$('#sampleCollectionDate,#sampleTestDate,#printDate').daterangepicker({
+				locale: {
+					cancelLabel: 'Clear'
+				},
 				format: 'DD-MMM-YYYY',
 				separator: ' to ',
 				startDate: moment().subtract(29, 'days'),
@@ -311,21 +314,43 @@ $eidResults = $general->getEidResults();
 			//"bStateSave" : true,
 			"iDisplayLength": 100,
 			"bRetrieve": true,
-			"aoColumns": [
-                { "sClass": "center" }, 
-                <?php if ($sarr['user_type'] != 'standalone') { ?> 
-                    { "sClass": "center"},
-                <?php } ?> 
-                { "sClass": "center"},
-				{ "sClass": "center"},
-				{ "sClass": "center"},
-				{ "sClass": "center"},
-				{ "sClass": "center"},
-				{ "sClass": "center"},
-				{ "sClass": "center"},
-				{ "sClass": "center"},
-				{ "sClass": "center"},
-				{ "sClass": "center", "bSortable": false },
+			"aoColumns": [{
+					"sClass": "center"
+				},
+				<?php if ($sarr['user_type'] != 'standalone') { ?> {
+						"sClass": "center"
+					},
+				<?php } ?> {
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center",
+					"bSortable": false
+				},
 			],
 			"aaSorting": [
 				[0, "asc"]
@@ -334,7 +359,7 @@ $eidResults = $general->getEidResults();
 			"bServerSide": true,
 			"sAjaxSource": "/eid/management/get-data-export.php",
 			"fnServerData": function(sSource, aoData, fnCallback) {
-				
+
 				aoData.push({
 					"name": "sampleCollectionDate",
 					"value": $("#sampleCollectionDate").val()
@@ -395,9 +420,9 @@ $eidResults = $general->getEidResults();
 
 	function convertSearchResultToPdf(id) {
 		<?php
-		    $path = '';
-            $path = '/eid/results/generate-result-pdf.php'; 
-        ?>
+		$path = '';
+		$path = '/eid/results/generate-result-pdf.php';
+		?>
 		$.post("<?php echo $path; ?>", {
 				source: 'print',
 				id: id
@@ -435,7 +460,6 @@ $eidResults = $general->getEidResults();
 				}
 			});
 	}
-
 </script>
 <?php
 include(APPLICATION_PATH . '/footer.php');

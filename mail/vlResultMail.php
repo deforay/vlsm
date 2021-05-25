@@ -77,10 +77,10 @@ $batchResult = $db->rawQuery($batchQuery);
                   <div class="col-lg-9">
                     <select class="form-control isRequired" id="facility" name="facility" title="Please select facility name">
                       <option></option>
-                    <?php
+                      <?php
                       foreach ($facilityResult as $facility) { ?>
                         ?>
-                        <option data-name="<?php echo $facility['facility_name']; ?>" data-email="<?php echo $facility['facility_emails']; ?>" data-report-email="<?php echo $facility['report_email']; ?>" data-id="<?= $facility['facility_id']?>" value="<?php echo base64_encode($facility['facility_id']); ?>"><?php echo ucwords($facility['facility_name']); ?></option>
+                        <option data-name="<?php echo $facility['facility_name']; ?>" data-email="<?php echo $facility['facility_emails']; ?>" data-report-email="<?php echo $facility['report_email']; ?>" data-id="<?= $facility['facility_id'] ?>" value="<?php echo base64_encode($facility['facility_id']); ?>"><?php echo ucwords($facility['facility_name']); ?></option>
                       <?php } ?>
                     </select>
                   </div>
@@ -280,6 +280,9 @@ $batchResult = $db->rawQuery($batchQuery);
       placeholder: "Select Batches"
     });
     $('#sampleCollectionDate').daterangepicker({
+        locale: {
+          cancelLabel: 'Clear'
+        },
         format: 'DD-MMM-YYYY',
         separator: ' to ',
         startDate: moment().subtract(29, 'days'),
@@ -443,7 +446,7 @@ $batchResult = $db->rawQuery($batchQuery);
       $('#toName').val('');
       $('#toEmail').val('');
       $('#reportEmail').val('');
-      
+
     } else {
       var toName = $(this).find(':selected').data('name');
       var toEmailId = $(this).find(':selected').data('email');

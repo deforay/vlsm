@@ -1,16 +1,10 @@
 <?php
-$title = "Hepatitis | View All Requests";
-#require_once('../../startup.php');
-
-
-// echo "<pre>";
-// var_dump($_SESSION['privileges']);die;
-
-include_once(APPLICATION_PATH . '/header.php');
+$title = "Covid-19 | DHIS2 Requests";
+require_once(APPLICATION_PATH . '/header.php');
 
 $general = new \Vlsm\Models\General($db);
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
-$healthFacilites = $facilitiesDb->getHealthFacilities('hepatitis');
+$healthFacilites = $facilitiesDb->getHealthFacilities('covid19');
 /* Global config data */
 $arr = $general->getGlobalConfig();
 
@@ -18,19 +12,17 @@ $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-
 
 $formId = $general->getGlobalConfig('vl_form');
 
-$batQuery = "SELECT batch_code FROM batch_details WHERE test_type ='hepatitis' AND batch_status='completed'";
+$sQuery = "SELECT * FROM r_covid19_sample_type WHERE `status`='active'";
+$sResult = $db->rawQuery($sQuery);
+
+$batQuery = "SELECT batch_code FROM batch_details WHERE test_type ='covid19' AND batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
 ?>
-<style>
-	.select2-selection__choice {
-		color: black !important;
-	}
-</style>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<h1><i class="fa fa-edit"></i>Hepatitis Test Requests</h1>
+		<h1><i class="fa fa-edit"></i> Covid-19 Test Requests - DHIS2</h1>
 		<ol class="breadcrumb">
 			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
 			<li class="active">Test Request</li>
@@ -42,75 +34,19 @@ $batResult = $db->rawQuery($batQuery);
 		<div class="row">
 			<div class="col-xs-12">
 				<div class="box">
-					<table id="advanceFilter" class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;display: none;">
-						<tr>
-							<td><b>Sample Collection Date :</b></td>
-							<td>
-								<input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="background:#fff;" />
-							</td>
-							<td><b>Batch Code :</b></td>
-							<td>
-								<select class="form-control" id="batchCode" name="batchCode" title="Please select batch code">
-									<option value=""> -- Select -- </option>
-									<?php
-									foreach ($batResult as $code) {
-									?>
-										<option value="<?php echo $code['batch_code']; ?>"><?php echo $code['batch_code']; ?></option>
-									<?php
-									}
-									?>
-								</select>
-							</td>
-							<td><b>Req. Sample Type :</b></td>
-							<td>
-								<select class="form-control" id="requestSampleType" name="requestSampleType" title="Please select request sample type">
-									<option value="">All</option>
-									<option value="result">Sample With Result</option>
-									<option value="noresult">Sample Without Result</option>
-								</select>
-							</td>
 
-						</tr>
-						<tr>
-							<td><b>Facility Name :</b></td>
-							<td>
-								<select class="form-control" id="facilityName" name="facilityName" multiple="multiple" title="Please select facility name" style="width:100%;">
-									<?= $facilitiesDropdown; ?>
-								</select>
-							</td>
-							<td><b>Province/State&nbsp;:</b></td>
-							<td>
-								<input type="text" id="state" name="state" class="form-control" placeholder="Enter Province/State" style="background:#fff;" onkeyup="loadVlRequestStateDistrict()" />
-							</td>
-							<td><b>District/County :</b></td>
-							<td>
-								<input type="text" id="district" name="district" class="form-control" placeholder="Enter District/County" onkeyup="loadVlRequestStateDistrict()" />
-							</td>
-						</tr>
-						<tr>
-
-						</tr>
-						<tr>
-							<td colspan="2"><input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-default btn-sm">
-								&nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
-								&nbsp;<button class="btn btn-danger btn-sm" onclick="hideAdvanceSearch('advanceFilter','filter');"><span>Hide Advanced Search</span></button>
-							</td>
-							<td colspan="4">
-								<?php if (isset($_SESSION['privileges']) && in_array("hepatitis-add-request.php", $_SESSION['privileges'])) { ?>
-									<a style=" margin: 0px 5px; " href="/hepatitis/requests/hepatitis-add-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Add new Hepatitis Request</a>
-								<?php } ?>
-							</td>
-						</tr>
-					</table>
 					<table id="filter" class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
 						<tr id="">
 							<td>
 
 								<?php
-								if (isset($_SESSION['privileges']) && in_array("hepatitis-add-request.php", $_SESSION['privileges'])) { ?>
-									<a style=" margin: 0px 5px; " href="/hepatitis/requests/hepatitis-add-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Add new Hepatitis Request</a>
-								<?php } ?>
-								<button style=" margin: 0px 5px; " class="btn btn-primary btn-sm pull-right" style="margin-right:5px;" onclick="hideAdvanceSearch('filter','advanceFilter');"><span>Show Advanced Search</span></button>
+								if (isset($_SESSION['privileges']) && in_array("covid-19-add-request.php", $_SESSION['privileges'])) { ?>
+									<?php if ($formId == 1 && $sarr['user_type'] != 'remoteuser') { ?>
+										<a style=" margin: 0px 5px; " href="javascript:receiveDhis2Data();" class="btn btn-success btn-sm pull-right"> <i class="fa fa-download"></i> Receive Test Requests from DHIS2</a>
+										<a style=" margin: 0px 5px; " href="javascript:sendDhis2Data();" class="btn btn-warning btn-sm pull-right"> <i class="fa fa-upload"></i> Send Results to DHIS2</a>
+								<?php }
+								} ?>
+
 							</td>
 						</tr>
 					</table>
@@ -128,15 +64,18 @@ $batResult = $db->rawQuery($batQuery);
 									<th>Sample Collection<br /> Date</th>
 									<th>Batch Code</th>
 									<th>Facility Name</th>
-									<th>Patient ID</th>
+									<?php if ($formId == 1) { ?>
+										<th>Case ID</th>
+									<?php } else { ?>
+										<th>Patient ID</th>
+									<?php } ?>
 									<th>Patient Name</th>
 									<th>Province/State</th>
 									<th>District/County</th>
-									<th>HCV VL Count</th>
-									<th>HBV VL Count</th>
+									<th>Result</th>
 									<th>Last Modified On</th>
 									<th>Status</th>
-									<?php if (isset($_SESSION['privileges']) && (in_array("hepatitis-edit-request.php", $_SESSION['privileges'])) || (in_array("hepatitis-view-request.php", $_SESSION['privileges']))) { ?>
+									<?php if (isset($_SESSION['privileges']) && (in_array("covid-19-edit-request.php", $_SESSION['privileges'])) || (in_array("covid-19-view-request.php", $_SESSION['privileges']))) { ?>
 										<th>Action</th>
 									<?php } ?>
 								</tr>
@@ -211,6 +150,88 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 	var selectedTests = [];
 	var selectedTestsId = [];
 	var oTable = null;
+
+
+	function receiveDhis2Data() {
+		if (!navigator.onLine) {
+			alert('Please connect to internet to sync with DHIS2');
+			return false;
+		}
+
+
+		$.blockUI({
+			message: '<h3>Receiving test requests from DHIS2<br><img src="/assets/img/loading.gif" /></h3>'
+		});
+		var jqxhr = $.ajax({
+				url: "/covid-19/interop/dhis2/covid-19-receive.php",
+			})
+			.done(function(data) {
+				var response = JSON.parse(data);
+				if (response.received > 0) {
+					msg  = '<h3>No. of Records Received : ' + response.received + ' <br><img src="/assets/img/loading.gif" /></h3>'
+				}else{
+					msg =  '<h3>No Records received from DHIS2 for the selected date range</h3>'
+				}
+				setTimeout(function() {
+						$.blockUI({
+							message: msg
+						});
+					}, 2500);
+				if (response.processed > 0) {
+					setTimeout(function() {
+						$.blockUI({
+							message: '<h3>No. of Records Received : ' + response.received + ' </h3><h3>Successfully Processed : ' + response.processed + ' </h3>'
+						});
+					}, 6000);
+				}
+			})
+			.fail(function() {
+				$.unblockUI();
+				alert("Unable to sync with DHIS2. Please contact technical team for assistance.");
+			})
+			.always(function() {
+				setTimeout(function() {
+					$.unblockUI();
+				}, 9500);
+			});
+	}
+
+	function sendDhis2Data() {
+		if (!navigator.onLine) {
+			alert('Please connect to internet to sync with DHIS2');
+			return false;
+		}
+
+		$.blockUI({
+			message: '<h3>Sending Test Results to DHIS2<br><img src="/assets/img/loading.gif" /></h3>'
+		});
+		var jqxhr = $.ajax({
+				url: "/covid-19/interop/dhis2/covid-19-send.php",
+			})
+			.done(function(data) {
+				var response = JSON.parse(data);
+				if (response.processed > 0) {
+					msg = '<h3>No. of Results Successfully Sent : ' + response.processed + ' </h3>';
+				} else {
+					msg = '<h3>All results already synced with DHIS2</h3>';
+				}
+				$.blockUI({
+					message: msg
+				});
+			})
+			.fail(function() {
+				$.unblockUI();
+				alert("Unable to sync with DHIS2. Please contact technical team for assistance.");
+			})
+			.always(function() {
+
+				setTimeout(function() {
+					$.unblockUI();
+				}, 4500);
+
+			});
+	}
+
 	$(document).ready(function() {
 		<?php
 		if (isset($_GET['barcode']) && $_GET['barcode'] == 'true') {
@@ -304,17 +325,15 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 					"sClass": "center"
 				}, {
 					"sClass": "center"
-				}, {
-					"sClass": "center"
 				},
-				<?php if (isset($_SESSION['privileges']) && (in_array("hepatitis-edit-request.php", $_SESSION['privileges'])) || (in_array("hepatitis-view-request.php", $_SESSION['privileges']))) { ?> {
+				<?php if (isset($_SESSION['privileges']) && (in_array("covid-19-edit-request.php", $_SESSION['privileges'])) || (in_array("covid-19-view-request.php", $_SESSION['privileges']))) { ?> {
 						"sClass": "center",
 						"bSortable": false
 					},
 				<?php } ?>
 			],
 			"aaSorting": [
-				[<?php echo ($sarr['user_type'] == 'remoteuser' || $sarr['user_type'] == 'vluser') ? 11 : 10 ?>, "desc"]
+				[<?php echo ($sarr['user_type'] == 'remoteuser' || $sarr['user_type'] == 'vluser') ? 10 : 9 ?>, "desc"]
 			],
 			"fnDrawCallback": function() {
 				var checkBoxes = document.getElementsByName("chk[]");
@@ -327,35 +346,11 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 			},
 			"bProcessing": true,
 			"bServerSide": true,
-			"sAjaxSource": "/hepatitis/requests/get-request-list.php",
+			"sAjaxSource": "/covid-19/requests/get-request-list.php",
 			"fnServerData": function(sSource, aoData, fnCallback) {
 				aoData.push({
-					"name": "batchCode",
-					"value": $("#batchCode").val()
-				});
-				aoData.push({
-					"name": "sampleCollectionDate",
-					"value": $("#sampleCollectionDate").val()
-				});
-				aoData.push({
-					"name": "facilityName",
-					"value": $("#facilityName").val()
-				});
-				aoData.push({
-					"name": "sampleType",
-					"value": $("#sampleType").val()
-				});
-				aoData.push({
-					"name": "district",
-					"value": $("#district").val()
-				});
-				aoData.push({
-					"name": "state",
-					"value": $("#state").val()
-				});
-				aoData.push({
-					"name": "reqSampleType",
-					"value": $("#requestSampleType").val()
+					"name": "source",
+					"value": "dhis2"
 				});
 				$.ajax({
 					"dataType": 'json',
@@ -374,43 +369,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 		oTable.fnDraw();
 		$.unblockUI();
 	}
-
-	function loadVlRequestStateDistrict() {
-		oTable.fnDraw();
-	}
-
-	function toggleAllVisible() {
-		//alert(tabStatus);
-		$(".checkTests").each(function() {
-			$(this).prop('checked', false);
-			selectedTests.splice($.inArray(this.value, selectedTests), 1);
-			selectedTestsId.splice($.inArray(this.id, selectedTestsId), 1);
-			$("#status").prop('disabled', true);
-		});
-		if ($("#checkTestsData").is(':checked')) {
-			$(".checkTests").each(function() {
-				$(this).prop('checked', true);
-				selectedTests.push(this.value);
-				selectedTestsId.push(this.id);
-			});
-			$("#status").prop('disabled', false);
-		} else {
-			$(".checkTests").each(function() {
-				$(this).prop('checked', false);
-				selectedTests.splice($.inArray(this.value, selectedTests), 1);
-				selectedTestsId.splice($.inArray(this.id, selectedTestsId), 1);
-				$("#status").prop('disabled', true);
-			});
-		}
-		$("#checkedTests").val(selectedTests.join());
-	}
-
-
-	function hideAdvanceSearch(hideId, showId) {
-		$("#" + hideId).hide();
-		$("#" + showId).show();
-	}
 </script>
 <?php
-include(APPLICATION_PATH . '/footer.php');
+require_once(APPLICATION_PATH . '/footer.php');
 ?>

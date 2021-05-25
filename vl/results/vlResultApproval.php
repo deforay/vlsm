@@ -102,11 +102,11 @@ foreach ($rejectionTypeResult as $type) {
                   <option value=""> -- Select -- </option>
                   <?php
                   foreach ($batResult as $code) {
-                    ?>
+                  ?>
                     <option value="<?php echo $code['batch_code']; ?>"><?php echo $code['batch_code']; ?></option>
                   <?php
-                }
-                ?>
+                  }
+                  ?>
                 </select>
               </td>
             </tr>
@@ -117,11 +117,11 @@ foreach ($rejectionTypeResult as $type) {
                   <option value=""> -- Select -- </option>
                   <?php
                   foreach ($sResult as $type) {
-                    ?>
+                  ?>
                     <option value="<?php echo $type['sample_id']; ?>"><?php echo ucwords($type['sample_name']); ?></option>
                   <?php
-                }
-                ?>
+                  }
+                  ?>
                 </select>
               </td>
               <td>&nbsp;<b>Facility Name&nbsp;:</b></td>
@@ -220,6 +220,9 @@ foreach ($rejectionTypeResult as $type) {
       placeholder: "Select Facilities"
     });
     $('#sampleCollectionDate').daterangepicker({
+        locale: {
+          cancelLabel: 'Clear'
+        },
         format: 'DD-MMM-YYYY',
         separator: ' to ',
         startDate: moment().subtract(29, 'days'),

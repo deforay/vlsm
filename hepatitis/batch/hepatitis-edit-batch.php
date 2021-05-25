@@ -83,7 +83,7 @@ $testPlatformResult = $general->getTestingPlatforms('hepatitis');
 			</div>
 			<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 100%;">
 				<tr>
-					
+
 					<th>Facility</th>
 					<td>
 						<select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple">
@@ -217,6 +217,9 @@ $testPlatformResult = $general->getTestingPlatforms('hepatitis');
 			placeholder: "Select Facilities"
 		});
 		$('#sampleCollectionDate').daterangepicker({
+				locale: {
+					cancelLabel: 'Clear'
+				},
 				format: 'DD-MMM-YYYY',
 				separator: ' to ',
 				startDate: moment().subtract(29, 'days'),

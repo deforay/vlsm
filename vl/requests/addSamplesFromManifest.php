@@ -98,13 +98,13 @@ $batResult = $db->rawQuery($batQuery);
 <?php
 if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off") {
 	if ($global['bar_code_printing'] == 'dymo-labelwriter-450') {
-		?>
+?>
 		<script src="/assets/js/DYMO.Label.Framework.js"></script>
 		<script src="/configs/dymo-format.js"></script>
 		<script src="/assets/js/dymo-print.js"></script>
 	<?php
-		} else if ($global['bar_code_printing'] == 'zebra-printer') {
-			?>
+	} else if ($global['bar_code_printing'] == 'zebra-printer') {
+	?>
 		<script src="/assets/js/zebra-browserprint.js.js"></script>
 		<script src="/configs/zebra-format.js"></script>
 		<script src="/assets/js/zebra-print.js"></script>
@@ -118,10 +118,10 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 
 	function loadVlRequestData() {
 		$.blockUI();
-		if(oTable){
+		if (oTable) {
 			$("#vlManifestDataTable").dataTable().fnDestroy();
 		}
-		
+
 		oTable = $('#vlManifestDataTable').dataTable({
 			"oLanguage": {
 				"sLengthMenu": "_MENU_ records per page"
@@ -205,7 +205,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 					if (data != "") {
 						$('.activateSample').show(500);
 						$('#sampleId').val(data);
-					} else{
+					} else {
 						<?php if (isset($_SESSION['system']) && $_SESSION['system'] == 'vluser') { ?>
 							syncPkgRequests($("#samplePackageCode").val(), 'vl');
 						<?php } ?>
@@ -215,6 +215,45 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 			alert('Please enter the Sample Manifest Code then hit submit');
 		}
 	}
+
+	/* Remote Syn only package code matches */
+	<?php if (isset($_SESSION['system']) && $_SESSION['system'] == 'vluser') { ?>
+		var remoteUrl = '<?php echo $systemConfig['remoteURL']; ?>';
+
+		function syncPkgRequests(pkg, type) {
+			$.blockUI({
+				message: '<h3>Trying to sync Relevant Manifest Code Test Requests<br>Please wait...</h3>'
+			});
+
+			if (remoteSync && remoteUrl != null && remoteUrl != '') {
+				var jqxhr = $.ajax({
+						url: "/remote/scheduled-jobs/syncRequests.php?pkg=" + pkg + "&type=" + type,
+					})
+					.done(function(data) {
+						//console.log(data);
+						//alert( "success" );
+					})
+					.fail(function() {
+						$.unblockUI();
+						// alert("Unable to do VLSTS Remote Sync. Please contact technical team for assistance.");
+					})
+					.always(function() {
+						$.unblockUI();
+						$.post("/vl/requests/getRemoteManifestHelper.php", {
+								samplePackageCode: $("#samplePackageCode").val()
+							},
+							function(data) {
+								$.unblockUI();
+								if (data != "") {
+									$('.activateSample').show(500);
+									$('#sampleId').val(data);
+									oTable.fnDraw();
+								}
+							});
+					});
+			}
+		}
+	<?php } ?>
 
 	function activeSampleCode() {
 		$.blockUI();
@@ -230,43 +269,6 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 				$.unblockUI();
 			});
 	}
-	/* Remote Syn only package code matches */
-	<?php if (isset($_SESSION['system']) && $_SESSION['system'] == 'vluser') { ?>
-		var remoteUrl = '<?php echo $systemConfig['remoteURL']; ?>';
-		function syncPkgRequests(pkg, type) {
-			$.blockUI({
-				message: '<h3>Trying to sync Relevant Manifest Code Test Requests<br>Please wait...</h3>'
-			});
-
-			if (remoteSync && remoteUrl != null && remoteUrl != '') {
-				var jqxhr = $.ajax({
-						url: "/remote/scheduled-jobs/syncRequests.php?pkg="+pkg+"&type="+type,
-				})
-				.done(function(data) {
-					//console.log(data);
-					//alert( "success" );
-				})
-				.fail(function() {
-					$.unblockUI();
-					// alert("Unable to do VLSTS Remote Sync. Please contact technical team for assistance.");
-				})
-				.always(function() {
-					$.unblockUI();
-					$.post("/vl/requests/getRemoteManifestHelper.php", {
-						samplePackageCode: $("#samplePackageCode").val()
-					},
-					function(data) {
-						$.unblockUI();
-						if (data != "") {
-							$('.activateSample').show(500);
-							$('#sampleId').val(data);
-							oTable.fnDraw();
-						} 
-					});
-				});
-			}
-		}
-	<?php } ?>
 </script>
 <?php
 include(APPLICATION_PATH . '/footer.php');

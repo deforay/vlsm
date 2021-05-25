@@ -191,6 +191,10 @@
 		if (empty($_SESSION['instanceFacilityName'])) { ?>
 			showModal('/addInstanceDetails.php', 900, 420);
 		<?php } ?>
+
+		$('.daterange,#sampleCollectionDate,#sampleTestDate,#printSampleCollectionDate,#printSampleTestDate,#vlSampleCollectionDate,#eidSampleCollectionDate,#covid19SampleCollectionDate,#recencySampleCollectionDate,#hepatitisSampleCollectionDate,#hvlSampleTestDate,#rjtSampleTestDate,#noResultSampleTestDate,#printDate,#hvlSampleTestDate,#rjtSampleTestDate,#noResultSampleTestDate,#femaleSampleTestDate').on('cancel.daterangepicker', function(ev, picker) {
+			$(this).val('');
+		});
 	});
 	str = $(location).attr('pathname');
 	splitsUrl = str.substr(str.lastIndexOf('/') + 1);
