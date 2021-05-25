@@ -5,8 +5,6 @@ if (session_status() == PHP_SESSION_NONE) {
 #require_once('../../startup.php');  
 
 $general = new \Vlsm\Models\General($db);
-$facilitiesDb = new \Vlsm\Models\Facilities($db);
-$facilityMap = $facilitiesDb->getFacilityMap($_SESSION['userId']);
 
 $formId = $general->getGlobalConfig('vl_form');
 
@@ -109,7 +107,8 @@ $aWhere = '';
 $sQuery = "SELECT  DATE_FORMAT(DATE(vl.sample_tested_datetime), '%b-%Y') as monthrange, f.facility_id, f.facility_name, vl.is_sample_rejected,vl.sample_tested_datetime,vl.sample_collection_date, tl.monthly_target, 
 SUM(CASE WHEN (is_sample_rejected IS NOT NULL AND is_sample_rejected LIKE 'yes%') THEN 1 ELSE 0 END) as totalRejected, 
 SUM(CASE WHEN (sample_tested_datetime IS NULL AND sample_collection_date IS NOT NULL) THEN 1 ELSE 0 END) as totalReceived, 
-SUM(CASE WHEN (sample_collection_date IS NOT NULL) THEN 1 ELSE 0 END) as totalCollected FROM testing_labs as tl INNER JOIN form_covid19 as vl ON vl.lab_id=tl.facility_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  ";
+SUM(CASE WHEN (sample_collection_date IS NOT NULL) THEN 1 ELSE 0 END) as totalCollected FROM testing_labs as tl INNER JOIN form_covid19 as vl ON vl.lab_id=tl.facility_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  
+RIGHT JOIN vl_facility_map as fm ON vl.lab_id=fm.vl_lab_id";
 // vl_request_form
 // health_facilities
 $start_date = '';
@@ -202,13 +201,16 @@ if ($sWhere != '') {
      $sWhere = $sWhere . ' where vl.result!="" AND vl.vlsm_country_id="' . $formId . '" AND vl.result_status!=9';
 }
 
-if (!empty($facilityMap)) {
-     $sWhere .= " AND vl.facility_id IN ($facilityMap) ";
-}
 $sWhere .= " AND tl.test_type = 'covid19'";
 
 
-$sQuery = $sQuery . ' ' . $sWhere;
+$sQuery = $sQuery . ' ' . $sWhere .' GROUP BY f.facility_id, YEAR(vl.sample_tested_datetime), MONTH(vl.sample_tested_datetime)';
+if($_POST['targetType'] == 1){
+     $sQuery = $sQuery . ' HAVING tl.monthly_target > SUM(CASE WHEN (sample_collection_date IS NOT NULL) THEN 1 ELSE 0 END) ';
+}
+else if($_POST['targetType'] == 2){
+     $sQuery = $sQuery . ' HAVING tl.monthly_target < SUM(CASE WHEN (sample_collection_date IS NOT NULL) THEN 1 ELSE 0 END) ';
+}
 $_SESSION['covid19MonitoringThresholdReportQuery'] = $sQuery;
 // die($sQuery);
 $rResult = $db->rawQuery($sQuery);
@@ -235,36 +237,15 @@ $output = array(
 $cnt = 0;
 foreach($rResult as $rowData)
 {
-     $targetType1 = false;
-     $targetType2 = false;
-     $targetType3 = false;
-     if($_POST['targetType'] == 1){
-
-          if($rowData['monthly_target'] > $rowData['totalCollected'])
-          { 
-               $targetType1 = true;
-          }
-     } else if($_POST['targetType'] == 2){
-
-          if($rowData['monthly_target'] < $rowData['totalCollected'])
-          { 
-               $targetType2 = true;
-          }
-     } else if($_POST['targetType'] == 3){
-          $targetType3 = true;
-     }
-     if($targetType1 || $targetType2 || $targetType3){
-          $cnt++;
-          $data = array();
-          $data[] = ucwords($rowData['facility_name']);
-          $data[] = $rowData['monthrange'];
-          $data[] = $rowData['totalReceived'];
-          $data[] = $rowData['totalRejected'];
-          $data[] = $rowData['totalCollected'];
-          $data[] = $rowData['monthly_target'];
-          $output['aaData'][] = $data;
-     }
-
+     $cnt++;
+     $data = array();
+     $data[] = ucwords($rowData['facility_name']);
+     $data[] = $rowData['monthrange'];
+     $data[] = $rowData['totalReceived'];
+     $data[] = $rowData['totalRejected'];
+     $data[] = $rowData['totalCollected'];
+     $data[] = $rowData['monthly_target'];
+     $output['aaData'][] = $data;
 }   
 $output['iTotalDisplayRecords'] = $cnt;
 $output['iTotalRecords'] = $cnt;

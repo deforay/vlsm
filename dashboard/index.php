@@ -272,7 +272,7 @@ $facilityCount = $facilityTotal[0]['total'];
 
 		$("#myTab li:first-child").addClass("active");
 		$("#myTabContent div:first-child").addClass("active");
-		$("#myTabContent div:first-child table.searchTable .searchBtn").trigger("click");
+		// $("#myTabContent div:first-child table.searchTable .searchBtn").trigger("click");
 
 
 		$('#vlSampleCollectionDate,#eidSampleCollectionDate,#covid19SampleCollectionDate,#recencySampleCollectionDate,#hepatitisSampleCollectionDate').daterangepicker({
@@ -296,13 +296,11 @@ $facilityCount = $facilityTotal[0]['total'];
 			});
 
 		// by default we pass 'vl' because that is first tab
-		//generateDashboard('vl');
+		generateDashboard('vl');	
 	});
 
 	function generateDashboard(requestType) {
-		searchVlRequestData(requestType);
-		getNoOfSampleCount(requestType);
-		getSamplesOverview(requestType);
+		
 		if(requestType == 'eid')
 			loadEidRequestData();
 		else if(requestType == 'vl')
@@ -311,7 +309,12 @@ $facilityCount = $facilityTotal[0]['total'];
 			loadCovid19RequestData();
 		else if(requestType == 'hepatitis')
 			loadHepatitisRequestData();
+			
+		getNoOfSampleCount(requestType);
+		searchVlRequestData(requestType);
 		loadVlSuppressedData();
+		getSamplesOverview(requestType);
+		
 	}
 
 	function searchVlRequestData(requestType) {
