@@ -7,8 +7,6 @@ if (session_status() == PHP_SESSION_NONE) {
 
 
 include_once APPLICATION_PATH . '/includes/ImageResize.php';
-// Define path to guzzle directory
-require_once(APPLICATION_PATH . '/vendor/guzzle/autoload.php');
 
 $general = new \Vlsm\Models\General($db);
 $tableName = "user_details";
