@@ -92,7 +92,8 @@ try {
                         lt_u_d.user_name as labTechnician,
                         t_b.user_name as testedBy,
                         rs.rejection_reason_name as rejectionReason,
-                        vl.rejection_on as rejectionDate
+                        vl.rejection_on as rejectionDate,
+                        ts.status_name as statusName
                         
                         FROM form_covid19 as vl 
                         
