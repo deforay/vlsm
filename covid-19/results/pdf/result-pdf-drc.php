@@ -354,33 +354,35 @@ if (sizeof($requestResult) > 0) {
         $html .= '<td colspan="3" style="line-height:8px;"></td>';
         $html .= '</tr>';
 
-        /* $html .= '<tr>';
-        $html .= '<td colspan="3" style="line-height:2px;border-bottom:1px solid #d3d3d3;"></td>';
-        $html .= '</tr>';
+        if (!isset($signResults) || empty($signResults)) {
+            $html .= '<tr>';
+            $html .= '<td colspan="3" style="line-height:2px;border-bottom:1px solid #d3d3d3;"></td>';
+            $html .= '</tr>';
 
-        $html .= '<tr>';
-        $html .= '<td colspan="3" style="line-height:22px;"></td>';
-        $html .= '</tr>'; */
+            $html .= '<tr>';
+            $html .= '<td colspan="3" style="line-height:22px;"></td>';
+            $html .= '</tr>';
 
-        /* $html .= '<tr>';
-        $html .= '<td colspan="3" style="line-height:8px;"></td>';
-        $html .= '</tr>';
+            $html .= '<tr>';
+            $html .= '<td colspan="3" style="line-height:8px;"></td>';
+            $html .= '</tr>';
 
-        $html .= '<tr>';
-        $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Aprouvé par</td>';
-        $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Chef de laboratoire</td>';
-        $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date confirmée</td>';
-        $html .= '</tr>';
+            $html .= '<tr>';
+            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Aprouvé par</td>';
+            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Chef de laboratoire</td>';
+            $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date confirmée</td>';
+            $html .= '</tr>';
 
-        $html .= '<tr>';
-        $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $resultApprovedBy . '</td>';
-        if (!empty($userSignaturePath) && file_exists($userSignaturePath)) {
-            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"><img src="' . $userSignaturePath . '" style="width:70px;" /></td>';
-        } else {
-            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+            $html .= '<tr>';
+            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $resultApprovedBy . '</td>';
+            if (!empty($userSignaturePath) && file_exists($userSignaturePath)) {
+                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"><img src="' . $userSignaturePath . '" style="width:70px;" /></td>';
+            } else {
+                $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+            }
+            $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $general->humanDateFormat($result['result_approved_datetime']) . '</td>';
+            $html .= '</tr>';
         }
-        $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $general->humanDateFormat($result['result_approved_datetime']) . '</td>';
-        $html .= '</tr>'; */
 
         $html .= '<tr>';
         $html .= '<td colspan="3">';
