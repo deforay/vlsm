@@ -407,7 +407,9 @@ if (sizeof($requestResult) > 0) {
         }
         $html .= '</td>';
         $html .= '</tr>';
-
+        $html .= '<tr>';
+        $html .= '<td colspan="3" style="line-height:12px;"></td>';
+        $html .= '</tr>';
         $html .= '<tr>';
         $html .= '<td colspan="3" style="line-height:20px;border-bottom:2px solid #d3d3d3;"></td>';
         $html .= '</tr>';
