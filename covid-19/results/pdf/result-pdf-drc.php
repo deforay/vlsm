@@ -20,9 +20,6 @@ if (sizeof($requestResult) > 0) {
 
         $signQuery = "SELECT * from lab_report_signatories where lab_id=? AND test_types like '%covid19%' AND signatory_status like 'active' ORDER BY display_order ASC";
         $signResults = $db->rawQuery($signQuery, array($result['lab_id']));
-        /* echo "<pre>";
-        print_r($signResults);
-        die; */
         $currentTime = $general->getDateTime();
         $_SESSION['aliasPage'] = $page;
         if (!isset($result['labName'])) {

@@ -70,11 +70,15 @@ if (sizeof($requestResult) > 0) {
     mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']);
     $pathFront = realpath(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']);
   }
-  
+
   //$pathFront = $pathFront;
   $pages = array();
   $page = 1;
   foreach ($requestResult as $result) {
+
+    $signQuery = "SELECT * from lab_report_signatories where lab_id=? AND test_types like '%covid19%' AND signatory_status like 'active' ORDER BY display_order ASC";
+    $signResults = $db->rawQuery($signQuery, array($result['lab_id']));
+
     $_SESSION['aliasPage'] = $page;
     if (!isset($result['labName'])) {
       $result['labName'] = '';
@@ -217,7 +221,8 @@ if (sizeof($requestResult) > 0) {
     if (!isset($result['patient_gender']) || trim($result['patient_gender']) == '') {
       $result['patient_gender'] = 'not reported';
     }
-    $resultApprovedBy  = '';$userRes = array();
+    $resultApprovedBy  = '';
+    $userRes = array();
     if (isset($result['approvedBy']) && trim($result['approvedBy']) != '') {
       $resultApprovedBy = ucwords($result['approvedBy']);
       $userRes = $users->getUserInfo($result['result_approved_by'], 'user_signature');
@@ -225,7 +230,7 @@ if (sizeof($requestResult) > 0) {
     $userSignaturePath = null;
 
     if (!empty($userRes['user_signature'])) {
-    $userSignaturePath = UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature" . DIRECTORY_SEPARATOR . $userRes['user_signature'];
+      $userSignaturePath = UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature" . DIRECTORY_SEPARATOR . $userRes['user_signature'];
     }
     $vlResult = '';
     $smileyContent = '';
@@ -438,10 +443,10 @@ if (sizeof($requestResult) > 0) {
       $html .= '<td colspan="3" style="line-height:16px;"></td>';
       $html .= '</tr>';
     }
-    if (!empty($userSignaturePath) && file_exists($userSignaturePath) && !empty($resultApprovedBy)) {
-      $html .='<tr>';
-          $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;vertical-align: bottom;"><img src="' . $userSignaturePath . '" style="width:70px;margin-top:-20px;" /><br></td>';
-      $html .='</tr>';
+    /* if (!empty($userSignaturePath) && file_exists($userSignaturePath) && !empty($resultApprovedBy)) {
+      $html .= '<tr>';
+      $html .= '<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;vertical-align: bottom;"><img src="' . $userSignaturePath . '" style="width:70px;margin-top:-20px;" /><br></td>';
+      $html .= '</tr>';
     }
     $html .= '<tr>';
     $html .= '<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Approuvé par&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">' . $resultApprovedBy . '</span></td>';
@@ -462,7 +467,7 @@ if (sizeof($requestResult) > 0) {
     $html .= '</tr>';
     $html .= '<tr>';
     $html .= '<td colspan="3" style="line-height:14px;"></td>';
-    $html .= '</tr>';
+    $html .= '</tr>'; */
 
 
     if ($result['last_viral_load_date'] != '' || $result['last_viral_load_result'] != '') {
@@ -484,6 +489,37 @@ if (sizeof($requestResult) > 0) {
     }
     $html .= '<tr>';
     $html .= '<td colspan="3" style="line-height:2px;"></td>';
+    $html .= '</tr>';
+    $html .= '<tr>';
+    $html .= '<tr>';
+    $html .= '<td colspan="3">';
+    if (isset($signResults) && !empty($signResults)) {
+      $html .= '<table style="width:100%;padding:3px;border:1px solid gray;">';
+      $html .= '<tr>';
+      $html .= '<td style="line-height:17px;font-size:13px;font-weight:bold;text-align:left;border-bottom:1px solid gray;">AUTORISÉ PAR</td>';
+      $html .= '<td style="line-height:17px;font-size:13px;font-weight:bold;text-align:left;border-bottom:1px solid gray;border-left:1px solid gray;">IMPRIMER LE NOM</td>';
+      $html .= '<td style="line-height:17px;font-size:13px;font-weight:bold;text-align:left;border-bottom:1px solid gray;border-left:1px solid gray;">SIGNATURE</td>';
+      $html .= '<td style="line-height:17px;font-size:13px;font-weight:bold;text-align:left;border-bottom:1px solid gray;border-left:1px solid gray;">DATE & HEURE</td>';
+      $html .= '</tr>';
+      foreach ($signResults as $key => $row) {
+        $lmSign = "/uploads/labs/" . $row['lab_id'] . "/signatures/" . $row['signature'];
+        $html .= '<tr>';
+        $html .= '<td style="line-height:17px;font-size:11px;text-align:left;font-weight:bold;border-bottom:1px solid gray;">' . $row['designation'] . '</td>';
+        $html .= '<td style="line-height:17px;font-size:11px;text-align:left;border-bottom:1px solid gray;border-left:1px solid gray;">' . $row['name_of_signatory'] . '</td>';
+        $html .= '<td style="line-height:17px;font-size:11px;text-align:left;border-bottom:1px solid gray;border-left:1px solid gray;"><img src="' . $lmSign . '" style="width:30px;"></td>';
+        $html .= '<td style="line-height:17px;font-size:11px;text-align:left;border-bottom:1px solid gray;border-left:1px solid gray;">' . date('d-M-Y H:i:s a') . '</td>';
+        $html .= '</tr>';
+      }
+      $html .= '</table>';
+    }
+    $html .= '</td>';
+    $html .= '</tr>';
+
+    $html .= '<tr>';
+    $html .= '<td colspan="3" style="line-height:2px;border-bottom:2px solid #d3d3d3;"></td>';
+    $html .= '</tr>';
+    $html .= '<tr>';
+    $html .= '<td colspan="3" style="line-height:12px;"></td>';
     $html .= '</tr>';
     $html .= '<tr>';
     $html .= '<td colspan="3">';
