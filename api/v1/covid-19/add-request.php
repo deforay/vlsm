@@ -149,7 +149,7 @@ try {
         }
 
         $status = 6;
-        if ($systemConfig['user_type'] == 'remoteuser') {
+        if ($user['testing_user'] != 'yes') {
             $status = 9;
         }
 
