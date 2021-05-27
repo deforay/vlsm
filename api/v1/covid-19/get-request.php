@@ -78,6 +78,7 @@ try {
                         vl.clinician_email                      as clinicianEmail,
                         vl.test_number                          as testNumber,
                         vl.province_id                          as provinceId,
+                        f.facility_district                     as district,
                         vl.lab_id                               as labId,
                         vl.testing_point                        as testingPoint,
                         vl.implementing_partner                 as implementingPartner,
@@ -162,7 +163,7 @@ try {
                         lt_u_d.user_name                        as labTechnician,
                         t_b.user_name                           as testedBy,
                         rs.rejection_reason_name                as rejectionReason,
-                        vl.rejection_on                         as rejectionDate
+                        vl.rejection_on                         as rejectionDate                        
                         
                         FROM form_covid19 as vl 
                         
