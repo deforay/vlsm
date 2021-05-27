@@ -84,11 +84,11 @@ try {
                 $sampleData['sampleCodeFormat'] = (!empty($rowData['sample_code_format'])) ? $rowData['sample_code_format'] : $rowData['remote_sample_code_format'];
                 $sampleData['sampleCodeKey'] = (!empty($rowData['sample_code_key'])) ? $rowData['sample_code_key'] : $rowData['remote_sample_code_key'];
             } else {
-                $sampleJson = $covid19Model->generateCovid19SampleCode($provinceCode, $sampleCollectionDate, null, $provinceId);
+                $sampleJson = $app->generateCovid19SampleCode($provinceCode, $sampleCollectionDate, null, $provinceId, null, $user);
                 $sampleData = json_decode($sampleJson, true);
             }
         } else {
-            $sampleJson = $covid19Model->generateCovid19SampleCode($provinceCode, $sampleCollectionDate, null, $provinceId);
+            $sampleJson = $app->generateCovid19SampleCode($provinceCode, $sampleCollectionDate, null, $provinceId, null, $user);
             $sampleData = json_decode($sampleJson, true);
         }
 
@@ -105,7 +105,7 @@ try {
             'last_modified_by' => '',
             'last_modified_datetime' => $general->getDateTime()
         );
-        if ($systemConfig['user_type'] == 'remoteuser') {
+        if ($user['testing_user'] != 'yes') {
             $covid19Data['remote_sample_code'] = $sampleData['sampleCode'];
             $covid19Data['remote_sample_code_format'] = $sampleData['sampleCodeFormat'];
             $covid19Data['remote_sample_code_key'] = $sampleData['sampleCodeKey'];
@@ -146,14 +146,6 @@ try {
 
         if (empty(trim($data['sampleCode']))) {
             $data['sampleCode'] = NULL;
-        }
-
-        if ($systemConfig['user_type'] == 'remoteuser') {
-            $sampleCode = 'remote_sample_code';
-            $sampleCodeKey = 'remote_sample_code_key';
-        } else {
-            $sampleCode = 'sample_code';
-            $sampleCodeKey = 'sample_code_key';
         }
 
         $status = 6;
