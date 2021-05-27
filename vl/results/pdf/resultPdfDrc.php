@@ -443,31 +443,34 @@ if (sizeof($requestResult) > 0) {
       $html .= '<td colspan="3" style="line-height:16px;"></td>';
       $html .= '</tr>';
     }
-    /* if (!empty($userSignaturePath) && file_exists($userSignaturePath) && !empty($resultApprovedBy)) {
+    if (!isset($signResults) || empty($signResults)) {
+
+      if (!empty($userSignaturePath) && file_exists($userSignaturePath) && !empty($resultApprovedBy)) {
+        $html .= '<tr>';
+        $html .= '<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;vertical-align: bottom;"><img src="' . $userSignaturePath . '" style="width:70px;margin-top:-20px;" /><br></td>';
+        $html .= '</tr>';
+      }
       $html .= '<tr>';
-      $html .= '<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;vertical-align: bottom;"><img src="' . $userSignaturePath . '" style="width:70px;margin-top:-20px;" /><br></td>';
-      $html .= '</tr>';
-    }
-    $html .= '<tr>';
-    $html .= '<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Approuvé par&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">' . $resultApprovedBy . '</span></td>';
-    $html .= '</tr>';
-    $html .= '<tr>';
-    $html .= '<td colspan="3" style="line-height:10px;"></td>';
-    $html .= '</tr>';
-    if (trim($result['approver_comments']) != '') {
-      $html .= '<tr>';
-      $html .= '<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Commentaires du laboratoire&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">' . ucfirst($result['approver_comments']) . '</span></td>';
+      $html .= '<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Approuvé par&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">' . $resultApprovedBy . '</span></td>';
       $html .= '</tr>';
       $html .= '<tr>';
       $html .= '<td colspan="3" style="line-height:10px;"></td>';
       $html .= '</tr>';
+      if (trim($result['approver_comments']) != '') {
+        $html .= '<tr>';
+        $html .= '<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Commentaires du laboratoire&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">' . ucfirst($result['approver_comments']) . '</span></td>';
+        $html .= '</tr>';
+        $html .= '<tr>';
+        $html .= '<td colspan="3" style="line-height:10px;"></td>';
+        $html .= '</tr>';
+      }
+      $html .= '<tr>';
+      $html .= '<td colspan="3" style="line-height:2px;border-bottom:2px solid #d3d3d3;"></td>';
+      $html .= '</tr>';
+      $html .= '<tr>';
+      $html .= '<td colspan="3" style="line-height:14px;"></td>';
+      $html .= '</tr>';
     }
-    $html .= '<tr>';
-    $html .= '<td colspan="3" style="line-height:2px;border-bottom:2px solid #d3d3d3;"></td>';
-    $html .= '</tr>';
-    $html .= '<tr>';
-    $html .= '<td colspan="3" style="line-height:14px;"></td>';
-    $html .= '</tr>'; */
 
 
     if ($result['last_viral_load_date'] != '' || $result['last_viral_load_result'] != '') {
