@@ -153,7 +153,7 @@ try {
     if (!$rowData) {
         // array_splice($rowData, 1, 2);
         $response = array(
-            'status' => 'failed',
+            'status' => 'success',
             'timestamp' => time(),
             'error' => 'No matching data',
             'data' => $rowData
@@ -188,7 +188,7 @@ try {
 
     http_response_code(500);
     $payload = array(
-        'status' => 'failed',
+        'status' => 'success',
         'timestamp' => time(),
         'error' => $exc->getMessage(),
         'data' => array()

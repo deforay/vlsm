@@ -105,7 +105,7 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
     $typeOfTestReqList = array();
     $typeOfTestReqResult = array('Real Time RT-PCR', 'RDT-Antibody', 'RDT-Antigen', 'ELISA', 'Others');
     foreach ($typeOfTestReqResult as $key => $req) {
-        $typeOfTestReqList[$key]['value'] = ($key + 1);
+        $typeOfTestReqList[$key]['value'] = $req;
         $typeOfTestReqList[$key]['show'] = $req;
     }
     $data['covid19']['typeOfTestRequestList'] = $typeOfTestReqList;

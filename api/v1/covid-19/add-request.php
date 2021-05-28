@@ -56,7 +56,6 @@ try {
     }
     foreach ($input['data'] as $rootKey => $field) {
         $data = $field;
-
         $sampleFrom = '';
         $data['formId'] = $data['countryId'] = $general->getGlobalConfig('vl_form');
         $sQuery = "SELECT vlsm_instance_id from s_vlsm_instance";
@@ -257,11 +256,12 @@ try {
             'travel_return_date'                  => !empty($data['returnDate']) ? $general->dateFormat($data['returnDate']) : null,
             'sample_received_at_vl_lab_datetime'  => !empty($data['sampleReceivedDate']) ? $data['sampleReceivedDate'] : null,
             'sample_condition'                    => !empty($data['sampleCondition']) ? $data['sampleCondition'] : (isset($data['specimenQuality']) ? $data['specimenQuality'] : null),
+            'lab_technician'                      => (!empty($data['labTechnician']) && $data['labTechnician'] != '') ? $data['labTechnician'] :  $user['user_id'],
             'is_sample_rejected'                  => !empty($data['isSampleRejected']) ? $data['isSampleRejected'] : null,
             'result'                              => !empty($data['result']) ? $data['result'] : null,
             'if_have_other_diseases'              => (!empty($data['ifOtherDiseases'])) ? $data['ifOtherDiseases'] : null,
             'other_diseases'                      => (!empty($data['otherDiseases']) && $data['result'] != 'positive') ? $data['otherDiseases'] : null,
-            'tested_by'                           => !empty($_POST['testedBy']) ? $_POST['testedBy'] : null,
+            'tested_by'                           => !empty($data['testedBy']) ? $data['testedBy'] : null,
             'is_result_authorised'                => !empty($data['isResultAuthorized']) ? $data['isResultAuthorized'] : null,
             'authorized_by'                       => !empty($data['authorizedBy']) ? $data['authorizedBy'] : null,
             'authorized_on'                       => !empty($data['authorizedOn']) ? $general->dateFormat($data['authorizedOn']) : null,
