@@ -70,6 +70,7 @@ try {
                         CONCAT_WS('',vl.sample_code, vl.remote_sample_code) as sampleCode,
                         vl.external_sample_code                 as externalSampleCode,
                         vl.facility_id                          as facilityId,
+                        f.facility_name                         as facilityName,
                         vl.investogator_name                    as investigatorName,
                         vl.investigator_phone                   as investigatorPhone,
                         vl.investigator_email                   as investigatorEmail,
@@ -160,15 +161,23 @@ try {
                         vl.authorized_on                        as authorisedOn,
                         vl.authorized_by                        as authorisedBy,
                         u_d.user_name                           as reviewedBy,
-                        lt_u_d.user_name                        as labTechnician,
+                        vl.lab_technician                       as labTechnician,
+                        lt_u_d.user_name                        as labTechnicianName,
                         t_b.user_name                           as testedBy,
                         rs.rejection_reason_name                as rejectionReason,
-                        vl.rejection_on                         as rejectionDate                        
+                        vl.rejection_on                         as rejectionDate,                  
+                        p.province_name                         as provinceName,                  
+                        r_f_s.funding_source_name               as fundingSourceName,                  
+                        r_i_p.i_partner_name                    as implementingPartnerName,                  
+                        pp.province_id                          as patientProvinceId,
+                        c.iso_name                              as patientNationalityName
                         
                         FROM form_covid19 as vl 
                         
                         LEFT JOIN r_countries as c ON vl.patient_nationality=c.id
-                        LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
+                        LEFT JOIN province_details as p ON vl.province_id=p.province_id
+                        LEFT JOIN province_details as pp ON vl.patient_province=pp.province_name
+                        LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id
                         LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id 
                         LEFT JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
                         LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id 
@@ -223,7 +232,7 @@ try {
     if (!$rowData) {
         // array_splice($rowData, 1, 2);
         $response = array(
-            'status' => 'failed',
+            'status' => 'success',
             'timestamp' => time(),
             'error' => 'No matching data',
             'data' => $rowData
