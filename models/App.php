@@ -280,7 +280,7 @@ class App
         return $this->db->rawQueryOne("SELECT * FROM " . $tablename . " WHERE " . $fieldName . " = " . $value);
     }
 
-    public function getCovid19TestsCamelCaseByFormId($c19Id)
+    public function getCovid19TestsCamelCaseByFormId($c19Id, $localTestReqID = null)
     {
         if (empty($c19Id)) {
             return null;
@@ -290,15 +290,28 @@ class App
         // Using this in sync requests/results
         if (is_array($c19Id)) {
             $results = $this->db->rawQuery("SELECT test_id as testId, covid19_id as covid19Id, facility_id as facilityId, test_name as testNameId, sample_tested_datetime as sampleTestedDateTime, testing_platform as testingPlatform, result FROM covid19_tests WHERE `covid19_id` IN (" . implode(",", $c19Id) . ") ORDER BY test_id ASC");
-
             foreach ($results as $row) {
-                $response[$row['covid19_id']][$row['test_id']] = $row;
+                $response[$row['covid19_id']]['testDate'][]         = $row['sampleTestedDateTime'];
+                $response[$row['covid19_id']]['testName'][]         = $row['testName'];
+                $response[$row['covid19_id']]['testingPlatform'][]  = $row['testingPlatform'];
+                $response[$row['covid19_id']]['testResult'][]       = $row['result'];
+                $response[$row['covid19_id']]['testId'][]           = $row['testId'];
+                $response[$row['covid19_id']]['covid19Id'][]        = $row['covid19Id'];
+                $response[$row['covid19_id']]['facilityId'][]       = $row['facilityId'];
             }
         } else {
             $results = $this->db->rawQuery("SELECT test_id as testId, covid19_id as covid19Id, facility_id as facilityId, test_name as testName, sample_tested_datetime as sampleTestedDateTime, testing_platform as testingPlatform, result FROM covid19_tests WHERE `covid19_id` = $c19Id ORDER BY test_id ASC");
+            foreach ($results as $row) {
+                $response['testDate'][]         = $row['sampleTestedDateTime'];
+                $response['testName'][]         = $row['testName'];
+                $response['testingPlatform'][]  = $row['testingPlatform'];
+                $response['testResult'][]       = $row['result'];
+                $response['testId'][]           = $row['testId'];
+                $response['covid19Id'][]        = $row['covid19Id'];
+                $response['facilityId'][]       = $row['facilityId'];
+            }
         }
-
-        return $results;
+        return $response;
     }
 
     public function generateCovid19SampleCode($provinceCode, $sampleCollectionDate, $sampleFrom = null, $provinceId = '', $maxCodeKeyVal = null, $user)
