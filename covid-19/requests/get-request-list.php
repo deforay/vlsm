@@ -139,13 +139,14 @@ if (isset($_POST['source']) && trim($_POST['source']) != '') {
      }
 }
 
-if (empty($sWhere) || $sWhere == "") {
-     $sWhere = ' WHERE ' . $sWhere;
-}
 
 
 if (isset($_POST['source']) && trim($_POST['source']) == 'dhis2') {
-     $sWhere = $sWhere . ' `source_of_request` like "dhis2%"';
+
+     if (empty($sWhere) || $sWhere == "") {
+          $sWhere = ' WHERE ' . $sWhere;
+     }
+     $sWhere = $sWhere . ' `source_of_request` like "dhis2%" ';
 }
 
 
@@ -161,10 +162,10 @@ if ($sarr['user_type'] == 'remoteuser') {
           $sFilter = " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")   AND remote_sample='yes'";
      }
 } else {
-     if (isset($where) && trim($where) != "") {
-          $where .= " AND ";
+     if (isset($sWhere) && trim($sWhere) != "") {
+          $sWhere .= " AND ";
      } else {
-          $where .= " WHERE ";
+          $sWhere .= " WHERE ";
      }
      $sWhere = $sWhere . 'vl.result_status!=9';
      $sFilter = ' AND result_status!=9';
