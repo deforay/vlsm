@@ -163,16 +163,17 @@ if ($data['Key'] == 'vlsm-get-remote') {
         $condition = "updated_datetime > '" . $data['healthFacilityLastModified'] . "'";
     }
     $configResult = $general->fetchDataFromTable('health_facilities', $condition);
-    foreach ($configResult as $key => $row) {
-        $configResult[$key]['labReportSignatories'] = $this->db->query("SELECT * FROM lab_report_signatories WHERE lab_id = " . $row['facility_id']);
-    }
     $response['healthFacilities'] = $configResult;
 
     $condition = null;
     if (isset($data['testingLabsLastModified']) && !empty($data['testingLabsLastModified'])) {
         $condition = "updated_datetime > '" . $data['testingLabsLastModified'] . "'";
     }
-    $response['testingLabs'] = $general->fetchDataFromTable('testing_labs', $condition);
+    $configResult = $general->fetchDataFromTable('testing_labs', $condition);
+    foreach ($configResult as $key => $row) {
+        $configResult[$key]['labReportSignatories'] = $db->query("SELECT * FROM lab_report_signatories WHERE lab_id = " . $row['facility_id']);
+    }
+    $response['testingLabs'] = $configResult;
 
     $condition = null;
     if (isset($data['fundingSourcesLastModified']) && !empty($data['fundingSourcesLastModified'])) {
