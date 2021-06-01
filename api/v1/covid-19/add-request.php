@@ -62,6 +62,16 @@ try {
         $rowData = $db->rawQuery($sQuery);
         $data['instanceId'] = $rowData[0]['vlsm_instance_id'];
         $sampleFrom = '';
+        /* V1 name to Id mapping */
+        if (!is_numeric($data['provinceId'])) {
+            $data['provinceId'] = $general->getValueByName($data['provinceId'], 'province_name', 'province_details', 'province_id');
+        }
+        if (!is_numeric($data['implementingPartner'])) {
+            $data['implementingPartner'] = $general->getValueByName($data['implementingPartner'], 'i_partner_name', 'r_implementation_partners', 'i_partner_id');
+        }
+        if (!is_numeric($data['patientNationality'])) {
+            $data['patientNationality'] = $general->getValueByName($data['patientNationality'], 'iso_name', 'r_countries', 'id');
+        }
 
         $data['api'] = "yes";
         // include_once(APPLICATION_PATH . '/covid-19/requests/insert-sample.php');
