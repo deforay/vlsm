@@ -506,7 +506,7 @@ class General
         $where = "";
         if (!empty($name)) {
             $where = $condtionField . " LIKE '$name%'";
-            $query = "SELECT * FROM " . $tableName . " where " . $where;
+            $query = "SELECT " . $id . " FROM " . $tableName . " where " . $where;
             $result =  $this->db->rawQuery($query);
             return $result[0][$id];
         } else {
