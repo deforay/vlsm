@@ -602,6 +602,7 @@ $facilityCount = $facilityTotal[0]['total'];
 
 		$.post("/hepatitis/management/get-hepatitis-monthly-threshold-report.php", {
 				targetType: '1',
+				sampleTestDate: $("#vlSampleCollectionDate").val(),
 			},
 			function(data) {
 				var data = JSON.parse(data);
