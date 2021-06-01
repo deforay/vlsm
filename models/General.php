@@ -501,11 +501,16 @@ class General
         return $rejReaons;
     }
 
-    public function getValueByName($name = "", $condtionField, $tableName, $id)
+    public function getValueByName($name = "", $condtionField, $tableName, $id, $occurate = false)
     {
         $where = "";
         if (!empty($name)) {
-            $where = $condtionField . " LIKE '$name%'";
+            if ($occurate) {
+                $where = $condtionField . " LIKE '%$name%'";
+            } else {
+                $where = $condtionField . " LIKE '$name%'";
+            }
+
             $query = "SELECT " . $id . " FROM " . $tableName . " where " . $where;
             $result =  $this->db->rawQuery($query);
             return $result[0][$id];

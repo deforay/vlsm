@@ -64,13 +64,25 @@ try {
         $sampleFrom = '';
         /* V1 name to Id mapping */
         if (!is_numeric($data['provinceId'])) {
-            $data['provinceId'] = $general->getValueByName($data['provinceId'], 'province_name', 'province_details', 'province_id');
+            $province = explode("##", $data['provinceId']);
+            if (isset($province) && count($province) > 0) {
+                $data['provinceId'] = $province[0];
+            }
+            $data['provinceId'] = $general->getValueByName($data['provinceId'], 'province_name', 'province_details', 'province_id', true);
         }
         if (!is_numeric($data['implementingPartner'])) {
             $data['implementingPartner'] = $general->getValueByName($data['implementingPartner'], 'i_partner_name', 'r_implementation_partners', 'i_partner_id');
         }
         if (!is_numeric($data['patientNationality'])) {
+            $iso = explode("(", $data['patientNationality']);
+            if (isset($iso) && count($iso) > 0) {
+                $data['patientNationality'] = trim($iso[0]);
+            }
             $data['patientNationality'] = $general->getValueByName($data['patientNationality'], 'iso_name', 'r_countries', 'id');
+        }
+        $pprovince = explode("##", $data['patientProvince']);
+        if (isset($pprovince) && count($pprovince) > 0) {
+            $data['patientProvince'] = $pprovince[0];
         }
 
         $data['api'] = "yes";
