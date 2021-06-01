@@ -100,7 +100,7 @@ if (sizeof($requestResult) > 0) {
         $patientFname = ucwords($general->crypto('decrypt', $result['patient_name'], $result['patient_id']));
         $patientLname = ucwords($general->crypto('decrypt', $result['patient_surname'], $result['patient_id']));
 
-        $signQuery = "SELECT * from lab_report_signatories where lab_id=? AND test_types like '%covid19%' AND signatory_status like 'active'";
+        $signQuery = "SELECT * from lab_report_signatories where lab_id=? AND test_types like '%covid19%' AND signatory_status like 'active' ORDER BY display_order ASC";
         $signResults = $db->rawQuery($signQuery, array($result['lab_id']));
 
         $currentTime = $general->getDateTime();
@@ -502,7 +502,7 @@ if (sizeof($requestResult) > 0) {
                 $encryption_iv
             );
             $pdf->writeHTML($html);
-            $pdf->write2DBarcode($systemConfig['remoteURL'] . '/covid-19/results/view.php?q=' . $Cid . '', 'QRCODE,H', 170, 175 , 20, 20, $style, 'N');
+            $pdf->write2DBarcode($systemConfig['remoteURL'] . '/covid-19/results/view.php?q=' . $Cid . '', 'QRCODE,H', 170, 175, 20, 20, $style, 'N');
             $pdf->lastPage();
             $filename = $pathFront . DIRECTORY_SEPARATOR . 'p' . $page . '.pdf';
             $pdf->Output($filename, "F");

@@ -92,7 +92,8 @@ try {
                         lt_u_d.user_name as labTechnician,
                         t_b.user_name as testedBy,
                         rs.rejection_reason_name as rejectionReason,
-                        vl.rejection_on as rejectionDate
+                        vl.rejection_on as rejectionDate,
+                        ts.status_name as statusName
                         
                         FROM form_covid19 as vl 
                         
@@ -152,7 +153,7 @@ try {
     if (!$rowData) {
         // array_splice($rowData, 1, 2);
         $response = array(
-            'status' => 'failed',
+            'status' => 'success',
             'timestamp' => time(),
             'error' => 'No matching data',
             'data' => $rowData
@@ -167,7 +168,14 @@ try {
     }
 
     foreach ($rowData as $key => $row) {
-        $rowData[$key]['c19Tests'] = $app->getCovid19TestsCamelCaseByFormId($row['covid19Id']);
+        $c19Tests = $app->getCovid19TestsCamelCaseByFormId($row['covid19Id']);
+        foreach ($c19Tests as $tests) {
+            $rowData[$key]['testDate'][]         = $tests['sampleTestedDateTime'];
+            $rowData[$key]['testName'][]         = $tests['testName'];
+            $rowData[$key]['testingPlatform'][]  = $tests['testingPlatform'];
+            $rowData[$key]['testResult'][]       = $tests['result'];
+            $rowData[$key]['testId'][]           = $tests['testId'];
+        }
     }
     $payload = array(
         'status' => 'success',
@@ -187,7 +195,7 @@ try {
 
     http_response_code(500);
     $payload = array(
-        'status' => 'failed',
+        'status' => 'success',
         'timestamp' => time(),
         'error' => $exc->getMessage(),
         'data' => array()

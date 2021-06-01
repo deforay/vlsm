@@ -42,6 +42,13 @@ if (empty($user) || empty($user['user_id'])) {
     echo json_encode($response);
     exit(0);
 }
+/* Status name list */
+$statusList = array();
+$tsQuery = "SELECT * FROM r_sample_status where status = 'active'";
+$tsResult = $db->rawQuery($tsQuery);
+foreach ($tsResult as $row) {
+    $statusList[$row['status_id']] = $row['status_name'];
+}
 $status = false;
 // Check if covid-19 module active/inactive
 if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) {
@@ -98,7 +105,7 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
     $typeOfTestReqList = array();
     $typeOfTestReqResult = array('Real Time RT-PCR', 'RDT-Antibody', 'RDT-Antigen', 'ELISA', 'Others');
     foreach ($typeOfTestReqResult as $key => $req) {
-        $typeOfTestReqList[$key]['value'] = ($key + 1);
+        $typeOfTestReqList[$key]['value'] = $req;
         $typeOfTestReqList[$key]['show'] = $req;
     }
     $data['covid19']['typeOfTestRequestList'] = $typeOfTestReqList;
@@ -152,7 +159,7 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
     $data['covid19']['resultsList'] = $app->generateSelectOptions($covid19Obj->getCovid19Results());
     $data['covid19']['symptomsList'] = $app->generateSelectOptions($covid19Obj->getCovid19Symptoms());
     $data['covid19']['comorbiditiesList'] = $app->generateSelectOptions($covid19Obj->getCovid19Comorbidities());
-
+    $data['covid19']['sampleStatusList'] = $app->generateSelectOptions($statusList);
     $payload = array(
         'status' => 1,
         'message' => 'Success',
