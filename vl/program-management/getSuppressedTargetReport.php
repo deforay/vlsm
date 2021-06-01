@@ -50,6 +50,25 @@ if (isset($_POST['facilityName']) && count($_POST['facilityName']) > 0) {
 
 
 }
+$sTestDate = '';
+$eTestDate = '';
+if (isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate']) != '') {
+     $s_t_date = explode("to", $_POST['sampleTestDate']);
+     if (isset($s_t_date[0]) && trim($s_t_date[0]) != "") {
+          $sTestDate = $general->dateFormat(trim($s_t_date[0]));
+     }
+     if (isset($s_t_date[1]) && trim($s_t_date[1]) != "") {
+          $eTestDate = $general->dateFormat(trim($s_t_date[1]));
+     }
+}
+if (isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate']) != '') {
+    if (isset($sWhere)) {
+         $sWhere = $sWhere . ' AND DATE(vl.sample_tested_datetime) >= "' . $sTestDate . '" AND DATE(vl.sample_tested_datetime) <= "' . $eTestDate . '"';
+    } else {
+         $sWhere = ' where ' . $sWhere;
+         $sWhere = $sWhere . ' DATE(vl.sample_tested_datetime) >= "' . $sTestDate . '" AND DATE(vl.sample_tested_datetime) <= "' . $eTestDate . '"';
+    }
+}
 if (!empty($facilityMap)) {
     $sWhere .= " AND vl.facility_id IN ($facilityMap) ";
 }
@@ -57,8 +76,7 @@ $sWhere .= " AND tl.test_type = 'vl' ";
 
 $sQuery = $sQuery . ' ' . $sWhere . ' GROUP BY f.facility_id, YEAR(vl.sample_tested_datetime), MONTH(vl.sample_tested_datetime)';
 
-// $_SESSION['vlSuppressedTargetReportQuery'] = $sQuery;
-// die($sQuery);
+$_SESSION['vlSuppressedTargetReportQuery'] = $sQuery;
 $rResult = $db->rawQuery($sQuery);
 // print_r($sQuery);die;
 
