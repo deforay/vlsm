@@ -192,6 +192,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 			.always(function() {
 				setTimeout(function() {
 					$.unblockUI();
+					window.location.href = window.location;
 				}, 9500);
 			});
 	}

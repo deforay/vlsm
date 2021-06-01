@@ -56,13 +56,22 @@ try {
     }
     foreach ($input['data'] as $rootKey => $field) {
         $data = $field;
-
         $sampleFrom = '';
         $data['formId'] = $data['countryId'] = $general->getGlobalConfig('vl_form');
         $sQuery = "SELECT vlsm_instance_id from s_vlsm_instance";
         $rowData = $db->rawQuery($sQuery);
         $data['instanceId'] = $rowData[0]['vlsm_instance_id'];
         $sampleFrom = '';
+        /* V1 name to Id mapping */
+        if (!is_numeric($data['provinceId'])) {
+            $data['provinceId'] = $general->getValueByName($data['provinceId'], 'province_name', 'province_details', 'province_id');
+        }
+        if (!is_numeric($data['implementingPartner'])) {
+            $data['implementingPartner'] = $general->getValueByName($data['implementingPartner'], 'i_partner_name', 'r_implementation_partners', 'i_partner_id');
+        }
+        if (!is_numeric($data['patientNationality'])) {
+            $data['patientNationality'] = $general->getValueByName($data['patientNationality'], 'iso_name', 'r_countries', 'id');
+        }
 
         $data['api'] = "yes";
         // include_once(APPLICATION_PATH . '/covid-19/requests/insert-sample.php');
@@ -84,11 +93,11 @@ try {
                 $sampleData['sampleCodeFormat'] = (!empty($rowData['sample_code_format'])) ? $rowData['sample_code_format'] : $rowData['remote_sample_code_format'];
                 $sampleData['sampleCodeKey'] = (!empty($rowData['sample_code_key'])) ? $rowData['sample_code_key'] : $rowData['remote_sample_code_key'];
             } else {
-                $sampleJson = $covid19Model->generateCovid19SampleCode($provinceCode, $sampleCollectionDate, null, $provinceId);
+                $sampleJson = $app->generateCovid19SampleCode($provinceCode, $sampleCollectionDate, null, $provinceId, null, $user);
                 $sampleData = json_decode($sampleJson, true);
             }
         } else {
-            $sampleJson = $covid19Model->generateCovid19SampleCode($provinceCode, $sampleCollectionDate, null, $provinceId);
+            $sampleJson = $app->generateCovid19SampleCode($provinceCode, $sampleCollectionDate, null, $provinceId, null, $user);
             $sampleData = json_decode($sampleJson, true);
         }
 
@@ -105,7 +114,7 @@ try {
             'last_modified_by' => '',
             'last_modified_datetime' => $general->getDateTime()
         );
-        if ($systemConfig['user_type'] == 'remoteuser') {
+        if ($user['testing_user'] != 'yes') {
             $covid19Data['remote_sample_code'] = $sampleData['sampleCode'];
             $covid19Data['remote_sample_code_format'] = $sampleData['sampleCodeFormat'];
             $covid19Data['remote_sample_code_key'] = $sampleData['sampleCodeKey'];
@@ -148,16 +157,8 @@ try {
             $data['sampleCode'] = NULL;
         }
 
-        if ($systemConfig['user_type'] == 'remoteuser') {
-            $sampleCode = 'remote_sample_code';
-            $sampleCodeKey = 'remote_sample_code_key';
-        } else {
-            $sampleCode = 'sample_code';
-            $sampleCodeKey = 'sample_code_key';
-        }
-
         $status = 6;
-        if ($systemConfig['user_type'] == 'remoteuser') {
+        if ($user['testing_user'] != 'yes') {
             $status = 9;
         }
 
@@ -265,11 +266,12 @@ try {
             'travel_return_date'                  => !empty($data['returnDate']) ? $general->dateFormat($data['returnDate']) : null,
             'sample_received_at_vl_lab_datetime'  => !empty($data['sampleReceivedDate']) ? $data['sampleReceivedDate'] : null,
             'sample_condition'                    => !empty($data['sampleCondition']) ? $data['sampleCondition'] : (isset($data['specimenQuality']) ? $data['specimenQuality'] : null),
+            'lab_technician'                      => (!empty($data['labTechnician']) && $data['labTechnician'] != '') ? $data['labTechnician'] :  $user['user_id'],
             'is_sample_rejected'                  => !empty($data['isSampleRejected']) ? $data['isSampleRejected'] : null,
             'result'                              => !empty($data['result']) ? $data['result'] : null,
             'if_have_other_diseases'              => (!empty($data['ifOtherDiseases'])) ? $data['ifOtherDiseases'] : null,
             'other_diseases'                      => (!empty($data['otherDiseases']) && $data['result'] != 'positive') ? $data['otherDiseases'] : null,
-            'tested_by'                           => !empty($_POST['testedBy']) ? $_POST['testedBy'] : null,
+            'tested_by'                           => !empty($data['testedBy']) ? $data['testedBy'] : null,
             'is_result_authorised'                => !empty($data['isResultAuthorized']) ? $data['isResultAuthorized'] : null,
             'authorized_by'                       => !empty($data['authorizedBy']) ? $data['authorizedBy'] : null,
             'authorized_on'                       => !empty($data['authorizedOn']) ? $general->dateFormat($data['authorizedOn']) : null,
