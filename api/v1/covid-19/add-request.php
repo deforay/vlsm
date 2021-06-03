@@ -73,6 +73,9 @@ try {
         if (!is_numeric($data['implementingPartner'])) {
             $data['implementingPartner'] = $general->getValueByName($data['implementingPartner'], 'i_partner_name', 'r_implementation_partners', 'i_partner_id');
         }
+        if (!is_numeric($data['fundingSource'])) {
+            $data['fundingSource'] = $general->getValueByName($data['fundingSource'], 'funding_source_name', 'r_funding_sources', 'funding_source_id');
+        }
         if (!is_numeric($data['patientNationality'])) {
             $iso = explode("(", $data['patientNationality']);
             if (isset($iso) && count($iso) > 0) {
@@ -224,7 +227,7 @@ try {
             'lab_id'                              => !empty($data['labId']) ? $data['labId'] : null,
             'testing_point'                       => !empty($data['testingPoint']) ? $data['testingPoint'] : null,
             'implementing_partner'                => !empty($data['implementingPartner']) ? $data['implementingPartner'] : null,
-            'source_of_alert'                     => !empty($data['sourceOfAlertPOE']) ? $data['sourceOfAlertPOE'] : null,
+            'source_of_alert'                     => !empty($data['sourceOfAlertPOE']) ? strtolower(str_replace(" ", "-", $data['sourceOfAlertPOE'])) : null,
             'source_of_alert_other'               => (!empty($data['sourceOfAlertPOE']) && $data['sourceOfAlertPOE'] == 'others') ? $data['alertPoeOthers'] : null,
             'funding_source'                      => !empty($data['fundingSource']) ? $data['fundingSource'] : null,
             'patient_id'                          => !empty($data['patientId']) ? $data['patientId'] : null,
