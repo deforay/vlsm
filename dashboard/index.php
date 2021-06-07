@@ -305,6 +305,9 @@ $facilityCount = $facilityTotal[0]['total'];
 
 	function generateDashboard(requestType) {
 		
+		getNoOfSampleCount(requestType);
+		searchVlRequestData(requestType);
+		getSamplesOverview(requestType);
 		if(requestType == 'eid')
 			loadEidRequestData();
 		else if(requestType == 'vl')
@@ -313,11 +316,8 @@ $facilityCount = $facilityTotal[0]['total'];
 			loadCovid19RequestData();
 		else if(requestType == 'hepatitis')
 			loadHepatitisRequestData();
-			
-		getNoOfSampleCount(requestType);
-		searchVlRequestData(requestType);
 		loadVlSuppressedData();
-		getSamplesOverview(requestType);
+		
 		
 	}
 
@@ -507,6 +507,7 @@ $facilityCount = $facilityTotal[0]['total'];
 
 		$.post("/eid/management/getEidMonthlyThresholdReport.php", {
 				targetType: '1',
+				sampleTestDate: $("#vlSampleCollectionDate").val(),
 			},
 			function(data) {
 				var data = JSON.parse(data);
@@ -530,6 +531,7 @@ $facilityCount = $facilityTotal[0]['total'];
 
 		$.post("/vl/program-management/getVlMonthlyThresholdReport.php", {
 				targetType: '1',
+				sampleTestDate: $("#vlSampleCollectionDate").val(),
 			},
 			function(data) {
 				var data = JSON.parse(data);
@@ -553,6 +555,7 @@ $facilityCount = $facilityTotal[0]['total'];
 
 		$.post("/vl/program-management/getSuppressedTargetReport.php", {
 				targetType: '1',
+				sampleTestDate: $("#vlSampleCollectionDate").val(),
 			},
 			function(data) {
 				console.log(data)
@@ -575,6 +578,7 @@ $facilityCount = $facilityTotal[0]['total'];
 
 		$.post("/covid-19/management/getCovid19MonthlyThresholdReport.php", {
 				targetType: '1',
+				sampleTestDate: $("#vlSampleCollectionDate").val(),
 			},
 			function(data) {
 				var data = JSON.parse(data);
@@ -598,6 +602,7 @@ $facilityCount = $facilityTotal[0]['total'];
 
 		$.post("/hepatitis/management/get-hepatitis-monthly-threshold-report.php", {
 				targetType: '1',
+				sampleTestDate: $("#vlSampleCollectionDate").val(),
 			},
 			function(data) {
 				var data = JSON.parse(data);
