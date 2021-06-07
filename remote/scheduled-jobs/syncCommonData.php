@@ -649,14 +649,15 @@ if (!empty($result['healthFacilities']) && count($result['healthFacilities']) > 
 //update or insert testing labs
 if (!empty($result['testingLabs']) && count($result['testingLabs']) > 0) {
 
-    $db = $db->where('test_type IN ("vl,eid,covid19,hepatitis")');
+    //$db = $db->where('test_type IN ("vl,eid,covid19,hepatitis")');
     $id = $db->delete('testing_labs');
     foreach ($result['testingLabs'] as $testingLabs) {
         $testingLabsData = array(
             'test_type'         => $testingLabs['test_type'],
             'facility_id'       => $testingLabs['facility_id'],
             'monthly_target' => $testingLabs['monthly_target'],
-            'updated_datetime'  => $general->getDateTime()
+            'suppressed_monthly_target' => $testingLabs['suppressed_monthly_target'],
+            'updated_datetime'  => !empty($testingLabs['updated_datetime']) ? $testingLabs['updated_datetime'] : $general->getDateTime()
         );
         $lastId = 0;
         $db->insert('testing_labs', $testingLabsData);
