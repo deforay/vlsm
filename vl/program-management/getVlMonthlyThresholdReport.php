@@ -222,36 +222,15 @@ $output = array(
 $cnt = 0;
 foreach($rResult as $rowData)
 {
-     // $targetType1 = false;
-     // $targetType2 = false;
-     // $targetType3 = false;
-     // if($_POST['targetType'] == 1){
-     //      if($rowData['monthly_target'] > $rowData['totalCollected'])
-     //      { 
-     //           $targetType1 = true;
-     //      }
-     // } else if($_POST['targetType'] == 2){
-
-     //      if($rowData['monthly_target'] < $rowData['totalCollected'])
-     //      { 
-     //           $targetType2 = true;
-     //      }
-     // } else if($_POST['targetType'] == 3){
-     //      $targetType3 = true;
-     // }
-
-     // if($targetType1 || $targetType2 || $targetType3){
-          $cnt++;
-          $data = array();
-          $data[] = ucwords($rowData['facility_name']);
-          $data[] = $rowData['monthrange'];
-          $data[] = $rowData['totalReceived'];
-          $data[] = $rowData['totalRejected'];
-          $data[] = $rowData['totalCollected'];
-          $data[] = $rowData['monthly_target'];
-          $output['aaData'][] = $data;
-     // }
-
+     $cnt++;
+     $data = array();
+     $data[] = ucwords($rowData['facility_name']);
+     $data[] = $rowData['monthrange'];
+     $data[] = $rowData['totalReceived'];
+     $data[] = $rowData['totalRejected'];
+     $data[] = $rowData['totalCollected'];
+     $data[] = $rowData['monthly_target'];
+     $output['aaData'][] = $data;
 }   
 $output['iTotalDisplayRecords'] = $cnt;
 $output['iTotalRecords'] = $cnt;

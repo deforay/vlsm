@@ -78,14 +78,11 @@ try {
                         vl.clinician_phone                      as clinicianPhone,
                         vl.clinician_email                      as clinicianEmail,
                         vl.test_number                          as testNumber,
-                        vl.province_id                          as provinceId,
                         f.facility_district                     as district,
                         vl.lab_id                               as labId,
                         vl.testing_point                        as testingPoint,
-                        vl.implementing_partner                 as implementingPartner,
                         vl.source_of_alert                      as sourceOfAlertPOE,
                         vl.source_of_alert_other                as sourceOfAlertOtherPOE,
-                        vl.funding_source                       as fundingSource,
                         vl.patient_id                           as patientId,
                         vl.patient_name                         as firstName,
                         vl.patient_surname                      as lastName,
@@ -95,7 +92,6 @@ try {
                         vl.patient_age                          as patientAge,
                         vl.patient_phone_number                 as patientPhoneNumber,
                         vl.patient_address                      as patientAddress,
-                        vl.patient_province                     as patientProvince,
                         vl.patient_district                     as patientDistrict,
                         vl.patient_city                         as patientCity,
                         vl.patient_zone                         as patientZone,
@@ -166,11 +162,11 @@ try {
                         t_b.user_name                           as testedBy,
                         rs.rejection_reason_name                as rejectionReason,
                         vl.rejection_on                         as rejectionDate,                  
-                        p.province_name                         as provinceName,                  
-                        r_f_s.funding_source_name               as fundingSourceName,                  
-                        r_i_p.i_partner_name                    as implementingPartnerName,                  
-                        pp.province_id                          as patientProvinceId,
-                        c.iso_name                              as patientNationalityName
+                        p.province_name                         as provinceId,                  
+                        r_f_s.funding_source_name               as fundingSource,                  
+                        r_i_p.i_partner_name                    as implementingPartner,                  
+                        pp.province_name                        as patientProvince,
+                        CONCAT_WS('',c.iso_name, ' (', c.iso3,')') as patientNationality
                         
                         FROM form_covid19 as vl 
                         
@@ -227,7 +223,8 @@ try {
     $sQuery .= $where;
     // die($sQuery);
     $rowData = $db->rawQuery($sQuery);
-
+    $app = new \Vlsm\Models\App($db);
+    $trackId = $app->addApiTracking($user['user_id'], count($rowData), 'get-request', 'covid19', $requestUrl, $params, 'json');
     // No data found
     if (!$rowData) {
         // array_splice($rowData, 1, 2);
@@ -239,15 +236,20 @@ try {
 
         );
 
-        $app = new \Vlsm\Models\App($db);
-        $trackId = $app->addApiTracking($user['user_id'], count($rowData), 'get-request', 'covid19', $requestUrl, $params, 'json');
         http_response_code(200);
         echo json_encode($response);
         exit(0);
     }
 
     foreach ($rowData as $key => $row) {
-        $rowData[$key]['c19Tests'] = $app->getCovid19TestsCamelCaseByFormId($row['covid19Id']);
+        $c19Tests = $app->getCovid19TestsCamelCaseByFormId($row['covid19Id']);
+        foreach ($c19Tests as $tests) {
+            $rowData[$key]['testDate'][]         = $tests['sampleTestedDateTime'];
+            $rowData[$key]['testName'][]         = $tests['testName'];
+            $rowData[$key]['testingPlatform'][]  = $tests['testingPlatform'];
+            $rowData[$key]['testResult'][]       = $tests['result'];
+            $rowData[$key]['testId'][]           = $tests['testId'];
+        }
     }
     $payload = array(
         'status' => 'success',
@@ -257,9 +259,6 @@ try {
     // if (isset($user['token-updated']) && $user['token-updated'] == true) {
     //     $payload['token'] = $user['newToken'];
     // }
-    $app = new \Vlsm\Models\App($db);
-    $trackId = $app->addApiTracking($user['user_id'], count($rowData), 'fetch-results', 'covid19', $requestUrl, $params, 'json');
-
     http_response_code(200);
     echo json_encode($payload);
     exit(0);

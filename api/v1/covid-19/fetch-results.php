@@ -168,7 +168,14 @@ try {
     }
 
     foreach ($rowData as $key => $row) {
-        $rowData[$key]['c19Tests'] = $app->getCovid19TestsCamelCaseByFormId($row['covid19Id']);
+        $c19Tests = $app->getCovid19TestsCamelCaseByFormId($row['covid19Id']);
+        foreach ($c19Tests as $tests) {
+            $rowData[$key]['testDate'][]         = $tests['sampleTestedDateTime'];
+            $rowData[$key]['testName'][]         = $tests['testName'];
+            $rowData[$key]['testingPlatform'][]  = $tests['testingPlatform'];
+            $rowData[$key]['testResult'][]       = $tests['result'];
+            $rowData[$key]['testId'][]           = $tests['testId'];
+        }
     }
     $payload = array(
         'status' => 'success',
