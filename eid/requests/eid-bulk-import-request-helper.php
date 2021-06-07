@@ -94,6 +94,18 @@ try {
                     $status = 4;
                 }
 
+                if(!empty($rowData['I'])){
+                    $rowData['I'] = strtolower($rowData['I']);
+                    if($rowData['I'] == 'm' || $rowData['I'] == 'male'){
+                        $rowData['I'] = 'male';
+                    }
+                    else if($rowData['I'] == 'f' || $rowData['I'] == 'female'){
+                        $rowData['I'] = 'female';
+                    }else{
+                        $rowData['I'] = null;
+                    }
+                }
+
                 $eidData = array(
                     'vlsm_instance_id'                                  => $instanceId,
                     'vlsm_country_id'                                   => 1,
@@ -103,13 +115,13 @@ try {
                     'child_id'                                          => isset($rowData['F']) ? $rowData['F'] : null,
                     'child_name'                                        => isset($rowData['G']) ? $rowData['G'] : null,
                     // 'child_dob'                                         => isset($rowData['H']) ? date('Y-M-d',strtotime($rowData['H'])) : null,
-                    'child_gender'                                      => isset($rowData['I']) ? $rowData['I'] : null,
-                    // 'child_age'                                         => isset($rowData['H']) ? $general->ageInMonth($rowData['H']) : null,
+                    'child_gender'                                      => $rowData['I'],
+                    'child_age'                                         => isset($rowData['H']) ? $rowData['H'] : null,
                     'mother_id'                                         => isset($rowData['J']) ? $rowData['J'] : null,
                     'caretaker_phone_number'                            => isset($rowData['K']) ? $rowData['K'] : null,
                     'caretaker_address'                                 => isset($rowData['L']) ? $rowData['L'] : null,
                     'mother_hiv_status'                                 => isset($rowData['M']) ? $rowData['M'] : null,
-                    'mother_treatment'                                  => isset($rowData['N']) ? implode(",", $rowData['N']) : null,
+                    'mother_treatment'                                  => isset($rowData['N']) ? $rowData['N'] : null,
                     'rapid_test_performed'                              => isset($rowData['O']) ? strtolower($rowData['O']) : null,
                     'rapid_test_date'                                   => isset($rowData['P']) ? date('Y-M-d',strtotime($rowData['P'])) : null,
                     'rapid_test_result'                                 => isset($rowData['Q']) ? strtolower($rowData['Q']) : null,
