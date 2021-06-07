@@ -1,6 +1,6 @@
 <?php
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+  session_start();
 }
 ob_start();
 
@@ -26,7 +26,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
 if (isset($arr['default_time_zone']) && $arr['default_time_zone'] != '') {
   date_default_timezone_set($arr['default_time_zone']);
 } else {
-  date_default_timezone_set(!empty(date_default_timezone_get()) ?  date_default_timezone_get() : "UTC"); 
+  date_default_timezone_set(!empty(date_default_timezone_get()) ?  date_default_timezone_get() : "UTC");
 }
 //set mField Array
 $mFieldArray = array();
@@ -146,8 +146,8 @@ class MYPDF extends TCPDF
         $this->writeHTMLCell(0, 0, 10, $thirdHeading, strtoupper($this->lab), 0, 0, 0, true, 'C', true);
       }
       $this->SetFont('helvetica', '', 12);
-      $this->writeHTMLCell(0, 0, 10, $fourthHeading, 'RESULTATS CHARGE VIRALE', 0, 0, 0, true, 'C', true);
-      $this->writeHTMLCell(0, 0, 15, $hrLine, '<hr>', 0, 0, 0, true, 'C', true);
+      // $this->writeHTMLCell(0, 0, 10, $fourthHeading, 'RESULTATS CHARGE VIRALE', 0, 0, 0, true, 'C', true);
+      $this->writeHTMLCell(0, 0, 10, $hrLine, '<hr>', 0, 0, 0, true, 'C', true);
     }
   }
 
