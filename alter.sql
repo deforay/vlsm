@@ -2151,7 +2151,7 @@ CREATE TABLE `track_api_requests` (
 
 -- Amit 02-May-2021
 
-ALTER TABLE `form_hepatitis` ADD `source_of_request` VARCHAR(255) NULL DEFAULT NULL AFTER `lot_number`;
+ALTER TABLE `form_hepatitis` ADD `source_of_request` TEXT NULL DEFAULT NULL AFTER `lot_number`;
 ALTER TABLE `form_hepatitis` ADD `source_data_dump` TEXT NULL DEFAULT NULL AFTER `source_of_request`;
 ALTER TABLE `form_covid19` ADD `source_data_dump` TEXT NULL DEFAULT NULL AFTER `source_of_request`;
 ALTER TABLE `eid_form` ADD `source_data_dump` TEXT NULL DEFAULT NULL AFTER `source_of_request`;
@@ -2170,13 +2170,13 @@ UPDATE `resources` SET `module` = 'common' WHERE `resource_id` = 'specimen-refer
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'covid-19-requests', 'addSamplesFromManifest.php', 'Add Samples from Manifest');
 
 -- Thana 11-May-2021
-ALTER TABLE `form_covid19` ADD `app_local_test_req_id` VARCHAR(255) NULL DEFAULT NULL AFTER `is_result_mail_sent`; 
+ALTER TABLE `form_covid19` ADD `app_local_test_req_id` TEXT NULL DEFAULT NULL AFTER `is_result_mail_sent`; 
 ALTER TABLE `r_eid_results` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `status`; 
 
 -- Prasath M 12-May-2021
 INSERT INTO `global_config` (`display_name`, `name`, `value`, `category`, `remote_sync_needed`, `updated_on`, `updated_by`, `status`) VALUES ('VL Monthly Target', 'vl_monthly_target', 'no', 'vl', 'enable', '', '', 'active');
 -- Thana 12-May-2021
-ALTER TABLE `user_details` ADD `testing_user` VARCHAR(50) NULL DEFAULT NULL AFTER `user_signature`; 
+ALTER TABLE `user_details` ADD `testing_user` TEXT NULL DEFAULT NULL AFTER `user_signature`; 
 
 
 UPDATE `system_config` SET `value` = '4.3.2' WHERE `system_config`.`name` = 'version';

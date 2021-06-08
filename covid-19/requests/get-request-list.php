@@ -83,7 +83,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
      $sWhereSub = "";
      foreach ($searchArray as $search) {
           if ($sWhereSub == "") {
-               $sWhereSub .= "(";
+               $sWhereSub .= " WHERE (";
           } else {
                $sWhereSub .= " AND (";
           }

@@ -34,8 +34,8 @@ $testingLabs = $facilitiesDb->getTestingLabs('eid');
 $userQuery = "SELECT * FROM user_details where status='active'";
 $userResult = $db->rawQuery($userQuery);
 $userInfo = array();
-foreach($userResult as $user){
-     $userInfo[$user['user_id']] = ucwords($user['user_name']);
+foreach ($userResult as $user) {
+    $userInfo[$user['user_id']] = ucwords($user['user_name']);
 }
 
 $rejectionTypeQuery = "SELECT DISTINCT rejection_type FROM r_eid_sample_rejection_reasons WHERE rejection_reason_status ='active'";
@@ -87,8 +87,7 @@ require_once($fileArray[$arr['vl_form']]);
 ?>
 
 <script>
-
-    function changeFun(){
+    function changeFun() {
         if ($('#isSampleRejected').val() == "yes") {
             $('.rejected').show();
             $('#sampleRejectionReason').addClass('isRequired');
@@ -110,8 +109,8 @@ require_once($fileArray[$arr['vl_form']]);
     $(document).ready(function() {
 
         $("#isSampleRejected,#result").on("change", function() {
-			changeFun();
-		});
+            changeFun();
+        });
 
         $('.date').datepicker({
             changeMonth: true,
@@ -161,21 +160,34 @@ require_once($fileArray[$arr['vl_form']]);
         $('.dateTime').mask('99-aaa-9999 99:99');
     });
 
-    function showPatientList() {
-        $("#showEmptyResult").hide();
-        if ($.trim($("#artPatientNo").val()) != '') {
-            $.post("/eid/requests/checkPatientExist.php", {
-                    artPatientNo: $("#artPatientNo").val()
-                },
-                function(data) {
-                    if (data >= '1') {
-                        showModal('patientModal.php?artNo=' + $.trim($("#artPatientNo").val()), 900, 520);
-                    } else {
-                        $("#showEmptyResult").show();
-                    }
-                });
+    var patientSearchTimeout = null;
+
+    function showPatientList(patientCode, timeOutDuration) {
+        if (patientSearchTimeout != null) {
+            clearTimeout(patientSearchTimeout);
         }
+        patientSearchTimeout = setTimeout(function() {
+            patientSearchTimeout = null;
+
+            $("#showEmptyResult").hide();
+            if (patientCode != '') {
+                $.post("/eid/requests/checkPatientExist.php", {
+                        artPatientNo: patientCode
+                    },
+                    function(data) {
+                        if (data >= '1') {
+                            showModal('patientModal.php?artNo=' + patientCode, 900, 520);
+                        } else {
+                            $("#showEmptyResult").show();
+                        }
+                    });
+            }
+
+
+        }, timeOutDuration);
+
     }
+
     function checkSampleNameValidation(tableName, fieldName, id, fnct, alrt) {
 
         if ($.trim($("#" + id).val()) != '') {
