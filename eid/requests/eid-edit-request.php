@@ -36,8 +36,8 @@ $testingLabs = $facilitiesDb->getTestingLabs('eid');
 $userQuery = "SELECT * FROM user_details where status='active'";
 $userResult = $db->rawQuery($userQuery);
 $userInfo = array();
-foreach($userResult as $user){
-     $userInfo[$user['user_id']] = ucwords($user['user_name']);
+foreach ($userResult as $user) {
+    $userInfo[$user['user_id']] = ucwords($user['user_name']);
 }
 
 $rejectionTypeQuery = "SELECT DISTINCT rejection_type FROM r_eid_sample_rejection_reasons WHERE rejection_reason_status ='active'";
@@ -99,20 +99,20 @@ foreach ($testPlatformResult as $row) {
 }
 
 
-if(isset($eidInfo['sample_collection_date']) && trim($eidInfo['sample_collection_date'])!='' && $eidInfo['sample_collection_date']!='0000-00-00 00:00:00'){
+if (isset($eidInfo['sample_collection_date']) && trim($eidInfo['sample_collection_date']) != '' && $eidInfo['sample_collection_date'] != '0000-00-00 00:00:00') {
     $sampleCollectionDate = $eidInfo['sample_collection_date'];
-    $expStr=explode(" ",$eidInfo['sample_collection_date']);
-    $eidInfo['sample_collection_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-}else{
+    $expStr = explode(" ", $eidInfo['sample_collection_date']);
+    $eidInfo['sample_collection_date'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
+} else {
     $sampleCollectionDate = '';
-    $eidInfo['sample_collection_date']='';
+    $eidInfo['sample_collection_date'] = '';
 }
 
-if(isset($eidInfo['result_approved_datetime']) && trim($eidInfo['result_approved_datetime'])!='' && $eidInfo['result_approved_datetime']!='0000-00-00 00:00:00'){
-    $expStr=explode(" ",$eidInfo['result_approved_datetime']);
-    $eidInfo['result_approved_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-}else{
-    $eidInfo['result_approved_datetime']=$general->humanDateFormat($general->getDateTime());
+if (isset($eidInfo['result_approved_datetime']) && trim($eidInfo['result_approved_datetime']) != '' && $eidInfo['result_approved_datetime'] != '0000-00-00 00:00:00') {
+    $expStr = explode(" ", $eidInfo['result_approved_datetime']);
+    $eidInfo['result_approved_datetime'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
+} else {
+    $eidInfo['result_approved_datetime'] = $general->humanDateFormat($general->getDateTime());
 }
 
 
@@ -157,7 +157,7 @@ require_once($fileArray[$arr['vl_form']]);
         }
     }
 
-    function changeFun(){
+    function changeFun() {
         if ($('#isSampleRejected').val() == "yes") {
             $('.rejected').show();
             $('#sampleRejectionReason').addClass('isRequired');
@@ -175,27 +175,39 @@ require_once($fileArray[$arr['vl_form']]);
             $('#sampleTestedDateTime').addClass('isRequired');
         }
     }
-    function showPatientList() {
-        $("#showEmptyResult").hide();
-        if ($.trim($("#artPatientNo").val()) != '') {
-            $.post("/eid/requests/checkPatientExist.php", {
-                    artPatientNo: $("#artPatientNo").val()
-                },
-                function(data) {
-                    if (data >= '1') {
-                        showModal('patientModal.php?artNo=' + $.trim($("#artPatientNo").val()), 900, 520);
-                    } else {
-                        $("#showEmptyResult").show();
-                    }
-                });
+    var patientSearchTimeout = null;
+
+    function showPatientList(patientCode, timeOutDuration) {
+        if (patientSearchTimeout != null) {
+            clearTimeout(patientSearchTimeout);
         }
+        patientSearchTimeout = setTimeout(function() {
+            patientSearchTimeout = null;
+
+            $("#showEmptyResult").hide();
+            if (patientCode != '') {
+                $.post("/eid/requests/checkPatientExist.php", {
+                        artPatientNo: patientCode
+                    },
+                    function(data) {
+                        if (data >= '1') {
+                            showModal('patientModal.php?artNo=' + patientCode, 900, 520);
+                        } else {
+                            $("#showEmptyResult").show();
+                        }
+                    });
+            }
+
+
+        }, timeOutDuration);
+
     }
 
     $(document).ready(function() {
         changeFun();
         $("#isSampleRejected,#result").on("change", function() {
-			changeFun();
-		});
+            changeFun();
+        });
 
         $('.date').datepicker({
             changeMonth: true,
@@ -302,7 +314,7 @@ require_once($fileArray[$arr['vl_form']]);
         }).click(function() {
             $('.ui-datepicker-calendar').show();
         });
-        
+
         $('#approvedOnDateTime').datetimepicker({
             changeMonth: true,
             changeYear: true,
@@ -314,8 +326,7 @@ require_once($fileArray[$arr['vl_form']]);
                     $('.ui-datepicker-calendar').show();
                 });
             },
-            onSelect: function(e) {
-            },
+            onSelect: function(e) {},
             yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
         }).click(function() {
             $('.ui-datepicker-calendar').show();
