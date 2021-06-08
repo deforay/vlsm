@@ -46,7 +46,7 @@ if (sizeof($requestResult) > 0) {
             $headerText = $arr['header'];
         }
 
-        $pdf->setHeading($logoPrintInPdf, $headerText, $result['labName'], '', $result['lab_id']);
+        $pdf->setHeading($logoPrintInPdf, $headerText, $result['labName'], '', $result['lab_id'], $arr['vl_form']);
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
         //$pdf->SetAuthor('Pal');

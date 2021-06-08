@@ -167,14 +167,14 @@ try {
         exit(0);
     }
 
-    foreach ($rowData as $key => $row) {
+    foreach ($rowData as $index => $row) {
         $c19Tests = $app->getCovid19TestsCamelCaseByFormId($row['covid19Id']);
-        foreach ($c19Tests as $tests) {
-            $rowData[$key]['testDate'][]         = $tests['sampleTestedDateTime'];
-            $rowData[$key]['testName'][]         = $tests['testName'];
-            $rowData[$key]['testingPlatform'][]  = $tests['testingPlatform'];
-            $rowData[$key]['testResult'][]       = $tests['result'];
-            $rowData[$key]['testId'][]           = $tests['testId'];
+        foreach ($c19Tests as $key => $tests) {
+            $rowData[$index]['c19Tests'][$key]['testDate'][]         = $tests['sampleTestedDateTime'];
+            $rowData[$index]['c19Tests'][$key]['testName'][]         = $tests['testName'];
+            $rowData[$index]['c19Tests'][$key]['testingPlatform'][]  = $tests['testingPlatform'];
+            $rowData[$index]['c19Tests'][$key]['testResult'][]       = $tests['result'];
+            $rowData[$index]['c19Tests'][$key]['testId'][]           = $tests['testId'];
         }
     }
     $payload = array(
