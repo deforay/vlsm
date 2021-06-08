@@ -77,13 +77,14 @@ class MYPDF extends TCPDF
 {
 
   //Page header
-  public function setHeading($logo, $text, $lab, $title = null, $labFacilityId = null)
+  public function setHeading($logo, $text, $lab, $title = null, $labFacilityId = null, $formId = null)
   {
     $this->logo = $logo;
     $this->text = $text;
     $this->lab = $lab;
     $this->htitle = $title;
     $this->labFacilityId = $labFacilityId;
+    $this->formId  = $formId;
   }
   //Page header
   public function Header()
@@ -146,8 +147,12 @@ class MYPDF extends TCPDF
         $this->writeHTMLCell(0, 0, 10, $thirdHeading, strtoupper($this->lab), 0, 0, 0, true, 'C', true);
       }
       $this->SetFont('helvetica', '', 12);
-      // $this->writeHTMLCell(0, 0, 10, $fourthHeading, 'RESULTATS CHARGE VIRALE', 0, 0, 0, true, 'C', true);
-      $this->writeHTMLCell(0, 0, 10, $hrLine, '<hr>', 0, 0, 0, true, 'C', true);
+      if ($this->formId == 3) {
+        $this->writeHTMLCell(0, 0, 10, $fourthHeading, 'DIAGNOSTIC PRÉCOCE DU NOURRISSON', 0, 0, 0, true, 'C', true);
+      } else {
+        $this->writeHTMLCell(0, 0, 10, $fourthHeading, 'RESULTATS CHARGE VIRALE', 0, 0, 0, true, 'C', true);
+      }
+      $this->writeHTMLCell(0, 0, 15, $hrLine, '<hr>', 0, 0, 0, true, 'C', true);
     }
   }
 

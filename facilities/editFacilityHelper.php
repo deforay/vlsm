@@ -140,8 +140,8 @@ try {
 				$db = $db->where('signatory_id', $delete);
 				$db->delete($signTableName);
 			}
-			/* $pathname = UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $lastId . DIRECTORY_SEPARATOR . 'signatures' . DIRECTORY_SEPARATOR;
-			unlink($pathname); */
+			$pathname = UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $lastId . DIRECTORY_SEPARATOR . 'signatures' . DIRECTORY_SEPARATOR;
+			// unlink($pathname);
 			foreach ($_POST['signName'] as $key => $name) {
 				if (isset($name) && $name != "") {
 					$signData = array(
