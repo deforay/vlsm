@@ -2192,3 +2192,8 @@ UPDATE `system_config` SET `value` = '4.3.3' WHERE `system_config`.`name` = 'ver
 
 -- Amit -- 30-May-2021
 UPDATE `system_config` SET `value` = '4.3.4' WHERE `system_config`.`name` = 'version';
+
+
+
+-- Amit -- 08-Jun-2021
+UPDATE `system_config` SET `value` = '4.3.5' WHERE `system_config`.`name` = 'version';
