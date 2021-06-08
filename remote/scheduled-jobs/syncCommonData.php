@@ -662,33 +662,37 @@ if (!empty($result['testingLabs']) && count($result['testingLabs']) > 0) {
         $lastId = 0;
         $db->insert('testing_labs', $testingLabsData);
         $lastId = $db->getInsertId();
+        $labId[] = $testingLabs['facility_id'];
+    }
+}
+//update or insert testing labs signs
+if (isset($result['labReportSignatories']) && count($result['labReportSignatories']) > 0) {
+    if (!file_exists(UPLOAD_PATH)) {
+        mkdir(UPLOAD_PATH);
+    }
+    if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs")) {
+        mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs");
+    }
+    if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $testingLabs['facility_id'])) {
+        mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $testingLabs['facility_id']);
+    }
+    if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $testingLabs['facility_id'] . DIRECTORY_SEPARATOR . 'signatures')) {
+        mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $testingLabs['facility_id'] . DIRECTORY_SEPARATOR . 'signatures');
+    }
+    foreach ($result['labReportSignatories'] as $key => $sign) {
+        unset($sign['signatory_id']);
+        if (in_array($sign['lab_id'], $labId)) {
 
-        if (isset($testingLabs['labReportSignatories']) && count($testingLabs['labReportSignatories']) > 0) {
-            if (!file_exists(UPLOAD_PATH)) {
-                mkdir(UPLOAD_PATH);
-            }
-            if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs")) {
-                mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs");
-            }
-            if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $testingLabs['facility_id'])) {
-                mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $testingLabs['facility_id']);
-            }
-            if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $testingLabs['facility_id'] . DIRECTORY_SEPARATOR . 'signatures')) {
-                mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $testingLabs['facility_id'] . DIRECTORY_SEPARATOR . 'signatures');
-            }
-            $db = $db->where('lab_id  = "' . $testingLabs['facility_id'] . '"');
+            $db = $db->where('lab_id  = "' . $sign['lab_id'] . '"');
             $id = $db->delete('lab_report_signatories');
-            foreach ($testingLabs['labReportSignatories'] as $sign) {
-                unset($sign['signatory_id']);
+        }
 
-                if (isset($sign['signature']) && $sign['signature'] != "") {
-                    /* To save file from the url */
-                    $filePath = $systemConfig['remoteURL'] . '/uploads/labs/' . $testingLabs['facility_id'] . '/signatures/' . $sign['signature'];
-                    $pathname = UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $testingLabs['facility_id'] . DIRECTORY_SEPARATOR . 'signatures' . DIRECTORY_SEPARATOR . $sign['signature'];
-                    if (file_put_contents($pathname, file_get_contents($filePath))) {
-                        $db->insert('lab_report_signatories', $sign);
-                    }
-                }
+        if (isset($sign['signature']) && $sign['signature'] != "") {
+            /* To save file from the url */
+            $filePath = $systemConfig['remoteURL'] . '/uploads/labs/' . $sign['lab_id'] . '/signatures/' . $sign['signature'];
+            $pathname = UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $sign['lab_id'] . DIRECTORY_SEPARATOR . 'signatures' . DIRECTORY_SEPARATOR . $sign['signature'];
+            if (file_put_contents($pathname, file_get_contents($filePath))) {
+                $db->insert('lab_report_signatories', $sign);
             }
         }
     }
