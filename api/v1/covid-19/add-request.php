@@ -294,11 +294,16 @@ try {
             'result_status'                       => $status,
             'data_sync'                           => 0,
             'reason_for_sample_rejection'         => (isset($data['sampleRejectionReason']) && $data['isSampleRejected'] == 'yes') ? $data['sampleRejectionReason'] : null,
-            'request_created_datetime'            => (isset($data['sampleRejectionReason']) && $data['isSampleRejected'] == 'yes') ? $data['sampleRejectionReason'] : $general->getDateTime(),
-            'sample_registered_at_lab'            => $general->getDateTime(),
-            'last_modified_datetime'              => $general->getDateTime(),
             'source_of_request'                   => "api"
         );
+        if ($rowData) {
+            $covid19Data['last_modified_datetime']  = $general->getDateTime();
+            $covid19Data['last_modified_by']  = $user['user_id'];
+        } else {
+            $covid19Data['request_created_datetime']  = (isset($data['sampleRejectionReason']) && $data['isSampleRejected'] == 'yes') ? $data['sampleRejectionReason'] : $general->getDateTime();
+            $covid19Data['sample_registered_at_lab']  = $general->getDateTime();
+            $covid19Data['request_created_by']  = $user['user_id'];
+        }
         $lock = $general->getGlobalConfig('lock_approved_covid19_samples');
         if ($status == 7 && $lock == 'yes') {
             $covid19Data['locked'] = 'yes';
@@ -342,27 +347,28 @@ try {
                 $db->insert("covid19_patient_comorbidities", $comorbidityData);
             }
         }
-
         if (isset($data['covid19SampleId']) && $data['covid19SampleId'] != '' && ($data['isSampleRejected'] == 'no' || $data['isSampleRejected'] == '')) {
-            if (isset($data['c19Tests']['testName']) && count($data['c19Tests']['testName']) > 0) {
-                foreach ($data['testName'] as $testKey => $testKitName) {
-                    if (isset($testKitName) && !empty($testKitName)) {
-                        if (isset($data['c19Tests']['testDate'][$testKey]) && trim($data['c19Tests']['testDate'][$testKey]) != "") {
-                            $testedDateTime = explode(" ", $data['c19Tests']['testDate'][$testKey]);
-                            $data['c19Tests']['testDate'][$testKey] = $general->dateFormat($testedDateTime[0]) . " " . $testedDateTime[1];
+            if (isset($data['c19Tests']) && count($data['c19Tests']) > 0) {
+                $db = $db->where('covid19_id', $data['covid19SampleId']);
+                $db->delete($testTableName);
+                foreach ($data['c19Tests'] as $testKey => $test) {
+                    if (isset($test['testName']) && !empty($test['testName'])) {
+                        if (isset($test['testDate']) && trim($test['testDate']) != "") {
+                            $testedDateTime = explode(" ", $test['testDate']);
+                            $test['testDate'] = $general->dateFormat($testedDateTime[0]) . " " . $testedDateTime[1];
                         } else {
-                            $data['c19Tests']['testDate'][$testKey] = NULL;
+                            $test['testDate'] = NULL;
                         }
                         $covid19TestData = array(
                             'covid19_id'            => $data['covid19SampleId'],
-                            'test_name'                => ($testKitName == 'other') ? $data['c19Tests']['testNameOther'][$testKey] : $testKitName,
+                            'test_name'             => ($test['testName'] == 'other') ? $test['testNameOther'] : $test['testName'],
                             'facility_id'           => isset($data['labId']) ? $data['labId'] : null,
-                            'sample_tested_datetime' => date('Y-m-d H:i:s', strtotime($data['c19Tests']['testDate'][$testKey])),
-                            'testing_platform'      => isset($data['c19Tests']['testingPlatform'][$testKey]) ? $data['c19Tests']['testingPlatform'][$testKey] : null,
-                            'result'                => $data['c19Tests']['testResult'][$testKey],
+                            'sample_tested_datetime' => date('Y-m-d H:i:s', strtotime($test['testDate'])),
+                            'testing_platform'      => isset($test['testingPlatform']) ? $test['testingPlatform'] : null,
+                            'result'                => $test['testResult'],
                         );
                         $db->insert($testTableName, $covid19TestData);
-                        $covid19Data['sample_tested_datetime'] = date('Y-m-d H:i:s', strtotime($data['c19Tests']['testDate'][$testKey]));
+                        $covid19Data['sample_tested_datetime'] = date('Y-m-d H:i:s', strtotime($test['testDate']));
                     }
                 }
             }
@@ -381,21 +387,19 @@ try {
             $c19SampleCode = (isset($c19Data['sample_code']) && $c19Data['sample_code']) ? $c19Data['sample_code'] : $c19Data['remote_sample_code'];
             if (isset($data['localTestReqID']) && $data['localTestReqID'] != "") {
                 $responseData[$rootKey] = array(
-                    'status'             => 'success',
-                    'localTestReqID'     => $data['localTestReqID'],
-                    'sampleCode'         => $c19SampleCode,
+                    'status' => 'success',
+                    'sampleCode' => $c19SampleCode,
                 );
             } else {
                 $responseData[$rootKey] = array(
-                    'sampleCode'         => $c19SampleCode,
+                    'sampleCode' => $c19SampleCode,
                 );
             }
             http_response_code(200);
         } else {
             if (isset($data['localTestReqID']) && $data['localTestReqID'] != "") {
                 $responseData[$rootKey] = array(
-                    'status'             => 'faile',
-                    'localTestReqID'     => $data['localTestReqID'],
+                    'status' => 'faile'
                 );
             } else {
                 $payload = array(

@@ -156,6 +156,8 @@ try {
                         vl.testing_point                        as testingPoint,
                         vl.authorized_on                        as authorisedOn,
                         vl.authorized_by                        as authorisedBy,
+                        vl.request_created_datetime             as createdOn,
+                        vl.last_modified_datetime               as updatedOn,
                         u_d.user_name                           as reviewedBy,
                         vl.lab_technician                       as labTechnician,
                         lt_u_d.user_name                        as labTechnicianName,
@@ -242,14 +244,7 @@ try {
     }
 
     foreach ($rowData as $key => $row) {
-        $c19Tests = $app->getCovid19TestsCamelCaseByFormId($row['covid19Id']);
-        foreach ($c19Tests as $tests) {
-            $rowData[$key]['testDate'][]         = $tests['sampleTestedDateTime'];
-            $rowData[$key]['testName'][]         = $tests['testName'];
-            $rowData[$key]['testingPlatform'][]  = $tests['testingPlatform'];
-            $rowData[$key]['testResult'][]       = $tests['result'];
-            $rowData[$key]['testId'][]           = $tests['testId'];
-        }
+        $rowData[$key]['c19Tests'] = $app->getCovid19TestsCamelCaseByFormId($row['covid19Id']);
     }
     $payload = array(
         'status' => 'success',
