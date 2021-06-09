@@ -168,6 +168,7 @@ try {
                         r_f_s.funding_source_name               as fundingSource,                  
                         r_i_p.i_partner_name                    as implementingPartner,                  
                         pp.province_name                        as patientProvince,
+                        ts.status_name                          as resultStatusName,
                         CONCAT_WS('',c.iso_name, ' (', c.iso3,')') as patientNationality
                         
                         FROM form_covid19 as vl 
