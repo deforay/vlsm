@@ -51,7 +51,7 @@ if (isset($_POST['id']) && trim($_POST['id']) != '') {
 
 	$searchQuery = "SELECT vl.*,f.*,
 				l.facility_name as labName,
-				l.email as labEmail,
+				l.facility_emails as labEmail,
 				l.address as labAddress,
 				l.facility_mobile_numbers as labPhone,
 				l.facility_state as labState,
