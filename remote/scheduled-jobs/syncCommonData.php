@@ -84,9 +84,9 @@ $curl_response = curl_exec($ch);
 //close connection
 curl_close($ch);
 $result = json_decode($curl_response, true);
-// echo "<pre>";
-// print_r($result);
-// die;
+/* echo "<pre>";
+print_r($result);
+die; */
 
 //update or insert sample type
 if (!empty($result['vlSampleTypes']) && count($result['vlSampleTypes']) > 0) {
@@ -667,26 +667,28 @@ if (!empty($result['testingLabs']) && count($result['testingLabs']) > 0) {
 }
 //update or insert testing labs signs
 if (isset($result['labReportSignatories']) && count($result['labReportSignatories']) > 0) {
-    if (!file_exists(UPLOAD_PATH)) {
-        mkdir(UPLOAD_PATH);
-    }
-    if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs")) {
-        mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs");
-    }
-    if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $testingLabs['facility_id'])) {
-        mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $testingLabs['facility_id']);
-    }
-    if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $testingLabs['facility_id'] . DIRECTORY_SEPARATOR . 'signatures')) {
-        mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $testingLabs['facility_id'] . DIRECTORY_SEPARATOR . 'signatures');
-    }
     foreach ($result['labReportSignatories'] as $key => $sign) {
-        unset($sign['signatory_id']);
         if (in_array($sign['lab_id'], $labId)) {
-
             $db = $db->where('lab_id  = "' . $sign['lab_id'] . '"');
             $id = $db->delete('lab_report_signatories');
         }
+    }
 
+    foreach ($result['labReportSignatories'] as $key => $sign) {
+        if (!file_exists(UPLOAD_PATH)) {
+            mkdir(UPLOAD_PATH);
+        }
+        if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs")) {
+            mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs");
+        }
+        if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $sign['lab_id'])) {
+            mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $sign['lab_id']);
+        }
+        if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $sign['lab_id'] . DIRECTORY_SEPARATOR . 'signatures')) {
+            mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $sign['lab_id'] . DIRECTORY_SEPARATOR . 'signatures');
+        }
+        // Save Data to DB
+        unset($sign['signatory_id']);
         if (isset($sign['signature']) && $sign['signature'] != "") {
             /* To save file from the url */
             $filePath = $systemConfig['remoteURL'] . '/uploads/labs/' . $sign['lab_id'] . '/signatures/' . $sign['signature'];
