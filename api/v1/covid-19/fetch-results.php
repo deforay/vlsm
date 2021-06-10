@@ -67,6 +67,7 @@ try {
     $sQuery = "SELECT 
                         vl.covid19_id as covid19Id,
                         CONCAT_WS('',vl.sample_code, vl.remote_sample_code) as sampleCode,
+                        vl.facility_id as facilityId,
                         vl.patient_id as patientId,
                         CONCAT_WS(' ',vl.patient_name, vl.patient_surname) as patientFullName,
                         vl.app_local_test_req_id as localTestReqID,
