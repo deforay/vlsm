@@ -140,7 +140,7 @@ try {
         } else {
             $where .= " WHERE ";
         }
-        $where .= " AND (sample_code IN ('$sampleCode') OR remote_sample_code IN ('$sampleCode') )";
+        $where .= " (sample_code IN ('$sampleCode') OR remote_sample_code IN ('$sampleCode') )";
     }
     /* To check the facility and date range filter */
     $from = $input['sampleCollectionDate'][0];
@@ -152,7 +152,7 @@ try {
         } else {
             $where .= " WHERE ";
         }
-        $where .= " AND DATE(sample_collection_date) between '$from' AND '$to' ";
+        $where .= " DATE(sample_collection_date) between '$from' AND '$to' ";
 
         $facilityId = implode("','", $facilityId);
         $where .= " AND vl.facility_id IN ('$facilityId') ";
@@ -169,13 +169,13 @@ try {
     }
 
     if (!empty($input['patientName'])) {
-        $patientName = implode("','", $input['patientName']);
+        // $patientName = implode("','", $input['patientName']);
         if (isset($where) && trim($where) != "") {
             $where .= " AND ";
         } else {
             $where .= " WHERE ";
         }
-        $where .= " CONCAT(vl.patient_name, ' ', vl.patient_surname) like '%" . $patientName . "%'";
+        $where .= " CONCAT(vl.patient_name, ' ', vl.patient_surname) like '%" . $input['patientName'] . "%'";
     }
 
     // $sQuery .= " ORDER BY sample_collection_date ASC ";
