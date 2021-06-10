@@ -158,6 +158,26 @@ try {
         $where .= " AND vl.facility_id IN ('$facilityId') ";
     }
 
+    if (!empty($input['patientId'])) {
+        $patientId = implode("','", $input['patientId']);
+        if (isset($where) && trim($where) != "") {
+            $where .= " AND ";
+        } else {
+            $where .= " WHERE ";
+        }
+        $where .= " vl.patient_id IN ('" . $patientId . "') ";
+    }
+
+    if (!empty($input['patientName'])) {
+        $patientName = implode("','", $input['patientName']);
+        if (isset($where) && trim($where) != "") {
+            $where .= " AND ";
+        } else {
+            $where .= " WHERE ";
+        }
+        $where .= " CONCAT(vl.patient_name, ' ', vl.patient_surname) like '%" . $patientName . "%'";
+    }
+
     // $sQuery .= " ORDER BY sample_collection_date ASC ";
     $sQuery .= $where;
     // die($sQuery);
