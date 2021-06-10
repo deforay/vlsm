@@ -131,6 +131,54 @@ class App
         return $response;
     }
 
+    public function getTestingLabs($testType = null, $user = null, $onlyActive = false)
+    {
+        $facilityDb = new \Vlsm\Models\Facilities($this->db);
+        $query = "SELECT tl.test_type, f.facility_id, f.facility_name, f.facility_code, f.facility_district, f.facility_type 
+                    from testing_labs AS tl 
+                    INNER JOIN facility_details as f ON tl.facility_id=f.facility_id";
+        $where = "";
+        if (!empty($user)) {
+            $facilityMap = $facilityDb->getFacilityMap($user);
+            if (!empty($facilityMap)) {
+                if (isset($where) && trim($where) != "") {
+                    $where .= " AND ";
+                } else {
+                    $where .= " WHERE ";
+                }
+                $where .= " facility_id IN (" . $facilityMap . ")";
+            }
+        }
+
+        if (!empty($testType)) {
+            if (isset($where) && trim($where) != "") {
+                $where .= " AND ";
+            } else {
+                $where .= " WHERE ";
+            }
+            $where .= " tl.test_type like '$testType'";
+        }
+
+        if ($onlyActive) {
+            if (isset($where) && trim($where) != "") {
+                $where .= " AND ";
+            } else {
+                $where .= " WHERE ";
+            }
+            $where .= " f.status like 'active'";
+        }
+
+        $where .= ' GROUP BY facility_name ORDER BY facility_name ASC';
+        $query .= $where;
+        $result = $this->db->rawQuery($query);
+        foreach ($result as $key => $row) {
+            $response[$key]['value']        = $row['facility_id'];
+            $response[$key]['show']         = $row['facility_name'] . ' (' . $row['facility_code'] . ')';
+            $response[$key]['district']     = $row['facility_district'];
+        }
+        return $response;
+    }
+
     public function getProvinceDetails($user = null, $onlyActive = false)
     {
         $facilityDb = new \Vlsm\Models\Facilities($this->db);

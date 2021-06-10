@@ -389,10 +389,12 @@ try {
                 $responseData[$rootKey] = array(
                     'status' => 'success',
                     'sampleCode' => $c19SampleCode,
+                    'localTestReqID' => $c19Data['app_local_test_req_id'],
                 );
             } else {
                 $responseData[$rootKey] = array(
                     'sampleCode' => $c19SampleCode,
+                    'localTestReqID' => $c19Data['app_local_test_req_id'],
                 );
             }
             http_response_code(200);
