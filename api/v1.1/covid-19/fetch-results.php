@@ -165,9 +165,11 @@ try {
                         rs.rejection_reason_name                as rejectionReason,
                         vl.rejection_on                         as rejectionDate,                  
                         vl.province_id                          as provinceId,                  
+                        p.province_name                         as provinceName,                  
                         r_f_s.funding_source_name               as fundingSource,                  
                         r_i_p.i_partner_name                    as implementingPartner,                  
-                        vl.patient_province                      as patientProvince,
+                        vl.patient_province                     as patientProvince,
+                        pp.province_name                        as patientProvinceName,
                         ts.status_name                          as resultStatusName,
                         CONCAT_WS('',c.iso_name, ' (', c.iso3,')') as patientNationality
                         
