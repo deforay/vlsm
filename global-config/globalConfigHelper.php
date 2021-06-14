@@ -29,7 +29,7 @@ try {
         $data = array('value' => '');
         $db = $db->where('name', 'logo');
         $id = $db->update($tableName, $data);
-        if($id){
+        if ($id) {
             $db = $db->where('name', 'logo');
             $db->update($tableName, array(
                 "updated_on" => $general->getDateTime(),
@@ -91,7 +91,7 @@ try {
             $data = array('value' => $imageName);
             $db = $db->where('name', 'logo');
             $id = $db->update($tableName, $data);
-            if($id){
+            if ($id) {
                 $db = $db->where('name', 'logo');
                 $db->update($tableName, array(
                     "updated_on" => $general->getDateTime(),
@@ -104,7 +104,7 @@ try {
         $data = array('value' => null);
         $db = $db->where('name', 'r_mandatory_fields');
         $id = $db->update($tableName, $data);
-        if($id){
+        if ($id) {
             $db = $db->where('name', 'logo');
             $db->update($tableName, array(
                 "updated_on" => $general->getDateTime(),
@@ -121,7 +121,7 @@ try {
             $data = array('value' => $fieldValue);
             $db = $db->where('name', $fieldName);
             $id = $db->update($tableName, $data);
-            if($id){
+            if ($id) {
                 $db = $db->where('name', $fieldName);
                 $db->update($tableName, array(
                     "updated_on" => $general->getDateTime(),
@@ -207,12 +207,12 @@ try {
         $db = $db->where('name', 'lock_approved_covid19_samples');
         $id = $db->update($tableName, $data);
     }
-    
+
     if (isset($_POST['covid19ReportType']) && trim($_POST['covid19ReportType']) != "") {
         $data = array('value' => trim($_POST['covid19ReportType']));
         $db = $db->where('name', 'covid19_report_type');
         $id = $db->update($tableName, $data);
-        if($id){
+        if ($id) {
             $db = $db->where('name', 'logo');
             $db->update($tableName, array(
                 "updated_on" => $general->getDateTime(),
@@ -224,7 +224,7 @@ try {
         $data = array('value' => trim($_POST['covid19PositiveConfirmatoryTestsRequiredByCentralLab']));
         $db = $db->where('name', 'covid19_positive_confirmatory_tests_required_by_central_lab');
         $id = $db->update($tableName, $data);
-        if($id){
+        if ($id) {
             $db = $db->where('name', 'logo');
             $db->update($tableName, array(
                 "updated_on" => $general->getDateTime(),
@@ -236,7 +236,7 @@ try {
         $data = array('value' => trim($_POST['covid19TestsTableInResultsPdf']));
         $db = $db->where('name', 'covid19_tests_table_in_results_pdf');
         $id = $db->update($tableName, $data);
-        if($id){
+        if ($id) {
             $db = $db->where('name', 'logo');
             $db->update($tableName, array(
                 "updated_on" => $general->getDateTime(),
@@ -288,7 +288,7 @@ try {
     //     }
     // }
     $_SESSION['alertMsg'] = "Global Config values updated successfully";
-    
+
     //Add event log
     $eventType = 'general-config-update';
     $action = ucwords($_SESSION['userName']) . ' updated general config';
