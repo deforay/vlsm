@@ -2197,3 +2197,6 @@ UPDATE `system_config` SET `value` = '4.3.4' WHERE `system_config`.`name` = 'ver
 
 -- Amit -- 08-Jun-2021
 UPDATE `system_config` SET `value` = '4.3.5' WHERE `system_config`.`name` = 'version';
+
+-- Thana 14-Jun-2021
+INSERT INTO `global_config` (`display_name`, `name`, `value`, `category`, `remote_sync_needed`, `updated_on`, `updated_by`, `status`) VALUES ('App Menu Name', 'app_menu_name', 'VLSM', 'app', 'no', '2021-06-14 18:47:11', NULL, 'active');

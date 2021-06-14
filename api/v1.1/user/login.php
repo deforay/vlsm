@@ -62,6 +62,7 @@ try {
                     $data['user'] = $admin;
                     $data['form'] = $configFormResult[0]['value'];
                     $data['api_token'] = $randomString;
+                    $data['appMenuName'] = $general->getGlobalConfig('app_menu_name');;
                     // print_r($data);die;
                     $payload = array(
                         'status' => 1,

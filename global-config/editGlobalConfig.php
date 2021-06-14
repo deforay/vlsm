@@ -4,7 +4,7 @@ $title = "Edit Global Configuration";
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 
-	
+
 $instanceQuery = "SELECT * from s_vlsm_instance where vlsm_instance_id='" . $_SESSION['instanceId'] . "'";
 $instanceResult = $db->query($instanceQuery);
 $fType = "SELECT * FROM facility_type";
@@ -49,18 +49,18 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 
 	<!-- Main content -->
 	<section class="content">
-		
+
 		<div class="box box-default">
 			<div class="box-header with-border">
-          <div class="pull-right" style="font-size:15px;"> 
-		  <?php if (isset($_SESSION['privileges']) && in_array("editGlobalConfig.php", $_SESSION['privileges']) && !isset($_GET['e'])) { ?>
-				<div class="col-sm-6 pull-right">
-					<a href="editGlobalConfig.php?e=1" class="btn btn-primary pull-right"> <i class="fa fa-pencil"></i> Edit General Config</a>
+				<div class="pull-right" style="font-size:15px;">
+					<?php if (isset($_SESSION['privileges']) && in_array("editGlobalConfig.php", $_SESSION['privileges']) && !isset($_GET['e'])) { ?>
+						<div class="col-sm-6 pull-right">
+							<a href="editGlobalConfig.php?e=1" class="btn btn-primary pull-right"> <i class="fa fa-pencil"></i> Edit General Config</a>
+						</div>
+					<?php } ?>
+					<br>
 				</div>
-			<?php } ?>
-			<br>
-		  </div>
-        </div>
+			</div>
 			<!-- /.box-header -->
 			<div class="box-body">
 				<!-- form start -->
@@ -307,7 +307,7 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 
 							</div>
 						</div>
-						<?php if($systemConfig['modules']['vl']){ ?>
+						<?php if ($systemConfig['modules']['vl']) { ?>
 							<div class="panel panel-default">
 								<div class="panel-heading">
 									<h3 class="panel-title">Viral Load Settings</h3>
@@ -418,57 +418,57 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 										</div>
 									</div>
 									<?php if (isset($arr['lock_approved_vl_samples']) && $arr['lock_approved_vl_samples'] != '') { ?>
-									<div class="row">
-										<div class="col-md-12">
-											<div class="form-group">
-												<label for="lockApprovedVlSamples" class="col-lg-2 control-label">Lock Approved VL Samples<span class="mandatory ">*</span></label>
-												<div class="col-lg-4">
-													<select id="lockApprovedVlSamples" name="lockApprovedVlSamples" type="text" class="form-control readPage" title="Please select lock approved sample">
-													<option value="">--Select--</option>
-													<option value="yes" <?php echo (isset($arr['lock_approved_vl_samples']) && $arr['lock_approved_vl_samples'] == 'yes')?"selected='selected'":''; ?>>Yes</option>
-													<option value="no" <?php echo (isset($arr['lock_approved_vl_samples']) && $arr['lock_approved_vl_samples'] == 'no')?"selected='selected'":''; ?>>No</option>
-													</select>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group">
+													<label for="lockApprovedVlSamples" class="col-lg-2 control-label">Lock Approved VL Samples<span class="mandatory ">*</span></label>
+													<div class="col-lg-4">
+														<select id="lockApprovedVlSamples" name="lockApprovedVlSamples" type="text" class="form-control readPage" title="Please select lock approved sample">
+															<option value="">--Select--</option>
+															<option value="yes" <?php echo (isset($arr['lock_approved_vl_samples']) && $arr['lock_approved_vl_samples'] == 'yes') ? "selected='selected'" : ''; ?>>Yes</option>
+															<option value="no" <?php echo (isset($arr['lock_approved_vl_samples']) && $arr['lock_approved_vl_samples'] == 'no') ? "selected='selected'" : ''; ?>>No</option>
+														</select>
+													</div>
 												</div>
 											</div>
 										</div>
-									</div>
-									<?php }?>
+									<?php } ?>
 									<?php if (isset($arr['vl_suppression_target']) && $arr['vl_suppression_target'] != '') { ?>
-									<div class="row">
-										<div class="col-md-12">
-											<div class="form-group">
-												<label for="vl_suppression_target" class="col-lg-2 control-label">VL Suppression Target<span class="mandatory ">*</span></label>
-												<div class="col-lg-4">
-													<select id="vl_suppression_target" name="vl_suppression_target" type="text" class="form-control readPage" title="Please select lock approved sample">
-													<option value="">--Select--</option>
-													<option value="yes" <?php echo (isset($arr['vl_suppression_target']) && $arr['vl_suppression_target'] == 'yes')?"selected='selected'":''; ?>>Enable</option>
-													<option value="no" <?php echo (isset($arr['vl_suppression_target']) && $arr['vl_suppression_target'] == 'no')?"selected='selected'":''; ?>>Disable</option>
-													</select>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group">
+													<label for="vl_suppression_target" class="col-lg-2 control-label">VL Suppression Target<span class="mandatory ">*</span></label>
+													<div class="col-lg-4">
+														<select id="vl_suppression_target" name="vl_suppression_target" type="text" class="form-control readPage" title="Please select lock approved sample">
+															<option value="">--Select--</option>
+															<option value="yes" <?php echo (isset($arr['vl_suppression_target']) && $arr['vl_suppression_target'] == 'yes') ? "selected='selected'" : ''; ?>>Enable</option>
+															<option value="no" <?php echo (isset($arr['vl_suppression_target']) && $arr['vl_suppression_target'] == 'no') ? "selected='selected'" : ''; ?>>Disable</option>
+														</select>
+													</div>
 												</div>
 											</div>
 										</div>
-									</div>
-									<?php }?>
+									<?php } ?>
 									<?php if (isset($arr['vl_monthly_target']) && $arr['vl_monthly_target'] != '') { ?>
-									<div class="row">
-										<div class="col-md-12">
-											<div class="form-group">
-												<label for="vl_monthly_target" class="col-lg-2 control-label">VL Monthly Target<span class="mandatory ">*</span></label>
-												<div class="col-lg-4">
-													<select id="vl_monthly_target" name="vl_monthly_target" type="text" class="form-control readPage" title="Please select lock approved sample">
-													<option value="">--Select--</option>
-													<option value="yes" <?php echo (isset($arr['vl_monthly_target']) && $arr['vl_monthly_target'] == 'yes')?"selected='selected'":''; ?>>Enable</option>
-													<option value="no" <?php echo (isset($arr['vl_monthly_target']) && $arr['vl_monthly_target'] == 'no')?"selected='selected'":''; ?>>Disable</option>
-													</select>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group">
+													<label for="vl_monthly_target" class="col-lg-2 control-label">VL Monthly Target<span class="mandatory ">*</span></label>
+													<div class="col-lg-4">
+														<select id="vl_monthly_target" name="vl_monthly_target" type="text" class="form-control readPage" title="Please select lock approved sample">
+															<option value="">--Select--</option>
+															<option value="yes" <?php echo (isset($arr['vl_monthly_target']) && $arr['vl_monthly_target'] == 'yes') ? "selected='selected'" : ''; ?>>Enable</option>
+															<option value="no" <?php echo (isset($arr['vl_monthly_target']) && $arr['vl_monthly_target'] == 'no') ? "selected='selected'" : ''; ?>>Disable</option>
+														</select>
+													</div>
 												</div>
 											</div>
 										</div>
-									</div>
-									<?php }?>
+									<?php } ?>
 								</div>
 							</div>
-						<?php } 
-						if($systemConfig['modules']['eid']){ ?>
+						<?php }
+						if ($systemConfig['modules']['eid']) { ?>
 							<div class="panel panel-default">
 								<div class="panel-heading">
 									<h3 class="panel-title">EID Settings</h3>
@@ -574,21 +574,21 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 										</div>
 									</div>
 									<?php if (isset($arr['lock_approved_eid_samples']) && $arr['lock_approved_eid_samples'] != '') { ?>
-									<div class="row">
-										<div class="col-md-12">
-											<div class="form-group">
-												<label for="lockApprovedEidSamples" class="col-lg-2 control-label">Lock Approved EID Samples<span class="mandatory ">*</span></label>
-												<div class="col-lg-4">
-													<select id="lockApprovedEidSamples" name="lockApprovedEidSamples" type="text" class="form-control readPage" title="Please select lock approved sample">
-													<option value="">--Select--</option>
-													<option value="yes" <?php echo (isset($arr['lock_approved_eid_samples']) && $arr['lock_approved_eid_samples'] == 'yes')?"selected='selected'":''; ?>>Yes</option>
-													<option value="no" <?php echo (isset($arr['lock_approved_eid_samples']) && $arr['lock_approved_eid_samples'] == 'no')?"selected='selected'":''; ?>>No</option>
-													</select>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group">
+													<label for="lockApprovedEidSamples" class="col-lg-2 control-label">Lock Approved EID Samples<span class="mandatory ">*</span></label>
+													<div class="col-lg-4">
+														<select id="lockApprovedEidSamples" name="lockApprovedEidSamples" type="text" class="form-control readPage" title="Please select lock approved sample">
+															<option value="">--Select--</option>
+															<option value="yes" <?php echo (isset($arr['lock_approved_eid_samples']) && $arr['lock_approved_eid_samples'] == 'yes') ? "selected='selected'" : ''; ?>>Yes</option>
+															<option value="no" <?php echo (isset($arr['lock_approved_eid_samples']) && $arr['lock_approved_eid_samples'] == 'no') ? "selected='selected'" : ''; ?>>No</option>
+														</select>
+													</div>
 												</div>
 											</div>
 										</div>
-									</div>
-									<?php }?>
+									<?php } ?>
 								</div>
 							</div>
 						<?php }
@@ -653,7 +653,7 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 											</div>
 										</div>
 									</div>
-									
+
 									<div id="covid19_auto-sample-eg" class="row" style="display:<?php echo ($arr['covid19_sample_code'] == 'auto' || $arr['covid19_sample_code'] == 'auto2' || 'MMYY' || 'YY') ? 'block' : 'none'; ?>;">
 										<div class="col-md-12" style="text-align:center;">
 											<code id="covid19_auto-sample-code" class="covid19_autoSample" style="display:<?php echo ($arr['covid19_sample_code'] == 'auto') ? 'block' : 'none'; ?>;">
@@ -704,7 +704,7 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 													<div class="col-lg-4">
 														<input value="<?php echo $arr['covid19_negative']; ?>" name="covid19Negative" id="covid19Negative" type="text" class="form-control readPage" placeholder="Sample code prefix" title="Please enter sample code prefix" />
 													</div>
-												<?php }?>
+												<?php } ?>
 											</div>
 										</div>
 									</div>
@@ -716,20 +716,20 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 													<div class="col-lg-4">
 														<input value="<?php echo $arr['covid19_positive']; ?>" id="covid19Positive" name="covid19Positive" type="text" class="form-control readPage" placeholder="Sample code prefix" title="Please enter sample code prefix" />
 													</div>
-												<?php }?>
+												<?php } ?>
 											</div>
 											<?php if (isset($arr['lock_approved_covid19_samples']) && $arr['lock_approved_covid19_samples'] != '') { ?>
-											<div class="form-group">
+												<div class="form-group">
 													<label for="lockApprovedCovid19Samples" class="col-lg-2 control-label">Lock Approved Covid19 Samples<span class="mandatory ">*</span></label>
 													<div class="col-lg-4">
 														<select id="lockApprovedCovid19Samples" name="lockApprovedCovid19Samples" type="text" class="form-control readPage" title="Please select lock approved sample">
-														<option value="">--Select--</option>
-														<option value="yes" <?php echo (isset($arr['lock_approved_covid19_samples']) && $arr['lock_approved_covid19_samples'] == 'yes')?"selected='selected'":''; ?>>Yes</option>
-														<option value="no" <?php echo (isset($arr['lock_approved_covid19_samples']) && $arr['lock_approved_covid19_samples'] == 'no')?"selected='selected'":''; ?>>No</option>
+															<option value="">--Select--</option>
+															<option value="yes" <?php echo (isset($arr['lock_approved_covid19_samples']) && $arr['lock_approved_covid19_samples'] == 'yes') ? "selected='selected'" : ''; ?>>Yes</option>
+															<option value="no" <?php echo (isset($arr['lock_approved_covid19_samples']) && $arr['lock_approved_covid19_samples'] == 'no') ? "selected='selected'" : ''; ?>>No</option>
 														</select>
 													</div>
-											</div>
-											<?php }?>
+												</div>
+											<?php } ?>
 										</div>
 									</div>
 								</div>
@@ -769,7 +769,7 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 											</div>
 										</div>
 									</div>
-									
+
 									<div id="hepatitis_auto-sample-eg" class="row" style="display:<?php echo ($arr['hepatitis_sample_code'] == 'auto' || $arr['hepatitis_sample_code'] == 'auto2' || 'MMYY' || 'YY') ? 'block' : 'none'; ?>;">
 										<div class="col-md-12" style="text-align:center;">
 											<code id="hepatitis_auto-sample-code" class="hepatitis_autoSample" style="display:<?php echo ($arr['hepatitis_sample_code'] == 'auto') ? 'block' : 'none'; ?>;">
@@ -804,6 +804,23 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 								</div>
 							</div>
 						<?php } ?>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">APP Settings</h3>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="app_menu_name" class="col-lg-2 control-label">APP Menu Name</label>
+											<div class="col-lg-4">
+												<input type="text" class="form-control readPage" id="app_menu_name" name="app_menu_name" placeholder="Min" title="Please enter sample code min length" value="<?php echo $arr['app_menu_name']; ?>" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 						<div class="panel panel-default">
 							<div class="panel-heading">
 								<h3 class="panel-title">Connect</h3>
@@ -983,15 +1000,13 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 <script src="/assets/js/jquery.quicksearch.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-		var editSet = '<?php  if(isset($_GET['e'])){ echo $_GET['e'];} ?>'
+		var editSet = '<?php if (isset($_GET['e'])) {
+							echo $_GET['e'];
+						} ?>'
 		// alert(editSet)
-		if(editSet == 1)
-		{
-		}
-		else
-		{
+		if (editSet == 1) {} else {
 			$(".readPage").prop('disabled', true);
-			$(".hideFooter").css('display','none');
+			$(".hideFooter").css('display', 'none');
 		}
 		$('.search').multiSelect({
 			selectableHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Field Name'>",
@@ -1181,7 +1196,7 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 			$('.eid_boxWidth').removeClass('isRequired').attr('disabled', true).val('');
 		}
 	});
-	
+
 	$("input:radio[name=covid19_sample_code]").click(function() {
 		if (this.value == 'MMYY' || this.value == 'YY') {
 			$('#covid19_auto-sample-eg').show();
@@ -1236,7 +1251,7 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 			$('.covid19_boxWidth').removeClass('isRequired').attr('disabled', true).val('');
 		}
 	});
-	
+
 	$("input:radio[name=hepatitis_sample_code]").click(function() {
 		if (this.value == 'MMYY' || this.value == 'YY') {
 			$('#hepatitis_auto-sample-eg').show();
