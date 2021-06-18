@@ -67,7 +67,7 @@ try {
     $sQuery = "SELECT 
                         vl.app_local_test_req_id                as localTestReqID,
                         vl.covid19_id                           as covid19Id,
-                        CONCAT_WS('',vl.sample_code, vl.remote_sample_code) as sampleCode,
+                        CASE WHEN (vl.sample_code IS NOT NULL) THEN vl.sample_code ELSE vl.remote_sample_code END as sampleCode,
                         vl.external_sample_code                 as externalSampleCode,
                         vl.facility_id                          as facilityId,
                         f.facility_name                         as facilityName,
@@ -163,7 +163,7 @@ try {
                         t_b.user_name                           as testedByName,
                         rs.rejection_reason_name                as rejectionReason,
                         vl.rejection_on                         as rejectionDate,                  
-                        vl.province_id                           as provinceId,                             
+                        vl.province_id                          as provinceId,                             
                         p.province_name                         as provinceName,  
                         vl.funding_source                       as fundingSource,                                  
                         r_f_s.funding_source_name               as fundingSourceName,
