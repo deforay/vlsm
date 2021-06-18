@@ -163,7 +163,7 @@ try {
                         t_b.user_name                           as testedByName,
                         rs.rejection_reason_name                as rejectionReason,
                         vl.rejection_on                         as rejectionDate,                  
-                        SUBSTRING_INDEX(vl.province_id,'##',1)  as provinceId,                             
+                        vl.province_id                           as provinceId,                             
                         p.province_name                         as provinceName,  
                         vl.funding_source                       as fundingSource,                                  
                         r_f_s.funding_source_name               as fundingSourceName,
