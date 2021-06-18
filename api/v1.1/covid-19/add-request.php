@@ -393,6 +393,7 @@ try {
                 );
             } else {
                 $responseData[$rootKey] = array(
+                    'status' => 'success',
                     'sampleCode' => $c19SampleCode,
                     'localTestReqID' => $c19Data['app_local_test_req_id'],
                 );
@@ -401,7 +402,7 @@ try {
         } else {
             if (isset($data['localTestReqID']) && $data['localTestReqID'] != "") {
                 $responseData[$rootKey] = array(
-                    'status' => 'faile'
+                    'status' => 'failed'
                 );
             } else {
                 $payload = array(
