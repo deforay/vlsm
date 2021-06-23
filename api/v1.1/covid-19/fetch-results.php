@@ -257,6 +257,18 @@ try {
         $where .= " CONCAT(vl.patient_name, ' ', vl.patient_surname) like '%" . $input['patientName'] . "%'";
     }
 
+    $sampleStatus = $input['sampleStatus'];
+    if (!empty($sampleStatus)) {
+        $sampleStatus = implode("','", $sampleStatus);
+
+        if (isset($where) && trim($where) != "") {
+            $where .= " AND ";
+        } else {
+            $where .= " WHERE ";
+        }
+        $where .= " result_status IN ('$sampleStatus') ";
+    }
+
     // $sQuery .= " ORDER BY sample_collection_date ASC ";
     $sQuery .= $where;
     // die($sQuery);
