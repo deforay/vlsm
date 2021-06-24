@@ -160,6 +160,11 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
     $data['covid19']['symptomsList'] = $app->generateSelectOptions($covid19Obj->getCovid19Symptoms());
     $data['covid19']['comorbiditiesList'] = $app->generateSelectOptions($covid19Obj->getCovid19Comorbidities());
     $data['covid19']['sampleStatusList'] = $app->generateSelectOptions($statusList);
+    $data['covid19']['statusFilterList'] = array(
+        array('value'=>'approved', 'show' => 'Approved'),
+        array('value'=>'pending', 'show' => 'Pending'),
+        array('value'=>'rejected', 'show' => 'Rejected')
+    );
     $payload = array(
         'status' => 1,
         'message' => 'Success',
