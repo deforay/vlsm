@@ -215,10 +215,22 @@ $ftResult = $db->rawQuery($fQuery);
                                              </div>
                                         </div>
                                    </div>
-
                               </div>
 
-
+                              <div class="row">
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="appAccessable" class="col-lg-4 control-label">App Accessable</label>
+                                             <div class="col-lg-7">
+                                                  <select class="form-control" name='appAccessable' id='appAccessable' title="Please select the app accessable or not?">
+                                                       <option value="">--Select--</option>
+                                                       <option value="yes" <?php echo ($userInfo[0]['app_access'] == 'yes') ? "selected='selected'" : "" ?>>Yes</option>
+                                                       <option value="no" <?php echo ($userInfo[0]['app_access'] == 'no') ? "selected='selected'" : "" ?>>No</option>
+                                                  </select>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
                               <div class="row" style=<?php echo $display; ?>>
                                    <div class="col-md-12">
                                         <a href="javascript:void(0);" id="showFilter" class="btn btn-primary">Show Advanced Filter</a>

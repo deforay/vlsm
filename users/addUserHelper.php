@@ -42,7 +42,8 @@ try {
             'password'      => $password,
             'role_id'       => $_POST['role'],
             'status'        => 'active',
-            'user_signature' => $imageName,
+            'app_access'    => $_POST['appAccessable'],
+            'user_signature'=> $imageName
         );
         if (isset($_POST['authToken']) && !empty($_POST['authToken'])) {
             $data['api_token'] = $_POST['authToken'];
