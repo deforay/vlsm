@@ -39,13 +39,13 @@ try {
             if ($admin['status'] != 'active') {
                 $payload = array(
                     'status' => 2,
-                    'message' => 'You are not activated. Kindly contact administrator.',
+                    'message' => 'Login failed. Please contact system administrator.',
                     'timestamp' => $general->getDateTime()
                 );
             } else if (isset($admin['app_access']) && $admin['app_access'] == "no") {
                 $payload = array(
                     'status' => 2,
-                    'message' => 'You are not accessable. Kindly contact administrator.',
+                    'message' => 'Login failed. Please contact system administrator.',
                     'timestamp' => $general->getDateTime()
                 );
             } else {
