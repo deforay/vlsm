@@ -16,12 +16,13 @@ $userId = base64_decode($_POST['userId']);
 try {
     if (trim($_POST['userName']) != '' && trim($_POST['loginId']) != '' && ($_POST['role']) != '') {
         $data = array(
-            'user_name' => $_POST['userName'],
-            'email' => $_POST['email'],
-            'phone_number' => $_POST['phoneNo'],
-            'login_id' => $_POST['loginId'],
-            'role_id' => $_POST['role'],
-            'status' => $_POST['status']
+            'user_name'     => $_POST['userName'],
+            'email'         => $_POST['email'],
+            'phone_number'  => $_POST['phoneNo'],
+            'login_id'      => $_POST['loginId'],
+            'role_id'       => $_POST['role'],
+            'status'        => $_POST['status'],
+            'app_access'    => $_POST['appAccessable']
         );
         if (isset($_POST['authToken']) && !empty($_POST['authToken'])) {
             $data['api_token'] = $_POST['authToken'];

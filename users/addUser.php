@@ -124,7 +124,7 @@ $ftResult = $db->rawQuery($fQuery);
                                         </div>
                                    </div>
                               </div>
-
+                              
                               <div class="row">
                                    <div class="col-md-6">
                                         <div class="form-group">
@@ -158,7 +158,6 @@ $ftResult = $db->rawQuery($fQuery);
                                              </div>
                                         </div>
                                    </div>
-
                               </div>
                               <div class="row">
 
@@ -180,7 +179,20 @@ $ftResult = $db->rawQuery($fQuery);
                                         </div>
                                    </div>
                               </div>
-
+                              <div class="row">
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label for="appAccessable" class="col-lg-4 control-label">App Accessable</label>
+                                             <div class="col-lg-7">
+                                                  <select class="form-control" name='appAccessable' id='appAccessable' title="Please select the app accessable or not?">
+                                                       <option value="">--Select--</option>
+                                                       <option value="yes">Yes</option>
+                                                       <option value="no">No</option>
+                                                  </select>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
                               <div class="row" style=<?php echo $display; ?>>
                                    <div class="col-md-12">
                                         <a href="javascript:void(0);" id="showFilter" class="btn btn-primary">Show Advanced Filter</a>
@@ -190,7 +202,7 @@ $ftResult = $db->rawQuery($fQuery);
                                         <h4 style="padding:36px 0px 0px 14px;"> Filter Facilities by Province & Districts</h4>
                                         <div class="col-md-4">
                                              <div class="form-group">
-                                                  <label for="province" style="" class="col-lg-4 control-label">Province </label>
+                                                  <label for="province" class="col-lg-4 control-label">Province </label>
                                                   <div class="col-lg-7">
                                                        <select class="form-control " name="province" id="province" title="Please choose province" style="width:100%;" onchange="getProvinceDistricts();">
                                                             <?php echo $province; ?>
@@ -200,7 +212,7 @@ $ftResult = $db->rawQuery($fQuery);
                                         </div>
                                         <div class="col-md-4">
                                              <div class="form-group">
-                                                  <label for="province" style="" class="col-lg-4 control-label">District </label>
+                                                  <label for="province" class="col-lg-4 control-label">District </label>
                                                   <div class="col-lg-7">
                                                        <select class="form-control " name="district" id="district" title="Please choose district" style="width:100%;" onchange="getFacilities();">
                                                             <option value=""> -- Select -- </option>
@@ -210,7 +222,7 @@ $ftResult = $db->rawQuery($fQuery);
                                         </div>
                                         <div class="col-md-4">
                                              <div class="form-group">
-                                                  <label for="province" style="" class="col-lg-4 control-label">Facility Type </label>
+                                                  <label for="province" class="col-lg-4 control-label">Facility Type </label>
                                                   <div class="col-lg-7">
                                                        <select class="form-control" id="facilityType" name="facilityType" title="Please select facility type" onchange="getFacility()">
                                                             <option value=""> -- Select -- </option>
@@ -229,7 +241,7 @@ $ftResult = $db->rawQuery($fQuery);
                               </div>
 
                               <div class="row" style="margin: 15px;<?php echo $display; ?>">
-                                   <h4 style=" "> Facility User Map Details</h4>
+                                   <h4> Facility User Map Details</h4>
                                    <div class="col-md-5">
                                         <!-- <div class="col-lg-5"> -->
 

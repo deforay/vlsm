@@ -42,10 +42,10 @@ try {
                     'message' => 'You are not activated. Kindly contact administrator.',
                     'timestamp' => $general->getDateTime()
                 );
-            } else if (isset($admin['role_code']) && $admin['role_code'] != "API") {
+            } else if (isset($admin['app_access']) && $admin['app_access'] == "no") {
                 $payload = array(
                     'status' => 2,
-                    'message' => 'You are not API user. Kindly contact administrator.',
+                    'message' => 'You are not accessable. Kindly contact administrator.',
                     'timestamp' => $general->getDateTime()
                 );
             } else {
