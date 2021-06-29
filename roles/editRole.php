@@ -112,7 +112,20 @@ if ($priInfo) {
 								</div>
 							</div>
 						</div>
-
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="accessType" class="col-lg-4 control-label">Access Type</label>
+									<div class="col-lg-7">
+										<select class="form-control" name='accessType' id='accessType' title="Please select access type">
+											<option value=""> -- Select -- </option>
+											<option value="testing-lab" <?php echo ($roleInfo[0]['access_type'] == 'testing-lab') ? "selected='selected'" : "" ?>>Testing Lab</option>
+											<option value="collection-site" <?php echo ($roleInfo[0]['access_type'] == 'collection-site') ? "selected='selected'" : "" ?>>Collection Site</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
 						<fieldset>
 							<div class="form-group">
 								<label class="col-sm-2 control-label">Note:</label>

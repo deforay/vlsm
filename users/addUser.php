@@ -2,7 +2,7 @@
 ob_start();
 #require_once('../startup.php'); 
 include_once(APPLICATION_PATH . '/header.php');
-$query = "SELECT * FROM roles where status='active'";
+$query = "SELECT * FROM roles where status='active' GROUP BY role_code";
 $result = $db->rawQuery($query);
 
 $fResult = array();
@@ -110,12 +110,12 @@ $ftResult = $db->rawQuery($fQuery);
                                         </div>
                                    </div>
                               </div>
-                              <div class="row show-token" style="display: none;">
+                              <div class="row">
                                    <div class="col-md-6">
                                         <div class="form-group">
-                                             <label for="testingUser" class="col-lg-4 control-label">Testing User</label>
+                                             <label for="appAccessable" class="col-lg-4 control-label">Mobile App Access</label>
                                              <div class="col-lg-7">
-                                                  <select class="form-control" name='testingUser' id='testingUser' title="Please select the testing user or not?">
+                                                  <select class="form-control" name='appAccessable' id='appAccessable' title="Please select the mobile App access or not?">
                                                        <option value="">--Select--</option>
                                                        <option value="yes">Yes</option>
                                                        <option value="no">No</option>
@@ -160,7 +160,6 @@ $ftResult = $db->rawQuery($fQuery);
                                    </div>
                               </div>
                               <div class="row">
-
                                    <div class="col-md-6">
                                         <div class="form-group">
                                              <label for="password" class="col-lg-4 control-label">Password <span class="mandatory">*</span></label>
@@ -175,20 +174,6 @@ $ftResult = $db->rawQuery($fQuery);
                                              <label for="confirmPassword" class="col-lg-4 control-label">Confirm Password <span class="mandatory">*</span></label>
                                              <div class="col-lg-7">
                                                   <input type="password" class="form-control cpwd isRequired confirmPassword" id="confirmPassword" name="password" placeholder="Confirm Password" title="" />
-                                             </div>
-                                        </div>
-                                   </div>
-                              </div>
-                              <div class="row">
-                                   <div class="col-md-6">
-                                        <div class="form-group">
-                                             <label for="appAccessable" class="col-lg-4 control-label">App Accessable</label>
-                                             <div class="col-lg-7">
-                                                  <select class="form-control" name='appAccessable' id='appAccessable' title="Please select the app accessable or not?">
-                                                       <option value="">--Select--</option>
-                                                       <option value="yes">Yes</option>
-                                                       <option value="no">No</option>
-                                                  </select>
                                              </div>
                                         </div>
                                    </div>

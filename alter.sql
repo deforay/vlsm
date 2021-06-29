@@ -2203,3 +2203,7 @@ UPDATE `system_config` SET `value` = '4.3.5' WHERE `system_config`.`name` = 'ver
 INSERT INTO `global_config` (`display_name`, `name`, `value`, `category`, `remote_sync_needed`, `updated_on`, `updated_by`, `status`) VALUES ('App Menu Name', 'app_menu_name', 'VLSM', 'app', 'no', '2021-06-14 18:47:11', NULL, 'active');
 -- Thana 28-Jun-2021
 ALTER TABLE `user_details` ADD `app_access` VARCHAR(50) NULL DEFAULT 'no' AFTER `status`; 
+
+-- Thana 29-Jun-2021
+ALTER TABLE `roles` ADD `access_type` VARCHAR(256) NULL DEFAULT NULL AFTER `status`;
+ALTER TABLE `user_details` DROP COLUMN `testing_user`;

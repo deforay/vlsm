@@ -1,7 +1,7 @@
 <?php
 ob_start();
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+        session_start();
 }
 #require_once('../startup.php');  
 
@@ -15,6 +15,7 @@ try {
                         'role_name' => $_POST['roleName'],
                         'role_code' => $_POST['roleCode'],
                         'status' => $_POST['status'],
+                        'access_type' => $_POST['accessType'],
                         'landing_page' => $_POST['landingPage']
                 );
                 $db = $db->where('role_id', $lastId);

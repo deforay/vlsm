@@ -7,7 +7,7 @@ $id = base64_decode($_GET['id']);
 $userQuery = "SELECT * from user_details as ud INNER JOIN roles as r ON ud.role_id=r.role_id where user_id='" . $id . "'";
 $userInfo = $db->query($userQuery);
 
-$query = "SELECT * FROM roles where status='active'";
+$query = "SELECT * FROM roles where status='active' GROUP BY role_code";
 $result = $db->rawQuery($query);
 
 
@@ -123,15 +123,15 @@ $ftResult = $db->rawQuery($fQuery);
                                         </div>
                                    </div>
                               </div>
-                              <div class="row show-token" style="display: <?php echo ($userInfo[0]['role_code'] != "" && $userInfo[0]['role_code'] == "API") ? 'block' : 'none'; ?>;">
+                              <div class="row">
                                    <div class="col-md-6">
                                         <div class="form-group">
-                                             <label for="testingUser" class="col-lg-4 control-label">Testing User</label>
+                                             <label for="appAccessable" class="col-lg-4 control-label">Mobile App Access</label>
                                              <div class="col-lg-7">
-                                                  <select class="form-control" name='testingUser' id='testingUser' title="Please select the testing user or not?">
+                                                  <select class="form-control" name='appAccessable' id='appAccessable' title="Please select the mobile App access or not?">
                                                        <option value="">--Select--</option>
-                                                       <option value="yes" <?php echo (isset($userInfo[0]['testing_user']) && $userInfo[0]['testing_user'] == "yes") ? "selected='selected'" : ""; ?>>Yes</option>
-                                                       <option value="no" <?php echo (isset($userInfo[0]['testing_user']) && $userInfo[0]['testing_user'] == "no") ? "selected='selected'" : ""; ?>>No</option>
+                                                       <option value="yes" <?php echo ($userInfo[0]['app_access'] == 'yes') ? "selected='selected'" : "" ?>>Yes</option>
+                                                       <option value="no" <?php echo ($userInfo[0]['app_access'] == 'no') ? "selected='selected'" : "" ?>>No</option>
                                                   </select>
                                              </div>
                                         </div>
@@ -217,20 +217,6 @@ $ftResult = $db->rawQuery($fQuery);
                                    </div>
                               </div>
 
-                              <div class="row">
-                                   <div class="col-md-6">
-                                        <div class="form-group">
-                                             <label for="appAccessable" class="col-lg-4 control-label">App Accessable</label>
-                                             <div class="col-lg-7">
-                                                  <select class="form-control" name='appAccessable' id='appAccessable' title="Please select the app accessable or not?">
-                                                       <option value="">--Select--</option>
-                                                       <option value="yes" <?php echo ($userInfo[0]['app_access'] == 'yes') ? "selected='selected'" : "" ?>>Yes</option>
-                                                       <option value="no" <?php echo ($userInfo[0]['app_access'] == 'no') ? "selected='selected'" : "" ?>>No</option>
-                                                  </select>
-                                             </div>
-                                        </div>
-                                   </div>
-                              </div>
                               <div class="row" style=<?php echo $display; ?>>
                                    <div class="col-md-12">
                                         <a href="javascript:void(0);" id="showFilter" class="btn btn-primary">Show Advanced Filter</a>
