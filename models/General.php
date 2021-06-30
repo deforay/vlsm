@@ -518,4 +518,43 @@ class General
             return null;
         }
     }
+
+    public function activeReportFrmats($countryId = 1, $format = null)
+    {
+        $response = array(
+            1 => array(
+                'default' => 'pdf/result-pdf-ssudan.php',
+                'format-1' => 'pdf/result-pdf-ssudan-1.php',
+                'format-2' => 'pdf/result-pdf-ssudan-2.php',
+                'format-3' => 'pdf/result-pdf-ssudan-3.php',
+                'format-4' => 'pdf/result-pdf-ssudan-4.php'
+            ),
+            2 => array(
+                'default' => 'pdf/result-pdf-zm.php'
+            ),
+            3 => array(
+                'default' => 'pdf/result-pdf-drc.php'
+            ),
+            4 => array(
+                'default' => 'pdf/result-pdf-zam.php'
+            ),
+            5 => array(
+                'default' => 'pdf/result-pdf-png.php'
+            ),
+            6 => array(
+                'default' => 'pdf/result-pdf-who.php'
+            ),
+            7 => array(
+                'default' => 'pdf/result-pdf-rwanda.php'
+            ),
+            8 => array(
+                'default' => 'pdf/result-pdf-angola.php'
+            )
+        );
+        if(isset($format) && $format != null){
+            return $response[$countryId][$format];
+        }else{
+            return $response[$countryId];
+        }
+    }
 }

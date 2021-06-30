@@ -2,6 +2,8 @@
 ob_start();
 #require_once('../startup.php'); 
 include_once(APPLICATION_PATH . '/header.php');
+$general = new \Vlsm\Models\General($db);
+
 $id = base64_decode($_GET['id']);
 $facilityQuery = "SELECT * from facility_details where facility_id=$id";
 $facilityInfo = $db->query($facilityQuery);
@@ -66,7 +68,14 @@ if (count($testTypeInfo) > 0) {
 	}
 	$div .= '</tbody></table>';
 }
-// print_r($editTestType);die;
+$reportFormats = $general->activeReportFrmats();
+foreach($reportFormats as $opion=>$row){
+	$resportOptions[$opion] = ucwords(str_replace("-"," ",$opion));
+}
+$labDiv = "none";
+if($facilityInfo[0]['test_type'] == 2){
+	$labDiv = "block";
+}
 ?>
 <style>
 	.ms-choice,
@@ -89,7 +98,6 @@ if (count($testTypeInfo) > 0) {
 
 	<!-- Main content -->
 	<section class="content">
-		<pre></pre>
 		<div class="box box-default">
 			<div class="box-header with-border">
 				<div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
@@ -313,6 +321,18 @@ if (count($testTypeInfo) > 0) {
 							</div>
 						</div>
 					</div>
+					<div class="row labDiv" style="display:<?php echo $labDiv;?>;">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="reportFormat" class="col-lg-4 control-label">Report Format</label>
+								<div class="col-lg-7">
+									<select class="form-control isRequired" name='reportFormat' id='reportFormat' title="Please select the status">
+										<?= $general->generateSelectOptions($resportOptions, (isset($facilityInfo[0]['report_format']) && $facilityInfo[0]['report_format'] != "")?$facilityInfo[0]['report_format']:'default', '-- Select --'); ?>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="row">
 						<div class="col-md-6">
 							<div class="form-group">
@@ -357,7 +377,7 @@ if (count($testTypeInfo) > 0) {
 						</div>
 					</div>
 
-					<div class="row" id="signatureDiv" style="display:none;">
+					<div class="row labDiv" style="display:<?php echo $labDiv;?>;">
 						<table class="table table-bordered">
 							<thead>
 								<tr>
@@ -628,9 +648,9 @@ if (count($testTypeInfo) > 0) {
 
 	function showSignature(facilityType) {
 		if (facilityType == 2) {
-			$("#signatureDiv").show();
+			$(".labDiv").show();
 		} else {
-			$("#signatureDiv").hide();
+			$(".labDiv").hide();
 		}
 	}
 
