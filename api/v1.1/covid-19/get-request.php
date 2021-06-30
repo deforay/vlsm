@@ -32,6 +32,7 @@ $userDb = new \Vlsm\Models\Users($db);
 $facilityDb = new \Vlsm\Models\Facilities($db);
 $c19Db = new \Vlsm\Models\Covid19($db);
 $app = new \Vlsm\Models\App($db);
+$arr = $general->getGlobalConfig();
 $user = null;
 $input = json_decode(file_get_contents("php://input"), true);
 /* echo "<pre>";
@@ -206,7 +207,7 @@ try {
             }
             $where .= " vl.facility_id IN (" . $facilityMap . ")";
         } else {
-            $where = " WHERE request_created_by = '" . $user['user_id'] . "'";
+            $where = " WHERE (request_created_by = '" . $user['user_id'] . "' OR vlsm_country_id = '".$arr['vl_form']."')";
         }
     }
     /* To check the sample code filter */
@@ -227,7 +228,7 @@ try {
     }
 
     // $sQuery .= " ORDER BY sample_collection_date ASC ";
-    $sQuery .= $where;
+    $sQuery .= $where ." limit 100;";
     // die($sQuery);
     $rowData = $db->rawQuery($sQuery);
     $app = new \Vlsm\Models\App($db);
