@@ -83,6 +83,7 @@ try {
 			'test_type' => (isset($_POST['testType']) && !empty($_POST['testType'])) ?  implode(', ', $_POST['testType'])  : null,
 			'testing_points' => $_POST['testingPoints'],
 			'header_text' => $_POST['headerText'],
+			'report_format' => (isset($_POST['facilityType']) && $_POST['facilityType'] == 2)?$_POST['reportFormat']:null,
 			'updated_datetime' => $general->getDateTime(),
 			'status' => 'active'
 		);

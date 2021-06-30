@@ -2,11 +2,16 @@
 ob_start();
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
+$general = new \Vlsm\Models\General($db);
 
 $fQuery = "SELECT * FROM facility_type";
 $fResult = $db->rawQuery($fQuery);
 $pQuery = "SELECT * FROM province_details";
 $pResult = $db->rawQuery($pQuery);
+$reportFormats = $general->activeReportFrmats();
+foreach($reportFormats as $opion=>$row){
+	$resportOptions[$opion] = ucwords(str_replace("-"," ",$opion));
+}
 ?>
 <style>
 	.ms-choice {
@@ -229,6 +234,18 @@ $pResult = $db->rawQuery($pQuery);
 								</div>
 							</div>
 						</div>
+						<div class="row labDiv" style="display:none;">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="reportFormat" class="col-lg-4 control-label">Report Format</label>
+									<div class="col-lg-7">
+										<select class="form-control isRequired" name='reportFormat' id='reportFormat' title="Please select the status">
+											<?= $general->generateSelectOptions($resportOptions, 'default', '-- Select --'); ?>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
 						<div class="row logoImage" style="display:none;">
 							<div class="col-md-6">
 								<div class="form-group">
@@ -261,7 +278,7 @@ $pResult = $db->rawQuery($pQuery);
 							</div>
 						</div>
 
-						<div class="row" style="display:none;" id="signatureDiv">
+						<div class="row labDiv" style="display:none;">
 							<table class="table table-bordered">
 								<thead>
 									<tr>
@@ -362,9 +379,9 @@ $pResult = $db->rawQuery($pQuery);
 
 	function showSignature(facilityType) {
 		if (facilityType == 2) {
-			$("#signatureDiv").show();
+			$(".labDiv").show();
 		} else {
-			$("#signatureDiv").hide();
+			$(".labDiv").hide();
 		}
 	}
 

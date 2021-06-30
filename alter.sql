@@ -2207,3 +2207,5 @@ ALTER TABLE `user_details` ADD `app_access` VARCHAR(50) NULL DEFAULT 'no' AFTER 
 -- Thana 29-Jun-2021
 ALTER TABLE `roles` ADD `access_type` VARCHAR(256) NULL DEFAULT NULL AFTER `status`;
 ALTER TABLE `user_details` DROP COLUMN `testing_user`;
+-- Thana 30-Jun-2021
+ALTER TABLE `facility_details` ADD `report_format` VARCHAR(256) NULL DEFAULT NULL AFTER `test_type`; 
