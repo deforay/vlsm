@@ -57,6 +57,7 @@ if (isset($_POST['id']) && trim($_POST['id']) != '') {
 				l.facility_state as labState,
 				l.facility_district as labCounty,
 				l.facility_logo as facilityLogo,
+				l.report_format as reportFormat,
 				rip.i_partner_name,
 				rsrr.rejection_reason_name ,
 				u_d.user_name as reviewedBy,
@@ -284,20 +285,80 @@ class Pdf_concat extends FPDI
 		}
 	}
 }
-if ($arr['vl_form'] == 1) {
-	include('pdf/result-pdf-ssudan.php');
-} else if ($arr['vl_form'] == 2) {
-	include('pdf/result-pdf-zm.php');
-} else if ($arr['vl_form'] == 3) {
-	include('pdf/result-pdf-drc.php');
-} else if ($arr['vl_form'] == 4) {
-	include('pdf/result-pdf-zam.php');
-} else if ($arr['vl_form'] == 5) {
-	include('pdf/result-pdf-png.php');
-} else if ($arr['vl_form'] == 6) {
-	include('pdf/result-pdf-who.php');
-} else if ($arr['vl_form'] == 7) {
-	include('pdf/result-pdf-rwanda.php');
-} else if ($arr['vl_form'] == 8) {
-	include('pdf/result-pdf-angola.php');
+if ($systemConfig['reportLayoutFormat']) {
+	$resultFilename = '';
+	if (sizeof($requestResult) > 0) {
+		$_SESSION['rVal'] = $general->generateRandomString(6);
+		$pathFront = (UPLOAD_PATH . DIRECTORY_SEPARATOR .  $_SESSION['rVal']);
+		if (!file_exists($pathFront) && !is_dir($pathFront)) {
+			mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']);
+			$pathFront = realpath(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']);
+		}
+		$pages = array();
+		$page = 1;
+
+		foreach ($requestResult as $result) {
+			$covid19Results = $general->getCovid19Results();
+			$countryFormId = $general->getGlobalConfig('vl_form');
+
+			$covid19TestQuery = "SELECT * from covid19_tests where covid19_id= " . $result['covid19_id'] . " ORDER BY test_id ASC";
+			$covid19TestInfo = $db->rawQuery($covid19TestQuery);
+
+			$facilityQuery = "SELECT * from form_covid19 as c19 INNER JOIN facility_details as fd ON c19.facility_id=fd.facility_id where covid19_id= " . $result['covid19_id'] . " GROUP BY fd.facility_id LIMIT 1";
+			$facilityInfo = $db->rawQueryOne($facilityQuery);
+			// echo "<pre>";print_r($covid19TestInfo);die;
+
+			$patientFname = ucwords($general->crypto('decrypt', $result['patient_name'], $result['patient_id']));
+			$patientLname = ucwords($general->crypto('decrypt', $result['patient_surname'], $result['patient_id']));
+
+			$signQuery = "SELECT * from lab_report_signatories where lab_id=? AND test_types like '%covid19%' AND signatory_status like 'active' ORDER BY display_order ASC";
+			$signResults = $db->rawQuery($signQuery, array($result['lab_id']));
+			$currentTime = $general->getDateTime();
+			$_SESSION['aliasPage'] = $page;
+			if (!isset($result['labName'])) {
+				$result['labName'] = '';
+			}
+			$draftTextShow = false;
+			//Set watermark text
+			for ($m = 0; $m < count($mFieldArray); $m++) {
+				if (!isset($result[$mFieldArray[$m]]) || trim($result[$mFieldArray[$m]]) == '' || $result[$mFieldArray[$m]] == null || $result[$mFieldArray[$m]] == '0000-00-00 00:00:00') {
+					$draftTextShow = true;
+					break;
+				}
+			}
+			$pdfFormat = $general->activeReportFrmats($arr['vl_form'], $result['reportFormat'],false);
+			/* New format selection */
+			include($pdfFormat);
+		}
+		if (count($pages) > 0) {
+			$resultPdf = new Pdf_concat();
+			$resultPdf->setFiles($pages);
+			$resultPdf->setPrintHeader(false);
+			$resultPdf->setPrintFooter(false);
+			$resultPdf->concat();
+			$resultFilename = 'COVID-19-Test-result-' . date('d-M-Y-H-i-s') . '.pdf';
+			$resultPdf->Output(UPLOAD_PATH . DIRECTORY_SEPARATOR . $resultFilename, "F");
+			$general->removeDirectory($pathFront);
+			unset($_SESSION['rVal']);
+		}
+	}
+	echo $resultFilename;
+} else {
+	if ($arr['vl_form'] == 1) {
+		include('pdf/result-pdf-ssudan.php');
+	} else if ($arr['vl_form'] == 2) {
+		include('pdf/result-pdf-zm.php');
+	} else if ($arr['vl_form'] == 3) {
+		include('pdf/result-pdf-drc.php');
+	} else if ($arr['vl_form'] == 4) {
+		include('pdf/result-pdf-zam.php');
+	} else if ($arr['vl_form'] == 5) {
+		include('pdf/result-pdf-png.php');
+	} else if ($arr['vl_form'] == 6) {
+		include('pdf/result-pdf-who.php');
+	} else if ($arr['vl_form'] == 7) {
+		include('pdf/result-pdf-rwanda.php');
+	} else if ($arr['vl_form'] == 8) {
+		include('pdf/result-pdf-angola.php');
+	}
 }

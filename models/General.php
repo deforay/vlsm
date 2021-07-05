@@ -519,21 +519,18 @@ class General
         }
     }
 
-    public function activeReportFrmats($countryId = 1, $format = null)
+    public function activeReportFrmats($countryId = 1, $format = null, $list = true)
     {
         $response = array(
             1 => array(
-                'default' => 'pdf/result-pdf-ssudan.php',
-                'format-1' => 'pdf/result-pdf-ssudan-1.php',
-                'format-2' => 'pdf/result-pdf-ssudan-2.php',
-                'format-3' => 'pdf/result-pdf-ssudan-3.php',
-                'format-4' => 'pdf/result-pdf-ssudan-4.php'
+                'default' => 'pdf/result-pdf-ssudan-default.php'
             ),
             2 => array(
                 'default' => 'pdf/result-pdf-zm.php'
             ),
             3 => array(
-                'default' => 'pdf/result-pdf-drc.php'
+                'default' => 'pdf/result-pdf-drc-default.php',
+                'DRC-1' => 'pdf/result-pdf-drc-1.php'
             ),
             4 => array(
                 'default' => 'pdf/result-pdf-zam.php'
@@ -552,9 +549,11 @@ class General
             )
         );
         if(isset($format) && $format != null){
-            return $response[$countryId][$format];
-        }else{
+            return (isset($response[$countryId][$format]) && $response[$countryId][$format] != "")?$response[$countryId][$format]:$response[$countryId]['default'];
+        } else if($list){
             return $response[$countryId];
+        } else{
+            return $response[$countryId]['default'];
         }
     }
 }
