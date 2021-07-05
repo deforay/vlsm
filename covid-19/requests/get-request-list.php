@@ -149,8 +149,11 @@ if (isset($_POST['source']) && trim($_POST['source']) == 'dhis2') {
      $sWhere = $sWhere . ' `source_of_request` like "dhis2%" ';
 }
 
-
-
+if ($sWhere != '') {
+     $sWhere = $sWhere . ' AND ' . $whereResult . 'vl.vlsm_country_id="' . $gconfig['vl_form'] . '"';
+} else {
+     $sWhere = $sWhere . ' where ' . $whereResult . 'vl.vlsm_country_id="' . $gconfig['vl_form'] . '"';
+}
 $sFilter = '';
 if ($sarr['user_type'] == 'remoteuser') {
      //$sWhere = $sWhere.' AND vl.request_created_by="'.$_SESSION['userId'].'"';

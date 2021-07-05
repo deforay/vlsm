@@ -68,7 +68,7 @@ if (count($testTypeInfo) > 0) {
 	}
 	$div .= '</tbody></table>';
 }
-$reportFormats = $general->activeReportFrmats();
+$reportFormats = $general->activeReportFrmats($arr['vl_form'],null,true);
 foreach($reportFormats as $opion=>$row){
 	$resportOptions[$opion] = ucwords(str_replace("-"," ",$opion));
 }
