@@ -68,10 +68,23 @@ if (count($testTypeInfo) > 0) {
 	}
 	$div .= '</tbody></table>';
 }
-$reportFormats = $general->activeReportFrmats($arr['vl_form'],null,true);
-foreach($reportFormats as $opion=>$row){
-	$resportOptions[$opion] = ucwords(str_replace("-"," ",$opion));
+$cntId = $general->reportPdfNames();
+
+if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true){
+	$reportFormats['covid19'] = $general->activeReportFormats('covid-19',$cntId['covid19'],null,true);
 }
+if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true){
+	$reportFormats['eid'] = $general->activeReportFormats('eid',$cntId['eid'],null,true);
+}
+if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true){
+	$reportFormats['vl'] = $general->activeReportFormats('vl',$cntId['vl'],null,true);
+}
+if ($arr['vl_form'] == 7) {
+	if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true){
+		$reportFormats['hepatitis'] = $general->activeReportFormats('hepatitis',$cntId['hepatitis'],null,true);
+	}
+}
+$formats = json_decode($facilityInfo[0]['report_format'], true);
 $labDiv = "none";
 if($facilityInfo[0]['test_type'] == 2){
 	$labDiv = "block";
@@ -322,16 +335,75 @@ if($facilityInfo[0]['test_type'] == 2){
 						</div>
 					</div>
 					<div class="row labDiv" style="display:<?php echo $labDiv;?>;">
-						<div class="col-md-6">
+						<?php if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true){ 
+							$count = sizeof($reportFormats['vl']);?>
+						<div class="col-md-6" style="display:<?php echo ($count > 1)?'block':'none';?>">
 							<div class="form-group">
-								<label for="reportFormat" class="col-lg-4 control-label">Report Format</label>
+								<label for="reportFormat" class="col-lg-4 control-label">Report Format For VL</label>
 								<div class="col-lg-7">
-									<select class="form-control isRequired" name='reportFormat' id='reportFormat' title="Please select the status">
-										<?= $general->generateSelectOptions($resportOptions, (isset($facilityInfo[0]['report_format']) && $facilityInfo[0]['report_format'] != "")?$facilityInfo[0]['report_format']:'default', '-- Select --'); ?>
+									<select class="form-control isRequired" name='reportFormat[vl]' id='reportFormat' title="Please select the status" onchange="checkIfExist(this);">
+										<?php if(($count > 1)){ ?>
+											<option value="">-- Select --</option>
+										<?php }?>
+										<?php foreach($reportFormats['vl'] as $key=>$value){?>
+    										<option value="<?php echo $key;?>" <?php echo ($formats['vl'] == $key)?"selected='selected'":"";?>><?php echo ucwords($value);?></option>
+										<?php } ?>
 									</select>
 								</div>
 							</div>
 						</div>
+						<?php } if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true){
+							$count = sizeof($reportFormats['eid']);?>
+						<div class="col-md-6" style="display:<?php echo ($count > 1)?'block':'none';?>">
+							<div class="form-group">
+								<label for="reportFormat" class="col-lg-4 control-label">Report Format For EID</label>
+								<div class="col-lg-7">
+									<select class="form-control isRequired" name='reportFormat[eid]' id='reportFormat' title="Please select the status" onchange="checkIfExist(this);">
+										<?php if(($count > 1)){ ?>
+											<option value="">-- Select --</option>
+										<?php }?>
+										<?php foreach($reportFormats['eid'] as $key=>$value){?>
+    										<option value="<?php echo $key;?>" <?php echo ($formats['eid'] == $key)?"selected='selected'":"";?>><?php echo ucwords($value);?></option>
+										<?php } ?>
+									</select>
+								</div>
+							</div>
+						</div>
+						<?php } if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true){
+							$count = sizeof($reportFormats['covid19']);?>
+						<div class="col-md-6" style="display:<?php echo ($count > 1)?'block':'none';?>">
+							<div class="form-group">
+								<label for="reportFormat" class="col-lg-4 control-label">Report Format For Covid-19</label>
+								<div class="col-lg-7">
+									<select class="form-control isRequired" name='reportFormat[covid19]' id='reportFormat' title="Please select the status" onchange="checkIfExist(this);">
+										<?php if(($count > 1)){ ?>
+											<option value="">-- Select --</option>
+										<?php }?>
+										<?php foreach($reportFormats['covid19'] as $key=>$value){?>
+    										<option value="<?php echo $key;?>" <?php echo ($formats['covid19'] == $key)?"selected='selected'":"";?>><?php echo ucwords($value);?></option>
+										<?php } ?>
+									</select>
+								</div>
+							</div>
+						</div>
+						<?php } if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true){
+							$count = sizeof($reportFormats['covid19']);?>
+						<div class="col-md-6" style="display:<?php echo ($count > 1)?'block':'none';?>">
+							<div class="form-group">
+								<label for="reportFormat" class="col-lg-4 control-label">Report Format For Hepatitis</label>
+								<div class="col-lg-7">
+									<select class="form-control isRequired" name='reportFormat[hepatitis]' id='reportFormat' title="Please select the status" onchange="checkIfExist(this);">
+										<?php if(($count > 1)){ ?>
+											<option value="">-- Select --</option>
+										<?php }?>
+										<?php foreach($reportFormats['hepatitis'] as $key=>$value){?>
+    										<option value="<?php echo $key;?>" <?php echo ($formats['hepatitis'] == $key)?"selected='selected'":"";?>><?php echo ucwords($value);?></option>
+										<?php } ?>
+									</select>
+								</div>
+							</div>
+						</div>
+						<?php } ?>
 					</div>
 					<div class="row">
 						<div class="col-md-6">

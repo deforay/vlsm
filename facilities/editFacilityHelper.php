@@ -7,8 +7,8 @@ if (session_status() == PHP_SESSION_NONE) {
 include_once(APPLICATION_PATH . '/includes/ImageResize.php');
 
 $general = new \Vlsm\Models\General($db);
-// echo "<pre>";
-// print_r($_POST);die;
+/* echo "<pre>";
+print_r($_POST);die; */
 $tableName = "facility_details";
 $facilityId = base64_decode($_POST['facilityId']);
 $tableName1 = "province_details";
@@ -74,7 +74,7 @@ try {
 			'test_type' => implode(', ', $_POST['testType']),
 			'testing_points' => $_POST['testingPoints'],
 			'header_text' => $_POST['headerText'],
-			'report_format' => (isset($_POST['facilityType']) && $_POST['facilityType'] == 2)?$_POST['reportFormat']:null,
+			'report_format' => (isset($_POST['facilityType']) && $_POST['facilityType'] == 2)?json_encode($_POST['reportFormat'],true):null,
 			'updated_datetime' => $general->getDateTime(),
 			'status' => $_POST['status']
 		);
