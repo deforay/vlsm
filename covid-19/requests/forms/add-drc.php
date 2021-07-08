@@ -169,9 +169,9 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                         <td style="width:35% !important">
                                             <input type="text" class="form-control isRequired" id="patientId" name="patientId" placeholder="N&deg; EPID" title="N&deg; EPID" style="width:100%;" onchange="" />
                                         </td>
-                                        <th><label for="patientDob">Date de naissance <span class="mandatory">*</span> </label></th>
+                                        <th><label for="patientDob">Date de naissance</label></th>
                                         <td>
-                                            <input type="text" class="form-control isRequired" id="patientDob" name="patientDob" placeholder="Date de naissance" title="Date de naissance" style="width:100%;" onchange="calculateAgeInYears();" />
+                                            <input type="text" class="form-control" id="patientDob" name="patientDob" placeholder="Date de naissance" title="Date de naissance" style="width:100%;" onchange="calculateAgeInYears();" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -388,9 +388,9 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                 </div>
                                 <table class="table">
                                     <tr>
-                                        <th style="width:15% !important">Fièvre / température (&deg;C) <span class="mandatory">*</span> </th>
+                                        <th style="width:15% !important">Fièvre / température (&deg;C)</th>
                                         <td style="width:35% !important;">
-                                            <input class="form-control isRequired" type="number" name="feverTemp" id="feverTemp" placeholder="Fièvre / température (en &deg;Celcius)" title="Fièvre / température (en &deg;Celcius)" />
+                                            <input class="form-control" type="number" name="feverTemp" id="feverTemp" placeholder="Fièvre / température (en &deg;Celcius)" title="Fièvre / température (en &deg;Celcius)" />
                                         </td>
                                         <th style="width:15% !important"><label for="temperatureMeasurementMethod">Température</label></th>
                                         <td style="width:35% !important;">
@@ -448,6 +448,19 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                         <th colspan="4" style="width:15% !important">Symptômes <span class="mandatory">*</span> </th>
                                     </tr>
                                     <tr>
+                                        <th style="width:15% !important"><label for="asymptomatic">Asymptomatic <span class="mandatory">*</span></label></th>
+                                        <td style="width:35% !important;">
+                                            <select name="asymptomatic" id="asymptomatic" class="form-control isRequired" title="Asymptomatic" onchange="asymptomaticFn(this.value);">
+                                                <option value="">--Select--</option>
+                                                <option value="yes">Oui</option>
+                                                <option value="no">Non</option>
+                                                <option value="unknown">Inconnu</option>
+                                            </select>
+                                        </td>
+                                        <th></th>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="sysmptoms">
                                         <td colspan="4">
                                             <table id="symptomsTable" class="table table-bordered table-striped">
                                                 <?php $index = 0;
@@ -952,6 +965,10 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
     }
 
     function validateNow() {
+        if($("#patientDob").val() == "" && $("#patientAge").val() == ""){
+            alert("Please select or enter patient DOB or Age");
+            return false;
+        }
         if ($('#isResultAuthorized').val() != "yes") {
             $('#authorizedBy,#authorizedOn').removeClass('isRequired');
         }
@@ -1176,6 +1193,13 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                 });
         } else {
             $('.symptomRow' + parent).remove();
+        }
+    }
+    function asymptomaticFn(value){
+        if(value == "yes"){
+            $(".sysmptoms").hide();
+        }else{
+            $(".sysmptoms").show();
         }
     }
 </script>
