@@ -2211,3 +2211,5 @@ ALTER TABLE `user_details` DROP COLUMN `testing_user`;
 ALTER TABLE `facility_details` ADD `report_format` VARCHAR(256) NULL DEFAULT NULL AFTER `test_type`; 
 -- Thana 07-Jul-2021
 ALTER TABLE `facility_details` CHANGE `report_format` `report_format` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL; 
+-- Thana 08-Jul-2021
+ALTER TABLE `form_covid19` ADD `asymptomatic` VARCHAR(50) NULL DEFAULT NULL AFTER `number_of_days_sick`; 

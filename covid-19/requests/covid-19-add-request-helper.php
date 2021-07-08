@@ -150,6 +150,7 @@ try {
 		'priority_status'                     => !empty($_POST['priorityStatus']) ? $_POST['priorityStatus'] : null,
 		'number_of_days_sick'                 => !empty($_POST['numberOfDaysSick']) ? $_POST['numberOfDaysSick'] : null,
 		'suspected_case'                 	  => !empty($_POST['suspectedCase']) ? $_POST['suspectedCase'] : null,
+		'asymptomatic'                 	  	  => !empty($_POST['asymptomatic']) ? $_POST['asymptomatic'] : null,
 		'date_of_symptom_onset'               => !empty($_POST['dateOfSymptomOnset']) ? $general->dateFormat($_POST['dateOfSymptomOnset']) : null,
 		'date_of_initial_consultation'        => !empty($_POST['dateOfInitialConsultation']) ? $general->dateFormat($_POST['dateOfInitialConsultation']) : null,
 		'fever_temp'        				  => !empty($_POST['feverTemp']) ? $_POST['feverTemp'] : null,
@@ -195,18 +196,19 @@ try {
 	if ($status == 7 && $lock == 'yes') {
 		$covid19Data['locked'] = 'yes';
 	}
-
-	$db = $db->where('covid19_id', $_POST['covid19SampleId']);
-	$db->delete("covid19_patient_symptoms");
-	if (isset($_POST['symptomDetected']) && !empty($_POST['symptomDetected']) || (isset($_POST['symptom']) && !empty($_POST['symptom']))) {
-		for ($i = 0; $i < count($_POST['symptomDetected']); $i++) {
-			$symptomData = array();
-			$symptomData["covid19_id"] = $_POST['covid19SampleId'];
-			$symptomData["symptom_id"] = $_POST['symptomId'][$i];
-			$symptomData["symptom_detected"] = $_POST['symptomDetected'][$i];
-			$symptomData["symptom_details"] 	= (isset($_POST['symptomDetails'][$_POST['symptomId'][$i]]) && count($_POST['symptomDetails'][$_POST['symptomId'][$i]]) > 0) ? json_encode($_POST['symptomDetails'][$_POST['symptomId'][$i]]) : null;
-			//var_dump($symptomData);
-			$db->insert("covid19_patient_symptoms", $symptomData);
+	if(isset($_POST['asymptomatic']) && $_POST['asymptomatic'] != "yes"){
+		$db = $db->where('covid19_id', $_POST['covid19SampleId']);
+		$db->delete("covid19_patient_symptoms");
+		if (isset($_POST['symptomDetected']) && !empty($_POST['symptomDetected']) || (isset($_POST['symptom']) && !empty($_POST['symptom']))) {
+			for ($i = 0; $i < count($_POST['symptomDetected']); $i++) {
+				$symptomData = array();
+				$symptomData["covid19_id"] = $_POST['covid19SampleId'];
+				$symptomData["symptom_id"] = $_POST['symptomId'][$i];
+				$symptomData["symptom_detected"] = $_POST['symptomDetected'][$i];
+				$symptomData["symptom_details"] 	= (isset($_POST['symptomDetails'][$_POST['symptomId'][$i]]) && count($_POST['symptomDetails'][$_POST['symptomId'][$i]]) > 0) ? json_encode($_POST['symptomDetails'][$_POST['symptomId'][$i]]) : null;
+				//var_dump($symptomData);
+				$db->insert("covid19_patient_symptoms", $symptomData);
+			}
 		}
 	}
 

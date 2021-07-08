@@ -215,9 +215,9 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         <td style="width:35% !important">
                                             <input type="text" class="form-control isRequired" id="patientId" name="patientId" placeholder="N&deg; EPID" title="N&deg; EPID" style="width:100%;" value="<?php echo $covid19Info['patient_id']; ?>" />
                                         </td>
-                                        <th><label for="patientDob">Date de naissance <span class="mandatory">*</span> </label></th>
+                                        <th><label for="patientDob">Date de naissance</label></th>
                                         <td>
-                                            <input type="text" class="form-control isRequired" id="patientDob" name="patientDob" placeholder="Date de naissance" title="Date de naissance" style="width:100%;" onchange="calculateAgeInYears();" value="<?php echo $general->humanDateFormat($covid19Info['patient_dob']); ?>" />
+                                            <input type="text" class="form-control" id="patientDob" name="patientDob" placeholder="Date de naissance" title="Date de naissance" style="width:100%;" onchange="calculateAgeInYears();" value="<?php echo $general->humanDateFormat($covid19Info['patient_dob']); ?>" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -430,9 +430,9 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                 </div>
                                 <table class="table">
                                     <tr>
-                                        <th style="width:15% !important">Fever/Temperature (&deg;C) <span class="mandatory">*</span> </th>
+                                        <th style="width:15% !important">Fever/Temperature (&deg;C)</th>
                                         <td style="width:35% !important;">
-                                            <input class="form-control isRequired" type="number" value="<?php echo $covid19Info['fever_temp']; ?>" name="feverTemp" id="feverTemp" placeholder="Fever/Temperature (in &deg;Celcius)" />
+                                            <input class="form-control" type="number" value="<?php echo $covid19Info['fever_temp']; ?>" name="feverTemp" id="feverTemp" placeholder="Fever/Temperature (in &deg;Celcius)" />
                                         </td>
                                         <th style="width:15% !important"><label for="temperatureMeasurementMethod">Température</label></th>
                                         <td style="width:35% !important;">
@@ -490,6 +490,19 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         <th colspan="4" style="width:15% !important">Symptômes <span class="mandatory">*</span> </th>
                                     </tr>
                                     <tr>
+                                        <th style="width:15% !important"><label for="asymptomatic">Asymptomatic <span class="mandatory">*</span></label></th>
+                                        <td style="width:35% !important;">
+                                            <select name="asymptomatic" id="asymptomatic" class="form-control isRequired" title="Asymptomatic" onchange="asymptomaticFn(this.value);">
+                                                <option value="">--Select--</option>
+                                                <option value="yes" <?php echo ($covid19Info['asymptomatic'] == 'yes') ? "selected='selected'" : ""; ?>>Oui</option>
+                                                <option value="no" <?php echo ($covid19Info['asymptomatic'] == 'no') ? "selected='selected'" : ""; ?>>Non</option>
+                                                <option value="unknown" <?php echo ($covid19Info['asymptomatic'] == 'unknown') ? "selected='selected'" : ""; ?>>Inconnu</option>
+                                            </select>
+                                        </td>
+                                        <th></th>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="sysmptoms" style="display: <?php echo ($covid19Info['asymptomatic'] == 'yes')?"none":"contents";?>;">
                                         <td colspan="4">
                                             <table id="symptomsTable" class="table table-bordered table-striped">
                                                 <?php $index = 0;
@@ -1030,6 +1043,10 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
     }
 
     function validateNow() {
+        if($("#patientDob").val() == "" && $("#patientAge").val() == ""){
+            alert("Please select or enter patient DOB or Age");
+            return false;
+        }
         if ($('#isResultAuthorized').val() != "yes") {
             $('#authorizedBy,#authorizedOn').removeClass('isRequired');
         }
@@ -1280,6 +1297,14 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
             $('.' + show).removeClass('hide-reasons');
             $('.hide-reasons').hide();
             $('.' + show).addClass('hide-reasons');
+        }
+    }
+
+    function asymptomaticFn(value){
+        if(value == "yes"){
+            $(".sysmptoms").hide();
+        }else{
+            $(".sysmptoms").show();
         }
     }
 </script>
