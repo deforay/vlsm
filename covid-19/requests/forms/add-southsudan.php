@@ -721,7 +721,6 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
     </div>
   </div>
 </div>
-</div>
 
 
 <script type="text/javascript">

@@ -56,7 +56,8 @@ foreach ($pdResult as $provinceName) {
 }
 
 $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélectionner --');
-
+$pQuery = "SELECT * FROM province_details";
+$pResult = $db->rawQuery($pQuery);
 ?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -132,6 +133,9 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                             <select class="form-control isRequired " name="facilityId" id="facilityId" title="Nom de Structure" style="width:100%;" onchange="getfacilityProvinceDetails(this);">
                                                 <?php echo $facility; ?>
                                             </select>
+                                        </td>
+                                        <td>
+                                            <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#addFacility">Add Facility</button>
                                         </td>
                                     </tr>
                                     <tr>
@@ -251,7 +255,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                             <ul style=" display: inline-flex; list-style: none; padding: 0px; ">
                                                 <li>
                                                     <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                    <input type="checkbox" class="reason-checkbox" id="suspect2" name="reasonDetails[]" value="Toux">
+                                                        <input type="checkbox" class="reason-checkbox" id="suspect2" name="reasonDetails[]" value="Toux">
                                                     </label>
                                                     <label class="radio-inline" for="suspect2" style="padding-left:17px !important;margin-left:0;">Toux</label>
                                                 </li>
@@ -464,11 +468,11 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                         <td colspan="4">
                                             <table id="symptomsTable" class="table table-bordered table-striped">
                                                 <?php $index = 0;
-                                                foreach ($covid19Symptoms as $symptomId => $symptomName) { 
+                                                foreach ($covid19Symptoms as $symptomId => $symptomName) {
                                                     $diarrhée = "";
                                                     if ($symptomId == 13) {
                                                         $diarrhée = "diarrhée";
-                                                    }?>
+                                                    } ?>
                                                     <tr class="row<?php echo $index; ?>">
                                                         <!-- <td style="display: flex;">
                                                             <label class="radio-inline" style="width:4%;margin-left:0;">
@@ -479,7 +483,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                         <th style="width:50%;"><?php echo $symptomName; ?></th>
                                                         <td style="width:50%;">
                                                             <input name="symptomId[]" type="hidden" value="<?php echo $symptomId; ?>">
-                                                            <select name="symptomDetected[]" id="symptomDetected<?php echo $symptomId; ?>" class="form-control <?php echo $diarrhée;?>" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" style="width:100%">
+                                                            <select name="symptomDetected[]" id="symptomDetected<?php echo $symptomId; ?>" class="form-control <?php echo $diarrhée; ?>" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" style="width:100%">
                                                                 <option value="">-- Sélectionner --</option>
                                                                 <option value='yes'> Oui </option>
                                                                 <option value='no'> Non </option>
@@ -505,7 +509,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                                                     <option value='unknown'> Inconnu </option>
                                                                 </select>
                                                                 <label class="diarrhée-sub" for="symptomDetails16" style="margin-left:0;display:none;">Nombre De Selles Par /24h</label>
-                                                                    <input type="text" value="" style="display:none;" class="form-control reason-checkbox symptoms-checkbox diarrhée-sub" id="symptomDetails16" name="symptomDetails[13][]" placeholder="Nombre de selles par /24h" title="Nombre de selles par /24h">
+                                                                <input type="text" value="" style="display:none;" class="form-control reason-checkbox symptoms-checkbox diarrhée-sub" id="symptomDetails16" name="symptomDetails[13][]" placeholder="Nombre de selles par /24h" title="Nombre de selles par /24h">
 
                                                             <?php } ?>
                                                         </td>
@@ -620,7 +624,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
                                         <td style="width:35% !important;">
                                             <input type="text" class="form-control date" id="returnDate" name="returnDate" placeholder="e.g 09-Jan-1992" title="Date de retour" />
                                         </td>
-                                        
+
                                         <th>Compagnie aérienne</th>
                                         <td><input type="text" class="form-control " id="airline" name="airline" placeholder="Compagnie aérienne" title="Compagnie aérienne" style="width:100%;" /></td>
                                     </tr>
@@ -849,7 +853,185 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
     <!-- /.content -->
 </div>
 
+<div class="modal" id="addFacility">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
 
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Add Facility</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form class="form-horizontal" method='post' name='addFacilityForm' id='addFacilityForm' autocomplete="off" enctype="multipart/form-data">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="facilityName" class="col-lg-4 control-label">Facility Name <span class="mandatory">*</span></label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Facility Name" title="Please enter facility name" onblur="checkNameValidation('facility_details','facility_name',this,null,'The facility name that you entered already exists.Enter another name',null)" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="facilityCode" class="col-lg-4 control-label">Facility Code</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control" id="facilityCode" name="facilityCode" placeholder="Facility Code" title="Please enter facility code" onblur="checkNameValidation('facility_details','facility_code',this,null,'The code that you entered already exists.Try another code',null)" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="otherId" class="col-lg-4 control-label">Other Id </label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control" id="otherId" name="otherId" placeholder="Other Id" />
+                                        <input type="hidden" class="form-control isRequired" id="facilityType" name="facilityType" value="1" title="Please select facility type" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="email" class="col-lg-4 control-label">Email(s) </label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control" id="email" name="email" placeholder="eg-email1@gmail.com,email2@gmail.com" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="testingPoints" class="col-lg-4 control-label">Testing Point(s)<br> <small>(comma separated)</small> </label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control" id="testingPoints" name="testingPoints" placeholder="eg. VCT, PMTCT" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="contactPerson" class="col-lg-4 control-label">Contact Person</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control" id="contactPerson" name="contactPerson" placeholder="Contact Person" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="state" class="col-lg-4 control-label">Province/State <span class="mandatory">*</span></label>
+                                    <div class="col-lg-7">
+                                        <select name="state" id="state" class="form-control isRequired" title="Please choose province/state">
+                                            <option value=""> -- Select -- </option>
+                                            <?php
+                                            foreach ($pResult as $province) {
+                                            ?>
+                                                <option value="<?php echo $province['province_name']; ?>"><?php echo $province['province_name']; ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                            <option value="other">Other</option>
+                                        </select>
+                                        <input type="text" class="form-control" name="provinceNew" id="provinceNew" placeholder="Enter Province/State" title="Please enter province/state" style="margin-top:4px;display:none;" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="phoneNo" class="col-lg-4 control-label">Phone Number</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control checkNum" id="phoneNo" name="phoneNo" placeholder="Phone Number" onblur="checkNameValidation('facility_details','facility_mobile_numbers',this,null,'The mobile no that you entered already exists.Enter another mobile no.',null)" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="hubName" class="col-lg-4 control-label">Linked Hub Name (If Applicable)</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control" id="hubName" name="hubName" placeholder="Hub Name" title="Please enter hub name" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="district" class="col-lg-4 control-label">District/County <span class="mandatory">*</span></label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control isRequired" id="district" name="district" placeholder="District/County" title="Please enter district/county" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="country" class="col-lg-4 control-label">Country</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control" id="country" name="country" placeholder="Country" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="address" class="col-lg-4 control-label">Address</label>
+                                    <div class="col-lg-7">
+                                        <textarea class="form-control" name="address" id="address" placeholder="Address"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="latitude" class="col-lg-4 control-label">Latitude</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control checkNum" id="latitude" name="latitude" placeholder="Latitude" title="Please enter latitude" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="longitude" class="col-lg-4 control-label">Longitude</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control checkNum" id="longitude" name="longitude" placeholder="Longitude" title="Please enter longitude" />
+                                        <input type="hidden" name="reqForm" id="reqForm" value="1" />
+                                        <input type="hidden" name="headerText" id="headerText" />
+                                        <input type="hidden" name="testType[]" id="testType" value="" />
+                                        <input type="hidden" name="selectedUser[]" id="selectedUser" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- /.box-body -->
+                        <div class="box-footer">
+
+                        </div>
+                        <!-- /.box-footer -->
+                </form>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <a class="btn btn-primary" href="javascript:void(0);" onclick="addFacility();">Submit</a>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 
 <script type="text/javascript">
     changeProvince = true;
@@ -858,6 +1040,24 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
     facilityName = true;
     machineName = true;
     tableRowId = 2;
+
+    function addFacility(){
+        flag = deforayValidator.init({
+            formId: 'addFacilityForm'
+        });
+        if (flag) {
+        $.ajax({
+                type: 'POST',
+                url: '/facilities/addFacilityHelper.php',
+                data: $('#addFacilityForm').serialize(),
+                success: function () {
+                    alert('Facility details added successfully');
+                    $('#addFacility').modal('hide');
+                    getfacilityDistrictwise('');
+                }
+            });
+        }
+    }
 
     function getfacilityDetails(obj) {
 
@@ -965,7 +1165,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
     }
 
     function validateNow() {
-        if($("#patientDob").val() == "" && $("#patientAge").val() == ""){
+        if ($("#patientDob").val() == "" && $("#patientAge").val() == "") {
             alert("Please select or enter patient DOB or Age");
             return false;
         }
@@ -1002,7 +1202,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
 
 
     $(document).ready(function() {
-        
+
         $('#facilityId').select2({
             placeholder: "Nom de l'installation"
         });
@@ -1013,9 +1213,9 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
         //     placeholder: "Province"
         // });
         $('.diarrhée').change(function(e) {
-            if(this.value == "yes"){
+            if (this.value == "yes") {
                 $('.diarrhée-sub').show();
-            } else{
+            } else {
                 $('.diarrhée-sub').hide();
             }
         });
@@ -1195,10 +1395,11 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Sélect
             $('.symptomRow' + parent).remove();
         }
     }
-    function asymptomaticFn(value){
-        if(value == "yes"){
+
+    function asymptomaticFn(value) {
+        if (value == "yes") {
             $(".sysmptoms").hide();
-        }else{
+        } else {
             $(".sysmptoms").show();
         }
     }

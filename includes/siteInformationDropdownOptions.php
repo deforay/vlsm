@@ -165,7 +165,9 @@ function getFacilitiesDropdown($provinceName = null, $districtRequested = null)
       $facility .= $option;
     }
     foreach ($facilityInfo as $fDetails) {
-      $facility .= "<option data-code='" . $fDetails['facility_code'] . "' data-emails='" . $fDetails['facility_emails'] . "' data-mobile-nos='" . $fDetails['facility_mobile_numbers'] . "' data-contact-person='" . ($fDetails['contact_person']) . "' value='" . $fDetails['facility_id'] . "'>" . (addslashes($fDetails['facility_name'])) . ' - ' . $fDetails['facility_code'] . "</option>";
+      $fcode = (isset($fDetails['facility_code']) && $fDetails['facility_code'] != "")?' - '.$fDetails['facility_code']:'';
+      
+      $facility .= "<option data-code='" . $fDetails['facility_code'] . "' data-emails='" . $fDetails['facility_emails'] . "' data-mobile-nos='" . $fDetails['facility_mobile_numbers'] . "' data-contact-person='" . ($fDetails['contact_person']) . "' value='" . $fDetails['facility_id'] . "'>" . (addslashes($fDetails['facility_name'])) . $fcode."</option>";
     }
   } else {
     // if(isset($_POST['comingFromUser'])){
