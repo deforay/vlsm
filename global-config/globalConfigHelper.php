@@ -207,6 +207,11 @@ try {
         $db = $db->where('name', 'lock_approved_covid19_samples');
         $id = $db->update($tableName, $data);
     }
+    if (isset($_POST['covid19ReportQrCode']) && trim($_POST['covid19ReportQrCode']) != "") {
+        $data = array('value' => trim($_POST['covid19ReportQrCode']));
+        $db = $db->where('name', 'covid19_report_qr_code');
+        $id = $db->update($tableName, $data);
+    }
 
     if (isset($_POST['covid19ReportType']) && trim($_POST['covid19ReportType']) != "") {
         $data = array('value' => trim($_POST['covid19ReportType']));

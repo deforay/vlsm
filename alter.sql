@@ -2213,3 +2213,5 @@ ALTER TABLE `facility_details` ADD `report_format` VARCHAR(256) NULL DEFAULT NUL
 ALTER TABLE `facility_details` CHANGE `report_format` `report_format` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL; 
 -- Thana 08-Jul-2021
 ALTER TABLE `form_covid19` ADD `asymptomatic` VARCHAR(50) NULL DEFAULT NULL AFTER `number_of_days_sick`; 
+-- Thana 09-Jul-2021
+INSERT INTO `global_config` (`display_name`, `name`, `value`, `category`, `remote_sync_needed`, `updated_on`, `updated_by`, `status`) VALUES ('COVID-19 Report QR Code', 'covid19_report_qr_code', 'no', NULL, 'yes', '2021-07-09 17:32:23', NULL, 'active');
