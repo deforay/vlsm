@@ -289,7 +289,6 @@ class Pdf_concat extends FPDI
 		}
 	}
 }
-if ($systemConfig['reportLayoutFormat']) {
 	$resultFilename = '';
 	if (sizeof($requestResult) > 0) {
 		$_SESSION['rVal'] = $general->generateRandomString(6);
@@ -330,9 +329,51 @@ if ($systemConfig['reportLayoutFormat']) {
 					break;
 				}
 			}
-			$pdfFormat = $general->activeReportFrmats($arr['vl_form'], $result['reportFormat'],false);
-			/* New format selection */
-			include($pdfFormat);
+			if(isset($result['reportFormat']) && $result['reportFormat'] != ""){
+				$formats = json_decode($result['reportFormat'], true);
+				if(file_exists($formats['covid19'])){
+					/* New format selection */
+					include($formats['covid19']);
+				} else{
+					if ($arr['vl_form'] == 1) {
+						include('pdf/result-pdf-ssudan.php');
+					} else if ($arr['vl_form'] == 2) {
+						include('pdf/result-pdf-zm.php');
+					} else if ($arr['vl_form'] == 3) {
+						include('pdf/result-pdf-drc.php');
+					} else if ($arr['vl_form'] == 4) {
+						include('pdf/result-pdf-zam.php');
+					} else if ($arr['vl_form'] == 5) {
+						include('pdf/result-pdf-png.php');
+					} else if ($arr['vl_form'] == 6) {
+						include('pdf/result-pdf-who.php');
+					} else if ($arr['vl_form'] == 7) {
+						include('pdf/result-pdf-rwanda.php');
+					} else if ($arr['vl_form'] == 8) {
+						include('pdf/result-pdf-angola.php');
+					}
+					exit(0);
+				}
+			}else{
+				if ($arr['vl_form'] == 1) {
+					include('pdf/result-pdf-ssudan.php');
+				} else if ($arr['vl_form'] == 2) {
+					include('pdf/result-pdf-zm.php');
+				} else if ($arr['vl_form'] == 3) {
+					include('pdf/result-pdf-drc.php');
+				} else if ($arr['vl_form'] == 4) {
+					include('pdf/result-pdf-zam.php');
+				} else if ($arr['vl_form'] == 5) {
+					include('pdf/result-pdf-png.php');
+				} else if ($arr['vl_form'] == 6) {
+					include('pdf/result-pdf-who.php');
+				} else if ($arr['vl_form'] == 7) {
+					include('pdf/result-pdf-rwanda.php');
+				} else if ($arr['vl_form'] == 8) {
+					include('pdf/result-pdf-angola.php');
+				}
+				exit(0);
+			}
 		}
 		if (count($pages) > 0) {
 			$resultPdf = new Pdf_concat();
@@ -347,22 +388,4 @@ if ($systemConfig['reportLayoutFormat']) {
 		}
 	}
 	echo $resultFilename;
-} else {
-	if ($arr['vl_form'] == 1) {
-		include('pdf/result-pdf-ssudan.php');
-	} else if ($arr['vl_form'] == 2) {
-		include('pdf/result-pdf-zm.php');
-	} else if ($arr['vl_form'] == 3) {
-		include('pdf/result-pdf-drc.php');
-	} else if ($arr['vl_form'] == 4) {
-		include('pdf/result-pdf-zam.php');
-	} else if ($arr['vl_form'] == 5) {
-		include('pdf/result-pdf-png.php');
-	} else if ($arr['vl_form'] == 6) {
-		include('pdf/result-pdf-who.php');
-	} else if ($arr['vl_form'] == 7) {
-		include('pdf/result-pdf-rwanda.php');
-	} else if ($arr['vl_form'] == 8) {
-		include('pdf/result-pdf-angola.php');
-	}
-}
+

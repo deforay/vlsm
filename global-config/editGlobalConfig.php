@@ -732,6 +732,23 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 											<?php } ?>
 										</div>
 									</div>
+									
+									<?php if (isset($arr['covid19_report_qr_code']) && $arr['covid19_report_qr_code'] != '') { ?>
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label for="covid19ReportQrCode" class="col-lg-2 control-label">Covid-19 Report QR Code</label>
+												<div class="col-lg-4">
+													<select id="covid19ReportQrCode" name="covid19ReportQrCode" type="text" class="form-control readPage" title="Please select report QR code yes/no?">
+														<option value="">--Select--</option>
+														<option value="yes" <?php echo (isset($arr['covid19_report_qr_code']) && $arr['covid19_report_qr_code'] == 'yes') ? "selected='selected'" : ''; ?>>Yes</option>
+														<option value="no" <?php echo (isset($arr['covid19_report_qr_code']) && $arr['covid19_report_qr_code'] == 'no') ? "selected='selected'" : ''; ?>>No</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+									<?php } ?>
 								</div>
 							</div>
 						<?php }

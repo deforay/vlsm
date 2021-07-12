@@ -83,7 +83,8 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
     $sampleSuggestion = $sampleCodeKeys['sampleCode'];
     $sampleSuggestionDisplay = 'display:block;';
 }
-
+$pQuery = "SELECT * FROM province_details";
+$pResult = $db->rawQuery($pQuery);
 ?>
 <style>
     .other-comorbidities {
@@ -126,7 +127,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             if ($covid19Info['sample_code'] != '') {
                                             ?>
                                                 <td colspan="4"> <label for="sampleSuggest" class="text-danger">&nbsp;&nbsp;&nbsp;Veuillez noter que cet exemple distant a déjà été importé avec VLSM Échantillon ID </td>
-                                                <td colspan="4"  align="left"> <?php echo $covid19Info['sample_code']; ?></label> </td>
+                                                <td colspan="4" align="left"> <?php echo $covid19Info['sample_code']; ?></label> </td>
                                             <?php
                                             } else {
                                             ?>
@@ -180,6 +181,9 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                 <?php echo $facility; ?>
                                             </select>
                                         </td>
+                                        <td>
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addFacility">Add Facility</button>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <?php if ($sarr['user_type'] == 'remoteuser') { ?>
@@ -215,9 +219,9 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         <td style="width:35% !important">
                                             <input type="text" class="form-control isRequired" id="patientId" name="patientId" placeholder="N&deg; EPID" title="N&deg; EPID" style="width:100%;" value="<?php echo $covid19Info['patient_id']; ?>" />
                                         </td>
-                                        <th><label for="patientDob">Date de naissance <span class="mandatory">*</span> </label></th>
+                                        <th><label for="patientDob">Date de naissance</label></th>
                                         <td>
-                                            <input type="text" class="form-control isRequired" id="patientDob" name="patientDob" placeholder="Date de naissance" title="Date de naissance" style="width:100%;" onchange="calculateAgeInYears();" value="<?php echo $general->humanDateFormat($covid19Info['patient_dob']); ?>" />
+                                            <input type="text" class="form-control" id="patientDob" name="patientDob" placeholder="Date de naissance" title="Date de naissance" style="width:100%;" onchange="calculateAgeInYears();" value="<?php echo $general->humanDateFormat($covid19Info['patient_dob']); ?>" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -301,19 +305,19 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                 </li>
                                                 <li>
                                                     <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                    <input type="checkbox" class="checkbox" id="suspect3" name="reasonDetails[]" value="Rhume" title="Please check response" <?php echo (in_array("Rhume", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "checked" : ""; ?>>
+                                                        <input type="checkbox" class="checkbox" id="suspect3" name="reasonDetails[]" value="Rhume" title="Please check response" <?php echo (in_array("Rhume", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "checked" : ""; ?>>
                                                     </label>
                                                     <label class="radio-inline" for="suspect3" style="padding-left:17px !important;margin-left:0;">Rhume</label>
                                                 </li>
                                                 <li>
                                                     <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                    <input type="checkbox" class="checkbox" id="suspect4" name="reasonDetails[]" value="Mal de gorge" title="Please check response" <?php echo (in_array("Mal de gorge", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "checked" : ""; ?>>
+                                                        <input type="checkbox" class="checkbox" id="suspect4" name="reasonDetails[]" value="Mal de gorge" title="Please check response" <?php echo (in_array("Mal de gorge", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "checked" : ""; ?>>
                                                     </label>
                                                     <label class="radio-inline" for="suspect4" style="padding-left:17px !important;margin-left:0;">Mal de gorge</label>
                                                 </li>
                                                 <li>
                                                     <label class="radio-inline" style="width:4%;margin-left:0;">
-                                                    <input type="checkbox" class="checkbox" id="suspect5" name="reasonDetails[]" value="Difficulté respiratoire" title="Please check response" <?php echo (in_array("Difficulté respiratoire", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "checked" : ""; ?>>
+                                                        <input type="checkbox" class="checkbox" id="suspect5" name="reasonDetails[]" value="Difficulté respiratoire" title="Please check response" <?php echo (in_array("Difficulté respiratoire", $reasonDetails) && $covid19SelectedReasonsDetailsForTesting['reasons_id'] == 1) ? "checked" : ""; ?>>
                                                     </label>
                                                     <label class="radio-inline" for="suspect5" style="padding-left:17px !important;margin-left:0;">Difficulté respiratoire</label>
                                                 </li>
@@ -430,9 +434,9 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                 </div>
                                 <table class="table">
                                     <tr>
-                                        <th style="width:15% !important">Fever/Temperature (&deg;C) <span class="mandatory">*</span> </th>
+                                        <th style="width:15% !important">Fever/Temperature (&deg;C)</th>
                                         <td style="width:35% !important;">
-                                            <input class="form-control isRequired" type="number" value="<?php echo $covid19Info['fever_temp']; ?>" name="feverTemp" id="feverTemp" placeholder="Fever/Temperature (in &deg;Celcius)" />
+                                            <input class="form-control" type="number" value="<?php echo $covid19Info['fever_temp']; ?>" name="feverTemp" id="feverTemp" placeholder="Fever/Temperature (in &deg;Celcius)" />
                                         </td>
                                         <th style="width:15% !important"><label for="temperatureMeasurementMethod">Température</label></th>
                                         <td style="width:35% !important;">
@@ -490,15 +494,29 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         <th colspan="4" style="width:15% !important">Symptômes <span class="mandatory">*</span> </th>
                                     </tr>
                                     <tr>
+                                        <th style="width:15% !important"><label for="asymptomatic">Asymptomatic <span class="mandatory">*</span></label></th>
+                                        <td style="width:35% !important;">
+                                            <select name="asymptomatic" id="asymptomatic" class="form-control isRequired" title="Asymptomatic" onchange="asymptomaticFn(this.value);">
+                                                <option value="">--Select--</option>
+                                                <option value="yes" <?php echo ($covid19Info['asymptomatic'] == 'yes') ? "selected='selected'" : ""; ?>>Oui</option>
+                                                <option value="no" <?php echo ($covid19Info['asymptomatic'] == 'no') ? "selected='selected'" : ""; ?>>Non</option>
+                                                <option value="unknown" <?php echo ($covid19Info['asymptomatic'] == 'unknown') ? "selected='selected'" : ""; ?>>Inconnu</option>
+                                            </select>
+                                        </td>
+                                        <th></th>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="sysmptoms" style="display: <?php echo ($covid19Info['asymptomatic'] == 'yes') ? "none" : "contents"; ?>;">
                                         <td colspan="4">
                                             <table id="symptomsTable" class="table table-bordered table-striped">
                                                 <?php $index = 0;
-                                                foreach ($covid19Symptoms as $symptomId => $symptomName) { 
-                                                    $diarrhée = "";$display = "display:none;";
+                                                foreach ($covid19Symptoms as $symptomId => $symptomName) {
+                                                    $diarrhée = "";
+                                                    $display = "display:none;";
                                                     if ($symptomId == 13) {
                                                         $diarrhée = "diarrhée";
-                                                        $display = (isset($covid19SelectedSymptoms[$symptomId]['value']) && $covid19SelectedSymptoms[$symptomId]['value'] == "yes")?"":'display:none;';
-                                                    }?>
+                                                        $display = (isset($covid19SelectedSymptoms[$symptomId]['value']) && $covid19SelectedSymptoms[$symptomId]['value'] == "yes") ? "" : 'display:none;';
+                                                    } ?>
                                                     <tr class="row<?php echo $index; ?>">
                                                         <!-- <td style="display: flex;">
                                                             <label class="radio-inline" style="width:4%;margin-left:0;">
@@ -509,7 +527,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                         <th style="width:50%;"><?php echo $symptomName; ?></th>
                                                         <td style="width:50%;">
                                                             <input name="symptomId[]" type="hidden" value="<?php echo $symptomId; ?>">
-                                                            <select name="symptomDetected[]" id="symptomDetected<?php echo $symptomId; ?>" class="form-control <?php echo $diarrhée;?>" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" style="width:100%">
+                                                            <select name="symptomDetected[]" id="symptomDetected<?php echo $symptomId; ?>" class="form-control <?php echo $diarrhée; ?>" title="Veuillez choisir la valeur pour <?php echo $symptomName; ?>" style="width:100%">
                                                                 <option value="">-- Sélectionner --</option>
                                                                 <option value='yes' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['value']) && $covid19SelectedSymptoms[$symptomId]['value'] == 'yes') ? "selected='selected'" : ""; ?>> Oui </option>
                                                                 <option value='no' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['value']) && $covid19SelectedSymptoms[$symptomId]['value'] == 'no') ? "selected='selected'" : ""; ?>> Non </option>
@@ -520,22 +538,22 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                             <?php
                                                             if ($symptomId == 13) {
                                                             ?>
-                                                                <label class="diarrhée-sub" for="" style="margin-left:0;<?php echo $display;?>">Si oui:<br> Sanglante?</label>
-                                                                <select name="symptomDetails[13][]" class="form-control diarrhée-sub" style="width:100%;<?php echo $display;?>">
+                                                                <label class="diarrhée-sub" for="" style="margin-left:0;<?php echo $display; ?>">Si oui:<br> Sanglante?</label>
+                                                                <select name="symptomDetails[13][]" class="form-control diarrhée-sub" style="width:100%;<?php echo $display; ?>">
                                                                     <option value="">-- Sélectionner --</option>
                                                                     <option value='yes' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['sDetails'][0]) && $covid19SelectedSymptoms[$symptomId]['sDetails'][0] == 'yes') ? "selected='selected'" : ""; ?>> Oui </option>
                                                                     <option value='no' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['sDetails'][0]) && $covid19SelectedSymptoms[$symptomId]['sDetails'][0] == 'no') ? "selected='selected'" : ""; ?>> Non </option>
                                                                     <option value='unknown' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['sDetails'][0]) && $covid19SelectedSymptoms[$symptomId]['sDetails'][0] == 'unknown') ? "selected='selected'" : ""; ?>> Inconnu </option>
                                                                 </select>
-                                                                <label class="diarrhée-sub" for="" style="margin-left:0;<?php echo $display;?>">Aqueuse?</label>
-                                                                <select name="symptomDetails[13][]" class="form-control diarrhée-sub" style="width:100%;<?php echo $display;?>">
+                                                                <label class="diarrhée-sub" for="" style="margin-left:0;<?php echo $display; ?>">Aqueuse?</label>
+                                                                <select name="symptomDetails[13][]" class="form-control diarrhée-sub" style="width:100%;<?php echo $display; ?>">
                                                                     <option value="">-- Sélectionner --</option>
                                                                     <option value='yes' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['sDetails'][1]) && $covid19SelectedSymptoms[$symptomId]['sDetails'][1] == 'yes') ? "selected='selected'" : ""; ?>> Oui </option>
                                                                     <option value='no' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['sDetails'][1]) && $covid19SelectedSymptoms[$symptomId]['sDetails'][1] == 'no') ? "selected='selected'" : ""; ?>> Non </option>
                                                                     <option value='unknown' <?php echo (isset($covid19SelectedSymptoms[$symptomId]['sDetails'][1]) && $covid19SelectedSymptoms[$symptomId]['sDetails'][1] == 'unknown') ? "selected='selected'" : ""; ?>> Inconnu </option>
                                                                 </select>
-                                                                <label class="diarrhée-sub" for="" style="margin-left:0;<?php echo $display;?>">Nombre De Selles Par /24h</label>
-                                                                <input type="text" style="<?php echo $display;?>" class="form-control reason-checkbox symptoms-checkbox diarrhée-sub" id="" name="symptomDetails[13][]" placeholder="Nombre de selles par /24h" title="Nombre de selles par /24h" value="<?php echo $covid19SelectedSymptoms[$symptomId]['sDetails'][2]; ?>">
+                                                                <label class="diarrhée-sub" for="" style="margin-left:0;<?php echo $display; ?>">Nombre De Selles Par /24h</label>
+                                                                <input type="text" style="<?php echo $display; ?>" class="form-control reason-checkbox symptoms-checkbox diarrhée-sub" id="" name="symptomDetails[13][]" placeholder="Nombre de selles par /24h" title="Nombre de selles par /24h" value="<?php echo $covid19SelectedSymptoms[$symptomId]['sDetails'][2]; ?>">
 
                                                             <?php } ?>
                                                         </td>
@@ -648,7 +666,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         <td style="width:35% !important;">
                                             <input type="text" value="<?php echo $general->humanDateFormat($covid19Info['travel_return_date']); ?>" class="form-control date" id="returnDate" name="returnDate" placeholder="e.g 09-Jan-1992" title="Date de retour" />
                                         </td>
-                                        
+
                                         <th>Compagnie aérienne</th>
                                         <td><input type="text" class="form-control " value="<?php echo $covid19Info['flight_airline']; ?>" id="airline" name="airline" placeholder="Compagnie aérienne" title="Compagnie aérienne" style="width:100%;" /></td>
                                     </tr>
@@ -669,7 +687,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                     <tr>
                                         <th>Raison de la visite (le cas échéant)</th>
                                         <td><input type="text" class="form-control" value="<?php echo $covid19Info['reason_of_visit']; ?>" id="reasonOfVisit" name="reasonOfVisit" placeholder="Raison de la visite (le cas échéant)" title="Raison de la visite (le cas échéant)" style="width:100%;" /></td>
-                                        
+
                                         <th>Occupation du patient</th>
                                         <td>
                                             <input class="form-control" value="<?php echo $covid19Info['patient_occupation']; ?>" type="text" name="patientOccupation" id="patientOccupation" placeholder="Occupation du patient" title="Occupation du patient" />
@@ -749,7 +767,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             <th class="show-rejection" style="display: none;">Date de rejet<span class="mandatory">*</span></th>
                                             <td class="show-rejection" style="display: none;"><input value="<?php echo $general->humanDateFormat($covid19Info['rejection_on']); ?>" class="form-control date rejection-date" type="text" name="rejectionDate" id="rejectionDate" placeholder="Date de rejet" title="Date de rejet" /></td>
                                         </tr>
-                                            
+
                                         <tr>
                                             <td colspan="4">
                                                 <table class="table table-bordered table-striped" id="testNameTable">
@@ -916,6 +934,185 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
     <!-- /.content -->
 </div>
 
+<div class="modal" id="addFacility">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Add Facility</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form class="form-horizontal" method='post' name='addFacilityForm' id='addFacilityForm' autocomplete="off" enctype="multipart/form-data">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="facilityName" class="col-lg-4 control-label">Facility Name <span class="mandatory">*</span></label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Facility Name" title="Please enter facility name" onblur="checkNameValidation('facility_details','facility_name',this,null,'The facility name that you entered already exists.Enter another name',null)" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="facilityCode" class="col-lg-4 control-label">Facility Code</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control" id="facilityCode" name="facilityCode" placeholder="Facility Code" title="Please enter facility code" onblur="checkNameValidation('facility_details','facility_code',this,null,'The code that you entered already exists.Try another code',null)" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="otherId" class="col-lg-4 control-label">Other Id </label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control" id="otherId" name="otherId" placeholder="Other Id" />
+                                        <input type="hidden" class="form-control isRequired" id="facilityType" name="facilityType" value="1" title="Please select facility type" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="email" class="col-lg-4 control-label">Email(s) </label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control" id="email" name="email" placeholder="eg-email1@gmail.com,email2@gmail.com" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="testingPoints" class="col-lg-4 control-label">Testing Point(s)<br> <small>(comma separated)</small> </label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control" id="testingPoints" name="testingPoints" placeholder="eg. VCT, PMTCT" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="contactPerson" class="col-lg-4 control-label">Contact Person</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control" id="contactPerson" name="contactPerson" placeholder="Contact Person" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="state" class="col-lg-4 control-label">Province/State <span class="mandatory">*</span></label>
+                                    <div class="col-lg-7">
+                                        <select name="state" id="state" class="form-control isRequired" title="Please choose province/state">
+                                            <option value=""> -- Select -- </option>
+                                            <?php
+                                            foreach ($pResult as $province) {
+                                            ?>
+                                                <option value="<?php echo $province['province_name']; ?>"><?php echo $province['province_name']; ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                            <option value="other">Other</option>
+                                        </select>
+                                        <input type="text" class="form-control" name="provinceNew" id="provinceNew" placeholder="Enter Province/State" title="Please enter province/state" style="margin-top:4px;display:none;" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="phoneNo" class="col-lg-4 control-label">Phone Number</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control checkNum" id="phoneNo" name="phoneNo" placeholder="Phone Number" onblur="checkNameValidation('facility_details','facility_mobile_numbers',this,null,'The mobile no that you entered already exists.Enter another mobile no.',null)" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="hubName" class="col-lg-4 control-label">Linked Hub Name (If Applicable)</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control" id="hubName" name="hubName" placeholder="Hub Name" title="Please enter hub name" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="district" class="col-lg-4 control-label">District/County <span class="mandatory">*</span></label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control isRequired" id="district" name="district" placeholder="District/County" title="Please enter district/county" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="country" class="col-lg-4 control-label">Country</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control" id="country" name="country" placeholder="Country" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="address" class="col-lg-4 control-label">Address</label>
+                                    <div class="col-lg-7">
+                                        <textarea class="form-control" name="address" id="address" placeholder="Address"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="latitude" class="col-lg-4 control-label">Latitude</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control checkNum" id="latitude" name="latitude" placeholder="Latitude" title="Please enter latitude" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="longitude" class="col-lg-4 control-label">Longitude</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control checkNum" id="longitude" name="longitude" placeholder="Longitude" title="Please enter longitude" />
+                                        <input type="hidden" name="reqForm" id="reqForm" value="1" />
+                                        <input type="hidden" name="headerText" id="headerText" />
+                                        <input type="hidden" name="testType[]" id="testType" value="" />
+                                        <input type="hidden" name="selectedUser[]" id="selectedUser" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- /.box-body -->
+                        <div class="box-footer">
+
+                        </div>
+                        <!-- /.box-footer -->
+                </form>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <a class="btn btn-primary" href="javascript:void(0);" onclick="addFacility();">Submit</a>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
     changeProvince = true;
     changeFacility = true;
@@ -924,6 +1121,24 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
     machineName = true;
     tableRowId = <?php echo (isset($covid19TestInfo) && count($covid19TestInfo) > 0) ? (count($covid19TestInfo) + 1) : 2; ?>;
     deletedRow = [];
+
+    function addFacility() {
+        flag = deforayValidator.init({
+            formId: 'addFacilityForm'
+        });
+        if (flag) {
+            $.ajax({
+                type: 'POST',
+                url: '/facilities/addFacilityHelper.php',
+                data: $('#addFacilityForm').serialize(),
+                success: function() {
+                    alert('Facility details added successfully');
+                    $('#addFacility').modal('hide');
+                    getfacilityDistrictwise('');
+                }
+            });
+        }
+    }
 
     function getfacilityDetails(obj) {
         $.blockUI();
@@ -1030,6 +1245,10 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
     }
 
     function validateNow() {
+        if ($("#patientDob").val() == "" && $("#patientAge").val() == "") {
+            alert("Please select or enter patient DOB or Age");
+            return false;
+        }
         if ($('#isResultAuthorized').val() != "yes") {
             $('#authorizedBy,#authorizedOn').removeClass('isRequired');
         }
@@ -1088,9 +1307,9 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         <?php } ?>
 
         $('.diarrhée').change(function(e) {
-            if(this.value == "yes"){
+            if (this.value == "yes") {
                 $('.diarrhée-sub').show();
-            } else{
+            } else {
                 $('.diarrhée-sub').hide();
                 $('.diarrhée-sub').val('');
             }
@@ -1280,6 +1499,14 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
             $('.' + show).removeClass('hide-reasons');
             $('.hide-reasons').hide();
             $('.' + show).addClass('hide-reasons');
+        }
+    }
+
+    function asymptomaticFn(value) {
+        if (value == "yes") {
+            $(".sysmptoms").hide();
+        } else {
+            $(".sysmptoms").show();
         }
     }
 </script>
