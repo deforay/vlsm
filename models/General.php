@@ -551,7 +551,7 @@ class General
             if (isset($pdfFormat) && sizeof($pdfFormat) > 0) {
                 foreach ($pdfFormat as $formatPath) {
                     $index = substr($formatPath, strpos($formatPath, "results/") + 8);
-                    $cut = str_replace("-", "", substr($index, strpos($index, "result-pdf-" . $countryCode . "-") + 15));
+                    $cut = str_replace("-", "", substr($index, strpos($index, "result-pdf-" . $countryCode . "-") - 15));
                     $value = substr($cut, 0, strpos($cut, ".php"));
                     $list[$index] = ucwords($value);
                 }

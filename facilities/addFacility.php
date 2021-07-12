@@ -253,7 +253,7 @@ if ($arr['vl_form'] == 7) {
 								<div class="form-group">
 									<label for="reportFormat" class="col-lg-4 control-label">Report Format For VL</label>
 									<div class="col-lg-7">
-										<select class="form-control isRequired" name='reportFormat[vl]' id='reportFormat' title="Please select the status" onchange="checkIfExist(this);">
+										<select class="form-control" name='reportFormat[vl]' id='reportFormat' title="Please select the status" onchange="checkIfExist(this);">
 											<?php if(($count > 1)){ ?>
 												<option value="">-- Select --</option>
 											<?php }?>
@@ -270,7 +270,7 @@ if ($arr['vl_form'] == 7) {
 								<div class="form-group">
 									<label for="reportFormat" class="col-lg-4 control-label">Report Format For EID</label>
 									<div class="col-lg-7">
-										<select class="form-control isRequired" name='reportFormat[eid]' id='reportFormat' title="Please select the status" onchange="checkIfExist(this);">
+										<select class="form-control" name='reportFormat[eid]' id='reportFormat' title="Please select the status" onchange="checkIfExist(this);">
 											<?php if(($count > 1)){ ?>
 												<option value="">-- Select --</option>
 											<?php }?>
@@ -287,7 +287,7 @@ if ($arr['vl_form'] == 7) {
 								<div class="form-group">
 									<label for="reportFormat" class="col-lg-4 control-label">Report Format For Covid-19</label>
 									<div class="col-lg-7">
-										<select class="form-control isRequired" name='reportFormat[covid19]' id='reportFormat' title="Please select the status" onchange="checkIfExist(this);">
+										<select class="form-control" name='reportFormat[covid19]' id='reportFormat' title="Please select the status" onchange="checkIfExist(this);">
 											<?php if(($count > 1)){ ?>
 												<option value="">-- Select --</option>
 											<?php }?>
@@ -304,7 +304,7 @@ if ($arr['vl_form'] == 7) {
 								<div class="form-group">
 									<label for="reportFormat" class="col-lg-4 control-label">Report Format For Hepatitis</label>
 									<div class="col-lg-7">
-										<select class="form-control isRequired" name='reportFormat[hepatitis]' id='reportFormat' title="Please select the status" onchange="checkIfExist(this);">
+										<select class="form-control" name='reportFormat[hepatitis]' id='reportFormat' title="Please select the status" onchange="checkIfExist(this);">
 											<?php if(($count > 1)){ ?>
 												<option value="">-- Select --</option>
 											<?php }?>
