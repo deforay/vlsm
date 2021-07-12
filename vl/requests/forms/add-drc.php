@@ -515,7 +515,7 @@ $sFormat = '';
                         < 20<br>
                           <input type="checkbox" class="specialResults" id="vlLt40" name="vlLt40" value="yes" title="Please check VL value">
                           < 40<br>
-                            <input type="checkbox" class="specialResults" id="vlLt40" name="vlLt400" value="yes" title="Please check VL value">
+                            <input type="checkbox" class="specialResults" id="vlLt400" name="vlLt400" value="yes" title="Please check VL value">
                             < 400<br>
                               <input type="checkbox" class="specialResults" id="vlTND" name="vlTND" value="yes" title="Please check VL value"> Target Not Detected / Non Détecté
                       </td>

@@ -502,6 +502,7 @@ if (sizeof($requestResult) > 0) {
                 $encryption_iv
             );
             $pdf->writeHTML($html);
+	    $systemConfig['remoteURL'] = rtrim($systemConfig['remoteURL'], "/");
             if(isset($arr['covid19_report_qr_code']) && $arr['covid19_report_qr_code'] == 'yes'){
                 $pdf->write2DBarcode($systemConfig['remoteURL'] . '/covid-19/results/view.php?q=' . $Cid . '', 'QRCODE,H', 170, 185, 20, 20, $style, 'N');
             }

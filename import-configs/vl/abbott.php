@@ -98,11 +98,14 @@ try {
                     //$reviewBy = $sheetData[$reviewByCol];
 
                     // //Changing date to European format for strtotime - https://stackoverflow.com/a/5736255
-                    
+
                     if (strpos($sheetData[$resultCol], 'Log') !== false) {
+
                         $sheetData[$resultCol] = str_replace(",", ".", $sheetData[$resultCol]); // in case they are using european decimal format
                         $logVal = ((float) filter_var($sheetData[$resultCol], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION));
                         $absDecimalVal = round((float) round(pow(10, $logVal) * 100) / 100);
+
+
                         if (strpos($sheetData[$resultCol], "<") !== false) {
                             $txtVal = $absVal = "< " . trim($absDecimalVal);
                         } else {
@@ -110,11 +113,12 @@ try {
                             $absVal = $absDecimalVal;
                         }
                     } else if (strpos($sheetData[$resultCol], 'Copies') !== false) {
+                        $absDecimalVal = abs((int) filter_var($sheetData[$resultCol], FILTER_SANITIZE_NUMBER_INT));
                         if (strpos($sheetData[$resultCol], '<') !== false) {
-                            $txtVal = "Below Detection Level";
-                            $logVal = $absDecimalVal = $absVal = $resultFlag = "";
+                            $txtVal = $absVal = "< " . trim($absDecimalVal);
+                            $logVal = $absDecimalVal = $resultFlag = "";
                         } else {
-                            $absVal = $absDecimalVal = abs((int) filter_var($sheetData[$resultCol], FILTER_SANITIZE_NUMBER_INT));
+                            $absVal = $absDecimalVal;
                         }
                     } else if (strpos($sheetData[$resultCol], 'IU/mL') !== false) {
                         $absVal = $absDecimalVal = abs((int) filter_var($sheetData[$resultCol], FILTER_SANITIZE_NUMBER_INT));
