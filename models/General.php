@@ -519,41 +519,86 @@ class General
         }
     }
 
-    public function activeReportFrmats($countryId = 1, $format = null, $list = true)
+    public function activeReportFormats($module = "vl", $countryCode = "southsudan", $format = "", $list = true)
     {
-        $response = array(
-            1 => array(
-                'default' => 'pdf/result-pdf-ssudan-default.php'
-            ),
-            2 => array(
-                'default' => 'pdf/result-pdf-zm.php'
-            ),
-            3 => array(
-                'default' => 'pdf/result-pdf-drc-default.php',
-                'DRC-1' => 'pdf/result-pdf-drc-1.php'
-            ),
-            4 => array(
-                'default' => 'pdf/result-pdf-zam.php'
-            ),
-            5 => array(
-                'default' => 'pdf/result-pdf-png.php'
-            ),
-            6 => array(
-                'default' => 'pdf/result-pdf-who.php'
-            ),
-            7 => array(
-                'default' => 'pdf/result-pdf-rwanda.php'
-            ),
-            8 => array(
-                'default' => 'pdf/result-pdf-angola.php'
-            )
-        );
-        if(isset($format) && $format != null){
-            return (isset($response[$countryId][$format]) && $response[$countryId][$format] != "")?$response[$countryId][$format]:$response[$countryId]['default'];
-        } else if($list){
-            return $response[$countryId];
-        } else{
-            return $response[$countryId]['default'];
+        $list = array();
+        if ($module == 'vl') {
+
+            if (isset($format) && $format != null) {
+                $path = APPLICATION_PATH . DIRECTORY_SEPARATOR . $module . DIRECTORY_SEPARATOR . 'results/pdf/resultPdf' . $countryCode . '-' . $format . '.php';
+            } else {
+                $path = APPLICATION_PATH . DIRECTORY_SEPARATOR . $module . DIRECTORY_SEPARATOR . 'results/pdf/resultPdf' . $countryCode . '*.php';
+            }
+            $pdfFormat = glob($path, true);
+            if (isset($pdfFormat) && sizeof($pdfFormat) > 0) {
+                foreach ($pdfFormat as $formatPath) {
+                    $index = substr($formatPath, strpos($formatPath, "results/") + 8);
+                    $cut = str_replace("-", "", substr($index, strpos($index, "resultPdf" . $countryCode . "-") + 14));
+                    $value = substr($cut, 0, strpos($cut, ".php"));
+                    $list[$index] = ucwords($value);
+                }
+            } else {
+                $list['pdf/resultPdf-' . $countryCode . '.pdf'] = "Default";
+            }
+        } else {
+
+            if (isset($format) && $format != null) {
+                $path = APPLICATION_PATH . DIRECTORY_SEPARATOR . $module . DIRECTORY_SEPARATOR . 'results/pdf/result-pdf-' . $countryCode . '-' . $format . '.php';
+            } else {
+                $path = APPLICATION_PATH . DIRECTORY_SEPARATOR . $module . DIRECTORY_SEPARATOR . 'results/pdf/result-pdf-' . $countryCode . '*.php';
+            }
+            $pdfFormat = glob($path, true);
+            if (isset($pdfFormat) && sizeof($pdfFormat) > 0) {
+                foreach ($pdfFormat as $formatPath) {
+                    $index = substr($formatPath, strpos($formatPath, "results/") + 8);
+                    $cut = str_replace("-", "", substr($index, strpos($index, "result-pdf-" . $countryCode . "-") + 15));
+                    $value = substr($cut, 0, strpos($cut, ".php"));
+                    $list[$index] = ucwords($value);
+                }
+            } else {
+                $list['pdf/result-pdf-' . $countryCode . '.pdf'] = "Default";
+            }
         }
+        return $list;
+    }
+
+    public function reportPdfNames($module = null)
+    {
+        $arr = $this->getGlobalConfig();
+        $cntId = array();
+        if ($arr['vl_form'] == 1) {
+            $cntId['covid19'] = 'ssudan';
+            $cntId['eid'] = 'ssudan';
+            $cntId['vl'] = 'SouthSudan';
+        } else if ($arr['vl_form'] == 2) {
+            $cntId['vl'] = 'Zm';
+            $cntId['covid19'] = 'zm';
+        } else if ($arr['vl_form'] == 3) {
+            $cntId['vl'] = 'Drc';
+            $cntId['eid'] = 'drc';
+            $cntId['covid19'] = 'drc';
+        } else if ($arr['vl_form'] == 4) {
+            $cntId['vl'] = 'Zam';
+            $cntId['covid19'] = 'zam';
+        } else if ($arr['vl_form'] == 5) {
+            $cntId['vl'] = 'Png';
+            $cntId['covid19'] = 'png';
+        } else if ($arr['vl_form'] == 6) {
+            $cntId['vl'] = 'Who';
+            $cntId['covid19'] = 'who';
+        } else if ($arr['vl_form'] == 7) {
+            $cntId['vl'] = 'Rwd';
+            $cntId['hepatitis'] = 'rwanda';
+            $cntId['eid'] = 'rwanda';
+            $cntId['covid19'] = 'rwanda';            
+        } else if ($arr['vl_form'] == 8) {
+            $cntId['vl'] = 'Ang';
+            $cntId['eid'] = 'angola';
+            $cntId['covid19'] = 'angola';
+        }
+        if($module != null){
+            return $cntId[$module];
+        }
+        return $cntId;
     }
 }

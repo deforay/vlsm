@@ -59,7 +59,8 @@ defined('APPLICATION_ENV')
     || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ?
         getenv('APPLICATION_ENV') :
         'production'));
-
+defined('COVID_19_REPORT_PATH')
+    || define('COVID_19_REPORT_PATH', APPLICATION_PATH . DIRECTORY_SEPARATOR . 'covid-19/results/pdf');
 
 set_include_path(implode(PATH_SEPARATOR, array(
     realpath(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'vendor'),
