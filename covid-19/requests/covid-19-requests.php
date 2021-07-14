@@ -28,6 +28,12 @@ $batResult = $db->rawQuery($batQuery);
 	.select2-selection__choice {
 		color: black !important;
 	}
+	.action{
+		display: flex;
+	}
+	th{
+		display: revert !important;
+	}
 </style>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -324,8 +330,8 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 				}, {
 					"sClass": "center"
 				},
-				<?php if (isset($_SESSION['privileges']) && (in_array("covid-19-edit-request.php", $_SESSION['privileges'])) || (in_array("covid-19-view-request.php", $_SESSION['privileges']))) { ?> {
-						"sClass": "center",
+				<?php if (isset($_SESSION['privileges']) && (in_array("covid-19-edit-request.php", $_SESSION['privileges'])) || (in_array("covid-19-view-request.php", $_SESSION['privileges'])) || (in_array("covid-19-sync-request.php", $_SESSION['privileges']))) { ?> {
+						"sClass": "center action",
 						"bSortable": false
 					},
 				<?php } ?>
@@ -426,6 +432,21 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 	function hideAdvanceSearch(hideId, showId) {
 		$("#" + hideId).hide();
 		$("#" + showId).show();
+	}
+
+	function syncRequest(value){
+		$.blockUI();
+		$.post("/covid-19/requests/covid-19-sync-request.php", {
+			c19: value,
+			testType: 'covid19'
+		},
+		function(data) {
+			if (data != "") {
+				alert(data);
+			}
+			oTable.fnDraw();
+			$.unblockUI();
+		});
 	}
 </script>
 <?php

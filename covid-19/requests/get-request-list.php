@@ -150,9 +150,9 @@ if (isset($_POST['source']) && trim($_POST['source']) == 'dhis2') {
 }
 
 if ($sWhere != '') {
-     $sWhere = $sWhere . ' AND ' . $whereResult . 'vl.vlsm_country_id="' . $gconfig['vl_form'] . '"';
+     $sWhere = $sWhere . ' AND ' . 'vl.vlsm_country_id="' . $gconfig['vl_form'] . '"';
 } else {
-     $sWhere = $sWhere . ' where ' . $whereResult . 'vl.vlsm_country_id="' . $gconfig['vl_form'] . '"';
+     $sWhere = $sWhere . ' where ' . 'vl.vlsm_country_id="' . $gconfig['vl_form'] . '"';
 }
 $sFilter = '';
 if ($sarr['user_type'] == 'remoteuser') {
@@ -207,15 +207,22 @@ $output = array(
 );
 $editRequest = false;
 $viewRequest = false;
+$syncRequest = false;
 if (isset($_SESSION['privileges']) && (in_array("covid-19-edit-request.php", $_SESSION['privileges']))) {
      $editRequest = true;
 }
 if (isset($_SESSION['privileges']) && (in_array("covid-19-view-request.php", $_SESSION['privileges']))) {
      $viewRequest = true;
 }
+if (isset($_SESSION['privileges']) && (in_array("covid-19-sync-request.php", $_SESSION['privileges']))) {
+     $syncRequest = true;
+}
+
 foreach ($rResult as $aRow) {
      $vlResult = '';
      $edit = '';
+     $view = '';
+     $sync = '';
      $barcode = '';
      if (isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date']) != '' && $aRow['sample_collection_date'] != '0000-00-00 00:00:00') {
           $xplodDate = explode(" ", $aRow['sample_collection_date']);
@@ -268,15 +275,24 @@ foreach ($rResult as $aRow) {
      if ($viewRequest) {
           $view = '<a href="covid-19-view-request.php?id=' . base64_encode($aRow['covid19_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
      }
+     
+     if ($syncRequest) {
+          $sync = '<a href="javascript:void(0);" class="btn btn-success btn-xs disabled" style="margin-right: 2px;" title="This sample already Synced to remote" disabled><i class="fa fa-check"></i></a>';
+          if($aRow['data_sync'] == 0){
+               $sync = '<a href="javascript:void(0);" class="btn btn-secondry btn-xs" style="margin-right: 2px;" title="Sync this sample" onclick="syncRequest(\'' . base64_encode($aRow['covid19_id']) . '\')">⟳</a>';
+          }
+     }
 
      if (isset($gconfig['bar_code_printing']) && $gconfig['bar_code_printing'] != "off") {
           $fac = ucwords($aRow['facility_name']) . " | " . $aRow['sample_collection_date'];
           $barcode = '<br><a href="javascript:void(0)" onclick="printBarcodeLabel(\'' . $aRow[$sampleCode] . '\',\'' . $fac . '\')" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Barcode"><i class="fa fa-barcode"> </i> Barcode </a>';
      }
      if ($editRequest) {
-          $row[] = $edit . $barcode;
+          $row[] = $edit . $barcode . $sync;
      } else if ($viewRequest) {
-          $row[] = $view . $barcode;
+          $row[] = $view . $barcode . $sync;
+     } else if ($syncRequest) {
+          $row[] = $barcode . $sync;
      }
      // echo '<pre>';print_r($row);die;
      $output['aaData'][] = $row;
