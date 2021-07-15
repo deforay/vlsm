@@ -108,6 +108,8 @@ try {
 
                         if (strpos($sheetData[$resultCol], "<") !== false) {
                             $txtVal = $absVal = "< " . trim($absDecimalVal);
+                        } else if (strpos($sheetData[$resultCol], ">") !== false) {
+                            $txtVal = $absVal = "> " . trim($absDecimalVal);
                         } else {
                             $txtVal = null;
                             $absVal = $absDecimalVal;
@@ -117,14 +119,18 @@ try {
                         if (strpos($sheetData[$resultCol], '<') !== false) {
                             $txtVal = $absVal = "< " . trim($absDecimalVal);
                             $logVal = $absDecimalVal = $resultFlag = "";
+                        } else if (strpos($sheetData[$resultCol], '>') !== false) {
+                            $txtVal = $absVal = "> " . trim($absDecimalVal);
+                            $logVal = $absDecimalVal = $resultFlag = "";
                         } else {
+                            $logVal = round(log10($absDecimalVal), 2);
                             $absVal = $absDecimalVal;
                         }
                     } else if (strpos($sheetData[$resultCol], 'IU/mL') !== false) {
                         $absVal = $absDecimalVal = abs((int) filter_var($sheetData[$resultCol], FILTER_SANITIZE_NUMBER_INT));
                     } else {
                         if (strpos(strtolower($sheetData[$resultCol]), 'not detected') !== false || strtolower($sheetData[$resultCol]) == 'target not detected') {
-                            $txtVal = "Below Detection Level";
+                            $txtVal = "Target Not Detected";
                             $resultFlag = "";
                             $absVal = "";
                             $logVal = "";
