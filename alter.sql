@@ -2217,3 +2217,7 @@ ALTER TABLE `form_covid19` ADD `asymptomatic` VARCHAR(50) NULL DEFAULT NULL AFTE
 INSERT INTO `global_config` (`display_name`, `name`, `value`, `category`, `remote_sync_needed`, `updated_on`, `updated_by`, `status`) VALUES ('COVID-19 Report QR Code', 'covid19_report_qr_code', 'no', NULL, 'yes', '2021-07-09 17:32:23', NULL, 'active');
 -- Thana 14-Jul-2021
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'covid-19-requests', 'covid-19-sync-request.php', 'Covid-19 Sync Request');
+
+
+-- Amit -- 15-Jul-2021
+UPDATE `system_config` SET `value` = '4.3.6' WHERE `system_config`.`name` = 'version';

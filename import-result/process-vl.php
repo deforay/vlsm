@@ -40,7 +40,7 @@ try {
                     'control_type'                  => $rResult[0]['sample_type'],
                     'lot_number'                    => $rResult[0]['lot_number'],
                     'lot_expiration_date'           => $rResult[0]['lot_expiration_date'],
-                    'sample_tested_datetime'        => !empty($rResult[0]['sample_tested_datetime']) ? $rResult[0]['sample_tested_datetime'] : $general->getDateTime(),
+                    'sample_tested_datetime'        => $rResult[0]['sample_tested_datetime'],
                     //'is_sample_rejected'=>'yes',
                     //'reason_for_sample_rejection'=>$rResult[0]['reason_for_sample_rejection'],
                     'result_value_log'              => $rResult[0]['result_value_log'],
@@ -114,7 +114,7 @@ try {
                     $result = $db->insert('hold_sample_import', $data);
                 } else {
                     $data['tested_by'] = $_POST['testBy'];
-                    $data['sample_tested_datetime'] = $general->getDateTime();
+                    $data['sample_tested_datetime'] = $rResult[0]['sample_tested_datetime'];
                     $data['request_created_by'] = $rResult[0]['result_reviewed_by'];
                     $data['request_created_datetime'] = $general->getDateTime();
                     $data['last_modified_by'] = $rResult[0]['result_reviewed_by'];
@@ -205,7 +205,6 @@ try {
                 'sample_tested_datetime' => $accResult[$i]['sample_tested_datetime'],
                 'lab_id' => $accResult[$i]['lab_id'],
                 'tested_by'                     => $_POST['testBy'],
-                'sample_tested_datetime'        => $general->getDateTime(),
                 'request_created_by' => $accResult[$i]['result_reviewed_by'],
                 'request_created_datetime' => $general->getDateTime(),
                 'last_modified_datetime' => $general->getDateTime(),
