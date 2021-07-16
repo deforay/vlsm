@@ -203,7 +203,7 @@ if (sizeof($requestResult) > 0) {
       $expStr = explode(" ", $result['result_printed_datetime']);
       $result['result_printed_datetime'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
     } else {
-      $result['result_printed_datetime'] = '';
+      $result['result_printed_datetime'] = $general->getDateTime();
     }
 
     if (isset($result['sample_tested_datetime']) && trim($result['sample_tested_datetime']) != '' && $result['sample_tested_datetime'] != '0000-00-00 00:00:00') {
