@@ -502,7 +502,7 @@ if (sizeof($requestResult) > 0) {
                 $encryption_iv
             );
             $pdf->writeHTML($html);
-	    $systemConfig['remoteURL'] = rtrim($systemConfig['remoteURL'], "/");
+	        $systemConfig['remoteURL'] = rtrim($systemConfig['remoteURL'], "/");
             if(isset($arr['covid19_report_qr_code']) && $arr['covid19_report_qr_code'] == 'yes'){
                 $h =175;
                 if(isset($facilityInfo['address']) && $facilityInfo['address'] != ""){

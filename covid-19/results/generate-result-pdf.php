@@ -84,6 +84,14 @@ if (isset($_POST['id']) && trim($_POST['id']) != '') {
 // echo($searchQuery);die;
 $requestResult = $db->query($searchQuery);
 /* Test Results */
+if(isset($_POST['type']) && $_POST['type'] == "qr"){
+	try{
+		$general->trackQrViewPage('covid19', $requestResult[0]['covid19_id'], $requestResult[0]['sample_code']);
+	}catch (Exception $exc) {
+		error_log($exc->getMessage());
+		error_log($exc->getTraceAsString());
+	  }
+}
 
 $_SESSION['nbPages'] = sizeof($requestResult);
 $_SESSION['aliasPage'] = 1;
