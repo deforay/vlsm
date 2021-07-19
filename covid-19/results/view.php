@@ -13,8 +13,8 @@ $decryption = openssl_decrypt(
     $decryption_iv
 );
 $data = explode('&&&', $decryption);
-if ($data[1] != "qr")
-    include_once(APPLICATION_PATH . '/header.php');
+/* if ($data[1] != "qr")
+    include_once(APPLICATION_PATH . '/header.php'); */
 $id = $data[0];
 ?>
 <style>
