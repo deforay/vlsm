@@ -2234,3 +2234,7 @@ CREATE TABLE `track_qr_code_page` (
  PRIMARY KEY (`tqcp_d`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE `track_qr_code_page` ADD `sample_code` VARCHAR(256) NULL AFTER `test_type_id`; 
+
+
+-- Amit -- 22-Jul-2021
+UPDATE `system_config` SET `value` = '4.3.7' WHERE `system_config`.`name` = 'version';
