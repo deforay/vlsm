@@ -187,7 +187,7 @@ try {
             $data = array(
                 'module' => 'hepatitis',
                 'lab_id' => base64_decode($_POST['labId']),
-                'hepatitis_test_platform' => $_POST['vltestPlatform'],
+                'vl_test_platform' => $_POST['vltestPlatform'],
                 'import_machine_name' => $_POST['configMachineName'],
                 'result_reviewed_by' => $_SESSION['userId'],
                 'sample_code' => $d['sampleCode'],
@@ -297,8 +297,8 @@ try {
     if (isset($id) && $id > 0) {
         $data = array(
             'user_id' => $_SESSION['userId'],
-            'hepatitis_id' => $id,
-            'test_type' => 'vl',
+            'vl_sample_id' => $id,
+            'test_type' => 'hepatitis',
             'updated_on' => $general->getDateTime()
         );
         $db->insert("log_result_updates", $data);

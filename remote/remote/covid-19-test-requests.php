@@ -7,16 +7,6 @@ include(dirname(__FILE__) . "/../../startup.php");
 
 $labId = $data['labName'];
 
-
-// //global config
-// $cQuery="SELECT * FROM global_config";
-// $cResult=$db->query($cQuery);
-// $arr = array();
-// // now we create an associative array so that we can easily create view variables
-// for ($i = 0; $i < sizeof($cResult); $i++) {
-//   $arr[$cResult[$i]['name']] = $cResult[$i]['value'];
-// }
-
 $general = new \Vlsm\Models\General($db);
 $dataSyncInterval = $general->getGlobalConfig('data_sync_interval');
 $dataSyncInterval = (isset($dataSyncInterval) && !empty($dataSyncInterval)) ? $dataSyncInterval : 30;
@@ -37,13 +27,16 @@ if (isset($fMapResult) && $fMapResult != '' && $fMapResult != null) {
   $condition = "lab_id =" . $labId;
 }
 
-//$vlQuery="SELECT * FROM form_covid19 WHERE $condition AND last_modified_datetime > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." DAY)";
+$covid19Query = "SELECT * FROM form_covid19 
+                    WHERE $condition 
+                    AND last_modified_datetime > SUBDATE( NOW(), INTERVAL $dataSyncInterval DAY)";
 
-//$vlQuery="SELECT * FROM form_covid19 WHERE $condition AND data_sync=0";
+if (!empty($data['manifestCode'])) {
+  $covid19Query .= " AND sample_package_code like '" . $data['manifestCode'] . "%'";
+} else {
+  $covid19Query .= " AND data_sync=0";
+}
 
-$covid19Query = "SELECT * FROM form_covid19 WHERE $condition 
-          AND last_modified_datetime > SUBDATE( NOW(), INTERVAL $dataSyncInterval DAY) 
-          AND data_sync=0";
 
 $covid19RemoteResult = $db->rawQuery($covid19Query);
 

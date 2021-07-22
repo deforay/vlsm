@@ -2225,12 +2225,12 @@ UPDATE `system_config` SET `value` = '4.3.6' WHERE `system_config`.`name` = 'ver
 -- Amit -- 19-Jul-2021
 CREATE TABLE `track_qr_code_page` (
  `tqcp_d` int NOT NULL AUTO_INCREMENT,
- `test_type` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'vl, eid, covid19 or hepatitis',
+ `test_type` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'vl, eid, covid19 or hepatitis',
  `test_type_id` int NOT NULL,
  `browser` varchar(256) DEFAULT NULL,
  `ip_address` varchar(256) DEFAULT NULL,
  `operating_system` varchar(256) DEFAULT NULL,
  `date_time` datetime DEFAULT NULL,
  PRIMARY KEY (`tqcp_d`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE `track_qr_code_page` ADD `sample_code` VARCHAR(256) NULL AFTER `test_type_id`; 

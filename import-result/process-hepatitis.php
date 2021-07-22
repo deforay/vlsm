@@ -118,6 +118,9 @@ try {
                     } else if ($testType == 'hcv') {
                         $resultField = "hcv_vl_count";
                         $otherField = "hbv_vl_count";
+                    } else{
+                        $resultField = "hcv_vl_count";
+                        $otherField = "hbv_vl_count";
                     }
 
                     if ($status[$i] == '4') {
@@ -129,13 +132,11 @@ try {
 
                         $data['is_sample_rejected'] = 'no';
                         $data['reason_for_sample_rejection'] = null;
-                        $data[$otherField] = null;
-                        if (!empty(trim($rResult[0]['result_value_text'])) && $rResult[0]['result_value_text'] != '') {
-                            $data[$resultField] = $rResult[0]['result_value_text'];
-                        } else if ($rResult[0]['result_value_absolute'] != '') {
-                            $data[$resultField] = $rResult[0]['result_value_absolute'];
-                        } else if ($rResult[0]['result_value_log'] != '') {
-                            $data[$resultField] = $rResult[0]['result_value_log'];
+                        $data[$resultField] = $data[$otherField] = null;
+                        $data[$resultField] = $rResult[0]['result'];
+
+                        if(empty($testType)){
+                            $data[$otherField] = $data[$resultField];
                         }
                     }
                     //get bacth code

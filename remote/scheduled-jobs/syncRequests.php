@@ -22,8 +22,8 @@ try {
         exit(0);
     }
 
-    $type = !empty($_GET['type']) ? $_GET['type'] : null;
-    $pkg = !empty($_GET['pkg']) ? $_GET['pkg'] : null;
+    $forceSyncModule = !empty($_GET['forceSyncModule']) ? $_GET['forceSyncModule'] : null;
+    $manifestCode = !empty($_GET['manifestCode']) ? $_GET['manifestCode'] : null;
     /*
  ****************************************************************
  * VIRAL LOAD TEST REQUESTS
@@ -39,8 +39,8 @@ try {
             'module' => 'vl',
             "Key" => "vlsm-lab-data--",
         );
-        if (!empty($type) && trim($type) == "vl" && !empty($pkg) && trim($pkg) != "") {
-            $data['pkg'] = $pkg;
+        if (!empty($forceSyncModule) && trim($forceSyncModule) == "vl" && !empty($manifestCode) && trim($manifestCode) != "") {
+            $data['manifestCode'] = $manifestCode;
         }
         $columnList = array();
         //open connection
@@ -157,8 +157,8 @@ try {
             'module' => 'eid',
             "Key" => "vlsm-lab-data--",
         );
-        if (isset($type) && trim($type) == "eid" && isset($pkg) && trim($pkg) != "") {
-            $data['pkg'] = $pkg;
+        if (isset($forceSyncModule) && trim($forceSyncModule) == "eid" && isset($manifestCode) && trim($manifestCode) != "") {
+            $data['manifestCode'] = $manifestCode;
         }
         //open connection
         $ch = curl_init($url);
@@ -267,8 +267,8 @@ try {
             'module' => 'covid19',
             "Key" => "vlsm-lab-data--",
         );
-        if (isset($type) && trim($type) == "covid19" && isset($pkg) && trim($pkg) != "") {
-            $data['pkg'] = $pkg;
+        if (isset($forceSyncModule) && trim($forceSyncModule) == "covid19" && isset($manifestCode) && trim($manifestCode) != "") {
+            $data['manifestCode'] = $manifestCode;
         }
         //open connection
         $ch = curl_init($url);
@@ -432,8 +432,8 @@ try {
             'module' => 'hepatitis',
             "Key" => "vlsm-lab-data--",
         );
-        if (isset($type) && trim($type) == "hepatitis" && isset($pkg) && trim($pkg) != "") {
-            $data['pkg'] = $pkg;
+        if (isset($forceSyncModule) && trim($forceSyncModule) == "hepatitis" && isset($manifestCode) && trim($manifestCode) != "") {
+            $data['manifestCode'] = $manifestCode;
         }
         //open connection
         $ch = curl_init($url);
@@ -571,7 +571,7 @@ try {
         }
     }
 
-    if (isset($type) && trim($type) != "" && isset($pkg) && trim($pkg) != "") {
+    if (isset($forceSyncModule) && trim($forceSyncModule) != "" && isset($manifestCode) && trim($manifestCode) != "") {
         return 1;
     }
 } catch (Exception $exc) {

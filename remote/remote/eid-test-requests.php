@@ -28,15 +28,16 @@ if (isset($fMapResult) && $fMapResult != '' && $fMapResult != null) {
   $condition = "lab_id =" . $labId;
 }
 
-//$vlQuery="SELECT * FROM eid_form WHERE $condition AND last_modified_datetime > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." DAY)";
+$eidQuery = "SELECT * FROM eid_form 
+                    WHERE $condition 
+                    AND last_modified_datetime > SUBDATE( NOW(), INTERVAL $dataSyncInterval DAY)";
 
-//$vlQuery="SELECT * FROM eid_form WHERE $condition AND data_sync=0";
+if (!empty($data['manifestCode'])) {
+  $eidQuery .= " AND sample_package_code like '" . $data['manifestCode'] . "%'";
+} else {
+  $eidQuery .= " AND data_sync=0";
+}
 
-$eidQuery = "SELECT * FROM eid_form WHERE $condition 
-          AND last_modified_datetime > SUBDATE( NOW(), INTERVAL $dataSyncInterval DAY) 
-          AND data_sync=0";
-
-//error_log($eidQuery);
 
 $eidRemoteResult = $db->rawQuery($eidQuery);
 
