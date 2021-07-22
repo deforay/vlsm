@@ -188,7 +188,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 						$('#sampleId').val(data);
 					} else {
 						<?php if (isset($_SESSION['system']) && $_SESSION['system'] == 'vluser') { ?>
-							syncPkgRequests($("#samplePackageCode").val(), 'vl');
+							forceSyncRequestsByManifestCode($("#samplePackageCode").val(), 'covid19');
 						<?php } ?>
 					}
 				});
@@ -201,14 +201,14 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 	<?php if (isset($_SESSION['system']) && $_SESSION['system'] == 'vluser') { ?>
 		var remoteUrl = '<?php echo $systemConfig['remoteURL']; ?>';
 
-		function syncPkgRequests(pkg, type) {
+		function forceSyncRequestsByManifestCode(manifestCode, forceSyncModule) {
 			$.blockUI({
 				message: '<h3>Trying to sync Relevant Manifest Code Test Requests<br>Please wait...</h3>'
 			});
 
 			if (remoteSync && remoteUrl != null && remoteUrl != '') {
 				var jqxhr = $.ajax({
-						url: "/remote/scheduled-jobs/syncRequests.php?pkg=" + pkg + "&type=" + type,
+						url: "/remote/scheduled-jobs/syncRequests.php?manifestCode=" + manifestCode + "&forceSyncModule=" + forceSyncModule,
 					})
 					.done(function(data) {
 						//console.log(data);

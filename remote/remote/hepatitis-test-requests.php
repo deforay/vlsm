@@ -27,9 +27,18 @@ if (isset($fMapResult) && $fMapResult != '' && $fMapResult != null) {
     $condition = "lab_id =" . $labId;
 }
 
-$hepatitisQuery = "SELECT * FROM form_hepatitis WHERE $condition 
-          AND last_modified_datetime > SUBDATE( NOW(), INTERVAL $dataSyncInterval DAY) 
-          AND data_sync=0";
+$hepatitisQuery = "SELECT * FROM form_hepatitis 
+                    WHERE $condition 
+                    AND last_modified_datetime > SUBDATE( NOW(), INTERVAL $dataSyncInterval DAY)";
+
+if (!empty($data['manifestCode'])) {
+    $hepatitisQuery .= " AND sample_package_code like '" . $data['manifestCode'] . "%'";
+}else{
+    $hepatitisQuery .= " AND data_sync=0";
+}
+
+
+
 
 $hepatitisRemoteResult = $db->rawQuery($hepatitisQuery);
 $data = array();
@@ -45,7 +54,7 @@ if (!empty($hepatitisRemoteResult) && count($hepatitisRemoteResult) > 0) {
     $comorbidities = $hepatitisObj->getComorbidityByHepatitisId($forms);
     $risks = $hepatitisObj->getRiskFactorsByHepatitisId($forms);
 
-    
+
     $data['result'] = $hepatitisRemoteResult;
     $data['risks'] = $risks;
     $data['comorbidities'] = $comorbidities;

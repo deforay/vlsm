@@ -31,7 +31,7 @@ if ($module == 'vl') {
   include_once(APPLICATION_PATH . '/import-result/import-stats-eid.php');
 } else if ($module == 'covid19') {
   include_once(APPLICATION_PATH . '/import-result/import-stats-covid-19.php');
-} else if ($module == 'covid19') {
+} else if ($module == 'hepatitis') {
   include_once(APPLICATION_PATH . '/import-result/import-stats-hepatitis.php');
 }
 
