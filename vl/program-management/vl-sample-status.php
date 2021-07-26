@@ -17,10 +17,13 @@ $sQuery = "SELECT * FROM r_vl_sample_type where status='active'";
 $sResult = $db->rawQuery($sQuery);
 
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
-// $healthFacilites = $facilitiesDb->getHealthFacilities('vl');
-// $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
+$sarr = $general->getSystemConfig();
 
-$testingLabs = $facilitiesDb->getTestingLabs('vl');
+if (isset($sarr['sc_user_type']) && $sarr['sc_user_type'] == 'vluser') {
+  $testingLabs = $facilitiesDb->getTestingLabs('vl', true, false, "facility_id = ". $sarr['sc_testing_lab_id']);
+}else{
+  $testingLabs = $facilitiesDb->getTestingLabs('vl');
+}
 $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- Select --");
 
 $batQuery = "SELECT batch_code FROM batch_details where test_type = 'vl' AND batch_status='completed'";
