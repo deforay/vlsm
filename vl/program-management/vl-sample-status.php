@@ -19,11 +19,12 @@ $sResult = $db->rawQuery($sQuery);
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
 $sarr = $general->getSystemConfig();
 
-if (isset($sarr['sc_user_type']) && $sarr['sc_user_type'] == 'vluser') {
+if (isset($sarr['sc_user_type']) && $sarr['sc_user_type'] != 'vluser') {
   $testingLabs = $facilitiesDb->getTestingLabs('vl', true, false, "facility_id = ". $sarr['sc_testing_lab_id']);
 }else{
   $testingLabs = $facilitiesDb->getTestingLabs('vl');
 }
+
 
 $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- Select --");
 
