@@ -481,6 +481,7 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
                     name: 'No. of Samples Tested',
                     data: [<?php echo implode(",", $result['totalSamples']); ?>],
                     color: '#7CB5ED',
+                    visible : false
                 },
                 <?php
                 if (isset($result['sampleTestedDiff'])) {

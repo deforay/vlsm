@@ -16,11 +16,16 @@ $general = new \Vlsm\Models\General($db); // passing $db which is coming from st
 // $configFormResult = $db->rawQuery($configFormQuery);
 
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
-// $healthFacilites = $facilitiesDb->getHealthFacilities('eid');
-// $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
 
-$testingLabs = $facilitiesDb->getTestingLabs('eid');
-$testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- Select --");
+$sarr = $general->getSystemConfig();
+
+if (isset($sarr['sc_user_type']) && $sarr['sc_user_type'] == 'vluser') {
+  $testingLabs = $facilitiesDb->getTestingLabs('eid', true, false, "facility_id = ". $sarr['sc_testing_lab_id']);
+}else{
+  $testingLabs = $facilitiesDb->getTestingLabs('eid');
+}
+
+
 
 $batQuery = "SELECT batch_code FROM batch_details WHERE test_type='eid' AND batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
