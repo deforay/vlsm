@@ -9,8 +9,14 @@ include_once(APPLICATION_PATH . '/header.php');
 $general = new \Vlsm\Models\General($db); // passing $db which is coming from startup.php
 
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
-$testingLabs = $facilitiesDb->getTestingLabs('covid19');
-$testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- Select --");
+
+$sarr = $general->getSystemConfig();
+
+if (isset($sarr['sc_user_type']) && $sarr['sc_user_type'] == 'vluser') {
+  $testingLabs = $facilitiesDb->getTestingLabs('covid19', true, false, "facility_id = ". $sarr['sc_testing_lab_id']);
+}else{
+  $testingLabs = $facilitiesDb->getTestingLabs('covid19');
+}
 
 
 $batQuery = "SELECT batch_code FROM batch_details WHERE test_type='covid19' AND batch_status='completed'";
