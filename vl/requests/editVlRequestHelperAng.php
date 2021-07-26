@@ -225,7 +225,7 @@ try {
           'data_sync' => 0,
           'vl_result_category' => $vl_result_category
      );
-     if ($sarr['user_type'] == 'remoteuser') {
+     if ($sarr['sc_user_type'] == 'remoteuser') {
           $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] :  NULL;
      } else if ($_POST['sampleCodeCol'] != '') {
           $vldata['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') ? $_POST['sampleCodeCol'] :  NULL;

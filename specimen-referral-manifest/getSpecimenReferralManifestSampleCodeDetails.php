@@ -21,11 +21,11 @@ $country = $configResult[0]['value'];
 
 // $rpQuery="SELECT GROUP_CONCAT(DISTINCT rp.sample_id SEPARATOR ',') as sampleId FROM r_package_details_map as rp";
 // $rpResult = $db->rawQuery($rpQuery);
-if ($sarr['user_type'] == 'remoteuser') {
+if ($sarr['sc_user_type'] == 'remoteuser') {
 	$sCode = 'remote_sample_code';
 	$vlfmQuery = "SELECT GROUP_CONCAT(DISTINCT vlfm.facility_id SEPARATOR ',') as facilityId FROM vl_user_facility_map as vlfm where vlfm.user_id='" . $_SESSION['userId'] . "'";
 	$vlfmResult = $db->rawQuery($vlfmQuery);
-} else if ($sarr['user_type'] == 'vluser' || $sarr['user_type'] == 'standalone') {
+} else if ($sarr['sc_user_type'] == 'vluser' || $sarr['sc_user_type'] == 'standalone') {
 	$sCode = 'sample_code';
 }
 

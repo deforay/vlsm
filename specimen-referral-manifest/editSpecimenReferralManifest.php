@@ -14,9 +14,9 @@ $pResult = $db->rawQuery($pQuery);
 if ($pResult[0]['package_status'] == 'dispatch') {
 	header("location:packageList.php");
 }
-if ($sarr['user_type'] == 'remoteuser') {
+if ($sarr['sc_user_type'] == 'remoteuser') {
 	$sCode = 'remote_sample_code';
-} else if ($sarr['user_type'] == 'vluser' || $sarr['user_type'] == 'standalone') {
+} else if ($sarr['sc_user_type'] == 'vluser' || $sarr['sc_user_type'] == 'standalone') {
 	$sCode = 'sample_code';
 }
 
@@ -41,9 +41,9 @@ if (!empty($facilityMap)) {
 $query = $query . " ORDER BY vl.request_created_datetime ASC";
 // echo $query;die;
 $result = $db->rawQuery($query);
-// if($sarr['user_type']=='remoteuser'){
+// if($sarr['sc_user_type']=='remoteuser'){
 //   $sCode = 'remote_sample_code';
-// }else if($sarr['user_type']=='vluser'){
+// }else if($sarr['sc_user_type']=='vluser'){
 //   $sCode = 'sample_code';
 // }
 

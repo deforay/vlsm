@@ -150,7 +150,7 @@ if (file_exists($fileArray[$arr['vl_form']])) {
                 },
                 function(data) {
                     if (data != 0) {
-                        <?php if (isset($sarr['user_type']) && ($sarr['user_type'] == 'remoteuser' || $sarr['user_type'] == 'standalone')) { ?>
+                        <?php if (isset($sarr['sc_user_type']) && ($sarr['sc_user_type'] == 'remoteuser' || $sarr['sc_user_type'] == 'standalone')) { ?>
                             alert(alrt);
                             $("#" + id).val('');
                         <?php } else { ?>

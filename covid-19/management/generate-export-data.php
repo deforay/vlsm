@@ -131,7 +131,7 @@ if (isset($_SESSION['covid19ResultQuery']) && trim($_SESSION['covid19ResultQuery
 			$resultDispatchedDate =  date("d-m-Y", strtotime($expStr[0]));
 		}
 
-		if ($sarr['user_type'] == 'remoteuser') {
+		if ($sarr['sc_user_type'] == 'remoteuser') {
 			$sampleCode = 'remote_sample_code';
 		} else {
 			$sampleCode = 'sample_code';

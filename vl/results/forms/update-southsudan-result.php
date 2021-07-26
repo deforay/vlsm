@@ -562,7 +562,7 @@ $disable = "disabled = 'disabled'";
 													</div>
 												</div>
 											</div>
-											<div class="box box-primary" style="<?php if ($sarr['user_type'] == 'remoteuser') { ?> pointer-events:none;<?php } ?>">
+											<div class="box box-primary" style="<?php if ($sarr['sc_user_type'] == 'remoteuser') { ?> pointer-events:none;<?php } ?>">
 												<div class="box-header with-border">
 													<h3 class="box-title">Laboratory Information</h3>
 												</div>
@@ -707,10 +707,10 @@ $disable = "disabled = 'disabled'";
 																<input type="text" value="<?php echo $vlQueryInfo['result_approved_datetime']; ?>" class="form-control dateTime" id="approvedOnDateTime" name="approvedOnDateTime" placeholder="e.g 09-Jan-1992 05:30" <?php echo $labFieldDisabled; ?> style="width:100%;" />
 															</div>
 														</div>
-														<div class="col-md-4" style="<?php echo (($sarr['user_type'] == 'remoteuser')) ? 'display:none;' : ''; ?>">
+														<div class="col-md-4" style="<?php echo (($sarr['sc_user_type'] == 'remoteuser')) ? 'display:none;' : ''; ?>">
 															<label class="col-lg-5 control-label" for="status">Status <span class="mandatory">*</span></label>
 															<div class="col-lg-7">
-																<select class="form-control labSection  <?php echo (($sarr['user_type'] != 'remoteuser')) ? 'isRequired' : ''; ?>" id="status" name="status" title="Please select test status">
+																<select class="form-control labSection  <?php echo (($sarr['sc_user_type'] != 'remoteuser')) ? 'isRequired' : ''; ?>" id="status" name="status" title="Please select test status">
 																	<option value="">-- Select --</option>
 																	<?php
 																	foreach ($statusResult as $status) {

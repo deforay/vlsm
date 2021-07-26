@@ -52,7 +52,7 @@ try {
         'last_modified_datetime' => $general->getDateTime()
     );
 
-    if ($systemConfig['user_type'] == 'remoteuser') {
+    if ($systemConfig['sc_user_type'] == 'remoteuser') {
         $hepatitisData['remote_sample_code'] = $sampleData['sampleCode'];
         $hepatitisData['remote_sample_code_format'] = $sampleData['sampleCodeFormat'];
         $hepatitisData['remote_sample_code_key'] = $sampleData['sampleCodeKey'];

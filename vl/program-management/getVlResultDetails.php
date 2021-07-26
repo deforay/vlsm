@@ -29,9 +29,9 @@ $primaryKey="vl_sample_id";
 $aColumns = array('vl.sample_code','vl.remote_sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name','funding_source_name','i_partner_name');
 $orderColumns = array('vl.sample_code','vl.remote_sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name','funding_source_name','i_partner_name');
 $sampleCode = 'sample_code';
-if($sarr['user_type']=='remoteuser'){
+if($sarr['sc_user_type']=='remoteuser'){
      $sampleCode = 'remote_sample_code';
-}else if($sarr['user_type']=='standalone') {
+}else if($sarr['sc_user_type']=='standalone') {
      $aColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name','funding_source_name','i_partner_name');
      $orderColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name','funding_source_name','i_partner_name');
 }
@@ -459,7 +459,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                $sWhere = $sWhere.' where vl.result_status!=9';
           }
           $cWhere = '';
-          if($sarr['user_type']=='remoteuser'){
+          if($sarr['sc_user_type']=='remoteuser'){
                //$sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
                //$cWhere = " AND request_created_by='".$_SESSION['userId']."'";
                $userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT facility_id ORDER BY facility_id SEPARATOR ',') as facility_id FROM vl_user_facility_map where user_id='".$_SESSION['userId']."'";
@@ -534,7 +534,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
 
                $row = array();
                $row[] = $aRow['sample_code'];
-                    if($sarr['user_type']!='standalone'){
+                    if($sarr['sc_user_type']!='standalone'){
                          $row[] = $aRow['remote_sample_code'];
                     }
                $row[] = $aRow['batch_code'];

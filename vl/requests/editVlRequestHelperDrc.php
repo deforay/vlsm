@@ -26,9 +26,9 @@ try {
     for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
         $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
     }
-    if ($sarr['user_type'] == 'remoteuser' && $_POST['oldStatus'] == 9) {
+    if ($sarr['sc_user_type'] == 'remoteuser' && $_POST['oldStatus'] == 9) {
         $_POST['status'] = 9;
-    } else if ($_POST['oldStatus'] == 9 && $sarr['user_type'] == 'vluser' && $_POST['status'] == '') {
+    } else if ($_POST['oldStatus'] == 9 && $sarr['sc_user_type'] == 'vluser' && $_POST['status'] == '') {
         $_POST['status'] = 6;
     }
     //Set Date of demand
@@ -262,7 +262,7 @@ try {
         'last_modified_datetime' => $general->getDateTime(),
         'vl_result_category' => $vl_result_category
     );
-    if ($sarr['user_type'] == 'remoteuser') {
+    if ($sarr['sc_user_type'] == 'remoteuser') {
         $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] :  NULL;
     } else {
         if ($_POST['sampleCodeCol'] != '') {

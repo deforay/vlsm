@@ -9,13 +9,8 @@ include_once(APPLICATION_PATH . '/header.php');
 $general = new \Vlsm\Models\General($db); // passing $db which is coming from startup.php
 
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
-$healthFacilites = $facilitiesDb->getHealthFacilities('covid19');
-$facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
-
-// $tsQuery = "SELECT * FROM r_sample_status";
-// $tsResult = $db->rawQuery($tsQuery);
-// $configFormQuery = "SELECT * FROM global_config WHERE name ='vl_form'";
-// $configFormResult = $db->rawQuery($configFormQuery);
+$testingLabs = $facilitiesDb->getTestingLabs('covid19');
+$testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- Select --");
 
 
 $batQuery = "SELECT batch_code FROM batch_details WHERE test_type='covid19' AND batch_status='completed'";
@@ -65,10 +60,10 @@ $batResult = $db->rawQuery($batQuery);
             <tr>
 
 
-              <td>&nbsp;<b>Facility Name &nbsp;:</b></td>
+              <td>&nbsp;<b>Testing Lab &nbsp;:</b></td>
               <td>
-                <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple" style="width:220px;">
-                  <?= $facilitiesDropdown; ?>
+                <select class="form-control" id="labName" name="labName" title="Please select facility name">
+                  <?= $testingLabsDropdown; ?>
                 </select>
               </td>
 
@@ -129,8 +124,8 @@ $batResult = $db->rawQuery($batQuery);
 <script src="/assets/js/highchart-exporting.js"></script>
 <script>
   $(function() {
-    $("#facilityName").select2({
-      placeholder: "Select Facilities"
+    $("#labName").select2({
+      placeholder: "Select Testing Lab"
     });
     $('#sampleCollectionDate').daterangepicker({
         locale: {
@@ -165,7 +160,7 @@ $batResult = $db->rawQuery($batQuery);
     $.post("/covid-19/management/getSampleStatus.php", {
         sampleCollectionDate: $("#sampleCollectionDate").val(),
         batchCode: $("#batchCode").val(),
-        facilityName: $("#facilityName").val(),
+        labName: $("#labName").val(),
         sampleType: $("#sampleType").val()
       },
       function(data) {
@@ -230,8 +225,8 @@ $batResult = $db->rawQuery($batQuery);
           "value": $("#sampleCollectionDate").val()
         });
         aoData.push({
-          "name": "facilityName",
-          "value": $("#facilityName").val()
+          "name": "labName",
+          "value": $("#labName").val()
         });
         aoData.push({
           "name": "sampleType",
@@ -256,7 +251,7 @@ $batResult = $db->rawQuery($batQuery);
         Sample_Collection_Date: $("#sampleCollectionDate").val(),
         Batch_Code: $("#batchCode  option:selected").text(),
         Sample_Type: $("#sampleType  option:selected").text(),
-        Facility_Name: $("#facilityName  option:selected").text()
+        Facility_Name: $("#labName  option:selected").text()
       },
       function(data) {
         if (data == "" || data == null || data == undefined) {

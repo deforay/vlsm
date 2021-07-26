@@ -173,7 +173,7 @@ foreach ($rejectionTypeResult as $type) {
                 <tr>
                   <th><input type="checkbox" id="checkTestsData" onclick="toggleAllVisible()" /></th>
                   <th>Sample Code</th>
-                  <?php if ($sarr['user_type'] != 'standalone') { ?>
+                  <?php if ($sarr['sc_user_type'] != 'standalone') { ?>
                     <th>Remote Sample <br />Code</th>
                   <?php } ?>
                   <th>Sample Collection Date</th>
@@ -267,7 +267,7 @@ foreach ($rejectionTypeResult as $type) {
         {
           "sClass": "center"
         },
-        <?php if ($sarr['user_type'] != 'standalone') { ?> {
+        <?php if ($sarr['sc_user_type'] != 'standalone') { ?> {
             "sClass": "center"
           },
         <?php } ?> {
@@ -299,7 +299,7 @@ foreach ($rejectionTypeResult as $type) {
         },
         //{"sClass":"center","bSortable":false},
       ],
-      <?php if ($sarr['user_type'] != 'standalone') { ?> "aaSorting": [
+      <?php if ($sarr['sc_user_type'] != 'standalone') { ?> "aaSorting": [
           [10, "desc"]
         ],
       <?php } else { ?> "aaSorting": [

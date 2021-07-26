@@ -41,7 +41,7 @@ $batResult = $db->rawQuery($batQuery);
 
 								<?php
 								if (isset($_SESSION['privileges']) && in_array("covid-19-add-request.php", $_SESSION['privileges'])) { ?>
-									<?php if ($formId == 1 && $sarr['user_type'] != 'remoteuser') { ?>
+									<?php if ($formId == 1 && $sarr['sc_user_type'] != 'remoteuser') { ?>
 										<a style=" margin: 0px 5px; " href="javascript:receiveDhis2Data();" class="btn btn-success btn-sm pull-right"> <i class="fa fa-download"></i> Receive Test Requests from DHIS2</a>
 										<a style=" margin: 0px 5px; " href="javascript:sendDhis2Data();" class="btn btn-warning btn-sm pull-right"> <i class="fa fa-upload"></i> Send Results to DHIS2</a>
 								<?php }
@@ -58,7 +58,7 @@ $batResult = $db->rawQuery($batQuery);
 								<tr>
 									<!--<th><input type="checkbox" id="checkTestsData" onclick="toggleAllVisible()"/></th>-->
 									<th>Sample Code</th>
-									<?php if ($sarr['user_type'] != 'standalone') { ?>
+									<?php if ($sarr['sc_user_type'] != 'standalone') { ?>
 										<th>Remote Sample <br />Code</th>
 									<?php } ?>
 									<th>Sample Collection<br /> Date</th>
@@ -303,7 +303,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 			"aoColumns": [{
 					"sClass": "center"
 				},
-				<?php if ($sarr['user_type'] != 'standalone') { ?> {
+				<?php if ($sarr['sc_user_type'] != 'standalone') { ?> {
 						"sClass": "center"
 					},
 				<?php } ?> {
@@ -334,7 +334,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 				<?php } ?>
 			],
 			"aaSorting": [
-				[<?php echo ($sarr['user_type'] == 'remoteuser' || $sarr['user_type'] == 'vluser') ? 10 : 9 ?>, "desc"]
+				[<?php echo ($sarr['sc_user_type'] == 'remoteuser' || $sarr['sc_user_type'] == 'vluser') ? 10 : 9 ?>, "desc"]
 			],
 			"fnDrawCallback": function() {
 				var checkBoxes = document.getElementsByName("chk[]");

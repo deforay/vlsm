@@ -84,7 +84,7 @@ try {
                 }
 
                 $status = 6;
-                if ($sarr['user_type'] == 'remoteuser') {
+                if ($sarr['sc_user_type'] == 'remoteuser') {
                     $status = 9;
                 }
 

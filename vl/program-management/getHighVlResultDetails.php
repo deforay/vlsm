@@ -32,9 +32,9 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
         $sampleCode = 'sample_code';
         $aColumns = array('vl.sample_code','vl.remote_sample_code','f.facility_name','vl.patient_first_name','vl.patient_art_no','vl.patient_mobile_number',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')","DATE_FORMAT(vl.sample_tested_datetime,'%d-%b-%Y')",'fd.facility_name','vl.result');
         $orderColumns = array('vl.sample_code','vl.remote_sample_code','f.facility_name','vl.patient_art_no','vl.patient_first_name','vl.patient_mobile_number','vl.sample_collection_date','vl.sample_tested_datetime','fd.facility_name','vl.result');
-        if($sarr['user_type']=='remoteuser'){
+        if($sarr['sc_user_type']=='remoteuser'){
             $sampleCode = 'remote_sample_code';
-       }else if($sarr['user_type']=='standalone') {
+       }else if($sarr['sc_user_type']=='standalone') {
         $aColumns = array('vl.sample_code','f.facility_name','vl.patient_first_name','vl.patient_art_no','vl.patient_mobile_number',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')","DATE_FORMAT(vl.sample_tested_datetime,'%d-%b-%Y')",'fd.facility_name','vl.result');
         $orderColumns = array('vl.sample_code','f.facility_name','vl.patient_art_no','vl.patient_first_name','vl.patient_mobile_number','vl.sample_collection_date','vl.sample_tested_datetime','fd.facility_name','vl.result');
        }
@@ -163,7 +163,7 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
 		$sWhere = $sWhere.' AND vl.is_patient_breastfeeding = "'.$_POST['hvlPatientBreastfeeding'].'"';
     }
     $dWhere = '';
-    if($sarr['user_type']=='remoteuser'){
+    if($sarr['sc_user_type']=='remoteuser'){
         //$sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
         //$dWhere = $dWhere." AND request_created_by='".$_SESSION['userId']."'";
         $userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT facility_id ORDER BY facility_id SEPARATOR ',') as facility_id FROM vl_user_facility_map where user_id='".$_SESSION['userId']."'";
@@ -231,7 +231,7 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
 				$patientLname = $general->crypto('decrypt',$aRow['patient_last_name'],$aRow[$decrypt]);
             $row = array();
             $row[] = $aRow['sample_code'];
-            if($sarr['user_type']!='standalone'){
+            if($sarr['sc_user_type']!='standalone'){
                     $row[] = $aRow['remote_sample_code'];
             }
             $row[] = ucwords($aRow['facility_name']);

@@ -112,7 +112,7 @@ $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-
                                                             <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="1" id="iCol1" data-showhide="sample_code" class="showhideCheckBox" /> <label for="iCol1">Sample Code</label>
                                                         </div>
                                                         <?php $i = 1;
-                                                        if ($sarr['user_type'] != 'standalone') {
+                                                        if ($sarr['sc_user_type'] != 'standalone') {
                                                             $i = 2; ?>
                                                             <div class="col-md-3">
                                                                 <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i; ?>" id="iCol<?php echo $i; ?>" data-showhide="remote_sample_code" class="showhideCheckBox" /> <label for="iCol<?php echo $i; ?>">Remote Sample Code</label>
@@ -152,7 +152,7 @@ $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-
                                                     <tr>
                                                         <th><input type="checkbox" id="checkRowsData" onclick="toggleAllVisible()" /></th>
                                                         <th>Sample Code</th>
-                                                        <?php if ($sarr['user_type'] != 'standalone') { ?>
+                                                        <?php if ($sarr['sc_user_type'] != 'standalone') { ?>
                                                             <th>Remote Sample <br />Code</th>
                                                         <?php } ?>
                                                         <th>Batch Code</th>
@@ -230,7 +230,7 @@ $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-
                                                             <input type="checkbox" onclick="javascript:printfnShowHide(this.value);" value="1" id="printiCol1" data-showhide="sample_code" class="printShowhideCheckBox" /> <label for="printiCol1">Sample Code</label>
                                                         </div>
                                                         <?php $i = 1;
-                                                        if ($sarr['user_type'] != 'standalone') {
+                                                        if ($sarr['sc_user_type'] != 'standalone') {
                                                             $i = 2; ?>
                                                             <div class="col-md-3">
                                                                 <input type="checkbox" onclick="javascript:printfnShowHide(this.value);" value="<?php echo $i; ?>" id="printiCol<?php echo $i; ?>" data-showhide="remote_sample_code" class="printShowhideCheckBox" /> <label for="printiCol<?php echo $i; ?>">Remote Sample Code</label>
@@ -269,7 +269,7 @@ $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-
                                                     <tr>
                                                         <th><input type="checkbox" id="checkPrintedRowsData" onclick="toggleAllPrintedVisible()" /></th>
                                                         <th>Sample Code</th>
-                                                        <?php if ($sarr['user_type'] != 'standalone') { ?>
+                                                        <?php if ($sarr['sc_user_type'] != 'standalone') { ?>
                                                             <th>Remote Sample <br />Code</th>
                                                         <?php } ?>
                                                         <th>Batch Code</th>
@@ -418,7 +418,7 @@ $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-
                 {
                     "sClass": "center"
                 },
-                <?php if ($sarr['user_type'] != 'standalone') { ?> {
+                <?php if ($sarr['sc_user_type'] != 'standalone') { ?> {
                         "sClass": "center"
                     },
                 <?php } ?> {
@@ -450,7 +450,7 @@ $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-
                     "bSortable": false
                 },
             ],
-            <?php if ($sarr['user_type'] != 'standalone') { ?> "aaSorting": [
+            <?php if ($sarr['sc_user_type'] != 'standalone') { ?> "aaSorting": [
                     [9, "desc"]
                 ],
             <?php } else { ?> "aaSorting": [
@@ -525,7 +525,7 @@ $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-
                 {
                     "sClass": "center"
                 },
-                <?php if ($sarr['user_type'] != 'standalone') { ?> {
+                <?php if ($sarr['sc_user_type'] != 'standalone') { ?> {
                         "sClass": "center"
                     },
                 <?php } ?> {
@@ -557,7 +557,7 @@ $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-
                     "bSortable": false
                 },
             ],
-            <?php if ($sarr['user_type'] != 'standalone') { ?> "aaSorting": [
+            <?php if ($sarr['sc_user_type'] != 'standalone') { ?> "aaSorting": [
                     [9, "desc"]
                 ],
             <?php } else { ?> "aaSorting": [

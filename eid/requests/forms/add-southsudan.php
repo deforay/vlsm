@@ -27,7 +27,7 @@ $rKey = '';
 $sKey = '';
 $sFormat = '';
 $pdQuery = "SELECT * FROM province_details";
-if ($sarr['user_type'] == 'remoteuser') {
+if ($sarr['sc_user_type'] == 'remoteuser') {
     $sampleCodeKey = 'remote_sample_code_key';
     $sampleCode = 'remote_sample_code';
     //check user exist in user_facility_map table
@@ -84,7 +84,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                 </div>
                                 <table class="table" style="width:100%">
                                     <tr>
-                                        <?php if ($sarr['user_type'] == 'remoteuser') { ?>
+                                        <?php if ($sarr['sc_user_type'] == 'remoteuser') { ?>
                                             <td><label for="sampleCode">Sample ID </label></td>
                                             <td>
                                                 <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"></span>
@@ -363,7 +363,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
 
                             </div>
                         </div>
-                        <?php if ($sarr['user_type'] != 'remoteuser') { ?>
+                        <?php if ($sarr['sc_user_type'] != 'remoteuser') { ?>
                             <div class="box box-primary">
                                 <div class="box-body">
                                     <div class="box-header with-border">

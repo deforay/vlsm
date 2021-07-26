@@ -107,10 +107,10 @@ $batResult = $db->rawQuery($batQuery);
 							<td colspan="4">
 								<?php if (isset($_SESSION['privileges']) && in_array("covid-19-add-request.php", $_SESSION['privileges'])) { ?>
 									<a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-add-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Add new Covid-19 Request</a>
-									<?php if ($arr['vl_form'] == 1 && $sarr['user_type'] != 'remoteuser') { ?>
+									<?php if ($arr['vl_form'] == 1 && $sarr['sc_user_type'] != 'remoteuser') { ?>
 										<a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-bulk-import-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Bulk Import Covid-19 Request</a>
 									<?php }
-									if ($formId == 1 && $sarr['user_type'] != 'remoteuser') { ?>
+									if ($formId == 1 && $sarr['sc_user_type'] != 'remoteuser') { ?>
 										<a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-quick-add.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Quick Add Covid-19 Request</a>
 								<?php }
 								} ?>
@@ -123,12 +123,12 @@ $batResult = $db->rawQuery($batQuery);
 
 								<?php
 								if (isset($_SESSION['privileges']) && in_array("covid-19-add-request.php", $_SESSION['privileges'])) { ?>
-									<?php if ($formId == 1 && $sarr['user_type'] != 'remoteuser') { ?>
+									<?php if ($formId == 1 && $sarr['sc_user_type'] != 'remoteuser') { ?>
 										<a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-quick-add.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Quick Add Covid-19 Request</a>
 									<?php } ?>
 
 									<a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-add-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Add new Covid-19 Request</a>
-									<?php if ($arr['vl_form'] == 1 && $sarr['user_type'] != 'remoteuser') { ?>
+									<?php if ($arr['vl_form'] == 1 && $sarr['sc_user_type'] != 'remoteuser') { ?>
 										<a style=" margin: 0px 5px; " href="/covid-19/requests/covid-19-bulk-import-request.php" class="btn btn-primary btn-sm pull-right"> <i class="fa fa-plus"></i> Bulk Import Covid-19 Request</a>
 								<?php }
 								} ?>
@@ -144,7 +144,7 @@ $batResult = $db->rawQuery($batQuery);
 								<tr>
 									<!--<th><input type="checkbox" id="checkTestsData" onclick="toggleAllVisible()"/></th>-->
 									<th>Sample Code</th>
-									<?php if ($sarr['user_type'] != 'standalone') { ?>
+									<?php if ($sarr['sc_user_type'] != 'standalone') { ?>
 										<th>Remote Sample <br />Code</th>
 									<?php } ?>
 									<th>Sample Collection<br /> Date</th>
@@ -306,7 +306,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 			"aoColumns": [{
 					"sClass": "center"
 				},
-				<?php if ($sarr['user_type'] != 'standalone') { ?> {
+				<?php if ($sarr['sc_user_type'] != 'standalone') { ?> {
 						"sClass": "center"
 					},
 				<?php } ?> {
@@ -337,7 +337,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 				<?php } ?>
 			],
 			"aaSorting": [
-				[<?php echo ($sarr['user_type'] == 'remoteuser' || $sarr['user_type'] == 'vluser') ? 10 : 9 ?>, "desc"]
+				[<?php echo ($sarr['sc_user_type'] == 'remoteuser' || $sarr['sc_user_type'] == 'vluser') ? 10 : 9 ?>, "desc"]
 			],
 			"fnDrawCallback": function() {
 				var checkBoxes = document.getElementsByName("chk[]");

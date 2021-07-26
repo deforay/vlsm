@@ -49,7 +49,7 @@ include_once(APPLICATION_PATH . '/header.php');
 							<thead>
 								<tr>
 									<th>Sample Code</th>
-									<?php if ($sarr['user_type'] != 'standalone') { ?>
+									<?php if ($sarr['sc_user_type'] != 'standalone') { ?>
 										<th>Remote Sample <br />Code</th>
 									<?php } ?>
 									<th>Sample Collection<br /> Date</th>
@@ -125,7 +125,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 			"aoColumns": [{
 					"sClass": "center"
 				},
-				<?php if ($sarr['user_type'] != 'standalone') { ?> {
+				<?php if ($sarr['sc_user_type'] != 'standalone') { ?> {
 						"sClass": "center"
 					},
 				<?php } ?> {
@@ -151,7 +151,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 				}
 			],
 			"aaSorting": [
-				[<?php echo ($sarr['user_type'] == 'remoteuser' || $sarr['user_type'] == 'vluser') ? 9 : 8 ?>, "desc"]
+				[<?php echo ($sarr['sc_user_type'] == 'remoteuser' || $sarr['sc_user_type'] == 'vluser') ? 9 : 8 ?>, "desc"]
 			],
 			"fnDrawCallback": function() {},
 			"bProcessing": true,

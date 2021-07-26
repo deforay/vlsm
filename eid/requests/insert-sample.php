@@ -85,7 +85,7 @@ try {
         );
     }
 
-    if ($systemConfig['user_type'] == 'remoteuser') {
+    if ($systemConfig['sc_user_type'] == 'remoteuser') {
         $eidData['remote_sample_code'] = $sampleData['sampleCode'];
         $eidData['remote_sample_code_format'] = $sampleData['sampleCodeFormat'];
         $eidData['remote_sample_code_key'] = $sampleData['sampleCodeKey'];

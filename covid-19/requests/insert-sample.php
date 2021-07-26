@@ -53,7 +53,7 @@ try {
         'last_modified_datetime' => $general->getDateTime()
     );
 
-    if ($systemConfig['user_type'] == 'remoteuser') {
+    if ($systemConfig['sc_user_type'] == 'remoteuser') {
         $covid19Data['remote_sample_code'] = $sampleData['sampleCode'];
         $covid19Data['remote_sample_code_format'] = $sampleData['sampleCodeFormat'];
         $covid19Data['remote_sample_code_key'] = $sampleData['sampleCodeKey'];

@@ -12,7 +12,7 @@ $healthFacilities = $facilitiesDb->getHealthFacilities('vl');
 $testingLabs = $facilitiesDb->getTestingLabs('vl');
 
 
-if ($sarr['user_type'] == 'remoteuser') {
+if ($sarr['sc_user_type'] == 'remoteuser') {
      $labFieldDisabled = 'disabled="disabled"';
 }
 
@@ -377,7 +377,7 @@ if ($arr['vl_form'] == 1) {
                     },
                     function(data) {
                          if (data != 0) {
-                              <?php if (isset($sarr['user_type']) && ($sarr['user_type'] == 'remoteuser' || $sarr['user_type'] == 'standalone')) { ?>
+                              <?php if (isset($sarr['sc_user_type']) && ($sarr['sc_user_type'] == 'remoteuser' || $sarr['sc_user_type'] == 'standalone')) { ?>
                                    alert(alrt);
                                    $("#" + id).val('');
                               <?php } else { ?>

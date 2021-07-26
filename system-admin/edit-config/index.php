@@ -43,24 +43,24 @@ $fResult=$db->query($fDetails);
                         <div class="row">
                             <div class="col-md-7">
                               <div class="form-group">
-                                <label for="user_type" class="col-lg-4 control-label">Instance Type <span class="mandatory">*</span></label>
+                                <label for="sc_user_type" class="col-lg-4 control-label">Instance Type <span class="mandatory">*</span></label>
                                 <div class="col-lg-8">
-                                  <select type="text" class="form-control" id="user_type" name="user_type" placeholder="User Type" title="Please choose user type" onchange="enableLab();">
-                                    <option value="standalone" <?php echo ('standalone'==$arr['user_type'])?"selected='selected'":""?>>Stand Alone</option>
-                                    <option value="vluser" <?php echo ('vluser'==$arr['user_type'])?"selected='selected'":""?>>Vl User</option>
-                                    <option value="remoteuser" <?php echo ('remoteuser'==$arr['user_type'])?"selected='selected'":""?>>Remote User</option>
+                                  <select type="text" class="form-control" id="sc_user_type" name="sc_user_type" placeholder="User Type" title="Please choose user type" onchange="enableLab();">
+                                    <option value="standalone" <?php echo ('standalone'==$arr['sc_user_type'])?"selected='selected'":""?>>Stand Alone</option>
+                                    <option value="vluser" <?php echo ('vluser'==$arr['sc_user_type'])?"selected='selected'":""?>>Vl User</option>
+                                    <option value="remoteuser" <?php echo ('remoteuser'==$arr['sc_user_type'])?"selected='selected'":""?>>Remote User</option>
                                   </select>
                                 </div>
                               </div>
                             </div>
-                            <div class="col-md-7 labName" style="<?php echo ($arr['user_type']=='vluser')?'display:show':'display:none';?>">
+                            <div class="col-md-7 labName" style="<?php echo ($arr['sc_user_type']=='vluser')?'display:show':'display:none';?>">
                               <div class="form-group">
-                                <label for="lab_name" class="col-lg-4 control-label">Lab Name</label>
+                                <label for="sc_testing_lab_id" class="col-lg-4 control-label">Lab Name</label>
                                 <div class="col-lg-8">
-                                    <select class="form-control" name="lab_name" id="lab_name" title="Please select the lab name">
+                                    <select class="form-control" name="sc_testing_lab_id" id="sc_testing_lab_id" title="Please select the lab name">
                                         <option value="">-- Select --</option>
                                         <?php foreach($fResult as $labName){ ?>
-                                            <option value="<?php echo $labName['facility_id'];?>" <?php echo ($labName['facility_id']==$arr['lab_name'])?"selected='selected'":""?>><?php echo $labName['facility_name'];?></option>
+                                            <option value="<?php echo $labName['facility_id'];?>" <?php echo ($labName['facility_id']==$arr['sc_testing_lab_id'])?"selected='selected'":""?>><?php echo $labName['facility_name'];?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
@@ -85,12 +85,12 @@ $fResult=$db->query($fDetails);
     });
     function enableLab()
     {
-        if($("#user_type").val()=='vluser'){
+        if($("#sc_user_type").val()=='vluser'){
             $(".labName").show();
-            $("#lab_name").addClass("isRequired").css('pointer-events','');
+            $("#sc_testing_lab_id").addClass("isRequired").css('pointer-events','');
         }else{
             $(".labName").hide();
-            $("#lab_name").removeClass("isRequired").css('pointer-events','none').val('');
+            $("#sc_testing_lab_id").removeClass("isRequired").css('pointer-events','none').val('');
         }
     }
     function validateNow(){

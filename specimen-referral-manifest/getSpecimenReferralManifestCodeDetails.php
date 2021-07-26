@@ -10,10 +10,10 @@ $facilitiesDb = new \Vlsm\Models\Facilities($db);
 //system config
 $sarr = $general->getSystemConfig();
 $facilityMap = null;
-if ($sarr['user_type'] == 'remoteuser') {
+if ($sarr['sc_user_type'] == 'remoteuser') {
     $sCode = 'remote_sample_code';
     $facilityMap = $facilitiesDb->getFacilityMap($_SESSION['userId'], null);
-} else if ($sarr['user_type'] == 'vluser' || $sarr['user_type'] == 'standalone') {
+} else if ($sarr['sc_user_type'] == 'vluser' || $sarr['sc_user_type'] == 'standalone') {
     $sCode = 'sample_code';
 }
 

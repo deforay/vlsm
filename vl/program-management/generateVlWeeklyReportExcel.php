@@ -98,8 +98,8 @@ $borderStyle = array(
     ),
 );
 
-if ($sarr['user_type'] == 'vluser') {
-    $vlLabQuery = "SELECT * FROM facility_details where status='active' AND facility_id = " . $sarr['lab_name'];
+if ($sarr['sc_user_type'] == 'vluser') {
+    $vlLabQuery = "SELECT * FROM facility_details where status='active' AND facility_id = " . $sarr['sc_testing_lab_id'];
     $vlLabResult = $db->rawQuery($vlLabQuery);
 } else if (isset($_POST['lab']) && trim($_POST['lab']) != '') {
     $vlLabQuery = "SELECT * FROM facility_details where facility_id IN (" . $_POST['lab'] . ") AND status='active'";

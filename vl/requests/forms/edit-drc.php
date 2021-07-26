@@ -8,7 +8,7 @@ $implementingPartnerQry = "SELECT * FROM r_implementation_partners WHERE i_partn
 $implementingPartnerList = $db->query($implementingPartnerQry);
 //check remote user
 $pdQuery = "SELECT * FROM province_details";
-if ($sarr['user_type'] == 'remoteuser') {
+if ($sarr['sc_user_type'] == 'remoteuser') {
   $sampleCode = 'remote_sample_code';
   //check user exist in user_facility_map table
   $chkUserFcMapQry = "SELECT user_id FROM vl_user_facility_map WHERE user_id='" . $_SESSION['userId'] . "'";
@@ -121,7 +121,7 @@ $sampleSuggestionDisplay = 'display:none;';
 
 
                   <tr>
-                    <?php if ($sarr['user_type'] == 'remoteuser') { ?>
+                    <?php if ($sarr['sc_user_type'] == 'remoteuser') { ?>
                       <td><label for="sampleCode">Échantillon ID </label></td>
                       <td>
                         <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"><?php echo (isset($sCode) && $sCode != '') ? $sCode : $vlQueryInfo[$sampleCode]; ?></span>
@@ -208,7 +208,7 @@ $sampleSuggestionDisplay = 'display:none;';
                         <?php } ?>
                       </select>
                     </td>
-                    <?php if ($sarr['user_type'] == 'remoteuser') { ?>
+                    <?php if ($sarr['sc_user_type'] == 'remoteuser') { ?>
                       <td><label for="labId">Nom du laboratoire <span class="mandatory">*</span></label> </td>
                       <td>
                         <select name="labId" id="labId" class="form-control isRequired" title="Please choose laboratoire" style="width:100%;">
@@ -289,7 +289,7 @@ $sampleSuggestionDisplay = 'display:none;';
                         <?php foreach ($aResult as $arv) { ?>
                           <option value="<?php echo $arv['art_code']; ?>" <?php echo ($arv['art_code'] == $vlQueryInfo['current_regimen']) ? 'selected="selected"' : ''; ?>><?php echo $arv['art_code']; ?></option>
                         <?php }
-                        if ($sarr['user_type'] != 'vluser') {  ?>
+                        if ($sarr['sc_user_type'] != 'vluser') {  ?>
                           <option value="other">Autre</option>
                         <?php } ?>
                       </select>
@@ -337,7 +337,7 @@ $sampleSuggestionDisplay = 'display:none;';
                         <?php foreach ($vlTestReasonResult as $tReason) { ?>
                           <option value="<?php echo $tReason['test_reason_id']; ?>" <?php echo ($vlQueryInfo['reason_for_vl_testing'] == $tReason['test_reason_id']) ? 'selected="selected"' : ''; ?>><?php echo ucwords($tReason['test_reason_name']); ?></option>
                         <?php }
-                        if ($sarr['user_type'] != 'vluser') {  ?>
+                        if ($sarr['sc_user_type'] != 'vluser') {  ?>
                           <option value="other">Autre</option>
                         <?php } ?>
                       </select>
@@ -469,7 +469,7 @@ $sampleSuggestionDisplay = 'display:none;';
                 </table>
               </div>
             </div>
-            <?php if ($sarr['user_type'] != 'remoteuser') { ?>
+            <?php if ($sarr['sc_user_type'] != 'remoteuser') { ?>
               <div class="box box-primary">
                 <div class="box-body">
                   <div class="box-header with-border">

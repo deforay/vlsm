@@ -13,7 +13,7 @@ $vlsmDb  = $db; // assigning to another variable to avoid confusion
 $usersModel = new \Vlsm\Models\Users($vlsmDb);
 $general = new \Vlsm\Models\General($vlsmDb);
 
-$labId = $general->getSystemConfig('lab_name');
+$labId = $general->getSystemConfig('sc_testing_lab_id');
 
 
 if (empty($labId)) {

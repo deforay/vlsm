@@ -58,14 +58,14 @@ if ($result != "" && count($result) > 0) {
     $fMapResult = "";
 }
 //get remote data
-if (trim($sarr['lab_name']) == '') {
-    $sarr['lab_name'] = "''";
+if (trim($sarr['sc_testing_lab_id']) == '') {
+    $sarr['sc_testing_lab_id'] = "''";
 }
 
 if (isset($fMapResult) && $fMapResult != '' && $fMapResult != null) {
-    $where = "(lab_id =" . $sarr['lab_name'] . " OR facility_id IN (" . $fMapResult . "))";
+    $where = "(lab_id =" . $sarr['sc_testing_lab_id'] . " OR facility_id IN (" . $fMapResult . "))";
 } else {
-    $where = "lab_id =" . $sarr['lab_name'];
+    $where = "lab_id =" . $sarr['sc_testing_lab_id'];
 }
 
 // VIRAL LOAD TEST RESULTS

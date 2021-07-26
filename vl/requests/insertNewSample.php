@@ -81,7 +81,7 @@ else
     );
 }
 
-if ($systemConfig['user_type'] == 'remoteuser') {
+if ($systemConfig['sc_user_type'] == 'remoteuser') {
     $vlData['remote_sample_code'] = $sampleData['sampleCode'];
     $vlData['remote_sample_code_format'] = $sampleData['sampleCodeFormat'];
     $vlData['remote_sample_code_key'] = $sampleData['sampleCodeKey'];

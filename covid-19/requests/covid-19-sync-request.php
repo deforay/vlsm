@@ -14,7 +14,7 @@ try {
     $sarr = $general->getSystemConfig();
 
     //get remote data
-    if (empty($sarr['lab_name'])) {
+    if (empty($sarr['sc_testing_lab_id'])) {
         echo "No Lab ID set in System Config";
         exit(0);
     }
@@ -46,7 +46,7 @@ try {
             error_log('update failed: ' . $db->getLastError());
 
         $data = array(
-            'labName' => $sarr['lab_name'],
+            'labName' => $sarr['sc_testing_lab_id'],
             'module' => 'covid19',
             'data' => $data,
         );

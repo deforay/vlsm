@@ -26,7 +26,7 @@ if(isset($_SESSION['rejectedViralLoadResult']) && trim($_SESSION['rejectedViralL
      $output = array();
      $sheet = $excel->getActiveSheet();
      $headings = array('Sample Code','Remote Sample Code',"Facility Name","Patient ART no.","Patient Name","Sample Collection Date","Lab Name","Rejection Reason");
-     if($sarr['user_type']=='standalone') {
+     if($sarr['sc_user_type']=='standalone') {
      $headings = array('Sample Code',"Facility Name","Patient ART no.","Patient Name","Sample Collection Date","Lab Name","Rejection Reason");
      }
 
@@ -99,7 +99,7 @@ if(isset($_SESSION['rejectedViralLoadResult']) && trim($_SESSION['rejectedViralL
                $patientLname = '';
           }
           $row[] = $aRow['sample_code'];
-          if($sarr['user_type']!='standalone'){
+          if($sarr['sc_user_type']!='standalone'){
            $row[] = $aRow['remote_sample_code'];
             }
           $row[] = ucwords($aRow['facility_name']);

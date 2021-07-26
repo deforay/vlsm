@@ -11,7 +11,7 @@ $tableName = "vl_request_form";
 $primaryKey = "vl_sample_id";
 
 $vlsmFormId = $general->getGlobalConfig('vl_form');
-$userType = $general->getSystemConfig('user_type');
+$userType = $general->getSystemConfig('sc_user_type');
 
 
 /* Array of database columns which should be read and sent back to DataTables. Use a space where

@@ -3,7 +3,7 @@ $title = "Covid-19 Sample Rejection Reasons";
 #require_once('../startup.php'); 
 include_once(APPLICATION_PATH . '/header.php');
 
-// if($sarr['user_type']=='vluser'){
+// if($sarr['sc_user_type']=='vluser'){
 //   include('../remote/pullDataFromRemote.php');
 // }
 ?>
@@ -24,7 +24,7 @@ include_once(APPLICATION_PATH . '/header.php');
       <div class="col-xs-12">
         <div class="box">
           <div class="box-header with-border">
-            <?php if (isset($_SESSION['privileges']) && in_array("covid19-sample-type.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') { ?>
+            <?php if (isset($_SESSION['privileges']) && in_array("covid19-sample-type.php", $_SESSION['privileges']) && $sarr['sc_user_type'] !='vluser') { ?>
               <a href="add-covid19-sample-rejection-reason.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Covid-19 Sample Rejection Reasons</a>
             <?php } ?>
             <!--<button class="btn btn-primary pull-right" style="margin-right: 1%;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>-->
@@ -38,7 +38,7 @@ include_once(APPLICATION_PATH . '/header.php');
                   <th>Rejection Reason Type</th>
                   <th>Rejection Reason Code</th>
                   <th>Rejection Reason Status</th>
-                  <?php if (isset($_SESSION['privileges']) && in_array("covid19-sample-type.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') { ?>
+                  <?php if (isset($_SESSION['privileges']) && in_array("covid19-sample-type.php", $_SESSION['privileges']) && $sarr['sc_user_type'] !='vluser') { ?>
                     <th>Action</th>
                   <?php } ?>
                 </tr>
@@ -90,7 +90,7 @@ include_once(APPLICATION_PATH . '/header.php');
         {
           "sClass": "center"
         },
-        <?php if (isset($_SESSION['privileges']) && in_array("covid19-sample-type.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') { ?> {
+        <?php if (isset($_SESSION['privileges']) && in_array("covid19-sample-type.php", $_SESSION['privileges']) && $sarr['sc_user_type'] !='vluser') { ?> {
             "sClass": "center",
             "bSortable": false
           },

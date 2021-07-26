@@ -2238,3 +2238,12 @@ ALTER TABLE `track_qr_code_page` ADD `sample_code` VARCHAR(256) NULL AFTER `test
 
 -- Amit -- 22-Jul-2021
 UPDATE `system_config` SET `value` = '4.3.7' WHERE `system_config`.`name` = 'version';
+
+
+UPDATE `system_config` SET `display_name` = 'Testing Lab ID', `name` = 'sc_testing_lab_id' WHERE `system_config`.`name` = 'lab_name'; 
+UPDATE `system_config` SET `name` = 'sc_user_type' WHERE `system_config`.`name` = 'user_type'; 
+UPDATE `system_config` SET `name` = 'sc_version' WHERE `system_config`.`name` = 'version';
+
+
+-- Amit -- 25-Jul-2021
+UPDATE `system_config` SET `value` = '4.3.8' WHERE `system_config`.`name` = 'sc_version';
