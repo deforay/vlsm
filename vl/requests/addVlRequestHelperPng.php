@@ -97,7 +97,7 @@ try {
      }
 
      $status = 6;
-     if ($sarr['user_type'] == 'remoteuser') {
+     if ($sarr['sc_user_type'] == 'remoteuser') {
           $status = 9;
      }
      
@@ -218,7 +218,7 @@ try {
           $db = $db->where('vl_sample_id', $_POST['vlSampleId']);
           $id = $db->update($tableName, $vldata);
      } else {
-          if ($sarr['user_type'] == 'remoteuser') {
+          if ($sarr['sc_user_type'] == 'remoteuser') {
                $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] : NULL;
                $vldata['remote_sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey'] != '') ? $_POST['sampleCodeKey'] : NULL;
                $vldata['remote_sample'] = 'yes';

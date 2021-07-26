@@ -33,9 +33,9 @@ $primaryKey = "covid19_id";
 $sampleCode = 'sample_code';
 $aColumns = array('vl.sample_code', 'vl.remote_sample_code', 'b.batch_code', 'vl.patient_id', 'CONCAT(vl.patient_name, vl.patient_surname)', 'f.facility_name', 'vl.result', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
 $orderColumns = array('vl.sample_code', 'vl.remote_sample_code', 'b.batch_code', 'vl.patient_id', 'vl.patient_name', 'f.facility_name', 'vl.result', 'vl.last_modified_datetime', 'ts.status_name');
-if ($sarr['user_type'] == 'remoteuser') {
+if ($sarr['sc_user_type'] == 'remoteuser') {
 	$sampleCode = 'remote_sample_code';
-} else if ($sarr['user_type'] == 'standalone') {
+} else if ($sarr['sc_user_type'] == 'standalone') {
 	$aColumns = array('vl.sample_code', 'b.batch_code', 'vl.patient_id', 'CONCAT(vl.patient_name, vl.patient_surname)', 'f.facility_name',  'vl.result', "DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')", 'ts.status_name');
 	$orderColumns = array('vl.sample_code', 'b.batch_code', 'vl.patient_id', 'vl.patient_name', 'f.facility_name', 'vl.result', 'vl.last_modified_datetime', 'ts.status_name');
 }
@@ -263,7 +263,7 @@ if (isset($_POST['vlPrint']) && $_POST['vlPrint'] == 'print') {
 	$sWhere = $sWhere . " AND vl.vlsm_country_id='" . $arr['vl_form'] . "'";
 	$dWhere = "WHERE ((vl.result_status = 7 AND vl.result is NOT NULL AND vl.result !='') OR (vl.result_status = 4 AND (vl.result is NULL OR vl.result = ''))) AND vl.vlsm_country_id='" . $arr['vl_form'] . "' AND result_printed_datetime is NOT NULL AND result_printed_datetime not like ''";
 }
-if ($sarr['user_type'] == 'remoteuser') {
+if ($sarr['sc_user_type'] == 'remoteuser') {
 	//$sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
 	//$dWhere = $dWhere." AND request_created_by='".$_SESSION['userId']."'";
 	$userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT facility_id ORDER BY facility_id SEPARATOR ',') as facility_id FROM vl_user_facility_map where user_id='" . $_SESSION['userId'] . "'";
@@ -330,7 +330,7 @@ foreach ($rResult as $aRow) {
 	$patientLname = $general->crypto('decrypt', $aRow['patient_surname'], $aRow['patient_id']);
 
 	$row[] = $aRow['sample_code'];
-	if ($sarr['user_type'] != 'standalone') {
+	if ($sarr['sc_user_type'] != 'standalone') {
 		$row[] = $aRow['remote_sample_code'];
 	}
 	$row[] = $aRow['batch_code'];

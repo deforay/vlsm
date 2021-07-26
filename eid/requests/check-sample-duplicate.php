@@ -26,7 +26,7 @@ if ($value != '') {
         if ($result) {
             $data = base64_encode($result[0]['eid_id']) . "##" . $result[0][$fieldName];
         } else {
-            if ($sarr['user_type'] == 'vluser') {
+            if ($sarr['sc_user_type'] == 'vluser') {
                 $sQuery = "SELECT * from $tableName where remote_sample_code= ?";
                 $parameters = array($value);
                 $result = $db->rawQuery($sQuery, $parameters);
@@ -48,7 +48,7 @@ if ($value != '') {
             if ($result) {
                 $data = base64_encode($result[0]['eid_id']) . "##" . $result[0][$fieldName];
             } else {
-                if ($sarr['user_type'] == 'vluser') {
+                if ($sarr['sc_user_type'] == 'vluser') {
                     $sQuery = "SELECT * from $tableName where remote_sample_code= ? and $table[0]!= ?";
                     $parameters = array($value, $table[1]);
                     $result = $db->rawQuery($sQuery, $parameters);

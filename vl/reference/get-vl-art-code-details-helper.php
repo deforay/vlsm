@@ -141,7 +141,7 @@ foreach ($rResult as $aRow) {
     $row[] = $aRow['art_code'];
     $row[] = ucwords($aRow['headings']);
     $row[] = ucwords($aRow['art_status']);
-    if (isset($_SESSION['privileges']) && in_array("vl-art-code-details.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') {
+    if (isset($_SESSION['privileges']) && in_array("vl-art-code-details.php", $_SESSION['privileges']) && $sarr['sc_user_type'] !='vluser') {
         $row[] = '<a href="edit-vl-art-code-details.php?id=' . base64_encode($aRow['art_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
     }
     $output['aaData'][] = $row;

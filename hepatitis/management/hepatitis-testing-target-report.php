@@ -24,7 +24,7 @@ $sResult = $db->rawQuery($sQuery);
 
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
 
-$testingLabs = $facilitiesDb->getTestingLabs('vl');
+$testingLabs = $facilitiesDb->getTestingLabs('hepatitis');
 $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- Select --");
 
 

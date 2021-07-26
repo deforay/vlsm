@@ -26,7 +26,7 @@ if ($arr['sample_code'] == 'auto' || $arr['sample_code'] == 'alphanumeric' || $a
 //check remote user
 $rKey = '';
 $pdQuery = "SELECT * FROM province_details";
-if ($sarr['user_type'] == 'remoteuser') {
+if ($sarr['sc_user_type'] == 'remoteuser') {
      $sampleCodeKey = 'remote_sample_code_key';
      $sampleCode = 'remote_sample_code';
      //check user exist in user_facility_map table
@@ -323,7 +323,7 @@ $sFormat = '';
                                                                                 ?>
                                                                            </optgroup>
                                                                       <?php }
-                                                                      if ($sarr['user_type'] != 'vluser') { ?>
+                                                                      if ($sarr['sc_user_type'] != 'vluser') { ?>
                                                                            <option value="other">Other</option>
                                                                       <?php } ?>
                                                                  </select>
@@ -579,7 +579,7 @@ $sFormat = '';
                                                                                                } ?>
                                                                                           </optgroup>
                                                                                      <?php }
-                                                                                     if ($sarr['user_type'] != 'vluser') {  ?>
+                                                                                     if ($sarr['sc_user_type'] != 'vluser') {  ?>
                                                                                           <option value="other">Other (Please Specify) </option>
                                                                                      <?php } ?>
                                                                                 </select>

@@ -33,7 +33,7 @@ $sampleCodeKey = 'sample_code_key';
 $sampleCode = 'sample_code';
 $prefix = $arr['sample_code_prefix'];
 $pdQuery = "SELECT * FROM province_details";
-if ($sarr['user_type'] == 'remoteuser') {
+if ($sarr['sc_user_type'] == 'remoteuser') {
   $rKey = 'R';
   $sampleCodeKey = 'remote_sample_code_key';
   $sampleCode = 'remote_sample_code';
@@ -121,7 +121,7 @@ if (isset($vlQueryInfo['clinic_date']) && trim($vlQueryInfo['clinic_date']) != '
 //suggest a sample id when user adds request sample
 $sampleSuggestion = '';
 $sampleSuggestionDisplay = 'display:none;';
-if ($sarr['user_type'] == 'vluser' && $sCode != '') {
+if ($sarr['sc_user_type'] == 'vluser' && $sCode != '') {
   $vlObj = new \Vlsm\Models\Vl($db);
   $sampleCollectionDate = explode(" ", $sampleCollectionDate);
   $sampleCollectionDate = $general->humanDateFormat($sampleCollectionDate[0]);
@@ -212,7 +212,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                   </div>
                   <div class="col-xs-3 col-md-3">
                     <div class="form-group">
-                      <?php if ($sarr['user_type'] == 'remoteuser') { ?>
+                      <?php if ($sarr['sc_user_type'] == 'remoteuser') { ?>
                         <label for="sampleCode">Laboratory ID </label><br>
                         <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"><?php echo ($sCode != '') ? $sCode : $vlQueryInfo[$sampleCode]; ?></span>
                         <input type="hidden" class="" id="sampleCode" name="sampleCode" value="<?php echo ($sCode != '') ? $sCode : $vlQueryInfo[$sampleCode]; ?>" />
@@ -225,7 +225,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                     </div>
                   </div>
 
-                  <?php if ($sarr['user_type'] == 'remoteuser') { ?>
+                  <?php if ($sarr['sc_user_type'] == 'remoteuser') { ?>
 
                     <div class="col-xs-3 col-md-3">
                       <div class="">

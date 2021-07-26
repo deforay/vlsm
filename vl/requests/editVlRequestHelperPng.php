@@ -135,9 +135,9 @@ try {
 
 
 
-     if ($sarr['user_type'] == 'remoteuser' && $_POST['oldStatus'] == 9) {
+     if ($sarr['sc_user_type'] == 'remoteuser' && $_POST['oldStatus'] == 9) {
           $_POST['status'] = 9;
-     } else if ($sarr['user_type'] == 'vluser' && $_POST['oldStatus'] == 9) {
+     } else if ($sarr['sc_user_type'] == 'vluser' && $_POST['oldStatus'] == 9) {
           $_POST['status'] = 6;
      }
 
@@ -217,7 +217,7 @@ try {
 
 
 
-     if ($sarr['user_type'] == 'remoteuser') {
+     if ($sarr['sc_user_type'] == 'remoteuser') {
           $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] : NULL;
      } else {
           if ($_POST['sampleCodeCol'] != '') {

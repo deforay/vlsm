@@ -25,7 +25,7 @@ if (isset($_SESSION['resultNotAvailable']) && trim($_SESSION['resultNotAvailable
     $output = array();
     $sheet = $excel->getActiveSheet();
     $headings = array('Sample Code', 'Remote Sample Code', "Facility Name", "Patient ART no.", "Patient Name", "Sample Collection Date", "Lab Name");
-    if ($sarr['user_type'] == 'standalone') {
+    if ($sarr['sc_user_type'] == 'standalone') {
         $headings = array('Sample Code', "Facility Name", "Patient ART no.", "Patient Name", "Sample Collection Date", "Lab Name");
     }
 
@@ -77,7 +77,7 @@ if (isset($_SESSION['resultNotAvailable']) && trim($_SESSION['resultNotAvailable
     $sheet->getStyle('D3:D3')->applyFromArray($styleArray);
     $sheet->getStyle('E3:E3')->applyFromArray($styleArray);
     $sheet->getStyle('F3:F3')->applyFromArray($styleArray);
-    if ($sarr['user_type'] != 'standalone') {
+    if ($sarr['sc_user_type'] != 'standalone') {
         $sheet->getStyle('G3:G3')->applyFromArray($styleArray);
     }
 
@@ -111,7 +111,7 @@ if (isset($_SESSION['resultNotAvailable']) && trim($_SESSION['resultNotAvailable
             $patientLname = '';
         }
         $row[] = $aRow['sample_code'];
-        if ($sarr['user_type'] != 'standalone') {
+        if ($sarr['sc_user_type'] != 'standalone') {
             $row[] = $aRow['remote_sample_code'];
         }
         $row[] = ucwords($aRow['facility_name']);

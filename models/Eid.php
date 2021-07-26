@@ -32,7 +32,7 @@ class Eid
         $remotePrefix = '';
         $sampleCodeKeyCol = 'sample_code_key';
         $sampleCodeCol = 'sample_code';
-        if ($systemConfig['user_type'] == 'remoteuser') {
+        if ($systemConfig['sc_user_type'] == 'remoteuser') {
             $remotePrefix = 'R';
             $sampleCodeKeyCol = 'remote_sample_code_key';
             $sampleCodeCol = 'remote_sample_code';

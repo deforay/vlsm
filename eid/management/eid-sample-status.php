@@ -16,8 +16,11 @@ $general = new \Vlsm\Models\General($db); // passing $db which is coming from st
 // $configFormResult = $db->rawQuery($configFormQuery);
 
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
-$healthFacilites = $facilitiesDb->getHealthFacilities('eid');
-$facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
+// $healthFacilites = $facilitiesDb->getHealthFacilities('eid');
+// $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
+
+$testingLabs = $facilitiesDb->getTestingLabs('eid');
+$testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- Select --");
 
 $batQuery = "SELECT batch_code FROM batch_details WHERE test_type='eid' AND batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
@@ -66,10 +69,10 @@ $batResult = $db->rawQuery($batQuery);
             <tr>
 
 
-              <td>&nbsp;<b>Facility Name &nbsp;:</b></td>
+              <td>&nbsp;<b>Testing Lab &nbsp;:</b></td>
               <td>
-                <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple" style="width:220px;">
-                  <?= $facilitiesDropdown; ?>
+                <select class="form-control" id="labName" name="labName" title="Please select facility name">
+                  <?= $testingLabsDropdown; ?>
                 </select>
               </td>
 
@@ -130,8 +133,8 @@ $batResult = $db->rawQuery($batQuery);
 <script src="/assets/js/highchart-exporting.js"></script>
 <script>
   $(function() {
-    $("#facilityName").select2({
-      placeholder: "Select Facilities"
+    $("#labName").select2({
+      placeholder: "Select Testing Lab"
     });
     $('#sampleCollectionDate').daterangepicker({
         locale: {
@@ -139,7 +142,7 @@ $batResult = $db->rawQuery($batQuery);
         },
         format: 'DD-MMM-YYYY',
         separator: ' to ',
-        startDate: moment().subtract(29, 'days'),
+        startDate: moment().subtract(179, 'days'),
         endDate: moment(),
         maxDate: moment(),
         ranges: {
@@ -155,7 +158,6 @@ $batResult = $db->rawQuery($batQuery);
         startDate = start.format('YYYY-MM-DD');
         endDate = end.format('YYYY-MM-DD');
       });
-    $('#sampleCollectionDate').val("");
     searchResultData();
     loadVlTATData();
 
@@ -166,7 +168,7 @@ $batResult = $db->rawQuery($batQuery);
     $.post("/eid/management/getSampleStatus.php", {
         sampleCollectionDate: $("#sampleCollectionDate").val(),
         batchCode: $("#batchCode").val(),
-        facilityName: $("#facilityName").val(),
+        labName: $("#labName").val(),
         sampleType: $("#sampleType").val()
       },
       function(data) {
@@ -231,8 +233,8 @@ $batResult = $db->rawQuery($batQuery);
           "value": $("#sampleCollectionDate").val()
         });
         aoData.push({
-          "name": "facilityName",
-          "value": $("#facilityName").val()
+          "name": "labName",
+          "value": $("#labName").val()
         });
         aoData.push({
           "name": "sampleType",
@@ -257,7 +259,7 @@ $batResult = $db->rawQuery($batQuery);
         Sample_Collection_Date: $("#sampleCollectionDate").val(),
         Batch_Code: $("#batchCode  option:selected").text(),
         Sample_Type: $("#sampleType  option:selected").text(),
-        Facility_Name: $("#facilityName  option:selected").text()
+        Facility_Name: $("#labName  option:selected").text()
       },
       function(data) {
         if (data == "" || data == null || data == undefined) {

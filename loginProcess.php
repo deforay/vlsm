@@ -13,8 +13,8 @@ $general = new \Vlsm\Models\General($db);
 $systemInfo = $general->getSystemConfig();
 $systemType = $systemLabId = null;
 if ($systemInfo != false) {
-    $systemType = $systemInfo['user_type'];
-    $systemLabId = $systemInfo['lab_name'];
+    $systemType = $systemInfo['sc_user_type'];
+    $systemLabId = $systemInfo['sc_testing_lab_id'];
 }
 
 if ($_POST["csrf_token"] != $_SESSION["csrf_token"]) {

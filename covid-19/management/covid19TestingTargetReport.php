@@ -27,7 +27,7 @@ $facilitiesDb = new \Vlsm\Models\Facilities($db);
 
 // $healthFacilites = $facilitiesDb->getHealthFacilities('vl');
 // $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");
-$testingLabs = $facilitiesDb->getTestingLabs('vl');
+$testingLabs = $facilitiesDb->getTestingLabs('covid19');
 $testingLabsDropdown = $general->generateSelectOptions($testingLabs, null, "-- Select --");
 
 

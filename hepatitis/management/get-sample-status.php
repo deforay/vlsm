@@ -7,7 +7,7 @@ $whereCondition = '';
 $configFormQuery = "SELECT * FROM global_config WHERE `name` ='vl_form'";
 $configFormResult = $db->rawQuery($configFormQuery);
 
-$userType = $general->getSystemConfig('user_type');
+$userType = $general->getSystemConfig('sc_user_type');
 
 $whereCondition = '';
 
@@ -69,8 +69,8 @@ if (isset($_POST['batchCode']) && trim($_POST['batchCode']) != '') {
 if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != '') {
     $sWhere .= ' AND DATE(vl.sample_collection_date) >= "' . $start_date . '" AND DATE(vl.sample_collection_date) <= "' . $end_date . '"';
 }
-if (isset($_POST['facilityName']) && is_array($_POST['facilityName']) && count($_POST['facilityName']) > 0) {
-    $sWhere .= ' AND f.facility_id IN (' . implode(",", $_POST['facilityName']) . ')';
+if (!empty($_POST['labName'])) {
+    $sWhere .= ' AND vl.lab_id = ' .$_POST['labName'];
 }
 $tQuery .= " " . $sWhere;
 
@@ -116,8 +116,8 @@ if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']
 if (isset($_POST['sampleType']) && trim($_POST['sampleType']) != '') {
     $sWhere .= ' AND s.sample_id = "' . $_POST['sampleType'] . '"';
 }
-if (isset($_POST['facilityName']) && is_array($_POST['facilityName']) && count($_POST['facilityName']) > 0) {
-    $sWhere .= ' AND f.facility_id IN (' . implode(",", $_POST['facilityName']) . ')';
+if (!empty($_POST['labName'])) {
+    $sWhere .= ' AND vl.lab_id = ' .$_POST['labName'];
 }
 $vlSuppressionQuery = $vlSuppressionQuery . ' ' . $sWhere;
 
@@ -129,37 +129,41 @@ if ($start_date == '' && $end_date == '') {
     $start_date = date('Y-m-d', $date);
     $end_date = date('Y-m-d');
 }
-$tatSampleQuery = "select
-                        DATE_FORMAT(DATE(sample_collection_date), '%b-%Y') as monthDate,
+$tatSampleQuery = "SELECT 
+        count(*) as 'totalSamples',
+                        DATE_FORMAT(DATE(sample_tested_datetime), '%b-%Y') as monthDate,
+                        ABS(TIMESTAMPDIFF(DAY,sample_tested_datetime,sample_collection_date)) as daydiff,
                         CAST(ABS(AVG(TIMESTAMPDIFF(DAY,sample_tested_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgTestedDiff,
                         CAST(ABS(AVG(TIMESTAMPDIFF(DAY,sample_received_at_vl_lab_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgReceivedDiff,
                         CAST(ABS(AVG(TIMESTAMPDIFF(DAY,result_printed_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgPrintedDiff
 
                         from form_hepatitis as vl 
                         INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
-                        JOIN facility_details as f ON vl.facility_id=f.facility_id 
+                        JOIN facility_details as f ON vl.lab_id=f.facility_id 
                         LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id 
                         
-                        where (vl.sample_collection_date is not null AND vl.sample_collection_date not like '' AND DATE(vl.sample_collection_date) !='1970-01-01' AND DATE(vl.sample_collection_date) !='0000-00-00')
-                        AND ((vl.sample_tested_datetime is not null AND vl.sample_tested_datetime not like '' AND DATE(vl.sample_tested_datetime) !='1970-01-01' AND DATE(vl.sample_tested_datetime) !='0000-00-00') OR
-                        (vl.result_printed_datetime is not null AND vl.result_printed_datetime not like '' AND DATE(vl.result_printed_datetime) !='1970-01-01' AND DATE(vl.result_printed_datetime) !='0000-00-00') OR
-                        (vl.sample_received_at_vl_lab_datetime is not null AND vl.sample_received_at_vl_lab_datetime not like '' AND DATE(vl.sample_received_at_vl_lab_datetime) !='1970-01-01' AND DATE(vl.sample_received_at_vl_lab_datetime) !='0000-00-00'))
-                        AND vl.hcv_vl_result is not null
-                        AND vl.hcv_vl_result != ''
-                        AND DATE(vl.sample_collection_date) >= '" . $start_date . "'
-                        AND DATE(vl.sample_collection_date) <= '" . $end_date . "' AND vl.vlsm_country_id='" . $configFormResult[0]['value'] . "' $whereCondition group by MONTH(vl.sample_collection_date) ORDER BY (vl.sample_collection_date)";
+                        where (vl.sample_collection_date is not null AND vl.sample_collection_date not like '' AND DATE(vl.sample_collection_date) > '1970-01-01')
+                        AND ((vl.sample_tested_datetime is not null AND vl.sample_tested_datetime not like '' AND DATE(vl.sample_tested_datetime) !='1970-01-01' AND DATE(vl.sample_tested_datetime) !='0000-00-00') 
+                        AND (vl.result_printed_datetime is not null AND vl.result_printed_datetime not like '' AND DATE(vl.result_printed_datetime) !='1970-01-01' AND DATE(vl.result_printed_datetime) !='0000-00-00') 
+                        AND (vl.sample_received_at_vl_lab_datetime is not null AND vl.sample_received_at_vl_lab_datetime not like '' AND DATE(vl.sample_received_at_vl_lab_datetime) !='1970-01-01' AND DATE(vl.sample_received_at_vl_lab_datetime) !='0000-00-00'))
+                        AND ((vl.hcv_vl_result is not null AND vl.hcv_vl_result != '') OR (vl.hbv_vl_result is not null AND vl.hbv_vl_result != ''))
+                        AND DATE(vl.sample_tested_datetime) >= '$start_date'
+                        AND DATE(vl.sample_tested_datetime) <= '$end_date' AND vl.vlsm_country_id='" . $configFormResult[0]['value'] . "'";
 $sWhere = '';
 if (isset($_POST['batchCode']) && trim($_POST['batchCode']) != '') {
     $sWhere .= ' AND b.batch_code = "' . $_POST['batchCode'] . '"';
 }
-if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != '') {
-    //$sWhere.= ' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+
+if (!empty($_POST['labName'])) {
+    $sWhere .= ' AND vl.lab_id = ' .$_POST['labName'];
 }
-if (isset($_POST['facilityName']) && is_array($_POST['facilityName']) && count($_POST['facilityName']) > 0) {
-    $sWhere .= ' AND f.facility_id IN (' . implode(",", $_POST['facilityName']) . ')';
-}
-$tatSampleQuery = $tatSampleQuery . " " . $sWhere;
-//$tatSampleQuery .= " HAVING TIMESTAMPDIFF(DAY,sample_tested_datetime,sample_collection_date) < 120 ";
+
+$tatSampleQuery .= " " . $sWhere;
+$tatSampleQuery .= " GROUP BY monthDate";
+$tatSampleQuery .= " HAVING daydiff < 120";
+$tatSampleQuery .= " ORDER BY sample_tested_datetime";
+
+
 $tatResult = $db->rawQuery($tatSampleQuery);
 // print_r($tatSampleQuery);die;
 $j = 0;
@@ -168,6 +172,7 @@ foreach ($tatResult as $sRow) {
         continue;
     }
 
+    $result['totalSamples'][$j] = (isset($sRow["totalSamples"]) && $sRow["totalSamples"] > 0 && $sRow["totalSamples"] != null) ? $sRow["totalSamples"] : 'null';
     $result['sampleTestedDiff'][$j] = (isset($sRow["AvgTestedDiff"]) && $sRow["AvgTestedDiff"] > 0 && $sRow["AvgTestedDiff"] != null) ? round($sRow["AvgTestedDiff"], 2) : 'null';
     $result['sampleReceivedDiff'][$j] = (isset($sRow["AvgReceivedDiff"]) && $sRow["AvgReceivedDiff"] > 0 && $sRow["AvgReceivedDiff"] != null) ? round($sRow["AvgReceivedDiff"], 2) : 'null';
     $result['samplePrintedDiff'][$j] = (isset($sRow["AvgPrintedDiff"]) && $sRow["AvgPrintedDiff"] > 0 && $sRow["AvgPrintedDiff"] != null) ? round($sRow["AvgPrintedDiff"], 2) : 'null';
@@ -188,8 +193,8 @@ if (isset($_POST['batchCode']) && trim($_POST['batchCode']) != '') {
 if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != '') {
     $sWhere.= ' AND DATE(c.sample_collection_date) >= "'.$start_date.'" AND DATE(c.sample_collection_date) <= "'.$end_date.'"';
 }
-if (isset($_POST['facilityName']) && is_array($_POST['facilityName']) && count($_POST['facilityName']) > 0) {
-    $sWhere .= ' AND f.facility_id IN (' . implode(",", $_POST['facilityName']) . ')';
+if (!empty($_POST['labName'])) {
+    $sWhere .= ' AND vl.lab_id = ' .$_POST['labName'];
 }
 $testReasonQuery = $testReasonQuery . " " . $sWhere;
 $testReasonQuery = $testReasonQuery . " GROUP BY tr.test_reason_name";
@@ -463,10 +468,20 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
                             }
                         }
                     }
+                },
+                series: {
+                    dataLabels: {
+                        enabled: true
+                    }
                 }
             },
 
-            series: [
+            series: [{
+                    type: 'column',
+                    name: 'No. of Samples Tested',
+                    data: [<?php echo implode(",", $result['totalSamples']); ?>],
+                    color: '#7CB5ED',
+                },
                 <?php
                 if (isset($result['sampleTestedDiff'])) {
                 ?> {

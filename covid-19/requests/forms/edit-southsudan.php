@@ -48,7 +48,7 @@ $rKey = '';
 $pdQuery = "SELECT * FROM province_details";
 
 
-if ($sarr['user_type'] == 'remoteuser') {
+if ($sarr['sc_user_type'] == 'remoteuser') {
     $sampleCodeKey = 'remote_sample_code_key';
     $sampleCode = 'remote_sample_code';
     //check user exist in user_facility_map table
@@ -85,7 +85,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
 //$sampleSuggestion = '';
 //$sampleSuggestionDisplay = 'display:none;';
 // $sCode = (isset($_GET['c']) && $_GET['c'] != '') ? $_GET['c'] : '';
-// if ($sarr['user_type'] == 'vluser' && $sCode != '') {
+// if ($sarr['sc_user_type'] == 'vluser' && $sCode != '') {
 //     $vlObj = new \Vlsm\Models\Covid19($db);
 //     $sampleCollectionDate = explode(" ", $sampleCollectionDate);
 //     $sampleCollectionDate = $general->humanDateFormat($sampleCollectionDate[0]);
@@ -143,7 +143,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                                         </tr>
                                     <?php } ?> -->
                                     <tr>
-                                        <?php if ($sarr['user_type'] == 'remoteuser') { ?>
+                                        <?php if ($sarr['sc_user_type'] == 'remoteuser') { ?>
                                             <td><label for="sampleCode">Sample ID </label> </td>
                                             <td>
                                                 <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"><?php echo $covid19Info[$sampleCode]; ?></span>
@@ -218,7 +218,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                                                 <?php } ?>
                                             </select>
                                         </td>
-                                        <?php if ($sarr['user_type'] == 'remoteuser') { ?>
+                                        <?php if ($sarr['sc_user_type'] == 'remoteuser') { ?>
                                             <!-- <tr> -->
                                             <td><label for="labId">Testing Laboratory <span class="mandatory">*</span></label> </td>
                                             <td>
@@ -386,7 +386,7 @@ $facility = $general->generateSelectOptions($healthFacilities, $covid19Info['fac
                                 </table>
                             </div>
                         </div>
-                        <?php if ($sarr['user_type'] != 'remoteuser') { ?>
+                        <?php if ($sarr['sc_user_type'] != 'remoteuser') { ?>
                             <?php //if (false) { 
                             ?>
                             <div class="box box-primary">

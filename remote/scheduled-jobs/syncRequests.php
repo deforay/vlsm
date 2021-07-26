@@ -17,7 +17,7 @@ try {
     $sarr = $general->getSystemConfig();
 
     //get remote data
-    if (empty($sarr['lab_name'])) {
+    if (empty($sarr['sc_testing_lab_id'])) {
         echo "No Lab ID set in System Config";
         exit(0);
     }
@@ -35,7 +35,7 @@ try {
 
         $url = $systemConfig['remoteURL'] . '/remote/remote/getRequests.php';
         $data = array(
-            'labName' => $sarr['lab_name'],
+            'labName' => $sarr['sc_testing_lab_id'],
             'module' => 'vl',
             "Key" => "vlsm-lab-data--",
         );
@@ -153,7 +153,7 @@ try {
     if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) {
         $url = $systemConfig['remoteURL'] . '/remote/remote/eid-test-requests.php';
         $data = array(
-            'labName' => $sarr['lab_name'],
+            'labName' => $sarr['sc_testing_lab_id'],
             'module' => 'eid',
             "Key" => "vlsm-lab-data--",
         );
@@ -263,7 +263,7 @@ try {
     if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) {
         $url = $systemConfig['remoteURL'] . '/remote/remote/covid-19-test-requests.php';
         $data = array(
-            'labName' => $sarr['lab_name'],
+            'labName' => $sarr['sc_testing_lab_id'],
             'module' => 'covid19',
             "Key" => "vlsm-lab-data--",
         );
@@ -428,7 +428,7 @@ try {
     if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) {
         $url = $systemConfig['remoteURL'] . '/remote/remote/hepatitis-test-requests.php';
         $data = array(
-            'labName' => $sarr['lab_name'],
+            'labName' => $sarr['sc_testing_lab_id'],
             'module' => 'hepatitis',
             "Key" => "vlsm-lab-data--",
         );

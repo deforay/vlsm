@@ -140,7 +140,7 @@ foreach ($rResult as $aRow) {
     $row = array();
     $row[] = ucwords($aRow['sample_name']);
     $row[] = ucwords($aRow['status']);
-    if (isset($_SESSION['privileges']) && in_array("vl-art-code-details.php", $_SESSION['privileges']) && $sarr['user_type'] !='vluser') {
+    if (isset($_SESSION['privileges']) && in_array("vl-art-code-details.php", $_SESSION['privileges']) && $sarr['sc_user_type'] !='vluser') {
         $row[] = '<a href="edit-vl-sample-type.php?id=' . base64_encode($aRow['sample_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
     }
     $output['aaData'][] = $row;

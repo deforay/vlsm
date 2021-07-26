@@ -13,7 +13,7 @@ $country = $configFormResult[0]['value'];
 $end_date = date('Y-m-d');
 $start_date = date('Y-m-d', strtotime('-7 days'));
 
-$u = $general->getSystemConfig('user_type');
+$u = $general->getSystemConfig('sc_user_type');
 if (isset($_POST['type']) && trim($_POST['type']) == 'eid') {
     $table = "eid_form";
     $requestCountDataTable = "eidRequestCountDataTable";

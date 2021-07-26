@@ -27,7 +27,7 @@ if (isset($_SESSION['highViralResult']) && trim($_SESSION['highViralResult']) !=
      $output = array();
      $sheet = $excel->getActiveSheet();
      $headings = array('Sample Code', 'Remote Sample Code', "Facility Name", "Patient's Name", "Patient ART no.", "Patient phone no.", "Sample Collection Date", "Sample Tested Date", "Lab Name", "Vl value in cp/ml");
-     if ($sarr['user_type'] == 'standalone') {
+     if ($sarr['sc_user_type'] == 'standalone') {
           $headings = array('Sample Code', "Facility Name", "Patient's Name", "Patient ART no.", "Patient phone no.", "Sample Collection Date", "Sample Tested Date", "Lab Name", "Vl value in cp/ml");
      }
 
@@ -92,7 +92,7 @@ if (isset($_SESSION['highViralResult']) && trim($_SESSION['highViralResult']) !=
      $sheet->getStyle('G3:G3')->applyFromArray($styleArray);
      $sheet->getStyle('H3:H3')->applyFromArray($styleArray);
      $sheet->getStyle('I3:I3')->applyFromArray($styleArray);
-     if ($sarr['user_type'] != 'standalone') {
+     if ($sarr['sc_user_type'] != 'standalone') {
           $sheet->getStyle('J3:J3')->applyFromArray($styleArray);
      }
 
@@ -118,7 +118,7 @@ if (isset($_SESSION['highViralResult']) && trim($_SESSION['highViralResult']) !=
           }
           $patientFname = ucwords($general->crypto('decrypt', $aRow['patient_first_name'], $aRow[$decrypt]));
           $row[] = $aRow['sample_code'];
-          if ($sarr['user_type'] != 'standalone') {
+          if ($sarr['sc_user_type'] != 'standalone') {
                $row[] = $aRow['remote_sample_code'];
           }
           $row[] = ucwords($aRow['facility_name']);

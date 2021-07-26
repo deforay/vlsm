@@ -25,7 +25,7 @@ if(isset($_SESSION['vlIncompleteForm']) && trim($_SESSION['vlIncompleteForm'])!=
      $sheet = $excel->getActiveSheet();
 
      $headings = array('Sample Code','Remote Sample Code',"Sample Collection Date","Batch Code","Unique ART No.","Patient's Name","Facility Name","Province/State","District/County","Sample Type","Result","Status");
-     if($sarr['user_type']=='standalone') {
+     if($sarr['sc_user_type']=='standalone') {
      $headings = array("Sample Code","Sample Collection Date","Batch Code","Unique ART No.","Patient's Name","Facility Name","Province/State","District/County","Sample Type","Result","Status");
      }
 
@@ -106,7 +106,7 @@ if(isset($_SESSION['vlIncompleteForm']) && trim($_SESSION['vlIncompleteForm'])!=
           }
 
           $row[] = $aRow['sample_code'];
-          if($sarr['user_type']!='standalone'){
+          if($sarr['sc_user_type']!='standalone'){
             $row[] = $aRow['remote_sample_code'];
              }
           $row[] = $sampleCollectionDate;

@@ -57,7 +57,7 @@ if (isset($_POST['type']) && trim($_POST['type']) == 'eid') {
 }
 
 
-$u = $general->getSystemConfig('user_type');
+$u = $general->getSystemConfig('sc_user_type');
 
 if ($u != 'remoteuser') {
     $whereCondition = " result_status!=9  AND ";

@@ -69,7 +69,7 @@ try {
 		$_POST['sampleCode'] = NULL;
 	}
 
-	if ($sarr['user_type'] == 'remoteuser') {
+	if ($sarr['sc_user_type'] == 'remoteuser') {
 		$sampleCode = 'remote_sample_code';
 		$sampleCodeKey = 'remote_sample_code_key';
 	} else {
@@ -78,7 +78,7 @@ try {
 	}
 
 	$status = 6;
-	if ($sarr['user_type'] == 'remoteuser') {
+	if ($sarr['sc_user_type'] == 'remoteuser') {
 		$status = 9;
 	}
 

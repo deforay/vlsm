@@ -33,7 +33,7 @@ try {
      for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
           $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
      }
-     if (($sarr['user_type'] == 'remoteuser') && $_POST['oldStatus'] == 9) {
+     if (($sarr['sc_user_type'] == 'remoteuser') && $_POST['oldStatus'] == 9) {
           $_POST['status'] = 9;
      } else if ($_POST['oldStatus'] == 9) {
           $_POST['status'] = 6;
@@ -299,7 +299,7 @@ try {
      }
 	else
 		$vldata['last_modified_by'] =  $_SESSION['userId'];
-     if ($sarr['user_type'] == 'remoteuser') {
+     if ($sarr['sc_user_type'] == 'remoteuser') {
           $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] :  NULL;
      } else if ($_POST['sampleCodeCol'] != '') {
           $vldata['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') ? $_POST['sampleCodeCol'] :  NULL;

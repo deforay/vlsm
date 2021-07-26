@@ -36,7 +36,7 @@ include_once(APPLICATION_PATH . '/header.php');
                   <th>Reason For Moving</th>
                   <th>Approved By</th>
                   <th>Added On</th>
-                  <?php if (isset($_SESSION['privileges']) && in_array("editSampleList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
+                  <?php if (isset($_SESSION['privileges']) && in_array("editSampleList.php", $_SESSION['privileges']) && ($sarr['sc_user_type'] == 'remoteuser')) { ?>
                     <th>Action</th>
                   <?php } ?>
                 </tr>
@@ -93,7 +93,7 @@ include_once(APPLICATION_PATH . '/header.php');
         {
           "sClass": "center"
         },
-        <?php if (isset($_SESSION['privileges']) && in_array("editSampleList.php", $_SESSION['privileges']) && (($sarr['user_type'] == 'remoteuser') || ($sarr['user_type'] == 'standalone'))) { ?> {
+        <?php if (isset($_SESSION['privileges']) && in_array("editSampleList.php", $_SESSION['privileges']) && (($sarr['sc_user_type'] == 'remoteuser') || ($sarr['sc_user_type'] == 'standalone'))) { ?> {
             "sClass": "center",
             "bSortable": false
           },

@@ -202,7 +202,7 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
 	    $sWhere = $sWhere." AND vl.lab_id IN (".$_POST['lab'].")";
 	    $tWhere = $tWhere." AND vl.lab_id IN (".$_POST['lab'].")";
     }
-    if($sarr['user_type']=='remoteuser'){
+    if($sarr['sc_user_type']=='remoteuser'){
 
         $userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT facility_id ORDER BY facility_id SEPARATOR ',') as facility_id FROM vl_user_facility_map where user_id='".$_SESSION['userId']."'";
         $userfacilityMapresult = $db->rawQuery($userfacilityMapQuery);
@@ -210,10 +210,10 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
             $sWhere = $sWhere." AND vl.facility_id IN (".$userfacilityMapresult[0]['facility_id'].")   AND remote_sample='yes'";
             $tWhere = $tWhere." AND vl.facility_id IN (".$userfacilityMapresult[0]['facility_id'].")   AND remote_sample='yes' ";
         }
-    }else if($sarr['user_type']=='vluser'){
+    }else if($sarr['sc_user_type']=='vluser'){
 
-        $sWhere = $sWhere." AND vl.lab_id = ". $sarr['lab_name'];
-	    $tWhere = $tWhere." AND vl.lab_id = ". $sarr['lab_name'];  
+        $sWhere = $sWhere." AND vl.lab_id = ". $sarr['sc_testing_lab_id'];
+	    $tWhere = $tWhere." AND vl.lab_id = ". $sarr['sc_testing_lab_id'];  
     }
 		
 	$sQuery = $sQuery.' '.$sWhere;

@@ -356,7 +356,7 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
         'last_modified_datetime' => $general->getDateTime()
     );
 
-    if ($systemConfig['user_type'] == 'remoteuser') {
+    if ($systemConfig['sc_user_type'] == 'remoteuser') {
         $vlData['remote_sample_code'] = $sampleData['sampleCode'];
         $vlData['remote_sample_code_format'] = $sampleData['sampleCodeFormat'];
         $vlData['remote_sample_code_key'] = $sampleData['sampleCodeKey'];
@@ -386,7 +386,7 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
         $fDetails = "facility_details";
         $vl_result_category = NULL;
         $status = 6;
-        if ($systemConfig['user_type'] == 'remoteuser') {
+        if ($systemConfig['sc_user_type'] == 'remoteuser') {
             $status = 9;
         }
         //add province
@@ -410,7 +410,7 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
             $platForm = explode("##", $_POST['testingPlatform']);
             $testingPlatform = $platForm[0];
         }
-        if ($systemConfig['user_type'] == 'remoteuser') {
+        if ($systemConfig['sc_user_type'] == 'remoteuser') {
             $sampleCode = 'remote_sample_code';
             $sampleCodeKey = 'remote_sample_code_key';
         } else {
@@ -484,7 +484,7 @@ if ($type[1] == 'REQ' || $type[1] == 'UPI') {
             }
             // print_r($_POST['sampleCode']);die;
 
-            if ($sarr['user_type'] == 'remoteuser') {
+            if ($sarr['sc_user_type'] == 'remoteuser') {
                 $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] :  NULL;
                 $vldata['remote_sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey'] != '') ? $_POST['sampleCodeKey'] :  NULL;
                 $vldata['remote_sample'] = 'yes';

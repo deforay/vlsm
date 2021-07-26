@@ -30,7 +30,7 @@ try {
         $admin = $db->rawQueryOne("SELECT ud.*, (CASE WHEN (r.access_type = 'testing-lab') THEN 'yes' ELSE 'no' END) as testing_user FROM user_details as ud INNER JOIN roles as r ON ud.role_id=r.role_id WHERE ud.login_id = ? AND ud.password = ?", $queryParams);
         // print_r($admin);die;
 
-        if ($systemConfig['user_type'] == 'remoteuser') {
+        if ($systemConfig['sc_user_type'] == 'remoteuser') {
             $remoteUser = "yes";
         } else {
             $remoteUser = "no";

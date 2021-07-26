@@ -136,7 +136,7 @@ $batResult = $db->rawQuery($batQuery);
 												<thead>
 													<tr>
 														<th>Sample Code</th>
-														<?php if ($sarr['user_type'] != 'standalone') { ?>
+														<?php if ($sarr['sc_user_type'] != 'standalone') { ?>
 															<th>Remote Sample <br />Code</th>
 														<?php } ?>
 														<th>Facility Name</th>
@@ -226,7 +226,7 @@ $batResult = $db->rawQuery($batQuery);
 												<thead>
 													<tr>
 														<th>Sample Code</th>
-														<?php if ($sarr['user_type'] != 'standalone') { ?>
+														<?php if ($sarr['sc_user_type'] != 'standalone') { ?>
 															<th>Remote Sample <br />Code</th>
 														<?php } ?>
 														<th>Facility Name</th>
@@ -312,7 +312,7 @@ $batResult = $db->rawQuery($batQuery);
 												<thead>
 													<tr>
 														<th>Sample Code</th>
-														<?php if ($sarr['user_type'] != 'standalone') { ?>
+														<?php if ($sarr['sc_user_type'] != 'standalone') { ?>
 															<th>Remote Sample <br />Code</th>
 														<?php } ?>
 														<th>Facility Name</th>
@@ -366,7 +366,7 @@ $batResult = $db->rawQuery($batQuery);
 												<thead>
 													<tr>
 														<th>Sample Code</th>
-														<?php if ($sarr['user_type'] != 'standalone') { ?>
+														<?php if ($sarr['sc_user_type'] != 'standalone') { ?>
 															<th>Remote Sample <br />Code</th>
 														<?php } ?>
 														<th>Sample Collection Date</th>
@@ -458,7 +458,7 @@ $batResult = $db->rawQuery($batQuery);
 			"aoColumns": [{
 					"sClass": "center"
 				},
-				<?php if ($sarr['user_type'] != 'standalone') { ?> {
+				<?php if ($sarr['sc_user_type'] != 'standalone') { ?> {
 						"sClass": "center"
 					},
 				<?php } ?> {
@@ -492,7 +492,7 @@ $batResult = $db->rawQuery($batQuery);
 					"sClass": "center"
 				},
 			],
-			<?php if ($sarr['user_type'] != 'standalone') { ?> "aaSorting": [
+			<?php if ($sarr['sc_user_type'] != 'standalone') { ?> "aaSorting": [
 					[6, "desc"]
 				],
 			<?php } else { ?> "aaSorting": [
@@ -555,7 +555,7 @@ $batResult = $db->rawQuery($batQuery);
 			"aoColumns": [{
 					"sClass": "center"
 				},
-				<?php if ($sarr['user_type'] != 'standalone') { ?> {
+				<?php if ($sarr['sc_user_type'] != 'standalone') { ?> {
 						"sClass": "center"
 					},
 				<?php } ?> {
@@ -577,7 +577,7 @@ $batResult = $db->rawQuery($batQuery);
 					"sClass": "center"
 				},
 			],
-			<?php if ($sarr['user_type'] != 'standalone') { ?> "aaSorting": [
+			<?php if ($sarr['sc_user_type'] != 'standalone') { ?> "aaSorting": [
 					[5, "desc"]
 				],
 			<?php } else { ?> "aaSorting": [
@@ -636,7 +636,7 @@ $batResult = $db->rawQuery($batQuery);
 			"aoColumns": [{
 					"sClass": "center"
 				},
-				<?php if ($sarr['user_type'] != 'standalone') { ?> {
+				<?php if ($sarr['sc_user_type'] != 'standalone') { ?> {
 						"sClass": "center"
 					},
 				<?php } ?> {
@@ -655,7 +655,7 @@ $batResult = $db->rawQuery($batQuery);
 					"sClass": "center"
 				}
 			],
-			<?php if ($sarr['user_type'] != 'standalone') { ?> "aaSorting": [
+			<?php if ($sarr['sc_user_type'] != 'standalone') { ?> "aaSorting": [
 					[5, "desc"]
 				],
 			<?php } else { ?> "aaSorting": [
@@ -714,7 +714,7 @@ $batResult = $db->rawQuery($batQuery);
 			"aoColumns": [{
 					"sClass": "center"
 				},
-				<?php if ($sarr['user_type'] != 'standalone') { ?> {
+				<?php if ($sarr['sc_user_type'] != 'standalone') { ?> {
 						"sClass": "center"
 					},
 				<?php } ?> {
@@ -748,7 +748,7 @@ $batResult = $db->rawQuery($batQuery);
 					"sClass": "center"
 				},
 			],
-			<?php if ($sarr['user_type'] != 'standalone') { ?> "aaSorting": [
+			<?php if ($sarr['sc_user_type'] != 'standalone') { ?> "aaSorting": [
 					[2, "desc"]
 				],
 			<?php } else { ?> "aaSorting": [
