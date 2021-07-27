@@ -69,11 +69,11 @@ if ($u != 'remoteuser') {
     if ($userfacilityMapresult[0]['facility_id'] != null && $userfacilityMapresult[0]['facility_id'] != '') {
         $userfacilityMapresult[0]['facility_id'] = rtrim($userfacilityMapresult[0]['facility_id'], ",");
         if (isset($_POST['type']) && trim($_POST['type']) == 'eid') {
-            $whereCondition = " eid.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")  AND remote_sample='yes' AND ";
+            $whereCondition = " eid.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ") AND ";
         } else if (isset($_POST['type']) && trim($_POST['type']) == 'covid19') {
-            $whereCondition = " covid19.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")  AND remote_sample='yes' AND ";
+            $whereCondition = " covid19.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ") AND ";
         } else {
-            $whereCondition = " vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")  AND remote_sample='yes' AND ";
+            $whereCondition = " vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")  AND ";
         }
     }
 }
