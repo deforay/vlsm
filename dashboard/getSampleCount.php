@@ -48,9 +48,9 @@ if ($u != 'remoteuser') {
     if ($userfacilityMapresult[0]['facility_id'] != null && $userfacilityMapresult[0]['facility_id'] != '') {
         $userfacilityMapresult[0]['facility_id'] = rtrim($userfacilityMapresult[0]['facility_id'], ",");
         if (isset($_POST['type']) && trim($_POST['type']) == 'eid') {
-            $whereCondition = " AND eid.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")  AND eid.remote_sample='yes' ";
+            $whereCondition = " AND eid.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ") ";
         } else {
-            $whereCondition = " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")  AND vl.remote_sample='yes' ";
+            $whereCondition = " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ") ";
         }
     }
 }
@@ -69,10 +69,7 @@ if ($table == "eid_form") {
     $sQuery = "SELECT
 		eid.facility_id,f.facility_code,f.facility_state,f.facility_district,f.facility_name,
 		COUNT(*) AS totalCount,
-		SUM(CASE
-			WHEN (remote_sample='yes') THEN 1
-				ELSE 0
-			END) AS reorderCount,
+		NULL AS reorderCount,
 		SUM(CASE
 			WHEN (result_status=9) THEN 1
 				ELSE 0
@@ -109,10 +106,7 @@ if ($table == "eid_form") {
     $sQuery = "SELECT
 		vl.facility_id,f.facility_code,f.facility_state,f.facility_district,f.facility_name,
 		COUNT(*) AS totalCount,
-		SUM(CASE
-			WHEN (sample_reordered='yes') THEN 1
-				ELSE 0
-			END) AS reorderCount,
+		NULL AS reorderCount,
 		SUM(CASE
 			WHEN (result_status=9) THEN 1
 				ELSE 0

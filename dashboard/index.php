@@ -44,20 +44,20 @@ $facilityCount = $facilityTotal[0]['total'];
 		<div class="bs-example bs-example-tabs">
 			<ul id="myTab" class="nav nav-tabs" style="font-size:1.4em;">
 				<?php if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true && array_intersect($_SESSION['module'], array('vl'))) {  ?>
-					<li class="active"><a href="#vlDashboard" data-toggle="tab" onclick="generateDashboard('vl');">Viral Load Tests</a></li>
+					<li class="active"><a href="#vlDashboard" data-name = "vl" data-toggle="tab" onclick="generateDashboard('vl');">Viral Load Tests</a></li>
 				<?php } ?>
 				<?php if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true  && array_intersect($_SESSION['module'], array('eid'))) {  ?>
-					<li><a href="#eidDashboard" data-toggle="tab" onclick="generateDashboard('eid');">EID Tests</a></li>
+					<li><a href="#eidDashboard" data-name = "eid" data-toggle="tab" onclick="generateDashboard('eid');">EID Tests</a></li>
 				<?php } ?>
 				<?php if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true && array_intersect($_SESSION['module'], array('covid19'))) {  ?>
-					<li><a href="#covid19Dashboard" data-toggle="tab" onclick="generateDashboard('covid19');">Covid-19 Tests</a></li>
+					<li><a href="#covid19Dashboard" data-name = "covid19" data-toggle="tab" onclick="generateDashboard('covid19');">Covid-19 Tests</a></li>
 				<?php } ?>
 				<?php if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true && array_intersect($_SESSION['module'], array('hepatitis'))) {  ?>
 					<li><a href="#hepatitisDashboard" data-toggle="tab" onclick="generateDashboard('hepatitis');">Hepatitis Tests</a></li>
 				<?php } ?>
 				<?php
 				if (isset($recencyConfig['vlsync']) && $recencyConfig['vlsync'] == true) {  ?>
-					<li><a href="#recencyDashboard" data-toggle="tab" onclick="generateDashboard('recency')">Confirmation Tests for Recency</a></li>
+					<li><a href="#recencyDashboard" data-name = "recency" data-toggle="tab" onclick="generateDashboard('recency')">Confirmation Tests for Recency</a></li>
 				<?php }  ?>
 			</ul>
 			<div id="myTabContent" class="tab-content">
@@ -299,8 +299,8 @@ $facilityCount = $facilityTotal[0]['total'];
 				endDate = end.format('YYYY-MM-DD');
 			});
 
-		// by default we pass 'vl' because that is first tab
-		generateDashboard('vl');	
+			
+		$("#myTab li:first-child > a").trigger("click");	
 	});
 
 	function generateDashboard(requestType) {
