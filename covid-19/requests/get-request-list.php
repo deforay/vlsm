@@ -171,7 +171,7 @@ if ($sarr['sc_user_type'] == 'remoteuser') {
      } else {
           $sWhere .= " WHERE ";
      }
-     $sWhere = $sWhere . 'vl.result_status!=9 AND vl.data_sync != 0 ';
+     $sWhere = $sWhere . 'vl.result_status!=9 ';
      $sFilter = ' AND result_status!=9';
 }
 $sQuery = $sQuery . ' ' . $sWhere;
