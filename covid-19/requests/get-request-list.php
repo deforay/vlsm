@@ -120,11 +120,12 @@ for ($i = 0; $i < count($aColumns); $i++) {
           * Get data to display
           */
 $aWhere = '';
+$sQuery = '';
 
-$sQuery = "SELECT * FROM form_covid19 as vl 
-                         LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
-                         LEFT JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
-                         LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id";
+$sQuery = "SELECT vl.*, f.facility_name, ts.status_name, b.batch_code  FROM form_covid19 as vl 
+               LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
+               LEFT JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
+               LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id";
 
 //echo $sQuery;die;
 $start_date = '';
@@ -170,7 +171,7 @@ if ($sarr['sc_user_type'] == 'remoteuser') {
      } else {
           $sWhere .= " WHERE ";
      }
-     $sWhere = $sWhere . 'vl.result_status!=9';
+     $sWhere = $sWhere . 'vl.result_status!=9 ';
      $sFilter = ' AND result_status!=9';
 }
 $sQuery = $sQuery . ' ' . $sWhere;
@@ -183,8 +184,7 @@ $_SESSION['covid19RequestSearchResultQuery'] = $sQuery;
 if (isset($sLimit) && isset($sOffset)) {
      $sQuery = $sQuery . ' LIMIT ' . $sOffset . ',' . $sLimit;
 }
-/* echo $sQuery;
-die; */
+// echo $sQuery;
 $rResult = $db->rawQuery($sQuery);
 /* Data set length after filtering */
 $aResultFilterTotal = $db->rawQuery("SELECT vl.covid19_id FROM form_covid19 as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere");
@@ -217,7 +217,7 @@ if (isset($_SESSION['privileges']) && (in_array("covid-19-view-request.php", $_S
 if (isset($_SESSION['privileges']) && (in_array("covid-19-sync-request.php", $_SESSION['privileges']))) {
      $syncRequest = true;
 }
-
+// echo "<pre>";print_r($rResult);die;
 foreach ($rResult as $aRow) {
      $vlResult = '';
      $edit = '';
@@ -277,10 +277,13 @@ foreach ($rResult as $aRow) {
      }
      
      if ($syncRequest) {
-          $sync = '<a href="javascript:void(0);" class="btn btn-success btn-xs disabled" style="margin-right: 2px;" title="This sample already Synced to remote" disabled><i class="fa fa-check"></i></a>';
           if($aRow['data_sync'] == 0){
                $sync = '<a href="javascript:void(0);" class="btn btn-secondry btn-xs" style="margin-right: 2px;" title="Sync this sample" onclick="syncRequest(\'' . base64_encode($aRow['covid19_id']) . '\')">⟳</a>';
+          }else{
+               $sync = "";
           }
+     }else{
+          $sync = "";
      }
 
      if (isset($gconfig['bar_code_printing']) && $gconfig['bar_code_printing'] != "off") {
