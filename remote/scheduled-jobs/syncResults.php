@@ -2,7 +2,7 @@
 //this fille is get the data from lab db and update in remote db
 
 include(dirname(__FILE__) . "/../../startup.php");
-
+$general = new \Vlsm\Models\General($db);
 
 if (!isset($systemConfig['remoteURL']) || $systemConfig['remoteURL'] == '') {
     echo "Please check your remote url";
@@ -284,3 +284,9 @@ if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['he
         //}
     }
 }
+/* Get instance id for update last_remote_results_sync */
+$instanceResult = $db->rawQueryOne("SELECT vlsm_instance_id, instance_facility_name FROM s_vlsm_instance");
+
+/* Update last_remote_results_sync in s_vlsm_instance */
+$db = $db->where('vlsm_instance_id', $instanceResult['vlsm_instance_id']);
+$id = $db->update('s_vlsm_instance', array('last_remote_results_sync' => $general->getDateTime()));

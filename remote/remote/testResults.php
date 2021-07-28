@@ -65,7 +65,7 @@ if (count($data['result']) > 0) {
 
 
         //data_sync = 1 means data sync done. data_sync = 0 means sync is not yet done.
-        $lab['data_sync'] = 1; 
+        $lab['data_sync'] = 1;
         $lab['last_modified_datetime'] = $general->getDateTime();
 
         // unset($lab['request_created_by']);
@@ -92,19 +92,18 @@ if (count($data['result']) > 0) {
             //error_log($sQuery);
         }
 
-        try{
+        try {
             $sResult = $db->rawQuery($sQuery);
 
             //$lab['result_printed_datetime'] = null;            
-    
+
             if ($sResult) {
                 $db = $db->where('vl_sample_id', $sResult[0]['vl_sample_id']);
                 $id = $db->update('vl_request_form', $lab);
             } else {
                 $id = $db->insert('vl_request_form', $lab);
             }
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             continue;
         }
 

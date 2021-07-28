@@ -605,7 +605,7 @@ class General
     public function trackQrViewPage($type, $typeId, $sampleCode)
     {
         $userAgent = $_SERVER['HTTP_USER_AGENT'];
-        
+
         $data = array(
             'test_type' => $type,
             'test_type_id' => $typeId,
@@ -700,5 +700,10 @@ class General
         }
 
         return $browser;
+    }
+    public function getLatestSynDateTime()
+    {
+        $dateTime = $this->db->rawQueryOne("SELECT GREATEST(last_remote_requests_sync, last_remote_results_sync, last_remote_reference_data_sync) AS dateTime FROM s_vlsm_instance");
+        return (isset($dateTime['dateTime']) && $dateTime['dateTime'] != "") ? date('d-M-Y h:i:s a', strtotime($dateTime['dateTime'])) : null;
     }
 }
