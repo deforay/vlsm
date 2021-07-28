@@ -21,7 +21,7 @@ if ($userType == 'remoteuser') {
     $userfacilityMapresult = $db->rawQuery($userfacilityMapQuery);
     if ($userfacilityMapresult[0]['facility_id'] != null && $userfacilityMapresult[0]['facility_id'] != '') {
         $userfacilityMapresult[0]['facility_id'] = rtrim($userfacilityMapresult[0]['facility_id'], ",");
-        $whereCondition = " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")   AND remote_sample='yes'";
+        $whereCondition = " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")";
     }
 }
 
