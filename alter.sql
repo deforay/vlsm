@@ -2252,3 +2252,7 @@ UPDATE `system_config` SET `value` = '4.3.8' WHERE `system_config`.`name` = 'sc_
 ALTER TABLE `form_hepatitis` ADD `lab_technician` VARCHAR(256) NULL DEFAULT NULL AFTER `lab_id`; 
 ALTER TABLE `form_hepatitis` ADD `social_category` VARCHAR(256) NULL DEFAULT NULL AFTER `patient_marital_status`; 
 ALTER TABLE `s_vlsm_instance` ADD `last_remote_requests_sync` DATETIME NULL DEFAULT NULL AFTER `last_vldash_sync`, ADD `last_remote_results_sync` DATETIME NULL DEFAULT NULL AFTER `last_remote_requests_sync`, ADD `last_remote_reference_data_sync` DATETIME NULL DEFAULT NULL AFTER `last_remote_results_sync`; 
+
+
+-- Amit -- 28-Jul-2021
+UPDATE `system_config` SET `value` = '4.3.9' WHERE `system_config`.`name` = 'sc_version';
