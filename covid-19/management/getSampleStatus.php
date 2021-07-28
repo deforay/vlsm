@@ -16,7 +16,7 @@ if ($userType == 'remoteuser') {
     $userfacilityMapresult = $db->rawQuery($userfacilityMapQuery);
     if ($userfacilityMapresult[0]['facility_id'] != null && $userfacilityMapresult[0]['facility_id'] != '') {
         $userfacilityMapresult[0]['facility_id'] = rtrim($userfacilityMapresult[0]['facility_id'], ",");
-        $whereCondition = " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")   AND remote_sample='yes'";
+        $whereCondition = " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")";
     }
 }
 
@@ -158,6 +158,8 @@ $tatSampleQuery .= " GROUP BY monthDate";
 $tatSampleQuery .= " HAVING daydiff < 120";
 $tatSampleQuery .= " ORDER BY sample_tested_datetime";
 
+//echo $tatSampleQuery;
+
 $tatResult = $db->rawQuery($tatSampleQuery);
 $j = 0;
 foreach ($tatResult as $sRow) {
@@ -173,18 +175,18 @@ foreach ($tatResult as $sRow) {
     $j++;
 }
 
-$testReasonQuery = "SELECT count(c.sample_code) AS total, tr.test_reason_name 
-                    from form_covid19 as c 
-                    INNER JOIN r_covid19_test_reasons as tr ON c.reason_for_covid19_test = tr.test_reason_id 
-                    JOIN facility_details as f ON c.facility_id=f.facility_id 
-                    LEFT JOIN batch_details as b ON b.batch_id=c.sample_batch_id";
+$testReasonQuery = "SELECT count(vl.sample_code) AS total, tr.test_reason_name 
+                    from form_covid19 as vl 
+                    INNER JOIN r_covid19_test_reasons as tr ON vl.reason_for_covid19_test = tr.test_reason_id 
+                    JOIN facility_details as f ON vl.facility_id=f.facility_id 
+                    LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id";
 
-$sWhere = ' WHERE c.reason_for_covid19_test IS NOT NULL ';
+$sWhere = ' WHERE vl.reason_for_covid19_test IS NOT NULL '. $whereCondition;
 if (isset($_POST['batchCode']) && trim($_POST['batchCode']) != '') {
     $sWhere .= ' AND b.batch_code = "' . $_POST['batchCode'] . '"';
 }
 if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != '') {
-    $sWhere .= ' AND DATE(c.sample_collection_date) >= "' . $start_date . '" AND DATE(c.sample_collection_date) <= "' . $end_date . '"';
+    $sWhere .= ' AND DATE(vl.sample_collection_date) >= "' . $start_date . '" AND DATE(vl.sample_collection_date) <= "' . $end_date . '"';
 }
 if (!empty($_POST['labName'])) {
     $sWhere .= ' AND vl.lab_id = ' . $_POST['labName'];

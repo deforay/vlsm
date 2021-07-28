@@ -229,7 +229,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 	$covid19TestRequestMenuAccess = false;
 }
 
-if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('addImportResult.php', 'covid-19-manual-results.php', 'covid-19-confirmation-manifest.php', 'can-record-confirmatory-tests.php', 'covid-19-result-status.php', 'covid-19-print-results.php'))) {
+if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('addImportResult.php', 'covid-19-manual-results.php', 'covid-19-confirmation-manifest.php', 'can-record-confirmatory-tests.php', 'covid-19-result-status.php'))) {
 	$covid19TestResultMenuAccess = true;
 } else {
 	$covid19TestResultMenuAccess = false;
