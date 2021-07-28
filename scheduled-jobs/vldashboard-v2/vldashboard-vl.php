@@ -11,67 +11,75 @@ $general = new \Vlsm\Models\General($db);
 $lastUpdate = null;
 $output = array();
 
-$tndArray = array(
+$suppressionLimit = 1000;
+
+$suppressedArray = array(
     'target not detected',
     'tnd',
-    '<20',
-    '< 20',
-    '<40',
-    '< 40',
-    '< 800',
-    '<800',
-    'bdl',
+    'not detected',
     'below detection limit',
+    'below detection level',
+    'bdl',
     'suppressed',
+    'negative',
+    'negat'
 );
 
 try {
 
     $instanceUpdateOn = $db->getValue('s_vlsm_instance', 'vl_last_dash_sync');
-    
+
     if (!empty($instanceUpdateOn)) {
         $db->where('last_modified_datetime', $instanceUpdateOn, ">");
     }
-    
+
     $db->orderBy("last_modified_datetime", "ASC");
-    
+
     $rResult = $db->get('vl_request_form', 5000);
-    
+
     if (empty($rResult)) {
         exit(0);
     }
 
     $lastUpdate = $rResult[count($rResult) - 1]['last_modified_datetime'];
-    
+
     $output['timestamp'] = strtotime($instanceUpdateOn);
     foreach ($rResult as $aRow) {
 
-        $VLAnalysisResult = $aRow['result_value_absolute'];
+        if ($aRow['result'] == NULL || empty($aRow['result'])) {
+            $aRow['DashVL_Abs'] = NULL;
+            $aRow['DashVL_AnalysisResult'] = NULL;
+        } else if (is_numeric($aRow['result']) && $aRow['result'] > 0 && $aRow['result'] == round($aRow['result'], 0)) {
+            $aRow['result'] = (float)filter_var($aRow['result'], FILTER_SANITIZE_NUMBER_FLOAT);
 
-        if (in_array(strtolower($aRow['result_value_text']), $tndArray)) {
-            $VLAnalysisResult = 20;
-        }
+            if ($aRow['result'] < $suppressionLimit) {
+                $aRow['DashVL_AnalysisResult'] = 'Suppressed';
+                $aRow['DashVL_Abs'] = $aRow['result'];
+            } else if ($aRow['result'] >= $suppressionLimit) {
+                $aRow['DashVL_AnalysisResult'] = 'Not Suppressed';
+                $aRow['DashVL_Abs'] = $aRow['result'];
+            }
+        } else {
 
-        if (empty($VLAnalysisResult)) {
-            $DashVL_Abs = 0;
-            $DashVL_AnalysisResult = NULL;
-        } else if ($VLAnalysisResult < 1000) {
-            $DashVL_AnalysisResult = 'Suppressed';
-            $DashVL_Abs = $VLAnalysisResult;
-        } else if ($VLAnalysisResult >= 1000) {
-            $DashVL_AnalysisResult = 'Not Suppressed';
-            $DashVL_Abs = $VLAnalysisResult;
-        }
-        if (!empty($aRow['remote_sample_code'])) {
-            if (!empty($aRow['sample_code'])) {
-                $aRow['sample_code']      = $aRow['remote_sample_code'] . '-' . $aRow['sample_code'];
+            $textResult = NULL;
+
+            if (in_array(strtolower($aRow['result']), $suppressedArray) || in_array(strtolower($aRow['result_value_text']), $suppressedArray)) {
+                $textResult = 20;
             } else {
-                $aRow['sample_code']      = $aRow['remote_sample_code'];
+                $textResult = (float)filter_var($aRow['result_value_text'], FILTER_SANITIZE_NUMBER_FLOAT);
+            }
+
+            if ($textResult == 'NULL' || empty($textResult)) {
+                $aRow['DashVL_Abs'] = NULL;
+                $aRow['DashVL_AnalysisResult'] = NULL;
+            } else if ($textResult < $suppressionLimit) {
+                $aRow['DashVL_AnalysisResult'] = 'Suppressed';
+                $aRow['DashVL_Abs'] = $textResult;
+            } else if ($textResult >= $suppressionLimit) {
+                $aRow['DashVL_AnalysisResult'] = 'Not Suppressed';
+                $aRow['DashVL_Abs'] = $textResult;
             }
         }
-
-        $aRow['DashVL_Abs'] = $DashVL_Abs;
-        $aRow['DashVL_AnalysisResult'] = $DashVL_AnalysisResult;
         $output['data'][] = $aRow;
     }
 
@@ -118,7 +126,7 @@ try {
         $data = array(
             'vl_last_dash_sync' => (!empty($lastUpdate) ? $lastUpdate : $general->getDateTime())
         );
-        
+
         $db->update('s_vlsm_instance', $data);
     }
     $general->removeDirectory(TEMP_PATH . DIRECTORY_SEPARATOR . $filename);
