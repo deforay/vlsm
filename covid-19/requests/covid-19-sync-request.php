@@ -72,9 +72,9 @@ try {
         curl_close($ch);
         $apiData = json_decode($curl_response, true);
         if (isset($apiData) && sizeof($apiData) > 0) {
-            echo "Sample Synced to remote.";
+            echo "Sample synced successfully";
         } else {
-            echo "Sample Not Synced please try again later.";
+            echo "Sample not synced. Please try again later";
         }
     }
 } catch (Exception $exc) {
