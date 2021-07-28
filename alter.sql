@@ -2247,3 +2247,7 @@ UPDATE `system_config` SET `name` = 'sc_version' WHERE `system_config`.`name` = 
 
 -- Amit -- 25-Jul-2021
 UPDATE `system_config` SET `value` = '4.3.8' WHERE `system_config`.`name` = 'sc_version';
+
+-- Thana -- 28-Jul-2021
+ALTER TABLE `form_hepatitis` ADD `lab_technician` VARCHAR(256) NULL DEFAULT NULL AFTER `lab_id`; 
+ALTER TABLE `form_hepatitis` ADD `social_category` VARCHAR(256) NULL DEFAULT NULL AFTER `patient_marital_status`; 
