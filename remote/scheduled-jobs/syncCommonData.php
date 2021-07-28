@@ -747,3 +747,10 @@ if (!empty($result['partners']) && count($result['partners']) > 0) {
         }
     }
 }
+
+/* Get instance id for update last_remote_results_sync */
+$instanceResult = $db->rawQueryOne("SELECT vlsm_instance_id, instance_facility_name FROM s_vlsm_instance");
+
+/* Update last_remote_results_sync in s_vlsm_instance */
+$db = $db->where('vlsm_instance_id', $instanceResult['vlsm_instance_id']);
+$id = $db->update('s_vlsm_instance', array('last_remote_reference_data_sync' => $general->getDateTime()));

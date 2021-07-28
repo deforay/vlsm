@@ -33,7 +33,7 @@ $hepatitisQuery = "SELECT * FROM form_hepatitis
 
 if (!empty($data['manifestCode'])) {
     $hepatitisQuery .= " AND sample_package_code like '" . $data['manifestCode'] . "%'";
-}else{
+} else {
     $hepatitisQuery .= " AND data_sync=0";
 }
 

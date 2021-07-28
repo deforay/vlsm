@@ -40,7 +40,7 @@ try {
         $data['symptoms'] = $symptoms;
         $data['comorbidities'] = $comorbidities;
         $data['testResults'] = $testResults;
-        
+
         $db->where('covid19_id', $forms, 'IN');
         if (!$db->update('form_covid19', array('data_sync' => 1)))
             error_log('update failed: ' . $db->getLastError());
@@ -71,9 +71,9 @@ try {
         //close connection
         curl_close($ch);
         $apiData = json_decode($curl_response, true);
-        if(isset($apiData) && sizeof($apiData) > 0){
+        if (isset($apiData) && sizeof($apiData) > 0) {
             echo "Sample Synced to remote.";
-        }else{
+        } else {
             echo "Sample Not Synced please try again later.";
         }
     }
