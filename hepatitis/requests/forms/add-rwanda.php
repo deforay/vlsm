@@ -66,7 +66,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                         <div class="box box-default">
                             <div class="box-body">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">SITE INFORMATION</h3>
+                                    <h3 class="box-title">SECTION 1. TO BE FILLED AT ENROLMENT FACILITY</h3>
                                 </div>
                                 <div class="box-header with-border">
                                     <h3 class="box-title" style="font-size:1em;">To be filled by requesting Clinician/Nurse</h3>
@@ -85,16 +85,18 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                 <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Sample ID" title="Please enter sample id" style="width:100%;" onchange="checkSampleNameValidation('form_hepatitis','<?php echo $sampleCode; ?>',this.id,null,'The sample id that you entered already exists. Please try another sample id',null)" readonly />
                                             </td>
                                         <?php } ?>
+                                        <th style="width:15% !important"><label for="patientId">Patient Code <span class="mandatory">*</span> </label></th>
+                                        <td style="width:35% !important">
+                                            <input type="text" class="form-control isRequired" id="patientId" name="patientId" placeholder="Patient Code" title="Please enter Patient Code" style="width:100%;" onchange="" />
+                                        </td>
                                         <td><label for="hepatitisTestType">Type of Hepatitis Test </label><span class="mandatory">*</span></td>
                                         <td>
-                                            <select class="form-control isRequired" name="hepatitisTestType" id="hepatitisTestType" title="Please choose type of test" style="width:100%;" onchange="sampleCodeGeneration();hepatitisTestTypeFn(this.value);">
+                                            <select class="form-control isRequired" name="hepatitisTestType" id="hepatitisTestType" title="Please choose type hepatitis test" style="width:100%;" onchange="hepatitisTestTypeFn(this.value);">
                                                 <option value="">--Select--</option>
                                                 <option value="HBV">HBV</option>
                                                 <option value="HCV">HCV</option>
                                             </select>
                                         </td>
-                                        <td></td>
-                                        <td></td>
                                     </tr>
                                     <tr>
                                         <td><label for="province">Province </label><span class="mandatory">*</span></td>
@@ -117,29 +119,6 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><label for="supportPartner">Implementing Partner </label></td>
-                                        <td>
-                                            <!-- <input type="text" class="form-control" id="supportPartner" name="supportPartner" placeholder="Partenaire dappui" title="Please enter partenaire dappui" style="width:100%;"/> -->
-                                            <select class="form-control" name="implementingPartner" id="implementingPartner" title="Please choose partenaire de mise en œuvre" style="width:100%;">
-                                                <option value=""> -- Select -- </option>
-                                                <?php
-                                                foreach ($implementingPartnerList as $implementingPartner) {
-                                                ?>
-                                                    <option value="<?php echo ($implementingPartner['i_partner_id']); ?>"><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
-                                                <?php } ?>
-                                            </select>
-                                        </td>
-                                        <td><label for="fundingSource">Funding Partner</label></td>
-                                        <td>
-                                            <select class="form-control" name="fundingSource" id="fundingSource" title="Please choose source de financement" style="width:100%;">
-                                                <option value=""> -- Select -- </option>
-                                                <?php
-                                                foreach ($fundingSourceList as $fundingSource) {
-                                                ?>
-                                                    <option value="<?php echo ($fundingSource['funding_source_id']); ?>"><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
-                                                <?php } ?>
-                                            </select>
-                                        </td>
                                         <?php if ($sarr['sc_user_type'] == 'remoteuser') { ?>
                                             <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
                                             <td>
@@ -148,17 +127,18 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                     <?= $general->generateSelectOptions($testingLabs, null, '-- Select --'); ?>
                                                 </select>
                                             </td>
-                                        <?php } else { ?>
-                                            <th></th>
-                                            <td></td>
                                         <?php } ?>
-
+                                        <th style="width:15% !important">Sample Collection Date <span class="mandatory">*</span> </th>
+                                        <td style="width:35% !important;">
+                                            <input class="form-control isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" onchange="sampleCodeGeneration();" />
+                                        </td>
+                                    </tr>
                                 </table>
                                 <br>
                                 <hr style="border: 1px solid #ccc;">
 
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">PATIENT INFORMATION</h3>
+                                    <h3 class="box-title">DEMOGRAPHICS</h3>
                                 </div>
                                 <table class="table" style="width:100%">
 
@@ -173,18 +153,18 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th style="width:15% !important"><label for="patientId">Patient Code <span class="mandatory">*</span> </label></th>
-                                        <td style="width:35% !important">
-                                            <input type="text" class="form-control isRequired" id="patientId" name="patientId" placeholder="Patient Code" title="Please enter Patient Code" style="width:100%;" onchange="" />
-                                        </td>
+                                        <th><label for="patientPhoneNumber">Phone number</label></th>
+                                        <td><input type="text" class="form-control " id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Patient Phone Number" title="Patient Phone Number" style="width:100%;" onchange="" /></td>
+
                                         <th><label for="patientDob">Date of Birth <span class="mandatory">*</span> </label></th>
                                         <td>
                                             <input type="text" class="form-control isRequired" id="patientDob" name="patientDob" placeholder="Date of Birth" title="Please enter Date of birth" style="width:100%;" onchange="calculateAgeInYears();" />
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th>Patient Age (years)</th>
+                                        <th><label for="patientAge">Patient Age (years)</label></th>
                                         <td><input type="number" max="150" maxlength="3" oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="patientAge" name="patientAge" placeholder="Patient Age (in years)" title="Patient Age" style="width:100%;" onchange="" /></td>
+
                                         <th><label for="patientGender">Gender <span class="mandatory">*</span> </label></th>
                                         <td>
                                             <select class="form-control isRequired" name="patientGender" id="patientGender">
@@ -192,26 +172,36 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                                 <option value='male'> Male </option>
                                                 <option value='female'> Female </option>
                                                 <option value='other'> Other </option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="patientProvince">Province</label></th>
+                                        <td><input type="text" class="form-control " id="patientProvince" name="patientProvince" placeholder="Patient Province" title="Please enter the patient province" style="width:100%;" /></td>
+
+                                        <th><label for="patientDistrict">District</label></th>
+                                        <td><input class="form-control" id="patientDistrict" name="patientDistrict" placeholder="Patient District" title="Please enter the patient district" style="width:100%;"></td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="patientCity">Village</label></th>
+                                        <td><input type="text" class="form-control " id="patientCity" name="patientCity" placeholder="Patient Village" title="Please enter the patient village" style="width:100%;" /></td>
+                                        <th><label for="socialCategory">Social Category</label></th>
+                                        <td>
+                                            <select class="form-control" name="socialCategory" id="socialCategory" title="Please select the social category">
+                                                <option value=''> -- Select -- </option>
+                                                <option value='A'> A </option>
+                                                <option value='B'> B </option>
+                                                <option value='C'> C </option>
+                                                <option value='D'> D </option>
+                                                <option value='others'>Others </option>
 
                                             </select>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th><label for="patientGender">Marital Status</label></th>
-                                        <td>
-                                            <select class="form-control" name="maritalStatus" id="maritalStatus">
-                                                <option value=''> -- Select -- </option>
-                                                <option value='married'> Married </option>
-                                                <option value='single'> Single </option>
-                                                <option value='widow'> Widow </option>
-                                                <option value='divorced'> Divorced </option>
-                                                <option value='separated'> Separated </option>
-
-                                            </select>
-                                        </td>
                                         <th><label for="patientGender">Insurance</label></th>
                                         <td>
-                                            <select class="form-control" name="insurance" id="insurance">
+                                            <select class="form-control" name="insurance" id="insurance" title="Please select the insurance">
                                                 <option value=''> -- Select -- </option>
                                                 <option value='mutuelle'> Mutuelle </option>
                                                 <option value='RAMA'> RAMA </option>
@@ -222,110 +212,9 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             </select>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <th>Phone number</th>
-                                        <td><input type="text" class="form-control " id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Patient Phone Number" title="Patient Phone Number" style="width:100%;" onchange="" /></td>
 
-                                        <th>Patient address</th>
-                                        <td><textarea class="form-control " id="patientAddress" name="patientAddress" placeholder="Patient Address" title="Patient Address" style="width:100%;" onchange=""></textarea></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Province</th>
-                                        <td><input type="text" class="form-control " id="patientProvince" name="patientProvince" placeholder="Patient Province" title="Please enter the patient province" style="width:100%;" /></td>
-
-                                        <th>District</th>
-                                        <td><input class="form-control" id="patientDistrict" name="patientDistrict" placeholder="Patient District" title="Please enter the patient district" style="width:100%;"></td>
-                                    </tr>
                                 </table>
                                 <br><br>
-                                <table class="table" style="border-top:#ccc 2px solid;">
-                                    <tr>
-                                        <th style="width:15% !important">
-                                            <label for="testNumber">Ubudehe</label>
-                                        </th>
-                                        <td style="width:35% !important">
-                                            <select name="testNumber" id="testNumber" class="form-control" title="Please choose ubudehe">
-                                                <option value="">-- Select --</option>
-                                                <?php foreach (array('A', 'B', 'C', 'D', 'E') as $val) { ?>
-                                                    <option value="<?php echo $val; ?>"><?php echo $val; ?></option>
-                                                <?php } ?>
-                                            </select>
-                                        </td>
-                                        <th style="width:15% !important"></th>
-                                        <td style="width:35% !important"></td>
-                                    </tr>
-                                </table>
-                                <br><br>
-                                <table class="table">
-                                    <tr>
-                                        <th colspan=4 style="border-top:#ccc 2px solid;">
-                                            <h4>COMORBIDITIES</h4>
-                                        </th>
-                                    </tr>
-                                    <?php foreach ($comorbidityData as $id => $name) { ?>
-                                        <tr>
-                                            <th>
-                                                <label for="riskFactors"><?php echo ucwords($name); ?></label>
-                                            </th>
-                                            <td>
-                                                <select name="comorbidity[<?php echo $id; ?>]" id="comorbidity<?php echo $id; ?>" class="form-control" title="Please choose <?php echo ucwords($name); ?>" style="width:100%" onchange="comorbidity(this,<?php echo $id; ?>);">
-                                                    <option value="">-- Select --</option>
-                                                    <option value="yes">Yes</option>
-                                                    <option value="no">No</option>
-                                                    <option value="other">Others</option>
-                                                </select>
-                                            </td>
-
-                                            <th class="show-comorbidity<?php echo $id; ?>" style="display:none;">
-                                                <label for="comorbidityOther<?php echo $id; ?>">Enter other comorbidity for <?php echo ucwords($name); ?></label>
-                                            </th>
-                                            <td class="show-comorbidity<?php echo $id; ?>" style="display:none;">
-                                                <input name="comorbidityOther[<?php echo $id; ?>]" id="comorbidityOther<?php echo $id; ?>" placeholder="Enter other comorbidity" type="text" class="form-control" title="Please enter <?php echo ucwords($name); ?> others" style="width:100%">
-                                            </td>
-                                        </tr>
-                                    <?php } ?>
-                                </table>
-                                <table class="table">
-                                    <tr>
-                                        <th colspan=4 style="border-top:#ccc 2px solid;">
-                                            <h4>HEPATITIS RISK FACTORS</h4>
-                                        </th>
-                                    </tr>
-                                    <?php foreach ($riskFactorsData as $id => $name) { ?>
-                                        <tr>
-                                            <th>
-                                                <label for="riskFactors"><?php echo ucwords($name); ?></label>
-                                            </th>
-                                            <td>
-                                                <select name="riskFactors[<?php echo $id; ?>]" id="riskFactors<?php echo $id; ?>" class="form-control" title="Please choose <?php echo ucwords($name); ?>" style="width:100%" onchange="riskfactor(this,<?php echo $id; ?>);">
-                                                    <option value="">-- Select --</option>
-                                                    <option value="yes">Yes</option>
-                                                    <option value="no">No</option>
-                                                    <option value="other">Others</option>
-                                                </select>
-                                            </td>
-
-                                            <th class="show-riskfactor<?php echo $id; ?>" style="display:none;">
-                                                <label for="riskFactors">Enter other risk factor for <?php echo ucwords($name); ?></label>
-                                            </th>
-                                            <td class="show-riskfactor<?php echo $id; ?>" style="display:none;">
-                                                <input name="riskFactorsOther[<?php echo $id; ?>]" id="riskFactorsOther<?php echo $id; ?>" placeholder="Enter other risk factor" type="text" class="form-control" title="Please enter <?php echo ucwords($name); ?> others" style="width:100%">
-                                            </td>
-                                        </tr>
-                                    <?php } ?>
-                                    <tr>
-                                        <th><label for="HbvVaccination">HBV vaccination</label></th>
-                                        <td>
-                                            <select name="HbvVaccination" id="HbvVaccination" class="form-control isRequired" title="Please choose HBV vaccination" style="width:100%">
-                                                <option value="">-- Select --</option>
-                                                <option value="yes">Yes</option>
-                                                <option value="no">No</option>
-                                                <option value="fully-vaccinated">Fully vaccinated</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-
-                                </table>
                             </div>
                         </div>
                         <div class="box-body">
@@ -334,10 +223,6 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                             </div>
                             <table class="table" style="width:100%">
                                 <tr>
-                                    <th style="width:15% !important">Sample Collection Date <span class="mandatory">*</span> </th>
-                                    <td style="width:35% !important;">
-                                        <input class="form-control isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" onchange="sampleCodeGeneration();" />
-                                    </td>
                                     <th>Specimen Type <span class="mandatory">*</span></th>
                                     <td>
                                         <select name="specimenType" id="specimenType" class="form-control isRequired" title="Please choose specimen type" style="width:100%">
@@ -347,8 +232,6 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             <?php } ?>
                                         </select>
                                     </td>
-                                </tr>
-                                <tr>
                                     <th class="hbvFields"><label for="HBsAg">HBsAg Result</label></th>
                                     <td class="hbvFields">
                                         <select class="hbvFields form-control" name="HBsAg" id="HBsAg" title="Please choose HBsAg result">
@@ -358,6 +241,8 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             <option value='intermediate'>Intermediate</option>
                                         </select>
                                     </td>
+                                </tr>
+                                <tr>
                                     <th class="hcvFields"><label for="antiHcv">Anti-HCV Result</label></th>
                                     <td class="hcvFields">
                                         <select class="hcvFields form-control" name="antiHcv" id="antiHcv" title="Please choose Anti-HCV result">
@@ -367,12 +252,11 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             <option value='intermediate'>Intermediate</option>
                                         </select>
                                     </td>
-                                </tr>
-                                <tr>
-                                    <th><label for="testTypeRequested">Purpose of Test</label></th>
+                                    <th><label for="labTechnician">Lab Technician (screening test)</label></th>
                                     <td>
-                                        <select class="form-control" name="testTypeRequested" id="testTypeRequested" title="Please choose purpose of test">
-                                            <?= $general->generateSelectOptions($testReasonResults, null, '-- Select --'); ?>
+                                        <select name="labTechnician" id="labTechnician" class="form-control" title="Please select a Lab Technician" style="width:100%;">
+                                            <option value="">--Select--</option>
+                                            <?= $general->generateSelectOptions($labTechniciansResults, $_SESSION['userId'], '-- Select --'); ?>
                                         </select>
                                     </td>
                                 </tr>
@@ -382,7 +266,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                             <div class="box box-primary">
                                 <div class="box-body">
                                     <div class="box-header with-border">
-                                        <h3 class="box-title">TO BE FILLED AT VIRAL LOAD TESTING SITE </h3>
+                                        <h3 class="box-title">SECTION 2. TO BE FILLED AT VIRAL LOAD TESTING SITE</h3>
                                     </div>
                                     <table class="table" style="width:100%">
                                         <tr>
@@ -489,8 +373,13 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         <tr>
                                             <th>Authorized on</td>
                                             <td><input type="text" name="authorizedOn" id="authorizedOn" class="labSecInput disabled-field form-control date rejected-input" placeholder="Authorized on" /></td>
-                                            <th></th>
-                                            <td></td>
+                                            <th>Lab Technician (VL Testing)</td>
+                                            <td>
+                                                <select name="tested_by" id="tested_by" class="form-control" title="Please select a Lab Technician (VL Testing)" style="width:100%;">
+                                                    <option value="">--Select--</option>
+                                                    <?= $general->generateSelectOptions($labTechniciansResults, $_SESSION['userId'], '-- Select --'); ?>
+                                                </select>
+                                            </td>
                                         </tr>
                                     </table>
                                 </div>

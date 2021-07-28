@@ -96,7 +96,7 @@ try {
 		'hbv_vaccination'                     => isset($_POST['HbvVaccination']) ? $_POST['HbvVaccination'] : null,
 		'is_sample_collected'                 => isset($_POST['isSampleCollected']) ? $_POST['isSampleCollected'] : null,
 		'type_of_test_requested'              => isset($_POST['testTypeRequested']) ? $_POST['testTypeRequested'] : null,
-		'reason_for_vl_test'  				  => isset($_POST['reasonVlTest']) ? $_POST['reasonVlTest'] :null,
+		'reason_for_vl_test'  				  => isset($_POST['reasonVlTest']) ? $_POST['reasonVlTest'] : null,
 		'specimen_type'                       => isset($_POST['specimenType']) ? $_POST['specimenType'] : null,
 		'sample_collection_date'              => isset($_POST['sampleCollectionDate']) ? $_POST['sampleCollectionDate'] : null,
 		'sample_received_at_vl_lab_datetime'  => isset($_POST['sampleReceivedDate']) ? $_POST['sampleReceivedDate'] : null,
@@ -115,6 +115,7 @@ try {
 		'import_machine_name'                 => isset($_POST['machineName']) ? $_POST['machineName'] : null,
 		'is_result_authorised'                => isset($_POST['isResultAuthorized']) ? $_POST['isResultAuthorized'] : null,
 		'authorized_by'                       => isset($_POST['authorizedBy']) ? $_POST['authorizedBy'] : null,
+		'social_category'                       => isset($_POST['socialCategory']) ? $_POST['socialCategory'] : null,
 		'authorized_on' 					  => isset($_POST['authorizedOn']) ? $general->dateFormat($_POST['authorizedOn']) : null,
 		'rejection_on'	 					  => (isset($_POST['rejectionDate']) && $_POST['isSampleRejected'] == 'yes') ? $general->dateFormat($_POST['rejectionDate']) : null,
 		'result_status'                       => $status,
@@ -124,7 +125,8 @@ try {
 		'request_created_datetime'            => $general->getDateTime(),
 		'sample_registered_at_lab'            => $general->getDateTime(),
 		'last_modified_by'                    => $_SESSION['userId'],
-		'last_modified_datetime'              => $general->getDateTime()
+		'last_modified_datetime'              => $general->getDateTime(),
+		'lab_technician'              		  => (isset($_POST['labTechnician']) && $_POST['labTechnician'] != '') ? $_POST['labTechnician'] :  $_SESSION['userId'],
 	);
 	/* $lock = $general->getGlobalConfig('lock_approved_hepatitis_samples');
     if($status == 7 && $lock == 'yes'){
@@ -132,17 +134,17 @@ try {
 	} */
 	// echo "<pre>";print_r($hepatitisData);die;
 	// For Save Comorbidity 
-	if(isset($_POST['hepatitisSampleId']) && $_POST['hepatitisSampleId'] != 0){
+	if (isset($_POST['hepatitisSampleId']) && $_POST['hepatitisSampleId'] != 0) {
 
 		$db = $db->where('hepatitis_id', $_POST['hepatitisSampleId']);
 		$db->delete("hepatitis_patient_comorbidities");
 		if (isset($_POST['comorbidity']) && !empty($_POST['comorbidity'])) {
-	
-			foreach($_POST['comorbidity'] as $id=>$value){
+
+			foreach ($_POST['comorbidity'] as $id => $value) {
 				$comorbidityData = array();
 				$comorbidityData["hepatitis_id"] = $_POST['hepatitisSampleId'];
 				$comorbidityData["comorbidity_id"] = $id;
-				$comorbidityData["comorbidity_detected"] = (isset($value) && $value == 'other')?$_POST['comorbidityOther'][$id]:$value;
+				$comorbidityData["comorbidity_detected"] = (isset($value) && $value == 'other') ? $_POST['comorbidityOther'][$id] : $value;
 				$db->insert("hepatitis_patient_comorbidities", $comorbidityData);
 			}
 		}
@@ -150,22 +152,22 @@ try {
 		$db = $db->where('hepatitis_id', $_POST['hepatitisSampleId']);
 		$db->delete("hepatitis_risk_factors");
 		if (isset($_POST['riskFactors']) && !empty($_POST['riskFactors'])) {
-	
-			foreach($_POST['riskFactors'] as $id=>$value){
+
+			foreach ($_POST['riskFactors'] as $id => $value) {
 				$riskFactorsData = array();
 				$riskFactorsData["hepatitis_id"] = $_POST['hepatitisSampleId'];
 				$riskFactorsData["riskfactors_id"] = $id;
-				$riskFactorsData["riskfactors_detected"] = (isset($value) && $value == 'other')?$_POST['riskFactorsOther'][$id]:$value;;
+				$riskFactorsData["riskfactors_detected"] = (isset($value) && $value == 'other') ? $_POST['riskFactorsOther'][$id] : $value;;
 				$db->insert("hepatitis_risk_factors", $riskFactorsData);
 			}
 		}
-	
+
 		$id = 0;
 		if (isset($_POST['hepatitisSampleId']) && $_POST['hepatitisSampleId'] != '') {
 			$db = $db->where('hepatitis_id', $_POST['hepatitisSampleId']);
 			$id = $db->update($tableName, $hepatitisData);
 		}
-	} else{
+	} else {
 		$id = 0;
 	}
 
