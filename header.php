@@ -517,6 +517,11 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 										<a href="/vl/result-mail/testResultEmailConfig.php"><i class="fa fa-circle-o"></i>Test Result Email/SMS <br>Configuration</a>
 									</li>
 								<?php }
+								if (isset($_SESSION['privileges']) && in_array("geographical-divisions-details.php", $_SESSION['privileges'])) { ?>
+									<li class="allMenu resultEmailConfigMenu">
+										<a href="/common/reference/geographical-divisions-details.php"><i class="fa fa-circle-o"></i>Geographical Divisions</a>
+									</li>
+								<?php }
 								if (isset($_SESSION['privileges']) && in_array("province-details.php", $_SESSION['privileges'])) { ?>
 									<li class="treeview common-reference-manage">
 										<a href="#"><i class="fa fa-book"></i>Common Reference

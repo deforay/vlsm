@@ -2256,3 +2256,19 @@ ALTER TABLE `s_vlsm_instance` ADD `last_remote_requests_sync` DATETIME NULL DEFA
 
 -- Amit -- 28-Jul-2021
 UPDATE `system_config` SET `value` = '4.3.9' WHERE `system_config`.`name` = 'sc_version';
+
+-- Thana -- 29-Jul-2021
+CREATE TABLE `geographical_divisions` (
+ `geo_id` int NOT NULL AUTO_INCREMENT,
+ `geo_name` varchar(256) DEFAULT NULL,
+ `geo_code` varchar(256) DEFAULT NULL,
+ `geo_parent` varchar(256) NOT NULL DEFAULT '0',
+ `geo_status` varchar(256) DEFAULT NULL,
+ `created_by` varchar(256) DEFAULT NULL,
+ `created_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ `updated_datetime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ `data_sync` int NOT NULL DEFAULT '0',
+ PRIMARY KEY (`geo_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'common-reference', 'geographical-divisions-details.php', 'Manage Geographical Divisions'), (NULL, 'common-reference', 'add-geographical-divisions.php', 'Add Geographical Divisions'), (NULL, 'common-reference', 'edit-geographical-divisions.php', 'Edit Geographical Divisions');
