@@ -25,7 +25,7 @@ try {
 			$db = $db->where($primaryKey, base64_decode($_POST['geoId']));
 			$lastId = $db->update($tableName, $data);
 		} else {
-			$data['created_by'] = 0;
+			$data['created_by'] = $_SESSION['userId'];
 			$data['created_on'] = $general->getDateTime();
 			$data['data_sync'] = 0;
 			$db->insert($tableName, $data);

@@ -10,6 +10,7 @@ include_once(APPLICATION_PATH . '/includes/ImageResize.php');
 
 
 $general = new \Vlsm\Models\General($db);
+$geolocation = new \Vlsm\Models\GeoLocations($db);
 /* echo "<pre>";
 print_r($_FILES);*/
 $tableName = "facility_details";
@@ -62,6 +63,15 @@ try {
 			$_POST['testingPoints'] = null;
 		}
 
+		if (isset($_POST['provinceNew']) && $_POST['provinceNew'] != "" && $_POST['stateId'] == 'other') {
+			$_POST['stateId'] = $geolocation->addNewQuickGeoLocation($_POST['provinceNew']);
+			$_POST['state'] = $_POST['provinceNew'];
+		}
+
+		if (isset($_POST['districtNew']) && $_POST['districtNew'] != "" && $_POST['districtId'] == 'other') {
+			$_POST['districtId'] = $geolocation->addNewQuickGeoLocation($_POST['districtNew'], $_POST['stateId']);
+			$_POST['district'] = $_POST['districtNew'];
+		}
 
 		$data = array(
 			'facility_name' => $_POST['facilityName'],
@@ -71,6 +81,8 @@ try {
 			'facility_mobile_numbers' => $_POST['phoneNo'],
 			'address' => $_POST['address'],
 			'country' => $_POST['country'],
+			'facility_state_id' => $_POST['stateId'],
+			'facility_district_id' => $_POST['districtId'],
 			'facility_state' => $_POST['state'],
 			'facility_district' => $_POST['district'],
 			'facility_hub_name' => $_POST['hubName'],
@@ -83,7 +95,7 @@ try {
 			'test_type' => (isset($_POST['testType']) && !empty($_POST['testType'])) ?  implode(', ', $_POST['testType'])  : null,
 			'testing_points' => $_POST['testingPoints'],
 			'header_text' => $_POST['headerText'],
-			'report_format' => (isset($_POST['facilityType']) && $_POST['facilityType'] == 2)?json_encode($_POST['reportFormat']):null,
+			'report_format' => (isset($_POST['facilityType']) && $_POST['facilityType'] == 2) ? json_encode($_POST['reportFormat']) : null,
 			'updated_datetime' => $general->getDateTime(),
 			'status' => 'active'
 		);
