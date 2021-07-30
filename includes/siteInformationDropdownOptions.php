@@ -1,7 +1,7 @@
 <?php
 ob_start();
 if (session_status() == PHP_SESSION_NONE) {
-  session_start();
+	session_start();
 }
 #require_once('../startup.php');
 
@@ -15,21 +15,21 @@ $sarr = $general->getSystemConfig();
 
 
 if ($arr['vl_form'] == '3') {
-  $option = "<option value=''> -- Sélectionner -- </option>";
+	$option = "<option value=''> -- Sélectionner -- </option>";
 } else {
-  $option = "<option value=''> -- Select -- </option>";
+	$option = "<option value=''> -- Select -- </option>";
 }
 
-if (!empty($_POST['testType'])) {
-  $testType = $_POST['testType'];
+if (isset($_POST['testType']) && !empty($_POST['testType'])) {
+	$testType = $_POST['testType'];
 } else {
-  $testType = 'vl';
+	$testType = 'vl';
 }
 
 
 $facilityTypeTableList = array(
-  1 => "health_facilities",
-  2 => "testing_labs",
+	1 => "health_facilities",
+	2 => "testing_labs",
 );
 
 $facilityIdRequested = !empty($_POST['cName']) ? $_POST['cName'] : null;
@@ -41,139 +41,148 @@ $facilityTypeTable = !empty($facilityTypeRequested) ? $facilityTypeTableList[$fa
 
 $facilityMap = null;
 if (empty($_POST['comingFromUser']) || $_POST['comingFromUser'] != 'yes') {
-  $facilityMap = $facilitiesDb->getFacilityMap($_SESSION['userId'], null);
+	$facilityMap = $facilitiesDb->getFacilityMap($_SESSION['userId'], null);
 }
-
 
 if (!empty($facilityIdRequested)) {
+	$db->where("f.facility_id", $facilityIdRequested);
+	$facilityInfo = $db->getOne('facility_details f');
 
-  $db->where("f.facility_id", $facilityIdRequested);
-  $facilityInfo = $db->getOne('facility_details f');
-
-  $provinceOptions = getProvinceDropdown($facilityInfo['facility_state']);
-  $districtOptions = getDistrictDropdown($facilityInfo['facility_state'], $facilityInfo['facility_district']);
-  echo $provinceOptions . "###" . $districtOptions . "###" . $facilityInfo['contact_person'];
+	$provinceOptions = getProvinceDropdown($facilityInfo['facility_state']);
+	$districtOptions = getDistrictDropdown($facilityInfo['facility_state'], $facilityInfo['facility_district']);
+	echo $provinceOptions . "###" . $districtOptions . "###" . $facilityInfo['contact_person'];
 } else if (!empty($provinceRequested) && !empty($districtRequested) && $_POST['requestType'] == 'patient') {
-
-  $provinceName = explode("##", $provinceRequested);
-  $districtOptions = getDistrictDropdown($provinceName[0], $districtRequested);
-
-  echo '' . "###" . $districtOptions . "###" . '';
+	$provinceName = explode("##", $provinceRequested);
+	$districtOptions = getDistrictDropdown($provinceName[0], $districtRequested);
+	echo '' . "###" . $districtOptions . "###" . '';
+} else if (!empty($provinceRequested) && !empty($districtRequested) && is_numeric($provinceRequested) && is_numeric($districtRequested)) {
+	$districtOptions = getDistrictDropdown($provinceRequested, $districtRequested);
+	echo '' . "###" . $districtOptions . "###" . '';
 } else if (!empty($provinceRequested)) {
+	$provinceName = explode("##", $provinceRequested);
 
-  $provinceName = explode("##", $provinceRequested);
+	$facilityOptions = getFacilitiesDropdown($provinceName[0], null);
+	$districtOptions = getDistrictDropdown($provinceName[0]);
 
-  $facilityOptions = getFacilitiesDropdown($provinceName[0], null);
-  $districtOptions = getDistrictDropdown($provinceName[0]);
-
-  echo $facilityOptions . "###" . $districtOptions . "###" . '';
+	echo $facilityOptions . "###" . $districtOptions . "###" . '';
 } else if (!empty($districtRequested)) {
 
-  $facilityOptions = getFacilitiesDropdown(null, $districtRequested);
-  $testingLabsList = $facilitiesDb->getTestingLabs($testType);
-  $testingLabsOptions = $general->generateSelectOptions($testingLabsList, null, '-- Select --');
+	$facilityOptions = getFacilitiesDropdown(null, $districtRequested);
+	$testingLabsList = $facilitiesDb->getTestingLabs($testType);
+	$testingLabsOptions = $general->generateSelectOptions($testingLabsList, null, '-- Select --');
 
-  echo $facilityOptions . "###" . $testingLabsOptions . "###";
+	echo $facilityOptions . "###" . $testingLabsOptions . "###";
 }
-
 
 function getProvinceDropdown($selectedProvince = null)
 {
-  global $db;
-  global $option;
-  global $facilityMap;
+	global $db;
+	global $option;
+	global $facilityMap;
 
-  if (!empty($facilityMap)) {
-    $db->join("facility_details f", "f.facility_state=p.province_name", "INNER");
-    //$db->joinWhere("facility_details f", "h.test_type", $testType);
-    $db->where("f.facility_id IN (" . $facilityMap . ")");
-  }
+	if (!empty($facilityMap)) {
+		$db->join("facility_details f", "f.facility_state=p.province_name", "INNER");
+		//$db->joinWhere("facility_details f", "h.test_type", $testType);
+		$db->where("f.facility_id IN (" . $facilityMap . ")");
+	}
 
-  $pdResult = $db->get('province_details p');
-  $state = $option;
-  foreach ($pdResult as $pdRow) {
-    $selected = '';
-    if (strtolower($selectedProvince) == strtolower($pdRow['province_name'])) {
-      $selected = "selected='selected'";
-    }
-    $state .= "<option data-code='" . $pdRow['province_code'] . "' data-province-id='" . $pdRow['province_id'] . "' data-name='" . $pdRow['province_name'] . "' value='" . $pdRow['province_name'] . "##" . $pdRow['province_code'] . "' $selected>" . ($pdRow['province_name']) . "</option>";
-  }
-  return $state;
+	$pdResult = $db->get('province_details p');
+	$state = $option;
+	foreach ($pdResult as $pdRow) {
+		$selected = '';
+		if (strtolower($selectedProvince) == strtolower($pdRow['province_name'])) {
+			$selected = "selected='selected'";
+		}
+		$state .= "<option data-code='" . $pdRow['province_code'] . "' data-province-id='" . $pdRow['province_id'] . "' data-name='" . $pdRow['province_name'] . "' value='" . $pdRow['province_name'] . "##" . $pdRow['province_code'] . "' $selected>" . ($pdRow['province_name']) . "</option>";
+	}
+	return $state;
 }
 
 
 function getDistrictDropdown($selectedProvince = null, $selectedDistrict = null)
 {
-  global $db;
-  global $option;
-  global $facilityMap;
+	global $db;
+	global $option;
+	global $facilityMap;
 
-  if (!empty($selectedProvince)) {
-    $db->where("f.facility_state", $selectedProvince);
-  }
+	if (!empty($selectedProvince)) {
+		if (is_numeric($selectedProvince)) {
+			$db->where("geo_parent", $selectedProvince);
+			$districtInfo = $db->setQueryOption('DISTINCT')->get('geographical_divisions', null, array('geo_id', 'geo_name'));
+			$district = $option;
+			foreach ($districtInfo as $pdRow) {
+				$selected = '';
+				if ($selectedDistrict == $pdRow['geo_id']) {
+					$selected = "selected='selected'";
+				}
+				$district .= "<option $selected value='" . $pdRow['geo_id'] . "'>" . ucwords($pdRow['geo_name']) . "</option>";
+			}
+			return $district;
+		} else {
 
-  if (!empty($facilityMap)) {
-    $db->where("f.facility_id IN (" . $facilityMap . ")");
-  }
-  $facilityInfo = $db->setQueryOption('DISTINCT')->get('facility_details f', null, array('facility_district'));
+			$db->where("f.facility_state", $selectedProvince);
+		}
+	}
 
-  $district = $option;
-  foreach ($facilityInfo as $pdRow) {
-    $selected = '';
-    if (strtolower($selectedDistrict) == strtolower($pdRow['facility_district'])) {
-      $selected = "selected='selected'";
-    }
-    $district .= "<option $selected value='" . $pdRow['facility_district'] . "'>" . ($pdRow['facility_district']) . "</option>";
-  }
-  return $district;
+	if (!empty($facilityMap)) {
+		$db->where("f.facility_id IN (" . $facilityMap . ")");
+	}
+	$facilityInfo = $db->setQueryOption('DISTINCT')->get('facility_details f', null, array('facility_district'));
+
+	$district = $option;
+	foreach ($facilityInfo as $pdRow) {
+		$selected = '';
+		if (strtolower($selectedDistrict) == strtolower($pdRow['facility_district'])) {
+			$selected = "selected='selected'";
+		}
+		$district .= "<option $selected value='" . $pdRow['facility_district'] . "'>" . ($pdRow['facility_district']) . "</option>";
+	}
+	return $district;
 }
 
 
 function getFacilitiesDropdown($provinceName = null, $districtRequested = null)
 {
-  global $db;
-  global $option;
-  global $testType;
-  global $facilityMap;
-  global $facilityTypeTable;
+	global $db;
+	global $option;
+	global $testType;
+	global $facilityMap;
+	global $facilityTypeTable;
 
-  $db->where("f.status", 'active');
+	$db->where("f.status", 'active');
 
+	if (!empty($provinceName)) {
+		$db->where("f.facility_state", $provinceName);
+	}
 
-  if (!empty($provinceName)) {
-    $db->where("f.facility_state", $provinceName);
-  }
+	if (!empty($districtRequested)) {
+		$db->where("f.facility_district", $districtRequested);
+	}
 
+	//$db->where("f.facility_type", $facilityTypeRequested);
+	$db->join("$facilityTypeTable h", "h.facility_id=f.facility_id", "INNER");
+	$db->joinWhere("$facilityTypeTable h", "h.test_type", $testType);
 
-  if (!empty($districtRequested)) {
-    $db->where("f.facility_district", $districtRequested);
-  }
+	if (!empty($facilityMap)) {
+		$db->where("f.facility_id IN (" . $facilityMap . ")");
+	}
 
+	$facilityInfo = $db->get('facility_details f');
+	$facility = '';
+	if ($facilityInfo) {
+		if (!isset($_POST['comingFromUser'])) {
+			$facility .= $option;
+		}
+		foreach ($facilityInfo as $fDetails) {
+			$fcode = (isset($fDetails['facility_code']) && $fDetails['facility_code'] != "") ? ' - ' . $fDetails['facility_code'] : '';
 
-  //$db->where("f.facility_type", $facilityTypeRequested);
-  $db->join("$facilityTypeTable h", "h.facility_id=f.facility_id", "INNER");
-  $db->joinWhere("$facilityTypeTable h", "h.test_type", $testType);
-
-  if (!empty($facilityMap)) {
-    $db->where("f.facility_id IN (" . $facilityMap . ")");
-  }
-
-  $facilityInfo = $db->get('facility_details f');
-  $facility = '';
-  if ($facilityInfo) {
-    if (!isset($_POST['comingFromUser'])) {
-      $facility .= $option;
-    }
-    foreach ($facilityInfo as $fDetails) {
-      $fcode = (isset($fDetails['facility_code']) && $fDetails['facility_code'] != "")?' - '.$fDetails['facility_code']:'';
-      
-      $facility .= "<option data-code='" . $fDetails['facility_code'] . "' data-emails='" . $fDetails['facility_emails'] . "' data-mobile-nos='" . $fDetails['facility_mobile_numbers'] . "' data-contact-person='" . ($fDetails['contact_person']) . "' value='" . $fDetails['facility_id'] . "'>" . (addslashes($fDetails['facility_name'])) . $fcode."</option>";
-    }
-  } else {
-    // if(isset($_POST['comingFromUser'])){
-    //     $option = ' ';
-    // }
-    $facility .= $option;
-  }
-  return $facility;
+			$facility .= "<option data-code='" . $fDetails['facility_code'] . "' data-emails='" . $fDetails['facility_emails'] . "' data-mobile-nos='" . $fDetails['facility_mobile_numbers'] . "' data-contact-person='" . ($fDetails['contact_person']) . "' value='" . $fDetails['facility_id'] . "'>" . (addslashes($fDetails['facility_name'])) . $fcode . "</option>";
+		}
+	} else {
+		// if(isset($_POST['comingFromUser'])){
+		//     $option = ' ';
+		// }
+		$facility .= $option;
+	}
+	return $facility;
 }

@@ -3,6 +3,7 @@ ob_start();
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 $general = new \Vlsm\Models\General($db);
+$geolocation = new \Vlsm\Models\GeoLocations($db);
 
 $fQuery = "SELECT * FROM facility_type";
 $fResult = $db->rawQuery($fQuery);
@@ -10,20 +11,23 @@ $pQuery = "SELECT * FROM province_details";
 $pResult = $db->rawQuery($pQuery);
 
 $cntId = $general->reportPdfNames();
-if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true){
-	$reportFormats['covid19'] = $general->activeReportFormats('covid-19',$cntId['covid19'],null,true);
+if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) {
+	$reportFormats['covid19'] = $general->activeReportFormats('covid-19', $cntId['covid19'], null, true);
 }
-if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true){
-	$reportFormats['eid'] = $general->activeReportFormats('eid',$cntId['eid'],null,true);
+if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) {
+	$reportFormats['eid'] = $general->activeReportFormats('eid', $cntId['eid'], null, true);
 }
-if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true){
-	$reportFormats['vl'] = $general->activeReportFormats('vl',$cntId['vl'],null,true);
+if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) {
+	$reportFormats['vl'] = $general->activeReportFormats('vl', $cntId['vl'], null, true);
 }
 if ($arr['vl_form'] == 7) {
-	if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true){
-		$reportFormats['hepatitis'] = $general->activeReportFormats('hepatitis',$cntId['hepatitis'],null,true);
+	if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) {
+		$reportFormats['hepatitis'] = $general->activeReportFormats('hepatitis', $cntId['hepatitis'], null, true);
 	}
 }
+
+$geoLocationParentArray = $geolocation->fetchActiveGeolocations(0, 0);
+$geoLocationChildArray = $geolocation->fetchActiveGeolocations(0, '');
 ?>
 <style>
 	.ms-choice {
@@ -45,7 +49,6 @@ if ($arr['vl_form'] == 7) {
 
 	<!-- Main content -->
 	<section class="content">
-
 		<div class="box box-default">
 			<div class="box-header with-border">
 				<div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
@@ -152,15 +155,9 @@ if ($arr['vl_form'] == 7) {
 								<div class="form-group">
 									<label for="state" class="col-lg-4 control-label">Province/State <span class="mandatory">*</span></label>
 									<div class="col-lg-7">
-										<select name="state" id="state" class="form-control isRequired" title="Please choose province/state">
-											<option value=""> -- Select -- </option>
-											<?php
-											foreach ($pResult as $province) {
-											?>
-												<option value="<?php echo $province['province_name']; ?>"><?php echo $province['province_name']; ?></option>
-											<?php
-											}
-											?>
+										<input type="hidden" name="state" id="state" />
+										<select name="stateId" id="stateId" class="form-control isRequired" title="Please choose province/state">
+											<?= $general->generateSelectOptions($geoLocationParentArray, null, '-- Select --'); ?>
 											<option value="other">Other</option>
 										</select>
 										<input type="text" class="form-control" name="provinceNew" id="provinceNew" placeholder="Enter Province/State" title="Please enter province/state" style="margin-top:4px;display:none;" />
@@ -171,7 +168,12 @@ if ($arr['vl_form'] == 7) {
 								<div class="form-group">
 									<label for="district" class="col-lg-4 control-label">District/County <span class="mandatory">*</span></label>
 									<div class="col-lg-7">
-										<input type="text" class="form-control isRequired" id="district" name="district" placeholder="District/County" title="Please enter district/county" />
+										<select name="districtId" id="districtId" class="form-control isRequired" title="Please choose District/County">
+											<?= $general->generateSelectOptions($geoLocationChildArray, null, '-- Select --'); ?>
+											<option value="other">Other</option>
+										</select>
+										<input type="text" class="form-control" name="districtNew" id="districtNew" placeholder="Enter District/County" title="Please enter District/County" style="margin-top:4px;display:none;" />
+										<input type="hidden" id="district" name="district" />
 									</div>
 								</div>
 							</div>
@@ -247,74 +249,77 @@ if ($arr['vl_form'] == 7) {
 							</div>
 						</div>
 						<div class="row labDiv" style="display:none;">
-						<?php if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true){ 
-							$count = sizeof($reportFormats['vl']);?>
-							<div class="col-md-6" style="display:<?php echo ($count > 1)?'block':'none';?>">
-								<div class="form-group">
-									<label for="reportFormat" class="col-lg-4 control-label">Report Format For VL</label>
-									<div class="col-lg-7">
-										<select class="form-control" name='reportFormat[vl]' id='reportFormat' title="Please select the status" onchange="checkIfExist(this);">
-											<?php if(($count > 1)){ ?>
-												<option value="">-- Select --</option>
-											<?php }?>
-											<?php foreach($reportFormats['vl'] as $key=>$value){?>
-												<option value="<?php echo $key;?>"><?php echo ucwords($value);?></option>
-											<?php } ?>
-										</select>
+							<?php if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) {
+								$count = sizeof($reportFormats['vl']); ?>
+								<div class="col-md-6" style="display:<?php echo ($count > 1) ? 'block' : 'none'; ?>">
+									<div class="form-group">
+										<label for="reportFormat" class="col-lg-4 control-label">Report Format For VL</label>
+										<div class="col-lg-7">
+											<select class="form-control" name='reportFormat[vl]' id='reportFormat' title="Please select the status" onchange="checkIfExist(this);">
+												<?php if (($count > 1)) { ?>
+													<option value="">-- Select --</option>
+												<?php } ?>
+												<?php foreach ($reportFormats['vl'] as $key => $value) { ?>
+													<option value="<?php echo $key; ?>"><?php echo ucwords($value); ?></option>
+												<?php } ?>
+											</select>
+										</div>
 									</div>
 								</div>
-							</div>
-							<?php } if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true){
-								$count = sizeof($reportFormats['eid']);?>
-							<div class="col-md-6" style="display:<?php echo ($count > 1)?'block':'none';?>">
-								<div class="form-group">
-									<label for="reportFormat" class="col-lg-4 control-label">Report Format For EID</label>
-									<div class="col-lg-7">
-										<select class="form-control" name='reportFormat[eid]' id='reportFormat' title="Please select the status" onchange="checkIfExist(this);">
-											<?php if(($count > 1)){ ?>
-												<option value="">-- Select --</option>
-											<?php }?>
-											<?php foreach($reportFormats['eid'] as $key=>$value){ ?>
-												<option value="<?php echo $key;?>"><?php echo ucwords($value);?></option>
-											<?php } ?>
-										</select>
+							<?php }
+							if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) {
+								$count = sizeof($reportFormats['eid']); ?>
+								<div class="col-md-6" style="display:<?php echo ($count > 1) ? 'block' : 'none'; ?>">
+									<div class="form-group">
+										<label for="reportFormat" class="col-lg-4 control-label">Report Format For EID</label>
+										<div class="col-lg-7">
+											<select class="form-control" name='reportFormat[eid]' id='reportFormat' title="Please select the status" onchange="checkIfExist(this);">
+												<?php if (($count > 1)) { ?>
+													<option value="">-- Select --</option>
+												<?php } ?>
+												<?php foreach ($reportFormats['eid'] as $key => $value) { ?>
+													<option value="<?php echo $key; ?>"><?php echo ucwords($value); ?></option>
+												<?php } ?>
+											</select>
+										</div>
 									</div>
 								</div>
-							</div>
-							<?php } if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true){
-								$count = sizeof($reportFormats['covid19']);?>
-							<div class="col-md-6" style="display:<?php echo ($count > 1)?'block':'none';?>">
-								<div class="form-group">
-									<label for="reportFormat" class="col-lg-4 control-label">Report Format For Covid-19</label>
-									<div class="col-lg-7">
-										<select class="form-control" name='reportFormat[covid19]' id='reportFormat' title="Please select the status" onchange="checkIfExist(this);">
-											<?php if(($count > 1)){ ?>
-												<option value="">-- Select --</option>
-											<?php }?>
-											<?php foreach($reportFormats['covid19'] as $key=>$value){ ?>
-												<option value="<?php echo $key;?>"><?php echo ucwords($value);?></option>
-											<?php } ?>
-										</select>
+							<?php }
+							if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) {
+								$count = sizeof($reportFormats['covid19']); ?>
+								<div class="col-md-6" style="display:<?php echo ($count > 1) ? 'block' : 'none'; ?>">
+									<div class="form-group">
+										<label for="reportFormat" class="col-lg-4 control-label">Report Format For Covid-19</label>
+										<div class="col-lg-7">
+											<select class="form-control" name='reportFormat[covid19]' id='reportFormat' title="Please select the status" onchange="checkIfExist(this);">
+												<?php if (($count > 1)) { ?>
+													<option value="">-- Select --</option>
+												<?php } ?>
+												<?php foreach ($reportFormats['covid19'] as $key => $value) { ?>
+													<option value="<?php echo $key; ?>"><?php echo ucwords($value); ?></option>
+												<?php } ?>
+											</select>
+										</div>
 									</div>
 								</div>
-							</div>
-							<?php } if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true){
-								$count = sizeof($reportFormats['covid19']);?>
-							<div class="col-md-6" style="display:<?php echo ($count > 1)?'block':'none';?>">
-								<div class="form-group">
-									<label for="reportFormat" class="col-lg-4 control-label">Report Format For Hepatitis</label>
-									<div class="col-lg-7">
-										<select class="form-control" name='reportFormat[hepatitis]' id='reportFormat' title="Please select the status" onchange="checkIfExist(this);">
-											<?php if(($count > 1)){ ?>
-												<option value="">-- Select --</option>
-											<?php }?>
-											<?php foreach($reportFormats['hepatitis'] as $key=>$value){?>
-												<option value="<?php echo $key;?>"><?php echo ucwords($value);?></option>
-											<?php } ?>
-										</select>
+							<?php }
+							if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) {
+								$count = sizeof($reportFormats['covid19']); ?>
+								<div class="col-md-6" style="display:<?php echo ($count > 1) ? 'block' : 'none'; ?>">
+									<div class="form-group">
+										<label for="reportFormat" class="col-lg-4 control-label">Report Format For Hepatitis</label>
+										<div class="col-lg-7">
+											<select class="form-control" name='reportFormat[hepatitis]' id='reportFormat' title="Please select the status" onchange="checkIfExist(this);">
+												<?php if (($count > 1)) { ?>
+													<option value="">-- Select --</option>
+												<?php } ?>
+												<?php foreach ($reportFormats['hepatitis'] as $key => $value) { ?>
+													<option value="<?php echo $key; ?>"><?php echo ucwords($value); ?></option>
+												<?php } ?>
+											</select>
+										</div>
 									</div>
 								</div>
-							</div>
 							<?php } ?>
 						</div>
 						<div class="row logoImage" style="display:none;">
@@ -428,6 +433,39 @@ if ($arr['vl_form'] == 7) {
 		$(".select2").multipleSelect({
 			placeholder: 'Select Test Type',
 			width: '150px'
+		});
+
+		$("#stateId").change(function() {
+			if ($(this).val() == 'other') {
+				$('#provinceNew').show();
+			} else {
+				$('#provinceNew').hide();
+				$('#state').val($(this).text());
+			}
+			$.blockUI();
+			var pName = $(this).val();
+			if ($.trim(pName) != '') {
+				$.post("/includes/siteInformationDropdownOptions.php", {
+						pName: pName,
+					},
+					function(data) {
+						if (data != "") {
+							details = data.split("###");
+							$("#districtId").html(details[1]);
+							$("#districtId").append('<option value="other">Other</option>');
+						}
+					});
+			}
+			$.unblockUI();
+		});
+
+		$("#districtId").change(function() {
+			if ($(this).val() == 'other') {
+				$('#districtNew').show();
+			} else {
+				$('#districtNew').hide();
+				$('#district').val($(this).text());
+			}
 		});
 
 	});

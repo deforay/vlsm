@@ -62,6 +62,8 @@ try {
 			'facility_mobile_numbers' => $_POST['phoneNo'],
 			'address' => $_POST['address'],
 			'country' => $_POST['country'],
+			'facility_state_id' => $_POST['stateId'],
+			'facility_district_id' => $_POST['districtId'],
 			'facility_state' => $_POST['state'],
 			'facility_district' => $_POST['district'],
 			'facility_hub_name' => $_POST['hubName'],
@@ -74,7 +76,7 @@ try {
 			'test_type' => implode(', ', $_POST['testType']),
 			'testing_points' => $_POST['testingPoints'],
 			'header_text' => $_POST['headerText'],
-			'report_format' => (isset($_POST['facilityType']) && $_POST['facilityType'] == 2)?json_encode($_POST['reportFormat'],true):null,
+			'report_format' => (isset($_POST['facilityType']) && $_POST['facilityType'] == 2) ? json_encode($_POST['reportFormat'], true) : null,
 			'updated_datetime' => $general->getDateTime(),
 			'status' => $_POST['status']
 		);

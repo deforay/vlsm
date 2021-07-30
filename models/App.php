@@ -333,7 +333,7 @@ class App
         if (empty($c19Id)) {
             return null;
         }
-        return $this->db->rawQuery("SELECT test_name as testName, sample_tested_datetime as testDate, testing_platform as testingPlatform, result as testResult FROM covid19_tests WHERE `covid19_id` = $c19Id ORDER BY test_id ASC");
+        return $this->db->rawQuery("SELECT test_id as testId, test_name as testName, sample_tested_datetime as testDate, testing_platform as testingPlatform, result as testResult FROM covid19_tests WHERE `covid19_id` = $c19Id ORDER BY test_id ASC");
     }
 
     public function generateCovid19SampleCode($provinceCode, $sampleCollectionDate, $sampleFrom = null, $provinceId = '', $maxCodeKeyVal = null, $user)
