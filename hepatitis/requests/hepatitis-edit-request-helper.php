@@ -195,7 +195,7 @@ try {
 	}
 
 	if ($id > 0 || $sid > 0 || $pid > 0) {
-		$_SESSION['alertMsg'] = "hepatitis request updated successfully";
+		$_SESSION['alertMsg'] = "Hepatitis request updated successfully";
 		//Add event log
 		$eventType = 'update-hepatitis-request';
 		$action = ucwords($_SESSION['userName']) . ' updated hepatitis request data with the sample id ' . $_POST['hepatitisSampleId'];
