@@ -1,10 +1,10 @@
 <?php
-$title = "Covid-19 | DHIS2 Requests";
+$title = "Hepatitis | DHIS2 Requests";
 require_once(APPLICATION_PATH . '/header.php');
 
 $general = new \Vlsm\Models\General($db);
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
-$healthFacilites = $facilitiesDb->getHealthFacilities('covid19');
+$healthFacilites = $facilitiesDb->getHealthFacilities('hepatitis');
 /* Global config data */
 $arr = $general->getGlobalConfig();
 
@@ -12,17 +12,17 @@ $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-
 
 $formId = $general->getGlobalConfig('vl_form');
 
-$sQuery = "SELECT * FROM r_covid19_sample_type WHERE `status`='active'";
+$sQuery = "SELECT * FROM r_hepatitis_sample_type WHERE `status`='active'";
 $sResult = $db->rawQuery($sQuery);
 
-$batQuery = "SELECT batch_code FROM batch_details WHERE test_type ='covid19' AND batch_status='completed'";
+$batQuery = "SELECT batch_code FROM batch_details WHERE test_type ='hepatitis' AND batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
 ?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<h1><i class="fa fa-edit"></i> Covid-19 Test Requests - DHIS2</h1>
+		<h1><i class="fa fa-edit"></i> Hepatitis Test Requests - DHIS2</h1>
 		<ol class="breadcrumb">
 			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
 			<li class="active">Test Request</li>
@@ -40,7 +40,7 @@ $batResult = $db->rawQuery($batQuery);
 							<td>
 
 								<?php
-								if (isset($_SESSION['privileges']) && in_array("covid-19-add-request.php", $_SESSION['privileges'])) { ?>
+								if (isset($_SESSION['privileges']) && in_array("hepatitis-add-request.php", $_SESSION['privileges'])) { ?>
 									<?php if ($sarr['sc_user_type'] != 'remoteuser') { ?>
 										<a style=" margin: 0px 5px; " href="javascript:receiveDhis2Data();" class="btn btn-success btn-sm pull-right"> <i class="fa fa-download"></i> Receive Test Requests from DHIS2</a>
 										<a style=" margin: 0px 5px; " href="javascript:sendDhis2Data();" class="btn btn-warning btn-sm pull-right"> <i class="fa fa-upload"></i> Send Results to DHIS2</a>
@@ -75,7 +75,7 @@ $batResult = $db->rawQuery($batQuery);
 									<th>Result</th>
 									<th>Last Modified On</th>
 									<th>Status</th>
-									<?php if (isset($_SESSION['privileges']) && (in_array("covid-19-edit-request.php", $_SESSION['privileges'])) || (in_array("covid-19-view-request.php", $_SESSION['privileges']))) { ?>
+									<?php if (isset($_SESSION['privileges']) && (in_array("hepatitis-edit-request.php", $_SESSION['privileges'])) || (in_array("hepatitis-view-request.php", $_SESSION['privileges']))) { ?>
 										<th>Action</th>
 									<?php } ?>
 								</tr>
@@ -163,7 +163,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 			message: '<h3>Receiving test requests from DHIS2<br><img src="/assets/img/loading.gif" /></h3>'
 		});
 		var jqxhr = $.ajax({
-				url: "/covid-19/interop/dhis2/covid-19-receive.php",
+				url: "/hepatitis/interop/dhis2/hepatitis-receive.php",
 			})
 			.done(function(data) {
 				var response = JSON.parse(data);
@@ -207,7 +207,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 			message: '<h3>Sending Test Results to DHIS2<br><img src="/assets/img/loading.gif" /></h3>'
 		});
 		var jqxhr = $.ajax({
-				url: "/covid-19/interop/dhis2/covid-19-send.php",
+				url: "/hepatitis/interop/dhis2/hepatitis-send.php",
 			})
 			.done(function(data) {
 				var response = JSON.parse(data);
@@ -327,7 +327,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 				}, {
 					"sClass": "center"
 				},
-				<?php if (isset($_SESSION['privileges']) && (in_array("covid-19-edit-request.php", $_SESSION['privileges'])) || (in_array("covid-19-view-request.php", $_SESSION['privileges']))) { ?> {
+				<?php if (isset($_SESSION['privileges']) && (in_array("hepatitis-edit-request.php", $_SESSION['privileges'])) || (in_array("hepatitis-view-request.php", $_SESSION['privileges']))) { ?> {
 						"sClass": "center",
 						"bSortable": false
 					},
@@ -347,7 +347,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 			},
 			"bProcessing": true,
 			"bServerSide": true,
-			"sAjaxSource": "/covid-19/requests/get-request-list.php",
+			"sAjaxSource": "/hepatitis/requests/get-request-list.php",
 			"fnServerData": function(sSource, aoData, fnCallback) {
 				aoData.push({
 					"name": "source",

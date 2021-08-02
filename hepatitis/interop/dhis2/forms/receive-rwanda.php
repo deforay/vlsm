@@ -6,13 +6,13 @@
 // echo ("<h5>...</h5>");
 // echo ("<h3>Successfully connected to DHIS2</h3>");
 
-// https://southsudanhis.org/covid19southsudan/api/trackedEntityInstances.json?programStartDate=2020-04-01&programEndDate=2021-04-02&ou=OV9zi20DDXP&ouMode=DESCENDANTS&program=uYjxkTbwRNf&fields=attributes[attribute,code,value],enrollments[*],orgUnit,trackedEntityInstance&paging=false
+// https://his.rbc.gov.rw/hepatitis/covid19southsudan/api/trackedEntityInstances.json?programStartDate=2020-04-01&programEndDate=2021-04-02&ou=OV9zi20DDXP&ouMode=DESCENDANTS&program=uYjxkTbwRNf&fields=attributes[attribute,code,value],enrollments[*],orgUnit,trackedEntityInstance&paging=false
 
 $counter = 0;
 
-$data[] = "programStartDate=2020-04-01";
+$data[] = "programStartDate=2021-06-01";
 $data[] = "programEndDate=2021-06-30";
-$data[] = "ou=OV9zi20DDXP"; // South Sudan
+$data[] = "ou=Hjw70Lodtf2"; // Rwanda
 $data[] = "ouMode=DESCENDANTS";
 $data[] = "program=LEhPhsbgfFB";
 $data[] = "fields=attributes[attribute,code,value],enrollments[*],orgUnit,trackedEntityInstance";
@@ -22,33 +22,46 @@ $url = "/api/trackedEntityInstances.json";
 
 $response = $dhis2->get($url, $data);
 
+echo($response);die;
+
 $response = json_decode($response, true);
 
+// district list - https://his.rbc.gov.rw/hepatitis/api/optionSets/HGTWO3xvXRX.json?fields=name,options[:all]
+// province list - https://his.rbc.gov.rw/hepatitis/api/optionSets/LqaKTLJFf4H.json?fields=name,options[:all]
+// social status - https://his.rbc.gov.rw/hepatitis/api/optionSets/cNhaGfDzbUc.json?fields=name,options[:all]
+// test type - https://his.rbc.gov.rw/hepatitis/api/optionSets/uELLf8Z2Fi0.json?fields=name,options[:all]
+// gender - https://his.rbc.gov.rw/hepatitis/api/optionSets/zfJUnSL44Eg.json?fields=name,options[:all]
+// Testing Labs - https://his.rbc.gov.rw/hepatitis/api/optionSets/qrroYEzTQd3.json?fields=name,options[:all]
+
+
+$dhis2GenderOptions = array('1' => 'Male', '2' => 'female');
+
 $attributesDataElementMapping = [
-    'HAZ7VQ730yn' => 'external_sample_code', //dhis2 case id
-    'yCWkkKtr6vd' => 'source_of_alert',
-    'he05i8FUwu3' => 'patient_id',
-    'sB1IHYu2xQT' => 'patient_name',
-    'tIlOLmSOBGs' => 'patient_surname',
-    'NI0QRzJvQ0k' => 'patient_dob',
-    'Rv8WM2mTuS5' => 'patient_age',
-    'oindugucx72' => 'patient_gender',
-    'qlYg7fundnJ' => 'patient_nationality'
+    //'' => 'external_sample_code', //dhis2 case id
+    'zinPXXTrSmA' => 'patient_id',
+    'JtuGgGPsSuZ' => 'patient_province',
+    'zf3xIdu7n8v' => 'patient_district',
+    'HASxqY0HKma' => 'patient_city',
+    'qYpyifGg6Yi' => 'patient_occupation',
+    'EEAIP0aO4aR' => 'patient_marital_status',
+    'iUkIkQbkxI1' => 'patient_phone_number',
+    'BzEcIK9udqH' => 'patient_insurance',
+    'p2e195R27TO' => 'patient_name',
+    'odAu29pqSvh' => 'patient_dob',
+    'DP8JyLEof33' => 'social_category',
+    'IeduuuWaWa4' => 'patient_gender',
+    'bVXK3FxmU1L' => 'patient_nationality'
 ];
 
 
 
 
 $eventsDataElementMapping = [
-    'Q98LhagGLFj' => 'sample_collection_date',
-    'H3UJlHuglGv' => 'reason_for_covid19_test',
-    'b4PEeF4OOwc' => 'covid19_test_platform',
-    'P61FWjSAjjA' => 'sample_condition',
-    'bujqZ6Dqn4m' => 'lab_id',
-    'kL7PTi4lRSl' => 'specimen_type',
-    'pxPdKaS9CqF' => 'sample_received_datetime',
-    'Cl2I1H6Y3oj' => 'sample_tested_datetime',
-    'f5HxreMlOWP' => 'result'
+    'qoqX33PK82y' => 'sample_collection_date',
+    'Di17rUJDIWZ' => 'hbv_vl_count',
+    'Oem0BXNDPWL' => 'hcv_vl_count',
+    'Mpc3ftVuSvK' => 'hepatitis_test_type',
+    'DMQSNcqWRvI' => 'lab_id'
 ];
 
 
@@ -57,6 +70,8 @@ $eventsDataElementMapping = [
 // echo ("<h3>Total trackers received from DHIS2 : " . count($response['trackedEntityInstances']) . "</h3>");
 
 foreach ($response['trackedEntityInstances'] as $tracker) {
+
+    if ($tracker['enrollments'][0]['status'] == 'COMPLETED') continue;
 
     $formData = array();
     $facility = $tracker['orgUnit'];
@@ -108,11 +123,6 @@ foreach ($response['trackedEntityInstances'] as $tracker) {
     $country = $db->getOne("r_countries");
     $formData['patient_nationality'] = $country['id'];
 
-
-    $db->where("machine_name", $formData['covid19_test_platform']);
-    $testPlatform = $db->getOne("import_config");
-    $formData['covid19_test_platform'] = $testPlatform['config_id'];
-
     $db->where("facility_name", $formData['lab_id']);
     $lab = $db->getOne("facility_details");
     $formData['lab_id'] = $lab['facility_id'];
@@ -128,7 +138,7 @@ foreach ($response['trackedEntityInstances'] as $tracker) {
 
 
     $db->where("sample_name", $formData['specimen_type']);
-    $sampleType = $db->getOne("r_covid19_sample_type");
+    $sampleType = $db->getOne("r_hepatitis_sample_type");
     $formData['specimen_type'] = $sampleType['sample_id'];
 
 

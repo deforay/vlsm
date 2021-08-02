@@ -215,6 +215,16 @@ if (isset($_POST['reqSampleType']) && trim($_POST['reqSampleType']) == 'result')
 } else if (isset($_POST['reqSampleType']) && trim($_POST['reqSampleType']) == 'noresult') {
      $whereResult = '((vl.hcv_vl_count IS NULL OR vl.hcv_vl_count = "") OR (vl.hbv_vl_count IS NULL OR vl.hbv_vl_count = "")) AND ';
 }
+
+
+if (isset($_POST['source']) && trim($_POST['source']) == 'dhis2') {
+
+     if (empty($sWhere) || $sWhere == "") {
+          $sWhere = ' WHERE ' . $sWhere;
+     }
+     $sWhere = $sWhere . ' `source_of_request` like "dhis2%" ';
+}
+
 if ($sWhere != '') {
      $sWhere = $sWhere . ' AND ' . $whereResult . 'vl.vlsm_country_id="' . $gconfig['vl_form'] . '"';
 } else {
