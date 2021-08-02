@@ -18,6 +18,7 @@ class General
         $this->db = $db;
     }
 
+
     public static function generateRandomString($length = 8, $type = 'alphanum')
     {
 

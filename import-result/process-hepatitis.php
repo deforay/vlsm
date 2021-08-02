@@ -237,7 +237,7 @@ try {
                 $data[$resultField] = trim($accResult[$i]['result']);
             }
 
-            //get bacth code
+            //get bacth code\
             $bquery = "SELECT * FROM batch_details WHERE batch_code='" . $accResult[$i]['batch_code'] . "'";
             $bvlResult = $db->rawQuery($bquery);
             if ($bvlResult) {
