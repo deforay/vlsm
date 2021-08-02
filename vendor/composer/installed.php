@@ -22,12 +22,12 @@
     ),
     'aranyasen/hl7' => 
     array (
-      'pretty_version' => '2.0.5',
-      'version' => '2.0.5.0',
+      'pretty_version' => '2.0.6',
+      'version' => '2.0.6.0',
       'aliases' => 
       array (
       ),
-      'reference' => '6aa3c1e6a1be586fa188641a145fa8f630075fe5',
+      'reference' => '1257e4f4c97a17773ed026b7aea305e8b89780b3',
     ),
     'ezyang/htmlpurifier' => 
     array (
@@ -58,12 +58,12 @@
     ),
     'guzzlehttp/psr7' => 
     array (
-      'pretty_version' => '1.8.2',
-      'version' => '1.8.2.0',
+      'pretty_version' => '2.0.0',
+      'version' => '2.0.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'dc960a912984efb74d0a90222870c72c87f10c91',
+      'reference' => '1dc8d9cba3897165e16d12bb13d813afb1eb3fe7',
     ),
     'league/csv' => 
     array (
@@ -103,12 +103,12 @@
     ),
     'myclabs/php-enum' => 
     array (
-      'pretty_version' => '1.8.0',
-      'version' => '1.8.0.0',
+      'pretty_version' => '1.8.3',
+      'version' => '1.8.3.0',
       'aliases' => 
       array (
       ),
-      'reference' => '46cf3d8498b095bd33727b13fd5707263af99421',
+      'reference' => 'b942d263c641ddb5190929ff840c68f78713e937',
     ),
     'phpmailer/phpmailer' => 
     array (
@@ -152,6 +152,13 @@
       array (
       ),
       'reference' => '12ac7fcd07e5b077433f5f2bee95b3a771bf61be',
+    ),
+    'psr/http-factory-implementation' => 
+    array (
+      'provided' => 
+      array (
+        0 => '1.0',
+      ),
     ),
     'psr/http-message' => 
     array (
@@ -198,21 +205,21 @@
     ),
     'symfony/polyfill-mbstring' => 
     array (
-      'pretty_version' => 'v1.23.0',
-      'version' => '1.23.0.0',
+      'pretty_version' => 'v1.23.1',
+      'version' => '1.23.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => '2df51500adbaebdc4c38dea4c89a2e131c45c8a1',
+      'reference' => '9174a3d80210dca8daa7f31fec659150bbeabfc6',
     ),
     'tecnickcom/tcpdf' => 
     array (
-      'pretty_version' => '6.4.1',
-      'version' => '6.4.1.0',
+      'pretty_version' => '6.4.2',
+      'version' => '6.4.2.0',
       'aliases' => 
       array (
       ),
-      'reference' => '5ba838befdb37ef06a16d9f716f35eb03cb1b329',
+      'reference' => '172540dcbfdf8dc983bc2fe78feff48ff7ec1c76',
     ),
     'thingengineer/mysqli-database-class' => 
     array (
