@@ -88,10 +88,10 @@ if (count($interfaceInfo) > 0) {
 
 
 
-                if ($hepatitisResult == "< Titer min") {
+                if ($vlResult == "< Titer min") {
                     $absDecimalVal = 20;
                     $txtVal = $vlResult = $absVal = "< 20";
-                } else if ($hepatitisResult == "> Titer max") {
+                } else if ($vlResult == "> Titer max") {
                     $absDecimalVal = 10000000;
                     $txtVal = $vlResult = $absVal = "> 1000000";
                 } else if (strpos($vlResult, "<") !== false) {
