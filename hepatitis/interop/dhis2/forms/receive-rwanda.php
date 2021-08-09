@@ -1,12 +1,6 @@
 <?php
 
-// this file is included in /covid-19/interop/dhis2/covid-19-receive.php
-
-// echo ("<h5>...</h5>");
-// echo ("<h5>...</h5>");
-// echo ("<h3>Successfully connected to DHIS2</h3>");
-
-// https://his.rbc.gov.rw/hepatitis/covid19southsudan/api/trackedEntityInstances.json?programStartDate=2020-04-01&programEndDate=2021-04-02&ou=OV9zi20DDXP&ouMode=DESCENDANTS&program=uYjxkTbwRNf&fields=attributes[attribute,code,value],enrollments[*],orgUnit,trackedEntityInstance&paging=false
+// this file is included in /hepatitis/interop/dhis2/hepatitis-receive.php
 
 $counter = 0;
 
@@ -21,20 +15,13 @@ $data[] = "paging=false";
 $url = "/api/trackedEntityInstances.json";
 
 $response = $dhis2->get($url, $data);
-
-echo($response);die;
-
+//echo($response);die;
 $response = json_decode($response, true);
 
-// district list - https://his.rbc.gov.rw/hepatitis/api/optionSets/HGTWO3xvXRX.json?fields=name,options[:all]
-// province list - https://his.rbc.gov.rw/hepatitis/api/optionSets/LqaKTLJFf4H.json?fields=name,options[:all]
-// social status - https://his.rbc.gov.rw/hepatitis/api/optionSets/cNhaGfDzbUc.json?fields=name,options[:all]
-// test type - https://his.rbc.gov.rw/hepatitis/api/optionSets/uELLf8Z2Fi0.json?fields=name,options[:all]
-// gender - https://his.rbc.gov.rw/hepatitis/api/optionSets/zfJUnSL44Eg.json?fields=name,options[:all]
-// Testing Labs - https://his.rbc.gov.rw/hepatitis/api/optionSets/qrroYEzTQd3.json?fields=name,options[:all]
+//echo "<pre>";var_dump($response);"</pre>";die;
 
-
-$dhis2GenderOptions = array('1' => 'Male', '2' => 'female');
+$dhis2GenderOptions = array('1' => 'male', '2' => 'female');
+$dhis2SocialCategoryOptions = array('1' => 'A', '2' => 'B', '3' => 'C', '4' => 'D');
 
 $attributesDataElementMapping = [
     //'' => 'external_sample_code', //dhis2 case id
@@ -71,7 +58,12 @@ $eventsDataElementMapping = [
 
 foreach ($response['trackedEntityInstances'] as $tracker) {
 
-    if ($tracker['enrollments'][0]['status'] == 'COMPLETED') continue;
+    //if ($tracker['enrollments'][0]['status'] == 'COMPLETED') continue;
+
+    //     echo "<pre>";
+    //     var_dump($tracker);
+    //     echo "</pre>";
+    //    continue;
 
     $formData = array();
     $facility = $tracker['orgUnit'];
@@ -86,38 +78,36 @@ foreach ($response['trackedEntityInstances'] as $tracker) {
 
 
 
+    $formData['patient_province'] = $_SESSION['DHIS2_HEP_PROVINCES'][$formData['patient_province']];
+    $formData['patient_district'] = $_SESSION['DHIS2_HEP_DISTRICTS'][$formData['patient_district']];
 
+    //echo "<pre>";var_dump(array_keys($tracker['enrollments']));echo "</pre>";;
+    //echo "<pre>";var_dump(($tracker['enrollments']));echo "</pre>";
     foreach ($tracker['enrollments'] as $allEnrollments) {
-
-
-        //if($allEnrollments['status'] != 'ACTIVE') var_dump($tracker); die('RONA');
 
         $enrollmentDate = explode("T", $allEnrollments['enrollmentDate']);
         $enrollmentDate = $enrollmentDate[0];
+
         foreach ($allEnrollments['events'] as $enrollmentEvent) {
-
-            // iR8O4hSLHnu, CTdzCeTbYay
-            //if ($enrollmentEvent['programStage'] == 'CTdzCeTbYay') {
-
 
 
             foreach ($enrollmentEvent['dataValues'] as $dV) {
                 if (empty($eventsDataElementMapping[$dV['dataElement']])) continue;
-                //echo $eventsDataElementMapping[$dV['dataElement']] . "======" . $dV['value'] . PHP_EOL . PHP_EOL;
+                // echo "<h1>". $eventsDataElementMapping[$dV['dataElement']] . "</h1>";
+                //echo "<pre>"; var_dump($dV['dataElement']);echo "</pre>";
+                //echo "<pre>"; var_dump($dV['value']);echo "</pre>";
+                //echo "<h1>". $eventsDataElementMapping[$dV['value']] . "</h1>";
+                //echo "<pre>"; var_dump($dV);echo "</pre>";
                 $formData[$eventsDataElementMapping[$dV['dataElement']]] = $dV['value'];
+                //echo "<h1>". $formData[$eventsDataElementMapping[$dV['dataElement']]] . "</h1>";
+
             }
-            //}
         }
-        //die;
     }
 
-    $formData['sample_collection_date'] = (!empty($formData['sample_collection_date']) ?  $formData['sample_collection_date'] : $enrollmentDate);
-    $formData['reason_for_covid19_test'] = (!empty($formData['reason_for_covid19_test']) ?  $formData['reason_for_covid19_test'] : "Suspect");
-
-
-    $db->where("test_reason_name", $formData['reason_for_covid19_test']);
-    $reason = $db->getOne("r_covid19_test_reasons");
-    $formData['reason_for_covid19_test'] = $reason['test_reason_id'];
+    $db->where("test_reason_name", $formData['reason_for_hepatitis_test']);
+    $reason = $db->getOne("r_hepatitis_test_reasons");
+    $formData['reason_for_hepatitis_test'] = $reason['test_reason_id'];
 
     $db->where("iso3", $formData['patient_nationality']);
     $country = $db->getOne("r_countries");
@@ -125,9 +115,12 @@ foreach ($response['trackedEntityInstances'] as $tracker) {
 
     $db->where("facility_name", $formData['lab_id']);
     $lab = $db->getOne("facility_details");
+    // echo "<pre>";var_dump($formData['lab_id']);echo "</pre>";
+    // echo "<pre>";var_dump($lab);echo "</pre>";
     $formData['lab_id'] = $lab['facility_id'];
 
     $db->where("other_id", $facility);
+    $db->orWhere("other_id", $facility);
     $fac = $db->getOne("facility_details");
     $formData['facility_id'] =  $fac['facility_id'];
 
@@ -137,31 +130,37 @@ foreach ($response['trackedEntityInstances'] as $tracker) {
     $formData['province_id'] = !empty($prov['province_id']) ? $prov['province_id'] : 1;
 
 
-    $db->where("sample_name", $formData['specimen_type']);
-    $sampleType = $db->getOne("r_hepatitis_sample_type");
-    $formData['specimen_type'] = $sampleType['sample_id'];
-
-
-
+    $formData['specimen_type'] = 1; // Always Whole Blood
     $formData['result_status'] = 6;
 
 
-    $formData['patient_gender'] = (!empty($formData['patient_gender']) ? strtolower($formData['patient_gender']) : null);
-    if (!empty($formData['specimen_quality'])) {
-        $formData['specimen_quality'] =  strtolower($formData['specimen_quality']);
+    $formData['social_category'] = (!empty($formData['social_category']) ? $dhis2SocialCategoryOptions[$formData['social_category']] : null);
+    $formData['patient_gender'] = (!empty($formData['patient_gender']) ? $dhis2GenderOptions[$formData['patient_gender']] : null);
+    $formData['specimen_quality'] = (!empty($formData['specimen_quality']) ? strtolower($formData['specimen_quality']) : null);
+    
+    $formData['sample_collection_date'] = (!empty($formData['sample_collection_date']) ?  $formData['sample_collection_date'] : $enrollmentDate);
+    $formData['reason_for_hepatitis_test'] = (!empty($formData['reason_for_hepatitis_test']) ?  $formData['reason_for_hepatitis_test'] : "Suspect");
+    if (stripos($formData['hepatitis_test_type'], "hcv") === FALSE) {
+        $formData['hepatitis_test_type'] = "HCV";
+    } else {
+        $formData['hepatitis_test_type'] = "HBV";
     }
 
+    // echo "<pre>";
+    // var_dump($formData);
+    // continue;
+
     $general = new \Vlsm\Models\General($db);
-    $covid19Model = new \Vlsm\Models\Covid19($db);
+    $hepatitisModel = new \Vlsm\Models\Hepatitis($db);
 
 
     $db->where("source_of_request", $formData['source_of_request']);
-    $covid19Data = $db->getOne("form_covid19");
+    $hepatitisData = $db->getOne("form_hepatitis");
 
     $formData['last_modified_datetime'] = $general->getDateTime();
 
-    if (empty($covid19Data) || empty($covid19Data['covid19_id'])) {
-        $sampleJson = $covid19Model->generateCovid19SampleCode(null, $general->humanDateFormat($formData['sample_collection_date']), null, $formData['province_id']);
+    if (empty($hepatitisData) || empty($hepatitisData['hepatitis_id'])) {
+        $sampleJson = $hepatitisModel->generateHepatitisSampleCode($formData['hepatitis_test_type'], null , $general->humanDateFormat($formData['sample_collection_date']));
 
         $sampleData = json_decode($sampleJson, true);
 
@@ -176,20 +175,24 @@ foreach ($response['trackedEntityInstances'] as $tracker) {
 
         $formData['vlsm_instance_id'] = $instanceResult['vlsm_instance_id'];
         $formData['vlsm_country_id'] = 1;
-        $id = $db->insert("form_covid19", $formData);
+        //echo "<pre>";var_dump($formData);echo "</pre>";
+        $id = $db->insert("form_hepatitis", $formData);
         if ($id != false) {
             $counter++;
         }
     } else {
-        $db = $db->where('covid19_id', $covid19Data['covid19_id']);
-        $id = $db->update("form_covid19", $formData);
+        $db = $db->where('hepatitis_id', $hepatitisData['hepatitis_id']);
+        //echo "<pre>";var_dump($formData);echo "</pre>";
+        $id = $db->update("form_hepatitis", $formData);
         if ($id != false) {
             $counter++;
         }
     }
-    
+    echo "<pre>";
+    var_dump($formData);
+    echo "</pre>";
 }
 
 $response = array('received' => count($response['trackedEntityInstances']), 'processed' => $counter);
 
-echo(json_encode($response));
+echo (json_encode($response));

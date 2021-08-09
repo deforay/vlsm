@@ -28,6 +28,26 @@ class Facilities
 
         return $this->db->get("facility_details");
     }
+
+
+    public function searchOrAdd($facilityType, $facilityName = null, $facilityOtherId = null)
+    {
+
+        $this->db->orderBy("facility_name", "asc");
+
+        if (!empty($facilityOtherId)) {
+            $this->db->where("other_id", $facilityOtherId);
+        }
+        if (!empty($facilityName)) {
+            $this->db->where("facility_name", $facilityName);
+        }
+
+        if ($facilityType) {
+            $this->db->where('facility_type', $facilityType);
+        }        
+
+        return $this->db->getOne("facility_details");
+    }    
     
     public function getFacilityByName($facilityName)
     {

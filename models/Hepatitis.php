@@ -103,19 +103,19 @@ class Hepatitis
             $remotePrefix = $remotePrefix . "R";
             //$sampleCodeFormat = 'auto2';
         }
-        if(isset($prefix) && $prefix != ""){
+        if (isset($prefix) && $prefix != "") {
             $prefixFromConfig = $prefix;
         }
         if ($sampleCodeFormat == 'auto') {
             //$pNameVal = explode("##", $provinceCode);
-            $sCodeKey['sampleCode'] = ($remotePrefix . $provinceCode . $autoFormatedString . $sCodeKey['maxId']);
-            $sCodeKey['sampleCodeInText'] = ($remotePrefix . $provinceCode . $autoFormatedString . $sCodeKey['maxId']);
-            $sCodeKey['sampleCodeFormat'] = ($remotePrefix . $provinceCode . $autoFormatedString);
+            $sCodeKey['sampleCode'] = ($remotePrefix . $prefixFromConfig . $provinceCode . $autoFormatedString . $sCodeKey['maxId']);
+            $sCodeKey['sampleCodeInText'] = ($remotePrefix . $prefixFromConfig . $provinceCode . $autoFormatedString . $sCodeKey['maxId']);
+            $sCodeKey['sampleCodeFormat'] = ($remotePrefix . $prefixFromConfig . $provinceCode . $autoFormatedString);
             $sCodeKey['sampleCodeKey'] = ($sCodeKey['maxId']);
         } else if ($sampleCodeFormat == 'auto2') {
-            $sCodeKey['sampleCode'] = $remotePrefix . date('y', strtotime($sampleCollectionDate)) . $provinceCode . $this->shortCode . $sCodeKey['maxId'];
-            $sCodeKey['sampleCodeInText'] = $remotePrefix . date('y', strtotime($sampleCollectionDate)) . $provinceCode . $this->shortCode . $sCodeKey['maxId'];
-            $sCodeKey['sampleCodeFormat'] = $remotePrefix . $provinceCode . $autoFormatedString;
+            $sCodeKey['sampleCode'] = $remotePrefix . $prefixFromConfig . date('y', strtotime($sampleCollectionDate)) . $provinceCode . $this->shortCode . $sCodeKey['maxId'];
+            $sCodeKey['sampleCodeInText'] = $remotePrefix . $prefixFromConfig . date('y', strtotime($sampleCollectionDate)) . $provinceCode . $this->shortCode . $sCodeKey['maxId'];
+            $sCodeKey['sampleCodeFormat'] = $remotePrefix . $prefixFromConfig . $provinceCode . $autoFormatedString;
             $sCodeKey['sampleCodeKey'] = $sCodeKey['maxId'];
         } else if ($sampleCodeFormat == 'YY' || $sampleCodeFormat == 'MMYY') {
             $sCodeKey['sampleCode'] = $remotePrefix . $prefixFromConfig . $sCodeKey['mnthYr'] . $sCodeKey['maxId'];
@@ -159,7 +159,7 @@ class Hepatitis
         }
         return $response;
     }
-    
+
     public function getRiskFactorsByHepatitisId($formId)
     {
 
@@ -185,7 +185,6 @@ class Hepatitis
             }
         }
         return $response;
-        
     }
 
     public function getHepatitisResults()
@@ -207,5 +206,4 @@ class Hepatitis
         }
         return $response;
     }
-
 }

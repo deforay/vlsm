@@ -15,7 +15,7 @@ $sarr = $general->getSystemConfig();
 
 
 $fileArray = array(
-    1 => 'forms/init-southsudan.php'
+    7 => 'forms/init-rwanda.php',
 );
 
 if (file_exists($fileArray[$arr['vl_form']])) {

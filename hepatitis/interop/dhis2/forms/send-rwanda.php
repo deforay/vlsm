@@ -9,11 +9,12 @@
 // echo ("<h1>Successfully connected to DHIS2</h1>");
 
 use Vlsm\Models\Users;
+
 $users = new Users($db);
 
 
 //get facility map id
-$query = "SELECT * FROM form_covid19 WHERE source_of_request LIKE 'dhis%' AND result_sent_to_source LIKE 'pending'";
+$query = "SELECT * FROM form_hepatitis WHERE source_of_request LIKE 'dhis%' AND result_sent_to_source LIKE 'pending'";
 $formResults = $db->rawQuery($query);
 $attributesDataElementMapping = [
   'HAZ7VQ730yn' => 'external_sample_code', //dhis2 case id
@@ -29,8 +30,8 @@ $attributesDataElementMapping = [
 
 $eventsDataElementMapping = [
   'Q98LhagGLFj' => 'sample_collection_date',
-  'H3UJlHuglGv' => 'reason_for_covid19_test',
-  'b4PEeF4OOwc' => 'covid19_test_platform',
+  'H3UJlHuglGv' => 'reason_for_hepatitis_test',
+  'b4PEeF4OOwc' => 'hepatitis_test_platform',
   'P61FWjSAjjA' => 'sample_condition',
   'bujqZ6Dqn4m' => 'lab_id',
   'kL7PTi4lRSl' => 'specimen_type',
@@ -59,28 +60,23 @@ foreach ($formResults as $row) {
 
   $strategy = null;
   $eventId = null;
+
+  echo "<pre>"; var_dump($teResponse['enrollments'][0]['events']); echo "</pre>";
+
   foreach ($teResponse['enrollments'][0]['events'] as $teEvent) {
-    if ($teEvent['programStage'] == 'CTdzCeTbYay') {
+    if ($teEvent['programStage'] == 'WAyPhFAJLdv') {
       $eventId = ($teEvent['event']);
       $strategy = 'update';
       break;
     };
   }
+
+die;
+
+
   $facQuery = "SELECT facility_id, facility_name, other_id from facility_details where facility_id = " . $row['facility_id'];
 
   $facResult = $db->rawQueryOne($facQuery);
-
-
-
-  // $eventApi = $dhis2->get("/api/events?trackedEntityInstance=$trackedEntityInstance&programStage=CTdzCeTbYay&paging=false");
-
-  // $eventApi = (json_decode($eventApi, true));
-
-  // $strategy = null;
-  // if (!empty($eventApi['events'])) {
-  //   $eventId = ($eventApi['events'][0]['event']);
-  //   $strategy = 'update';
-  // }
 
   if (empty($eventId)) {
     $idGeneratorApi = $dhis2->get("/api/system/id?limit=1");
@@ -88,20 +84,22 @@ foreach ($formResults as $row) {
     $eventId = $idResponse['codes'][0];
   }
 
+  $eventDate = date("Y-m-d");
+
   $approver = $users->getUserInfo($row['result_approved_by'], 'user_name');
   $tester = $users->getUserInfo($row['tested_by'], 'user_name');
   $payload = '{
       "event": "' . $eventId . '",
-      "eventDate":"2020-02-02",
-      "program": "uYjxkTbwRNf",
+      "eventDate":"' . $eventDate . '",
+      "program": "LEhPhsbgfFB",
       "orgUnit": "' . $facResult['other_id'] . '",
-      "programStage": "CTdzCeTbYay",
+      "programStage": "WAyPhFAJLdv",
       "status": "ACTIVE",
       "trackedEntityInstance": "' . $trackedEntityInstance . '",
       "dataValues": [
         {
           "dataElement": "b4PEeF4OOwc",
-          "value": "' . $row['covid19_test_platform'] . '",
+          "value": "' . $row['hepatitis_test_platform'] . '",
           "providedElsewhere":false
         },
         {
@@ -142,8 +140,8 @@ foreach ($formResults as $row) {
   // echo "</pre>";
 
   $updateData = array('result_sent_to_source' => 'sent');
-  $db = $db->where('covid19_id', $row['covid19_id']);
-  $db->update('form_covid19', $updateData);
+  $db = $db->where('hepatitis_id', $row['hepatitis_id']);
+  $db->update('form_hepatitis', $updateData);
   $counter++;
 }
 
