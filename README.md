@@ -29,15 +29,15 @@ $systemConfig['modules']['hepatitis'] = false;
 * Next we will set up virtual host for this application. You can find many guides online on this topic. For example to set up on Ubuntu you can follow this guide : https://www.digitalocean.com/community/tutorials/how-to-set-up-apache-virtual-hosts-on-ubuntu-18-04
 * Before we set up the virtual host, ensure that the apache rewrite module is enabled in your Apache webserver settings.
 * Edit your computer's hosts file to make an entry for this virtual host name.
-* Next we create a virtual host pointing to the root folder of the source code. You can see an example below : 
+* Next we create a virtual host pointing to the root folder of the source code. You can see an example below (assumin the full path to VLSM is "/var/www/vlsm") : 
 
 ```apache
 <VirtualHost *:80>
-   DocumentRoot "/path/to/vlsm"
+   DocumentRoot "/var/www/vlsm"
    ServerName vlsm.example.org
 
-   <Directory "/path/to/vlsm">
-       php_value auto_prepend_file /path/to/vlsm/startup.php
+   <Directory "/var/www/vlsm">
+       php_value auto_prepend_file /var/www/vlsm/startup.php
 
        AddDefaultCharset UTF-8
        Options Indexes MultiViews FollowSymLinks
