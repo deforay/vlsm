@@ -15,7 +15,7 @@ try {
             $db->update($tableName, $data);
         }
     }
-    $_SESSION['alertMsg'] = "Global Config values updated successfully";
+    $_SESSION['alertMsg'] = "Configuration updated successfully";
     header("location:testResultEmailConfig.php");
 } catch (Exception $exc) {
     error_log($exc->getMessage());

@@ -30,13 +30,12 @@ if (!empty($fMapResult)) {
 }
 
 $vlQuery = "SELECT * FROM vl_request_form 
-                    WHERE $condition 
-                    AND last_modified_datetime > SUBDATE( NOW(), INTERVAL $dataSyncInterval DAY)";
+                    WHERE $condition ";
 
 if (!empty($data['manifestCode'])) {
   $vlQuery .= " AND sample_package_code like '" . $data['manifestCode'] . "%'";
 } else {
-  $vlQuery .= " AND data_sync=0";
+  $vlQuery .= " AND data_sync=0 AND last_modified_datetime > SUBDATE( NOW(), INTERVAL $dataSyncInterval DAY)";
 }
 
 

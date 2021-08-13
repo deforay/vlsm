@@ -145,7 +145,7 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 								<div class="row">
 									<div class="col-md-7">
 										<div class="form-group">
-											<label for="vl_form" class="col-lg-4 control-label">Form <span class="mandatory">*</span> </label>
+											<label for="vl_form" class="col-lg-4 control-label">Choose Country of Installation <span class="mandatory">*</span> </label>
 											<div class="col-lg-8">
 												<select class="form-control isRequired readPage" name="vl_form" id="vl_form" title="Please select the viral load form">
 													<?php
@@ -1330,18 +1330,18 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 		$("#" + id2).attr("disabled", false).addClass('isRequired');
 	}
 
-	$("#vl_form").on('change', function() {
-		$('input[name="sample_code"]:radio').prop('checked', false);
-		$('.autoSample').hide();
-		$('#auto-sample-eg').hide();
-		if (this.value == 5) {
-			$('#auto_generate2,#auto2').show();
-			$('#auto1').html('Auto 1');
-		} else {
-			$('#auto_generate2,#auto2').hide();
-			$('#auto1').html('Auto');
-		}
-	});
+	// $("#vl_form").on('change', function() {
+	// 	$('input[name="sample_code"]:radio').prop('checked', false);
+	// 	$('.autoSample').hide();
+	// 	$('#auto-sample-eg').hide();
+	// 	if (this.value == 5) {
+	// 		$('#auto_generate2,#auto2').show();
+	// 		$('#auto1').html('Auto 1');
+	// 	} else {
+	// 		$('#auto_generate2,#auto2').hide();
+	// 		$('#auto1').html('Auto');
+	// 	}
+	// });
 </script>
 <?php
 include(APPLICATION_PATH . '/footer.php');

@@ -29,13 +29,12 @@ if (isset($fMapResult) && $fMapResult != '' && $fMapResult != null) {
 }
 
 $eidQuery = "SELECT * FROM eid_form 
-                    WHERE $condition 
-                    AND last_modified_datetime > SUBDATE( NOW(), INTERVAL $dataSyncInterval DAY)";
+                    WHERE $condition ";
 
 if (!empty($data['manifestCode'])) {
   $eidQuery .= " AND sample_package_code like '" . $data['manifestCode'] . "%'";
 } else {
-  $eidQuery .= " AND data_sync=0";
+  $eidQuery .= " AND data_sync=0 AND last_modified_datetime > SUBDATE( NOW(), INTERVAL $dataSyncInterval DAY)";
 }
 
 

@@ -2251,7 +2251,7 @@ UPDATE `system_config` SET `value` = '4.3.8' WHERE `system_config`.`name` = 'sc_
 -- Thana -- 28-Jul-2021
 ALTER TABLE `form_hepatitis` ADD `lab_technician` VARCHAR(256) NULL DEFAULT NULL AFTER `lab_id`; 
 ALTER TABLE `form_hepatitis` ADD `social_category` VARCHAR(256) NULL DEFAULT NULL AFTER `patient_marital_status`; 
-ALTER TABLE `s_vlsm_instance` ADD `last_remote_requests_sync` DATETIME NULL DEFAULT NULL AFTER `last_vldash_sync`, ADD `last_remote_results_sync` DATETIME NULL DEFAULT NULL AFTER `last_remote_requests_sync`, ADD `last_remote_reference_data_sync` DATETIME NULL DEFAULT NULL AFTER `last_remote_results_sync`; 
+ALTER TABLE `s_vlsm_instance` ADD `last_remote_requests_sync` DATETIME NULL DEFAULT NULL AFTER `vl_last_dash_sync`, ADD `last_remote_results_sync` DATETIME NULL DEFAULT NULL AFTER `last_remote_requests_sync`, ADD `last_remote_reference_data_sync` DATETIME NULL DEFAULT NULL AFTER `last_remote_results_sync`; 
 
 
 -- Amit -- 28-Jul-2021
@@ -2279,3 +2279,13 @@ ALTER TABLE `facility_details` ADD `facility_state_id` VARCHAR(256) NULL DEFAULT
 
 -- Amit 31 Jul 2021
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'hepatitis-requests', 'hepatitis-dhis2.php', 'DHIS2');
+
+
+-- Amit 10 Aug 2021
+UPDATE s_available_country_forms SET form_name = REPLACE(form_name, ' Form', '');
+
+-- Amit 11 Aug 2021
+UPDATE `facility_details` set other_id = null where other_id like '';
+ALTER TABLE `facility_details` ADD UNIQUE(`other_id`);
+
+

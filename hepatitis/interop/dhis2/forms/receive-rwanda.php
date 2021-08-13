@@ -15,7 +15,7 @@ $data[] = "paging=false";
 $url = "/api/trackedEntityInstances.json";
 
 $response = $dhis2->get($url, $data);
-//echo($response);die;
+echo($response);die;
 $response = json_decode($response, true);
 
 //echo "<pre>";var_dump($response);"</pre>";die;
