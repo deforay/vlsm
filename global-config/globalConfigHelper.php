@@ -292,7 +292,7 @@ try {
     //         }
     //     }
     // }
-    $_SESSION['alertMsg'] = "Global Config values updated successfully";
+    $_SESSION['alertMsg'] = "Configuration updated successfully";
 
     //Add event log
     $eventType = 'general-config-update';

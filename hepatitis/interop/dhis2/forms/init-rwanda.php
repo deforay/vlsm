@@ -23,19 +23,18 @@ foreach ($initOptionSets as $t => $id) {
     $response = json_decode($response, true);
     if (!empty($response) && $t == 'province') {
         $_SESSION['DHIS2_HEP_PROVINCES'] = array();
-        
+
         foreach ($response['options'] as $province) {
             $_SESSION['DHIS2_HEP_PROVINCES'][$province['code']] = $province['name'];
         }
-    }else if (!empty($response) && $t == 'district') {
+    } else if (!empty($response) && $t == 'district') {
 
         $_SESSION['DHIS2_HEP_DISTRICTS'] = array();
         foreach ($response['options'] as $district) {
             $_SESSION['DHIS2_HEP_DISTRICTS'][$district['code']] = $district['name'];
         }
-    }
-    else if (!empty($response) && $t == 'testingLabs') {
-        
+    } else if (!empty($response) && $t == 'testingLabs') {
+
         foreach ($response['options'] as $lab) {
 
             //$_SESSION['DHIS2_HEP_TESTING_LABS'][$lab['id']] = $lab['name'];
@@ -72,44 +71,39 @@ foreach ($initOptionSets as $t => $id) {
 }
 
 
-// // Adding Facilities - We will only run this once
-// // https://his.rbc.gov.rw/hepatitis/api/organisationUnits?filter=level:eq:6&paging=false&
+// Adding Facilities - We will only run this once
+// https://his.rbc.gov.rw/hepatitis/api/organisationUnits?filter=level:eq:6&paging=false&
 
 
-// $data[] = "filter=level:eq:6";
-// $data[] = "paging=false";
-// $data[] = "fields=id,level,name,path,coordinates[id,name,parent]";
+$data[] = "filter=level:eq:6";
+$data[] = "paging=false";
+$data[] = "fields=id,level,name,path,coordinates[id,name,parent]";
 
-// $url = "/api/organisationUnits.json";
+$url = "/api/organisationUnits.json";
 
-// $response = $dhis2->get($url, $data);
-// $response = json_decode($response, true);
+$response = $dhis2->get($url, $data);
+$response = json_decode($response, true);
 
-// foreach ($response['organisationUnits'] as $facility) {
+foreach ($response['organisationUnits'] as $facility) {
 
-//     $db->where("other_id", $facility['id']);
-//     $db->orWhere("facility_name", $facility['name']);
-//     $facility = $db->getOne("facility_details");
-    
-//     if (empty($facility)) {
-//         $facilityData = array(
-//             'facility_name' => $facility['name'],
-//             'vlsm_instance_id' => $instanceId,
-//             'other_id' => $facility['id'],
-//             'facility_type' => 1,
-//             'test_type' => 'hepatitis',
-//             'updated_datetime' => $general->getDateTime(),
-//             'status' => 'active'
-//         );
-        
-//         $id = $db->insert('facility_details', $facilityData);
+    $db->where("other_id", $facility['id']);
+    $db->orWhere("facility_name", $facility['name']);
+    $facilityResult = $db->getOne("facility_details");
 
-//         $dataTest = array(
-//             'test_type' => 'hepatitis',
-//             'facility_id' => $id,
-//             "updated_datetime" => $general->getDateTime()
-//         );
-        
-//         $db->insert('health_facilities', $dataTest);
-//     }
-// }
+
+
+    $facilityData = array(
+        'facility_name' => $facility['name'],
+        'vlsm_instance_id' => $instanceId,
+        'other_id' => $facility['id'],
+        'facility_type' => 1,
+        'test_type' => 'hepatitis',
+        'updated_datetime' => $general->getDateTime(),
+        'status' => 'active'
+    );
+    $updateColumns = array("other_id", "updated_datetime");
+    $lastInsertId = "facility_id";
+    $db->onDuplicate($updateColumns, $lastInsertId);
+    $id = $db->insert('facility_details', $facilityData);
+}
+

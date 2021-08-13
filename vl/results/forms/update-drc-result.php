@@ -580,6 +580,46 @@ $disable = "disabled = 'disabled'";
 </div>
 <script type="text/javascript">
   $(document).ready(function() {
+
+
+    $('#vlResult, #vlLog').on('input', function(e) {
+      if (this.value != '') {
+        $('.specialResults').attr('disabled', true);
+      } else {
+        $('.specialResults').attr('disabled', false);
+      }
+    });
+
+    $('.specialResults').change(function() {
+      if ($(this).is(':checked')) {
+        $('#vlResult, #vlLog').val('');
+        $('#vlResult,#vlLog').attr('readonly', true);
+        $('#vlResult, #vlLog').removeClass('isRequired');
+        $(".specialResults").not(this).attr('disabled', true);
+        $('.specialResults').not(this).prop('checked', false).removeAttr('checked');
+      } else {
+        $('#vlResult,#vlLog').attr('readonly', false);
+        $('#vlResult').addClass('isRequired');
+        $(".specialResults").not(this).attr('disabled', false);
+      }
+    });
+
+
+
+    if ($(".specialResults:checked").length > 0) {
+      $('#vlResult, #vlLog').val('');
+      $('#vlResult,#vlLog').attr('readonly', true);
+      $('#vlResult, #vlLog').removeClass('isRequired');
+      //$(".specialResults").not(this).attr('disabled',true);
+      //$('.specialResults').not(this).prop('checked', false).removeAttr('checked');
+    }
+    if ($('#vlResult, #vlLog').val() != '') {
+      $(".specialResults").attr('disabled', true);
+      $('#vlResult').addClass('isRequired');
+    }
+
+
+
     $('.date').datepicker({
       changeMonth: true,
       changeYear: true,
@@ -751,48 +791,6 @@ $disable = "disabled = 'disabled'";
     }
   }
 
-
-
-
-  $(document).ready(function() {
-
-    $('#vlResult, #vlLog').on('input', function(e) {
-      if (this.value != '') {
-        $('.specialResults').attr('disabled', true);
-      } else {
-        $('.specialResults').attr('disabled', false);
-      }
-    });
-
-    $('.specialResults').change(function() {
-      if ($(this).is(':checked')) {
-        $('#vlResult, #vlLog').val('');
-        $('#vlResult,#vlLog').attr('readonly', true);
-        $('#vlResult, #vlLog').removeClass('isRequired');
-        $(".specialResults").not(this).attr('disabled', true);
-        $('.specialResults').not(this).prop('checked', false).removeAttr('checked');
-      } else {
-        $('#vlResult,#vlLog').attr('readonly', false);
-        $('#vlResult').addClass('isRequired');
-        $(".specialResults").not(this).attr('disabled', false);
-      }
-    });
-
-
-
-    if ($(".specialResults:checked").length > 0) {
-      $('#vlResult, #vlLog').val('');
-      $('#vlResult,#vlLog').attr('readonly', true);
-      $('#vlResult, #vlLog').removeClass('isRequired');
-      //$(".specialResults").not(this).attr('disabled',true);
-      //$('.specialResults').not(this).prop('checked', false).removeAttr('checked');
-    }
-    if ($('#vlResult, #vlLog').val() != '') {
-      $(".specialResults").attr('disabled', true);
-      $('#vlResult').addClass('isRequired');
-    }
-
-  });
 </script>
 <?php
 //include(APPLICATION_PATH.'/footer.php');
