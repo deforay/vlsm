@@ -28,13 +28,12 @@ if (isset($fMapResult) && $fMapResult != '' && $fMapResult != null) {
 }
 
 $covid19Query = "SELECT * FROM form_covid19 
-                    WHERE $condition 
-                    AND last_modified_datetime > SUBDATE( NOW(), INTERVAL $dataSyncInterval DAY)";
+                    WHERE $condition ";
 
 if (!empty($data['manifestCode'])) {
   $covid19Query .= " AND sample_package_code like '" . $data['manifestCode'] . "%'";
 } else {
-  $covid19Query .= " AND data_sync=0";
+  $covid19Query .= " AND data_sync=0 AND last_modified_datetime > SUBDATE( NOW(), INTERVAL $dataSyncInterval DAY)";
 }
 
 
