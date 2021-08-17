@@ -275,7 +275,7 @@ class Dhis2
 		// curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 		curl_setopt($ch, CURLOPT_USERPWD, "$this->username:$this->password");
 		$return = curl_exec($ch);
-		
+
 		$httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
 
@@ -316,5 +316,24 @@ class Dhis2
 		} else {
 			return false;
 		}
+	}
+
+	public function addDataValuesToEventPayload($eventPayload, $inputArray)
+	{
+
+		$dataValues = array();
+		if (empty($inputArray)) {
+			return $eventPayload;
+		}
+		foreach ($inputArray as $name => $value) {
+			$dataValues[] = array(
+				"dataElement" => $name,
+				"value" => $value,
+				"providedElsewhere" => false
+			);
+		}
+
+		$eventPayload['dataValues'] = array_merge($eventPayload['dataValues'], $dataValues);
+		return $eventPayload;
 	}
 }

@@ -107,18 +107,19 @@ try {
                     $data['result_approved_datetime'] = $general->getDateTime();
                     $sampleVal = $rResult[0]['sample_code'];
 
-                    $query = "SELECT hepatitis_id, hcv_vl_count, hbv_vl_count,hepatitis_test_type, result_status FROM form_hepatitis WHERE sample_code='" . $sampleVal . "'";
-                    $hepResult = $db->rawQuery($query);
+                    $query = "SELECT hepatitis_id, hcv_vl_count, hbv_vl_count,hepatitis_test_type, result_status FROM form_hepatitis WHERE sample_code='" . $rResult[0]['sample_code'] . "'";
+                    $hepResult = $db->rawQueryOne($query);
 
 
                     $testType = strtolower($hepResult['hepatitis_test_type']);
+                    $resultField = $otherField = null;
                     if ($testType == 'hbv') {
                         $resultField = "hbv_vl_count";
                         $otherField = "hcv_vl_count";
                     } else if ($testType == 'hcv') {
                         $resultField = "hcv_vl_count";
                         $otherField = "hbv_vl_count";
-                    } else{
+                    } else {
                         $resultField = "hcv_vl_count";
                         $otherField = "hbv_vl_count";
                     }
@@ -135,7 +136,7 @@ try {
                         $data[$resultField] = $data[$otherField] = null;
                         $data[$resultField] = $rResult[0]['result'];
 
-                        if(empty($testType)){
+                        if (empty($testType)) {
                             $data[$otherField] = $data[$resultField];
                         }
                     }
@@ -177,24 +178,27 @@ try {
         }
     }
     //get all accepted data result
-    $accQuery = "SELECT * FROM temp_sample_import as tsr LEFT JOIN form_hepatitis as vl ON vl.sample_code=tsr.sample_code where  imported_by ='$importedBy' AND tsr.result_status='7'";
+    $accQuery = "SELECT tsr.* FROM temp_sample_import as tsr LEFT JOIN form_hepatitis as vl ON vl.sample_code=tsr.sample_code where  imported_by ='$importedBy' AND tsr.result_status='7'";
     $accResult = $db->rawQuery($accQuery);
     if ($accResult) {
         for ($i = 0; $i < count($accResult); $i++) {
 
 
             $query = "SELECT hepatitis_id, hcv_vl_count, hbv_vl_count,hepatitis_test_type, result_status FROM form_hepatitis WHERE sample_code='" . $accResult[$i]['sample_code'] . "'";
-            $hepResult = $db->rawQuery($query);
+            $hepResult = $db->rawQueryOne($query);
+
 
             $testType = strtolower($hepResult['hepatitis_test_type']);
+            $resultField = $otherField = null;
             if ($testType == 'hbv') {
                 $resultField = "hbv_vl_count";
                 $otherField = "hcv_vl_count";
             } else if ($testType == 'hcv') {
                 $resultField = "hcv_vl_count";
                 $otherField = "hbv_vl_count";
+            } else {
+                continue;
             }
-
             $data = array(
                 // 'lab_name' => $accResult[$i]['lab_name'],
                 // 'lab_contact_person' => $accResult[$i]['lab_contact_person'],
@@ -220,6 +224,9 @@ try {
                 'import_machine_name' => $accResult[$i]['import_machine_name'],
             );
 
+            $data['hbv_vl_count'] = null;
+            $data['hcv_vl_count'] = null;
+
             if ($accResult[$i]['result_status'] == '4') {
                 $data['is_sample_rejected'] = 'yes';
                 $data['reason_for_sample_rejection'] = $rejectedReasonId[$i];
@@ -227,16 +234,10 @@ try {
                 $data['result_status'] = $status[$i];
                 $data['is_sample_rejected'] = 'no';
                 $data['reason_for_sample_rejection'] = null;
-                $data[$otherField] = null;
-                if (!empty(trim($accResult[$i]['result_value_text'])) && $accResult[$i]['result_value_text'] != '') {
-                    $data[$resultField] = trim($accResult[$i]['result_value_text']);
-                } else if ($accResult[$i]['result_value_absolute'] != '') {
-                    $data[$resultField] = $accResult[$i]['result_value_absolute'];
-                } else if ($accResult[$i]['result_value_log'] != '') {
-                    $data[$resultField] = $accResult[$i]['result_value_log'];
-                }
+                $data[$resultField] = trim($accResult[$i]['result']);
             }
-            //get bacth code
+
+            //get bacth code\
             $bquery = "SELECT * FROM batch_details WHERE batch_code='" . $accResult[$i]['batch_code'] . "'";
             $bvlResult = $db->rawQuery($bquery);
             if ($bvlResult) {
