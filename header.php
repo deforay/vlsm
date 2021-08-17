@@ -213,7 +213,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 	<!--<script type="text/javascript" src="assets/js/jquery-ui-sliderAccess.js"></script>-->
 	<style>
 		.online-info {
-			background-color: red;
+			/* background-color: red; */
 			text-align: center;
 			display: block;
 			position: absolute;
