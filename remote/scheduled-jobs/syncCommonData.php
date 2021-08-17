@@ -13,6 +13,8 @@ if (!isset($systemConfig['remoteURL']) || $systemConfig['remoteURL'] == '') {
 $systemConfig['remoteURL'] = rtrim($systemConfig['remoteURL'], "/");
 
 $general = new \Vlsm\Models\General($db);
+$app = new \Vlsm\Models\App($db);
+
 $globalConfigQuery = "SELECT * FROM system_config";
 $configResult = $db->query($globalConfigQuery);
 
@@ -35,11 +37,17 @@ $data = array(
     'partnersLastModified'          => $partnersLastModified,
     "Key"                           => "vlsm-get-remote",
 );
+$url = $systemConfig['remoteURL'] . '/remote/remote/commonData.php';
 
 if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) {
     $data['vlArtCodesLastModified'] = $general->getLastModifiedDateTime('r_vl_art_regimen');
     $data['vlRejectionReasonsLastModified'] = $general->getLastModifiedDateTime('r_vl_sample_rejection_reasons');
     $data['vlSampleTypesLastModified'] = $general->getLastModifiedDateTime('r_vl_sample_type');
+
+    $count = (count($data['vlArtCodesLastModified']) + count($data['vlRejectionReasonsLastModified']) + count($data['vlSampleTypesLastModified']));
+    if (isset($count) && $count > 0) {
+        $trackId = $app->addApiTracking('', $count, 'common-data', 'vl', $url, null, 'sync-api');
+    }
 }
 
 if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) {
@@ -47,6 +55,11 @@ if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] ==
     $data['eidSampleTypesLastModified'] = $general->getLastModifiedDateTime('r_eid_sample_type');
     $data['eidResultsLastModified'] = $general->getLastModifiedDateTime('r_eid_results ');
     $data['eidReasonForTestingLastModified'] = $general->getLastModifiedDateTime('r_eid_test_reasons  ');
+
+    $count = (count($data['eidRejectionReasonsLastModified']) + count($data['eidSampleTypesLastModified']) + count($data['eidResultsLastModified']) + count($data['eidReasonForTestingLastModified']));
+    if (isset($count) && $count > 0) {
+        $trackId = $app->addApiTracking('', $count, 'common-data', 'eid', $url, null, 'sync-api');
+    }
 }
 
 
@@ -57,6 +70,11 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
     $data['covid19ResultsLastModified'] = $general->getLastModifiedDateTime('r_covid19_results');
     $data['covid19SymptomsLastModified'] = $general->getLastModifiedDateTime('r_covid19_symptoms');
     $data['covid19ReasonForTestingLastModified'] = $general->getLastModifiedDateTime('r_covid19_test_reasons');
+
+    $count = (count($data['covid19RejectionReasonsLastModified']) + count($data['covid19SampleTypesLastModified']) + count($data['covid19ComorbiditiesLastModified']) + count($data['covid19ResultsLastModified']) + count($data['covid19SymptomsLastModified']) + count($data['covid19ReasonForTestingLastModified']));
+    if (isset($count) && $count > 0) {
+        $trackId = $app->addApiTracking('', $count, 'common-data', 'covid19', $url, null, 'sync-api');
+    }
 }
 
 if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) {
@@ -65,11 +83,14 @@ if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['he
     $data['hepatitisComorbiditiesLastModified'] = $general->getLastModifiedDateTime('r_hepatitis_comorbidities');
     $data['hepatitisResultsLastModified'] = $general->getLastModifiedDateTime('r_hepatitis_results');
     $data['hepatitisReasonForTestingLastModified'] = $general->getLastModifiedDateTime('r_hepatitis_test_reasons');
+
+    $count = (count($data['hepatitisRejectionReasonsLastModified']) + count($data['hepatitisSampleTypesLastModified']) + count($data['hepatitisComorbiditiesLastModified']) + count($data['hepatitisResultsLastModified']) + count($data['hepatitisReasonForTestingLastModified']));
+    if (isset($count) && $count > 0) {
+        $trackId = $app->addApiTracking('', $count, 'common-data', 'hepatitis', $url, null, 'sync-api');
+    }
 }
 
 // echo "<pre>";print_r($data);die;
-$url = $systemConfig['remoteURL'] . '/remote/remote/commonData.php';
-
 $ch = curl_init($url);
 $json_data = json_encode($data);
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");

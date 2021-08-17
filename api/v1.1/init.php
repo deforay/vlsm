@@ -155,15 +155,18 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
     foreach ($labTechnicians as $labTech) {
         $labTechniciansList[$labTech['user_id']] = ucwords($labTech['user_name']);
     }
+
     $data['covid19']['labTechniciansList'] = $app->generateSelectOptions($labTechniciansList);
     $data['covid19']['resultsList'] = $app->generateSelectOptions($covid19Obj->getCovid19Results());
     $data['covid19']['symptomsList'] = $app->generateSelectOptions($covid19Obj->getCovid19Symptoms());
     $data['covid19']['comorbiditiesList'] = $app->generateSelectOptions($covid19Obj->getCovid19Comorbidities());
     $data['covid19']['sampleStatusList'] = $app->generateSelectOptions($statusList);
+    /* Get covid-19 tests */
+    $data['covid19']['covid19Tests'] = $covid19Obj->getCovid19TestsByFormId();
     $data['covid19']['statusFilterList'] = array(
-        array('value'=>'7', 'show' => 'Approved'),
-        array('value'=>'1', 'show' => 'Pending'),
-        array('value'=>'4', 'show' => 'Rejected')
+        array('value' => '7', 'show' => 'Approved'),
+        array('value' => '1', 'show' => 'Pending'),
+        array('value' => '4', 'show' => 'Rejected')
     );
     $payload = array(
         'status' => 1,

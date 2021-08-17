@@ -3,6 +3,7 @@
 
 include(dirname(__FILE__) . "/../../startup.php");
 $general = new \Vlsm\Models\General($db);
+$app = new \Vlsm\Models\App($db);
 
 if (!isset($systemConfig['remoteURL']) || $systemConfig['remoteURL'] == '') {
     echo "Please check your remote url";
@@ -115,6 +116,9 @@ if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == t
         $id = $db->update('vl_request_form', array('data_sync' => 1));
         //}
     }
+    if (count($vlLabResult) > 0) {
+        $trackId = $app->addApiTracking('', count($vlLabResult), 'results', 'vl', $url, $sarr['sc_testing_lab_id'], 'sync-api');
+    }
 }
 
 
@@ -130,11 +134,11 @@ if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] ==
                     AND sample_code is not null 
                     AND data_sync=0"; // AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
 
-    $vlLabResult = $db->rawQuery($eidQuery);
+    $eidLabResult = $db->rawQuery($eidQuery);
 
     $url = $systemConfig['remoteURL'] . '/remote/remote/eid-test-results.php';
     $data = array(
-        "result" => $vlLabResult,
+        "result" => $eidLabResult,
         "Key" => "vlsm-lab-data--",
     );
     //open connection
@@ -162,6 +166,9 @@ if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] ==
         $db = $db->where("sample_code IN ('" . implode("','", $result) . "')");
         $id = $db->update('eid_form', array('data_sync' => 1));
         //}
+    }
+    if (count($vlLabResult) > 0) {
+        $trackId = $app->addApiTracking('', count($eidLabResult), 'results', 'eid', $url, $sarr['sc_testing_lab_id'], 'sync-api');
     }
 }
 
@@ -226,6 +233,9 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
         $id = $db->update('form_covid19', array('data_sync' => 1));
         //}
     }
+    if (count($vlLabResult) > 0) {
+        $trackId = $app->addApiTracking('', count($c19LabResult), 'results', 'covid19', $url, $sarr['sc_testing_lab_id'], 'sync-api');
+    }
 }
 
 // Hepatitis TEST RESULTS
@@ -282,6 +292,9 @@ if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['he
         $db = $db->where("sample_code IN ('" . implode("','", $result) . "')");
         $id = $db->update('form_hepatitis', array('data_sync' => 1));
         //}
+    }
+    if (count($vlLabResult) > 0) {
+        $trackId = $app->addApiTracking('', count($hepLabResult), 'results', 'hepatitis', $url, $sarr['sc_testing_lab_id'], 'sync-api');
     }
 }
 /* Get instance id for update last_remote_results_sync */

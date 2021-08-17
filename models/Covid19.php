@@ -144,9 +144,9 @@ class Covid19
     }
 
     public function getCovid19SampleTypesByName($name = "")
-    {   
+    {
         $where = "";
-        if(!empty($name)){
+        if (!empty($name)) {
             $where = " AND sample_name LIKE '$name%'";
         }
         $query = "SELECT * FROM r_covid19_sample_type where status='active'$where";
@@ -237,23 +237,21 @@ class Covid19
     }
 
 
-    public function getCovid19TestsByFormId($c19Id)
+    public function getCovid19TestsByFormId($c19Id = "")
     {
-        if (empty($c19Id)) {
-            return null;
-        }
-
         $response = array();
 
         // Using this in sync requests/results
-        if (is_array($c19Id)) {
+        if (isset($c19Id) && is_array($c19Id) && count($c19Id) > 0) {
             $results = $this->db->rawQuery("SELECT * FROM covid19_tests WHERE `covid19_id` IN (" . implode(",", $c19Id) . ") ORDER BY test_id ASC");
 
             foreach ($results as $row) {
                 $response[$row['covid19_id']][$row['test_id']] = $row;
             }
-        } else {
+        } else if (isset($c19Id) && $c19Id != "" && !is_array($c19Id)) {
             $response = $this->db->rawQuery("SELECT * FROM covid19_tests WHERE `covid19_id` = $c19Id ORDER BY test_id ASC");
+        } else if (!is_array($c19Id)) {
+            $response = $this->db->rawQuery("SELECT * FROM covid19_tests ORDER BY test_id ASC");
         }
 
         return $response;
@@ -267,7 +265,7 @@ class Covid19
         $response = array();
 
         // Using this in sync requests/results
-        if (is_array($c19Id)) {
+        if (isset($c19Id) && is_array($c19Id) && count($c19Id) > 0) {
             $results = $this->db->rawQuery("SELECT * FROM covid19_patient_symptoms WHERE `covid19_id` IN (" . implode(",", $c19Id) . ")");
 
 
@@ -299,7 +297,7 @@ class Covid19
         $response = array();
 
         // Using this in sync requests/results
-        if (is_array($c19Id)) {
+        if (isset($c19Id) && is_array($c19Id) && count($c19Id) > 0) {
 
             $results = $this->db->rawQuery("SELECT * FROM covid19_patient_comorbidities WHERE `covid19_id` IN (" . implode(",", $c19Id) . ")");
 
@@ -328,7 +326,7 @@ class Covid19
         $response = array();
 
         // Using this in sync requests/results
-        if (is_array($c19Id)) {
+        if (isset($c19Id) && is_array($c19Id) && count($c19Id) > 0) {
             $results = $this->db->rawQuery("SELECT * FROM covid19_reasons_for_testing WHERE `covid19_id` IN (" . implode(",", $c19Id) . ")");
 
             foreach ($results as $row) {
