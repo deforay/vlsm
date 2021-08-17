@@ -212,6 +212,18 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 	<!--<script type="text/javascript" src="assets/js/jquery-ui-sliderAccess.js"></script>-->
 	<style>
+		.online-info {
+			background-color: red;
+			text-align: center;
+			display: block;
+			position: absolute;
+			width: 10px;
+			height: 10px;
+			margin-top: 20px;
+			border-radius: 50%;
+			box-shadow: 0px 0px 0px;
+		}
+
 		.dataTables_empty {
 			text-align: center;
 		}
@@ -294,6 +306,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 								<a onclick="setCrossLogin();" href="<?php echo rtrim($recencyConfig['url'], "/") . '/login?u=' . base64_encode($crossLoginResult['login_id']) . '&t=' . hash('sha256', $password) . '&name=' . base64_encode($crossLoginResult['user_name']); ?>" class="btn btn-link"><i class="fa fa-fw fa-external-link"></i> Recency</a>
 							</li>
 						<?php } ?>
+						<li><span class="online-info"></span></li>
 						<li class="dropdown user user-menu">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								<img src="/assets/img/default-user.png" class="user-image" alt="User Image">
