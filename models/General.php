@@ -703,7 +703,7 @@ class General
     }
     public function getLatestSynDateTime()
     {
-        $dateTime = $this->db->rawQueryOne("SELECT GREATEST(last_remote_requests_sync, last_remote_results_sync, last_remote_reference_data_sync) AS dateTime FROM s_vlsm_instance");
+        $dateTime = $this->db->rawQueryOne("SELECT GREATEST(COALESCE(last_remote_requests_sync, 0), COALESCE(last_remote_results_sync, 0), COALESCE(last_remote_reference_data_sync, 0)) AS dateTime FROM s_vlsm_instance");
         return (isset($dateTime['dateTime']) && $dateTime['dateTime'] != "") ? date('d-M-Y h:i:s a', strtotime($dateTime['dateTime'])) : null;
     }
 }
