@@ -141,7 +141,9 @@ try {
                 }
                 //}
             }
-            $trackId = $app->addApiTracking('', count($apiResult), 'requests', 'vl', $url, $sarr['sc_testing_lab_id'], 'sync-api');
+            if (isset($apiResult) && count($apiResult) > 0) {
+                $trackId = $app->addApiTracking('', count($apiResult), 'requests', 'vl', $url, $sarr['sc_testing_lab_id'], 'sync-api');
+            }
         }
     }
 
@@ -252,7 +254,9 @@ try {
                 }
                 //}
             }
-            $trackId = $app->addApiTracking('', count($apiResult), 'requests', 'eid', $url, $sarr['sc_testing_lab_id'], 'sync-api');
+            if (isset($apiResult) && count($apiResult) > 0) {
+                $trackId = $app->addApiTracking('', count($apiResult), 'requests', 'eid', $url, $sarr['sc_testing_lab_id'], 'sync-api');
+            }
         }
     }
 
@@ -418,7 +422,9 @@ try {
                 }
                 //}
             }
-            $trackId = $app->addApiTracking('', count($apiResult), 'requests', 'covid19', $url, $sarr['sc_testing_lab_id'], 'sync-api');
+            if (isset($apiResult) && count($apiResult) > 0) {
+                $trackId = $app->addApiTracking('', count($apiResult), 'requests', 'covid19', $url, $sarr['sc_testing_lab_id'], 'sync-api');
+            }
         }
     }
 
@@ -573,7 +579,9 @@ try {
                     }
                 }
             }
-            $trackId = $app->addApiTracking('', count($apiResult), 'requests', 'hepatitis', $url, $sarr['sc_testing_lab_id'], 'sync-api');
+            if (isset($apiResult) && count($apiResult) > 0) {
+                $trackId = $app->addApiTracking('', count($apiResult), 'requests', 'hepatitis', $url, $sarr['sc_testing_lab_id'], 'sync-api');
+            }
         }
     }
 
