@@ -351,7 +351,7 @@ foreach ($rResult as $aRow) {
           if ($aRow['data_sync'] == 0) {
                $sync = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Sync this sample" onclick="syncRequest(\'' . base64_encode($aRow[$primaryKey]) . '\')">⟳ Sync Data</a>';
           } else {
-               $sync = "";
+               $sync = '<a href="javascript:void(0);" class="btn btn-default btn-xs disabled" style="margin-right: 2px;" title="Sync this sample" onclick="syncRequest(\'' . base64_encode($aRow[$primaryKey]) . '\')" disabled><i class="fa fa-ban"></i> Sync Data</a>';
           }
      } else {
           $sync = "";
