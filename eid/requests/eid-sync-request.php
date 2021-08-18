@@ -33,10 +33,6 @@ try {
         $data = array();
         $data['eidData'] = $eidData;
 
-        $db->where('eid_id', $forms, 'IN');
-        if (!$db->update('eid_form', array('data_sync' => 1)))
-            error_log('update failed: ' . $db->getLastError());
-
         $data = array(
             'labName' => $sarr['sc_testing_lab_id'],
             'module' => 'eid',
@@ -64,6 +60,9 @@ try {
         curl_close($ch);
         $apiData = json_decode($curl_response, true);
         if (isset($apiData) && sizeof($apiData) > 0) {
+            $db->where('eid_id', $forms, 'IN');
+            if (!$db->update('eid_form', array('data_sync' => 1)))
+                error_log('update failed: ' . $db->getLastError());
             echo "Sample synced successfully";
         } else {
             echo "Sample not synced. Please try again later";
