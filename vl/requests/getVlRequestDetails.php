@@ -111,15 +111,15 @@ for ($i = 0; $i < count($aColumns); $i++) {
           */
 $aWhere = '';
 //$sQuery="SELECT vl.vl_sample_id,vl.facility_id,vl.patient_name,f.facility_name,f.facility_code,art.art_code,s.sample_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_vl_art_regimen as art ON vl.current_regimen=art.art_id INNER JOIN r_vl_sample_type as s ON s.sample_id=vl.sample_type";
-$sQuery = "SELECT * FROM vl_request_form as vl    
-                    LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
-                    LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.sample_type 
-                    INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
-                    LEFT JOIN r_vl_art_regimen as art ON vl.current_regimen=art.art_id 
-                    LEFT JOIN r_vl_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection 
-                    LEFT JOIN r_implementation_partners as imp ON imp.i_partner_id=vl.implementing_partner
-                    LEFT JOIN r_vl_test_reasons as tr ON tr.test_reason_id=vl.reason_for_vl_testing 
-                    LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id";
+$sQuery = "SELECT vl.*, f.facility_name, ts.status_name, b.batch_code FROM vl_request_form as vl    
+          LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
+          LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.sample_type 
+          INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
+          LEFT JOIN r_vl_art_regimen as art ON vl.current_regimen=art.art_id 
+          LEFT JOIN r_vl_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection 
+          LEFT JOIN r_implementation_partners as imp ON imp.i_partner_id=vl.implementing_partner
+          LEFT JOIN r_vl_test_reasons as tr ON tr.test_reason_id=vl.reason_for_vl_testing 
+          LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id";
 
 $start_date = '';
 $end_date = '';
@@ -274,18 +274,22 @@ $output = array(
 );
 $vlRequest = false;
 $vlView = false;
+$syncRequest = false;
 if (isset($_SESSION['privileges']) && (in_array("editVlRequest.php", $_SESSION['privileges']))) {
      $vlRequest = true;
 }
 if (isset($_SESSION['privileges']) && (in_array("viewVlRequest.php", $_SESSION['privileges']))) {
      $vlView = true;
 }
-
+if (isset($_SESSION['privileges']) && (in_array("vl-sync-request.php", $_SESSION['privileges']))) {
+     $syncRequest = true;
+}
 
 foreach ($rResult as $aRow) {
 
      $vlResult = '';
      $edit = '';
+     $sync = '';
      $barcode = '';
      if (isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date']) != '' && $aRow['sample_collection_date'] != '0000-00-00 00:00:00') {
           $xplodDate = explode(" ", $aRow['sample_collection_date']);
@@ -324,14 +328,14 @@ foreach ($rResult as $aRow) {
      $row[] = $aRow['result'];
      $row[] = $aRow['last_modified_datetime'];
      $row[] = ucwords($aRow['status_name']);
-     
+
      //$printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="printBarcode(\''.base64_encode($aRow['vl_sample_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
      //$enterResult='<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '\',900,520);"> Result</a>';
 
      if ($vlRequest) {
           $edit = '<a href="editVlRequest.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
-          if($aRow['result_status'] == 7 && $aRow['locked'] == 'yes'){
-               if( isset($_SESSION['privileges']) && !in_array("edit-locked-vl-samples", $_SESSION['privileges'])){
+          if ($aRow['result_status'] == 7 && $aRow['locked'] == 'yes') {
+               if (isset($_SESSION['privileges']) && !in_array("edit-locked-vl-samples", $_SESSION['privileges'])) {
                     $edit = '<a href="javascript:void(0);" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Locked" disabled><i class="fa fa-lock"> Locked</i></a>';
                }
           }
@@ -346,10 +350,22 @@ foreach ($rResult as $aRow) {
           $barcode = '<br><a href="javascript:void(0)" onclick="printBarcodeLabel(\'' . $aRow[$sampleCode] . '\',\'' . $fac . '\')" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Barcode"><i class="fa fa-barcode"> </i> Barcode </a>';
      }
 
+     if ($syncRequest) {
+          if ($aRow['data_sync'] == 0) {
+               $sync = '<a href="javascript:void(0);" class="btn btn-secondry btn-xs" style="margin-right: 2px;" title="Sync this sample" onclick="syncRequest(\'' . base64_encode($aRow['vl_sample_id']) . '\')">⟳</a>';
+          } else {
+               $sync = "";
+          }
+     } else {
+          $sync = "";
+     }
+
      if ($vlView) {
-          $row[] = $edit . '&nbsp;' . $barcode; //.$pdf.$view;
+          $row[] = $edit . '&nbsp;' . $barcode . $sync; //.$pdf.$view;
      } else if ($vlRequest || $editVlRequestZm) {
-          $row[] = $edit;
+          $row[] = $edit . $sync;
+     } else if ($syncRequest) {
+          $row[] = $sync;
      } else if ($vlView) {
           $row[] = "";
      }
