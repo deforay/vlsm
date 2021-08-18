@@ -1,6 +1,8 @@
 Options -Indexes
 Header set X-Content-Type-Options "nosniff"
 
+Header set Access-Control-Allow-Origin "*"
+
 <IfModule mod_headers.c>
   # Serve brotli compressed CSS files if they exist and the client accepts gzip.
   RewriteCond %{HTTP:Accept-encoding} br
