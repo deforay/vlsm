@@ -12,6 +12,16 @@ if (!isset($systemConfig['remoteURL']) || $systemConfig['remoteURL'] == '') {
 
 $systemConfig['remoteURL'] = rtrim($systemConfig['remoteURL'], "/");
 
+
+
+$headers = @get_headers($systemConfig['remoteURL'] . '/vlsts-icons/favicon-16x16.png');
+
+if (strpos($headers[0], '200') === false) {
+    error_log("No internet connectivity while trying remote sync.");
+    return false;
+}
+
+
 $general = new \Vlsm\Models\General($db);
 $app = new \Vlsm\Models\App($db);
 
