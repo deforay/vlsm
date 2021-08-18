@@ -214,7 +214,7 @@ if (isset($_SESSION['privileges']) && (in_array("covid-19-edit-request.php", $_S
 if (isset($_SESSION['privileges']) && (in_array("covid-19-view-request.php", $_SESSION['privileges']))) {
      $viewRequest = true;
 }
-if (isset($_SESSION['privileges']) && (in_array("covid-19-sync-request.php", $_SESSION['privileges']))) {
+if (isset($_SESSION['privileges']) && (in_array("covid-19-add-request.php", $_SESSION['privileges']))) {
      $syncRequest = true;
 }
 // echo "<pre>";print_r($rResult);die;

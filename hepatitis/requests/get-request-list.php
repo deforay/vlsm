@@ -284,7 +284,7 @@ if (isset($_SESSION['privileges']) && (in_array("hepatitis-edit-request.php", $_
 if (isset($_SESSION['privileges']) && (in_array("hepatitis-view-request.php", $_SESSION['privileges']))) {
      $viewRequest = true;
 }
-if (isset($_SESSION['privileges']) && (in_array("hepatitis-sync-request.php", $_SESSION['privileges']))) {
+if (isset($_SESSION['privileges']) && (in_array("hepatitis-add-request.php", $_SESSION['privileges']))) {
      $syncRequest = true;
 }
 $hepatitisDb = new \Vlsm\Models\Hepatitis($db);
