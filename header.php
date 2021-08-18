@@ -53,7 +53,6 @@ $currentFileName = end(explode('/', $_SERVER['PHP_SELF']));
 if (!$usersModel->isAllowed($currentFileName, $systemConfig)) {
 	header("location:/error/401.php");
 }
-
 if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('roles.php', 'users.php', 'facilities.php', 'globalConfig.php', 'importConfig.php', 'otherConfig.php'))) {
 	$allAdminMenuAccess = true;
 } else {

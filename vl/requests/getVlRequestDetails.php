@@ -281,7 +281,7 @@ if (isset($_SESSION['privileges']) && (in_array("editVlRequest.php", $_SESSION['
 if (isset($_SESSION['privileges']) && (in_array("viewVlRequest.php", $_SESSION['privileges']))) {
      $vlView = true;
 }
-if (isset($_SESSION['privileges']) && (in_array("vl-sync-request.php", $_SESSION['privileges']))) {
+if (isset($_SESSION['privileges']) && (in_array("addVlRequest.php", $_SESSION['privileges']))) {
      $syncRequest = true;
 }
 

@@ -274,7 +274,7 @@ if (isset($_SESSION['privileges']) && (in_array("eid-edit-request.php", $_SESSIO
 if (isset($_SESSION['privileges']) && (in_array("eid-view-request.php", $_SESSION['privileges']))) {
      $viewRequest = true;
 }
-if (isset($_SESSION['privileges']) && (in_array("eid-sync-request.php", $_SESSION['privileges']))) {
+if (isset($_SESSION['privileges']) && (in_array("eid-add-request.php", $_SESSION['privileges']))) {
      $syncRequest = true;
 }
 

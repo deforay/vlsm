@@ -29,10 +29,6 @@ $batResult = $db->rawQuery($batQuery);
 		color: black !important;
 	}
 
-	.action {
-		display: flex;
-	}
-
 	th {
 		display: revert !important;
 	}
