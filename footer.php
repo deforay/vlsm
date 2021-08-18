@@ -691,7 +691,6 @@
 	if (isset($systemConfig['remoteURL']) && $systemConfig['remoteURL'] != "") { ?>
 		$.ajax({
 			url: '<?php echo $systemConfig['remoteURL']; ?>/vlsts-icons/favicon-16x16.png',
-			// url: 'https://via.placeholder.com/140x100',
 			cache: false,
 			success: function(data) {
 				$('.online-info').css('background-color', '#ad3');
