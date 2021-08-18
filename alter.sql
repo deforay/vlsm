@@ -2175,7 +2175,7 @@ ALTER TABLE `form_covid19` ADD `app_local_test_req_id` TEXT NULL DEFAULT NULL AF
 ALTER TABLE `r_eid_results` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `status`;
 
 -- Prasath M 12-May-2021
-INSERT INTO `global_config` (`display_name`, `name`, `value`, `category`, `remote_sync_needed`, `updated_on`, `updated_by`, `status`) VALUES ('VL Monthly Target', 'vl_monthly_target', 'no', 'vl', 'enable', '', '', 'active');
+INSERT INTO `global_config` (`display_name`, `name`, `value`, `category`, `remote_sync_needed`, `updated_on`, `updated_by`, `status`) VALUES ('VL Monthly Target', 'vl_monthly_target', 'no', 'vl', 'enable', null, null, 'active');
 -- Thana 12-May-2021
 ALTER TABLE `user_details` ADD `testing_user` TEXT NULL DEFAULT NULL AFTER `user_signature`; 
 
