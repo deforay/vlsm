@@ -123,9 +123,9 @@ $aWhere = '';
 $sQuery = '';
 
 $sQuery = "SELECT vl.*, f.facility_name, ts.status_name, b.batch_code  FROM form_covid19 as vl 
-               LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
-               LEFT JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
-               LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id";
+          LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
+          LEFT JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
+          LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id";
 
 //echo $sQuery;die;
 $start_date = '';
@@ -275,14 +275,14 @@ foreach ($rResult as $aRow) {
      if ($viewRequest) {
           $view = '<a href="covid-19-view-request.php?id=' . base64_encode($aRow['covid19_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
      }
-     
+
      if ($syncRequest) {
-          if($aRow['data_sync'] == 0){
+          if ($aRow['data_sync'] == 0) {
                $sync = '<a href="javascript:void(0);" class="btn btn-secondry btn-xs" style="margin-right: 2px;" title="Sync this sample" onclick="syncRequest(\'' . base64_encode($aRow['covid19_id']) . '\')">⟳</a>';
-          }else{
+          } else {
                $sync = "";
           }
-     }else{
+     } else {
           $sync = "";
      }
 

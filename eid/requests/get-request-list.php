@@ -118,10 +118,10 @@ for ($i = 0; $i < count($aColumns); $i++) {
           */
 $aWhere = '';
 
-$sQuery = "SELECT * FROM eid_form as vl 
-                         LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
-                         LEFT JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
-                         LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id";
+$sQuery = "SELECT vl.*, f.facility_name, ts.status_name, b.batch_code FROM eid_form as vl 
+          LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
+          LEFT JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
+          LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id";
 
 //echo $sQuery;die;
 $start_date = '';
@@ -267,18 +267,22 @@ $output = array(
 );
 $editRequest = false;
 $viewRequest = false;
+$syncRequest = false;
 if (isset($_SESSION['privileges']) && (in_array("eid-edit-request.php", $_SESSION['privileges']))) {
      $editRequest = true;
 }
 if (isset($_SESSION['privileges']) && (in_array("eid-view-request.php", $_SESSION['privileges']))) {
      $viewRequest = true;
 }
-
+if (isset($_SESSION['privileges']) && (in_array("eid-sync-request.php", $_SESSION['privileges']))) {
+     $syncRequest = true;
+}
 
 foreach ($rResult as $aRow) {
 
      $vlResult = '';
      $edit = '';
+     $sync = '';
      $barcode = '';
      if (isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date']) != '' && $aRow['sample_collection_date'] != '0000-00-00 00:00:00') {
           $xplodDate = explode(" ", $aRow['sample_collection_date']);
@@ -334,6 +338,16 @@ foreach ($rResult as $aRow) {
           $view = '<a href="eid-view-request.php?id=' . base64_encode($aRow['eid_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
      }
 
+     if ($syncRequest) {
+          if ($aRow['data_sync'] == 0) {
+               $sync = '<a href="javascript:void(0);" class="btn btn-secondry btn-xs" style="margin-right: 2px;" title="Sync this sample" onclick="syncRequest(\'' . base64_encode($aRow['eid_id']) . '\')">⟳</a>';
+          } else {
+               $sync = "";
+          }
+     } else {
+          $sync = "";
+     }
+
      if (isset($gconfig['bar_code_printing']) && $gconfig['bar_code_printing'] != "off") {
           $fac = ucwords($aRow['facility_name']) . " | " . $aRow['sample_collection_date'];
           $barcode = '<br><a href="javascript:void(0)" onclick="printBarcodeLabel(\'' . $aRow[$sampleCode] . '\',\'' . $fac . '\')" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Barcode"><i class="fa fa-barcode"> </i> Barcode </a>';
@@ -341,9 +355,11 @@ foreach ($rResult as $aRow) {
 
 
      if ($editRequest) {
-          $row[] = $edit . $barcode;
+          $row[] = $edit . $barcode . $sync;
      } else if ($viewRequest) {
-          $row[] = $view . $barcode;
+          $row[] = $view . $barcode . $sync;
+     } else if ($syncRequest) {
+          $row[] = $barcode . $sync;
      }
 
      $output['aaData'][] = $row;

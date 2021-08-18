@@ -28,10 +28,12 @@ $batResult = $db->rawQuery($batQuery);
 	.select2-selection__choice {
 		color: black !important;
 	}
-	.action{
+
+	.action {
 		display: flex;
 	}
-	th{
+
+	th {
 		display: revert !important;
 	}
 </style>
@@ -434,19 +436,19 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 		$("#" + showId).show();
 	}
 
-	function syncRequest(value){
+	function syncRequest(value) {
 		$.blockUI();
 		$.post("/covid-19/requests/covid-19-sync-request.php", {
-			c19: value,
-			testType: 'covid19'
-		},
-		function(data) {
-			if (data != "") {
-				alert(data);
-			}
-			oTable.fnDraw();
-			$.unblockUI();
-		});
+				c19: value,
+				testType: 'covid19'
+			},
+			function(data) {
+				if (data != "") {
+					alert(data);
+				}
+				oTable.fnDraw();
+				$.unblockUI();
+			});
 	}
 </script>
 <?php
