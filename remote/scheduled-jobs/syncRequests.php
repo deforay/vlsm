@@ -6,6 +6,8 @@ require_once(dirname(__FILE__) . "/../../startup.php");
 //}
 try {
     $general = new \Vlsm\Models\General($db);
+    $app = new \Vlsm\Models\App($db);
+
     if (!isset($systemConfig['remoteURL']) || $systemConfig['remoteURL'] == '') {
         echo "Please check your Remote URL";
         die;
@@ -139,6 +141,9 @@ try {
                 }
                 //}
             }
+            if (isset($apiResult) && count($apiResult) > 0) {
+                $trackId = $app->addApiTracking('', count($apiResult), 'requests', 'vl', $url, $sarr['sc_testing_lab_id'], 'sync-api');
+            }
         }
     }
 
@@ -248,6 +253,9 @@ try {
                     }
                 }
                 //}
+            }
+            if (isset($apiResult) && count($apiResult) > 0) {
+                $trackId = $app->addApiTracking('', count($apiResult), 'requests', 'eid', $url, $sarr['sc_testing_lab_id'], 'sync-api');
             }
         }
     }
@@ -414,6 +422,9 @@ try {
                 }
                 //}
             }
+            if (isset($apiResult) && count($apiResult) > 0) {
+                $trackId = $app->addApiTracking('', count($apiResult), 'requests', 'covid19', $url, $sarr['sc_testing_lab_id'], 'sync-api');
+            }
         }
     }
 
@@ -567,6 +578,9 @@ try {
                         error_log('insert failed: ' . $db->getLastError());
                     }
                 }
+            }
+            if (isset($apiResult) && count($apiResult) > 0) {
+                $trackId = $app->addApiTracking('', count($apiResult), 'requests', 'hepatitis', $url, $sarr['sc_testing_lab_id'], 'sync-api');
             }
         }
     }
