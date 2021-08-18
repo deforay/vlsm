@@ -17,7 +17,7 @@ try {
 		$data = array(
 			'geo_name' 			=> $_POST['geoName'],
 			'geo_code' 			=> $_POST['geoCode'],
-			'geo_parent' 		=> $_POST['geoParent'],
+			'geo_parent' 		=> (isset($_POST['geoParent']) && trim($_POST['geoParent']) != "") ? $_POST['geoParent'] : null,
 			'geo_status' 		=> $_POST['geoStatus'],
 			'updated_datetime'	=> $general->getDateTime()
 		);
@@ -31,6 +31,7 @@ try {
 			$db->insert($tableName, $data);
 			$lastId = $db->getInsertId();
 		}
+
 		if ($lastId > 0) {
 			$_SESSION['alertMsg'] = "Geographical Divisions details saved successfully";
 			$general->activityLog('Geographical Divisions details', $_SESSION['userName'] . ' added new geographical divisions for ' . $_POST['geoName'], 'common-reference');

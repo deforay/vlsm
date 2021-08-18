@@ -352,7 +352,7 @@ foreach ($rResult as $aRow) {
 
      if ($syncRequest) {
           if ($aRow['data_sync'] == 0) {
-               $sync = '<a href="javascript:void(0);" class="btn btn-secondry btn-xs" style="margin-right: 2px;" title="Sync this sample" onclick="syncRequest(\'' . base64_encode($aRow['vl_sample_id']) . '\')">⟳</a>';
+               $sync = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Sync this sample" onclick="syncRequest(\'' . base64_encode($aRow['vl_sample_id']) . '\')">⟳ Sync Data</a>';
           } else {
                $sync = "";
           }

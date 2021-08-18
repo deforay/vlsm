@@ -410,6 +410,21 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 		$("#" + hideId).hide();
 		$("#" + showId).show();
 	}
+
+	function syncRequest(value) {
+		$.blockUI();
+		$.post("/hepatitis/requests/hepatitis-sync-request.php", {
+				hepatitis: value,
+				testType: 'hepatitis'
+			},
+			function(data) {
+				if (data != "") {
+					alert(data);
+				}
+				oTable.fnDraw();
+				$.unblockUI();
+			});
+	}
 </script>
 <?php
 include(APPLICATION_PATH . '/footer.php');
