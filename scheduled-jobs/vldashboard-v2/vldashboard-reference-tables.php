@@ -16,7 +16,8 @@ $data['forceSync'] = true;
 
 
 $referenceTables = array(
-    'facility_details'
+    'facility_details',
+    'geographical_divisions'
 );
 
 if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) {
@@ -82,27 +83,27 @@ try {
             $data[$table]['tableStructure'] = "SET FOREIGN_KEY_CHECKS=0;" . PHP_EOL;
             $data[$table]['tableStructure'] .= "ALTER TABLE `$table` DISABLE KEYS ;" . PHP_EOL;
             $data[$table]['tableStructure'] .= "DROP TABLE IF EXISTS `$table`;" . PHP_EOL;
-            $data[$table]['tableStructure'] .= $createResult['Create Table'] . ";". PHP_EOL;;
+            $data[$table]['tableStructure'] .= $createResult['Create Table'] . ";" . PHP_EOL;;
             $data[$table]['tableStructure'] .= "ALTER TABLE `$table` ENABLE KEYS ;" . PHP_EOL;
             $data[$table]['tableStructure'] .= "SET FOREIGN_KEY_CHECKS=1;" . PHP_EOL;
         }
         $data[$table]['lastModifiedTime'] = $general->getLastModifiedDateTime($table);
         $data[$table]['tableData'] = $db->get($table);
     }
-    
-    
-    
+
+
+
     $currentDate = $general->getDateTime();
 
-    
+
     $filename = 'reference-data-' . $currentDate . '.json';
     $fp = fopen(TEMP_PATH . DIRECTORY_SEPARATOR . $filename, 'w');
     fwrite($fp, json_encode($data));
     fclose($fp);
-    
-    
+
+
     // print_r($data);die;
-    
+
     $vldashboardUrl = $general->getGlobalConfig('vldashboard_url');
     $vldashboardUrl = rtrim($vldashboardUrl, "/");
     // $vldashboardUrl = "http://vldashboard";
@@ -126,7 +127,9 @@ try {
     $result = curl_exec($ch);
     curl_close($ch);
 
-    // echo "<pre>";print_r($result);die;
+    echo "<pre>";
+    print_r($result);
+    die;
     $response = json_decode($result, true);
 } catch (Exception $exc) {
     error_log($exc->getMessage());

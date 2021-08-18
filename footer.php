@@ -4,7 +4,13 @@
 	<?php if (isset($_SESSION['userName']) && isset($_SESSION['system']) && $_SESSION['system'] == 'vluser') { ?>
 		<div class="pull-right" style="display: grid;">
 			<small><a href="javascript:forceRemoteSync();" class="text-muted" title="Last synced at : <?php echo $syncLatestTime; ?>">Force Remote sync</a>&nbsp;&nbsp;</small>
-			<small><span style="color:gray;font-size:xx-small;">Last Synced :<?php echo $syncLatestTime; ?></span></small>
+			<?php if (isset($syncLatestTime) && $syncLatestTime != '') {
+				if (isset($_SESSION['privileges']) && in_array("sync-details.php", $_SESSION['privileges'])) { ?>
+					<a href="/common/reference/sync-details.php"><small><span style="color:gray;font-size:xx-small;">Last Synced :<?php echo $syncLatestTime; ?></span></small></a>
+				<?php } else { ?>
+					<small><span style="color:gray;font-size:xx-small;">Last Synced :<?php echo $syncLatestTime; ?></span></small>
+			<?php }
+			} ?>
 		</div>
 	<?php } ?>
 </footer>
@@ -174,7 +180,7 @@
 	$(document).ready(function() {
 
 		<?php if (isset($_SESSION['system']) && $_SESSION['system'] == 'vluser') { ?>
-			syncRemoteData();
+			// syncRemoteData();
 		<?php } ?>
 		<?php if (isset($_SESSION['vldashboard_url']) && $_SESSION['vldashboard_url'] != '' && $_SESSION['vldashboard_url'] != null) { ?>
 			//syncVLDashboard();
@@ -679,6 +685,19 @@
 			e.preventDefault();
 		}
 	});
+	<?php if (isset($systemConfig['remoteURL']) && $systemConfig['remoteURL'] != "") { ?>
+		$.ajax({
+			url: '<?php echo $systemConfig['remoteURL']; ?>vlsts-icons/favicon-16x16.png',
+			// url: 'https://via.placeholder.com/140x100',
+			cache: false,
+			success: function(data) {
+				$('.online-info').css('background-color', '#ad3');
+			},
+			error: function() {
+				$('.online-info').css('background-color', 'red');
+			}
+		});
+	<?php } ?>
 </script>
 </body>
 
