@@ -2277,3 +2277,6 @@ ALTER TABLE `facility_details` ADD `facility_state_id` VARCHAR(256) NULL DEFAULT
 
 -- Thana -- 17-Aug-2021
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'common-reference', 'sync-details.php', 'Sync Details');
+
+-- Thana -- 18-Aug-2021
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'eid-requests', 'eid-sync-request.php', 'EID Sync Request');
