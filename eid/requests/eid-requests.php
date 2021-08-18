@@ -28,7 +28,7 @@ $batResult = $db->rawQuery($batQuery);
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<h1><i class="fa fa-edit"></i> EID Test Requests<?php echo base64_decode('MjA='); ?></h1>
+		<h1><i class="fa fa-edit"></i> EID Test Requests</h1>
 		<ol class="breadcrumb">
 			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
 			<li class="active">Test Request</li>
@@ -426,7 +426,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 		$.blockUI();
 		$.post("/eid/requests/eid-sync-request.php", {
 				eid: value,
-				testType: 'covid19'
+				testType: 'eid'
 			},
 			function(data) {
 				if (data != "") {

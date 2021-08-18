@@ -122,7 +122,7 @@ for ($i = 0; $i < count($aColumns); $i++) {
 $aWhere = '';
 $sQuery = '';
 
-$sQuery = "SELECT vl.*, f.facility_name, ts.status_name, b.batch_code  FROM form_covid19 as vl 
+$sQuery = "SELECT vl.*, f.facility_name, ts.status_name, b.batch_code FROM form_covid19 as vl 
           LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
           LEFT JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
           LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id";

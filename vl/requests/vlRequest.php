@@ -568,6 +568,21 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 		$("#" + hideId).hide();
 		$("#" + showId).show();
 	}
+
+	function syncRequest(value) {
+		$.blockUI();
+		$.post("/vl/requests/vl-sync-request.php", {
+				vl: value,
+				testType: 'vl'
+			},
+			function(data) {
+				if (data != "") {
+					alert(data);
+				}
+				oTable.fnDraw();
+				$.unblockUI();
+			});
+	}
 </script>
 <?php
 include(APPLICATION_PATH . '/footer.php');

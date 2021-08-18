@@ -20,30 +20,22 @@ try {
     }
 
     $request = array();
-    $url = $systemConfig['remoteURL'] . '/remote/remote/covid-19-add-requests.php';
+    $url = $systemConfig['remoteURL'] . '/remote/remote/vl-add-requests.php';
 
-    $sQuery = "SELECT * FROM form_covid19 as vl WHERE covid19_id";
-    $c19Data = $db->query("SELECT * FROM form_covid19 as vl WHERE covid19_id = " . base64_decode($_POST['c19']));
-    if (!empty($c19Data) && count($c19Data) > 0) {
+    $sQuery = "SELECT * FROM vl_request_form as vl WHERE vl_sample_id";
+    $vlData = $db->query("SELECT * FROM vl_request_form as vl WHERE vl_sample_id = " . base64_decode($_POST['vl']));
+    if (!empty($vlData) && count($vlData) > 0) {
         $forms = array();
-        foreach ($c19Data as $row) {
-            $forms[] = $row['covid19_id'];
+        foreach ($vlData as $row) {
+            $forms[] = $row['vl_sample_id'];
         }
 
-        $covid19Obj = new \Vlsm\Models\Covid19($db);
-        $symptoms = $covid19Obj->getCovid19SymptomsByFormId($forms);
-        $comorbidities = $covid19Obj->getCovid19ComorbiditiesByFormId($forms);
-        $testResults = $covid19Obj->getCovid19TestsByFormId($forms);
-
         $data = array();
-        $data['c19Data'] = $c19Data;
-        $data['symptoms'] = $symptoms;
-        $data['comorbidities'] = $comorbidities;
-        $data['testResults'] = $testResults;
+        $data['vlData'] = $vlData;
 
         $data = array(
             'labName' => $sarr['sc_testing_lab_id'],
-            'module' => 'covid19',
+            'module' => 'vl',
             'data' => $data,
         );
 
@@ -68,8 +60,8 @@ try {
         curl_close($ch);
         $apiData = json_decode($curl_response, true);
         if (isset($apiData) && sizeof($apiData) > 0) {
-            $db->where('covid19_id', $forms, 'IN');
-            if (!$db->update('form_covid19', array('data_sync' => 1)))
+            $db->where('vl_sample_id', $forms, 'IN');
+            if (!$db->update('vl_request_form', array('data_sync' => 1)))
                 error_log('update failed: ' . $db->getLastError());
             echo "Sample synced successfully";
         } else {

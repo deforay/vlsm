@@ -2280,3 +2280,4 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 
 -- Thana -- 18-Aug-2021
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'eid-requests', 'eid-sync-request.php', 'EID Sync Request');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'vl-test-request', 'vl-sync-request.php', 'VL Sync Request');
