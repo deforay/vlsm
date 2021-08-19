@@ -328,7 +328,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 				}, {
 					"sClass": "center"
 				},
-				<?php if (isset($_SESSION['privileges']) && (in_array("covid-19-edit-request.php", $_SESSION['privileges'])) || (in_array("covid-19-view-request.php", $_SESSION['privileges'])) || (in_array("covid-19-sync-request.php", $_SESSION['privileges']))) { ?> {
+				<?php if (isset($_SESSION['privileges']) && (in_array("covid-19-edit-request.php", $_SESSION['privileges'])) || (in_array("covid-19-view-request.php", $_SESSION['privileges']))) { ?> {
 						"sClass": "center action",
 						"bSortable": false
 					},
