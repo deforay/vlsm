@@ -59,7 +59,6 @@ class Users
 
         if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) {
             $sharedVLPrivileges = array(
-                'vl-sync-request.php'                   => 'addVlRequest.php',
                 'updateVlTestResult.php'                => 'vlTestResult.php',
                 'add-vl-art-code-details.php'           => 'vl-art-code-details.php',
                 'edit-vl-art-code-details.php'          => 'vl-art-code-details.php',
@@ -85,7 +84,6 @@ class Users
                 'eid-edit-batch-position.php'           => 'eid-edit-batch.php',
                 'eid-update-result.php'                 => 'eid-manual-results.php',
                 'eid-bulk-import-request.php'           => 'eid-add-request.php',
-                'eid-sync-request.php'                  => 'eid-add-request.php',
                 'eid-sample-rejection-reasons.php'      => 'eid-sample-type.php',
                 'add-eid-sample-rejection-reasons.php'  => 'eid-sample-type.php',
                 'edit-eid-sample-rejection-reasons.php' => 'eid-sample-type.php',
@@ -109,7 +107,6 @@ class Users
                 'covid-19-update-result.php'                => 'covid-19-manual-results.php',
                 'covid-19-bulk-import-request.php'          => 'covid-19-add-request.php',
                 'covid-19-quick-add.php'                    => 'covid-19-add-request.php',
-                'covid-19-sync-request.php'                 => 'covid-19-add-request.php',
                 'covid19-sample-rejection-reasons.php'      => 'covid19-sample-type.php',
                 'add-covid19-sample-rejection-reason.php'   => 'covid19-sample-type.php',
                 'edit-covid19-sample-rejection-reason.php'  => 'covid19-sample-type.php',
@@ -137,7 +134,6 @@ class Users
 
         if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) {
             $sharedHepPrivileges = array(
-                'hepatitis-sync-request.php'                    => 'hepatitis-add-request.php',
                 'hepatitis-update-result.php'                   => 'hepatitis-manual-results.php',
                 'mail-hepatitis-results.php'                    => 'hepatitis-print-results.php',
                 'hepatitis-result-mail-confirm.php'             => 'hepatitis-print-results.php',
