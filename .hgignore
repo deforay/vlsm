@@ -3,10 +3,12 @@ syntax: regexp
 ^uploads/(?!.htaccess)
 ^temporary/(?!.htaccess)
 ^interop/dhis2/examples/(?!index.php)
-
+.pid$
 
 syntax: glob
 error_log
+error.log
+errors.log
 npm-debug.log
 Thumbs.db
 Thumbs.db.orig

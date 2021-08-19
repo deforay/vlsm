@@ -1,5 +1,6 @@
+#!/usr/bin/php
 <?php
-//update common table from remote to lab db
+
 require_once(dirname(__FILE__) . "/../../startup.php");
 ini_set('memory_limit', -1);
 ini_set('max_execution_time', -1);
@@ -9,6 +10,25 @@ if (!isset($systemConfig['remoteURL']) || $systemConfig['remoteURL'] == '') {
     echo "Please check if the Remote URL is set." . PHP_EOL;
     exit(0);
 }
+
+
+$lockFile = fopen(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'sync-common.pid', 'c');
+$gotLock = flock($lockFile, LOCK_EX | LOCK_NB, $wouldblock);
+if ($lockFile === false || (!$gotLock && !$wouldblock)) {
+    error_log("Unable to create the lock file");
+    exit(0);
+} else if (!$gotLock && $wouldblock) {
+    exit(0);
+}
+// Lock acquired; let's write our PID to the lock file for the convenience
+// of humans who may wish to terminate the script.
+ftruncate($lockFile, 0);
+fwrite($lockFile, getmypid() . "\n");
+
+
+
+//update common data from remote to lab db
+
 
 $systemConfig['remoteURL'] = rtrim($systemConfig['remoteURL'], "/");
 
@@ -785,3 +805,9 @@ $instanceResult = $db->rawQueryOne("SELECT vlsm_instance_id, instance_facility_n
 /* Update last_remote_results_sync in s_vlsm_instance */
 $db = $db->where('vlsm_instance_id', $instanceResult['vlsm_instance_id']);
 $id = $db->update('s_vlsm_instance', array('last_remote_reference_data_sync' => $general->getDateTime()));
+
+
+// All done; we blank the PID file and explicitly release the lock 
+// (although this should be unnecessary) before terminating.
+ftruncate($lockFile, 0);
+flock($lockFile, LOCK_UN);

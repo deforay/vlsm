@@ -432,20 +432,32 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 		$("#" + showId).show();
 	}
 
-	function syncRequest(value) {
-		$.blockUI();
-		$.post("/covid-19/requests/covid-19-sync-request.php", {
-				c19: value,
-				testType: 'covid19'
-			},
-			function(data) {
-				if (data != "") {
-					alert(data);
-				}
-				oTable.fnDraw();
-				$.unblockUI();
+	<?php if (isset($_SESSION['system']) && $_SESSION['system'] == 'vluser') { ?>
+		var remoteUrl = '<?php echo $systemConfig['remoteURL']; ?>';
+
+		function forceResultSync(sampleCode) {
+			$.blockUI({
+				message: '<h3>Trying to sync ' + sampleCode + '<br>Please wait...</h3>'
 			});
-	}
+
+			if (remoteSync && remoteUrl != null && remoteUrl != '') {
+				var jqxhr = $.ajax({
+						url: "/remote/scheduled-jobs/syncResults.php?sampleCode=" + sampleCode + "&forceSyncModule=covid19",
+					})
+					.done(function(data) {
+						//console.log(data);
+						//alert( "success" );
+					})
+					.fail(function() {
+						$.unblockUI();
+					})
+					.always(function() {
+						oTable.fnDraw();
+						$.unblockUI();
+					});
+			}
+		}
+	<?php } ?>
 </script>
 <?php
 include(APPLICATION_PATH . '/footer.php');

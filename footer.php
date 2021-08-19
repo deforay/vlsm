@@ -42,44 +42,6 @@
 			sessionStorage.setItem("crosslogin", "false");
 		}
 	}
-
-	<?php if (isset($_SESSION['vldashboard_url']) && $_SESSION['vldashboard_url'] != '' && $_SESSION['vldashboard_url'] != null) { ?>
-		var vldashSync = true;
-		var vldashUrl = '<?php echo $_SESSION['vldashboard_url']; ?>';
-
-		function syncVLDashboard() {
-			if (!navigator.onLine) {
-				alert('Please connect to internet to sync with Vl Dashboard');
-				return false;
-			}
-
-			vlDashSyncStatus = Cookies.get('vldash-sync-status')
-			if (vlDashSyncStatus != undefined && vlDashSyncStatus != null && vlDashSyncStatus == 'synced') {
-				return false;
-			}
-			// if(vldashSync && vldashUrl != null && vldashUrl != ''){
-			//   $.blockUI({ message: '<h3>Trying to do VL Dashboard sync. Please wait...</h3>' });
-			//   var jqxhr = $.ajax({
-			//                   url : "/scheduled-jobs/vldashboard.php",
-			//                 })
-			//                 .done(function(data) {
-			//                   //console.log(data);
-			//                   //alert( "success" );
-			//                 })
-			//                 .fail(function() {
-			//                   $.unblockUI();
-			//                   alert( "Unable to do VL Dashboard Sync. Please contact technical team for assistance." );
-			//                 })
-			//                 .always(function() {
-			//                   //alert( "complete" );
-			//                   $.unblockUI();
-			//                   var inHalfADay = 0.5;
-			//                   Cookies.set('vldash-sync-status', 'synced', { expires: inHalfADay });                    
-			//                 });
-			// }
-
-		}
-	<?php } ?>
 	<?php if (isset($_SESSION['system']) && $_SESSION['system'] == 'vluser') { ?>
 		var remoteSync = true;
 		var remoteUrl = '<?php echo $systemConfig['remoteURL']; ?>';
@@ -685,20 +647,24 @@
 			e.preventDefault();
 		}
 	});
-	<?php 
-	
+	<?php
+	// Every 5 mins check connection if this is a local installation of VLSM and there is a remote server configured
 	$systemConfig['remoteURL'] = rtrim($systemConfig['remoteURL'], "/");
-	if (isset($systemConfig['remoteURL']) && $systemConfig['remoteURL'] != "") { ?>
-		$.ajax({
-			url: '<?php echo $systemConfig['remoteURL']; ?>/vlsts-icons/favicon-16x16.png',
-			cache: false,
-			success: function(data) {
-				$('.online-info').css('background-color', '#ad3');
-			},
-			error: function() {
-				$('.online-info').css('background-color', 'red');
-			}
-		});
+	if (isset($systemConfig['remoteURL']) && $systemConfig['remoteURL'] != "" && $_SESSION['system'] == 'vluser') { ?>
+
+			(function checkNetworkConnection() {
+				$.ajax({
+					url: '<?php echo $systemConfig['remoteURL']; ?>/vlsts-icons/favicon-16x16.png',
+					cache: false,
+					success: function(data) {
+						$('.is-remote-server-reachable').css('background-color', 'green');
+					},
+					error: function() {
+						$('.is-remote-server-reachable').css('background-color', 'red');
+					}
+				});
+				setTimeout(checkNetworkConnection, 300000);
+			})();
 	<?php } ?>
 </script>
 </body>

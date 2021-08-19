@@ -111,7 +111,7 @@ for ($i = 0; $i < count($aColumns); $i++) {
           */
 $aWhere = '';
 //$sQuery="SELECT vl.vl_sample_id,vl.facility_id,vl.patient_name,f.facility_name,f.facility_code,art.art_code,s.sample_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_vl_art_regimen as art ON vl.current_regimen=art.art_id INNER JOIN r_vl_sample_type as s ON s.sample_id=vl.sample_type";
-$sQuery = "SELECT vl.*, f.facility_name, ts.status_name, b.batch_code FROM vl_request_form as vl    
+$sQuery = "SELECT vl.*, f.*, s.sample_name, ts.status_name, b.batch_code FROM vl_request_form as vl    
           LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
           LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.sample_type 
           INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
@@ -272,16 +272,10 @@ $output = array(
      "iTotalDisplayRecords" => $iFilteredTotal,
      "aaData" => array()
 );
-$vlRequest = false;
-$vlView = false;
+$editRequest = false;
 $syncRequest = false;
 if (isset($_SESSION['privileges']) && (in_array("editVlRequest.php", $_SESSION['privileges']))) {
-     $vlRequest = true;
-}
-if (isset($_SESSION['privileges']) && (in_array("viewVlRequest.php", $_SESSION['privileges']))) {
-     $vlView = true;
-}
-if (isset($_SESSION['privileges']) && (in_array("addVlRequest.php", $_SESSION['privileges']))) {
+     $editRequest = true;
      $syncRequest = true;
 }
 
@@ -332,7 +326,7 @@ foreach ($rResult as $aRow) {
      //$printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="printBarcode(\''.base64_encode($aRow['vl_sample_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
      //$enterResult='<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '\',900,520);"> Result</a>';
 
-     if ($vlRequest) {
+     if ($editRequest) {
           $edit = '<a href="editVlRequest.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
           if ($aRow['result_status'] == 7 && $aRow['locked'] == 'yes') {
                if (isset($_SESSION['privileges']) && !in_array("edit-locked-vl-samples", $_SESSION['privileges'])) {
@@ -341,34 +335,27 @@ foreach ($rResult as $aRow) {
           }
      }
 
-     if ($vlView) {
-          $view = '<a href="viewVlRequest.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
-     }
-
      if (isset($gconfig['bar_code_printing']) && $gconfig['bar_code_printing'] != "off") {
           $fac = ucwords($aRow['facility_name']) . " | " . $aRow['sample_collection_date'];
           $barcode = '<br><a href="javascript:void(0)" onclick="printBarcodeLabel(\'' . $aRow[$sampleCode] . '\',\'' . $fac . '\')" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Barcode"><i class="fa fa-barcode"> </i> Barcode </a>';
      }
 
-     if ($syncRequest) {
+     if ($syncRequest && $_SESSION['system'] == 'vluser' && ($aRow['result_status'] == 7 || $aRow['result_status'] == 4)) {
           if ($aRow['data_sync'] == 0) {
-               $sync = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Sync this sample" onclick="syncRequest(\'' . base64_encode($aRow['vl_sample_id']) . '\')">⟳ Sync Data</a>';
-          } else {
-               $sync = '<a href="javascript:void(0);" class="btn btn-default btn-xs disabled" style="margin-right: 2px;" title="Sync this sample" onclick="syncRequest(\'' . base64_encode($aRow['vl_sample_id']) . '\')" disabled><i class="fa fa-ban"></i> Sync Data</a>';
+               $sync = '<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Sync this sample" onclick="forceResultSync(\'' . ($aRow['sample_code']) . '\')"> Sync</a>';
           }
      } else {
           $sync = "";
      }
 
-     if ($vlView) {
-          $row[] = $edit . '&nbsp;' . $barcode . $sync; //.$pdf.$view;
-     } else if ($vlRequest || $editVlRequestZm) {
-          $row[] = $edit . $sync;
-     } else if ($syncRequest) {
-          $row[] = $sync;
-     } else if ($vlView) {
-          $row[] = "";
+     $actions = "";
+     if ($editRequest) {
+          $actions .= $edit;
+     } 
+     if ($syncRequest) {
+          $actions .= $sync;
      }
+     $row[] = $actions . $barcode;
 
      $output['aaData'][] = $row;
 }

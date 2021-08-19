@@ -118,7 +118,7 @@ for ($i = 0; $i < count($aColumns); $i++) {
           */
 $aWhere = '';
 
-$sQuery = "SELECT vl.*, f.facility_name, ts.status_name, b.batch_code FROM $tableName as vl 
+$sQuery = "SELECT vl.*, f.*, ts.status_name, b.batch_code FROM $tableName as vl 
           LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
           LEFT JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
           LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id";
@@ -276,15 +276,9 @@ $output = array(
      "aaData" => array()
 );
 $editRequest = false;
-$viewRequest = false;
 $syncRequest = false;
 if (isset($_SESSION['privileges']) && (in_array("hepatitis-edit-request.php", $_SESSION['privileges']))) {
      $editRequest = true;
-}
-if (isset($_SESSION['privileges']) && (in_array("hepatitis-view-request.php", $_SESSION['privileges']))) {
-     $viewRequest = true;
-}
-if (isset($_SESSION['privileges']) && (in_array("hepatitis-add-request.php", $_SESSION['privileges']))) {
      $syncRequest = true;
 }
 $hepatitisDb = new \Vlsm\Models\Hepatitis($db);
@@ -331,9 +325,7 @@ foreach ($rResult as $aRow) {
      $row[] = ([$aRow['hbv_vl_count']]);
      $row[] = $aRow['last_modified_datetime'];
      $row[] = ucwords($aRow['status_name']);
-     //$printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="printBarcode(\''.base64_encode($aRow[$primaryKey]).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
-     //$enterResult='<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow[$primaryKey]) . '\',900,520);"> Result</a>';
-
+     
      if ($editRequest) {
           $edit = '<a href="hepatitis-edit-request.php?id=' . base64_encode($aRow[$primaryKey]) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
           if ($aRow['result_status'] == 7 && $aRow['locked'] == 'yes') {
@@ -343,15 +335,9 @@ foreach ($rResult as $aRow) {
           }
      }
 
-     if ($viewRequest) {
-          $view = '<a href="hepatitis-view-request.php?id=' . base64_encode($aRow[$primaryKey]) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
-     }
-
-     if ($syncRequest) {
+     if ($syncRequest && $_SESSION['system'] == 'vluser' && ($aRow['result_status'] == 7 || $aRow['result_status'] == 4)) {
           if ($aRow['data_sync'] == 0) {
-               $sync = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Sync this sample" onclick="syncRequest(\'' . base64_encode($aRow[$primaryKey]) . '\')">⟳ Sync Data</a>';
-          } else {
-               $sync = '<a href="javascript:void(0);" class="btn btn-default btn-xs disabled" style="margin-right: 2px;" title="Sync this sample" onclick="syncRequest(\'' . base64_encode($aRow[$primaryKey]) . '\')" disabled><i class="fa fa-ban"></i> Sync Data</a>';
+               $sync = '<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Sync this sample" onclick="forceResultSync(\'' . ($aRow['sample_code']) . '\')"> Sync</a>';
           }
      } else {
           $sync = "";
@@ -361,13 +347,14 @@ foreach ($rResult as $aRow) {
           $fac = ucwords($aRow['facility_name']) . " | " . $aRow['sample_collection_date'];
           $barcode = '<br><a href="javascript:void(0)" onclick="printBarcodeLabel(\'' . $aRow[$sampleCode] . '\',\'' . $fac . '\')" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Barcode"><i class="fa fa-barcode"> </i> Barcode </a>';
      }
+     $actions = "";
      if ($editRequest) {
-          $row[] = $edit . $barcode . $sync;
-     } else if ($viewRequest) {
-          $row[] = $view . $barcode . $sync;
-     } else if ($syncRequest) {
-          $row[] = $barcode . $sync;
+          $actions .= $edit;
      }
+     if ($syncRequest) {
+          $actions .= $sync;
+     }
+     $row[] = $actions . $barcode;
      // echo '<pre>';print_r($row);die;
      $output['aaData'][] = $row;
 }
