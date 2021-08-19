@@ -118,7 +118,7 @@ for ($i = 0; $i < count($aColumns); $i++) {
           */
 $aWhere = '';
 
-$sQuery = "SELECT vl.*, f.facility_name, ts.status_name, b.batch_code FROM eid_form as vl 
+$sQuery = "SELECT vl.*, f.*, ts.status_name, b.batch_code FROM eid_form as vl 
           LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
           LEFT JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
           LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id";
@@ -251,7 +251,7 @@ $aResultFilterTotal = $db->rawQuery("SELECT vl.eid_id FROM eid_form as vl LEFT J
 $iFilteredTotal = count($aResultFilterTotal);
 
 /* Total data set length */
-$aResultTotal =  $db->rawQuery("select COUNT(eid_id) as total FROM eid_form as vl where vlsm_country_id='" . $gconfig['vl_form'] . "'" . $sFilter);
+$aResultTotal =  $db->rawQuery("SELECT COUNT(eid_id) as total FROM eid_form as vl where vlsm_country_id='" . $gconfig['vl_form'] . "'" . $sFilter);
 // $aResultTotal = $countResult->fetch_row();
 //print_r($aResultTotal);
 $iTotal = $aResultTotal[0]['total'];
@@ -266,15 +266,9 @@ $output = array(
      "aaData" => array()
 );
 $editRequest = false;
-$viewRequest = false;
 $syncRequest = false;
 if (isset($_SESSION['privileges']) && (in_array("eid-edit-request.php", $_SESSION['privileges']))) {
      $editRequest = true;
-}
-if (isset($_SESSION['privileges']) && (in_array("eid-view-request.php", $_SESSION['privileges']))) {
-     $viewRequest = true;
-}
-if (isset($_SESSION['privileges']) && (in_array("eid-add-request.php", $_SESSION['privileges']))) {
      $syncRequest = true;
 }
 
@@ -334,15 +328,9 @@ foreach ($rResult as $aRow) {
           }
      }
 
-     if ($viewRequest) {
-          $view = '<a href="eid-view-request.php?id=' . base64_encode($aRow['eid_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
-     }
-
-     if ($syncRequest) {
+     if ($syncRequest && $_SESSION['system'] == 'vluser' && ($aRow['result_status'] == 7 || $aRow['result_status'] == 4)) {
           if ($aRow['data_sync'] == 0) {
-               $sync = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Sync this sample" onclick="syncRequest(\'' . base64_encode($aRow['eid_id']) . '\')">⟳ Sync Data</a>';
-          } else {
-               $sync = '<a href="javascript:void(0);" class="btn btn-default btn-xs disabled" style="margin-right: 2px;" title="Sync this sample" onclick="syncRequest(\'' . base64_encode($aRow['eid_id']) . '\')" disabled><i class="fa fa-ban"></i> Sync Data</a>';
+               $sync = '<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Sync this sample" onclick="forceResultSync(\'' . ($aRow['sample_code']) . '\')"> Sync</a>';
           }
      } else {
           $sync = "";
@@ -354,13 +342,14 @@ foreach ($rResult as $aRow) {
      }
 
 
+     $actions = "";
      if ($editRequest) {
-          $row[] = $edit . $barcode . $sync;
-     } else if ($viewRequest) {
-          $row[] = $view . $barcode . $sync;
-     } else if ($syncRequest) {
-          $row[] = $barcode . $sync;
+          $actions .= $edit;
+     } 
+     if ($syncRequest) {
+          $actions .= $sync;
      }
+     $row[] = $actions . $barcode;
 
      $output['aaData'][] = $row;
 }

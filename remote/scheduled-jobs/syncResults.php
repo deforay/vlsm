@@ -10,6 +10,21 @@ if (!isset($systemConfig['remoteURL']) || $systemConfig['remoteURL'] == '') {
     exit();
 }
 
+$lockFile = fopen(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'sync-results.pid', 'c');
+$gotLock = flock($lockFile, LOCK_EX | LOCK_NB, $wouldblock);
+if ($lockFile === false || (!$gotLock && !$wouldblock)) {
+    error_log("Unable to create the lock file");
+    exit(0);
+} else if (!$gotLock && $wouldblock) {
+    exit(0);
+}
+// Lock acquired; let's write our PID to the lock file for the convenience
+// of humans who may wish to terminate the script.
+ftruncate($lockFile, 0);
+fwrite($lockFile, getmypid() . "\n");
+
+
+
 $systemConfig['remoteURL'] = rtrim($systemConfig['remoteURL'], "/");
 
 
@@ -77,8 +92,19 @@ if (isset($fMapResult) && $fMapResult != '' && $fMapResult != null) {
     $where = "lab_id =" . $sarr['sc_testing_lab_id'];
 }
 
+$forceSyncModule = !empty($_GET['forceSyncModule']) ? $_GET['forceSyncModule'] : null;
+$sampleCode = !empty($_GET['sampleCode']) ? $_GET['sampleCode'] : null;
+
+// if only one module is getting synced, lets only sync that one module
+if(!empty($forceSyncModule)){
+    unset($systemConfig['modules']);
+    $systemConfig['modules'][$forceSyncModule] = true;
+}
+
 // VIRAL LOAD TEST RESULTS
 if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) {
+
+
     $vlQuery = "SELECT vl.*, a.user_name as 'approved_by_name' 
             FROM `vl_request_form` AS vl 
             LEFT JOIN `user_details` AS a ON vl.result_approved_by = a.user_id 
@@ -88,6 +114,11 @@ if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == t
             AND data_sync=0";
     // AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
     //echo $vlQuery;die;
+
+    if (!empty($forceSyncModule) && trim($forceSyncModule) == "vl" && !empty($sampleCode) && trim($sampleCode) != "") {
+        $vlQuery .= " AND sample_code like '$sampleCode'";
+    }
+
     $vlLabResult = $db->rawQuery($vlQuery);
 
 
@@ -134,6 +165,7 @@ if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == t
 
 if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) {
 
+
     $eidQuery = "SELECT vl.*, a.user_name as 'approved_by_name' 
                     FROM `eid_form` AS vl 
                     LEFT JOIN `user_details` AS a ON vl.result_approved_by = a.user_id 
@@ -142,6 +174,9 @@ if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] ==
                     AND sample_code is not null 
                     AND data_sync=0"; // AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
 
+    if (!empty($forceSyncModule) && trim($forceSyncModule) == "eid" && !empty($sampleCode) && trim($sampleCode) != "") {
+        $eidQuery .= " AND sample_code like '$sampleCode'";
+    }
     $eidLabResult = $db->rawQuery($eidQuery);
 
     $url = $systemConfig['remoteURL'] . '/remote/remote/eid-test-results.php';
@@ -194,6 +229,9 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
                     AND sample_code is not null 
                     AND data_sync=0"; // AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
 
+    if (!empty($forceSyncModule) && trim($forceSyncModule) == "covid19" && !empty($sampleCode) && trim($sampleCode) != "") {
+        $covid19Query .= " AND sample_code like '$sampleCode'";
+    }
     $c19LabResult = $db->rawQuery($covid19Query);
 
     $forms = array();
@@ -257,7 +295,9 @@ if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['he
                     AND sample_code !='' 
                     AND sample_code is not null 
                     AND data_sync=0"; // AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
-
+    if (!empty($forceSyncModule) && trim($forceSyncModule) == "hepatitis" && !empty($sampleCode) && trim($sampleCode) != "") {
+        $hepQuery .= " AND sample_code like '$sampleCode'";
+    }
     $hepLabResult = $db->rawQuery($hepQuery);
 
     // $forms = array();
@@ -311,3 +351,10 @@ $instanceResult = $db->rawQueryOne("SELECT vlsm_instance_id, instance_facility_n
 /* Update last_remote_results_sync in s_vlsm_instance */
 $db = $db->where('vlsm_instance_id', $instanceResult['vlsm_instance_id']);
 $id = $db->update('s_vlsm_instance', array('last_remote_results_sync' => $general->getDateTime()));
+
+
+
+// All done; we blank the PID file and explicitly release the lock 
+// (although this should be unnecessary) before terminating.
+ftruncate($lockFile, 0);
+flock($lockFile, LOCK_UN);

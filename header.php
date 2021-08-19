@@ -47,12 +47,12 @@ if (isset($arr['instance_type']) && $arr['instance_type'] != '') {
 	}
 }
 
-
-$currentFileName = end(explode('/', $_SERVER['PHP_SELF']));
-
-if (!$usersModel->isAllowed($currentFileName, $systemConfig)) {
+// Check if the user can access the requested page
+if (!$usersModel->isAllowed(basename($_SERVER['PHP_SELF']), $systemConfig)) {
 	header("location:/error/401.php");
 }
+
+
 if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('roles.php', 'users.php', 'facilities.php', 'globalConfig.php', 'importConfig.php', 'otherConfig.php'))) {
 	$allAdminMenuAccess = true;
 } else {
@@ -191,13 +191,6 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 	<link href="/assets/css/deforayModal.css" rel="stylesheet" />
 	<link href="/assets/css/jquery.fastconfirm.css" rel="stylesheet" />
 
-
-	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
-  	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
 	<!-- jQuery 2.2.3 -->
 
 	<script type="text/javascript" src="/assets/js/jquery.min.js"></script>
@@ -211,7 +204,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 	<!--<script type="text/javascript" src="assets/js/jquery-ui-sliderAccess.js"></script>-->
 	<style>
-		.online-info {
+		.is-remote-server-reachable {
 			/* background-color: red; */
 			text-align: center;
 			display: block;
@@ -305,7 +298,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 								<a onclick="setCrossLogin();" href="<?php echo rtrim($recencyConfig['url'], "/") . '/login?u=' . base64_encode($crossLoginResult['login_id']) . '&t=' . hash('sha256', $password) . '&name=' . base64_encode($crossLoginResult['user_name']); ?>" class="btn btn-link"><i class="fa fa-fw fa-external-link"></i> Recency</a>
 							</li>
 						<?php } ?>
-						<li><span class="online-info"></span></li>
+						<li><span class="is-remote-server-reachable"></span></li>
 						<li class="dropdown user user-menu">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								<img src="/assets/img/default-user.png" class="user-image" alt="User Image">
