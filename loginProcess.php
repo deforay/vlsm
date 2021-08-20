@@ -131,7 +131,7 @@ try {
             $_SESSION['module']     = $module;
 
 
-            if ($systemType != null && $systemType == 'vluser' && $systemLabId != '' && $systemLabId != null) {
+            if ($systemType != null && ($systemType == 'vluser' || $systemType == 'remoteuser') && $systemLabId != '' && $systemLabId != null) {
                 $_SESSION['system'] = $systemType;
             } else {
                 $_SESSION['system'] = null;

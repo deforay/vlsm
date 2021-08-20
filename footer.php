@@ -1,7 +1,7 @@
 <footer class="main-footer">
 	<small>This project is supported by the U.S. President’s Emergency Plan for AIDS Relief (PEPFAR) through the U.S. Centers for Disease Control and Prevention (CDC).</small>
 	<small class="pull-right" style="font-weight:bold;">&nbsp;&nbsp;<?php echo VERSION; ?></small>
-	<?php if (isset($_SESSION['userName']) && isset($_SESSION['system']) && $_SESSION['system'] == 'vluser') { ?>
+	<?php if (isset($_SESSION['userName']) && isset($_SESSION['system']) && ($_SESSION['system'] == 'vluser' || $_SESSION['system'] == 'remoteuser')) { ?>
 		<div class="pull-right" style="display: grid;">
 			<small><a href="javascript:forceRemoteSync();" class="text-muted" title="Last synced at : <?php echo $syncLatestTime; ?>">Force Remote sync</a>&nbsp;&nbsp;</small>
 			<?php if (isset($syncLatestTime) && $syncLatestTime != '') {

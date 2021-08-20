@@ -96,7 +96,7 @@ $forceSyncModule = !empty($_GET['forceSyncModule']) ? $_GET['forceSyncModule'] :
 $sampleCode = !empty($_GET['sampleCode']) ? $_GET['sampleCode'] : null;
 
 // if only one module is getting synced, lets only sync that one module
-if(!empty($forceSyncModule)){
+if (!empty($forceSyncModule)) {
     unset($systemConfig['modules']);
     $systemConfig['modules'][$forceSyncModule] = true;
 }
