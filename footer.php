@@ -1,7 +1,7 @@
 <footer class="main-footer">
 	<small>This project is supported by the U.S. President’s Emergency Plan for AIDS Relief (PEPFAR) through the U.S. Centers for Disease Control and Prevention (CDC).</small>
 	<small class="pull-right" style="font-weight:bold;">&nbsp;&nbsp;<?php echo VERSION; ?></small>
-	<?php if (isset($_SESSION['userName']) && isset($_SESSION['system']) && $_SESSION['system'] == 'vluser') { ?>
+	<?php if (isset($_SESSION['userName']) && isset($_SESSION['system']) && ($_SESSION['system'] == 'vluser' || $_SESSION['system'] == 'remoteuser')) { ?>
 		<div class="pull-right" style="display: grid;">
 			<small><a href="javascript:forceRemoteSync();" class="text-muted" title="Last synced at : <?php echo $syncLatestTime; ?>">Force Remote sync</a>&nbsp;&nbsp;</small>
 			<?php if (isset($syncLatestTime) && $syncLatestTime != '') {
@@ -137,30 +137,69 @@
 					});
 			}
 		}
+
+		function syncCommon() {
+
+			$.blockUI({
+				message: '<h3>Trying to sync common data<br>Please wait...</h3>'
+			});
+
+			if (remoteSync && remoteUrl != null && remoteUrl != '') {
+				var jqxhr = $.ajax({
+						url: "/remote/scheduled-jobs/syncCommonData.php",
+					})
+					.done(function(data) {
+						//console.log(data);
+						//alert( "success" );
+					})
+					.fail(function() {
+						$.unblockUI();
+						alert("Unable to do VLSTS Remote Sync. Please contact technical team for assistance.");
+					})
+					.always(function() {
+						$.unblockUI();
+						syncRequests()
+					});
+			}
+		}
 	<?php } ?>
 
 	$(document).ready(function() {
-
 		<?php if (isset($_SESSION['system']) && $_SESSION['system'] == 'vluser') { ?>
 			// syncRemoteData();
-		<?php } ?>
-		<?php if (isset($_SESSION['vldashboard_url']) && $_SESSION['vldashboard_url'] != '' && $_SESSION['vldashboard_url'] != null) { ?>
+
+			// To check the sync for each 5 min
+			var dt = new Date();
+			format = dt.setMinutes(dt.getMinutes() - 5);
+			formatdt = dateFormat(format, "yyyymmddHHMMss");
+
+			(function checkNetworkConnection() {
+				$.post("/remote/scheduled-jobs/checkSyncTime.php", {
+						time: formatdt
+					}, function(data) {
+						if (data != "") {
+
+						}
+					}).done(function() {})
+					.fail(function() {
+						syncCommon();
+					});
+				setTimeout(checkNetworkConnection, 50000);
+			})();
+		<?php } ?> <?php if (isset($_SESSION['vldashboard_url']) && $_SESSION['vldashboard_url'] != '' && $_SESSION['vldashboard_url'] != null) { ?>
 			//syncVLDashboard();
 		<?php } ?>
 
-		<?php if (isset($_SESSION['alertMsg']) && trim($_SESSION['alertMsg']) != "") { ?>
-			alert('<?php echo $_SESSION['alertMsg']; ?>');
+		<?php if (isset($_SESSION['alertMsg']) && trim($_SESSION['alertMsg']) != "") { ?> alert('<?php echo $_SESSION['alertMsg']; ?>');
 		<?php $_SESSION['alertMsg'] = '';
 			unset($_SESSION['alertMsg']);
 		}
-		if ($_SESSION['logged']) { ?>
-			setCrossLogin();
+		if ($_SESSION['logged']) { ?> setCrossLogin();
 		<?php }
 
 		// if instance facility name is not set, let us show the modal
 
-		if (empty($_SESSION['instanceFacilityName'])) { ?>
-			showModal('/addInstanceDetails.php', 900, 420);
+		if (empty($_SESSION['instanceFacilityName'])) { ?> showModal('/addInstanceDetails.php', 900, 420);
 		<?php } ?>
 
 		$('.daterange,#sampleCollectionDate,#sampleTestDate,#printSampleCollectionDate,#printSampleTestDate,#vlSampleCollectionDate,#eidSampleCollectionDate,#covid19SampleCollectionDate,#recencySampleCollectionDate,#hepatitisSampleCollectionDate,#hvlSampleTestDate,#rjtSampleTestDate,#noResultSampleTestDate,#printDate,#hvlSampleTestDate,#rjtSampleTestDate,#noResultSampleTestDate,#femaleSampleTestDate').on('cancel.daterangepicker', function(ev, picker) {
