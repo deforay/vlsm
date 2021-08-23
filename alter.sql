@@ -2273,4 +2273,4 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 ALTER TABLE `facility_details` ADD `facility_state_id` VARCHAR(256) NULL DEFAULT NULL AFTER `country`, ADD `facility_district_id` VARCHAR(256) NULL DEFAULT NULL AFTER `facility_state_id`; 
 
 -- Thana -- 17-Aug-2021
-INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'common-reference', 'sync-details.php', 'Sync Details');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'common-reference', 'sync-history.php', 'Sync History');
