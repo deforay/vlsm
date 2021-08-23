@@ -3,8 +3,8 @@
 	<small class="pull-right" style="font-weight:bold;">&nbsp;&nbsp;<?php echo VERSION; ?></small>
 	<?php if (isset($_SESSION['userName']) && isset($_SESSION['system']) && ($_SESSION['system'] == 'vluser' || $_SESSION['system'] == 'remoteuser')) { ?>
 		<div class="pull-right" style="display: grid;">
+			<small><a href="javascript:forceRemoteSync();" class="text-muted">Force Remote sync</a>&nbsp;&nbsp;</small>
 			<?php if (isset($syncLatestTime) && $syncLatestTime != '') { ?>
-				<small><a href="javascript:forceRemoteSync();" class="text-muted">Force Remote sync</a>&nbsp;&nbsp;</small>
 				<?php if (isset($_SESSION['privileges']) && in_array("sync-details.php", $_SESSION['privileges'])) { ?>
 					<a href="/common/reference/sync-details.php"><small><span style="color:gray;font-size:xx-small;">Last Synced :<span class="sync-time"><?php echo $syncLatestTime; ?></span></span></small></a>
 				<?php } else { ?>
