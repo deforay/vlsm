@@ -2,10 +2,10 @@
 	<small>This project is supported by the U.S. President’s Emergency Plan for AIDS Relief (PEPFAR) through the U.S. Centers for Disease Control and Prevention (CDC).</small>
 	<small class="pull-right" style="font-weight:bold;">&nbsp;&nbsp;<?php echo VERSION; ?></small>
 	<?php if (isset($_SESSION['userName']) && isset($_SESSION['system']) && ($_SESSION['system'] == 'vluser' || $_SESSION['system'] == 'remoteuser')) { ?>
-		<div class="pull-right" style="display: grid;">
-			<small><a href="javascript:forceRemoteSync();" class="text-muted" title="Last synced at : <?php echo $syncLatestTime; ?>">Force Remote sync</a>&nbsp;&nbsp;</small>
-			<?php if (isset($syncLatestTime) && $syncLatestTime != '') {
-				if (isset($_SESSION['privileges']) && in_array("sync-details.php", $_SESSION['privileges'])) { ?>
+		<div class="sync-time pull-right" style="display: grid;">
+			<?php if (isset($syncLatestTime) && $syncLatestTime != '') { ?>
+				<small><a href="javascript:forceRemoteSync();" class="text-muted" title="Last synced at : <?php echo $syncLatestTime; ?>">Force Remote sync</a>&nbsp;&nbsp;</small>
+				<?php if (isset($_SESSION['privileges']) && in_array("sync-details.php", $_SESSION['privileges'])) { ?>
 					<a href="/common/reference/sync-details.php"><small><span style="color:gray;font-size:xx-small;">Last Synced :<?php echo $syncLatestTime; ?></span></small></a>
 				<?php } else { ?>
 					<small><span style="color:gray;font-size:xx-small;">Last Synced :<?php echo $syncLatestTime; ?></span></small>
@@ -164,28 +164,29 @@
 		}
 	<?php } ?>
 
+	function syncTimeInterval() {
+		// To check the sync for each 5 min
+		var dt = new Date();
+		format = dt.setMinutes(dt.getMinutes() - 5);
+		formatdt = dateFormat(format, "yyyymmddHHMMss");
+		$.post("/remote/scheduled-jobs/checkSyncTime.php", {
+				time: formatdt
+			}, function(data) {
+				/* if (data != "") {} */
+			}).done(function(data) {
+				$('.sync-time').html(data);
+			})
+			.fail(function(data) {
+				syncCommon();
+			});
+	}
 	$(document).ready(function() {
 		<?php if (isset($_SESSION['system']) && $_SESSION['system'] == 'vluser') { ?>
-			// syncRemoteData();
-
-			// To check the sync for each 5 min
-			var dt = new Date();
-			format = dt.setMinutes(dt.getMinutes() - 5);
-			formatdt = dateFormat(format, "yyyymmddHHMMss");
-
-			(function checkNetworkConnection() {
-				$.post("/remote/scheduled-jobs/checkSyncTime.php", {
-						time: formatdt
-					}, function(data) {
-						if (data != "") {
-
-						}
-					}).done(function() {})
-					.fail(function() {
-						syncCommon();
-					});
-				setTimeout(checkNetworkConnection, 50000);
-			})();
+				// syncRemoteData();
+				(function checkNetworkConnection() {
+					syncTimeInterval();
+					setTimeout(checkNetworkConnection, 50000);
+				})();
 		<?php } ?> <?php if (isset($_SESSION['vldashboard_url']) && $_SESSION['vldashboard_url'] != '' && $_SESSION['vldashboard_url'] != null) { ?>
 			//syncVLDashboard();
 		<?php } ?>
