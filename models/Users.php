@@ -219,15 +219,20 @@ class Users
     public function getAuthToken($token = null)
     {
         $result = null;
+        $tokenExpiration = 30; //default is 30 days
         if (!empty($token)) {
             $query = "SELECT * FROM $this->table WHERE api_token = ? and `status` = 'active'";
             $result = $this->db->rawQueryOne($query, array($token));
             $tokenExpiration = !empty($result['api_token_exipiration_days']) ? $result['api_token_exipiration_days'] : 30;
         }
-
-        if (empty($token) 
-                || empty($result['api_token_generated_datetime']) 
-                || $result['api_token_generated_datetime'] < date('Y-m-d H:i:s', strtotime("-$tokenExpiration days"))) {
+        // Tokens with expiration = 0 are tokens that never expire
+        if ($tokenExpiration == 0) {
+            // do nothing
+        } else if (
+            empty($token)
+            || empty($result['api_token_generated_datetime'])
+            || $result['api_token_generated_datetime'] < date('Y-m-d H:i:s', strtotime("-$tokenExpiration days"))
+        ) {
             $general = new \Vlsm\Models\General($this->db);
             $token = $general->generateUserID();
             $data['api_token'] = $token;
@@ -238,12 +243,13 @@ class Users
 
             if ($id > 0) {
                 $result['token-updated'] = true;
-                $result['newToken'] = $token;
+                $result['new-token'] = $token;
             } else {
                 $result['token-updated'] = false;
             }
-            
+            return $result;
         }
+
         return $result;
     }
 }
