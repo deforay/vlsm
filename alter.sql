@@ -2274,3 +2274,7 @@ ALTER TABLE `facility_details` ADD `facility_state_id` VARCHAR(256) NULL DEFAULT
 
 -- Thana -- 17-Aug-2021
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, 'common-reference', 'sync-history.php', 'Sync History');
+
+
+-- Amit 23 Aug 2021
+ALTER TABLE `user_details` ADD `api_token_exipiration_days` INT NULL DEFAULT NULL AFTER `api_token_generated_datetime`;
