@@ -44,20 +44,20 @@ $facilityCount = $facilityTotal[0]['total'];
 		<div class="bs-example bs-example-tabs">
 			<ul id="myTab" class="nav nav-tabs" style="font-size:1.4em;">
 				<?php if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true && array_intersect($_SESSION['module'], array('vl'))) {  ?>
-					<li class="active"><a href="#vlDashboard" data-name = "vl" data-toggle="tab" onclick="generateDashboard('vl');">Viral Load Tests</a></li>
+					<li class="active"><a href="#vlDashboard" data-name="vl" data-toggle="tab" onclick="generateDashboard('vl');">Viral Load Tests</a></li>
 				<?php } ?>
 				<?php if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true  && array_intersect($_SESSION['module'], array('eid'))) {  ?>
-					<li><a href="#eidDashboard" data-name = "eid" data-toggle="tab" onclick="generateDashboard('eid');">EID Tests</a></li>
+					<li><a href="#eidDashboard" data-name="eid" data-toggle="tab" onclick="generateDashboard('eid');">EID Tests</a></li>
 				<?php } ?>
 				<?php if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true && array_intersect($_SESSION['module'], array('covid19'))) {  ?>
-					<li><a href="#covid19Dashboard" data-name = "covid19" data-toggle="tab" onclick="generateDashboard('covid19');">Covid-19 Tests</a></li>
+					<li><a href="#covid19Dashboard" data-name="covid19" data-toggle="tab" onclick="generateDashboard('covid19');">Covid-19 Tests</a></li>
 				<?php } ?>
 				<?php if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true && array_intersect($_SESSION['module'], array('hepatitis'))) {  ?>
 					<li><a href="#hepatitisDashboard" data-toggle="tab" onclick="generateDashboard('hepatitis');">Hepatitis Tests</a></li>
 				<?php } ?>
 				<?php
 				if (isset($recencyConfig['vlsync']) && $recencyConfig['vlsync'] == true) {  ?>
-					<li><a href="#recencyDashboard" data-name = "recency" data-toggle="tab" onclick="generateDashboard('recency')">Confirmation Tests for Recency</a></li>
+					<li><a href="#recencyDashboard" data-name="recency" data-toggle="tab" onclick="generateDashboard('recency')">Confirmation Tests for Recency</a></li>
 				<?php }  ?>
 			</ul>
 			<div id="myTabContent" class="tab-content">
@@ -91,7 +91,7 @@ $facilityCount = $facilityTotal[0]['total'];
 								<div class="box-body" id="vlNoOfSampleCount"></div>
 								<div id="vlPieChartDiv"></div>
 							</div>
-							
+
 							<!-- /.row -->
 							<!-- Main row -->
 							<!-- /.row (main row) -->
@@ -299,26 +299,26 @@ $facilityCount = $facilityTotal[0]['total'];
 				endDate = end.format('YYYY-MM-DD');
 			});
 
-			
-		$("#myTab li:first-child > a").trigger("click");	
+
+		$("#myTab li:first-child > a").trigger("click");
 	});
 
 	function generateDashboard(requestType) {
-		
+
 		getNoOfSampleCount(requestType);
 		searchVlRequestData(requestType);
 		getSamplesOverview(requestType);
-		if(requestType == 'eid')
+		if (requestType == 'eid')
 			loadEidRequestData();
-		else if(requestType == 'vl')
+		else if (requestType == 'vl')
 			loadVlRequestData();
-		else if(requestType == 'covid19')
+		else if (requestType == 'covid19')
 			loadCovid19RequestData();
-		else if(requestType == 'hepatitis')
+		else if (requestType == 'hepatitis')
 			loadHepatitisRequestData();
 		loadVlSuppressedData();
-		
-		
+
+
 	}
 
 	function searchVlRequestData(requestType) {
@@ -511,7 +511,7 @@ $facilityCount = $facilityTotal[0]['total'];
 			},
 			function(data) {
 				var data = JSON.parse(data);
-				console.log(data['aaData'].length);
+				// console.log(data['aaData'].length);
 				if (data['aaData'].length > 0) {
 					var div = '<div class="alert alert-danger alert-dismissible" role="alert" style="background-color: #ff909f !important">\
 							<button type="button" class="close" data-dismiss="alert" aria-label="Close" style="text-indent: 0px"><span aria-hidden="true" style="font-size: larger;font-weight: bolder;color: #000000;">&times;</span></button>\
@@ -535,7 +535,7 @@ $facilityCount = $facilityTotal[0]['total'];
 			},
 			function(data) {
 				var data = JSON.parse(data);
-				console.log(data['aaData'].length);
+				// console.log(data['aaData'].length);
 				if (data['aaData'].length > 0) {
 					var div = '<div class="alert alert-danger alert-dismissible" role="alert" style="background-color: #ff909f !important">\
 							<button type="button" class="close" data-dismiss="alert" aria-label="Close" style="text-indent: 0px"><span aria-hidden="true" style="font-size: larger;font-weight: bolder;color: #000000;">&times;</span></button>\
@@ -558,7 +558,7 @@ $facilityCount = $facilityTotal[0]['total'];
 				sampleTestDate: $("#vlSampleCollectionDate").val(),
 			},
 			function(data) {
-				console.log(data)
+				// console.log(data)
 				if (data == 1) {
 					var div = '<div class="alert alert-danger alert-dismissible" role="alert" style="background-color: #ff909f !important">\
 							<button type="button" class="close" data-dismiss="alert" aria-label="Close" style="text-indent: 0px"><span aria-hidden="true" style="font-size: larger;font-weight: bolder;color: #000000;">&times;</span></button>\
@@ -582,7 +582,7 @@ $facilityCount = $facilityTotal[0]['total'];
 			},
 			function(data) {
 				var data = JSON.parse(data);
-				console.log(data['aaData'].length);
+				// console.log(data['aaData'].length);
 				if (data['aaData'].length > 0) {
 					var div = '<div class="alert alert-danger alert-dismissible" role="alert" style="background-color: #ff909f !important">\
 							<button type="button" class="close" data-dismiss="alert" aria-label="Close" style="text-indent: 0px"><span aria-hidden="true" style="font-size: larger;font-weight: bolder;color: #000000;">&times;</span></button>\
@@ -606,7 +606,7 @@ $facilityCount = $facilityTotal[0]['total'];
 			},
 			function(data) {
 				var data = JSON.parse(data);
-				console.log(data['aaData'].length);
+				// console.log(data['aaData'].length);
 				if (data['aaData'].length > 0) {
 					var div = '<div class="alert alert-danger alert-dismissible" role="alert" style="background-color: #ff909f !important">\
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close" style="text-indent: 0px"><span aria-hidden="true" style="font-size: larger;font-weight: bolder;color: #000000;">&times;</span></button>\
