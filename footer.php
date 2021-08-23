@@ -2,13 +2,13 @@
 	<small>This project is supported by the U.S. President’s Emergency Plan for AIDS Relief (PEPFAR) through the U.S. Centers for Disease Control and Prevention (CDC).</small>
 	<small class="pull-right" style="font-weight:bold;">&nbsp;&nbsp;<?php echo VERSION; ?></small>
 	<?php if (isset($_SESSION['userName']) && isset($_SESSION['system']) && ($_SESSION['system'] == 'vluser' || $_SESSION['system'] == 'remoteuser')) { ?>
-		<div class="sync-time pull-right" style="display: grid;">
+		<div class="pull-right" style="display: grid;">
 			<?php if (isset($syncLatestTime) && $syncLatestTime != '') { ?>
-				<small><a href="javascript:forceRemoteSync();" class="text-muted" title="Last synced at : <?php echo $syncLatestTime; ?>">Force Remote sync</a>&nbsp;&nbsp;</small>
+				<small><a href="javascript:forceRemoteSync();" class="text-muted">Force Remote sync</a>&nbsp;&nbsp;</small>
 				<?php if (isset($_SESSION['privileges']) && in_array("sync-details.php", $_SESSION['privileges'])) { ?>
-					<a href="/common/reference/sync-details.php"><small><span style="color:gray;font-size:xx-small;">Last Synced :<?php echo $syncLatestTime; ?></span></small></a>
+					<a href="/common/reference/sync-details.php"><small><span style="color:gray;font-size:xx-small;">Last Synced :<span class="sync-time"><?php echo $syncLatestTime; ?></span></span></small></a>
 				<?php } else { ?>
-					<small><span style="color:gray;font-size:xx-small;">Last Synced :<?php echo $syncLatestTime; ?></span></small>
+					<small><span style="color:gray;font-size:xx-small;">Last Synced :<span class="sync-time"><?php echo $syncLatestTime; ?></span></span></small>
 			<?php }
 			} ?>
 		</div>
@@ -47,18 +47,12 @@
 		var remoteUrl = '<?php echo $systemConfig['remoteURL']; ?>';
 
 		function forceRemoteSync() {
-			Cookies.remove('vlsts-sync-status');
 			syncRemoteData();
 		}
 
 		function syncRemoteData() {
 			if (!navigator.onLine) {
 				alert('Please connect to internet to sync with VLSTS');
-				return false;
-			}
-
-			syncStatus = Cookies.get('vlsts-sync-status')
-			if (syncStatus != undefined && syncStatus != null && syncStatus == 'synced') {
 				return false;
 			}
 
@@ -130,10 +124,6 @@
 					})
 					.always(function() {
 						$.unblockUI();
-						var in120Minutes = 1 / 12;
-						Cookies.set('vlsts-sync-status', 'synced', {
-							expires: in120Minutes
-						});
 					});
 			}
 		}
@@ -164,29 +154,30 @@
 		}
 	<?php } ?>
 
-	function syncTimeInterval() {
-		// To check the sync for each 5 min
-		var dt = new Date();
-		format = dt.setMinutes(dt.getMinutes() - 5);
-		formatdt = dateFormat(format, "yyyymmddHHMMss");
-		$.post("/remote/scheduled-jobs/checkSyncTime.php", {
-				time: formatdt
-			}, function(data) {
-				/* if (data != "") {} */
-			}).done(function(data) {
-				$('.sync-time').html(data);
-			})
-			.fail(function(data) {
-				syncCommon();
-			});
-	}
 	$(document).ready(function() {
 		<?php if (isset($_SESSION['system']) && $_SESSION['system'] == 'vluser') { ?>
-				// syncRemoteData();
-				(function checkNetworkConnection() {
-					syncTimeInterval();
-					setTimeout(checkNetworkConnection, 50000);
-				})();
+			// syncRemoteData();
+			var ndt = new Date();
+			nformat = ndt.setMinutes(ndt.getMinutes() - 120);
+			nformatdt = dateFormat(nformat, "yyyymmddHHMMss");
+			(function getLastSyncDateTime() {
+				$.ajax({
+					url: '/remote/scheduled-jobs/getLastSyncTime.php',
+					cache: false,
+					success: function(data) {
+						if (data != null && data != undefined) {
+							$('.sync-time').html(data);
+							var dt = new Date(data);
+							formatdt = dateFormat(dt, "yyyymmddHHMMss");
+							if (formatdt <= nformatdt) {
+								syncCommon();
+							}
+						}
+					},
+					error: function(data) {}
+				});
+				setTimeout(getLastSyncDateTime, 300000);
+			})();
 		<?php } ?> <?php if (isset($_SESSION['vldashboard_url']) && $_SESSION['vldashboard_url'] != '' && $_SESSION['vldashboard_url'] != null) { ?>
 			//syncVLDashboard();
 		<?php } ?>
