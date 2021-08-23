@@ -55,6 +55,7 @@ $healthFacilityLastModified = $general->getLastModifiedDateTime('health_faciliti
 $testingLabsLastModified = $general->getLastModifiedDateTime('testing_labs');
 $fundingSourcesLastModified = $general->getLastModifiedDateTime('r_funding_sources');
 $partnersLastModified = $general->getLastModifiedDateTime('r_implementation_partners');
+$geoDivisionsLastModified = $general->getLastModifiedDateTime('geographical_divisions');
 
 $data = array(
     'globalConfigLastModified'      => $globalConfigLastModified,
@@ -64,6 +65,7 @@ $data = array(
     'testingLabsLastModified'       => $testingLabsLastModified,
     'fundingSourcesLastModified'    => $fundingSourcesLastModified,
     'partnersLastModified'          => $partnersLastModified,
+    'geoDivisionsLastModified'          => $geoDivisionsLastModified,
     "Key"                           => "vlsm-get-remote",
 );
 $url = $systemConfig['remoteURL'] . '/remote/remote/commonData.php';
@@ -793,6 +795,34 @@ if (!empty($result['partners']) && count($result['partners']) > 0) {
         } else {
             $partnersData['i_partner_id'] = $partners['i_partner_id'];
             $db->insert('r_implementation_partners', $partnersData);
+            $lastId = $db->getInsertId();
+        }
+    }
+}
+
+//update or insert geographical divisions
+if (!empty($result['geoDivisions']) && count($result['geoDivisions']) > 0) {
+
+    foreach ($result['geoDivisions'] as $geoDivisions) {
+        $geoDivQuery = "SELECT geo_id FROM geographical_divisions WHERE geo_id=" . $geoDivisions['geo_id'];
+        $geoDivResult = $db->query($geoDivQuery);
+        $geoDivData = array(
+            'geo_name'          => $geoDivisions['geo_name'],
+            'geo_code'          => $geoDivisions['geo_code'],
+            'geo_parent'        => $geoDivisions['geo_parent'],
+            'geo_status'        => $geoDivisions['geo_status'],
+            'created_by'        => $geoDivisions['created_by'],
+            'created_on'        => $geoDivisions['created_on'],
+            'data_sync'         => $geoDivisions['data_sync'],
+            'updated_datetime'  => $general->getDateTime(),
+        );
+        $lastId = 0;
+        if ($geoDivResult) {
+            $db = $db->where('geo_id', $geoDivisions['geo_id']);
+            $lastId = $db->update('geographical_divisions', $geoDivData);
+        } else {
+            $geoDivData['geo_id'] = $geoDivisions['geo_id'];
+            $db->insert('geographical_divisions', $geoDivData);
             $lastId = $db->getInsertId();
         }
     }
