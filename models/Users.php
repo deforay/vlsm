@@ -246,10 +246,10 @@ class Users
             $id = $this->db->update($this->table, $data);
 
             if ($id > 0) {
-                $result['token-updated'] = true;
-                $result['new-token'] = $token;
+                $result['token_updated'] = true;
+                $result['new_token'] = $token;
             } else {
-                $result['token-updated'] = false;
+                $result['token_updated'] = false;
             }
         }
 
