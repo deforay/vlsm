@@ -97,10 +97,10 @@ class General
         }
     }
 
-    public static function getDateTime()
+    public static function getDateTime($format = 'Y-m-d H:i:s')
     {
         $date = new \DateTime(date('Y-m-d H:i:s'));
-        return $date->format('Y-m-d H:i:s');
+        return $date->format($format);
     }
 
     public function removeDirectory($dirname)

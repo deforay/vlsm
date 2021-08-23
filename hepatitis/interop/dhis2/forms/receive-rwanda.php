@@ -4,8 +4,8 @@
 
 $counter = 0;
 
-$data[] = "programStartDate=2021-06-01";
-$data[] = "programEndDate=2021-06-30";
+$data[] = "programStartDate=2021-07-01";
+$data[] = "programEndDate=2021-09-30";
 $data[] = "ou=Hjw70Lodtf2"; // Rwanda
 $data[] = "ouMode=DESCENDANTS";
 $data[] = "program=LEhPhsbgfFB";
@@ -15,7 +15,7 @@ $data[] = "paging=false";
 $url = "/api/trackedEntityInstances.json";
 
 $response = $dhis2->get($url, $data);
-echo($response);die;
+//echo($response);die;
 $response = json_decode($response, true);
 
 //echo "<pre>";var_dump($response);"</pre>";die;
@@ -24,7 +24,7 @@ $dhis2GenderOptions = array('1' => 'male', '2' => 'female');
 $dhis2SocialCategoryOptions = array('1' => 'A', '2' => 'B', '3' => 'C', '4' => 'D');
 
 $attributesDataElementMapping = [
-    //'' => 'external_sample_code', //dhis2 case id
+    'VV9V5hpLLwB' => 'external_sample_code', //dhis2 case id
     'zinPXXTrSmA' => 'patient_id',
     'JtuGgGPsSuZ' => 'patient_province',
     'zf3xIdu7n8v' => 'patient_district',
@@ -136,14 +136,14 @@ foreach ($response['trackedEntityInstances'] as $tracker) {
 
     $formData['social_category'] = (!empty($formData['social_category']) ? $dhis2SocialCategoryOptions[$formData['social_category']] : null);
     $formData['patient_gender'] = (!empty($formData['patient_gender']) ? $dhis2GenderOptions[$formData['patient_gender']] : null);
-    $formData['specimen_quality'] = (!empty($formData['specimen_quality']) ? strtolower($formData['specimen_quality']) : null);
+    //$formData['specimen_quality'] = (!empty($formData['specimen_quality']) ? strtolower($formData['specimen_quality']) : null);
     
     $formData['sample_collection_date'] = (!empty($formData['sample_collection_date']) ?  $formData['sample_collection_date'] : $enrollmentDate);
     $formData['reason_for_hepatitis_test'] = (!empty($formData['reason_for_hepatitis_test']) ?  $formData['reason_for_hepatitis_test'] : "Suspect");
-    if (stripos($formData['hepatitis_test_type'], "hcv") === FALSE) {
-        $formData['hepatitis_test_type'] = "HCV";
-    } else {
+    if (isset($formData['hepatitis_test_type']) && stripos($formData['hepatitis_test_type'], "hbv") === FALSE) {
         $formData['hepatitis_test_type'] = "HBV";
+    } else {
+        $formData['hepatitis_test_type'] = "HCV";
     }
 
     // echo "<pre>";
@@ -157,7 +157,8 @@ foreach ($response['trackedEntityInstances'] as $tracker) {
     $db->where("source_of_request", $formData['source_of_request']);
     $hepatitisData = $db->getOne("form_hepatitis");
 
-    $formData['last_modified_datetime'] = $general->getDateTime();
+    
+    
 
     if (empty($hepatitisData) || empty($hepatitisData['hepatitis_id'])) {
         $sampleJson = $hepatitisModel->generateHepatitisSampleCode($formData['hepatitis_test_type'], null , $general->humanDateFormat($formData['sample_collection_date']));
@@ -174,7 +175,8 @@ foreach ($response['trackedEntityInstances'] as $tracker) {
         $instanceResult = $db->rawQueryOne("SELECT vlsm_instance_id, instance_facility_name FROM s_vlsm_instance");
 
         $formData['vlsm_instance_id'] = $instanceResult['vlsm_instance_id'];
-        $formData['vlsm_country_id'] = 1;
+        $formData['vlsm_country_id'] = 7; // RWANDA
+        $formData['last_modified_datetime'] = $general->getDateTime();
         //echo "<pre>";var_dump($formData);echo "</pre>";
         $id = $db->insert("form_hepatitis", $formData);
         if ($id != false) {
@@ -188,9 +190,9 @@ foreach ($response['trackedEntityInstances'] as $tracker) {
             $counter++;
         }
     }
-    echo "<pre>";
-    var_dump($formData);
-    echo "</pre>";
+    // echo "<pre>";
+    // var_dump($formData);
+    // echo "</pre>";
 }
 
 $response = array('received' => count($response['trackedEntityInstances']), 'processed' => $counter);

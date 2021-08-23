@@ -209,8 +209,8 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 			text-align: center;
 			display: block;
 			position: absolute;
-			width: 10px;
-			height: 10px;
+			width: 12px;
+			height: 12px;
 			margin-top: 20px;
 			border-radius: 50%;
 			box-shadow: 0px 0px 0px;
