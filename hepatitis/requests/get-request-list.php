@@ -137,7 +137,7 @@ if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']
 }
 
 if (isset($sWhere) && $sWhere != "") {
-     $sWhere = ' where ' . $sWhere;
+     $sWhere = ' WHERE ' . $sWhere;
      //$sQuery = $sQuery.' '.$sWhere;
      if (isset($_POST['batchCode']) && trim($_POST['batchCode']) != '') {
           $sWhere = $sWhere . ' AND b.batch_code LIKE "%' . $_POST['batchCode'] . '%"';
@@ -261,7 +261,7 @@ $aResultFilterTotal = $db->rawQuery("SELECT vl.$primaryKey FROM $tableName as vl
 $iFilteredTotal = count($aResultFilterTotal);
 
 /* Total data set length */
-$aResultTotal =  $db->rawQuery("select COUNT($primaryKey) as total FROM $tableName as vl where vlsm_country_id='" . $gconfig['vl_form'] . "'" . $sFilter);
+$aResultTotal =  $db->rawQuery("SELECT COUNT($primaryKey) as total FROM $tableName as vl where vlsm_country_id='" . $gconfig['vl_form'] . "'" . $sFilter);
 // $aResultTotal = $countResult->fetch_row();
 //print_r($aResultTotal);
 $iTotal = $aResultTotal[0]['total'];
