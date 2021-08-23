@@ -10,23 +10,7 @@ if (!isset($systemConfig['remoteURL']) || $systemConfig['remoteURL'] == '') {
     exit();
 }
 
-$lockFile = fopen(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'sync-results.pid', 'c');
-$gotLock = flock($lockFile, LOCK_EX | LOCK_NB, $wouldblock);
-if ($lockFile === false || (!$gotLock && !$wouldblock)) {
-    error_log("Unable to create the lock file");
-    exit(0);
-} else if (!$gotLock && $wouldblock) {
-    exit(0);
-}
-// Lock acquired; let's write our PID to the lock file for the convenience
-// of humans who may wish to terminate the script.
-ftruncate($lockFile, 0);
-fwrite($lockFile, getmypid() . "\n");
-
-
-
 $systemConfig['remoteURL'] = rtrim($systemConfig['remoteURL'], "/");
-
 
 $headers = @get_headers($systemConfig['remoteURL'] . '/vlsts-icons/favicon-16x16.png');
 
@@ -351,10 +335,3 @@ $instanceResult = $db->rawQueryOne("SELECT vlsm_instance_id, instance_facility_n
 /* Update last_remote_results_sync in s_vlsm_instance */
 $db = $db->where('vlsm_instance_id', $instanceResult['vlsm_instance_id']);
 $id = $db->update('s_vlsm_instance', array('last_remote_results_sync' => $general->getDateTime()));
-
-
-
-// All done; we blank the PID file and explicitly release the lock 
-// (although this should be unnecessary) before terminating.
-ftruncate($lockFile, 0);
-flock($lockFile, LOCK_UN);
