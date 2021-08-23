@@ -697,7 +697,7 @@
 					url: '<?php echo $systemConfig['remoteURL']; ?>/vlsts-icons/favicon-16x16.png',
 					cache: false,
 					success: function(data) {
-						$('.is-remote-server-reachable').css('background-color', 'green');
+						$('.is-remote-server-reachable').css('background-color', '#4dbc3c');
 					},
 					error: function() {
 						$('.is-remote-server-reachable').css('background-color', 'red');
