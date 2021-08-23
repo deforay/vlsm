@@ -216,26 +216,30 @@ class Users
 
 
 
-    public function getAuthToken($token = null)
+    public function getAuthToken($token)
     {
-        $result = null;
-        $tokenExpiration = 30; //default is 30 days
-        if (!empty($token)) {
-            $query = "SELECT * FROM $this->table WHERE api_token = ? and `status` = 'active'";
-            $result = $this->db->rawQueryOne($query, array($token));
-            $tokenExpiration = !empty($result['api_token_exipiration_days']) ? $result['api_token_exipiration_days'] : 30;
+
+        if (empty($token)) {
+            return null;
         }
+
+        $result = array();
+        $tokenExpiration = 30; //default is 30 days
+
+        $query = "SELECT * FROM $this->table WHERE api_token = ? and `status` = 'active'";
+        $result = $this->db->rawQueryOne($query, array($token));
+        $tokenExpiration = !empty($result['api_token_exipiration_days']) ? $result['api_token_exipiration_days'] : 30;
+
         // Tokens with expiration = 0 are tokens that never expire
         if ($tokenExpiration == 0) {
             // do nothing
         } else if (
-            empty($token)
-            || empty($result['api_token_generated_datetime'])
+            empty($result['api_token_generated_datetime'])
             || $result['api_token_generated_datetime'] < date('Y-m-d H:i:s', strtotime("-$tokenExpiration days"))
         ) {
             $general = new \Vlsm\Models\General($this->db);
-            $token = $general->generateUserID();
-            $data['api_token'] = $token;
+            $token = $general->generateUserID(6);
+            $data['api_token'] = base64_encode($result['user_id']."-".$token);
             $data['api_token_generated_datetime'] = $general->getDateTime();
 
             $this->db = $this->db->where('user_id', $result['user_id']);
@@ -247,7 +251,6 @@ class Users
             } else {
                 $result['token-updated'] = false;
             }
-            return $result;
         }
 
         return $result;
