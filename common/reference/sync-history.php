@@ -84,7 +84,7 @@ include_once(APPLICATION_PATH . '/header.php');
             ],
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "get-sync-details-helper.php",
+            "sAjaxSource": "get-sync-history-helper.php",
             "fnServerData": function(sSource, aoData, fnCallback) {
                 $.ajax({
                     "dataType": 'json',

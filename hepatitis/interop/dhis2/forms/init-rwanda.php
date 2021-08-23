@@ -71,39 +71,39 @@ foreach ($initOptionSets as $t => $id) {
 }
 
 
-// Adding Facilities - We will only run this once
-// https://his.rbc.gov.rw/hepatitis/api/organisationUnits?filter=level:eq:6&paging=false&
+// // Adding Facilities - We will only run this once
+// // https://his.rbc.gov.rw/hepatitis/api/organisationUnits?filter=level:eq:6&paging=false&
 
 
-$data[] = "filter=level:eq:6";
-$data[] = "paging=false";
-$data[] = "fields=id,level,name,path,coordinates[id,name,parent]";
+// $data[] = "filter=level:eq:6";
+// $data[] = "paging=false";
+// $data[] = "fields=id,level,name,path,coordinates[id,name,parent]";
 
-$url = "/api/organisationUnits.json";
+// $url = "/api/organisationUnits.json";
 
-$response = $dhis2->get($url, $data);
-$response = json_decode($response, true);
+// $response = $dhis2->get($url, $data);
+// $response = json_decode($response, true);
 
-foreach ($response['organisationUnits'] as $facility) {
+// foreach ($response['organisationUnits'] as $facility) {
 
-    $db->where("other_id", $facility['id']);
-    $db->orWhere("facility_name", $facility['name']);
-    $facilityResult = $db->getOne("facility_details");
+//     $db->where("other_id", $facility['id']);
+//     $db->orWhere("facility_name", $facility['name']);
+//     $facilityResult = $db->getOne("facility_details");
 
 
 
-    $facilityData = array(
-        'facility_name' => $facility['name'],
-        'vlsm_instance_id' => $instanceId,
-        'other_id' => $facility['id'],
-        'facility_type' => 1,
-        'test_type' => 'hepatitis',
-        'updated_datetime' => $general->getDateTime(),
-        'status' => 'active'
-    );
-    $updateColumns = array("other_id", "updated_datetime");
-    $lastInsertId = "facility_id";
-    $db->onDuplicate($updateColumns, $lastInsertId);
-    $id = $db->insert('facility_details', $facilityData);
-}
+//     $facilityData = array(
+//         'facility_name' => $facility['name'],
+//         'vlsm_instance_id' => $instanceId,
+//         'other_id' => $facility['id'],
+//         'facility_type' => 1,
+//         'test_type' => 'hepatitis',
+//         'updated_datetime' => $general->getDateTime(),
+//         'status' => 'active'
+//     );
+//     $updateColumns = array("other_id", "updated_datetime");
+//     $lastInsertId = "facility_id";
+//     $db->onDuplicate($updateColumns, $lastInsertId);
+//     $id = $db->insert('facility_details', $facilityData);
+// }
 
