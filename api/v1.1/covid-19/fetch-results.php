@@ -302,7 +302,7 @@ try {
         'data' => $rowData
     );
     // if (isset($user['token-updated']) && $user['token-updated'] == true) {
-    //     $payload['token'] = $user['newToken'];
+    //     $payload['token'] = $user['new-token'];
     // }
     $app = new \Vlsm\Models\App($db);
     $trackId = $app->addApiTracking($user['user_id'], count($rowData), 'fetch-results', 'covid19', $requestUrl, $params, 'json');

@@ -133,7 +133,7 @@ try {
 
         );
         // if (isset($user['token-updated']) && $user['token-updated'] == true) {
-        //     $response['token'] = $user['newToken'];
+        //     $response['token'] = $user['new-token'];
         // }
         http_response_code(200);
         echo json_encode($response);
@@ -146,7 +146,7 @@ try {
         'data' => $rowData
     );
     // if (isset($user['token-updated']) && $user['token-updated'] == true) {
-    //     $payload['token'] = $user['newToken'];
+    //     $payload['token'] = $user['new-token'];
     // }
 
     http_response_code(200);
@@ -162,7 +162,7 @@ try {
         'data' => array()
     );
     if (isset($user['token-updated']) && $user['token-updated'] == true) {
-        $payload['token'] = $user['newToken'];
+        $payload['token'] = $user['new-token'];
     }
 
     echo json_encode($payload);

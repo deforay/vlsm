@@ -103,7 +103,7 @@ try {
         'data' => array()
     );
     if (isset($user['token-updated']) && $user['token-updated'] == true) {
-        $payload['token'] = $user['newToken'];
+        $payload['token'] = $user['new-token'];
     }
 
     echo json_encode($payload);

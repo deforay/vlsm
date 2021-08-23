@@ -253,7 +253,7 @@ try {
         'data' => $rowData
     );
     // if (isset($user['token-updated']) && $user['token-updated'] == true) {
-    //     $payload['token'] = $user['newToken'];
+    //     $payload['token'] = $user['new-token'];
     // }
     http_response_code(200);
     echo json_encode($payload);
