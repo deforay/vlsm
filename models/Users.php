@@ -225,9 +225,11 @@ class Users
             $tokenExpiration = !empty($result['api_token_exipiration_days']) ? $result['api_token_exipiration_days'] : 30;
         }
 
-        if (empty($token) 
-                || empty($result['api_token_generated_datetime']) 
-                || $result['api_token_generated_datetime'] < date('Y-m-d H:i:s', strtotime("-$tokenExpiration days"))) {
+        if (
+            empty($token)
+            || empty($result['api_token_generated_datetime'])
+            || $result['api_token_generated_datetime'] < date('Y-m-d H:i:s', strtotime("-$tokenExpiration days"))
+        ) {
             $general = new \Vlsm\Models\General($this->db);
             $token = $general->generateUserID();
             $data['api_token'] = $token;
@@ -242,7 +244,6 @@ class Users
             } else {
                 $result['token-updated'] = false;
             }
-            
         }
         return $result;
     }
