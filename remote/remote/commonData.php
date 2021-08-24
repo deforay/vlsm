@@ -5,6 +5,20 @@ ini_set('memory_limit', -1);
 ini_set('max_execution_time', -1);
 
 $general = new \Vlsm\Models\General($db);
+$app = new \Vlsm\Models\App($db);
+
+//system config
+$systemConfigQuery = "SELECT * from system_config";
+$systemConfigResult = $db->query($systemConfigQuery);
+$sarr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+    $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+}
+//get remote data
+if (trim($sarr['sc_testing_lab_id']) == '') {
+    $sarr['sc_testing_lab_id'] = "''";
+}
 
 $data = json_decode(file_get_contents('php://input'), true);
 
@@ -33,6 +47,11 @@ if ($data['Key'] == 'vlsm-get-remote') {
             $condition = "updated_datetime > '" . $data['vlArtCodesLastModified'] . "'";
         }
         $response['vlArtCodes'] = $general->fetchDataFromTable('r_vl_art_regimen', $condition);
+
+        $count = (count($response['vlRejectionReasons']) + count($response['vlSampleTypes']) + count($response['vlArtCodes']));
+        if ($count > 0) {
+            $trackId = $app->addApiTracking('', $count, 'common-data', 'vl', null, $sarr['sc_testing_lab_id'], 'sync-api');
+        }
     }
 
 
@@ -62,6 +81,11 @@ if ($data['Key'] == 'vlsm-get-remote') {
             $condition = "updated_datetime > '" . $data['eidReasonForTestingLastModified'] . "'";
         }
         $response['eidReasonForTesting'] = $general->fetchDataFromTable('r_eid_test_reasons', $condition);
+
+        $count = (count($response['eidRejectionReasons']) + count($response['eidSampleTypes']) + count($response['eidResults']) + count($response['eidReasonForTesting']));
+        if ($count > 0) {
+            $trackId = $app->addApiTracking('', $count, 'common-data', 'eid', null, $sarr['sc_testing_lab_id'], 'sync-api');
+        }
     }
 
     if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) {
@@ -102,6 +126,11 @@ if ($data['Key'] == 'vlsm-get-remote') {
             $condition = "updated_datetime > '" . $data['covid19ReasonForTestingLastModified'] . "'";
         }
         $response['covid19ReasonForTesting'] = $general->fetchDataFromTable('r_covid19_test_reasons', $condition);
+
+        $count = (count($response['covid19RejectionReasons']) + count($response['covid19SampleTypes']) + count($response['covid19Comorbidities']) + count($response['covid19Results']) + count($response['covid19Symptoms']) + count($response['covid19ReasonForTesting']));
+        if ($count > 0) {
+            $trackId = $app->addApiTracking('', $count, 'common-data', 'covid19', null, $sarr['sc_testing_lab_id'], 'sync-api');
+        }
     }
 
     if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) {
@@ -136,6 +165,11 @@ if ($data['Key'] == 'vlsm-get-remote') {
             $condition = "updated_datetime > '" . $data['hepatitisReasonForTestingLastModified'] . "'";
         }
         $response['hepatitisReasonForTesting'] = $general->fetchDataFromTable('r_hepatitis_test_reasons', $condition);
+
+        $count = (count($response['hepatitisRejectionReasons']) + count($response['hepatitisSampleTypes']) + count($response['hepatitisComorbidities']) + count($response['hepatitisResults']) + count($response['hepatitisReasonForTesting']));
+        if ($count > 0) {
+            $trackId = $app->addApiTracking('', $count, 'common-data', 'hepatitis', null, $sarr['sc_testing_lab_id'], 'sync-api');
+        }
     }
 
 

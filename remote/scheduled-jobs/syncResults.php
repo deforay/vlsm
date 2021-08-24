@@ -326,7 +326,7 @@ if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['he
         //}
     }
     if (count($vlLabResult) > 0) {
-        $trackId = $app->addApiTracking('', count($hepLabResult), 'results', 'hepatitis', $url, $sarr['sc_testing_lab_id'], 'sync-api');
+        $trackId = $app->addApiTracking('', $count, 'common-data', 'vl', $url, null, 'sync-api');
     }
 }
 /* Get instance id for update last_remote_results_sync */

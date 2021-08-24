@@ -16,6 +16,20 @@ for ($i = 0; $i < sizeof($cResult); $i++) {
 
 $general = new \Vlsm\Models\General($db);
 $usersModel = new \Vlsm\Models\Users($db);
+$app = new \Vlsm\Models\App($db);
+
+//system config
+$systemConfigQuery = "SELECT * from system_config";
+$systemConfigResult = $db->query($systemConfigQuery);
+$sarr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+    $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+}
+//get remote data
+if (trim($sarr['sc_testing_lab_id']) == '') {
+    $sarr['sc_testing_lab_id'] = "''";
+}
 
 function var_error_log($object = null)
 {
@@ -31,7 +45,7 @@ $oneDimensionalArray = array_map('current', $allColResult);
 
 $sampleCode = array();
 if (count($data['result']) > 0) {
-
+    $trackId = $app->addApiTracking('', count($data['result']), 'results', 'vl', null, $sarr['sc_testing_lab_id'], 'sync-api');
     foreach ($data['result'] as $key => $remoteData) {
         $lab = array();
         foreach ($oneDimensionalArray as $columnName) {

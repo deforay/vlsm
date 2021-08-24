@@ -71,7 +71,7 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
     $data['covid19']['districtList'] = $app->getDistrictDetails($check['data']['user_id'], true);
 
     /* Health Facility Details */
-    // $data['covid19']['healthFacilitiesList'] = $app->getHealthFacilities('covid19', $check['data']['user_id'], true, 1);
+    $data['covid19']['healthFacilitiesList'] = $app->getAppHealthFacilities('covid19', $check['data']['user_id'], true, 1, true);
 
     /* Funding Source List */
     $fundingSourceList = array();
@@ -117,7 +117,7 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
         $typeOfTestReqList[$key]['show'] = $req;
     }
     $data['covid19']['testingPoint'] = $typeOfTestReqList;
-    $data['covid19']['testingLabsList'] = $app->getTestingLabs('covid19', null, true);
+    $data['covid19']['testingLabsList'] = $app->getTestingLabs('covid19', null, true, true);
     /* Type of Test Request */
     $qualityList = array();
     $qualityResults = array('Good', 'Poor');

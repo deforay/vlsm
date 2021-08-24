@@ -67,10 +67,10 @@ class App
         return $response;
     }
 
-    public function getHealthFacilities($testType = null, $user = null, $onlyActive = false, $facilityType = 1)
+    public function getAppHealthFacilities($testType = null, $user = null, $onlyActive = false, $facilityType = 0, $module = false)
     {
         $facilityDb = new \Vlsm\Models\Facilities($this->db);
-        $query = "SELECT hf.test_type, f.facility_id, f.facility_name, f.facility_code, pd.province_id, pd.province_name, f.facility_district, f.facility_type 
+        $query = "SELECT hf.test_type, f.*, pd.province_id, pd.province_name
                     from health_facilities AS hf 
                     INNER JOIN facility_details as f ON hf.facility_id=f.facility_id
                     INNER JOIN province_details as pd ON pd.province_name=f.facility_state";
@@ -84,6 +84,33 @@ class App
                     $where .= " WHERE ";
                 }
                 $where .= " facility_id IN (" . $facilityMap . ")";
+            }
+        }
+
+        if (!$module && $facilityType == 1) {
+            $general = new \Vlsm\Models\General($this->db);
+            $systemConfig = $general->getSystemConfig();
+
+            $activeModule = "";
+            if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) {
+                $activeModule .= 'vl';
+            }
+            if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) {
+                $activeModule .= ', eid';
+            }
+            if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) {
+                $activeModule .= ', covid19';
+            }
+            if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) {
+                $activeModule .= ', hepatitis';
+            }
+            if (!empty($activeModule)) {
+                if (isset($where) && trim($where) != "") {
+                    $where .= " AND ";
+                } else {
+                    $where .= " WHERE ";
+                }
+                $where .= " hf.test_type IN (" . $activeModule . ")";
             }
         }
 
@@ -105,7 +132,7 @@ class App
             $where .= " f.status like 'active'";
         }
 
-        if ($facilityType) {
+        if ($facilityType > 0) {
             if (isset($where) && trim($where) != "") {
                 $where .= " AND ";
             } else {
@@ -115,28 +142,44 @@ class App
         }
         $where .= ' GROUP BY facility_name ORDER BY facility_name ASC';
         $query .= $where;
+        if (!$module && $facilityType == 1) {
+            die($query);
+        }
         $result = $this->db->rawQuery($query);
         foreach ($result as $key => $row) {
             $condition1 = " province_name like '" . $row['province_name'] . "%'";
             $condition2 = " facility_state like '" . $row['province_name'] . "%'";
-
-            $response[$key]['value']        = $row['facility_id'];
-            $response[$key]['show']         = $row['facility_name'] . ' (' . $row['facility_code'] . ')';
-            /* $response[$key]['provinceId']   = $row['province_id'];
-            $response[$key]['province']     = $row['province_name'];
-            $response[$key]['district']     = $row['facility_district']; */
+            if ($module) {
+                $response[$key]['value']        = $row['facility_id'];
+                $response[$key]['show']         = $row['facility_name'] . ' (' . $row['facility_code'] . ')';
+            } else {
+                $response[$key]['facility_id']          = $row['facility_id'];
+                $response[$key]['facility_name']        = $row['facility_name'];
+                $response[$key]['facility_code']        = $row['facility_code'];
+                $response[$key]['other_id']             = $row['other_id'];
+                $response[$key]['facility_state_id']    = $row['facility_state_id'];
+                $response[$key]['facility_state']       = $row['facility_state'];
+                $response[$key]['facility_district_id'] = $row['facility_district_id'];
+                $response[$key]['facility_district']    = $row['facility_district'];
+                $response[$key]['testing_points']       = $row['testing_points'];
+                $response[$key]['status']               = $row['status'];
+            }
+            if (!$module && $facilityType == 1) {
+                $response[$key]['testType'] = $row['test_type'];
+            }
             $response[$key]['provinceDetails'] = $this->getSubFields('province_details', 'province_id', 'province_name', $condition1);
             $response[$key]['districtDetails'] = $this->getSubFields('facility_details', 'facility_district', 'facility_district', $condition2);
         }
         return $response;
     }
 
-    public function getTestingLabs($testType = null, $user = null, $onlyActive = false)
+    public function getTestingLabs($testType = null, $user = null, $onlyActive = false, $module = false)
     {
         $facilityDb = new \Vlsm\Models\Facilities($this->db);
-        $query = "SELECT tl.test_type, f.facility_id, f.facility_name, f.facility_code, f.facility_district, f.facility_type 
+        $query = "SELECT tl.test_type, f.*, pd.province_id, pd.province_name
                     from testing_labs AS tl 
-                    INNER JOIN facility_details as f ON tl.facility_id=f.facility_id";
+                    INNER JOIN facility_details as f ON tl.facility_id=f.facility_id
+                    LEFT JOIN province_details as pd ON pd.province_name=f.facility_state";
         $where = "";
         if (!empty($user)) {
             $facilityMap = $facilityDb->getFacilityMap($user);
@@ -147,6 +190,33 @@ class App
                     $where .= " WHERE ";
                 }
                 $where .= " facility_id IN (" . $facilityMap . ")";
+            }
+        }
+
+        if (!$module) {
+            $general = new \Vlsm\Models\General($this->db);
+            $systemConfig = $general->getSystemConfig();
+
+            $activeModule = "";
+            if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) {
+                $activeModule .= 'vl';
+            }
+            if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) {
+                $activeModule .= ', eid';
+            }
+            if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) {
+                $activeModule .= ', covid19';
+            }
+            if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) {
+                $activeModule .= ', hepatitis';
+            }
+            if (!empty($activeModule)) {
+                if (isset($where) && trim($where) != "") {
+                    $where .= " AND ";
+                } else {
+                    $where .= " WHERE ";
+                }
+                $where .= " tl.test_type IN (" . $activeModule . ")";
             }
         }
 
@@ -172,9 +242,18 @@ class App
         $query .= $where;
         $result = $this->db->rawQuery($query);
         foreach ($result as $key => $row) {
+            // $condition1 = " province_name like '" . $row['province_name'] . "%'";
+            // $condition2 = " facility_state like '" . $row['province_name'] . "%'";
+
             $response[$key]['value']        = $row['facility_id'];
             $response[$key]['show']         = $row['facility_name'] . ' (' . $row['facility_code'] . ')';
+            $response[$key]['state']        = $row['facility_state'];
             $response[$key]['district']     = $row['facility_district'];
+            if (!$module) {
+                $response[$key]['testType'] = $row['test_type'];
+            }
+            // $response[$key]['provinceDetails'] = $this->getSubFields('province_details', 'province_id', 'province_name', $condition1);
+            // $response[$key]['districtDetails'] = $this->getSubFields('facility_details', 'facility_district', 'facility_district', $condition2);
         }
         return $response;
     }
@@ -320,6 +399,9 @@ class App
             'api_params'            => $params,
             'data_format'           => $format
         );
+        if ($format == 'sync-api') {
+            $data['facility_id'] = $params;
+        }
         return $this->db->insert("track_api_requests", $data);
     }
 
