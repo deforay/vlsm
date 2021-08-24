@@ -18,7 +18,6 @@ header('Content-Type: application/json');
 $general = new \Vlsm\Models\General($db);
 $app = new \Vlsm\Models\App($db);
 $userDb = new \Vlsm\Models\Users($db);
-$covid19Obj = new \Vlsm\Models\Covid19($db);
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
 
 $input = json_decode(file_get_contents("php://input"), true);
@@ -49,9 +48,45 @@ $tsResult = $db->rawQuery($tsQuery);
 foreach ($tsResult as $row) {
     $statusList[$row['status_id']] = $row['status_name'];
 }
-$status = false;
 // Check if covid-19 module active/inactive
+$status = false;
+/* Funding Source List */
+$fundingSourceList = array();
+$fundingSourceQry = "SELECT * FROM r_funding_sources WHERE funding_source_status='active' ORDER BY funding_source_name ASC";
+$fundingSourceResult = $db->query($fundingSourceQry);
+foreach ($fundingSourceResult as $funding) {
+    $fundingSourceList[$funding['funding_source_id']] = $funding['funding_source_name'];
+}
+/* Implementing Partner Details */
+$implementingPartnerList = array();
+$implementingPartnerQry = "SELECT * FROM r_implementation_partners WHERE i_partner_status='active' ORDER BY i_partner_name ASC";
+$implementingPartnerResult = $db->query($implementingPartnerQry);
+foreach ($implementingPartnerResult as $key => $ip) {
+    $implementingPartnerList[$key]['value'] = strtolower(str_replace(" ", "-", $ip['i_partner_id']));
+    $implementingPartnerList[$key]['show'] = $ip['i_partner_name'];
+}
+/* Nationality Details */
+$nationalityQry = "SELECT * FROM `r_countries` ORDER BY `iso_name` ASC";
+$nationalityResult = $db->query($nationalityQry);
+foreach ($nationalityResult as $key => $nrow) {
+    $nationalityList[$key]['show'] = ucwords($nrow['iso_name']) . ' (' . $nrow['iso3'] . ')';
+    $nationalityList[$key]['value'] = $nrow['id'];
+}
+$commonResultsList = array();
+$commonResult = array('positive', 'negative', 'unknown');
+foreach ($commonResult as $key => $result) {
+    $commonResultsList[$key]['value'] = $result;
+    $commonResultsList[$key]['show'] = ucwords($result);
+}
+/* Lab Technician Details */
+$labTechnicians = $userDb->getActiveUserInfo();
+foreach ($labTechnicians as $labTech) {
+    $labTechniciansList[$labTech['user_id']] = ucwords($labTech['user_name']);
+}
+
 if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) {
+    $covid19Obj = new \Vlsm\Models\Covid19($db);
+
     $data = array();
     if (isset($formId) && $formId == 1) {
         /* Source of Alert list */
@@ -73,32 +108,8 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
     /* Health Facility Details */
     // $data['covid19']['healthFacilitiesList'] = $app->getHealthFacilities('covid19', $check['data']['user_id'], true, 1);
 
-    /* Funding Source List */
-    $fundingSourceList = array();
-    $fundingSourceQry = "SELECT * FROM r_funding_sources WHERE funding_source_status='active' ORDER BY funding_source_name ASC";
-    $fundingSourceResult = $db->query($fundingSourceQry);
-    foreach ($fundingSourceResult as $funding) {
-        $fundingSourceList[$funding['funding_source_id']] = $funding['funding_source_name'];
-    }
     $data['covid19']['fundingSourceList'] = $app->generateSelectOptions($fundingSourceList);
-
-    /* Implementing Partner Details */
-    $implementingPartnerList = array();
-    $implementingPartnerQry = "SELECT * FROM r_implementation_partners WHERE i_partner_status='active' ORDER BY i_partner_name ASC";
-    $implementingPartnerResult = $db->query($implementingPartnerQry);
-    foreach ($implementingPartnerResult as $key => $ip) {
-        $implementingPartnerList[$key]['value'] = strtolower(str_replace(" ", "-", $ip['i_partner_id']));
-        $implementingPartnerList[$key]['show'] = $ip['i_partner_name'];
-    }
     $data['covid19']['implementingPartnerList'] = $implementingPartnerList;
-
-    /* Nationality Details */
-    $nationalityQry = "SELECT * FROM `r_countries` ORDER BY `iso_name` ASC";
-    $nationalityResult = $db->query($nationalityQry);
-    foreach ($nationalityResult as $key => $nrow) {
-        $nationalityList[$key]['show'] = ucwords($nrow['iso_name']) . ' (' . $nrow['iso3'] . ')';
-        $nationalityList[$key]['value'] = $nrow['id'];
-    }
     $data['covid19']['nationalityList'] = $nationalityList;
 
     /* Type of Test Request */
@@ -161,6 +172,7 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
     $data['covid19']['symptomsList'] = $app->generateSelectOptions($covid19Obj->getCovid19Symptoms());
     $data['covid19']['comorbiditiesList'] = $app->generateSelectOptions($covid19Obj->getCovid19Comorbidities());
     $data['covid19']['sampleStatusList'] = $app->generateSelectOptions($statusList);
+
     /* Get covid-19 tests */
     $data['covid19']['covid19Tests'] = $covid19Obj->getCovid19TestsByFormId();
     $data['covid19']['statusFilterList'] = array(
@@ -179,6 +191,81 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
 
 // Check if eid module active/inactive
 if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) {
+    $eidObj = new \Vlsm\Models\Eid($db);
+
+    /* SITE INFORMATION SECTION */
+
+    /* Province Details */
+    $data['eid']['provinceList'] = $app->getProvinceDetails($check['data']['user_id'], true);
+    /* District Details */
+    $data['eid']['districtList'] = $app->getDistrictDetails($check['data']['user_id'], true);
+    /* Health Facility Details */
+    $data['eid']['healthFacilitiesList'] = $app->getHealthFacilities('eid', $check['data']['user_id'], true, 1);
+    $data['eid']['implementingPartnerList'] = $implementingPartnerList;
+    $data['eid']['fundingSourceList'] = $app->generateSelectOptions($fundingSourceList);
+    $data['eid']['nationalityList'] = $nationalityList;
+    $data['eid']['testingLabsList'] = $app->getTestingLabs('eid', null, true);
+
+    /* Infant and Mother's Health Information Section */
+    $data['eid']['mothersHIVStatus'] = $commonResultsList;
+
+    $motherTreatmentList = array();
+    $motherTreatmentArray = array('No ART given', 'Pregnancy', 'Labour/Delivery', 'Postnatal', 'Unknown');
+    foreach ($motherTreatmentArray as $key => $treatment) {
+        $motherTreatmentList[$key]['value'] = $treatment;
+        $motherTreatmentList[$key]['show'] = $treatment;
+    }
+    $data['eid']['motherTreatment'] = $motherTreatmentList;
+    $data['eid']['rapidTestResult'] = $app->generateSelectOptions($eidObj->getEidResults());
+    $data['eid']['prePcrTestResult'] = $commonResultsList;
+
+    $pcrTestReasonList = array();
+    $pcrTestReasonArray = array('Confirmation of positive first EID PCR test result', 'Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months', 'Positive HIV rapid test result at 9 months or later', 'Other');
+    foreach ($pcrTestReasonArray as $key => $reason) {
+        $pcrTestReasonList[$key]['value'] = $reason;
+        $pcrTestReasonList[$key]['show'] = $reason;
+    }
+    $data['eid']['pcrTestReason'] = $pcrTestReasonList;
+    $data['eid']['specimenTypeList'] = $app->generateSelectOptions($eidObj->getEidSampleTypes());
+
+    /* Rejected Reason*/
+    $rejectionTypeQuery = "SELECT DISTINCT rejection_type FROM r_eid_sample_rejection_reasons WHERE rejection_reason_status ='active' GROUP BY rejection_type";
+    $rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
+    $rejectionReason = array();
+    foreach ($rejectionTypeResult as $key => $type) {
+        $rejectionReason[$key]['show'] = ucwords($type['rejection_type']);
+        $rejectionQuery = "SELECT * FROM r_eid_sample_rejection_reasons where rejection_reason_status = 'active' AND rejection_type LIKE '" . $type['rejection_type'] . "%'";
+        $rejectionResult = $db->rawQuery($rejectionQuery);
+        foreach ($rejectionResult as $subKey => $reject) {
+            $rejectionReason[$key]['reasons'][$subKey]['value'] = $reject['rejection_reason_id'];
+            $rejectionReason[$key]['reasons'][$subKey]['show'] = ucwords($reject['rejection_reason_name']);
+        }
+    }
+    $data['eid']['rejectedReasonList'] = $rejectionReason;
+
+    /* Testing Platform Details */
+    $testPlatformList = array();
+    $testPlatformResult = $general->getTestingPlatforms('eid');
+    foreach ($testPlatformResult as $row) {
+        $testPlatformList[$row['machine_name']] = $row['machine_name'];
+    }
+    $data['eid']['testPlatformList'] = $app->generateSelectOptions($testPlatformList);
+
+    $data['eid']['labTechniciansList'] = $app->generateSelectOptions($labTechniciansList);
+    $data['eid']['resultsList'] = $app->generateSelectOptions($eidObj->getEidResults());
+    $data['eid']['sampleStatusList'] = $app->generateSelectOptions($statusList);
+
+    $data['eid']['statusFilterList'] = array(
+        array('value' => '7', 'show' => 'Approved'),
+        array('value' => '1', 'show' => 'Pending'),
+        array('value' => '4', 'show' => 'Rejected')
+    );
+    $payload = array(
+        'status' => 1,
+        'message' => 'Success',
+        'data' => $data,
+        'timestamp' => $general->getDateTime()
+    );
     $status = true;
 }
 
