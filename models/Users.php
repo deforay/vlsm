@@ -239,7 +239,7 @@ class Users
         ) {
             $general = new \Vlsm\Models\General($this->db);
             $token = $general->generateUserID(6);
-            $data['api_token'] = base64_encode($result['user_id']."-".$token);
+            $data['api_token'] = base64_encode($result['user_id'] . "-" . $token);
             $data['api_token_generated_datetime'] = $general->getDateTime();
 
             $this->db = $this->db->where('user_id', $result['user_id']);

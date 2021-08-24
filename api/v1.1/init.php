@@ -85,8 +85,10 @@ foreach ($labTechnicians as $labTech) {
     $labTechniciansList[$labTech['user_id']] = ucwords($labTech['user_name']);
 }
 $data = array();
-$data['facilitiesList'] = $facilitiesDb->getAllFacilities();
+$data['facilitiesList'] = $app->getAppHealthFacilities(null, $user['user_id']);
 $data['geoGraphicalDivision'] = $geoLocationDb->fetchActiveGeolocations();
+$data['healthFacilitiesList'] = $app->getAppHealthFacilities(null, $user['user_id'], true, 1, false);
+$data['testingLabsList'] = $app->getTestingLabs(null, $user['user_id'], false, false);
 
 if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) {
     $covid19Obj = new \Vlsm\Models\Covid19($db);
@@ -102,11 +104,11 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
         $data['covid19']['sourceOfAlertList'] = $sourceOfAlertList;
     }
     /* Province Details */
-    $data['covid19']['provinceList'] = $app->getProvinceDetails($check['data']['user_id'], true);
+    $data['covid19']['provinceList'] = $app->getProvinceDetails($user['user_id'], true);
     /* District Details */
-    $data['covid19']['districtList'] = $app->getDistrictDetails($check['data']['user_id'], true);
+    $data['covid19']['districtList'] = $app->getDistrictDetails($user['user_id'], true);
     /* Health Facility Details */
-    $data['covid19']['healthFacilitiesList'] = $app->getHealthFacilities('covid19', $check['data']['user_id'], true, 1);
+    // $data['covid19']['healthFacilitiesList'] = $app->getAppHealthFacilities('covid19', $user['user_id'], true, 1, true);
     $data['covid19']['fundingSourceList'] = $app->generateSelectOptions($fundingSourceList);
     $data['covid19']['implementingPartnerList'] = $implementingPartnerList;
     $data['covid19']['nationalityList'] = $nationalityList;
@@ -127,7 +129,7 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
         $typeOfTestReqList[$key]['show'] = $req;
     }
     $data['covid19']['testingPoint'] = $typeOfTestReqList;
-    $data['covid19']['testingLabsList'] = $app->getTestingLabs('covid19', null, true);
+    // $data['covid19']['testingLabsList'] = $app->getTestingLabs('covid19', null, true);
     /* Type of Test Request */
     $qualityList = array();
     $qualityResults = array('Good', 'Poor');
@@ -187,15 +189,15 @@ if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] ==
     $eidObj = new \Vlsm\Models\Eid($db);
     /* SITE INFORMATION SECTION */
     /* Province Details */
-    $data['eid']['provinceList'] = $app->getProvinceDetails($check['data']['user_id'], true);
+    $data['eid']['provinceList'] = $app->getProvinceDetails($user['user_id'], true);
     /* District Details */
-    $data['eid']['districtList'] = $app->getDistrictDetails($check['data']['user_id'], true);
+    $data['eid']['districtList'] = $app->getDistrictDetails($user['user_id'], true);
     /* Health Facility Details */
-    $data['eid']['healthFacilitiesList'] = $app->getHealthFacilities('eid', $check['data']['user_id'], true, 1);
+    // $data['eid']['healthFacilitiesList'] = $app->getAppHealthFacilities('eid', $user['user_id'], true, 1, true);
     $data['eid']['implementingPartnerList'] = $implementingPartnerList;
     $data['eid']['fundingSourceList'] = $app->generateSelectOptions($fundingSourceList);
     $data['eid']['nationalityList'] = $nationalityList;
-    $data['eid']['testingLabsList'] = $app->getTestingLabs('eid', null, true);
+    // $data['eid']['testingLabsList'] = $app->getTestingLabs('eid', null, true);
 
     /* Infant and Mother's Health Information Section */
     $data['eid']['mothersHIVStatus'] = $commonResultsList;

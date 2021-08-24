@@ -231,7 +231,7 @@ $geoLocationChildArray = $geolocation->fetchActiveGeolocations(0, 'child');
 											<input type="hidden" name="state" id="state" value="<?php echo $facilityInfo[0]['facility_state']; ?>" />
 										<?php }
 										if ((!isset($facilityInfo[0]['facility_state_id']) || $facilityInfo[0]['facility_state_id'] == "") && (isset($facilityInfo[0]['facility_state']) || $facilityInfo[0]['facility_state'] != "")) { ?>
-											<input type="text" value="<?php echo $facilityInfo[0]['facility_state']; ?>" class="form-control" name="oldState" id="oldState" placeholder="Enter Province/State" title="Please enter province/state" />
+											<input type="text" value="<?php echo $facilityInfo[0]['facility_state']; ?>" class="form-control isRequired" name="oldState" id="oldState" placeholder="Enter Province/State" title="Please enter province/state" />
 										<?php } ?>
 									</div>
 								</div>
@@ -249,7 +249,7 @@ $geoLocationChildArray = $geolocation->fetchActiveGeolocations(0, 'child');
 											<input type="hidden" id="district" name="district" value="<?php echo $facilityInfo[0]['facility_district']; ?>" />
 										<?php }
 										if ((!isset($facilityInfo[0]['facility_district_id']) || $facilityInfo[0]['facility_district_id'] == "") && (isset($facilityInfo[0]['facility_district']) || $facilityInfo[0]['facility_district'] != "")) { ?>
-											<input type="text" value="<?php echo $facilityInfo[0]['facility_district']; ?>" class="form-control" name="oldDistrict" id="oldDistrict" placeholder="Enter District/County" title="Please enter district/county" />
+											<input type="text" value="<?php echo $facilityInfo[0]['facility_district']; ?>" class="form-control isRequired" name="oldDistrict" id="oldDistrict" placeholder="Enter District/County" title="Please enter district/county" />
 										<?php } ?>
 									</div>
 								</div>
@@ -630,7 +630,7 @@ $geoLocationChildArray = $geolocation->fetchActiveGeolocations(0, 'child');
 			if ($.trim(pName) != '') {
 				$.post("/includes/siteInformationDropdownOptions.php", {
 						pName: pName,
-						dName: <?php echo $facilityInfo[0]['facility_district_id']; ?>
+						dName: '<?php echo (isset($facilityInfo[0]['facility_district_id']) && $facilityInfo[0]['facility_district_id'] != "") ? trim($facilityInfo[0]['facility_district_id']) : trim($facilityInfo[0]['facility_district']); ?>'
 					},
 					function(data) {
 						if (data != "") {
