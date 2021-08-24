@@ -19,6 +19,7 @@ $general = new \Vlsm\Models\General($db);
 $app = new \Vlsm\Models\App($db);
 $userDb = new \Vlsm\Models\Users($db);
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
+$geoLocationDb = new \Vlsm\Models\GeoLocations($db);
 
 $input = json_decode(file_get_contents("php://input"), true);
 $formId = $general->getGlobalConfig('vl_form');
@@ -83,11 +84,13 @@ $labTechnicians = $userDb->getActiveUserInfo();
 foreach ($labTechnicians as $labTech) {
     $labTechniciansList[$labTech['user_id']] = ucwords($labTech['user_name']);
 }
+$data = array();
+$data['facilitiesList'] = $facilitiesDb->getAllFacilities();
+$data['geoGraphicalDivision'] = $geoLocationDb->fetchActiveGeolocations();
 
 if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) {
     $covid19Obj = new \Vlsm\Models\Covid19($db);
 
-    $data = array();
     if (isset($formId) && $formId == 1) {
         /* Source of Alert list */
         $sourceOfAlertList = array();
@@ -98,16 +101,12 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
         }
         $data['covid19']['sourceOfAlertList'] = $sourceOfAlertList;
     }
-
     /* Province Details */
     $data['covid19']['provinceList'] = $app->getProvinceDetails($check['data']['user_id'], true);
-
     /* District Details */
     $data['covid19']['districtList'] = $app->getDistrictDetails($check['data']['user_id'], true);
-
     /* Health Facility Details */
-    // $data['covid19']['healthFacilitiesList'] = $app->getHealthFacilities('covid19', $check['data']['user_id'], true, 1);
-
+    $data['covid19']['healthFacilitiesList'] = $app->getHealthFacilities('covid19', $check['data']['user_id'], true, 1);
     $data['covid19']['fundingSourceList'] = $app->generateSelectOptions($fundingSourceList);
     $data['covid19']['implementingPartnerList'] = $implementingPartnerList;
     $data['covid19']['nationalityList'] = $nationalityList;
@@ -180,21 +179,13 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
         array('value' => '1', 'show' => 'Pending'),
         array('value' => '4', 'show' => 'Rejected')
     );
-    $payload = array(
-        'status' => 1,
-        'message' => 'Success',
-        'data' => $data,
-        'timestamp' => $general->getDateTime()
-    );
     $status = true;
 }
 
 // Check if eid module active/inactive
 if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) {
     $eidObj = new \Vlsm\Models\Eid($db);
-
     /* SITE INFORMATION SECTION */
-
     /* Province Details */
     $data['eid']['provinceList'] = $app->getProvinceDetails($check['data']['user_id'], true);
     /* District Details */
@@ -260,16 +251,16 @@ if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] ==
         array('value' => '1', 'show' => 'Pending'),
         array('value' => '4', 'show' => 'Rejected')
     );
+    $status = true;
+}
+if ($status) {
     $payload = array(
         'status' => 1,
         'message' => 'Success',
         'data' => $data,
         'timestamp' => $general->getDateTime()
     );
-    $status = true;
-}
-
-if (!$status) {
+} else {
     $response = array(
         'status' => 'failed',
         'timestamp' => time(),
