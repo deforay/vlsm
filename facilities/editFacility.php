@@ -613,7 +613,7 @@ $geoLocationChildArray = $geolocation->fetchActiveGeolocations(0, 'child');
 				$('#provinceNew').show();
 			} else {
 				$('#provinceNew').hide();
-				$('#state').val($(this).text());
+				$('#state').val($("#stateId option:selected").text());
 			}
 			$.blockUI();
 			var pName = $(this).val();
@@ -638,7 +638,7 @@ $geoLocationChildArray = $geolocation->fetchActiveGeolocations(0, 'child');
 				$('#districtNew').show();
 			} else {
 				$('#districtNew').hide();
-				$('#district').val($(this).text());
+				$('#district').val($("#districtId option:selected").text());
 			}
 		});
 		<?php if (isset($fType) && $fType == 2) { ?>
@@ -670,6 +670,8 @@ $geoLocationChildArray = $geolocation->fetchActiveGeolocations(0, 'child');
 			selVal[i] = $(selected).val();
 		});
 		$("#selectedUser").val(selVal);
+		$('#state').val($("#stateId option:selected").text());
+		$('#district').val($("#districtId option:selected").text());
 		flag = deforayValidator.init({
 			formId: 'editFacilityForm'
 		});

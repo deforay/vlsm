@@ -47,8 +47,8 @@ if (!$sampleCode && !$recencyId && (!$from || !$to)) {
         'error' => 'Mandatory request params missing in request. Expected Recency ID(s) or a Date Range',
         'data' => array()
     );
-    if (isset($user['token-updated']) && $user['token-updated'] == true) {
-        $response['token'] = $user['newToken'];
+    if (isset($user['token_updated']) && $user['token_updated'] == true) {
+        $response['token'] = $user['new_token'];
     }
     http_response_code(400);
     echo json_encode($response);
@@ -116,8 +116,8 @@ try {
             'data' => $rowData
 
         );
-        if (isset($user['token-updated']) && $user['token-updated'] == true) {
-            $response['token'] = $user['newToken'];
+        if (isset($user['token_updated']) && $user['token_updated'] == true) {
+            $response['token'] = $user['new_token'];
         }
         http_response_code(200);
         echo json_encode($response);
@@ -129,8 +129,8 @@ try {
         'timestamp' => time(),
         'data' => $rowData
     );
-    if (isset($user['token-updated']) && $user['token-updated'] == true) {
-        $payload['token'] = $user['newToken'];
+    if (isset($user['token_updated']) && $user['token_updated'] == true) {
+        $payload['token'] = $user['new_token'];
     }
 
     http_response_code(200);
@@ -145,8 +145,8 @@ try {
         'error' => $exc->getMessage(),
         'data' => array()
     );
-    if (isset($user['token-updated']) && $user['token-updated'] == true) {
-        $payload['token'] = $user['newToken'];
+    if (isset($user['token_updated']) && $user['token_updated'] == true) {
+        $payload['token'] = $user['new_token'];
     }
 
     echo json_encode($payload);

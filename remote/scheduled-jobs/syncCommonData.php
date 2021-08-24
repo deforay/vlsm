@@ -11,27 +11,8 @@ if (!isset($systemConfig['remoteURL']) || $systemConfig['remoteURL'] == '') {
 }
 
 
-$lockFile = fopen(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'sync-common.pid', 'c');
-$gotLock = flock($lockFile, LOCK_EX | LOCK_NB, $wouldblock);
-if ($lockFile === false || (!$gotLock && !$wouldblock)) {
-    error_log("Unable to create the lock file");
-    exit(0);
-} else if (!$gotLock && $wouldblock) {
-    exit(0);
-}
-// Lock acquired; let's write our PID to the lock file for the convenience
-// of humans who may wish to terminate the script.
-ftruncate($lockFile, 0);
-fwrite($lockFile, getmypid() . "\n");
-
-
-
 //update common data from remote to lab db
-
-
 $systemConfig['remoteURL'] = rtrim($systemConfig['remoteURL'], "/");
-
-
 
 $headers = @get_headers($systemConfig['remoteURL'] . '/vlsts-icons/favicon-16x16.png');
 
@@ -55,6 +36,7 @@ $healthFacilityLastModified = $general->getLastModifiedDateTime('health_faciliti
 $testingLabsLastModified = $general->getLastModifiedDateTime('testing_labs');
 $fundingSourcesLastModified = $general->getLastModifiedDateTime('r_funding_sources');
 $partnersLastModified = $general->getLastModifiedDateTime('r_implementation_partners');
+$geoDivisionsLastModified = $general->getLastModifiedDateTime('geographical_divisions');
 
 $data = array(
     'globalConfigLastModified'      => $globalConfigLastModified,
@@ -64,6 +46,7 @@ $data = array(
     'testingLabsLastModified'       => $testingLabsLastModified,
     'fundingSourcesLastModified'    => $fundingSourcesLastModified,
     'partnersLastModified'          => $partnersLastModified,
+    'geoDivisionsLastModified'          => $geoDivisionsLastModified,
     "Key"                           => "vlsm-get-remote",
 );
 $url = $systemConfig['remoteURL'] . '/remote/remote/commonData.php';
@@ -656,7 +639,8 @@ if (!empty($result['facilities']) && count($result['facilities']) > 0) {
             'facility_mobile_numbers' => $facility['facility_mobile_numbers'],
             'address' => $facility['address'],
             'country' => $facility['country'],
-            'facility_state' => $facility['facility_state'],
+            'facility_state_id' => $facility['facility_state_id'],
+            'facility_district_id' => $facility['facility_district_id'],
             'facility_state' => $facility['facility_state'],
             'facility_district' => $facility['facility_district'],
             'facility_hub_name' => $facility['facility_hub_name'],
@@ -798,15 +782,37 @@ if (!empty($result['partners']) && count($result['partners']) > 0) {
     }
 }
 
+//update or insert geographical divisions
+if (!empty($result['geoDivisions']) && count($result['geoDivisions']) > 0) {
+
+    foreach ($result['geoDivisions'] as $geoDivisions) {
+        $geoDivQuery = "SELECT geo_id FROM geographical_divisions WHERE geo_id=" . $geoDivisions['geo_id'];
+        $geoDivResult = $db->query($geoDivQuery);
+        $geoDivData = array(
+            'geo_name'          => $geoDivisions['geo_name'],
+            'geo_code'          => $geoDivisions['geo_code'],
+            'geo_parent'        => $geoDivisions['geo_parent'],
+            'geo_status'        => $geoDivisions['geo_status'],
+            'created_by'        => $geoDivisions['created_by'],
+            'created_on'        => $geoDivisions['created_on'],
+            'data_sync'         => $geoDivisions['data_sync'],
+            'updated_datetime'  => $general->getDateTime(),
+        );
+        $lastId = 0;
+        if ($geoDivResult) {
+            $db = $db->where('geo_id', $geoDivisions['geo_id']);
+            $lastId = $db->update('geographical_divisions', $geoDivData);
+        } else {
+            $geoDivData['geo_id'] = $geoDivisions['geo_id'];
+            $db->insert('geographical_divisions', $geoDivData);
+            $lastId = $db->getInsertId();
+        }
+    }
+}
+
 /* Get instance id for update last_remote_results_sync */
 $instanceResult = $db->rawQueryOne("SELECT vlsm_instance_id, instance_facility_name FROM s_vlsm_instance");
 
 /* Update last_remote_results_sync in s_vlsm_instance */
 $db = $db->where('vlsm_instance_id', $instanceResult['vlsm_instance_id']);
 $id = $db->update('s_vlsm_instance', array('last_remote_reference_data_sync' => $general->getDateTime()));
-
-
-// All done; we blank the PID file and explicitly release the lock 
-// (although this should be unnecessary) before terminating.
-ftruncate($lockFile, 0);
-flock($lockFile, LOCK_UN);
