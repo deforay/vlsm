@@ -2278,3 +2278,6 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 
 -- Amit 23 Aug 2021
 ALTER TABLE `user_details` ADD `api_token_exipiration_days` INT NULL DEFAULT NULL AFTER `api_token_generated_datetime`;
+
+-- Amit -- 24-Aug-2021
+UPDATE `system_config` SET `value` = '4.4.0' WHERE `system_config`.`name` = 'sc_version';

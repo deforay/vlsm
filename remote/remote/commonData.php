@@ -190,5 +190,11 @@ if ($data['Key'] == 'vlsm-get-remote') {
     }
     $response['partners'] = $general->fetchDataFromTable('r_implementation_partners', $condition);
 
+    $condition = null;
+    if (isset($data['geoDivisionsLastModified']) && !empty($data['geoDivisionsLastModified'])) {
+        $condition = "updated_datetime > '" . $data['geoDivisionsLastModified'] . "'";
+    }
+    $response['geoDivisions'] = $general->fetchDataFromTable('geographical_divisions', $condition);
+
     echo json_encode($response);
 }

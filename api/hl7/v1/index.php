@@ -102,8 +102,8 @@ try {
         'error' => $exc->getMessage(),
         'data' => array()
     );
-    if (isset($user['token-updated']) && $user['token-updated'] == true) {
-        $payload['token'] = $user['newToken'];
+    if (isset($user['token_updated']) && $user['token_updated'] == true) {
+        $payload['token'] = $user['new_token'];
     }
 
     echo json_encode($payload);

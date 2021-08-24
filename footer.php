@@ -1,17 +1,21 @@
 <footer class="main-footer">
 	<small>This project is supported by the U.S. President’s Emergency Plan for AIDS Relief (PEPFAR) through the U.S. Centers for Disease Control and Prevention (CDC).</small>
-	<small class="pull-right" style="font-weight:bold;">&nbsp;&nbsp;<?php echo VERSION; ?></small>
+	<small class="pull-right" style="font-weight:bold;">&nbsp;&nbsp;<?php echo "v" . VERSION; ?></small>
 	<?php if (isset($_SESSION['userName']) && isset($_SESSION['system']) && ($_SESSION['system'] == 'vluser' || $_SESSION['system'] == 'remoteuser')) { ?>
-		<div class="pull-right" style="display: grid;">
-			<small><a href="javascript:forceRemoteSync();" class="text-muted">Force Remote sync</a>&nbsp;&nbsp;</small>
-			<?php if (isset($syncLatestTime) && $syncLatestTime != '') { ?>
-				<?php if (isset($_SESSION['privileges']) && in_array("sync-history.php", $_SESSION['privileges'])) { ?>
-					<a href="/common/reference/sync-history.php"><small><span style="color:gray;font-size:xx-small;">Last Synced :<span class="sync-time"><?php echo $syncLatestTime; ?></span></span></small></a>
-				<?php } else { ?>
-					<small><span style="color:gray;font-size:xx-small;">Last Synced :<span class="sync-time"><?php echo $syncLatestTime; ?></span></span></small>
-			<?php }
-			} ?>
+		<div class="pull-right">
+			<small><a href="javascript:forceRemoteSync();">Force Remote Sync</a>&nbsp;&nbsp;</small>
 		</div>
+		<?php
+
+		$lastSync = '';
+
+		if (isset($_SESSION['privileges']) && in_array("sync-history.php", $_SESSION['privileges'])) {
+			$syncHistory = "/common/reference/sync-history.php";
+		} else {
+			$syncHistory = "javascript:void(0);";
+		}
+		?>
+		<br><div style="font-size:x-small;" class="pull-right"><a href="<?= $syncHistory; ?>" class="text-muted">Last Synced at <span class="sync-time"><?= $syncLatestTime; ?></a></span></div>
 	<?php } ?>
 </footer>
 </div>
@@ -124,6 +128,7 @@
 					})
 					.always(function() {
 						$.unblockUI();
+						getLastSyncDateTime();
 					});
 			}
 		}
@@ -156,30 +161,53 @@
 
 	$(document).ready(function() {
 		<?php if (isset($_SESSION['system']) && $_SESSION['system'] == 'vluser') { ?>
-			// syncRemoteData();
-			var ndt = new Date();
-			nformat = ndt.setMinutes(ndt.getMinutes() - 120);
-			nformatdt = dateFormat(nformat, "yyyymmddHHMMss");
-			(function getLastSyncDateTime() {
-				$.ajax({
-					url: '/remote/scheduled-jobs/getLastSyncTime.php',
-					cache: false,
-					success: function(data) {
-						if (data != null && data != undefined) {
-							$('.sync-time').html(data);
-							var dt = new Date(data);
-							formatdt = dateFormat(dt, "yyyymmddHHMMss");
-							if (formatdt <= nformatdt) {
+
+
+				let syncInterval = 60 * 60 * 1000 * 2 // 2 hours in ms
+				
+				(function getLastSyncDateTime() {
+					let currentDateTime = new Date();
+					$.ajax({
+						url: '/remote/scheduled-jobs/getLastSyncTime.php',
+						cache: false,
+						success: function(lastSyncDateString) {
+							if (lastSyncDateString != null && lastSyncDateString != undefined) {
+								$('.sync-time').html(lastSyncDateString);
+								lastSyncDateString.replace("-", "/"); // We had to do this for Firefox 
+								var lastSyncDate = new Date(lastSyncDateString);
+								if ((currentDateTime - lastSyncDate) > syncInterval) {
+									syncCommon();
+								}
+							} else {
 								syncCommon();
 							}
+						},
+						error: function(data) {}
+					});
+					setTimeout(getLastSyncDateTime, 300000);
+				})();
+		<?php } ?>
+
+
+
+		<?php
+		// Every 5 mins check connection if this is a local installation of VLSM and there is a remote server configured
+		$systemConfig['remoteURL'] = rtrim($systemConfig['remoteURL'], "/");
+		if (isset($systemConfig['remoteURL']) && $systemConfig['remoteURL'] != "" && $_SESSION['system'] == 'vluser') { ?>
+
+				(function checkNetworkConnection() {
+					$.ajax({
+						url: '<?php echo $systemConfig['remoteURL']; ?>/vlsts-icons/favicon-16x16.png',
+						cache: false,
+						success: function(data) {
+							$('.is-remote-server-reachable').css('background-color', '#4dbc3c');
+						},
+						error: function() {
+							$('.is-remote-server-reachable').css('background-color', 'red');
 						}
-					},
-					error: function(data) {}
-				});
-				setTimeout(getLastSyncDateTime, 300000);
-			})();
-		<?php } ?> <?php if (isset($_SESSION['vldashboard_url']) && $_SESSION['vldashboard_url'] != '' && $_SESSION['vldashboard_url'] != null) { ?>
-			//syncVLDashboard();
+					});
+					setTimeout(checkNetworkConnection, 300000);
+				})();
 		<?php } ?>
 
 		<?php if (isset($_SESSION['alertMsg']) && trim($_SESSION['alertMsg']) != "") { ?> alert('<?php echo $_SESSION['alertMsg']; ?>');
@@ -678,25 +706,6 @@
 			e.preventDefault();
 		}
 	});
-	<?php
-	// Every 5 mins check connection if this is a local installation of VLSM and there is a remote server configured
-	$systemConfig['remoteURL'] = rtrim($systemConfig['remoteURL'], "/");
-	if (isset($systemConfig['remoteURL']) && $systemConfig['remoteURL'] != "" && $_SESSION['system'] == 'vluser') { ?>
-
-			(function checkNetworkConnection() {
-				$.ajax({
-					url: '<?php echo $systemConfig['remoteURL']; ?>/vlsts-icons/favicon-16x16.png',
-					cache: false,
-					success: function(data) {
-						$('.is-remote-server-reachable').css('background-color', '#4dbc3c');
-					},
-					error: function() {
-						$('.is-remote-server-reachable').css('background-color', 'red');
-					}
-				});
-				setTimeout(checkNetworkConnection, 300000);
-			})();
-	<?php } ?>
 </script>
 </body>
 
