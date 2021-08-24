@@ -1,23 +1,23 @@
 <footer class="main-footer">
 	<small>This project is supported by the U.S. President’s Emergency Plan for AIDS Relief (PEPFAR) through the U.S. Centers for Disease Control and Prevention (CDC).</small>
 	<small class="pull-right" style="font-weight:bold;">&nbsp;&nbsp;<?php echo "v" . VERSION; ?></small>
-	<?php if (isset($_SESSION['userName']) && isset($_SESSION['system']) && ($_SESSION['system'] == 'vluser' || $_SESSION['system'] == 'remoteuser')) { ?>
+	<?php if (isset($_SESSION['userName']) && isset($_SESSION['system']) && ($_SESSION['system'] == 'vluser')) { ?>
 		<div class="pull-right">
 			<small><a href="javascript:forceRemoteSync();">Force Remote Sync</a>&nbsp;&nbsp;</small>
 		</div>
-		<?php
+	<?php
+	}
+	$lastSync = '';
 
-		$lastSync = '';
+	if (isset($_SESSION['privileges']) && in_array("sync-history.php", $_SESSION['privileges'])) {
+		$syncHistory = "/common/reference/sync-history.php";
+	} else {
+		$syncHistory = "javascript:void(0);";
+	}
+	?>
+	<br>
+	<div style="font-size:x-small;" class="pull-right"><a href="<?= $syncHistory; ?>" class="text-muted">Last Synced at <span class="sync-time"><?= $syncLatestTime; ?></a></span></div>
 
-		if (isset($_SESSION['privileges']) && in_array("sync-history.php", $_SESSION['privileges'])) {
-			$syncHistory = "/common/reference/sync-history.php";
-		} else {
-			$syncHistory = "javascript:void(0);";
-		}
-		?>
-		<br>
-		<div style="font-size:x-small;" class="pull-right"><a href="<?= $syncHistory; ?>" class="text-muted">Last Synced at <span class="sync-time"><?= $syncLatestTime; ?></a></span></div>
-	<?php } ?>
 </footer>
 </div>
 
