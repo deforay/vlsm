@@ -15,9 +15,8 @@ $general = new \Vlsm\Models\General($db);
 $userDb = new \Vlsm\Models\Users($db);
 $user = null;
 
-$data = json_decode(file_get_contents("php://input"),true);
-if(isset($data['api_token']) && $data['api_token']!='')
-{
+$data = json_decode(file_get_contents("php://input"), true);
+if (isset($data['api_token']) && $data['api_token'] != '') {
     $auth = $data['api_token'];
     $authToken = str_replace("Bearer ", "", $auth);
     /* Check if API token exists */
@@ -42,7 +41,6 @@ include_once(APPLICATION_PATH . '/eid/requests/insert-sample.php');
 include_once(APPLICATION_PATH . '/eid/requests/eid-add-request-helper.php');
 
 try {
-
 } catch (Exception $exc) {
 
     http_response_code(500);

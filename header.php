@@ -400,7 +400,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 									</li>
 								<?php }
 								if (isset($_SESSION['privileges']) && in_array("geographical-divisions-details.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu resultEmailConfigMenu">
+									<li class="allMenu geographicalMenu">
 										<a href="/common/reference/geographical-divisions-details.php"><i class="fa fa-circle-o"></i>Geographical Divisions</a>
 									</li>
 								<?php }

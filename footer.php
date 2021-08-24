@@ -267,6 +267,10 @@
 		$(".manage").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".resultEmailConfigMenu").addClass('active');
+	} else if (splitsUrl == 'geographical-divisions-details.php' || splitsUrl == 'add-geographical-divisions.php' || splitsUrl == 'edit-geographical-divisions.php') {
+		$(".manage").addClass('active');
+		$(".allMenu").removeClass('active');
+		$(".geographicalMenu").addClass('active');
 	} else if (splitsUrl == 'vlRequest.php' || splitsUrl == 'editVlRequest.php' || splitsUrl == 'viewVlRequest.php') {
 		$(".request").addClass('active');
 		$(".allMenu").removeClass('active');

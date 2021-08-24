@@ -7,6 +7,7 @@ if (session_status() == PHP_SESSION_NONE) {
 include_once(APPLICATION_PATH . '/includes/ImageResize.php');
 
 $general = new \Vlsm\Models\General($db);
+$geolocation = new \Vlsm\Models\GeoLocations($db);
 /* echo "<pre>";
 print_r($_POST);die; */
 $tableName = "facility_details";
@@ -17,7 +18,11 @@ $tableName3 = "testing_labs";
 $signTableName = "lab_report_signatories";
 try {
 	if (isset($_POST['facilityName']) && trim($_POST['facilityName']) != "") {
-		if (trim($_POST['state']) != "") {
+
+		if (isset($_POST['provinceNew']) && $_POST['provinceNew'] != "" && $_POST['stateId'] == 'other') {
+			$_POST['stateId'] = $geolocation->addNewQuickGeoLocation($_POST['provinceNew']);
+			$_POST['state'] = $_POST['provinceNew'];
+			// if (trim($_POST['state']) != "") {
 			$strSearch = (isset($_POST['provinceNew']) && trim($_POST['provinceNew']) != '' && $_POST['state'] == 'other') ? $_POST['provinceNew'] : $_POST['state'];
 			$facilityQuery = "SELECT province_name from province_details where province_name='" . $strSearch . "'";
 			$facilityInfo = $db->query($facilityQuery);
@@ -32,6 +37,12 @@ try {
 				$_POST['state'] = $_POST['provinceNew'];
 			}
 		}
+
+		if (isset($_POST['districtNew']) && $_POST['districtNew'] != "" && $_POST['districtId'] == 'other') {
+			$_POST['districtId'] = $geolocation->addNewQuickGeoLocation($_POST['districtNew'], $_POST['stateId']);
+			$_POST['district'] = $_POST['districtNew'];
+		}
+
 		$email = '';
 		if (isset($_POST['reportEmail']) && trim($_POST['reportEmail']) != '') {
 			$expEmail = explode(",", $_POST['reportEmail']);
@@ -64,8 +75,8 @@ try {
 			'country' => $_POST['country'],
 			'facility_state_id' => $_POST['stateId'],
 			'facility_district_id' => $_POST['districtId'],
-			'facility_state' => $_POST['state'],
-			'facility_district' => $_POST['district'],
+			'facility_state' => (isset($_POST['oldState']) && $_POST['oldState'] != "") ? $_POST['oldState'] : $_POST['state'],
+			'facility_district' => (isset($_POST['oldDistrict']) && $_POST['oldDistrict'] != "") ? $_POST['oldDistrict'] : $_POST['district'],
 			'facility_hub_name' => $_POST['hubName'],
 			'latitude' => $_POST['latitude'],
 			'longitude' => $_POST['longitude'],
