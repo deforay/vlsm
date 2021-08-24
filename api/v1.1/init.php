@@ -84,11 +84,25 @@ $labTechnicians = $userDb->getActiveUserInfo();
 foreach ($labTechnicians as $labTech) {
     $labTechniciansList[$labTech['user_id']] = ucwords($labTech['user_name']);
 }
+$activeModule = "";
+if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) {
+    $activeModule .= '"vl"';
+}
+if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) {
+    $activeModule .= ', "eid"';
+}
+if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) {
+    $activeModule .= ', "covid19"';
+}
+if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) {
+    $activeModule .= ', "hepatitis"';
+}
+
 $data = array();
 $data['facilitiesList'] = $app->getAppHealthFacilities(null, $user['user_id']);
 $data['geoGraphicalDivision'] = $geoLocationDb->fetchActiveGeolocations();
-$data['healthFacilitiesList'] = $app->getAppHealthFacilities(null, $user['user_id'], true, 1, false);
-$data['testingLabsList'] = $app->getTestingLabs(null, $user['user_id'], false, false);
+$data['healthFacilitiesList'] = $app->getAppHealthFacilities(null, $user['user_id'], true, 1, false, $activeModule);
+$data['testingLabsList'] = $app->getTestingLabs(null, $user['user_id'], false, false, $activeModule);
 
 if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) {
     $covid19Obj = new \Vlsm\Models\Covid19($db);
