@@ -228,8 +228,8 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                             <select class="form-control" name="mothersHIVStatus" id="mothersHIVStatus">
                                                 <option value=''> -- Select -- </option>
                                                 <option value="positive"> Positive </option>
-                                                <option value="negative" /> Negative </option>
-                                                <option value="unknown" /> Unknown </option>
+                                                <option value="negative"> Negative </option>
+                                                <option value="unknown"> Unknown </option>
                                             </select>
                                         </td>
 
@@ -318,8 +318,9 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         <td>
                                             <select class="form-control" name="pcrTestReason" id="pcrTestReason">
                                                 <option value=''> -- Select -- </option>
-                                                <option value="Confirmation of positive first EID PCR test result" /> Confirmation of positive first EID PCR test result </option>
-                                                <option value="Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months"> Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months </option> <option value="Positive HIV rapid test result at 9 months or later"> Positive HIV rapid test result at 9 months or later </option>
+                                                <option value="Confirmation of positive first EID PCR test result"> Confirmation of positive first EID PCR test result </option>
+                                                <option value="Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months"> Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months </option>
+                                                <option value="Positive HIV rapid test result at 9 months or later"> Positive HIV rapid test result at 9 months or later </option>
                                                 <option value="Other"> Other </option>
                                             </select>
                                         </td>
@@ -443,7 +444,7 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
                                         <tr>
                                             <td style="width:25%;"><label for="">Approve On </label></td>
                                             <td style="width:25%;">
-                                                <input type="text" value="<?php $general->humanDateFormat($general->getDateTime());?>" class="form-control dateTime" id="approvedOnDateTime" name="approvedOnDateTime" placeholder="e.g 09-Jan-1992 05:30" <?php echo $labFieldDisabled; ?> style="width:100%;" />
+                                                <input type="text" value="<?php $general->humanDateFormat($general->getDateTime()); ?>" class="form-control dateTime" id="approvedOnDateTime" name="approvedOnDateTime" placeholder="e.g 09-Jan-1992 05:30" <?php echo $labFieldDisabled; ?> style="width:100%;" />
                                             </td>
                                         </tr>
                                     </table>
@@ -637,14 +638,14 @@ $facility = $general->generateSelectOptions($healthFacilities, null, '-- Select 
 
     $(document).ready(function() {
         $('#testedBy').select2({
-			width: '100%',
-			placeholder: "Select Tested By"
-		});
+            width: '100%',
+            placeholder: "Select Tested By"
+        });
 
-		$('#approvedBy').select2({
-			width: '100%',
-			placeholder: "Select Approved By"
-		});
+        $('#approvedBy').select2({
+            width: '100%',
+            placeholder: "Select Approved By"
+        });
 
         $('#district').select2({
             placeholder: "District"

@@ -222,12 +222,17 @@ $geoLocationChildArray = $geolocation->fetchActiveGeolocations(0, 'child');
 								<div class="form-group">
 									<label for="state" class="col-lg-4 control-label">Province/State <span class="mandatory">*</span> </label>
 									<div class="col-lg-7">
-										<input type="hidden" name="state" id="state" value="<?php echo $facilityInfo[0]['facility_state']; ?>" />
-										<select name="stateId" id="stateId" class="form-control isRequired" title="Please choose province/state">
-											<?= $general->generateSelectOptions($geoLocationParentArray, $facilityInfo[0]['facility_state_id'], '-- Select --'); ?>
-											<option value="other">Other</option>
-										</select>
-										<input type="text" class="form-control" name="provinceNew" id="provinceNew" placeholder="Enter Province/State" title="Please enter province/state" style="margin-top:4px;display:none;" />
+										<?php if (sizeof($geoLocationParentArray) > 0) { ?>
+											<select name="stateId" id="stateId" class="form-control isRequired" title="Please choose province/state">
+												<?= $general->generateSelectOptions($geoLocationParentArray, $facilityInfo[0]['facility_state_id'], '-- Select --'); ?>
+												<option value="other">Other</option>
+											</select>
+											<input type="text" class="form-control" name="provinceNew" id="provinceNew" placeholder="Enter Province/State" title="Please enter province/state" style="margin-top:4px;display:none;" />
+											<input type="hidden" name="state" id="state" value="<?php echo $facilityInfo[0]['facility_state']; ?>" />
+										<?php }
+										if ((!isset($facilityInfo[0]['facility_state_id']) || $facilityInfo[0]['facility_state_id'] == "") && (isset($facilityInfo[0]['facility_state']) || $facilityInfo[0]['facility_state'] != "")) { ?>
+											<input type="text" value="<?php echo $facilityInfo[0]['facility_state']; ?>" class="form-control" name="oldState" id="oldState" placeholder="Enter Province/State" title="Please enter province/state" />
+										<?php } ?>
 									</div>
 								</div>
 							</div>
@@ -235,12 +240,17 @@ $geoLocationChildArray = $geolocation->fetchActiveGeolocations(0, 'child');
 								<div class="form-group">
 									<label for="district" class="col-lg-4 control-label">District/County <span class="mandatory">*</span></label>
 									<div class="col-lg-7">
-										<select name="districtId" id="districtId" class="form-control isRequired" title="Please choose District/County">
-											<?= $general->generateSelectOptions($geoLocationChildArray, $facilityInfo[0]['facility_district_id'], '-- Select --'); ?>
-											<option value="other">Other</option>
-										</select>
-										<input type="text" class="form-control" name="districtNew" id="districtNew" placeholder="Enter District/County" title="Please enter District/County" style="margin-top:4px;display:none;" />
-										<input type="hidden" id="district" name="district" value="<?php echo $facilityInfo[0]['facility_district']; ?>" />
+										<?php if (sizeof($geoLocationChildArray) > 0) { ?>
+											<select name="districtId" id="districtId" class="form-control isRequired" title="Please choose District/County">
+												<?= $general->generateSelectOptions($geoLocationChildArray, $facilityInfo[0]['facility_district_id'], '-- Select --'); ?>
+												<option value="other">Other</option>
+											</select>
+											<input type="text" class="form-control" name="districtNew" id="districtNew" placeholder="Enter District/County" title="Please enter District/County" style="margin-top:4px;display:none;" />
+											<input type="hidden" id="district" name="district" value="<?php echo $facilityInfo[0]['facility_district']; ?>" />
+										<?php }
+										if ((!isset($facilityInfo[0]['facility_district_id']) || $facilityInfo[0]['facility_district_id'] == "") && (isset($facilityInfo[0]['facility_district']) || $facilityInfo[0]['facility_district'] != "")) { ?>
+											<input type="text" value="<?php echo $facilityInfo[0]['facility_district']; ?>" class="form-control" name="oldDistrict" id="oldDistrict" placeholder="Enter District/County" title="Please enter district/county" />
+										<?php } ?>
 									</div>
 								</div>
 							</div>

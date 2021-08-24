@@ -155,12 +155,16 @@ $geoLocationChildArray = $geolocation->fetchActiveGeolocations(0, '');
 								<div class="form-group">
 									<label for="state" class="col-lg-4 control-label">Province/State <span class="mandatory">*</span></label>
 									<div class="col-lg-7">
-										<input type="hidden" name="state" id="state" />
-										<select name="stateId" id="stateId" class="form-control isRequired" title="Please choose province/state">
-											<?= $general->generateSelectOptions($geoLocationParentArray, null, '-- Select --'); ?>
-											<option value="other">Other</option>
-										</select>
-										<input type="text" class="form-control" name="provinceNew" id="provinceNew" placeholder="Enter Province/State" title="Please enter province/state" style="margin-top:4px;display:none;" />
+										<?php if (sizeof($geoLocationParentArray) > 0) { ?>
+											<select name="stateId" id="stateId" class="form-control isRequired" title="Please choose province/state">
+												<?= $general->generateSelectOptions($geoLocationParentArray, null, '-- Select --'); ?>
+												<option value="other">Other</option>
+											</select>
+											<input type="text" class="form-control" name="provinceNew" id="provinceNew" placeholder="Enter Province/State" title="Please enter province/state" style="margin-top:4px;display:none;" />
+											<input type="hidden" name="state" id="state" />
+										<?php } else { ?>
+											<input type="text" class="form-control" name="provinceNew" id="provinceNew" placeholder="Enter Province/State" title="Please enter province/state" style="margin-top:4px;" />
+										<?php } ?>
 									</div>
 								</div>
 							</div>
@@ -168,12 +172,16 @@ $geoLocationChildArray = $geolocation->fetchActiveGeolocations(0, '');
 								<div class="form-group">
 									<label for="district" class="col-lg-4 control-label">District/County <span class="mandatory">*</span></label>
 									<div class="col-lg-7">
-										<select name="districtId" id="districtId" class="form-control isRequired" title="Please choose District/County">
-											<?= $general->generateSelectOptions($geoLocationChildArray, null, '-- Select --'); ?>
-											<option value="other">Other</option>
-										</select>
-										<input type="text" class="form-control" name="districtNew" id="districtNew" placeholder="Enter District/County" title="Please enter District/County" style="margin-top:4px;display:none;" />
-										<input type="hidden" id="district" name="district" />
+										<?php if (sizeof($geoLocationChildArray) > 0) { ?>
+											<select name="districtId" id="districtId" class="form-control isRequired" title="Please choose District/County">
+												<?= $general->generateSelectOptions($geoLocationChildArray, null, '-- Select --'); ?>
+												<option value="other">Other</option>
+											</select>
+											<input type="text" class="form-control" name="districtNew" id="districtNew" placeholder="Enter District/County" title="Please enter District/County" style="margin-top:4px;display:none;" />
+											<input type="hidden" id="district" name="district" />
+										<?php } else { ?>
+											<input type="text" class="form-control" name="districtNew" id="districtNew" placeholder="Enter District/County" title="Please enter District/County" style="margin-top:4px;" />
+										<?php } ?>
 									</div>
 								</div>
 							</div>
@@ -477,7 +485,7 @@ $geoLocationChildArray = $geolocation->fetchActiveGeolocations(0, '');
 		});
 		$("#selectedUser").val(selVal);
 
-		
+
 		$('#state').val($("#stateId option:selected").text());
 		$('#district').val($("#districtId option:selected").text());
 

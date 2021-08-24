@@ -21,7 +21,10 @@ $signTableName = "lab_report_signatories";
 // print_r($_POST);die;
 try {
 	if (isset($_POST['facilityName']) && trim($_POST['facilityName']) != "") {
-		if (trim($_POST['state']) != "") {
+		if (isset($_POST['provinceNew']) && $_POST['provinceNew'] != "" && $_POST['stateId'] == 'other') {
+			$_POST['stateId'] = $geolocation->addNewQuickGeoLocation($_POST['provinceNew']);
+			$_POST['state'] = $_POST['provinceNew'];
+			// if (trim($_POST['state']) != "") {
 			$strSearch = (isset($_POST['provinceNew']) && trim($_POST['provinceNew']) != '' && $_POST['state'] == 'other') ? $_POST['provinceNew'] : $_POST['state'];
 			$facilityQuery = "SELECT province_name from province_details where province_name='" . $strSearch . "'";
 			$facilityInfo = $db->query($facilityQuery);
@@ -61,11 +64,6 @@ try {
 			$_POST['testingPoints'] = json_encode($_POST['testingPoints']);
 		} else {
 			$_POST['testingPoints'] = null;
-		}
-
-		if (isset($_POST['provinceNew']) && $_POST['provinceNew'] != "" && $_POST['stateId'] == 'other') {
-			$_POST['stateId'] = $geolocation->addNewQuickGeoLocation($_POST['provinceNew']);
-			$_POST['state'] = $_POST['provinceNew'];
 		}
 
 		if (isset($_POST['districtNew']) && $_POST['districtNew'] != "" && $_POST['districtId'] == 'other') {
