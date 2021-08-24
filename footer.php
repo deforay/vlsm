@@ -1,22 +1,23 @@
 <footer class="main-footer">
 	<small>This project is supported by the U.S. President’s Emergency Plan for AIDS Relief (PEPFAR) through the U.S. Centers for Disease Control and Prevention (CDC).</small>
 	<small class="pull-right" style="font-weight:bold;">&nbsp;&nbsp;<?php echo "v" . VERSION; ?></small>
-	<?php if (isset($_SESSION['userName']) && isset($_SESSION['system']) && ($_SESSION['system'] == 'vluser' || $_SESSION['system'] == 'remoteuser')) { ?>
+	<?php if (isset($_SESSION['userName']) && isset($_SESSION['system']) && ($_SESSION['system'] == 'vluser')) { ?>
 		<div class="pull-right">
 			<small><a href="javascript:forceRemoteSync();">Force Remote Sync</a>&nbsp;&nbsp;</small>
 		</div>
-		<?php
+	<?php
+	}
+	$lastSync = '';
 
-		$lastSync = '';
+	if (isset($_SESSION['privileges']) && in_array("sync-history.php", $_SESSION['privileges'])) {
+		$syncHistory = "/common/reference/sync-history.php";
+	} else {
+		$syncHistory = "javascript:void(0);";
+	}
+	?>
+	<br>
+	<div style="font-size:x-small;" class="pull-right"><a href="<?= $syncHistory; ?>" class="text-muted">Last Synced at <span class="sync-time"><?= $syncLatestTime; ?></a></span></div>
 
-		if (isset($_SESSION['privileges']) && in_array("sync-history.php", $_SESSION['privileges'])) {
-			$syncHistory = "/common/reference/sync-history.php";
-		} else {
-			$syncHistory = "javascript:void(0);";
-		}
-		?>
-		<br><div style="font-size:x-small;" class="pull-right"><a href="<?= $syncHistory; ?>" class="text-muted">Last Synced at <span class="sync-time"><?= $syncLatestTime; ?></a></span></div>
-	<?php } ?>
 </footer>
 </div>
 
@@ -163,29 +164,29 @@
 		<?php if (isset($_SESSION['system']) && $_SESSION['system'] == 'vluser') { ?>
 
 
-				let syncInterval = 60 * 60 * 1000 * 2 // 2 hours in ms
-				
-				(function getLastSyncDateTime() {
-					let currentDateTime = new Date();
-					$.ajax({
-						url: '/remote/scheduled-jobs/getLastSyncTime.php',
-						cache: false,
-						success: function(lastSyncDateString) {
-							if (lastSyncDateString != null && lastSyncDateString != undefined) {
-								$('.sync-time').html(lastSyncDateString);
-								lastSyncDateString.replace("-", "/"); // We had to do this for Firefox 
-								var lastSyncDate = new Date(lastSyncDateString);
-								if ((currentDateTime - lastSyncDate) > syncInterval) {
-									syncCommon();
-								}
-							} else {
+			let syncInterval = 60 * 60 * 1000 * 2 // 2 hours in ms
+
+			(function getLastSyncDateTime() {
+				let currentDateTime = new Date();
+				$.ajax({
+					url: '/remote/scheduled-jobs/getLastSyncTime.php',
+					cache: false,
+					success: function(lastSyncDateString) {
+						if (lastSyncDateString != null && lastSyncDateString != undefined) {
+							$('.sync-time').html(lastSyncDateString);
+							lastSyncDateString.replace("-", "/"); // We had to do this for Firefox 
+							var lastSyncDate = new Date(lastSyncDateString);
+							if ((currentDateTime - lastSyncDate) > syncInterval) {
 								syncCommon();
 							}
-						},
-						error: function(data) {}
-					});
-					setTimeout(getLastSyncDateTime, 300000);
-				})();
+						} else {
+							syncCommon();
+						}
+					},
+					error: function(data) {}
+				});
+				setTimeout(getLastSyncDateTime, 300000);
+			})();
 		<?php } ?>
 
 

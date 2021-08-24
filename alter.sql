@@ -2281,3 +2281,5 @@ ALTER TABLE `user_details` ADD `api_token_exipiration_days` INT NULL DEFAULT NUL
 
 -- Amit -- 24-Aug-2021
 UPDATE `system_config` SET `value` = '4.4.0' WHERE `system_config`.`name` = 'sc_version';
+
+ALTER TABLE `facility_details` CHANGE `facility_state_id` `facility_state_id` INT NULL DEFAULT NULL, CHANGE `facility_district_id` `facility_district_id` INT NULL DEFAULT NULL;
