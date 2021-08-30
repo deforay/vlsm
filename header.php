@@ -251,9 +251,9 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 			font-weight: bold;
 		}
 
-		.select2-container .select2-selection--single {
+		/* .select2-container .select2-selection--single {
 			height: auto !important;
-		}
+		} */
 
 		.select2-container--default .select2-selection--single .select2-selection__arrow {
 			top: 6px !important;
@@ -389,11 +389,11 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 										<a href="/import-configs/importConfig.php"><i class="fa fa-circle-o"></i> Import Configuration</a>
 									</li>
 								<?php }
-								if (isset($_SESSION['privileges']) && in_array("testRequestEmailConfig.php", $_SESSION['privileges'])) { ?>
+								/* if (isset($_SESSION['privileges']) && in_array("testRequestEmailConfig.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu requestEmailConfigMenu">
 										<a href="/vl/request-mail/testRequestEmailConfig.php"><i class="fa fa-circle-o"></i>Test Request Email/SMS <br>Configuration</a>
 									</li>
-								<?php }
+								<?php } */
 								if (isset($_SESSION['privileges']) && in_array("testResultEmailConfig.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu resultEmailConfigMenu">
 										<a href="/vl/result-mail/testResultEmailConfig.php"><i class="fa fa-circle-o"></i>Test Result Email/SMS <br>Configuration</a>

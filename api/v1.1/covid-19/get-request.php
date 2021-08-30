@@ -19,11 +19,6 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'OPTIONS'
 }
 session_unset(); // no need of session in json response
 
-// PURPOSE : Fetch Results using serial_no field which is used to
-// store the recency id from third party apps (for eg. in DRC)
-
-// serial_no field in db was unused so we decided to use it to store recency id
-
 ini_set('memory_limit', -1);
 header('Content-Type: application/json');
 
@@ -207,7 +202,7 @@ try {
             }
             $where .= " vl.facility_id IN (" . $facilityMap . ")";
         } else {
-            $where = " WHERE (request_created_by = '" . $user['user_id'] . "' OR vlsm_country_id = '".$arr['vl_form']."')";
+            $where = " WHERE (request_created_by = '" . $user['user_id'] . "' OR vlsm_country_id = '" . $arr['vl_form'] . "')";
         }
     }
     /* To check the sample code filter */
@@ -228,7 +223,7 @@ try {
     }
 
     // $sQuery .= " ORDER BY sample_collection_date ASC ";
-    $sQuery .= $where ." limit 100;";
+    $sQuery .= $where . " limit 100;";
     // die($sQuery);
     $rowData = $db->rawQuery($sQuery);
     $app = new \Vlsm\Models\App($db);

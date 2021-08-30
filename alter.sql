@@ -2285,3 +2285,5 @@ UPDATE `system_config` SET `value` = '4.4.0' WHERE `system_config`.`name` = 'sc_
 ALTER TABLE `facility_details` CHANGE `facility_state_id` `facility_state_id` INT NULL DEFAULT NULL, CHANGE `facility_district_id` `facility_district_id` INT NULL DEFAULT NULL;
 -- Thana -- 24-Aug-2021
 ALTER TABLE `track_api_requests` ADD `facility_id` VARCHAR(256) NULL DEFAULT NULL AFTER `api_params`;
+-- Thana -- 25-Aug-2021
+ALTER TABLE `eid_form` ADD `app_local_test_req_id` VARCHAR(256) NULL DEFAULT NULL AFTER `result_mail_datetime`;

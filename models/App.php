@@ -215,7 +215,9 @@ class App
             $response[$key]['state']        = $row['facility_state'];
             $response[$key]['district']     = $row['facility_district'];
             if (!$module) {
-                $response[$key]['test_type'] = $row['test_type'];
+                $response[$key]['test_type']                = $row['test_type'];
+                $response[$key]['monthly_target']           = $row['monthly_target'];
+                $response[$key]['suppressed_monthly_target'] = $row['suppressed_monthly_target'];
             }
             // $response[$key]['provinceDetails'] = $this->getSubFields('province_details', 'province_id', 'province_name', $condition1);
             // $response[$key]['districtDetails'] = $this->getSubFields('facility_details', 'facility_district', 'facility_district', $condition2);
@@ -381,6 +383,136 @@ class App
             return null;
         }
         return $this->db->rawQuery("SELECT test_id as testId, covid19_id as covid19Id, facility_id as facilityId, test_name as testName, tested_by as testedBy, sample_tested_datetime as testDate, testing_platform as testingPlatform, result as testResult FROM covid19_tests WHERE `covid19_id` = $c19Id ORDER BY test_id ASC");
+    }
+
+    public function generateSampleCode($provinceCode, $sampleCollectionDate, $sampleFrom = null, $provinceId = '', $maxCodeKeyVal = null, $user, $testType = "")
+    {
+
+        $general = new \Vlsm\Models\General($this->db);
+
+        $confSampleCode = 'covid19_sample_code';
+        $confSampleCodePrefix = 'covid19_sample_code_prefix';
+        $table = "form_covid19";
+        $shortCode = 'c19';
+        $globalConfig = $general->getGlobalConfig();
+        if (isset($testType) && $testType != "") {
+            if ($testType == "covid19") {
+                $confSampleCode = 'covid19_sample_code';
+                $confSampleCodePrefix = 'covid19_sample_code_prefix';
+                $table = "form_covid19";
+                $shortCode = 'c19';
+            } elseif ($testType == "eid") {
+                $confSampleCode = 'eid_sample_code';
+                $confSampleCodePrefix = 'eid_sample_code_prefix';
+                $table = "eid_form";
+                $shortCode = 'EID';
+            } elseif ($testType == "vl") {
+                $confSampleCode = 'sample_code';
+                $confSampleCodePrefix = 'sample_code_prefix';
+                $table = "vl_request_form";
+                $shortCode = 'VL';
+            }
+        }
+        $remotePrefix = '';
+        $sampleCodeKeyCol = 'sample_code_key';
+        $sampleCodeCol = 'sample_code';
+        if ($user['testing_user'] != 'yes') {
+            $remotePrefix = 'R';
+            $sampleCodeKeyCol = 'remote_sample_code_key';
+            $sampleCodeCol = 'remote_sample_code';
+        }
+        $sampleColDateTimeArray = explode(" ", $sampleCollectionDate);
+        $sampleCollectionDate = $general->dateFormat($sampleColDateTimeArray[0]);
+        $sampleColDateArray = explode("-", $sampleCollectionDate);
+        $samColDate = substr($sampleColDateArray[0], -2);
+        $start_date = $sampleColDateArray[0] . '-01-01';
+        $end_date = $sampleColDateArray[0] . '-12-31';
+        $mnthYr = $samColDate[0];
+        // Checking if sample code format is empty then we set by default 'MMYY'
+        $sampleCodeFormat = isset($globalConfig[$confSampleCode]) ? $globalConfig[$confSampleCode] : 'MMYY';
+        $prefixFromConfig = isset($globalConfig[$confSampleCodePrefix]) ? $globalConfig[$confSampleCodePrefix] : '';
+
+        if ($sampleCodeFormat == 'MMYY') {
+            $mnthYr = $sampleColDateArray[1] . $samColDate;
+        } else if ($sampleCodeFormat == 'YY') {
+            $mnthYr = $samColDate;
+        }
+
+        $autoFormatedString = $samColDate . $sampleColDateArray[1] . $sampleColDateArray[2];
+
+
+        if ($maxCodeKeyVal == null) {
+            // If it is PNG form
+            if ($globalConfig['vl_form'] == 5) {
+
+                if (empty($provinceId) && !empty($provinceCode)) {
+                    $provinceId = $general->getProvinceIDFromCode($provinceCode);
+                }
+
+                if (!empty($provinceId)) {
+                    $this->db->where('province_id', $provinceId);
+                }
+            }
+
+            $this->db->where('DATE(sample_collection_date)', array($start_date, $end_date), 'BETWEEN');
+            $this->db->where($sampleCodeCol, NULL, 'IS NOT');
+            $this->db->orderBy($sampleCodeKeyCol, "DESC");
+            $svlResult = $this->db->getOne($table, array($sampleCodeKeyCol));
+            if ($svlResult) {
+                $maxCodeKeyVal = $svlResult[$sampleCodeKeyCol];
+            } else {
+                $maxCodeKeyVal = null;
+            }
+        }
+
+
+        if (!empty($maxCodeKeyVal)) {
+            $maxId = $maxCodeKeyVal + 1;
+            $strparam = strlen($maxId);
+            $zeros = (isset($sampleCodeFormat) && trim($sampleCodeFormat) == 'auto2') ? substr("0000", $strparam) : substr("000", $strparam);
+            $maxId = $zeros . $maxId;
+        } else {
+            $maxId = (isset($sampleCodeFormat) && trim($sampleCodeFormat) == 'auto2') ? '0001' : '001';
+        }
+
+        //error_log($maxCodeKeyVal);
+
+        $sCodeKey = (array('maxId' => $maxId, 'mnthYr' => $mnthYr, 'auto' => $autoFormatedString));
+
+
+
+        if ($globalConfig['vl_form'] == 5) {
+            // PNG format has an additional R in prefix
+            $remotePrefix = $remotePrefix . "R";
+            //$sampleCodeFormat = 'auto2';
+        }
+
+
+        if ($sampleCodeFormat == 'auto') {
+            //$pNameVal = explode("##", $provinceCode);
+            $sCodeKey['sampleCode'] = ($remotePrefix . $provinceCode . $autoFormatedString . $sCodeKey['maxId']);
+            $sCodeKey['sampleCodeInText'] = ($remotePrefix . $provinceCode . $autoFormatedString . $sCodeKey['maxId']);
+            $sCodeKey['sampleCodeFormat'] = ($remotePrefix . $provinceCode . $autoFormatedString);
+            $sCodeKey['sampleCodeKey'] = ($sCodeKey['maxId']);
+        } else if ($sampleCodeFormat == 'auto2') {
+            $sCodeKey['sampleCode'] = $remotePrefix . date('y', strtotime($sampleCollectionDate)) . $provinceCode . $shortCode . $sCodeKey['maxId'];
+            $sCodeKey['sampleCodeInText'] = $remotePrefix . date('y', strtotime($sampleCollectionDate)) . $provinceCode . $shortCode . $sCodeKey['maxId'];
+            $sCodeKey['sampleCodeFormat'] = $remotePrefix . $provinceCode . $autoFormatedString;
+            $sCodeKey['sampleCodeKey'] = $sCodeKey['maxId'];
+        } else if ($sampleCodeFormat == 'YY' || $sampleCodeFormat == 'MMYY') {
+            $sCodeKey['sampleCode'] = $remotePrefix . $prefixFromConfig . $sCodeKey['mnthYr'] . $sCodeKey['maxId'];
+            $sCodeKey['sampleCodeInText'] = $remotePrefix . $prefixFromConfig . $sCodeKey['mnthYr'] . $sCodeKey['maxId'];
+            $sCodeKey['sampleCodeFormat'] = $remotePrefix . $prefixFromConfig . $sCodeKey['mnthYr'];
+            $sCodeKey['sampleCodeKey'] = ($sCodeKey['maxId']);
+        }
+
+        $checkQuery = "SELECT $sampleCodeCol, $sampleCodeKeyCol FROM " . $table . " where $sampleCodeCol='" . $sCodeKey['sampleCode'] . "'";
+        $checkResult = $this->db->rawQueryOne($checkQuery);
+        if ($checkResult !== null) {
+            return $this->generateSampleCode($provinceCode, $sampleCollectionDate, $sampleFrom, $provinceId, $checkResult[$sampleCodeKeyCol], $user, $testType);
+        }
+
+        return json_encode($sCodeKey);
     }
 
     public function generateCovid19SampleCode($provinceCode, $sampleCollectionDate, $sampleFrom = null, $provinceId = '', $maxCodeKeyVal = null, $user)

@@ -108,11 +108,11 @@ try {
                 $sampleData['sampleCodeFormat'] = (!empty($rowData['sample_code_format'])) ? $rowData['sample_code_format'] : $rowData['remote_sample_code_format'];
                 $sampleData['sampleCodeKey'] = (!empty($rowData['sample_code_key'])) ? $rowData['sample_code_key'] : $rowData['remote_sample_code_key'];
             } else {
-                $sampleJson = $app->generateCovid19SampleCode($provinceCode, $sampleCollectionDate, null, $provinceId, null, $user);
+                $sampleJson = $app->generateSampleCode($provinceCode, $sampleCollectionDate, null, $provinceId, null, $user);
                 $sampleData = json_decode($sampleJson, true);
             }
         } else {
-            $sampleJson = $app->generateCovid19SampleCode($provinceCode, $sampleCollectionDate, null, $provinceId, null, $user);
+            $sampleJson = $app->generateSampleCode($provinceCode, $sampleCollectionDate, null, $provinceId, null, $user);
             $sampleData = json_decode($sampleJson, true);
         }
 
@@ -160,13 +160,6 @@ try {
         if (empty($instanceId) && $data['instanceId']) {
             $instanceId = $data['instanceId'];
         }
-        if (!empty($data['arrivalDateTime']) && trim($data['arrivalDateTime']) != "") {
-            $arrivalDate = explode(" ", $data['arrivalDateTime']);
-            $data['arrivalDateTime'] = $general->dateFormat($arrivalDate[0]) . " " . $arrivalDate[1];
-        } else {
-            $data['arrivalDateTime'] = NULL;
-        }
-
 
         if (empty(trim($data['sampleCode']))) {
             $data['sampleCode'] = NULL;
@@ -300,7 +293,6 @@ try {
             $covid19Data['last_modified_datetime']  = $general->getDateTime();
             $covid19Data['last_modified_by']  = $user['user_id'];
         } else {
-            $covid19Data['request_created_datetime']  = (isset($data['sampleRejectionReason']) && $data['isSampleRejected'] == 'yes') ? $data['sampleRejectionReason'] : $general->getDateTime();
             $covid19Data['sample_registered_at_lab']  = $general->getDateTime();
             $covid19Data['request_created_by']  = $user['user_id'];
         }
@@ -401,7 +393,7 @@ try {
         } else {
             if (isset($data['localTestReqID']) && $data['localTestReqID'] != "") {
                 $responseData[$rootKey] = array(
-                    'status' => 'faile'
+                    'status' => 'failed'
                 );
             } else {
                 $payload = array(
