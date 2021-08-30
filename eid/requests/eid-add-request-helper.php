@@ -38,7 +38,7 @@ try {
 	} else {
 		$_POST['sampleCollectionDate'] = NULL;
 	}
-	
+
 	if (isset($_POST['approvedOnDateTime']) && trim($_POST['approvedOnDateTime']) != "") {
 		$approvedOnDateTime = explode(" ", $_POST['approvedOnDateTime']);
 		$_POST['approvedOnDateTime'] = $general->dateFormat($approvedOnDateTime[0]) . " " . $approvedOnDateTime[1];
@@ -203,12 +203,8 @@ try {
 	if (!empty($_POST['api']) && $_POST['api'] = "yes") {
 		$eidData['source_of_request'] = 'api';
 	}
-	if(isset($_POST['api']) && $_POST['api'] = "yes")
-	{
-
-	}
-	else
-	{
+	if (isset($_POST['api']) && $_POST['api'] = "yes") {
+	} else {
 		$eidData['request_created_by'] =  $_SESSION['userId'];
 		$eidData['last_modified_by'] =  $_SESSION['userId'];
 	}
@@ -220,21 +216,18 @@ try {
 		$db = $db->where('eid_id', $_POST['eidSampleId']);
 		$id = $db->update($tableName, $eidData);
 	}
-	if(isset($_POST['api']) && $_POST['api'] = "yes")
-	{
+	if (isset($_POST['api']) && $_POST['api'] = "yes") {
 		$payload = array(
 			'status' => 'success',
 			'timestamp' => time(),
 			'message' => 'Successfully added.'
 		);
-		
-	
+
+
 		http_response_code(200);
 		echo json_encode($payload);
 		exit(0);
-	}
-	else
-	{
+	} else {
 		if ($id > 0) {
 			$_SESSION['alertMsg'] = "EID request added successfully";
 			//Add event log
