@@ -55,6 +55,8 @@ try {
         echo json_encode($response);
         exit(0);
     }
+    $roleUser = $userDb->getRoleDetailsUsingUserId($user['user_id']);
+
     foreach ($input['data'] as $rootKey => $field) {
         $data = $field;
         $sampleFrom = '';
@@ -130,7 +132,7 @@ try {
             'last_modified_by' => '',
             'last_modified_datetime' => $general->getDateTime()
         );
-        if ($user['testing_user'] != 'yes') {
+        if ($roleUser['access_type'] != 'testing-lab') {
             $eidData['remote_sample_code'] = $sampleData['sampleCode'];
             $eidData['remote_sample_code_format'] = $sampleData['sampleCodeFormat'];
             $eidData['remote_sample_code_key'] = $sampleData['sampleCodeKey'];
@@ -167,7 +169,7 @@ try {
         }
 
         $status = 6;
-        if ($user['testing_user'] != 'yes') {
+        if ($roleUser['access_type'] != 'testing-lab') {
             $status = 9;
         }
 

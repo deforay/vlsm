@@ -102,6 +102,7 @@ if (isset($sWhere) && $sWhere != "") {
     $sWhere = ' where ' . $sWhere;
     $sQuery = $sQuery . ' ' . $sWhere;
 }
+$sQuery = $sQuery . ' GROUP BY comorbidity_name';
 
 if (isset($sOrder) && $sOrder != "") {
     $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
@@ -111,24 +112,22 @@ if (isset($sOrder) && $sOrder != "") {
 if (isset($sLimit) && isset($sOffset)) {
     $sQuery = $sQuery . ' LIMIT ' . $sOffset . ',' . $sLimit;
 }
-//die($sQuery);
-// echo $sQuery;
-$rResult = $db->rawQuery($sQuery);
-// print_r($rResult);
-/* Data set length after filtering */
 
+// die($sQuery);
+$rResult = $db->rawQuery($sQuery);
+
+/* Data set length after filtering */
 $aResultFilterTotal = $db->rawQuery("SELECT * FROM r_hepatitis_comorbidities $sWhere order by $sOrder");
 $iFilteredTotal = count($aResultFilterTotal);
 
 /* Total data set length */
 $aResultTotal =  $db->rawQuery("select COUNT(comorbidity_id) as total FROM r_hepatitis_comorbidities");
-// $aResultTotal = $countResult->fetch_row();
 //print_r($aResultTotal);
 $iTotal = $aResultTotal[0]['total'];
 
 /*
-         * Output
-        */
+    * Output
+*/
 $output = array(
     "sEcho" => intval($_POST['sEcho']),
     "iTotalRecords" => $iTotal,
@@ -140,7 +139,7 @@ foreach ($rResult as $aRow) {
     $row = array();
     $row[] = ucwords($aRow['comorbidity_name']);
     $row[] = ucwords($aRow['comorbidity_status']);
-    if (isset($_SESSION['privileges']) && in_array("hepatitis-sample-type.php", $_SESSION['privileges']) && $sarr['sc_user_type'] !='vluser') {
+    if (isset($_SESSION['privileges']) && in_array("hepatitis-sample-type.php", $_SESSION['privileges']) && $sarr['sc_user_type'] != 'vluser') {
         $row[] = '<a href="edit-hepatitis-comorbidities.php?id=' . base64_encode($aRow['comorbidity_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
     }
     $output['aaData'][] = $row;

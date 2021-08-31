@@ -102,7 +102,7 @@ if (isset($sWhere) && $sWhere != "") {
     $sWhere = ' where ' . $sWhere;
     $sQuery = $sQuery . ' ' . $sWhere;
 }
-
+$sQuery = $sQuery . ' GROUP BY riskfactor_name';
 if (isset($sOrder) && $sOrder != "") {
     $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
     $sQuery = $sQuery . ' order by ' . $sOrder;
@@ -140,7 +140,7 @@ foreach ($rResult as $aRow) {
     $row = array();
     $row[] = ucwords($aRow['riskfactor_name']);
     $row[] = ucwords($aRow['riskfactor_status']);
-    if (isset($_SESSION['privileges']) && in_array("hepatitis-sample-type.php", $_SESSION['privileges']) && $sarr['sc_user_type'] !='vluser') {
+    if (isset($_SESSION['privileges']) && in_array("hepatitis-sample-type.php", $_SESSION['privileges']) && $sarr['sc_user_type'] != 'vluser') {
         $row[] = '<a href="edit-hepatitis-risk-factors.php?id=' . base64_encode($aRow['riskfactor_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
     }
     $output['aaData'][] = $row;
