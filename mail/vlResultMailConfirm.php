@@ -3,7 +3,6 @@ ob_start();
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 
-
 $general = new \Vlsm\Models\General($db);
 
 $global = $general->getGlobalConfig();
@@ -253,7 +252,7 @@ if (isset($_POST['toEmail']) && trim($_POST['toEmail']) != "" && count($selected
       header('location:vlResultMail.php');
    }
 } else {
-   $_SESSION['alertMsg'] = 'Unable to generate test result pdf. Please try later.';
+   $_SESSION['alertMsg'] = "Unable to generate test result pdf. This facility doesn't have the email to send. Please try later.";
    header('location:vlResultMail.php');
 }
 ?>

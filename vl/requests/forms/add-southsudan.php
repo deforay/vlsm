@@ -82,7 +82,7 @@ $sFormat = '';
      </section>
      <!-- Main content -->
      <section class="content">
-          
+
           <div class="box box-default">
                <div class="box-header with-border">
                     <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
@@ -188,6 +188,17 @@ $sFormat = '';
                                                        </select>
                                                   </div>
                                              </div>
+                                             <?php if ($_SESSION['accessType'] == 'collection-site') { ?>
+                                                  <div class="col-md-4 col-md-4">
+                                                       <label for="labId">Lab Name </label>
+                                                       <select name="labId" id="labId" class="form-control" title="Please choose lab" onchange="autoFillFocalDetails();" style="width:100%;">
+                                                            <option value="">-- Select --</option>
+                                                            <?php foreach ($lResult as $labName) { ?>
+                                                                 <option data-focalperson="<?php echo $labName['contact_person']; ?>" data-focalphone="<?php echo $labName['facility_mobile_numbers']; ?>" value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
+                                                            <?php } ?>
+                                                       </select>
+                                                  </div>
+                                             <?php } ?>
                                         </div>
                                    </div>
                               </div>
@@ -343,335 +354,342 @@ $sFormat = '';
                                                                       <option value=""> -- Select -- </option>
                                                                       <option value="good">Good >= 95%</option>
                                                                       <option value="fair">Fair (85-94%)</option>
-                                                                      <option value="poor">Poor < 85%</option> </select> </div> </div> </div> <div class="row ">
-                                                                                <div class="col-xs-3 col-md-3 femaleSection">
-                                                                                     <div class="form-group">
-                                                                                          <label for="patientPregnant">Is Patient Pregnant? </label><br>
-                                                                                          <label class="radio-inline">
-                                                                                               <input type="radio" class="" id="pregYes" name="patientPregnant" value="yes" title="Please check one"> Yes
-                                                                                          </label>
-                                                                                          <label class="radio-inline">
-                                                                                               <input type="radio" class="" id="pregNo" name="patientPregnant" value="no"> No
-                                                                                          </label>
-                                                                                     </div>
-                                                                                </div>
-                                                                                <div class="col-xs-3 col-md-3 femaleSection">
-                                                                                     <div class="form-group">
-                                                                                          <label for="breastfeeding">Is Patient Breastfeeding? </label><br>
-                                                                                          <label class="radio-inline">
-                                                                                               <input type="radio" class="" id="breastfeedingYes" name="breastfeeding" value="yes" title="Please check one"> Yes
-                                                                                          </label>
-                                                                                          <label class="radio-inline">
-                                                                                               <input type="radio" class="" id="breastfeedingNo" name="breastfeeding" value="no"> No
-                                                                                          </label>
-                                                                                     </div>
-                                                                                </div>
-                                                                                <div class="col-xs-3 col-md-3" style="display:none;">
-                                                                                     <div class="form-group">
-                                                                                          <label for="">How long has this patient been on treatment ? </label>
-                                                                                          <input type="text" class="form-control" id="treatPeriod" name="treatPeriod" placeholder="Enter Treatment Period" title="Please enter how long has this patient been on treatment" />
-                                                                                     </div>
-                                                                                </div>
+                                                                      <option value="poor">Poor < 85%</option>
+                                                                 </select>
                                                             </div>
                                                        </div>
-                                                       <div class="box box-primary">
-                                                            <div class="box-header with-border">
-                                                                 <h3 class="box-title">Indication for Viral Load Testing</h3><small> (Please tick one):(To be completed by clinician)</small>
+                                                  </div>
+                                                  <div class="row ">
+                                                       <div class="col-xs-3 col-md-3 femaleSection">
+                                                            <div class="form-group">
+                                                                 <label for="patientPregnant">Is Patient Pregnant? </label><br>
+                                                                 <label class="radio-inline">
+                                                                      <input type="radio" class="" id="pregYes" name="patientPregnant" value="yes" title="Please check one"> Yes
+                                                                 </label>
+                                                                 <label class="radio-inline">
+                                                                      <input type="radio" class="" id="pregNo" name="patientPregnant" value="no"> No
+                                                                 </label>
                                                             </div>
-                                                            <div class="box-body">
-                                                                 <div class="row">
-                                                                      <div class="col-md-6">
-                                                                           <div class="form-group">
-                                                                                <div class="col-lg-12">
-                                                                                     <label class="radio-inline">
-                                                                                          <input type="radio" class="" id="rmTesting" name="stViralTesting" value="routine" title="Please check routine monitoring" onclick="showTesting('rmTesting');">
-                                                                                          <strong>Routine Monitoring</strong>
-                                                                                     </label>
-                                                                                </div>
-                                                                           </div>
-                                                                      </div>
-                                                                 </div>
-                                                                 <div class="row rmTesting hideTestData" style="display:none;">
-                                                                      <div class="col-md-6">
-                                                                           <label class="col-lg-5 control-label">Date of last viral load test</label>
-                                                                           <div class="col-lg-7">
-                                                                                <input type="text" class="form-control date viralTestData" id="rmTestingLastVLDate" name="rmTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" />
-                                                                           </div>
-                                                                      </div>
-                                                                      <div class="col-md-6">
-                                                                           <label for="rmTestingVlValue" class="col-lg-3 control-label">VL Value</label>
-                                                                           <div class="col-lg-7">
-                                                                                <input type="text" class="form-control checkNum viralTestData" id="rmTestingVlValue" name="rmTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" />
-                                                                                (copies/ml)
-                                                                           </div>
-                                                                      </div>
-                                                                 </div>
-                                                                 <div class="row">
-                                                                      <div class="col-md-8">
-                                                                           <div class="form-group">
-                                                                                <div class="col-lg-12">
-                                                                                     <label class="radio-inline">
-                                                                                          <input type="radio" class="" id="repeatTesting" name="stViralTesting" value="failure" title="Repeat VL test after suspected treatment failure adherence counseling" onclick="showTesting('repeatTesting');">
-                                                                                          <strong>Repeat VL test after suspected treatment failure adherence counselling </strong>
-                                                                                     </label>
-                                                                                </div>
-                                                                           </div>
-                                                                      </div>
-                                                                 </div>
-                                                                 <div class="row repeatTesting hideTestData" style="display:none;">
-                                                                      <div class="col-md-6">
-                                                                           <label class="col-lg-5 control-label">Date of last viral load test</label>
-                                                                           <div class="col-lg-7">
-                                                                                <input type="text" class="form-control date viralTestData" id="repeatTestingLastVLDate" name="repeatTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" />
-                                                                           </div>
-                                                                      </div>
-                                                                      <div class="col-md-6">
-                                                                           <label for="repeatTestingVlValue" class="col-lg-3 control-label">VL Value</label>
-                                                                           <div class="col-lg-7">
-                                                                                <input type="text" class="form-control checkNum viralTestData" id="repeatTestingVlValue" name="repeatTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" />
-                                                                                (copies/ml)
-                                                                           </div>
-                                                                      </div>
-                                                                 </div>
-                                                                 <div class="row">
-                                                                      <div class="col-md-6">
-                                                                           <div class="form-group">
-                                                                                <div class="col-lg-12">
-                                                                                     <label class="radio-inline">
-                                                                                          <input type="radio" class="" id="suspendTreatment" name="stViralTesting" value="suspect" title="Suspect Treatment Failure" onclick="showTesting('suspendTreatment');">
-                                                                                          <strong>Suspect Treatment Failure</strong>
-                                                                                     </label>
-                                                                                </div>
-                                                                           </div>
-                                                                      </div>
-                                                                 </div>
-                                                                 <div class="row suspendTreatment hideTestData" style="display: none;">
-                                                                      <div class="col-md-6">
-                                                                           <label class="col-lg-5 control-label">Date of last viral load test</label>
-                                                                           <div class="col-lg-7">
-                                                                                <input type="text" class="form-control date viralTestData" id="suspendTreatmentLastVLDate" name="suspendTreatmentLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" />
-                                                                           </div>
-                                                                      </div>
-                                                                      <div class="col-md-6">
-                                                                           <label for="suspendTreatmentVlValue" class="col-lg-3 control-label">VL Value</label>
-                                                                           <div class="col-lg-7">
-                                                                                <input type="text" class="form-control checkNum viralTestData" id="suspendTreatmentVlValue" name="suspendTreatmentVlValue" placeholder="Enter VL Value" title="Please enter vl value" />
-                                                                                (copies/ml)
-                                                                           </div>
-                                                                      </div>
-                                                                 </div>
-                                                                 <div class="row">
-                                                                      <div class="col-md-4">
-                                                                           <label for="reqClinician" class="col-lg-5 control-label">Request Clinician</label>
-                                                                           <div class="col-lg-7">
-                                                                                <input type="text" class="form-control" id="reqClinician" name="reqClinician" placeholder="Request Clinician" title="Please enter request clinician" />
-                                                                           </div>
-                                                                      </div>
-                                                                      <div class="col-md-4">
-                                                                           <label for="reqClinicianPhoneNumber" class="col-lg-5 control-label">Phone Number</label>
-                                                                           <div class="col-lg-7">
-                                                                                <input type="text" class="form-control checkNum" id="reqClinicianPhoneNumber" name="reqClinicianPhoneNumber" maxlength="15" placeholder="Phone Number" title="Please enter request clinician phone number" />
-                                                                           </div>
-                                                                      </div>
-                                                                      <div class="col-md-4">
-                                                                           <label class="col-lg-5 control-label" for="requestDate">Request Date </label>
-                                                                           <div class="col-lg-7">
-                                                                                <input type="text" class="form-control date" id="requestDate" name="requestDate" placeholder="Request Date" title="Please select request date" />
-                                                                           </div>
-                                                                      </div>
-                                                                 </div>
-                                                                 <div class="row" style="display:none;">
-                                                                      <div class="col-md-4">
-                                                                           <label class="col-lg-5 control-label" for="emailHf">Email for HF </label>
-                                                                           <div class="col-lg-7">
-                                                                                <input type="text" class="form-control isEmail" id="emailHf" name="emailHf" placeholder="Email for HF" title="Please enter email for hf" />
-                                                                           </div>
+                                                       </div>
+                                                       <div class="col-xs-3 col-md-3 femaleSection">
+                                                            <div class="form-group">
+                                                                 <label for="breastfeeding">Is Patient Breastfeeding? </label><br>
+                                                                 <label class="radio-inline">
+                                                                      <input type="radio" class="" id="breastfeedingYes" name="breastfeeding" value="yes" title="Please check one"> Yes
+                                                                 </label>
+                                                                 <label class="radio-inline">
+                                                                      <input type="radio" class="" id="breastfeedingNo" name="breastfeeding" value="no"> No
+                                                                 </label>
+                                                            </div>
+                                                       </div>
+                                                       <div class="col-xs-3 col-md-3" style="display:none;">
+                                                            <div class="form-group">
+                                                                 <label for="">How long has this patient been on treatment ? </label>
+                                                                 <input type="text" class="form-control" id="treatPeriod" name="treatPeriod" placeholder="Enter Treatment Period" title="Please enter how long has this patient been on treatment" />
+                                                            </div>
+                                                       </div>
+                                                  </div>
+                                             </div>
+                                             <div class="box box-primary">
+                                                  <div class="box-header with-border">
+                                                       <h3 class="box-title">Indication for Viral Load Testing</h3><small> (Please tick one):(To be completed by clinician)</small>
+                                                  </div>
+                                                  <div class="box-body">
+                                                       <div class="row">
+                                                            <div class="col-md-6">
+                                                                 <div class="form-group">
+                                                                      <div class="col-lg-12">
+                                                                           <label class="radio-inline">
+                                                                                <input type="radio" class="" id="rmTesting" name="stViralTesting" value="routine" title="Please check routine monitoring" onclick="showTesting('rmTesting');">
+                                                                                <strong>Routine Monitoring</strong>
+                                                                           </label>
                                                                       </div>
                                                                  </div>
                                                             </div>
                                                        </div>
-                                                       <div class="box box-primary">
-                                                            <div class="box-header with-border">
-                                                                 <h3 class="box-title">Laboratory Information</h3>
+                                                       <div class="row rmTesting hideTestData" style="display:none;">
+                                                            <div class="col-md-6">
+                                                                 <label class="col-lg-5 control-label">Date of last viral load test</label>
+                                                                 <div class="col-lg-7">
+                                                                      <input type="text" class="form-control date viralTestData" id="rmTestingLastVLDate" name="rmTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" />
+                                                                 </div>
                                                             </div>
-                                                            <div class="box-body">
-                                                                 <div class="row">
-                                                                      <div class="col-md-4">
-                                                                           <label for="labId" class="col-lg-5 control-label">Lab Name </label>
-                                                                           <div class="col-lg-7">
-                                                                                <select name="labId" id="labId" class="form-control" title="Please choose lab" onchange="autoFillFocalDetails();">
-                                                                                     <option value="">-- Select --</option>
-                                                                                     <?php foreach ($lResult as $labName) { ?>
-                                                                                          <option data-focalperson="<?php echo $labName['contact_person']; ?>" data-focalphone="<?php echo $labName['facility_mobile_numbers']; ?>" value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
-                                                                                     <?php } ?>
-                                                                                </select>
-                                                                           </div>
-                                                                      </div>
-                                                                      <div class="col-md-4">
-                                                                           <label for="vlFocalPerson" class="col-lg-5 control-label">VL Focal Person </label>
-                                                                           <div class="col-lg-7">
-                                                                                <input type="text" class="form-control" id="vlFocalPerson" name="vlFocalPerson" placeholder="VL Focal Person" title="Please enter vl focal person name" />
-                                                                           </div>
-                                                                      </div>
-                                                                      <div class="col-md-4">
-                                                                           <label for="vlFocalPersonPhoneNumber" class="col-lg-5 control-label">VL Focal Person Phone Number</label>
-                                                                           <div class="col-lg-7">
-                                                                                <input type="text" class="form-control checkNum" id="vlFocalPersonPhoneNumber" name="vlFocalPersonPhoneNumber" maxlength="15" placeholder="Phone Number" title="Please enter vl focal person phone number" />
-                                                                           </div>
+                                                            <div class="col-md-6">
+                                                                 <label for="rmTestingVlValue" class="col-lg-3 control-label">VL Value</label>
+                                                                 <div class="col-lg-7">
+                                                                      <input type="text" class="form-control checkNum viralTestData" id="rmTestingVlValue" name="rmTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" />
+                                                                      (copies/ml)
+                                                                 </div>
+                                                            </div>
+                                                       </div>
+                                                       <div class="row">
+                                                            <div class="col-md-8">
+                                                                 <div class="form-group">
+                                                                      <div class="col-lg-12">
+                                                                           <label class="radio-inline">
+                                                                                <input type="radio" class="" id="repeatTesting" name="stViralTesting" value="failure" title="Repeat VL test after suspected treatment failure adherence counseling" onclick="showTesting('repeatTesting');">
+                                                                                <strong>Repeat VL test after suspected treatment failure adherence counselling </strong>
+                                                                           </label>
                                                                       </div>
                                                                  </div>
-                                                                 <div class="row">
-                                                                      <div class="col-md-4">
-                                                                           <label class="col-lg-5 control-label" for="sampleReceivedAtHubOn">Date Sample Received at Hub (PHL) </label>
-                                                                           <div class="col-lg-7">
-                                                                                <input type="text" class="form-control dateTime" id="sampleReceivedAtHubOn" name="sampleReceivedAtHubOn" placeholder="Sample Received at HUB Date" title="Please select sample received at HUB date" onchange="checkSampleReceviedAtHubDate()" />
-                                                                           </div>
+                                                            </div>
+                                                       </div>
+                                                       <div class="row repeatTesting hideTestData" style="display:none;">
+                                                            <div class="col-md-6">
+                                                                 <label class="col-lg-5 control-label">Date of last viral load test</label>
+                                                                 <div class="col-lg-7">
+                                                                      <input type="text" class="form-control date viralTestData" id="repeatTestingLastVLDate" name="repeatTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" />
+                                                                 </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                 <label for="repeatTestingVlValue" class="col-lg-3 control-label">VL Value</label>
+                                                                 <div class="col-lg-7">
+                                                                      <input type="text" class="form-control checkNum viralTestData" id="repeatTestingVlValue" name="repeatTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" />
+                                                                      (copies/ml)
+                                                                 </div>
+                                                            </div>
+                                                       </div>
+                                                       <div class="row">
+                                                            <div class="col-md-6">
+                                                                 <div class="form-group">
+                                                                      <div class="col-lg-12">
+                                                                           <label class="radio-inline">
+                                                                                <input type="radio" class="" id="suspendTreatment" name="stViralTesting" value="suspect" title="Suspect Treatment Failure" onclick="showTesting('suspendTreatment');">
+                                                                                <strong>Suspect Treatment Failure</strong>
+                                                                           </label>
                                                                       </div>
-                                                                      <div class="col-md-4">
-                                                                           <label class="col-lg-5 control-label" for="sampleReceivedDate">Date Sample Received at Testing Lab </label>
-                                                                           <div class="col-lg-7">
-                                                                                <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="Sample Received at LAB Date" title="Please select sample received at Lab date" onchange="checkSampleReceviedDate()" />
-                                                                           </div>
+                                                                 </div>
+                                                            </div>
+                                                       </div>
+                                                       <div class="row suspendTreatment hideTestData" style="display: none;">
+                                                            <div class="col-md-6">
+                                                                 <label class="col-lg-5 control-label">Date of last viral load test</label>
+                                                                 <div class="col-lg-7">
+                                                                      <input type="text" class="form-control date viralTestData" id="suspendTreatmentLastVLDate" name="suspendTreatmentLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" />
+                                                                 </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                 <label for="suspendTreatmentVlValue" class="col-lg-3 control-label">VL Value</label>
+                                                                 <div class="col-lg-7">
+                                                                      <input type="text" class="form-control checkNum viralTestData" id="suspendTreatmentVlValue" name="suspendTreatmentVlValue" placeholder="Enter VL Value" title="Please enter vl value" />
+                                                                      (copies/ml)
+                                                                 </div>
+                                                            </div>
+                                                       </div>
+                                                       <div class="row">
+                                                            <div class="col-md-4">
+                                                                 <label for="reqClinician" class="col-lg-5 control-label">Request Clinician</label>
+                                                                 <div class="col-lg-7">
+                                                                      <input type="text" class="form-control" id="reqClinician" name="reqClinician" placeholder="Request Clinician" title="Please enter request clinician" />
+                                                                 </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                 <label for="reqClinicianPhoneNumber" class="col-lg-5 control-label">Phone Number</label>
+                                                                 <div class="col-lg-7">
+                                                                      <input type="text" class="form-control checkNum" id="reqClinicianPhoneNumber" name="reqClinicianPhoneNumber" maxlength="15" placeholder="Phone Number" title="Please enter request clinician phone number" />
+                                                                 </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                 <label class="col-lg-5 control-label" for="requestDate">Request Date </label>
+                                                                 <div class="col-lg-7">
+                                                                      <input type="text" class="form-control date" id="requestDate" name="requestDate" placeholder="Request Date" title="Please select request date" />
+                                                                 </div>
+                                                            </div>
+                                                       </div>
+                                                       <div class="row" style="display:none;">
+                                                            <div class="col-md-4">
+                                                                 <label class="col-lg-5 control-label" for="emailHf">Email for HF </label>
+                                                                 <div class="col-lg-7">
+                                                                      <input type="text" class="form-control isEmail" id="emailHf" name="emailHf" placeholder="Email for HF" title="Please enter email for hf" />
+                                                                 </div>
+                                                            </div>
+                                                       </div>
+                                                  </div>
+                                             </div>
+                                             <?php if ($_SESSION['accessType'] != 'collection-site') { ?>
+                                                  <div class="box box-primary">
+                                                       <div class="box-header with-border">
+                                                            <h3 class="box-title">Laboratory Information</h3>
+                                                       </div>
+                                                       <div class="box-body">
+                                                            <div class="row">
+                                                                 <div class="col-md-4">
+                                                                      <label for="labId" class="col-lg-5 control-label">Lab Name </label>
+                                                                      <div class="col-lg-7">
+                                                                           <select name="labId" id="labId" class="form-control" title="Please choose lab" onchange="autoFillFocalDetails();">
+                                                                                <option value="">-- Select --</option>
+                                                                                <?php foreach ($lResult as $labName) { ?>
+                                                                                     <option data-focalperson="<?php echo $labName['contact_person']; ?>" data-focalphone="<?php echo $labName['facility_mobile_numbers']; ?>" value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
+                                                                                <?php } ?>
+                                                                           </select>
                                                                       </div>
-                                                                      <div class="col-md-4">
-                                                                           <label class="col-lg-5 control-label" for="sampleTestingDateAtLab">Sample Testing Date </label>
-                                                                           <div class="col-lg-7">
-                                                                                <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Sample Testing Date" title="Please select sample testing date" onchange="checkSampleTestingDate();" />
-                                                                           </div>
+                                                                 </div>
+                                                                 <div class="col-md-4">
+                                                                      <label for="vlFocalPerson" class="col-lg-5 control-label">VL Focal Person </label>
+                                                                      <div class="col-lg-7">
+                                                                           <input type="text" class="form-control" id="vlFocalPerson" name="vlFocalPerson" placeholder="VL Focal Person" title="Please enter vl focal person name" />
                                                                       </div>
+                                                                 </div>
+                                                                 <div class="col-md-4">
+                                                                      <label for="vlFocalPersonPhoneNumber" class="col-lg-5 control-label">VL Focal Person Phone Number</label>
+                                                                      <div class="col-lg-7">
+                                                                           <input type="text" class="form-control checkNum" id="vlFocalPersonPhoneNumber" name="vlFocalPersonPhoneNumber" maxlength="15" placeholder="Phone Number" title="Please enter vl focal person phone number" />
+                                                                      </div>
+                                                                 </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                 <div class="col-md-4">
+                                                                      <label class="col-lg-5 control-label" for="sampleReceivedAtHubOn">Date Sample Received at Hub (PHL) </label>
+                                                                      <div class="col-lg-7">
+                                                                           <input type="text" class="form-control dateTime" id="sampleReceivedAtHubOn" name="sampleReceivedAtHubOn" placeholder="Sample Received at HUB Date" title="Please select sample received at HUB date" onchange="checkSampleReceviedAtHubDate()" />
+                                                                      </div>
+                                                                 </div>
+                                                                 <div class="col-md-4">
+                                                                      <label class="col-lg-5 control-label" for="sampleReceivedDate">Date Sample Received at Testing Lab </label>
+                                                                      <div class="col-lg-7">
+                                                                           <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="Sample Received at LAB Date" title="Please select sample received at Lab date" onchange="checkSampleReceviedDate()" />
+                                                                      </div>
+                                                                 </div>
+                                                                 <div class="col-md-4">
+                                                                      <label class="col-lg-5 control-label" for="sampleTestingDateAtLab">Sample Testing Date </label>
+                                                                      <div class="col-lg-7">
+                                                                           <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Sample Testing Date" title="Please select sample testing date" onchange="checkSampleTestingDate();" />
+                                                                      </div>
+                                                                 </div>
 
-                                                                 </div>
-                                                                 <div class="row">
-                                                                      <div class="col-md-4">
-                                                                           <label for="testingPlatform" class="col-lg-5 control-label">VL Testing Platform </label>
-                                                                           <div class="col-lg-7">
-                                                                                <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform">
-                                                                                     <option value="">-- Select --</option>
-                                                                                     <?php foreach ($importResult as $mName) { ?>
-                                                                                          <option value="<?php echo $mName['machine_name'] . '##' . $mName['lower_limit'] . '##' . $mName['higher_limit']; ?>"><?php echo $mName['machine_name']; ?></option>
-                                                                                     <?php } ?>
-                                                                                </select>
-                                                                           </div>
-                                                                      </div>
-                                                                      <div class="col-md-4">
-                                                                           <label class="col-lg-5 control-label" for="noResult">Sample Rejected ? </label>
-                                                                           <div class="col-lg-7">
-                                                                                <label class="radio-inline">
-                                                                                     <input class="" id="noResultYes" name="noResult" value="yes" title="Please check one" type="radio"> Yes
-                                                                                </label>
-                                                                                <label class="radio-inline">
-                                                                                     <input class="" id="noResultNo" name="noResult" value="no" title="Please check one" type="radio"> No
-                                                                                </label>
-                                                                           </div>
-                                                                      </div>
-                                                                      <div class="col-md-4 rejectionReason" style="display:none;">
-                                                                           <label class="col-lg-5 control-label" for="rejectionReason">Rejection Reason </label>
-                                                                           <div class="col-lg-7">
-                                                                                <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason" onchange="checkRejectionReason();">
-                                                                                     <option value="">-- Select --</option>
-                                                                                     <?php foreach ($rejectionTypeResult as $type) { ?>
-                                                                                          <optgroup label="<?php echo ucwords($type['rejection_type']); ?>">
-                                                                                               <?php foreach ($rejectionResult as $reject) {
-                                                                                                    if ($type['rejection_type'] == $reject['rejection_type']) {
-                                                                                               ?>
-                                                                                                         <option value="<?php echo $reject['rejection_reason_id']; ?>"><?php echo ucwords($reject['rejection_reason_name']); ?></option>
-                                                                                               <?php }
-                                                                                               } ?>
-                                                                                          </optgroup>
-                                                                                     <?php }
-                                                                                     if ($sarr['sc_user_type'] != 'vluser') {  ?>
-                                                                                          <option value="other">Other (Please Specify) </option>
-                                                                                     <?php } ?>
-                                                                                </select>
-                                                                                <input type="text" class="form-control newRejectionReason" name="newRejectionReason" id="newRejectionReason" placeholder="Rejection Reason" title="Please enter rejection reason" style="width:100%;display:none;margin-top:2px;">
-                                                                           </div>
-                                                                      </div>
-                                                                      <div class="col-md-4 vlResult">
-                                                                           <label class="col-lg-5 control-label" for="vlResult">Viral Load Result (copiesl/ml) </label>
-                                                                           <div class="col-lg-7">
-                                                                                <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" style="width:100%;" onchange="calculateLogValue(this)" />
-                                                                                <input type="checkbox" class="" id="tnd" name="tnd" value="yes" title="Please check tnd"> Target Not Detected<br>
-                                                                                <input type="checkbox" class="" id="bdl" name="bdl" value="yes" title="Please check bdl"> Below Detection Level
-                                                                           </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                 <div class="col-md-4">
+                                                                      <label for="testingPlatform" class="col-lg-5 control-label">VL Testing Platform </label>
+                                                                      <div class="col-lg-7">
+                                                                           <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform">
+                                                                                <option value="">-- Select --</option>
+                                                                                <?php foreach ($importResult as $mName) { ?>
+                                                                                     <option value="<?php echo $mName['machine_name'] . '##' . $mName['lower_limit'] . '##' . $mName['higher_limit']; ?>"><?php echo $mName['machine_name']; ?></option>
+                                                                                <?php } ?>
+                                                                           </select>
                                                                       </div>
                                                                  </div>
-                                                                 <div class="row">
-                                                                      <div class=" vlLog col-md-4">
-                                                                           <label class="col-lg-5 control-label" for="vlLog">Viral Load Log </label>
-                                                                           <div class="col-lg-7">
-                                                                                <input type="text" class="form-control " id="vlLog" name="vlLog" placeholder="Viral Load Log" title="Please enter viral load log" style="width:100%;" onchange="calculateLogValue(this);" />
-                                                                           </div>
+                                                                 <div class="col-md-4">
+                                                                      <label class="col-lg-5 control-label" for="noResult">Sample Rejected ? </label>
+                                                                      <div class="col-lg-7">
+                                                                           <label class="radio-inline">
+                                                                                <input class="" id="noResultYes" name="noResult" value="yes" title="Please check one" type="radio"> Yes
+                                                                           </label>
+                                                                           <label class="radio-inline">
+                                                                                <input class="" id="noResultNo" name="noResult" value="no" title="Please check one" type="radio"> No
+                                                                           </label>
                                                                       </div>
-                                                                      <div class="col-md-4">
-                                                                           <label class="col-lg-5 control-label" for="resultDispatchedOn">Date Results Dispatched </label>
-                                                                           <div class="col-lg-7">
-                                                                                <input type="text" class="form-control dateTime" id="resultDispatchedOn" name="resultDispatchedOn" placeholder="Result Dispatch Date" title="Please select result dispatched date" />
-                                                                           </div>
+                                                                 </div>
+                                                                 <div class="col-md-4 rejectionReason" style="display:none;">
+                                                                      <label class="col-lg-5 control-label" for="rejectionReason">Rejection Reason </label>
+                                                                      <div class="col-lg-7">
+                                                                           <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason" onchange="checkRejectionReason();">
+                                                                                <option value="">-- Select --</option>
+                                                                                <?php foreach ($rejectionTypeResult as $type) { ?>
+                                                                                     <optgroup label="<?php echo ucwords($type['rejection_type']); ?>">
+                                                                                          <?php foreach ($rejectionResult as $reject) {
+                                                                                               if ($type['rejection_type'] == $reject['rejection_type']) {
+                                                                                          ?>
+                                                                                                    <option value="<?php echo $reject['rejection_reason_id']; ?>"><?php echo ucwords($reject['rejection_reason_name']); ?></option>
+                                                                                          <?php }
+                                                                                          } ?>
+                                                                                     </optgroup>
+                                                                                <?php }
+                                                                                if ($sarr['sc_user_type'] != 'vluser') {  ?>
+                                                                                     <option value="other">Other (Please Specify) </option>
+                                                                                <?php } ?>
+                                                                           </select>
+                                                                           <input type="text" class="form-control newRejectionReason" name="newRejectionReason" id="newRejectionReason" placeholder="Rejection Reason" title="Please enter rejection reason" style="width:100%;display:none;margin-top:2px;">
                                                                       </div>
-                                                                      <div class="col-md-4">
-                                                                           <label class="col-lg-5 control-label" for="testedBy">Tested By </label>
-                                                                           <div class="col-lg-7">
-                                                                                <select name="testedBy" id="testedBy" class="select2 form-control" title="Please choose approved by">
-                                                                                <?= $general->generateSelectOptions($userInfo, null, '-- Select --');?>
-                                                                                </select>
-                                                                           </div>
+                                                                 </div>
+                                                                 <div class="col-md-4 vlResult">
+                                                                      <label class="col-lg-5 control-label" for="vlResult">Viral Load Result (copiesl/ml) </label>
+                                                                      <div class="col-lg-7">
+                                                                           <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" style="width:100%;" onchange="calculateLogValue(this)" />
+                                                                           <input type="checkbox" class="" id="tnd" name="tnd" value="yes" title="Please check tnd"> Target Not Detected<br>
+                                                                           <input type="checkbox" class="" id="bdl" name="bdl" value="yes" title="Please check bdl"> Below Detection Level
                                                                       </div>
-                                                                 </div><br />
-                                                                 <div class="row">
-                                                                      <div class="col-md-4">
-                                                                           <label class="col-lg-5 control-label" for="approvedBy">Approved By </label>
-                                                                           <div class="col-lg-7">
-                                                                                <select name="approvedBy" id="approvedBy" class="select2 form-control" title="Please choose approved by">
-                                                                                <?= $general->generateSelectOptions($userInfo, null, '-- Select --');?>
-                                                                                </select>
-                                                                           </div>
+                                                                 </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                 <div class=" vlLog col-md-4">
+                                                                      <label class="col-lg-5 control-label" for="vlLog">Viral Load Log </label>
+                                                                      <div class="col-lg-7">
+                                                                           <input type="text" class="form-control " id="vlLog" name="vlLog" placeholder="Viral Load Log" title="Please enter viral load log" style="width:100%;" onchange="calculateLogValue(this);" />
                                                                       </div>
-                                                                      <div class="col-md-4">
-                                                                           <label class="col-lg-5 control-label" for="approvedOnDateTime">Approved On </label>
-                                                                           <div class="col-lg-7">
-                                                                                <input type="text" value="<?php echo $general->humanDateFormat($general->getDateTime()); ?>" class="form-control dateTime" id="approvedOnDateTime" name="approvedOnDateTime" placeholder="e.g 09-Jan-1992 05:30" <?php echo $labFieldDisabled; ?> style="width:100%;" />
-                                                                           </div>
+                                                                 </div>
+                                                                 <div class="col-md-4">
+                                                                      <label class="col-lg-5 control-label" for="resultDispatchedOn">Date Results Dispatched </label>
+                                                                      <div class="col-lg-7">
+                                                                           <input type="text" class="form-control dateTime" id="resultDispatchedOn" name="resultDispatchedOn" placeholder="Result Dispatch Date" title="Please select result dispatched date" />
                                                                       </div>
-                                                                      <div class="col-md-4">
-                                                                           <label class="col-lg-2 control-label" for="labComments">Lab Tech. Comments </label>
-                                                                           <div class="col-lg-10">
-                                                                                <textarea class="form-control" name="labComments" id="labComments" placeholder="Lab comments" style="width:100%"></textarea>
-                                                                           </div>
+                                                                 </div>
+                                                                 <div class="col-md-4">
+                                                                      <label class="col-lg-5 control-label" for="testedBy">Tested By </label>
+                                                                      <div class="col-lg-7">
+                                                                           <select name="testedBy" id="testedBy" class="select2 form-control" title="Please choose approved by">
+                                                                                <?= $general->generateSelectOptions($userInfo, null, '-- Select --'); ?>
+                                                                           </select>
+                                                                      </div>
+                                                                 </div>
+                                                            </div><br />
+                                                            <div class="row">
+                                                                 <div class="col-md-4">
+                                                                      <label class="col-lg-5 control-label" for="approvedBy">Approved By </label>
+                                                                      <div class="col-lg-7">
+                                                                           <select name="approvedBy" id="approvedBy" class="select2 form-control" title="Please choose approved by">
+                                                                                <?= $general->generateSelectOptions($userInfo, null, '-- Select --'); ?>
+                                                                           </select>
+                                                                      </div>
+                                                                 </div>
+                                                                 <div class="col-md-4">
+                                                                      <label class="col-lg-5 control-label" for="approvedOnDateTime">Approved On </label>
+                                                                      <div class="col-lg-7">
+                                                                           <input type="text" value="<?php echo $general->humanDateFormat($general->getDateTime()); ?>" class="form-control dateTime" id="approvedOnDateTime" name="approvedOnDateTime" placeholder="e.g 09-Jan-1992 05:30" <?php echo $labFieldDisabled; ?> style="width:100%;" />
+                                                                      </div>
+                                                                 </div>
+                                                                 <div class="col-md-4">
+                                                                      <label class="col-lg-2 control-label" for="labComments">Lab Tech. Comments </label>
+                                                                      <div class="col-lg-10">
+                                                                           <textarea class="form-control" name="labComments" id="labComments" placeholder="Lab comments" style="width:100%"></textarea>
                                                                       </div>
                                                                  </div>
                                                             </div>
                                                        </div>
                                                   </div>
-                                                  <div class="box-footer">
-                                                       <!-- BARCODESTUFF START -->
-                                                       <?php if (isset($global['bar_code_printing']) && $global['bar_code_printing'] == 'zebra-printer') { ?>
-                                                            <div id="printer_data_loading" style="display:none"><span id="loading_message">Loading Printer Details...</span><br />
-                                                                 <div class="progress" style="width:100%">
-                                                                      <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                                                                      </div>
-                                                                 </div>
-                                                            </div> <!-- /printer_data_loading -->
-                                                            <div id="printer_details" style="display:none">
-                                                                 <span id="selected_printer">No printer selected!</span>
-                                                                 <button type="button" class="btn btn-success" onclick="changePrinter()">Change/Retry</button>
-                                                            </div><br /> <!-- /printer_details -->
-                                                            <div id="printer_select" style="display:none">
-                                                                 Zebra Printer Options<br />
-                                                                 Printer: <select id="printers"></select>
-                                                            </div> <!-- /printer_select -->
-                                                       <?php } ?>
-                                                       <!-- BARCODESTUFF END -->
-                                                       <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
-                                                       <input type="hidden" name="saveNext" id="saveNext" />
-                                                       <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
-                                                       <?php if ($arr['sample_code'] == 'auto' || $arr['sample_code'] == 'YY' || $arr['sample_code'] == 'MMYY') { ?>
-                                                            <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat; ?>" />
-                                                            <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey; ?>" />
-                                                       <?php } ?>
-                                                       <input type="hidden" name="vlSampleId" id="vlSampleId" value="" />
-                                                       <a class="btn btn-primary" href="javascript:void(0);" onclick="validateSaveNow();return false;">Save and Next</a>
-                                                       <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
-                                                  </div>
+                                             <?php } ?>
+                                        </div>
+                                        <div class="box-footer">
+                                             <!-- BARCODESTUFF START -->
+                                             <?php if (isset($global['bar_code_printing']) && $global['bar_code_printing'] == 'zebra-printer') { ?>
+                                                  <div id="printer_data_loading" style="display:none"><span id="loading_message">Loading Printer Details...</span><br />
+                                                       <div class="progress" style="width:100%">
+                                                            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                                            </div>
+                                                       </div>
+                                                  </div> <!-- /printer_data_loading -->
+                                                  <div id="printer_details" style="display:none">
+                                                       <span id="selected_printer">No printer selected!</span>
+                                                       <button type="button" class="btn btn-success" onclick="changePrinter()">Change/Retry</button>
+                                                  </div><br /> <!-- /printer_details -->
+                                                  <div id="printer_select" style="display:none">
+                                                       Zebra Printer Options<br />
+                                                       Printer: <select id="printers"></select>
+                                                  </div> <!-- /printer_select -->
+                                             <?php } ?>
+                                             <!-- BARCODESTUFF END -->
+                                             <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
+                                             <input type="hidden" name="saveNext" id="saveNext" />
+                                             <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
+                                             <?php if ($arr['sample_code'] == 'auto' || $arr['sample_code'] == 'YY' || $arr['sample_code'] == 'MMYY') { ?>
+                                                  <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat; ?>" />
+                                                  <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey; ?>" />
+                                             <?php } ?>
+                                             <input type="hidden" name="vlSampleId" id="vlSampleId" value="" />
+                                             <a class="btn btn-primary" href="javascript:void(0);" onclick="validateSaveNow();return false;">Save and Next</a>
+                                             <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
+                                        </div>
                     </form>
                </div>
      </section>
@@ -701,16 +719,16 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
      facilityName = true;
      $(document).ready(function() {
           $('#testedBy').select2({
-			width : '100%',
+               width: '100%',
                placeholder: "Select Tested By"
           });
-		
-		$('#approvedBy').select2({
-			width : '100%',
+
+          $('#approvedBy').select2({
+               width: '100%',
                placeholder: "Select Approved By"
           });
           $('#facilityId').select2({
-            placeholder: "Select Clinic/Health Center"
+               placeholder: "Select Clinic/Health Center"
           });
           $('#district').select2({
                placeholder: "District"

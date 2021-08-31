@@ -232,11 +232,11 @@
 	splitsUrlCheck = str.split("/", 4);
 	// console.log(splitsUrl);
 	if (splitsUrl == 'users.php' || splitsUrl == 'addUser.php' || splitsUrl == 'editUser.php') {
-		$(".manage").addClass('active');
+		$(".access-control-menu").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".userMenu").addClass('active');
 	} else if (splitsUrl == 'roles.php' || splitsUrl == 'editRole.php' || splitsUrl == 'addRole.php') {
-		$(".manage").addClass('active');
+		$(".access-control-menu").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".roleMenu").addClass('active');
 	} else if (splitsUrl == 'facilities.php' || splitsUrl == 'addFacility.php' || splitsUrl == 'editFacility.php' || splitsUrl == 'mapTestType.php') {
@@ -248,27 +248,27 @@
 		$(".allMenu").removeClass('active');
 		$(".facilityMapMenu").addClass('active');
 	} else if (splitsUrl == 'globalConfig.php' || splitsUrl == 'editGlobalConfig.php') {
-		$(".manage").addClass('active');
+		$(".system-config-menu").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".globalConfigMenu").addClass('active');
 	} else if (splitsUrl == 'importConfig.php' || splitsUrl == 'addImportConfig.php' || splitsUrl == 'editImportConfig.php') {
-		$(".manage").addClass('active');
+		$(".system-config-menu").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".importConfigMenu").addClass('active');
 	} else if (splitsUrl == 'otherConfig.php' || splitsUrl == 'editOtherConfig.php' || splitsUrl == 'editRequestEmailConfig.php' || splitsUrl == 'editResultEmailConfig.php') {
-		$(".manage").addClass('active');
+		$(".system-config-menu").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".otherConfigMenu").addClass('active');
 	} else if (splitsUrl == 'testRequestEmailConfig.php' || splitsUrl == 'editTestRequestEmailConfig.php') {
-		$(".manage").addClass('active');
+		$(".system-config-menu").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".requestEmailConfigMenu").addClass('active');
 	} else if (splitsUrl == 'testResultEmailConfig.php' || splitsUrl == 'editTestResultEmailConfig.php') {
-		$(".manage").addClass('active');
+		$(".system-config-menu").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".resultEmailConfigMenu").addClass('active');
 	} else if (splitsUrl == 'geographical-divisions-details.php' || splitsUrl == 'add-geographical-divisions.php' || splitsUrl == 'edit-geographical-divisions.php') {
-		$(".manage").addClass('active');
+		$(".system-config-menu").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".geographicalMenu").addClass('active');
 	} else if (splitsUrl == 'vlRequest.php' || splitsUrl == 'editVlRequest.php' || splitsUrl == 'viewVlRequest.php') {

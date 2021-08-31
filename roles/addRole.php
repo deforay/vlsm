@@ -95,9 +95,9 @@ $rInfo = $db->query($resourcesQuery);
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
-									<label for="accessType" class="col-lg-4 control-label">Access Type</label>
+									<label for="accessType" class="col-lg-4 control-label">Access Type <span class="mandatory">*</span></label>
 									<div class="col-lg-7">
-										<select class="form-control " name='accessType' id='accessType' title="Please select access type">
+										<select class="form-control isRequired" name='accessType' id='accessType' title="Please select access type">
 											<option value=""> -- Select -- </option>
 											<option value="testing-lab">Testing Lab</option>
 											<option value="collection-site">Collection Site</option>
