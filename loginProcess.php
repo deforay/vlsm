@@ -98,6 +98,7 @@ try {
             $_SESSION['userName'] = ucwords($admin[0]['user_name']);
             $_SESSION['roleCode'] = $admin[0]['role_code'];
             $_SESSION['roleId'] = $admin[0]['role_id'];
+            $_SESSION['accessType'] = $admin[0]['access_type'];
             $_SESSION['email'] = $admin[0]['email'];
 
             $redirect = '/error/401.php';

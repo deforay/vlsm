@@ -27,10 +27,10 @@ foreach ($configControlInfo as $info) {
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<h1 class="fa fa-gears"> Edit Import Configuration</h1>
+		<h1 class="fa fa-gears"> Edit Instrument</h1>
 		<ol class="breadcrumb">
 			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-			<li class="active">Edit Import Config</li>
+			<li class="active">Edit Instrument</li>
 		</ol>
 	</section>
 
@@ -49,7 +49,7 @@ foreach ($configControlInfo as $info) {
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
-									<label for="configurationName" class="col-lg-4 control-label">Configuration Name<span class="mandatory">*</span></label>
+									<label for="configurationName" class="col-lg-4 control-label">Instrument Name<span class="mandatory">*</span></label>
 									<div class="col-lg-7">
 										<input type="text" class="form-control isRequired" id="configurationName" name="configurationName" placeholder="eg. Roche or Abbott" title="Please enter configuration name" value="<?php echo $sInfo['machine_name']; ?>" onblur="checkNameValidation('import_config','machine_name',this,'<?php echo "config_id##" . $sInfo['config_id']; ?>','This configuration name already exists.Try another name',null);" />
 									</div>
@@ -65,7 +65,7 @@ foreach ($configControlInfo as $info) {
 											<option value='vl' <?php echo (in_array('vl', $sInfo['supported_tests'])) ? "selected='selected'" : '';  ?>>Viral Load</option>
 											<option value='eid' <?php echo (in_array('eid', $sInfo['supported_tests'])) ? "selected='selected'" : '';  ?>>EID</option>
 											<option value='covid19' <?php echo (in_array('covid19', $sInfo['supported_tests'])) ? "selected='selected'" : '';  ?>>Covid-19</option>
-											<?php if(isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) {?> 
+											<?php if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) { ?>
 												<option value='hepatitis' <?php echo (in_array('hepatitis', $sInfo['supported_tests'])) ? "selected='selected'" : '';  ?>>Hepatitis</option>
 											<?php } ?>
 										</select>
@@ -76,7 +76,7 @@ foreach ($configControlInfo as $info) {
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
-									<label for="configurationName" class="col-lg-4 control-label">Configuration File Name<span class="mandatory">*</span></label>
+									<label for="configurationName" class="col-lg-4 control-label">Instrument File Name<span class="mandatory">*</span></label>
 									<div class="col-lg-7">
 										<input type="text" class="form-control isRequired" id="configurationFile" name="configurationFile" placeholder="eg. roche.php or abbott.php" title="Please enter file name" value="<?php echo $sInfo['import_machine_file_name']; ?>" onblur="checkNameValidation('import_config','import_machine_file_name',this,'<?php echo "config_id##" . $sInfo['config_id']; ?>','This file name already exists.Try another name',null)" />
 									</div>
@@ -203,13 +203,10 @@ foreach ($configControlInfo as $info) {
 									$i = 1;
 									if (count($configMachineInfo) > 0) {
 										foreach ($configMachineInfo as $machine) {
-											if(trim($machine['poc_device'] == 'yes'))
-											{
+											if (trim($machine['poc_device'] == 'yes')) {
 												$style = "display:block";
 												$check = "checked";
-											}
-											else
-											{
+											} else {
 												$style = "display:none";
 												$check = "";
 											}
@@ -220,15 +217,15 @@ foreach ($configControlInfo as $info) {
 													<input type="text" name="configMachineName[]" id="configMachineName<?php echo $i; ?>" class="form-control configMachineName isRequired" placeholder="Machine Name" title="Please enter machine name" value="<?php echo $machine['config_machine_name']; ?>" onblur="checkMachineName(this);" ; />
 												</td>
 												<td>
-													<div class="col-md-3" >
-													<input type="checkbox" id="pocdevice<?php echo $i; ?>" name="pocdevice[]" value="" onclick="getLatiLongi(<?php echo $i; ?>);" <?php echo $check; ?>>
+													<div class="col-md-3">
+														<input type="checkbox" id="pocdevice<?php echo $i; ?>" name="pocdevice[]" value="" onclick="getLatiLongi(<?php echo $i; ?>);" <?php echo $check; ?>>
 													</div>
 													<div class="latLong<?php echo $i; ?> " style="<?php echo $style; ?>">
 														<div class="col-md-4">
-															<input type="text" name="latitude[]" id="latitude<?php echo $i; ?>" value="<?php echo $machine['latitude']; ?>" class="form-control " placeholder="Latitude" data-placement="bottom" title="Latitude"/> 
+															<input type="text" name="latitude[]" id="latitude<?php echo $i; ?>" value="<?php echo $machine['latitude']; ?>" class="form-control " placeholder="Latitude" data-placement="bottom" title="Latitude" />
 														</div>
 														<div class="col-md-4">
-															<input type="text" name="longitude[]" id="longitude<?php echo $i; ?>" value="<?php echo $machine['longitude']; ?>" class="form-control " placeholder="Longitude" data-placement="bottom" title="Longitude"/>
+															<input type="text" name="longitude[]" id="longitude<?php echo $i; ?>" value="<?php echo $machine['longitude']; ?>" class="form-control " placeholder="Longitude" data-placement="bottom" title="Longitude" />
 														</div>
 													</div>
 												</td>
@@ -246,18 +243,18 @@ foreach ($configControlInfo as $info) {
 												<input type="text" name="configMachineName[]" id="configMachineName0" class="form-control configMachineName isRequired" placeholder="Machine Name" title="Please enter machine name" onblur="checkMachineName(this);" />
 											</td>
 											<td>
-										<div class="col-md-3" >
-										<input type="checkbox" id="pocdevice0" name="pocdevice[]" value="" onclick="getLatiLongi(0);">
-										</div>
-										<div class="latLong0 " style="display:none">
-											<div class="col-md-4">
-												<input type="text" name="latitude[]" id="latitude0" class="form-control " placeholder="Latitude" data-placement="bottom" title="Latitude"/> 
-											</div>
-											<div class="col-md-4">
-												<input type="text" name="longitude[]" id="longitude0" class="form-control " placeholder="Longitude" data-placement="bottom" title="Longitude"/>
-											</div>
-										</div>
-										</td>
+												<div class="col-md-3">
+													<input type="checkbox" id="pocdevice0" name="pocdevice[]" value="" onclick="getLatiLongi(0);">
+												</div>
+												<div class="latLong0 " style="display:none">
+													<div class="col-md-4">
+														<input type="text" name="latitude[]" id="latitude0" class="form-control " placeholder="Latitude" data-placement="bottom" title="Latitude" />
+													</div>
+													<div class="col-md-4">
+														<input type="text" name="longitude[]" id="longitude0" class="form-control " placeholder="Longitude" data-placement="bottom" title="Longitude" />
+													</div>
+												</div>
+											</td>
 											<td align="center" style="vertical-align:middle;">
 												<a class="btn btn-xs btn-primary" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;&nbsp;<a class="btn btn-xs btn-default" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
 											</td>
@@ -366,15 +363,13 @@ foreach ($configControlInfo as $info) {
 			}
 		}
 	}
-	function getLatiLongi(id)
-	{
-		if($("#pocdevice"+id).is(':checked')){
-			$(".latLong"+id).css("display", "block");
+
+	function getLatiLongi(id) {
+		if ($("#pocdevice" + id).is(':checked')) {
+			$(".latLong" + id).css("display", "block");
 			// $("#pocdevice"+id).val('yes');
-		}
-		else
-		{
-			$(".latLong"+id).css("display", "none");
+		} else {
+			$(".latLong" + id).css("display", "none");
 			// $("#pocdevice"+id).val('no');
 		}
 	}

@@ -4,22 +4,20 @@ ob_start();
 include_once(APPLICATION_PATH . '/header.php');
 ?>
 <style>
-
-.tooltip-inner {
-      background-color: #fff; 
-      color: #000;
-      border: 1px solid #000;
-  }
-
-  </style>
+	.tooltip-inner {
+		background-color: #fff;
+		color: #000;
+		border: 1px solid #000;
+	}
+</style>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<h1 class="fa fa-gears"> Add Import Configuration</h1>
+		<h1 class="fa fa-gears"> Add Instrument</h1>
 		<ol class="breadcrumb">
 			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-			<li class="active">Add Configuration</li>
+			<li class="active">Add Instrument</li>
 		</ol>
 	</section>
 
@@ -38,7 +36,7 @@ include_once(APPLICATION_PATH . '/header.php');
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
-									<label for="configurationName" class="col-lg-4 control-label">Configuration Name <span class="mandatory">*</span></label>
+									<label for="configurationName" class="col-lg-4 control-label">Instrument Name <span class="mandatory">*</span></label>
 									<div class="col-lg-7">
 										<input type="text" class="form-control isRequired" id="configurationName" name="configurationName" placeholder="eg. Roche or Abbott" title="Please enter configuration name" onblur="checkNameValidation('import_config','machine_name',this,null,'This configuration name already exists.Try another name',null);setConfigFileName();" onkeypress="setConfigFileName();" />
 									</div>
@@ -52,11 +50,11 @@ include_once(APPLICATION_PATH . '/header.php');
 									<label for="supportedTests" class="col-lg-4 control-label">Supported Tests <span class="mandatory">*</span></label>
 									<div class="col-lg-7">
 										<select multiple class="form-control" id="supportedTests" name="supportedTests[]">
-											
+
 											<option value='vl'>Viral Load</option>
 											<option value='eid'>EID</option>
 											<option value='covid19'>Covid-19</option>
-											<?php if(isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) {?> 
+											<?php if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true) { ?>
 												<option value='hepatitis'>Hepatitis</option>
 											<?php } ?>
 										</select>
@@ -67,7 +65,7 @@ include_once(APPLICATION_PATH . '/header.php');
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
-									<label for="configurationFileName" class="col-lg-4 control-label">Configuration File <span class="mandatory">*</span></label>
+									<label for="configurationFileName" class="col-lg-4 control-label">Instrument File <span class="mandatory">*</span></label>
 									<div class="col-lg-7">
 										<input type="text" class="form-control isRequired" id="configurationFile" name="configurationFile" placeholder="eg. roche.php or abbott.php" title="Please enter machine name" onblur="checkNameValidation('import_config','import_machine_file_name',this,null,'This file name already exists.Try another name',null)" />
 									</div>
@@ -177,17 +175,17 @@ include_once(APPLICATION_PATH . '/header.php');
 											<input type="text" name="configMachineName[]" id="configMachineName1" class="form-control configMachineName isRequired" placeholder="Machine Name" title="Please enter machine name" onblur="checkMachineName(this);" />
 										</td>
 										<td>
-										<div class="col-md-3" >
-										<input type="checkbox" id="pocdevice1" name="pocdevice[]" value="" onclick="getLatiLongi(1);">
-										</div>
-										<div class="latLong1 " style="display:none">
-											<div class="col-md-4">
-												<input type="text" name="latitude[]" id="latitude1" class="form-control " placeholder="Latitude" data-placement="bottom" title="Latitude"/> 
+											<div class="col-md-3">
+												<input type="checkbox" id="pocdevice1" name="pocdevice[]" value="" onclick="getLatiLongi(1);">
 											</div>
-											<div class="col-md-4">
-												<input type="text" name="longitude[]" id="longitude1" class="form-control " placeholder="Longitude" data-placement="bottom" title="Longitude"/>
+											<div class="latLong1 " style="display:none">
+												<div class="col-md-4">
+													<input type="text" name="latitude[]" id="latitude1" class="form-control " placeholder="Latitude" data-placement="bottom" title="Latitude" />
+												</div>
+												<div class="col-md-4">
+													<input type="text" name="longitude[]" id="longitude1" class="form-control " placeholder="Longitude" data-placement="bottom" title="Longitude" />
+												</div>
 											</div>
-										</div>
 										</td>
 										<td align="center" style="vertical-align:middle;">
 											<a class="btn btn-xs btn-primary" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;&nbsp;<a class="btn btn-xs btn-default" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
@@ -218,7 +216,7 @@ include_once(APPLICATION_PATH . '/header.php');
 <script type="text/javascript">
 	tableRowId = 2;
 
-	$(document).ready(function(){
+	$(document).ready(function() {
 		$("#supportedTests").select2({
 			placeholder: "Select Test Types"
 		});
@@ -335,15 +333,12 @@ include_once(APPLICATION_PATH . '/header.php');
 		}
 	}
 
-	function getLatiLongi(id)
-	{
-		if($("#pocdevice"+id).is(':checked')){
-			$(".latLong"+id).css("display", "block");
+	function getLatiLongi(id) {
+		if ($("#pocdevice" + id).is(':checked')) {
+			$(".latLong" + id).css("display", "block");
 			// $("#pocdevice"+id).val('yes');
-		}
-		else
-		{
-			$(".latLong"+id).css("display", "none");
+		} else {
+			$(".latLong" + id).css("display", "none");
 			// $("#pocdevice"+id).val('no');
 		}
 	}

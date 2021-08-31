@@ -1,5 +1,5 @@
 <?php
-$title = "Import Configuration";
+$title = "Instruments";
 #require_once('../startup.php'); 
 include_once(APPLICATION_PATH . '/header.php');
 ?>
@@ -7,10 +7,10 @@ include_once(APPLICATION_PATH . '/header.php');
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
-    <h1><i class="fa fa-gears"></i> Import Configuration</h1>
+    <h1><i class="fa fa-gears"></i> Instruments</h1>
     <ol class="breadcrumb">
       <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li class="active">Import Configuration</li>
+      <li class="active">Instruments</li>
     </ol>
   </section>
 
@@ -20,14 +20,14 @@ include_once(APPLICATION_PATH . '/header.php');
       <div class="col-xs-12">
         <div class="box">
           <div class="box-header with-border">
-            <a href="addImportConfig.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Import Config</a>
+            <a href="addImportConfig.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Instrument</a>
           </div>
           <!-- /.box-header -->
           <div class="box-body">
             <table id="importConfigDataTable" class="table table-bordered table-striped">
               <thead>
                 <tr>
-                  <th>Configuration Name</th>
+                  <th>Instrument Name</th>
                   <th>Status</th>
                   <th>Action</th>
                 </tr>
