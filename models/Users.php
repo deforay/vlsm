@@ -255,4 +255,10 @@ class Users
 
         return $result;
     }
+
+    public function getRoleDetailsUsingUserId($userId)
+    {
+        $query = "SELECT * FROM user_details as ud INNER JOIN roles as r ON ud.role_id=r.role_id WHERE user_id = ?";
+        return $this->db->rawQueryOne($query, array($userId));
+    }
 }
