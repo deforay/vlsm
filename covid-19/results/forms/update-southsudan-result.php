@@ -64,7 +64,7 @@ if ($sarr['sc_user_type'] == 'remoteuser') {
 }
 $pdResult = $db->query($pdQuery);
 $provinceInfo = array();
-foreach($pdResult as $state){
+foreach ($pdResult as $state) {
     $provinceInfo[$state['province_name']] = ucwords($state['province_name']);
 }
 
@@ -640,18 +640,18 @@ $sampleSuggestionDisplay = 'display:none;';
         var pName = val;
         if ($.trim(pName) != '') {
             $.post("/includes/siteInformationDropdownOptions.php", {
-                pName: pName,
-                requestType: 'patient',
-                dName: '<?php echo $covid19Info['patient_district']; ?>',
-                testType: 'covid19'
+                    pName: pName,
+                    requestType: 'patient',
+                    dName: '<?php echo $covid19Info['patient_district']; ?>',
+                    testType: 'covid19'
 
-            },
-            function(data) {
-                if (data != "") {
-                    details = data.split("###");
-                    $("#patientDistrict").html(details[1]);
-                }
-            });
+                },
+                function(data) {
+                    if (data != "") {
+                        details = data.split("###");
+                        $("#patientDistrict").html(details[1]);
+                    }
+                });
         } else if (pName == '') {
             $("#patientDistrict").html("<?php echo $province; ?>");
             $("#patientDistrict").html("<option value=''> -- Select -- </option>");
@@ -723,7 +723,7 @@ $sampleSuggestionDisplay = 'display:none;';
         if ($('#result').val() != "") {
             $('#isResultAuthorized').val('yes');
         }
-        getPatientDistrictDetails('<?php echo (isset($covid19Info['patient_province']) && $covid19Info['patient_province'] != "");?>');
+        getPatientDistrictDetails('<?php echo (isset($covid19Info['patient_province']) && $covid19Info['patient_province'] != ""); ?>');
     });
 
 
