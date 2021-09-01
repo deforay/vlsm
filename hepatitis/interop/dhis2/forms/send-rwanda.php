@@ -8,78 +8,153 @@ $users = new Users($db);
 
 
 //get facility map id
-$query = "SELECT * FROM form_hepatitis WHERE source_of_request LIKE 'dhis%' AND result_sent_to_source LIKE 'pending'";
+//$query = "SELECT * FROM form_hepatitis WHERE source_of_request LIKE 'dhis%' AND result_sent_to_source LIKE 'pending'";
+$query = "SELECT * FROM form_hepatitis WHERE source_of_request LIKE 'dhis%' AND result_status = 7";
 $formResults = $db->rawQuery($query);
 $counter = 0;
 foreach ($formResults as $row) {
 
   $trackedEntityInstance = str_replace("dhis2-", "", $row['source_of_request']);
 
+  $programStages = array(
+    'Initial HBV VL' => 'UXFQ8uL45XB',
+    'Initial HCV VL' => 'UXFQ8uL45XB',
+    'Follow up HBV VL' => 'hGSprgJ8SaO',
+    'SVR12 HCV VL' => 'JYL69MJWyFc',
+  );
+
   $urlData = array();
-  $urlData[] = "fields=attributes[attribute,code,value],enrollments[*],orgUnit,trackedEntityInstance";
+  //$urlData[] = "fields=attributes[attribute,code,value],orgUnit,trackedEntityInstance";
+  $urlData[] = "trackedEntityInstance=$trackedEntityInstance";
+  $urlData[] = "programStage=" . $programStages[$row['reason_for_vl_test']];
   $urlData[] = "paging=false";
+  $urlData[] = "status=ACTIVE";
 
-  $url = "/api/trackedEntityInstances/$trackedEntityInstance";
 
-  $teResponse = $dhis2->get($url, $urlData);
+  $url = "/api/events";
 
-  $teResponse = json_decode($teResponse, true);
+
+  $dhis2Response = $dhis2->get($url, $urlData);
+
+  $dhis2Response = json_decode($dhis2Response, true);
+
 
   // echo "<pre>";
-  // var_dump($teResponse['enrollments'][0]['events']);
+  // var_dump($dhis2Response['enrollments'][0]['events']);
   // echo "</pre>";
   // continue;
   // echo "<pre>";
-  // var_dump($teResponse);
+  // var_dump($dhis2Response);
   // echo "</pre>";
   // continue;
 
-  if ($teResponse['enrollments'][0]['status'] == 'COMPLETED') continue;
+  //if ($dhis2Response['enrollments'][0]['status'] == 'COMPLETED') continue;
 
-  $orgUnitId = "Hjw70Lodtf2";
-  if (!empty($row['facility_id'])) {
-    $facQuery = "SELECT facility_id, facility_name, other_id from facility_details where facility_id = " . $row['facility_id'];
-    $facResult = $db->rawQueryOne($facQuery);
-    $orgUnitId = $facResult['other_id'];
-  }
-
+  //$orgUnitId = "WItSrsnhLXI"; // Rwanda
 
   $strategy = null;
   $eventId = null;
   $eventPayload = array();
   $eventDate = date("Y-m-d");
   $payload = array();
-  foreach ($teResponse['enrollments'][0]['events'] as $eventPayload) {
-    if ($eventPayload['programStage'] == 'KPBuhvFV5bK') {
-      $dataValues = array();
-      if ($row['hepatitis_test_type'] == 'HCV') {
-        $dataValues['Oem0BXNDPWL'] = $row['hcv_vl_count'];
-      } else {
-        $dataValues['Di17rUJDIWZ']  = $row['hbv_vl_count'];
-      }
-    } else if ($eventPayload['programStage'] == 'WAyPhFAJLdv') {
-      $dataValues = array();
-      $dataValues['LblBnouUMJE']  = $row['hbv_vl_count'];
-    } else if ($eventPayload['programStage'] == 'qiqz1esOFKV') {
-      $dataValues = array();
-      $dataValues['wVmsNyyPWT0'] = $row['hcv_vl_count'];
-    }
 
+
+  if (!empty($row['facility_id'])) {
+    $facQuery = "SELECT facility_id, facility_name, other_id from facility_details where facility_id = " . $row['facility_id'];
+    $facResult = $db->rawQueryOne($facQuery);
+    $orgUnitId = $facResult['other_id'];
+  } else {
+    continue;
+  }
+
+
+
+
+
+  $programStagesVariables = array(
+    'labResultHcvVlCount' => 'KqH0EkWPGvR',
+    'labResultHbvVlCount' => 'Ggd5bSi74kC',
+    'followUpHbvVlCount' => 'Ggd5bSi74kC',
+    'finalConfirmationHcvVlCount' => 'KqH0EkWPGvR',
+    'dateHcvResultsAvailable' => 'ZO3rVJbTFDy',
+    'dateHbvResultsAvailable' => 'YTKJ6PrlTSl',
+    'hbvSampleId' => 'TybTedCboNb',
+    'hcvSampleId' => 'CZrar5yxcrC',
+  );
+
+
+  $dataValues = array();
+  if ($row['reason_for_vl_test'] == 'Initial HBV VL') {
+    $dataValues[$programStagesVariables['labResultHbvVlCount']]  = $row['hbv_vl_count'];
+    $dataValues[$programStagesVariables['dateHbvResultsAvailable']] =  $row['sample_tested_datetime'];
+    $dataValues[$programStagesVariables['hbvSampleId']] =  $row['sample_code'];
+  } else if ($row['reason_for_vl_test'] == 'Initial HCV VL') {
+    $dataValues[$programStagesVariables['labResultHcvVlCount']] = $row['hcv_vl_count'];
+    $dataValues[$programStagesVariables['dateHcvResultsAvailable']] =  $row['sample_tested_datetime'];
+    $dataValues[$programStagesVariables['hcvSampleId']] =  $row['sample_code'];
+  } else if ($row['reason_for_vl_test'] == 'Follow up HBV VL') {
+    $dataValues[$programStagesVariables['followUpHbvVlCount']]  = $row['hbv_vl_count'];
+    $dataValues[$programStagesVariables['dateHbvResultsAvailable']] =  $row['sample_tested_datetime'];
+    $dataValues[$programStagesVariables['hbvSampleId']] =  $row['sample_code'];
+  } else if ($row['reason_for_vl_test'] == 'SVR12 HCV VL') {
+    $dataValues[$programStagesVariables['finalConfirmationHcvVlCount']] = $row['hcv_vl_count'];
+    $dataValues[$programStagesVariables['dateHcvResultsAvailable']] =  $row['sample_tested_datetime'];
+    $dataValues[$programStagesVariables['hcvSampleId']] =  $row['sample_code'];
+  }
+
+  
+
+
+  if (count($dhis2Response['events']) == 0) {
+    $idGeneratorApi = $dhis2->get("/api/system/id?limit=1");
+    $idResponse = (json_decode($idGeneratorApi, true));
+    $eventId = $idResponse['codes'][0];
+
+    $eventPayload = array(
+      "event" => $eventId,
+      "eventDate" => $eventDate,
+      "program" => "nZRqRmZvdJd",
+      "orgUnit" => $facResult['other_id'],
+      "programStage" => $programStages[$row['reason_for_vl_test']],
+      "status" => "ACTIVE",
+      "trackedEntityInstance" => $trackedEntityInstance,
+      "dataValues" => array()
+    );
     if (!empty($dataValues)) {
       $eventPayload = $dhis2->addDataValuesToEventPayload($eventPayload, $dataValues);
       $payload = json_encode($eventPayload);
       // echo "<br><br><pre>";
-      // var_dump($payload);
+      // print_r ($payload);
       // echo "</pre>";
-      $urlParams = array();
-      $urlParams[] = "mergeMode=REPLACE";
-      $urlParams[] = "strategy=UPDATE";
-      $response = $dhis2->post("/api/33/events/", $payload, $urlParams);
+      
+      $response = $dhis2->post("/api/33/events/", $payload);
       // echo "<br><br><pre>";
-      // var_dump($response);
+      // var_dump ($response);
       // echo "</pre>";
     }
+  } else {
+    foreach ($dhis2Response['events'] as $eventPayload) {
+      if (!empty($dataValues)) {
+        $eventPayload = $dhis2->addDataValuesToEventPayload($eventPayload, $dataValues);
+        $payload = json_encode($eventPayload);
+        echo "<br><br><pre>";
+        echo ($payload);
+        echo "</pre>";
+        $urlParams = array();
+        $urlParams[] = "mergeMode=REPLACE";
+        $urlParams[] = "strategy=UPDATE";
+        $urlParams[] = "importStrategy=CREATE_AND_UPDATE";
+        $response = $dhis2->post("/api/33/events/", $payload, $urlParams);
+        echo "<br><br><pre>";
+        echo ($response);
+        echo "</pre>";
+      }
+    }
   }
+
+
+
+
   $updateData = array('result_sent_to_source' => 'sent');
   $db = $db->where('hepatitis_id', $row['hepatitis_id']);
   $db->update('form_hepatitis', $updateData);

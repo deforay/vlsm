@@ -93,7 +93,7 @@ foreach ($formResults as $row) {
   $payload = '{
       "event": "' . $eventId . '",
       "eventDate":"2020-02-02",
-      "program": "uYjxkTbwRNf",
+      "program": "nZRqRmZvdJd",
       "orgUnit": "' . $facResult['other_id'] . '",
       "programStage": "CTdzCeTbYay",
       "status": "ACTIVE",

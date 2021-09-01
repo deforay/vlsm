@@ -12,6 +12,8 @@ $tableName1 = "activity_log";
 $tableName2 = "log_result_updates";
 $testTableName = 'hepatitis_tests';
 
+$resultSentToSource = null;
+
 try {
 	//Set sample received date
 	if (isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate']) != "") {
@@ -30,12 +32,27 @@ try {
 
 
 
+	$resultSentToSource = null;
+	
+	if (isset($_POST['isSampleRejected']) && $_POST['isSampleRejected'] == 'yes') {
+		$_POST['hcv_vl_count'] = null;
+		$_POST['hbv_vl_count'] = null;
+		$resultSentToSource = 'pending';
+	}
+
+	if (!empty($_POST['hcv_vl_count']) || !empty($_POST['hbv_vl_count'])) {
+		$resultSentToSource = 'pending';
+	}	
+
+
+
 	$hepatitisData = array(
 		'sample_received_at_vl_lab_datetime'  => $_POST['sampleReceivedDate'],
 		'lab_id'                              => isset($_POST['labId']) ? $_POST['labId'] : null,
 		'sample_condition'  				  => isset($_POST['sampleCondition']) ? $_POST['sampleCondition'] : (isset($_POST['specimenQuality']) ? $_POST['specimenQuality'] : null),
 		'sample_tested_datetime'  			  => isset($_POST['sampleTestedDateTime']) ? $_POST['sampleTestedDateTime'] : null,
 		'vl_testing_site'  			  		  => isset($_POST['vlTestingSite']) ? $_POST['vlTestingSite'] : null,
+		'is_sample_rejected'                  => isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
 		'result'                              => isset($_POST['result']) ? $_POST['result'] : null,
 		'hcv_vl_result'                       => isset($_POST['hcv']) ? $_POST['hcv'] : null,
 		'hbv_vl_result'                       => isset($_POST['hbv']) ? $_POST['hbv'] : null,
@@ -47,9 +64,10 @@ try {
 		'authorized_by'                       => isset($_POST['authorizedBy']) ? $_POST['authorizedBy'] : null,
 		'authorized_on' 					  => isset($_POST['authorizedOn']) ? $general->dateFormat($_POST['authorizedOn']) : null,
 		'result_status'                       => 8,
+		'result_sent_to_source'               => $resultSentToSource,
 		'data_sync'                           => 0,
-		'last_modified_by'                    => $_SESSION['userId'],
-		'last_modified_datetime'              => $general->getDateTime(),
+		'last_modified_by'                     => $_SESSION['userId'],
+		'last_modified_datetime'               => $general->getDateTime(),
 		'reason_for_vl_test'				  => isset($_POST['reasonVlTest']) ? $_POST['reasonVlTest'] : null,
 	);
 
