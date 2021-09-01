@@ -3,12 +3,12 @@
 // this file is included in /hepatitis/interop/dhis2/hepatitis-init.php
 
 $initOptionSets = array(
-    'province' => 'LqaKTLJFf4H',
-    'district' => 'HGTWO3xvXRX',
+    //'province' => 'LqaKTLJFf4H',
+    //'district' => 'HGTWO3xvXRX',
     //'socialStatus' => 'cNhaGfDzbUc',
-    //'testTypes' => 'uELLf8Z2Fi0',
-    //'gender' => 'zfJUnSL44Eg',
-    'testingLabs' => 'qrroYEzTQd3',
+    'vlTestReasons' => 'MQy8ZT6aiV8',
+    //'gender' => 'CFbcYp2biob',
+    'testingLabs' => 'MQy8ZT6aiV8',
 );
 
 foreach ($initOptionSets as $t => $id) {
@@ -32,6 +32,12 @@ foreach ($initOptionSets as $t => $id) {
         $_SESSION['DHIS2_HEP_DISTRICTS'] = array();
         foreach ($response['options'] as $district) {
             $_SESSION['DHIS2_HEP_DISTRICTS'][$district['code']] = $district['name'];
+        }
+    } else if (!empty($response) && $t == 'vlTestReasons') {
+
+        $_SESSION['DHIS2_VL_TEST_REASONS'] = array();
+        foreach ($response['options'] as $vlTestReasons) {
+            $_SESSION['DHIS2_VL_TEST_REASONS'][$vlTestReasons['code']] = $vlTestReasons['name'];
         }
     } else if (!empty($response) && $t == 'testingLabs') {
 
@@ -75,7 +81,7 @@ foreach ($initOptionSets as $t => $id) {
 // // https://his.rbc.gov.rw/hepatitis/api/organisationUnits?filter=level:eq:6&paging=false&
 
 
-// $data[] = "filter=level:eq:6";
+// $data[] = "filter=level:eq:4";
 // $data[] = "paging=false";
 // $data[] = "fields=id,level,name,path,coordinates[id,name,parent]";
 
@@ -106,4 +112,3 @@ foreach ($initOptionSets as $t => $id) {
 //     $db->onDuplicate($updateColumns, $lastInsertId);
 //     $id = $db->insert('facility_details', $facilityData);
 // }
-
