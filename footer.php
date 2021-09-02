@@ -232,15 +232,15 @@
 	splitsUrlCheck = str.split("/", 4);
 	// console.log(splitsUrl);
 	if (splitsUrl == 'users.php' || splitsUrl == 'addUser.php' || splitsUrl == 'editUser.php') {
-		$(".access-control-menu").addClass('active');
+		$(".access-control-menu,.manage").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".userMenu").addClass('active');
 	} else if (splitsUrl == 'roles.php' || splitsUrl == 'editRole.php' || splitsUrl == 'addRole.php') {
-		$(".access-control-menu").addClass('active');
+		$(".access-control-menu,.manage").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".roleMenu").addClass('active');
 	} else if (splitsUrl == 'facilities.php' || splitsUrl == 'addFacility.php' || splitsUrl == 'editFacility.php' || splitsUrl == 'mapTestType.php') {
-		$(".facility-config-menu").addClass('active');
+		$(".facility-config-menu,.manage").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".facilityMenu").addClass('active');
 	} else if (splitsUrl == 'facilityMap.php' || splitsUrl == 'addFacilityMap.php' || splitsUrl == 'editFacilityMap.php') {
@@ -248,11 +248,11 @@
 		$(".allMenu").removeClass('active');
 		$(".facilityMapMenu").addClass('active');
 	} else if (splitsUrl == 'globalConfig.php' || splitsUrl == 'editGlobalConfig.php') {
-		$(".system-config-menu").addClass('active');
+		$(".system-config-menu,.manage").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".globalConfigMenu").addClass('active');
 	} else if (splitsUrl == 'importConfig.php' || splitsUrl == 'addImportConfig.php' || splitsUrl == 'editImportConfig.php') {
-		$(".system-config-menu").addClass('active');
+		$(".system-config-menu,.manage").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".importConfigMenu").addClass('active');
 	} else if (splitsUrl == 'otherConfig.php' || splitsUrl == 'editOtherConfig.php' || splitsUrl == 'editRequestEmailConfig.php' || splitsUrl == 'editResultEmailConfig.php') {
@@ -260,15 +260,15 @@
 		$(".allMenu").removeClass('active');
 		$(".otherConfigMenu").addClass('active');
 	} else if (splitsUrl == 'testRequestEmailConfig.php' || splitsUrl == 'editTestRequestEmailConfig.php') {
-		$(".system-config-menu").addClass('active');
+		$(".system-config-menu,.manage").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".requestEmailConfigMenu").addClass('active');
 	} else if (splitsUrl == 'testResultEmailConfig.php' || splitsUrl == 'editTestResultEmailConfig.php') {
-		$(".system-config-menu").addClass('active');
+		$(".system-config-menu,.manage").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".resultEmailConfigMenu").addClass('active');
 	} else if (splitsUrl == 'geographical-divisions-details.php' || splitsUrl == 'add-geographical-divisions.php' || splitsUrl == 'edit-geographical-divisions.php') {
-		$(".system-config-menu").addClass('active');
+		$(".system-config-menu,.manage").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".geographicalMenu").addClass('active');
 	} else if (splitsUrl == 'vlRequest.php' || splitsUrl == 'editVlRequest.php' || splitsUrl == 'viewVlRequest.php') {
@@ -515,12 +515,12 @@
 		$(".allMenu").removeClass('active');
 		$(".common-reference-province").addClass('active');
 	} else if (splitsUrl == 'implementation-partners.php' || splitsUrl == 'add-implementation-partners.php' || splitsUrl == 'edit-implementation-partners.php') {
-		$(".system-config-menu").addClass('active');
+		$(".system-config-menu,.manage").addClass('active');
 		$(".common-reference-manage").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".common-reference-implementation-partners").addClass('active');
 	} else if (splitsUrl == 'funding-sources.php' || splitsUrl == 'add-funding-sources.php' || splitsUrl == 'edit-funding-sources.php') {
-		$(".system-config-menu").addClass('active');
+		$(".system-config-menu,.manage").addClass('active');
 		$(".common-reference-manage").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".common-reference-funding-sources").addClass('active');

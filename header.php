@@ -351,7 +351,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 					if ($allAdminMenuAccess == true && array_intersect($_SESSION['module'], array('admin'))) { ?>
 						<li class="treeview manage">
 							<a href="#">
-								<i class="fa fa-gears"></i>
+								<i class="fa fa-shield"></i>
 								<span>Admin</span>
 								<span class="pull-right-container">
 									<i class="fa fa-angle-left pull-right"></i>
@@ -371,7 +371,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 								if (in_array("roles.php", $_SESSION['privileges']) || in_array("users.php", $_SESSION['privileges'])) { ?>
 									<li class="treeview access-control-menu">
 										<a href="#">
-											<i class="fa fa-gears"></i>
+											<i class="fa fa-user"></i>
 											<span>Access Control</span>
 											<span class="pull-right-container">
 												<i class="fa fa-angle-left pull-right"></i>
@@ -394,7 +394,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 								<?php }
 								if (isset($_SESSION['privileges']) && in_array("facilities.php", $_SESSION['privileges'])) { ?>
 									<li class="treeview facility-config-menu">
-										<a href="/facilities/facilities.php"><i class="fa fa-gears"></i> Facilities</a>
+										<a href="/facilities/facilities.php"><i class="fa fa-building-o"></i> Facilities</a>
 									</li>
 								<?php }
 								if (in_array("roles.php", $_SESSION['privileges']) || in_array("users.php", $_SESSION['privileges'])) { ?>
@@ -429,7 +429,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 											<?php } */
 											if (isset($_SESSION['privileges']) && in_array("testResultEmailConfig.php", $_SESSION['privileges'])) { ?>
 												<li class="allMenu resultEmailConfigMenu">
-													<a href="/vl/result-mail/testResultEmailConfig.php"><i class="fa fa-caret-right"></i>Test Result Email/SMS <br>Configuration</a>
+													<a href="/vl/result-mail/testResultEmailConfig.php"><i class="fa fa-caret-right"></i>Test Result Email Config</a>
 												</li>
 											<?php }
 											?>
