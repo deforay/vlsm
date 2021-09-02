@@ -7,7 +7,7 @@ $rejReaons = $general->getRejectionReasons('eid');
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
-    <h1><i class="fa fa-gears"></i> Add EID Sample Rejection Reasons</h1>
+    <h1><i class="fa fa-child"></i> Add EID Sample Rejection Reasons</h1>
     <ol class="breadcrumb">
       <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
       <li class="active">EID Sample Rejection Reasons</li>

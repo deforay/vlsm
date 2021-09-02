@@ -10,7 +10,7 @@ $riskfactorInfo = $db->query($riskfactorQuery);
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<h1><i class="fa fa-gears"></i> Edit Hepatitis Risk Factors</h1>
+		<h1><i class="fa fa-h-square"></i> Edit Hepatitis Risk Factors</h1>
 		<ol class="breadcrumb">
 			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
 			<li class="active">Hepatitis Risk Factors</li>
@@ -35,7 +35,7 @@ $riskfactorInfo = $db->query($riskfactorQuery);
 									<label for="riskFactorName" class="col-lg-4 control-label">Risk Factor Name<span class="mandatory">*</span></label>
 									<div class="col-lg-7">
 										<input type="text" class="form-control isRequired" id="riskFactorName" name="riskFactorName" value="<?php echo $riskfactorInfo[0]['riskfactor_name']; ?>" placeholder="Risk Factor Name" title="Please enter Risk Factor name" onblur="checkNameValidation('r_hepatitis_risk_factors','riskfactor_name',this,'<?php echo "riskfactor_id##" . $id; ?>','The Risk Factor name that you entered already exists.Enter another name',null)" />
-                                        <input type="hidden" class="form-control isRequired" id="riskFactorId" name="riskFactorId" value="<?php echo base64_encode($riskfactorInfo[0]['riskfactor_id']); ?>" />
+										<input type="hidden" class="form-control isRequired" id="riskFactorId" name="riskFactorId" value="<?php echo base64_encode($riskfactorInfo[0]['riskfactor_id']); ?>" />
 									</div>
 								</div>
 							</div>
@@ -44,8 +44,8 @@ $riskfactorInfo = $db->query($riskfactorQuery);
 									<label for="riskFactorStatus" class="col-lg-4 control-label">Risk Factor Status</label>
 									<div class="col-lg-7">
 										<select class="form-control isRequired" id="riskFactorStatus" name="riskFactorStatus" placeholder="Risk Factor Status" title="Please select Risk Factor Status">
-                                            <option value="active" <?php echo($riskfactorInfo[0]['riskfactor_status']=="active" ? 'selected':''); ?> >Active</option>
-                                            <option value="inactive" <?php echo($riskfactorInfo[0]['riskfactor_status']=="inactive" ? 'selected':''); ?> >Inactive</option>
+											<option value="active" <?php echo ($riskfactorInfo[0]['riskfactor_status'] == "active" ? 'selected' : ''); ?>>Active</option>
+											<option value="inactive" <?php echo ($riskfactorInfo[0]['riskfactor_status'] == "inactive" ? 'selected' : ''); ?>>Inactive</option>
 										</select>
 									</div>
 								</div>
@@ -76,6 +76,7 @@ $riskfactorInfo = $db->query($riskfactorQuery);
 			tags: true
 		});
 	});
+
 	function validateNow() {
 
 		flag = deforayValidator.init({
@@ -95,18 +96,18 @@ $riskfactorInfo = $db->query($riskfactorQuery);
 		removeDots = removeDots.replace(/\s{2,}/g, ' ');
 
 		$.post("/includes/checkDuplicate.php", {
-			tableName: tableName,
-			fieldName: fieldName,
-			value: removeDots.trim(),
-			fnct: fnct,
-			format: "html"
-		},
-		function(data) {
-			if (data === '1') {
-				alert(alrt);
-				document.getElementById(obj.id).value = "";
-			}
-		});
+				tableName: tableName,
+				fieldName: fieldName,
+				value: removeDots.trim(),
+				fnct: fnct,
+				format: "html"
+			},
+			function(data) {
+				if (data === '1') {
+					alert(alrt);
+					document.getElementById(obj.id).value = "";
+				}
+			});
 	}
 </script>
 

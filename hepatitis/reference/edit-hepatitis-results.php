@@ -3,14 +3,14 @@ ob_start();
 #require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 $id = base64_decode($_GET['id']);
-$resultQuery = "SELECT * from r_hepatitis_results where result_id = '".$id."' ";
+$resultQuery = "SELECT * from r_hepatitis_results where result_id = '" . $id . "' ";
 $resultInfo = $db->query($resultQuery);
 ?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<h1><i class="fa fa-gears"></i> Edit Hepatitis Results</h1>
+		<h1><i class="fa fa-h-square"></i> Edit Hepatitis Results</h1>
 		<ol class="breadcrumb">
 			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
 			<li class="active">Hepatitis Results</li>
@@ -35,8 +35,8 @@ $resultInfo = $db->query($resultQuery);
 									<label for="resultName" class="col-lg-4 control-label">Result Name<span class="mandatory">*</span></label>
 									<div class="col-lg-7">
 										<input type="text" class="form-control isRequired" id="resultName" name="resultName" value="<?php echo $resultInfo[0]['result']; ?>" placeholder="Result Name" title="Please enter Result name" onblur="checkNameValidation('r_hepatitis_results','result_id',this,'<?php echo "result_id##" . $id; ?>','The Result name that you entered already exists.Enter another name',null)" />
-                                        <input type="hidden" class="form-control isRequired" id="resultId" name="resultId" value="<?php echo base64_encode($id); ?>" />
-                                        <input type="hidden" class="form-control isRequired" id="oldResultName" name="oldResultName" value="<?php echo $resultInfo[0]['result']; ?>" />
+										<input type="hidden" class="form-control isRequired" id="resultId" name="resultId" value="<?php echo base64_encode($id); ?>" />
+										<input type="hidden" class="form-control isRequired" id="oldResultName" name="oldResultName" value="<?php echo $resultInfo[0]['result']; ?>" />
 									</div>
 								</div>
 							</div>
@@ -45,8 +45,8 @@ $resultInfo = $db->query($resultQuery);
 									<label for="resultStatus" class="col-lg-4 control-label">Result Status</label>
 									<div class="col-lg-7">
 										<select class="form-control isRequired" id="resultStatus" name="resultStatus" placeholder="Result Status" title="Please select Result Status">
-                                            <option value="active" <?php echo($resultInfo[0]['status']=="active" ? 'selected':''); ?> >Active</option>
-                                            <option value="inactive" <?php echo($resultInfo[0]['status']=="inactive" ? 'selected':''); ?> >Inactive</option>
+											<option value="active" <?php echo ($resultInfo[0]['status'] == "active" ? 'selected' : ''); ?>>Active</option>
+											<option value="inactive" <?php echo ($resultInfo[0]['status'] == "inactive" ? 'selected' : ''); ?>>Inactive</option>
 										</select>
 									</div>
 								</div>
@@ -77,6 +77,7 @@ $resultInfo = $db->query($resultQuery);
 			tags: true
 		});
 	});
+
 	function validateNow() {
 
 		flag = deforayValidator.init({
@@ -96,18 +97,18 @@ $resultInfo = $db->query($resultQuery);
 		removeDots = removeDots.replace(/\s{2,}/g, ' ');
 
 		$.post("/includes/checkDuplicate.php", {
-			tableName: tableName,
-			fieldName: fieldName,
-			value: removeDots.trim(),
-			fnct: fnct,
-			format: "html"
-		},
-		function(data) {
-			if (data === '1') {
-				alert(alrt);
-				document.getElementById(obj.id).value = "";
-			}
-		});
+				tableName: tableName,
+				fieldName: fieldName,
+				value: removeDots.trim(),
+				fnct: fnct,
+				format: "html"
+			},
+			function(data) {
+				if (data === '1') {
+					alert(alrt);
+					document.getElementById(obj.id).value = "";
+				}
+			});
 	}
 </script>
 

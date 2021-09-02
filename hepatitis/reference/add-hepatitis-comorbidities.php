@@ -7,7 +7,7 @@ include_once(APPLICATION_PATH . '/header.php');
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
-    <h1><i class="fa fa-gears"></i> Add Hepatitis Co-morbidities</h1>
+    <h1><i class="fa fa-h-square"></i> Add Hepatitis Co-morbidities</h1>
     <ol class="breadcrumb">
       <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
       <li class="active">Hepatitis Co-morbidities</li>
@@ -16,7 +16,7 @@ include_once(APPLICATION_PATH . '/header.php');
 
   <!-- Main content -->
   <section class="content">
-    
+
     <div class="box box-default">
       <div class="box-header with-border">
         <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
@@ -39,9 +39,9 @@ include_once(APPLICATION_PATH . '/header.php');
                 <div class="form-group">
                   <label for="comorbidityStatus" class="col-lg-4 control-label">Comorbidity Status</label>
                   <div class="col-lg-7">
-                    <select class="form-control isRequired" id="comorbidityStatus" name="comorbidityStatus" placeholder="Comorbidity Status" title="Please enter Comorbidity Status"  >
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
+                    <select class="form-control isRequired" id="comorbidityStatus" name="comorbidityStatus" placeholder="Comorbidity Status" title="Please enter Comorbidity Status">
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
                     </select>
                   </div>
                 </div>
@@ -69,7 +69,7 @@ include_once(APPLICATION_PATH . '/header.php');
 
 <script type="text/javascript">
   function validateNow() {
-   
+
     flag = deforayValidator.init({
       formId: 'addComorbidityForm'
     });
@@ -100,7 +100,6 @@ include_once(APPLICATION_PATH . '/header.php');
         }
       });
   }
-
 </script>
 
 <?php

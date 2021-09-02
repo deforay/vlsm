@@ -18,7 +18,7 @@ $tstInfo = $db->query($tstQuery);
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<h1><i class="fa fa-gears"></i> Edit VL Test Reasons</h1>
+		<h1><i class="fa fa-flask"></i> Edit VL Test Reasons</h1>
 		<ol class="breadcrumb">
 			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
 			<li class="active">VL Test Reasons</li>
@@ -97,6 +97,7 @@ $tstInfo = $db->query($tstQuery);
 			tags: true
 		});
 	});
+
 	function validateNow() {
 
 		flag = deforayValidator.init({
@@ -116,18 +117,18 @@ $tstInfo = $db->query($tstQuery);
 		removeDots = removeDots.replace(/\s{2,}/g, ' ');
 
 		$.post("/includes/checkDuplicate.php", {
-			tableName: tableName,
-			fieldName: fieldName,
-			value: removeDots.trim(),
-			fnct: fnct,
-			format: "html"
-		},
-		function(data) {
-			if (data === '1') {
-				alert(alrt);
-				document.getElementById(obj.id).value = "";
-			}
-		});
+				tableName: tableName,
+				fieldName: fieldName,
+				value: removeDots.trim(),
+				fnct: fnct,
+				format: "html"
+			},
+			function(data) {
+				if (data === '1') {
+					alert(alrt);
+					document.getElementById(obj.id).value = "";
+				}
+			});
 	}
 </script>
 

@@ -8,7 +8,7 @@ include_once(APPLICATION_PATH . '/header.php');
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
-    <h1><i class="fa fa-gears"></i> Viral Load Sample Rejection Reasons</h1>
+    <h1><i class="fa fa-flask"></i> Viral Load Sample Rejection Reasons</h1>
     <ol class="breadcrumb">
       <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
       <li class="active">Viral Load Sample Rejection Reasons</li>
@@ -21,7 +21,7 @@ include_once(APPLICATION_PATH . '/header.php');
       <div class="col-xs-12">
         <div class="box">
           <div class="box-header with-border">
-            <?php if (isset($_SESSION['privileges']) && in_array("vl-art-code-details.php", $_SESSION['privileges']) && $sarr['sc_user_type'] !='vluser') { ?>
+            <?php if (isset($_SESSION['privileges']) && in_array("vl-art-code-details.php", $_SESSION['privileges']) && $sarr['sc_user_type'] != 'vluser') { ?>
               <a href="add-vl-sample-rejection-reasons.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add VL Sample Rejection Reasons</a>
             <?php } ?>
             <!--<button class="btn btn-primary pull-right" style="margin-right: 1%;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>-->
@@ -35,7 +35,7 @@ include_once(APPLICATION_PATH . '/header.php');
                   <th>Rejection Reason Type</th>
                   <th>Rejection Reason Code</th>
                   <th>Rejection Reason Status</th>
-                  <?php if (isset($_SESSION['privileges']) && in_array("vl-art-code-details.php", $_SESSION['privileges']) && $sarr['sc_user_type'] !='vluser') { ?>
+                  <?php if (isset($_SESSION['privileges']) && in_array("vl-art-code-details.php", $_SESSION['privileges']) && $sarr['sc_user_type'] != 'vluser') { ?>
                     <th>Action</th>
                   <?php } ?>
                 </tr>
@@ -87,7 +87,7 @@ include_once(APPLICATION_PATH . '/header.php');
         {
           "sClass": "center"
         },
-        <?php if (isset($_SESSION['privileges']) && in_array("vl-art-code-details.php", $_SESSION['privileges']) && $sarr['sc_user_type'] !='vluser') { ?> {
+        <?php if (isset($_SESSION['privileges']) && in_array("vl-art-code-details.php", $_SESSION['privileges']) && $sarr['sc_user_type'] != 'vluser') { ?> {
             "sClass": "center",
             "bSortable": false
           },

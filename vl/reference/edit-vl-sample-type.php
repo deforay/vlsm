@@ -10,7 +10,7 @@ $sampleInfo = $db->query($sampleQuery);
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <h1><i class="fa fa-gears"></i> Edit Viral Load Sample Type</h1>
+        <h1><i class="fa fa-flask"></i> Edit Viral Load Sample Type</h1>
         <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
             <li class="active">Viral Load Sample Type</li>
@@ -19,7 +19,7 @@ $sampleInfo = $db->query($sampleQuery);
 
     <!-- Main content -->
     <section class="content">
-        
+
         <div class="box box-default">
             <div class="box-header with-border">
                 <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>

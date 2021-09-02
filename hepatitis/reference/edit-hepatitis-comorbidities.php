@@ -10,7 +10,7 @@ $comorbidityInfo = $db->query($comorbidityQuery);
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
-    <h1><i class="fa fa-gears"></i> Edit Hepatitis Co-morbidities</h1>
+    <h1><i class="fa fa-h-square"></i> Edit Hepatitis Co-morbidities</h1>
     <ol class="breadcrumb">
       <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
       <li class="active">Hepatitis Co-morbidities</li>
@@ -19,7 +19,7 @@ $comorbidityInfo = $db->query($comorbidityQuery);
 
   <!-- Main content -->
   <section class="content">
-    
+
     <div class="box box-default">
       <div class="box-header with-border">
         <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
@@ -43,9 +43,9 @@ $comorbidityInfo = $db->query($comorbidityQuery);
                 <div class="form-group">
                   <label for="comorbidityStatus" class="col-lg-4 control-label">Comorbidity Status</label>
                   <div class="col-lg-7">
-                    <select class="form-control isRequired" id="comorbidityStatus" name="comorbidityStatus" placeholder="Comorbidity Status" title="Please enter Comorbidity Status"  >
-                        <option value="active" <?php echo($comorbidityInfo[0]['comorbidity_status']=="active" ? 'selected':''); ?> >Active</option>
-                        <option value="inactive" <?php echo($comorbidityInfo[0]['comorbidity_status']=="inactive" ? 'selected':''); ?> >Inactive</option>
+                    <select class="form-control isRequired" id="comorbidityStatus" name="comorbidityStatus" placeholder="Comorbidity Status" title="Please enter Comorbidity Status">
+                      <option value="active" <?php echo ($comorbidityInfo[0]['comorbidity_status'] == "active" ? 'selected' : ''); ?>>Active</option>
+                      <option value="inactive" <?php echo ($comorbidityInfo[0]['comorbidity_status'] == "inactive" ? 'selected' : ''); ?>>Inactive</option>
                     </select>
                   </div>
                 </div>
@@ -73,7 +73,7 @@ $comorbidityInfo = $db->query($comorbidityQuery);
 
 <script type="text/javascript">
   function validateNow() {
-   
+
     flag = deforayValidator.init({
       formId: 'editComorbidityForm'
     });
@@ -104,7 +104,6 @@ $comorbidityInfo = $db->query($comorbidityQuery);
         }
       });
   }
-
 </script>
 
 <?php
