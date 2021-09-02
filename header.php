@@ -394,7 +394,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 								<?php }
 								if (isset($_SESSION['privileges']) && in_array("facilities.php", $_SESSION['privileges'])) { ?>
 									<li class="treeview facility-config-menu">
-										<a href="/facilities/facilities.php"><i class="fa fa-building-o"></i> Facilities</a>
+										<a href="/facilities/facilities.php"><i class="fa fa-hospital-o"></i> Facilities</a>
 									</li>
 								<?php }
 								if (in_array("roles.php", $_SESSION['privileges']) || in_array("users.php", $_SESSION['privileges'])) { ?>
@@ -519,7 +519,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 								<?php }
 								if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['hepatitis'] == true && isset($_SESSION['privileges']) && in_array("hepatitis-sample-type.php", $_SESSION['privileges'])) { ?>
 									<li class="treeview hepatitis-reference-manage">
-										<a href="#"><i class="fa fa-flask"></i>
+										<a href="#"><i class="fa fa-h-square"></i>
 											Hepatitis Config
 											<span class="pull-right-container">
 												<i class="fa fa-angle-left pull-right"></i>

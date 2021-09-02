@@ -11,7 +11,7 @@ $rsnInfo = $db->query($rsnQuery);
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<h1><i class="fa fa-gears"></i> Edit Hepatitis Sample Rejection Reasons</h1>
+		<h1><i class="fa fa-h-square"></i> Edit Hepatitis Sample Rejection Reasons</h1>
 		<ol class="breadcrumb">
 			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
 			<li class="active">Hepatitis Sample Rejection Reasons</li>
@@ -35,7 +35,7 @@ $rsnInfo = $db->query($rsnQuery);
 								<div class="form-group">
 									<label for="rejectionReasonName" class="col-lg-4 control-label">Rejection Reason Name <span class="mandatory">*</span></label>
 									<div class="col-lg-7">
-										<input type="text" class="form-control isRequired" id="rejectionReasonName" name="rejectionReasonName" value="<?php echo $rsnInfo[0]['rejection_reason_name']; ?>" placeholder="Rejection Reason Name" title="Please enter Rejection Reason name" onblur="checkNameValidation('r_hepatitis_sample_rejection_reasons','rejection_reason_name',this,'<?php echo "rejection_reason_id##" . $id; ?>','This Rejection reason name that you entered already exists.Try another Rejection reason name',null)"/>
+										<input type="text" class="form-control isRequired" id="rejectionReasonName" name="rejectionReasonName" value="<?php echo $rsnInfo[0]['rejection_reason_name']; ?>" placeholder="Rejection Reason Name" title="Please enter Rejection Reason name" onblur="checkNameValidation('r_hepatitis_sample_rejection_reasons','rejection_reason_name',this,'<?php echo "rejection_reason_id##" . $id; ?>','This Rejection reason name that you entered already exists.Try another Rejection reason name',null)" />
 										<input type="hidden" class="form-control isRequired" id="rejectionReasonId" name="rejectionReasonId" value="<?php echo base64_encode($rsnInfo[0]['rejection_reason_id']); ?>" />
 									</div>
 								</div>
@@ -44,7 +44,7 @@ $rsnInfo = $db->query($rsnQuery);
 								<div class="form-group">
 									<label for="rejectionType" class="col-lg-4 control-label">Rejection Type</label>
 									<div class="col-lg-7">
-										<select class="form-control select2 isRequired" id="rejectionType" name="rejectionType" placeholder="Rejection Type" title="Please enter Rejection Type" >
+										<select class="form-control select2 isRequired" id="rejectionType" name="rejectionType" placeholder="Rejection Type" title="Please enter Rejection Type">
 											<?= $general->generateSelectOptions($rejReaons, strtolower($rsnInfo[0]['rejection_type']), '-- Select --'); ?>
 										</select>
 									</div>
@@ -56,7 +56,7 @@ $rsnInfo = $db->query($rsnQuery);
 								<div class="form-group">
 									<label for="rejectionReasonCode" class="col-lg-4 control-label">Rejection Reason Code <span class="mandatory">*</span></label>
 									<div class="col-lg-7">
-										<input type="text" class="form-control isRequired" value="<?php echo $rsnInfo[0]['rejection_reason_code']; ?>" id="rejectionReasonCode" name="rejectionReasonCode" placeholder="Rejection Reason Code" title="Please enter Rejection Reason Code" onblur="checkNameValidation('r_hepatitis_sample_rejection_reasons','rejection_reason_code',this,'<?php echo "rejection_reason_id##" . $id; ?>','This Rejection reason code that you entered already exists.Try another Rejection reason code',null)"/>
+										<input type="text" class="form-control isRequired" value="<?php echo $rsnInfo[0]['rejection_reason_code']; ?>" id="rejectionReasonCode" name="rejectionReasonCode" placeholder="Rejection Reason Code" title="Please enter Rejection Reason Code" onblur="checkNameValidation('r_hepatitis_sample_rejection_reasons','rejection_reason_code',this,'<?php echo "rejection_reason_id##" . $id; ?>','This Rejection reason code that you entered already exists.Try another Rejection reason code',null)" />
 									</div>
 								</div>
 							</div>
@@ -137,12 +137,12 @@ $rsnInfo = $db->query($rsnQuery);
 		checkValue = $("#" + id + " option:selected").html();
 		if (checkValue != '') {
 			$.post("/includes/addNewField.php", {
-				value: checkValue,
-				mode: 'addNewRejectionType'
-			},
-			function(data) {
-				console.log(data)
-			});
+					value: checkValue,
+					mode: 'addNewRejectionType'
+				},
+				function(data) {
+					console.log(data)
+				});
 		}
 	}
 </script>

@@ -8,7 +8,7 @@ include_once(APPLICATION_PATH . '/header.php');
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<h1><i class="fa fa-gears"></i> Add Hepatitis Risk Factors</h1>
+		<h1><i class="fa fa-h-square"></i> Add Hepatitis Risk Factors</h1>
 		<ol class="breadcrumb">
 			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
 			<li class="active">Hepatitis Risk Factors</li>
@@ -73,6 +73,7 @@ include_once(APPLICATION_PATH . '/header.php');
 			tags: true
 		});
 	});
+
 	function validateNow() {
 
 		flag = deforayValidator.init({
@@ -92,18 +93,18 @@ include_once(APPLICATION_PATH . '/header.php');
 		removeDots = removeDots.replace(/\s{2,}/g, ' ');
 
 		$.post("/includes/checkDuplicate.php", {
-			tableName: tableName,
-			fieldName: fieldName,
-			value: removeDots.trim(),
-			fnct: fnct,
-			format: "html"
-		},
-		function(data) {
-			if (data === '1') {
-				alert(alrt);
-				document.getElementById(obj.id).value = "";
-			}
-		});
+				tableName: tableName,
+				fieldName: fieldName,
+				value: removeDots.trim(),
+				fnct: fnct,
+				format: "html"
+			},
+			function(data) {
+				if (data === '1') {
+					alert(alrt);
+					document.getElementById(obj.id).value = "";
+				}
+			});
 	}
 </script>
 
