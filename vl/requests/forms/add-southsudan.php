@@ -188,7 +188,7 @@ $sFormat = '';
                                                        </select>
                                                   </div>
                                              </div>
-                                             <?php if ($_SESSION['accessType'] == 'collection-site') { ?>
+                                             <?php if ($usersModel->isAllowed('vlTestResult.php', $systemConfig) && $_SESSION['accessType'] != 'collection-site') { ?>
                                                   <div class="col-md-4 col-md-4">
                                                        <label for="labId">Lab Name </label>
                                                        <select name="labId" id="labId" class="form-control" title="Please choose lab" onchange="autoFillFocalDetails();" style="width:100%;">
@@ -506,7 +506,7 @@ $sFormat = '';
                                                        </div>
                                                   </div>
                                              </div>
-                                             <?php if ($_SESSION['accessType'] != 'collection-site') { ?>
+                                             <?php if ($usersModel->isAllowed('vlTestResult.php', $systemConfig) && $_SESSION['accessType'] != 'collection-site') { ?>
                                                   <div class="box box-primary">
                                                        <div class="box-header with-border">
                                                             <h3 class="box-title">Laboratory Information</h3>
