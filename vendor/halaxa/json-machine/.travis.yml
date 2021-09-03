@@ -1,0 +1,15 @@
+language: php
+
+php:
+  - 5.6
+  - 7.0
+  - 7.1
+  - 7.2
+  - 7.3
+  - 7.4
+  - 8.0
+  - nightly
+
+install:
+  - composer self-update --2
+  - composer update --ignore-platform-req=php

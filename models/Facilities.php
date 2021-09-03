@@ -24,7 +24,7 @@ class Facilities
 
         if ($onlyActive) {
             $this->db->where('status', 'active');
-        }        
+        }
 
         return $this->db->get("facility_details");
     }
@@ -44,11 +44,11 @@ class Facilities
 
         if ($facilityType) {
             $this->db->where('facility_type', $facilityType);
-        }        
+        }
 
         return $this->db->getOne("facility_details");
-    }    
-    
+    }
+
     public function getFacilityByName($facilityName)
     {
         if (!empty($facilityName)) {
@@ -85,7 +85,8 @@ class Facilities
         }
 
         $this->db->where("map.user_id", $userId);
-        return $this->db->getValue("vl_user_facility_map map", "GROUP_CONCAT(DISTINCT map.facility_id SEPARATOR ',')");
+        $response = $this->db->getValue("vl_user_facility_map map", "GROUP_CONCAT(DISTINCT map.facility_id SEPARATOR ',')");
+        return rtrim($response, ',');
     }
 
 
