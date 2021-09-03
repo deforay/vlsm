@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cfc6c7e0d513ebfa3ff3d4dd2875099a",
+    "content-hash": "c3d096826f849a6b6d47cea01a74754d",
     "packages": [
         {
             "name": "aranyasen/hl7",
@@ -350,6 +350,53 @@
                 "source": "https://github.com/guzzle/psr7/tree/2.0.0"
             },
             "time": "2021-06-30T20:03:07+00:00"
+        },
+        {
+            "name": "halaxa/json-machine",
+            "version": "0.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/halaxa/json-machine.git",
+                "reference": "39ec702c434e72ddae25d3af14c1d0fe60b03ef6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/halaxa/json-machine/zipball/39ec702c434e72ddae25d3af14c1d0fe60b03ef6",
+                "reference": "39ec702c434e72ddae25d3af14c1d0fe60b03ef6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^6",
+                "phpunit/phpunit": "^5.7.27"
+            },
+            "suggest": {
+                "ext-json": "To run JSON Machine out of the box without custom decoders."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "JsonMachine\\": "src/"
+                },
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Filip Halaxa",
+                    "email": "filip@halaxa.cz"
+                }
+            ],
+            "description": "Efficient, easy-to-use and fast JSON pull parser",
+            "time": "2021-05-06T11:47:56+00:00"
         },
         {
             "name": "league/csv",
@@ -1411,7 +1458,6 @@
             "require": {
                 "php": ">=5.3.0"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "files": [
@@ -1438,10 +1484,6 @@
                 }
             ],
             "description": "PHP MySQL Wrapper and object mapper which utilizes MySQLi and prepared statements",
-            "support": {
-                "issues": "https://github.com/ThingEngineer/PHP-MySQLi-Database-Class/issues",
-                "source": "https://github.com/ThingEngineer/PHP-MySQLi-Database-Class/tree/master"
-            },
             "time": "2020-10-14T10:55:58+00:00"
         }
     ],
@@ -1455,5 +1497,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "1.1.0"
 }
