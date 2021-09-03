@@ -315,7 +315,8 @@ if ($sarr['sc_user_type'] == 'vluser' && $sCode != '') {
                   </tr>
                   <tr>
                     <td>
-                      <label for="patientARTNo">Patient ID <span class="mandatory">*</span></label></td>
+                      <label for="patientARTNo">Patient ID <span class="mandatory">*</span></label>
+                    </td>
                     <td>
                       <input type="text" class="form-control isRequired" placeholder="Enter Patient ID" name="patientARTNo" id="patientARTNo" title="Please enter Clinic ID" value="<?php echo $vlQueryInfo['patient_art_no']; ?>" style="width:100%;" />
                     </td>
@@ -368,8 +369,10 @@ if ($sarr['sc_user_type'] == 'vluser' && $sCode != '') {
                     <td>
                       <input type="text" name="ageInYears" id="ageInYears" class="form-control checkNum" maxlength="2" placeholder="Age in Year" title="Enter age in years" value="<?php echo $vlQueryInfo['patient_age_in_years']; ?>" />
                     </td>
-                    <td><label for="ageInMonths">If Age < 1, Age in Months </label> </td> <td>
-                          <input type="text" name="ageInMonths" id="ageInMonths" class="form-control checkNum" maxlength="2" placeholder="Age in Month" title="Enter age in months" value="<?php echo $vlQueryInfo['patient_age_in_months']; ?>" />
+                    <td><label for="ageInMonths">If Age < 1, Age in Months </label>
+                    </td>
+                    <td>
+                      <input type="text" name="ageInMonths" id="ageInMonths" class="form-control checkNum" maxlength="2" placeholder="Age in Month" title="Enter age in months" value="<?php echo $vlQueryInfo['patient_age_in_months']; ?>" />
                     </td>
 
                   </tr>
@@ -457,14 +460,16 @@ if ($sarr['sc_user_type'] == 'vluser' && $sCode != '') {
                         &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="routineOne" name="reasonForTest" value="First VL, routine monitoring (On ART for at least 6 months)" title="Please Check Routine" <?php echo ($vlQueryInfo['reason_testing_png'] == 'First VL, routine monitoring (On ART for at least 6 months)' || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'First VL, routine monitoring (On ART for at least 6 months)') ? "checked='checked'" : "" ?>>First VL, routine monitoring (On ART for at least 6 months)
                       </label>
                       <label class="radio-inline">
-                        <input type="radio" id="routineTwo" name="reasonForTest" value="Annual routine follow-up VL (Previous VL < 1000 cp/mL)" title="Please Check Routine" <?php echo ($vlQueryInfo['reason_testing_png'] == 'Annual routine follow-up VL (Previous VL < 1000 cp/mL)' || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'Annual routine follow-up VL (Previous VL < 1000 cp/mL)') ? "checked='checked'" : "" ?>>Annual routine follow-up VL (Previous VL < 1000 cp/mL) </label> </td> <td colspan="3" class="suspect">
-                          <label for="suspect">Suspected Treatment Failure</label><br />
-                          <label class="radio-inline">
-                            <input type="radio" id="suspectOne" name="reasonForTest" value="Suspected TF" title="Please Suspected TF" <?php echo ($vlQueryInfo['reason_testing_png'] == 'Suspected TF' || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'Suspected TF') ? "checked='checked'" : "" ?>>Suspected TF
-                          </label>
-                          <label class="radio-inline">
-                            <input type="radio" id="suspectTwo" name="reasonForTest" value="Follow-up VL after EAC (Previous VL >= 1000 cp/mL)" title="Please Suspected TF" <?php echo ($vlQueryInfo['reason_testing_png'] == 'Follow-up VL after EAC (Previous VL >= 1000 cp/mL)' || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'Follow-up VL after EAC (Previous VL >= 1000 cp/mL)') ? "checked='checked'" : "" ?>>Follow-up VL after EAC (Previous VL >= 1000 cp/mL)
-                          </label>
+                        <input type="radio" id="routineTwo" name="reasonForTest" value="Annual routine follow-up VL (Previous VL < 1000 cp/mL)" title="Please Check Routine" <?php echo ($vlQueryInfo['reason_testing_png'] == 'Annual routine follow-up VL (Previous VL < 1000 cp/mL)' || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'Annual routine follow-up VL (Previous VL < 1000 cp/mL)') ? "checked='checked'" : "" ?>>Annual routine follow-up VL (Previous VL < 1000 cp/mL) </label>
+                    </td>
+                    <td colspan="3" class="suspect">
+                      <label for="suspect">Suspected Treatment Failure</label><br />
+                      <label class="radio-inline">
+                        <input type="radio" id="suspectOne" name="reasonForTest" value="Suspected TF" title="Please Suspected TF" <?php echo ($vlQueryInfo['reason_testing_png'] == 'Suspected TF' || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'Suspected TF') ? "checked='checked'" : "" ?>>Suspected TF
+                      </label>
+                      <label class="radio-inline">
+                        <input type="radio" id="suspectTwo" name="reasonForTest" value="Follow-up VL after EAC (Previous VL >= 1000 cp/mL)" title="Please Suspected TF" <?php echo ($vlQueryInfo['reason_testing_png'] == 'Follow-up VL after EAC (Previous VL >= 1000 cp/mL)' || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'Follow-up VL after EAC (Previous VL >= 1000 cp/mL)') ? "checked='checked'" : "" ?>>Follow-up VL after EAC (Previous VL >= 1000 cp/mL)
+                      </label>
                     </td>
                   </tr>
                   <tr>
@@ -522,7 +527,8 @@ if ($sarr['sc_user_type'] == 'vluser' && $sCode != '') {
                       <input type="text" name="processTime" id="processTime" class="form-control" style="width: 100%;" placeholder="Time" title="Processing Time" value="<?php echo $vlQueryInfo['plasma_process_time']; ?>" />
                     </td>
                     <td>
-                      <label for="processTech">Processing Tech</label></td>
+                      <label for="processTech">Processing Tech</label>
+                    </td>
                     <td>
                       <input type="text" name="processTech" id="processTech" class="form-control" style="width: 100%;" placeholder="Processing Tech" title="Processing Tech" value="<?php echo $vlQueryInfo['plasma_process_tech']; ?>" />
                     </td>
@@ -748,7 +754,7 @@ if ($sarr['sc_user_type'] == 'vluser' && $sCode != '') {
 <script>
   let provinceName = true;
   let facilityName = true;
-  
+
   $(document).ready(function() {
 
     //getfacilityProvinceDetails($("#clinicName").val());
