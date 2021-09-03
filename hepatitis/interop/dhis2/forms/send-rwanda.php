@@ -10,7 +10,8 @@ $formResults = $db->rawQuery($query);
 $counter = 0;
 foreach ($formResults as $row) {
 
-  $trackedEntityInstance = str_replace("dhis2-", "", $row['source_of_request']);
+  $sourceOfRequestArray = explode("::" , $row['source_of_request']);
+  $trackedEntityInstance = $sourceOfRequestArray[1];
 
   $programStages = array(
     'Initial HBV VL' => 'UXFQ8uL45XB',
