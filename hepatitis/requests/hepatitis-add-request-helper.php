@@ -66,6 +66,16 @@ try {
 		$status = 9;
 	}
 
+	$resultSentToSource = 'pending';
+	
+	if (isset($_POST['isSampleRejected']) && $_POST['isSampleRejected'] == 'yes') {
+		$_POST['hcvCount'] = null;
+		$_POST['hbvCount'] = null;
+		$resultSentToSource = 'pending';
+	}else if (empty($_POST['hcvCount']) && empty($_POST['hbvCount'])) {
+		$resultSentToSource = null;
+	}	
+
 
 	$hepatitisData = array(
 		'vlsm_instance_id'                    => $instanceId,
@@ -119,6 +129,7 @@ try {
 		'authorized_on' 					  => isset($_POST['authorizedOn']) ? $general->dateFormat($_POST['authorizedOn']) : null,
 		'rejection_on'	 					  => (isset($_POST['rejectionDate']) && $_POST['isSampleRejected'] == 'yes') ? $general->dateFormat($_POST['rejectionDate']) : null,
 		'result_status'                       => $status,
+		'result_sent_to_source'               => $resultSentToSource,
 		'data_sync'                           => 0,
 		'reason_for_sample_rejection'         => (isset($_POST['sampleRejectionReason']) && $_POST['isSampleRejected'] == 'yes') ? $_POST['sampleRejectionReason'] : null,
 		'request_created_by'                  => $_SESSION['userId'],
