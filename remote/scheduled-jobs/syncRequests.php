@@ -34,7 +34,7 @@ $forceSyncModule = !empty($_GET['forceSyncModule']) ? $_GET['forceSyncModule'] :
 $manifestCode = !empty($_GET['manifestCode']) ? $_GET['manifestCode'] : null;
 
 // if only one module is getting synced, lets only sync that one module
-if(!empty($forceSyncModule)){
+if (!empty($forceSyncModule)) {
     unset($systemConfig['modules']);
     $systemConfig['modules'][$forceSyncModule] = true;
 }
@@ -73,92 +73,92 @@ if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == t
         )
     );
     // execute post
-    $curl_response = curl_exec($ch);
-    // die($curl_response);
-    //close connection
+    $jsonResponse = curl_exec($ch);
+
     curl_close($ch);
-    $apiResult = json_decode($curl_response, true);
 
-    if (!empty($apiResult) && is_array($apiResult) && count($apiResult) > 0) {
-        $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='vl_request_form'";
-        $allColResult = $db->rawQuery($allColumns);
-        $columnList = array_map('current', $allColResult);
+    $parsedData = \JsonMachine\JsonMachine::fromString($jsonResponse);
 
-        $removeKeys = array(
-            'vl_sample_id',
-            'sample_batch_id',
-            'result_value_log',
-            'result_value_absolute',
-            'result_value_absolute_decimal',
-            'result_value_text',
-            'result',
-            'sample_tested_datetime',
-            'sample_received_at_vl_lab_datetime',
-            'result_dispatched_datetime',
-            'is_sample_rejected',
-            'reason_for_sample_rejection',
-            'result_approved_by',
-            'result_approved_datetime',
-            'request_created_datetime',
-            'request_created_by',
-            'last_modified_by',
-            'data_sync'
-        );
+    $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='vl_request_form'";
+    $allColResult = $db->rawQuery($allColumns);
+    $columnList = array_map('current', $allColResult);
 
-        $columnList = array_diff($columnList, $removeKeys);
+    $removeKeys = array(
+        'vl_sample_id',
+        'sample_batch_id',
+        'result_value_log',
+        'result_value_absolute',
+        'result_value_absolute_decimal',
+        'result_value_text',
+        'result',
+        'sample_tested_datetime',
+        'sample_received_at_vl_lab_datetime',
+        'result_dispatched_datetime',
+        'is_sample_rejected',
+        'reason_for_sample_rejection',
+        'result_approved_by',
+        'result_approved_datetime',
+        'request_created_datetime',
+        'request_created_by',
+        'last_modified_by',
+        'data_sync'
+    );
 
-        foreach ($apiResult as $key => $remoteData) {
-            $request = array();
-            foreach ($columnList as $colName) {
-                if (isset($remoteData[$colName])) {
-                    $request[$colName] = $remoteData[$colName];
-                } else {
-                    $request[$colName] = null;
-                }
-            }
-
-            //$remoteSampleCodeList[] = $request['remote_sample_code'];
-            $request['last_modified_datetime'] = $general->getDateTime();
-
-            //check wheather sample code empty or not
-            // if ($request['sample_code'] != '' && $request['sample_code'] != 0 && $request['sample_code'] != null) {
-            //     $sQuery = "SELECT vl_sample_id FROM vl_request_form WHERE sample_code='" . $request['sample_code'] . "'";
-            //     $sResult = $db->rawQuery($sQuery);
-            //     $db = $db->where('vl_sample_id', $sResult[0]['vl_sample_id']);
-            //     $id = $db->update('vl_request_form', $request);
-            // } else {
-            //check exist remote
-            $exsvlQuery = "SELECT vl_sample_id,sample_code FROM vl_request_form AS vl WHERE remote_sample_code='" . $request['remote_sample_code'] . "'";
-            $exsvlResult = $db->query($exsvlQuery);
-            if ($exsvlResult) {
-
-                $dataToUpdate = array();
-
-                $dataToUpdate['sample_package_code'] = $request['sample_package_code'];
-                $dataToUpdate['sample_package_id'] = $request['sample_package_id'];
-
-                $db = $db->where('vl_sample_id', $exsvlResult[0]['vl_sample_id']);
-                $id = $db->update('vl_request_form', $dataToUpdate);
+    $columnList = array_diff($columnList, $removeKeys);
+    $counter = 0;
+    foreach ($parsedData as $key => $remoteData) {
+        $counter++;
+        $request = array();
+        foreach ($columnList as $colName) {
+            if (isset($remoteData[$colName])) {
+                $request[$colName] = $remoteData[$colName];
             } else {
-                if ($request['sample_collection_date'] != '' && $request['sample_collection_date'] != null && $request['sample_collection_date'] != '0000-00-00 00:00:00') {
-                    $request['request_created_by'] = 0;
-                    $request['last_modified_by'] = 0;
-                    $request['request_created_datetime'] = $general->getDateTime();
-                    //column data_sync value is 1 equal to data_sync done.value 0 is not done.
-                    $request['data_sync'] = 0;
-                    /* echo "<pre>";
+                $request[$colName] = null;
+            }
+        }
+
+        //$remoteSampleCodeList[] = $request['remote_sample_code'];
+        $request['last_modified_datetime'] = $general->getDateTime();
+
+        //check wheather sample code empty or not
+        // if ($request['sample_code'] != '' && $request['sample_code'] != 0 && $request['sample_code'] != null) {
+        //     $sQuery = "SELECT vl_sample_id FROM vl_request_form WHERE sample_code='" . $request['sample_code'] . "'";
+        //     $sResult = $db->rawQuery($sQuery);
+        //     $db = $db->where('vl_sample_id', $sResult[0]['vl_sample_id']);
+        //     $id = $db->update('vl_request_form', $request);
+        // } else {
+        //check exist remote
+        $exsvlQuery = "SELECT vl_sample_id,sample_code FROM vl_request_form AS vl WHERE remote_sample_code='" . $request['remote_sample_code'] . "'";
+        $exsvlResult = $db->query($exsvlQuery);
+        if ($exsvlResult) {
+
+            $dataToUpdate = array();
+
+            $dataToUpdate['sample_package_code'] = $request['sample_package_code'];
+            $dataToUpdate['sample_package_id'] = $request['sample_package_id'];
+
+            $db = $db->where('vl_sample_id', $exsvlResult[0]['vl_sample_id']);
+            $id = $db->update('vl_request_form', $dataToUpdate);
+        } else {
+            if ($request['sample_collection_date'] != '' && $request['sample_collection_date'] != null && $request['sample_collection_date'] != '0000-00-00 00:00:00') {
+                $request['request_created_by'] = 0;
+                $request['last_modified_by'] = 0;
+                $request['request_created_datetime'] = $general->getDateTime();
+                //column data_sync value is 1 equal to data_sync done.value 0 is not done.
+                $request['data_sync'] = 0;
+                /* echo "<pre>";
                         print_r($request);
                         die; */
-                    $id = $db->insert('vl_request_form', $request);
-                }
+                $id = $db->insert('vl_request_form', $request);
             }
-            //}
         }
-        if (isset($apiResult) && count($apiResult) > 0) {
-            $trackId = $app->addApiTracking('', count($apiResult), 'requests', 'vl', $url, $sarr['sc_testing_lab_id'], 'sync-api');
-        }
+        //}
+    }
+    if ($counter > 0) {
+        $trackId = $app->addApiTracking('', $counter, 'requests', 'vl', $url, $sarr['sc_testing_lab_id'], 'sync-api');
     }
 }
+
 
 /* 
   ****************************************************************
@@ -193,83 +193,83 @@ if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] ==
         )
     );
     // execute post
-    $curl_response = curl_exec($ch);
+    $jsonResponse = curl_exec($ch);
 
     //close connection
     curl_close($ch);
-    $apiResult = json_decode($curl_response, true);
-
-    if (!empty($apiResult) && is_array($apiResult) && count($apiResult) > 0) {
-        $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='eid_form'";
-        $allColResult = $db->rawQuery($allColumns);
-        $columnList = array_map('current', $allColResult);
-
-        $removeKeys = array(
-            'eid_id',
-            'sample_batch_id',
-            'result',
-            'sample_tested_datetime',
-            'sample_received_at_vl_lab_datetime',
-            'result_dispatched_datetime',
-            'is_sample_rejected',
-            'reason_for_sample_rejection',
-            'result_approved_by',
-            'result_approved_datetime',
-            'request_created_by',
-            'last_modified_by',
-            'request_created_datetime',
-            'data_sync'
-        );
-
-        $columnList = array_diff($columnList, $removeKeys);
-
-        foreach ($apiResult as $key => $remoteData) {
-            $request = array();
-            foreach ($columnList as $colName) {
-                if (isset($remoteData[$colName])) {
-                    $request[$colName] = $remoteData[$colName];
-                } else {
-                    $request[$colName] = null;
-                }
-            }
+    $parsedData = \JsonMachine\JsonMachine::fromString($jsonResponse);
 
 
-            //$remoteSampleCodeList[] = $request['remote_sample_code'];
-            $request['last_modified_datetime'] = $general->getDateTime();
+    $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='eid_form'";
+    $allColResult = $db->rawQuery($allColumns);
+    $columnList = array_map('current', $allColResult);
 
-            //check whether sample code empty or not
-            // if ($request['sample_code'] != '' && $request['sample_code'] != 0 && $request['sample_code'] != null) {
-            //     $sQuery = "SELECT eid_id FROM eid_form WHERE sample_code='" . $request['sample_code'] . "'";
-            //     $sResult = $db->rawQuery($sQuery);
-            //     $db = $db->where('eid_id', $sResult[0]['eid_id']);
-            //     $id = $db->update('eid_form', $request);
-            // } else {
-            //check exist remote
-            $exsvlQuery = "SELECT eid_id,sample_code FROM eid_form AS vl WHERE remote_sample_code='" . $request['remote_sample_code'] . "'";
-            $exsvlResult = $db->query($exsvlQuery);
-            if ($exsvlResult) {
+    $removeKeys = array(
+        'eid_id',
+        'sample_batch_id',
+        'result',
+        'sample_tested_datetime',
+        'sample_received_at_vl_lab_datetime',
+        'result_dispatched_datetime',
+        'is_sample_rejected',
+        'reason_for_sample_rejection',
+        'result_approved_by',
+        'result_approved_datetime',
+        'request_created_by',
+        'last_modified_by',
+        'request_created_datetime',
+        'data_sync'
+    );
 
-                $dataToUpdate = array();
-                $dataToUpdate['sample_package_code'] = $request['sample_package_code'];
-                $dataToUpdate['sample_package_id'] = $request['sample_package_id'];
-
-                $db = $db->where('eid_id', $exsvlResult[0]['eid_id']);
-                $id = $db->update('eid_form', $dataToUpdate);
+    $columnList = array_diff($columnList, $removeKeys);
+    $counter = 0;
+    foreach ($parsedData as $key => $remoteData) {
+        $counter++;
+        $request = array();
+        foreach ($columnList as $colName) {
+            if (isset($remoteData[$colName])) {
+                $request[$colName] = $remoteData[$colName];
             } else {
-                if ($request['sample_collection_date'] != '' && $request['sample_collection_date'] != null && $request['sample_collection_date'] != '0000-00-00 00:00:00') {
-                    $request['request_created_by'] = 0;
-                    $request['last_modified_by'] = 0;
-                    $request['request_created_datetime'] = $general->getDateTime();
-                    //$request['result_status'] = 6;
-                    $request['data_sync'] = 0; //column data_sync value is 1 equal to data_sync done.value 0 is not done.
-                    $id = $db->insert('eid_form', $request);
-                }
+                $request[$colName] = null;
             }
-            //}
         }
-        if (isset($apiResult) && count($apiResult) > 0) {
-            $trackId = $app->addApiTracking('', count($apiResult), 'requests', 'eid', $url, $sarr['sc_testing_lab_id'], 'sync-api');
+
+
+        //$remoteSampleCodeList[] = $request['remote_sample_code'];
+        $request['last_modified_datetime'] = $general->getDateTime();
+
+        //check whether sample code empty or not
+        // if ($request['sample_code'] != '' && $request['sample_code'] != 0 && $request['sample_code'] != null) {
+        //     $sQuery = "SELECT eid_id FROM eid_form WHERE sample_code='" . $request['sample_code'] . "'";
+        //     $sResult = $db->rawQuery($sQuery);
+        //     $db = $db->where('eid_id', $sResult[0]['eid_id']);
+        //     $id = $db->update('eid_form', $request);
+        // } else {
+        //check exist remote
+        $exsvlQuery = "SELECT eid_id,sample_code FROM eid_form AS vl WHERE remote_sample_code='" . $request['remote_sample_code'] . "'";
+        $exsvlResult = $db->query($exsvlQuery);
+        if ($exsvlResult) {
+
+            $dataToUpdate = array();
+            $dataToUpdate['sample_package_code'] = $request['sample_package_code'];
+            $dataToUpdate['sample_package_id'] = $request['sample_package_id'];
+
+            $db = $db->where('eid_id', $exsvlResult[0]['eid_id']);
+            $id = $db->update('eid_form', $dataToUpdate);
+        } else {
+            if ($request['sample_collection_date'] != '' && $request['sample_collection_date'] != null && $request['sample_collection_date'] != '0000-00-00 00:00:00') {
+                $request['request_created_by'] = 0;
+                $request['last_modified_by'] = 0;
+                $request['request_created_datetime'] = $general->getDateTime();
+                //$request['result_status'] = 6;
+                $request['data_sync'] = 0; //column data_sync value is 1 equal to data_sync done.value 0 is not done.
+                $id = $db->insert('eid_form', $request);
+            }
         }
+        //}
+    }
+    if ($counter > 0) {
+        $trackId = $app->addApiTracking('', $counter, 'requests', 'eid', $url, $sarr['sc_testing_lab_id'], 'sync-api');
     }
 }
 
@@ -306,13 +306,16 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
         )
     );
     // execute post
-    $curl_response = curl_exec($ch);
+    $jsonResponse = curl_exec($ch);
 
     //close connection
     curl_close($ch);
-    $apiData = json_decode($curl_response, true);
+    //$apiData = json_decode($jsonResponse, true);
 
-    $apiResult = !empty($apiData['result']) ? $apiData['result'] : null;
+
+    $parsedData = \JsonMachine\JsonMachine::fromString($jsonResponse);
+
+    //$apiResult = !empty($apiData['result']) ? $apiData['result'] : null;
 
     $removeKeys = array(
         'covid19_id',
@@ -332,112 +335,101 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
     );
 
 
+    $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='form_covid19'";
+    $allColResult = $db->rawQuery($allColumns);
+    $columnList = array_map('current', $allColResult);
+    $columnList = array_diff($columnList, $removeKeys);
+    foreach ($parsedData as $dataKey => $dataVal) {
+        if ($dataKey == 'result') {
+            $counter;
+            foreach ($dataVal as $key => $remoteData) {
+                $counter++;
+                $request = array();
+                $covid19Id = $remoteData['covid19_id'];
+                foreach ($columnList as $colName) {
+                    if (isset($remoteData[$colName])) {
+                        $request[$colName] = $remoteData[$colName];
+                    } else {
+                        $request[$colName] = null;
+                    }
+                }
 
-    if (!empty($apiResult) && is_array($apiResult) && count($apiResult) > 0) {
-        $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='form_covid19'";
-        $allColResult = $db->rawQuery($allColumns);
-        $columnList = array_map('current', $allColResult);
-        $columnList = array_diff($columnList, $removeKeys);
-        foreach ($apiResult as $key => $remoteData) {
-            $request = array();
-            $covid19Id = $remoteData['covid19_id'];
-            foreach ($columnList as $colName) {
-                if (isset($remoteData[$colName])) {
-                    $request[$colName] = $remoteData[$colName];
+
+                //$remoteSampleCodeList[] = $request['remote_sample_code'];
+                $request['last_modified_datetime'] = $general->getDateTime();
+
+                //check whether sample code empty or not
+                // if ($request['sample_code'] != '' && $request['sample_code'] != 0 && $request['sample_code'] != null) {
+                //     $sQuery = "SELECT eid_id FROM eid_form WHERE sample_code='" . $request['sample_code'] . "'";
+                //     $sResult = $db->rawQuery($sQuery);
+                //     $db = $db->where('eid_id', $sResult[0]['eid_id']);
+                //     $id = $db->update('eid_form', $request);
+                // } else {
+                //check exist remote
+                $exsvlQuery = "SELECT covid19_id,sample_code FROM form_covid19 AS vl WHERE remote_sample_code='" . $request['remote_sample_code'] . "'";
+
+                $exsvlResult = $db->query($exsvlQuery);
+                if ($exsvlResult) {
+
+                    $dataToUpdate = array();
+                    $dataToUpdate['sample_package_code'] = $request['sample_package_code'];
+                    $dataToUpdate['sample_package_id'] = $request['sample_package_id'];
+
+                    $db = $db->where('covid19_id', $exsvlResult[0]['covid19_id']);
+                    $db->update('form_covid19', $dataToUpdate);
+                    $id = $exsvlResult[0]['covid19_id'];
                 } else {
-                    $request[$colName] = null;
+                    if (!empty($request['sample_collection_date'])) {
+                        $request['request_created_by'] = 0;
+                        $request['last_modified_by'] = 0;
+                        $request['request_created_datetime'] = $general->getDateTime();
+                        //$request['result_status'] = 6;
+                        $request['data_sync'] = 0; //column data_sync value is 1 equal to data_sync done.value 0 is not done.
+                        $db->insert('form_covid19', $request);
+                        $id = $db->getInsertId();
+                    }
                 }
             }
 
-            // before we unset the covid19_id field, let us fetch the
-            // test results, comorbidities and symptoms
-
-            $symptoms = (isset($apiData['symptoms'][$covid19Id]) && !empty($apiData['symptoms'][$covid19Id])) ? $apiData['symptoms'][$covid19Id] : array();
-            $comorbidities = (isset($apiData['comorbidities'][$covid19Id]) && !empty($apiData['comorbidities'][$covid19Id])) ? $apiData['comorbidities'][$covid19Id] : array();
-            $testResults = (isset($apiData['testResults'][$covid19Id]) && !empty($apiData['testResults'][$covid19Id])) ? $apiData['testResults'][$covid19Id] : array();
-
-
-            //$remoteSampleCodeList[] = $request['remote_sample_code'];
-            $request['last_modified_datetime'] = $general->getDateTime();
-
-            //check whether sample code empty or not
-            // if ($request['sample_code'] != '' && $request['sample_code'] != 0 && $request['sample_code'] != null) {
-            //     $sQuery = "SELECT eid_id FROM eid_form WHERE sample_code='" . $request['sample_code'] . "'";
-            //     $sResult = $db->rawQuery($sQuery);
-            //     $db = $db->where('eid_id', $sResult[0]['eid_id']);
-            //     $id = $db->update('eid_form', $request);
-            // } else {
-            //check exist remote
-            $exsvlQuery = "SELECT covid19_id,sample_code FROM form_covid19 AS vl WHERE remote_sample_code='" . $request['remote_sample_code'] . "'";
-
-            $exsvlResult = $db->query($exsvlQuery);
-            if ($exsvlResult) {
-
-                $dataToUpdate = array();
-                $dataToUpdate['sample_package_code'] = $request['sample_package_code'];
-                $dataToUpdate['sample_package_id'] = $request['sample_package_id'];
-
-                $db = $db->where('covid19_id', $exsvlResult[0]['covid19_id']);
-                $db->update('form_covid19', $dataToUpdate);
-                $id = $exsvlResult[0]['covid19_id'];
-            } else {
-                if (!empty($request['sample_collection_date'])) {
-                    $request['request_created_by'] = 0;
-                    $request['last_modified_by'] = 0;
-                    $request['request_created_datetime'] = $general->getDateTime();
-                    //$request['result_status'] = 6;
-                    $request['data_sync'] = 0; //column data_sync value is 1 equal to data_sync done.value 0 is not done.
-                    $db->insert('form_covid19', $request);
-                    $id = $db->getInsertId();
-                }
-            }
-
-
-            $db = $db->where('covid19_id', $id);
-            $db->delete("covid19_patient_symptoms");
-            if (isset($symptoms) && !empty($symptoms)) {
-
+            //}
+        } else if ($dataKey == 'symptoms') {
+            foreach ($dataVal as $covid19Id => $symptoms) {
+                $db = $db->where('covid19_id', $covid19Id);
+                $db->delete("covid19_patient_symptoms");
                 foreach ($symptoms as $symId => $symValue) {
                     $symptomData = array();
-                    $symptomData["covid19_id"] = $id;
+                    $symptomData["covid19_id"] = $covid19Id;
                     $symptomData["symptom_id"] = $symId;
                     $symptomData["symptom_detected"] = $symValue;
                     $db->insert("covid19_patient_symptoms", $symptomData);
                 }
             }
+        } else if ($dataKey == 'comorbidities') {
+            foreach ($dataVal as $covid19Id => $comorbidities) {
+                $db = $db->where('covid19_id', $covid19Id);
+                $db->delete("covid19_patient_comorbidities");
 
-            $db = $db->where('covid19_id', $id);
-            $db->delete("covid19_patient_comorbidities");
-            if (isset($comorbidities) && !empty($comorbidities)) {
-
-                foreach ($comorbidities as $comoId => $comoValue) {
+                foreach ($comorbidities as $comoId => $comorbidityData) {
                     $comorbidityData = array();
-                    $comorbidityData["covid19_id"] = $id;
+                    $comorbidityData["covid19_id"] = $covid19Id;
                     $comorbidityData["comorbidity_id"] = $comoId;
                     $comorbidityData["comorbidity_detected"] = $comoValue;
                     $db->insert("covid19_patient_comorbidities", $comorbidityData);
                 }
             }
-
-            $db = $db->where('covid19_id', $id);
-            $db->delete("covid19_tests");
-            if (isset($testResults) && !empty($testResults)) {
-                foreach ($testResults as $testValue) {
-                    $covid19TestData = array(
-                        'covid19_id'            => $id,
-                        'test_name'                => $testValue['test_name'],
-                        'facility_id'           => $testValue['facility_id'],
-                        'sample_tested_datetime' => $testValue['sample_tested_datetime'],
-                        'result'                => $testValue['result'],
-                    );
+        } else if ($dataKey == 'testResults') {
+            foreach ($dataVal as $covid19Id => $testResults) {
+                $db = $db->where('covid19_id', $covid19Id);
+                $db->delete("covid19_tests");
+                foreach ($testResults as $covid19TestData) {
+                    unset($covid19TestData['test_id']);
                     $db->insert("covid19_tests", $covid19TestData);
                 }
             }
-            //}
         }
-        if (isset($apiResult) && count($apiResult) > 0) {
-            $trackId = $app->addApiTracking('', count($apiResult), 'requests', 'covid19', $url, $sarr['sc_testing_lab_id'], 'sync-api');
-        }
+    }
+    if ($counter > 0) {
+        $trackId = $app->addApiTracking('', $counter, 'requests', 'covid19', $url, $sarr['sc_testing_lab_id'], 'sync-api');
     }
 }
 
@@ -474,11 +466,11 @@ if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['he
         )
     );
     // execute post
-    $curl_response = curl_exec($ch);
+    $jsonResponse = curl_exec($ch);
 
     //close connection
     curl_close($ch);
-    $apiData = json_decode($curl_response, true);
+    $apiData = json_decode($jsonResponse, true);
 
     $apiResult = !empty($apiData['result']) ? $apiData['result'] : null;
 

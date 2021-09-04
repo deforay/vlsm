@@ -32,17 +32,15 @@ try {
 
 
 
-	$resultSentToSource = null;
+	$resultSentToSource = 'pending';
 	
 	if (isset($_POST['isSampleRejected']) && $_POST['isSampleRejected'] == 'yes') {
-		$_POST['hcv_vl_count'] = null;
-		$_POST['hbv_vl_count'] = null;
+		$_POST['hcvCount'] = null;
+		$_POST['hbvCount'] = null;
 		$resultSentToSource = 'pending';
+	}else if (empty($_POST['hcvCount']) && empty($_POST['hbvCount'])) {
+		$resultSentToSource = null;
 	}
-
-	if (!empty($_POST['hcv_vl_count']) || !empty($_POST['hbv_vl_count'])) {
-		$resultSentToSource = 'pending';
-	}	
 
 
 

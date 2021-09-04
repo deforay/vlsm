@@ -107,18 +107,18 @@ if (count($data['result']) > 0) {
             $id = $db->insert('form_covid19', $lab);
         }
 
-        $db = $db->where('covid19_id', $id);
-        $db->delete("covid19_patient_symptoms");
-        if (isset($symptoms) && !empty($symptoms)) {
+        // $db = $db->where('covid19_id', $id);
+        // $db->delete("covid19_patient_symptoms");
+        // if (isset($symptoms) && !empty($symptoms)) {
 
-            foreach ($symptoms as $symId => $symValue) {
-                $symptomData = array();
-                $symptomData["covid19_id"] = $id;
-                $symptomData["symptom_id"] = $symId;
-                $symptomData["symptom_detected"] = $symValue;
-                $db->insert("covid19_patient_symptoms", $symptomData);
-            }
-        }
+        //     foreach ($symptoms as $symId => $symValue) {
+        //         $symptomData = array();
+        //         $symptomData["covid19_id"] = $id;
+        //         $symptomData["symptom_id"] = $symId;
+        //         $symptomData["symptom_detected"] = $symValue;
+        //         $db->insert("covid19_patient_symptoms", $symptomData);
+        //     }
+        // }
 
         if ($id > 0 && isset($lab['sample_code'])) {
             $sampleCode[] = $lab['sample_code'];
