@@ -22,7 +22,7 @@ $rKey = '';
 $pdQuery = "SELECT * FROM province_details";
 
 
-if ($sarr['sc_user_type'] == 'remoteuser') {
+if ($usersModel->isAllowed('vlTestResult.php', $systemConfig) && $_SESSION['accessType'] != 'collection-site') {
     $sampleCodeKey = 'remote_sample_code_key';
     $sampleCode = 'remote_sample_code';
     //check user exist in user_facility_map table
@@ -96,7 +96,7 @@ if ($sarr['sc_user_type'] == 'vluser' && $sCode != '') {
                                 </div>
                                 <table class="table" style="width:100%">
                                     <tr>
-                                        <?php if ($sarr['sc_user_type'] == 'remoteuser') { ?>
+                                        <?php if ($usersModel->isAllowed('vlTestResult.php', $systemConfig) && $_SESSION['accessType'] != 'collection-site') { ?>
                                             <td><label for="sampleCode">Sample ID </label></td>
                                             <td>
                                                 <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"><?php echo $eidInfo['sample_code'] ?></span>
@@ -328,7 +328,8 @@ if ($sarr['sc_user_type'] == 'vluser' && $sCode != '') {
                                             <select class="form-control" name="pcrTestReason" id="pcrTestReason">
                                                 <option value=''> -- Select -- </option>
                                                 <option value="Confirmation of positive first EID PCR test result" <?php echo ($eidInfo['reason_for_pcr'] == 'Confirmation of positive first EID PCR test result') ? "selected='selected'" : ""; ?>> Confirmation of positive first EID PCR test result </option>
-                                                <option value="Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months" <?php echo ($eidInfo['reason_for_pcr'] == 'Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months') ? "selected='selected'" : ""; ?>> Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months </option> <option value="Positive HIV rapid test result at 9 months or later"> Positive HIV rapid test result at 9 months or later </option>
+                                                <option value="Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months" <?php echo ($eidInfo['reason_for_pcr'] == 'Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months') ? "selected='selected'" : ""; ?>> Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months </option>
+                                                <option value="Positive HIV rapid test result at 9 months or later"> Positive HIV rapid test result at 9 months or later </option>
                                                 <option value="Other" <?php echo ($eidInfo['reason_for_pcr'] == 'Other') ? "selected='selected'" : ""; ?>> Other </option>
                                             </select>
                                         </td>
@@ -372,7 +373,7 @@ if ($sarr['sc_user_type'] == 'vluser' && $sCode != '') {
 
                             </div>
                         </div>
-                        <?php if ($sarr['sc_user_type'] != 'remoteuser') { ?>
+                        <?php if ($usersModel->isAllowed('vlTestResult.php', $systemConfig) && $_SESSION['accessType'] != 'collection-site') { ?>
                             <div class="box box-primary">
                                 <div class="box-body">
                                     <div class="box-header with-border">
@@ -627,14 +628,14 @@ if ($sarr['sc_user_type'] == 'vluser' && $sCode != '') {
 
     $(document).ready(function() {
         $('#testedBy').select2({
-			width: '100%',
-			placeholder: "Select Tested By"
-		});
+            width: '100%',
+            placeholder: "Select Tested By"
+        });
 
-		$('#approvedBy').select2({
-			width: '100%',
-			placeholder: "Select Approved By"
-		});
+        $('#approvedBy').select2({
+            width: '100%',
+            placeholder: "Select Approved By"
+        });
 
         $('#facilityId').select2({
             placeholder: "Select Clinic/Health Center"

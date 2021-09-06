@@ -24,7 +24,7 @@ foreach ($testPlatformResult as $row) {
 
 $rKey = '';
 $pdQuery = "SELECT * from province_details";
-if ($sarr['sc_user_type'] == 'remoteuser') {
+if ($usersModel->isAllowed('vlTestResult.php', $systemConfig) && $_SESSION['accessType'] != 'collection-site') {
     $sampleCodeKey = 'remote_sample_code_key';
     $sampleCode = 'remote_sample_code';
     //check user exist in user_facility_map table
@@ -85,7 +85,7 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                             </div>
                             <table class="table" style="width:100%">
                                 <tr>
-                                    <?php if ($sarr['sc_user_type'] == 'remoteuser') { ?>
+                                    <?php if ($usersModel->isAllowed('vlTestResult.php', $systemConfig) && $_SESSION['accessType'] != 'collection-site') { ?>
                                         <td><label for="sampleCode">Sample ID </label></td>
                                         <td>
                                             <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"><?php echo $eidInfo['sample_code'] ?></span>
@@ -146,7 +146,7 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                             <?php } ?>
                                         </select>
                                     </td>
-                                    <?php if ($sarr['sc_user_type'] == 'remoteuser') { ?>
+                                    <?php if ($usersModel->isAllowed('vlTestResult.php', $systemConfig) && $_SESSION['accessType'] != 'collection-site') { ?>
                                         <!-- <tr> -->
                                         <td><label for="labId">Testing Laboratory <span class="mandatory">*</span></label> </td>
                                         <td>
@@ -284,7 +284,7 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                         <select class="form-control" name="pcrTestPerformedBefore" id="pcrTestPerformedBefore">
                                             <option value=''> -- Select -- </option>
                                             <option value="yes" <?php echo ($eidInfo['pcr_test_performed_before'] == 'yes') ? "selected='selected'" : ""; ?>> Yes </option>
-                                                <option value="no" <?php echo ($eidInfo['pcr_test_performed_before'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
+                                            <option value="no" <?php echo ($eidInfo['pcr_test_performed_before'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
                                         </select>
                                     </td>
                                 </tr>
@@ -310,7 +310,8 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                         <select class="form-control" name="pcrTestReason" id="pcrTestReason">
                                             <option value=''> -- Select -- </option>
                                             <option value="Confirmation of positive first EID PCR test result" <?php echo ($eidInfo['reason_for_pcr'] == 'Confirmation of positive first EID PCR test result') ? "selected='selected'" : ""; ?>> Confirmation of positive first EID PCR test result </option>
-                                            <option value="Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months" <?php echo ($eidInfo['reason_for_pcr'] == 'Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months') ? "selected='selected'" : ""; ?>> Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months </option> <option value="Positive HIV rapid test result at 9 months or later"> Positive HIV rapid test result at 9 months or later </option>
+                                            <option value="Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months" <?php echo ($eidInfo['reason_for_pcr'] == 'Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months') ? "selected='selected'" : ""; ?>> Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months </option>
+                                            <option value="Positive HIV rapid test result at 9 months or later"> Positive HIV rapid test result at 9 months or later </option>
                                             <option value="Other" <?php echo ($eidInfo['reason_for_pcr'] == 'Other') ? "selected='selected'" : ""; ?>> Other </option>
                                         </select>
                                     </td>
@@ -378,7 +379,7 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                     <tr>
                                         <td><label for="">Testing Platform </label></td>
                                         <td><select name="eidPlatform" id="eidPlatform" class="form-control isRequired" title="Please select the testing platform">
-                                            <?= $general->generateSelectOptions($testPlatformList, $eidInfo['eid_test_platform'], '-- Select --'); ?>
+                                                <?= $general->generateSelectOptions($testPlatformList, $eidInfo['eid_test_platform'], '-- Select --'); ?>
                                             </select>
                                         </td>
                                         <td><label>Machine used to test </label></td>

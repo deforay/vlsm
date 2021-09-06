@@ -34,12 +34,11 @@ include_once(APPLICATION_PATH . '/header.php');
 
 // $general = new \Vlsm\Models\General($db);
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
-$userDb = new \Vlsm\Models\Users($db);
-
+$usersModel = new \Vlsm\Models\Users($db);
 // $arr = $general->getGlobalConfig();
 // $sarr = $general->getSystemConfig();
 
-$labTechnicians = $userDb->getActiveUserInfo();
+$labTechnicians = $usersModel->getActiveUserInfo();
 foreach ($labTechnicians as $labTech) {
     $labTechniciansResults[$labTech['user_id']] = ucwords($labTech['user_name']);
 }
@@ -116,8 +115,7 @@ if (file_exists($fileArray[$arr['vl_form']])) {
                     $('.ui-datepicker-calendar').show();
                 });
             },
-            onSelect: function(e) {
-            },
+            onSelect: function(e) {},
             yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
         }).click(function() {
             $('.ui-datepicker-calendar').show();
@@ -232,6 +230,7 @@ if (file_exists($fileArray[$arr['vl_form']])) {
             }
         });
     });
+
     function showPatientList() {
         $("#showEmptyResult").hide();
         if ($.trim($("#artPatientNo").val()) != '') {
@@ -247,6 +246,7 @@ if (file_exists($fileArray[$arr['vl_form']])) {
                 });
         }
     }
+
     function checkSampleNameValidation(tableName, fieldName, id, fnct, alrt) {
         if ($.trim($("#" + id).val()) != '') {
             $.blockUI();
@@ -287,7 +287,7 @@ if (file_exists($fileArray[$arr['vl_form']])) {
                 provinceId: provinceId
             },
             function(data) {
-                
+
                 if (data > 0) {
                     $.unblockUI();
                     document.getElementById("covid19SampleId").value = data;

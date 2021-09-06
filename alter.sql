@@ -2287,3 +2287,6 @@ ALTER TABLE `facility_details` CHANGE `facility_state_id` `facility_state_id` IN
 ALTER TABLE `track_api_requests` ADD `facility_id` VARCHAR(256) NULL DEFAULT NULL AFTER `api_params`;
 -- Thana -- 25-Aug-2021
 ALTER TABLE `eid_form` ADD `app_local_test_req_id` VARCHAR(256) NULL DEFAULT NULL AFTER `result_mail_datetime`;
+
+-- Thana -- 06-Sep-2021
+ALTER TABLE `covid19_tests` ADD `updated_datetime` DATETIME NULL DEFAULT CURRENT_TIMESTAMP AFTER `result`;
