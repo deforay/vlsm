@@ -5,8 +5,6 @@ require_once(APPLICATION_PATH . '/configs/config.interop.php');
 $general = new \Vlsm\Models\General($db);
 $arr = $general->getGlobalConfig();
 
-$dhis2 = new \Vlsm\Interop\Dhis2(DHIS2_URL, DHIS2_USER, DHIS2_PASSWORD);
-
 // let us do init first
 require_once(APPLICATION_PATH . '/hepatitis/interop/dhis2/hepatitis-init.php');
 

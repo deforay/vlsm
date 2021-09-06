@@ -65,9 +65,6 @@ try {
 		$sampleCodeKey = 'sample_code_key';
 	}
 
-
-
-
 	if ($sarr['sc_user_type'] == 'remoteuser') {
 		$status = 9;
 	}
@@ -94,7 +91,15 @@ try {
 	if (isset($_POST['status']) && $_POST['status'] == '') {
 		$_POST['status']  = $_POST['oldStatus'];
 	}
-
+	$resultSentToSource = 'pending';
+	
+	if (isset($_POST['isSampleRejected']) && $_POST['isSampleRejected'] == 'yes') {
+		$_POST['hcvCount'] = null;
+		$_POST['hbvCount'] = null;
+		$resultSentToSource = 'pending';
+	}else if (empty($_POST['hcvCount']) && empty($_POST['hbvCount'])) {
+		$resultSentToSource = null;
+	}	
 
 	$hepatitisData = array(
 		'external_sample_code'                => isset($_POST['externalSampleCode']) ? $_POST['externalSampleCode'] : null,
@@ -145,6 +150,7 @@ try {
 		'authorized_on' 					  => isset($_POST['authorizedOn']) ? $general->dateFormat($_POST['authorizedOn']) : null,
 		'rejection_on'	 					  => (isset($_POST['rejectionDate']) && $_POST['isSampleRejected'] == 'yes') ? $general->dateFormat($_POST['rejectionDate']) : null,
 		'result_status'                       => $status,
+		'result_sent_to_source'               => $resultSentToSource,
 		'data_sync'                           => 0,
 		'reason_for_sample_rejection'         => (isset($_POST['sampleRejectionReason']) && $_POST['isSampleRejected'] == 'yes') ? $_POST['sampleRejectionReason'] : null,
 		'last_modified_by'                    => $_SESSION['userId'],

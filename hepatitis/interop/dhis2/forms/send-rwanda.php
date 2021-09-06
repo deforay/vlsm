@@ -2,19 +2,16 @@
 
 // this file is included in /hepatitis/interop/dhis2/hepatitis-send.php
 
-use Vlsm\Models\Users;
+$dhis2 = new \Vlsm\Interop\Dhis2(DHIS2_URL, DHIS2_USER, DHIS2_PASSWORD);
 
-$users = new Users($db);
-
-
-//get facility map id
 //$query = "SELECT * FROM form_hepatitis WHERE source_of_request LIKE 'dhis%' AND result_sent_to_source LIKE 'pending'";
 $query = "SELECT * FROM form_hepatitis WHERE source_of_request LIKE 'dhis%' AND result_status = 7";
 $formResults = $db->rawQuery($query);
 $counter = 0;
 foreach ($formResults as $row) {
 
-  $trackedEntityInstance = str_replace("dhis2-", "", $row['source_of_request']);
+  $sourceOfRequestArray = explode("::" , $row['source_of_request']);
+  $trackedEntityInstance = $sourceOfRequestArray[1];
 
   $programStages = array(
     'Initial HBV VL' => 'UXFQ8uL45XB',
@@ -24,11 +21,10 @@ foreach ($formResults as $row) {
   );
 
   $urlData = array();
-  //$urlData[] = "fields=attributes[attribute,code,value],orgUnit,trackedEntityInstance";
   $urlData[] = "trackedEntityInstance=$trackedEntityInstance";
   $urlData[] = "programStage=" . $programStages[$row['reason_for_vl_test']];
   $urlData[] = "paging=false";
-  $urlData[] = "status=ACTIVE";
+  //$urlData[] = "status=ACTIVE";
 
 
   $url = "/api/events";
@@ -38,19 +34,6 @@ foreach ($formResults as $row) {
 
   $dhis2Response = json_decode($dhis2Response, true);
 
-
-  // echo "<pre>";
-  // var_dump($dhis2Response['enrollments'][0]['events']);
-  // echo "</pre>";
-  // continue;
-  // echo "<pre>";
-  // var_dump($dhis2Response);
-  // echo "</pre>";
-  // continue;
-
-  //if ($dhis2Response['enrollments'][0]['status'] == 'COMPLETED') continue;
-
-  //$orgUnitId = "WItSrsnhLXI"; // Rwanda
 
   $strategy = null;
   $eventId = null;
@@ -123,14 +106,14 @@ foreach ($formResults as $row) {
     if (!empty($dataValues)) {
       $eventPayload = $dhis2->addDataValuesToEventPayload($eventPayload, $dataValues);
       $payload = json_encode($eventPayload);
-      // echo "<br><br><pre>";
-      // print_r ($payload);
-      // echo "</pre>";
+      echo "<br><br><pre>";
+      print_r ($payload);
+      echo "</pre>";
       
       $response = $dhis2->post("/api/33/events/", $payload);
-      // echo "<br><br><pre>";
-      // var_dump ($response);
-      // echo "</pre>";
+      echo "<br><br><pre>";
+      var_dump ($response);
+      echo "</pre>";
     }
   } else {
     foreach ($dhis2Response['events'] as $eventPayload) {
@@ -160,15 +143,6 @@ foreach ($formResults as $row) {
   $db->update('form_hepatitis', $updateData);
   $counter++;
 }
-
-
-
-
-// echo ("<h5>...</h5>");
-// echo ("<h5>...</h5>");
-
-
-// echo ("<h1>Total records processed and result sent to DHIS2 : " . $counter . "</h1>");
 
 
 $response = array('processed' => $counter);

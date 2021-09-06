@@ -133,7 +133,7 @@ class Hepatitis
         return json_encode($sCodeKey);
     }
 
-    public function getComorbidityByHepatitisId($formId)
+    public function getComorbidityByHepatitisId($formId, $allData = false)
     {
 
         if (empty($formId)) {
@@ -145,14 +145,14 @@ class Hepatitis
         if (is_array($formId)) {
 
             $results = $this->db->rawQuery("SELECT * FROM hepatitis_patient_comorbidities WHERE `hepatitis_id` IN (" . implode(",", $formId) . ")");
-
+            if ($allData) return $results;
             foreach ($results as $row) {
                 $response[$row['hepatitis_id']][$row['comorbidity_id']] = $row['comorbidity_detected'];
             }
         } else {
 
             $results = $this->db->rawQuery("SELECT * FROM hepatitis_patient_comorbidities WHERE `hepatitis_id` = $formId");
-
+            if ($allData) return $results;
             foreach ($results as $row) {
                 $response[$row['comorbidity_id']] = $row['comorbidity_detected'];
             }
@@ -160,7 +160,7 @@ class Hepatitis
         return $response;
     }
 
-    public function getRiskFactorsByHepatitisId($formId)
+    public function getRiskFactorsByHepatitisId($formId, $allData = false)
     {
 
         if (empty($formId)) {
@@ -172,14 +172,14 @@ class Hepatitis
         if (is_array($formId)) {
 
             $results = $this->db->rawQuery("SELECT * FROM hepatitis_risk_factors WHERE `hepatitis_id` IN (" . implode(",", $formId) . ")");
-
+            if ($allData) return $results;
             foreach ($results as $row) {
                 $response[$row['hepatitis_id']][$row['riskfactors_id']] = $row['riskfactors_detected'];
             }
         } else {
 
             $results = $this->db->rawQuery("SELECT * FROM hepatitis_risk_factors WHERE `hepatitis_id` = $formId");
-
+            if ($allData) return $results;
             foreach ($results as $row) {
                 $response[$row['riskfactors_id']] = $row['riskfactors_detected'];
             }
