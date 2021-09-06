@@ -230,5 +230,5 @@ if ($data['Key'] == 'vlsm-get-remote') {
     }
     $response['geoDivisions'] = $general->fetchDataFromTable('geographical_divisions', $condition);
 
-    echo json_encode($response);
+    echo json_encode(array_filter($response));
 }

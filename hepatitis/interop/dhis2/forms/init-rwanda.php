@@ -2,13 +2,16 @@
 
 // this file is included in /hepatitis/interop/dhis2/hepatitis-init.php
 
+$dhis2 = new \Vlsm\Interop\Dhis2(DHIS2_URL, DHIS2_USER, DHIS2_PASSWORD);
+
+
 $initOptionSets = array(
     //'province' => 'LqaKTLJFf4H',
     //'district' => 'HGTWO3xvXRX',
     //'socialStatus' => 'cNhaGfDzbUc',
     'vlTestReasons' => 'MQy8ZT6aiV8',
     //'gender' => 'CFbcYp2biob',
-    'testingLabs' => 'MQy8ZT6aiV8',
+    'testingLabs' => 'bievX3PVOGJ',
 );
 
 foreach ($initOptionSets as $t => $id) {

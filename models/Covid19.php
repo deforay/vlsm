@@ -288,7 +288,7 @@ class Covid19
     }
 
 
-    public function getCovid19ComorbiditiesByFormId($c19Id)
+    public function getCovid19ComorbiditiesByFormId($c19Id, $allData = false)
     {
         if (empty($c19Id)) {
             return null;
@@ -300,14 +300,14 @@ class Covid19
         if (isset($c19Id) && is_array($c19Id) && count($c19Id) > 0) {
 
             $results = $this->db->rawQuery("SELECT * FROM covid19_patient_comorbidities WHERE `covid19_id` IN (" . implode(",", $c19Id) . ")");
-
+            if ($allData) return $results;
             foreach ($results as $row) {
                 $response[$row['covid19_id']][$row['comorbidity_id']] = $row['comorbidity_detected'];
             }
         } else {
 
             $results = $this->db->rawQuery("SELECT * FROM covid19_patient_comorbidities WHERE `covid19_id` = $c19Id");
-
+            if ($allData) return $results;
             foreach ($results as $row) {
                 $response[$row['comorbidity_id']] = $row['comorbidity_detected'];
             }
@@ -317,7 +317,7 @@ class Covid19
         return $response;
     }
 
-    public function getCovid19ReasonsForTestingByFormId($c19Id)
+    public function getCovid19ReasonsForTestingByFormId($c19Id, $allData = false)
     {
         if (empty($c19Id)) {
             return null;
@@ -328,13 +328,13 @@ class Covid19
         // Using this in sync requests/results
         if (isset($c19Id) && is_array($c19Id) && count($c19Id) > 0) {
             $results = $this->db->rawQuery("SELECT * FROM covid19_reasons_for_testing WHERE `covid19_id` IN (" . implode(",", $c19Id) . ")");
-
+            if ($allData) return $results;
             foreach ($results as $row) {
                 $response[$row['covid19_id']][$row['reasons_id']] = $row['reasons_detected'];
             }
         } else {
             $results = $this->db->rawQuery("SELECT * FROM covid19_reasons_for_testing WHERE `covid19_id` = $c19Id");
-
+            if ($allData) return $results;
             foreach ($results as $row) {
                 $response[$row['reasons_id']] = $row['reasons_detected'];
             }

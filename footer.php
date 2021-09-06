@@ -129,7 +129,6 @@
 					})
 					.always(function() {
 						$.unblockUI();
-						getLastSyncDateTime();
 					});
 			}
 		}

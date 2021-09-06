@@ -204,9 +204,12 @@ class Dhis2
 			$urlParams = "";
 		}
 
+		$url = $this->dhis2url . "{$path}{$urlParams}";
+		echo $url. "<br>";
+
 
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $this->dhis2url . "{$path}{$urlParams}");
+		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type:" . $this->getContentType()));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		// curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);

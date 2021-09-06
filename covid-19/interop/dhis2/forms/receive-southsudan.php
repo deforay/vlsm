@@ -2,16 +2,15 @@
 
 // this file is included in /covid-19/interop/dhis2/covid-19-receive.php
 
-// echo ("<h5>...</h5>");
-// echo ("<h5>...</h5>");
-// echo ("<h3>Successfully connected to DHIS2</h3>");
+
+$dhis2 = new \Vlsm\Interop\Dhis2(DHIS2_URL, DHIS2_USER, DHIS2_PASSWORD);
+
 
 // https://southsudanhis.org/covid19southsudan/api/trackedEntityInstances.json?programStartDate=2020-04-01&programEndDate=2021-04-02&ou=OV9zi20DDXP&ouMode=DESCENDANTS&program=uYjxkTbwRNf&fields=attributes[attribute,code,value],enrollments[*],orgUnit,trackedEntityInstance&paging=false
 
 $counter = 0;
 
-$data[] = "programStartDate=2020-04-01";
-$data[] = "programEndDate=2021-06-30";
+$data[] = "lastUpdatedDuration=100d";
 $data[] = "ou=OV9zi20DDXP"; // South Sudan
 $data[] = "ouMode=DESCENDANTS";
 $data[] = "program=uYjxkTbwRNf";
