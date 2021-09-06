@@ -8,14 +8,14 @@ $id = base64_decode($_GET['id']);
 
 
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
-
+$usersModel = new \Vlsm\Models\Users($db);
 $healthFacilities = $facilitiesDb->getHealthFacilities('eid');
 $testingLabs = $facilitiesDb->getTestingLabs('eid');
 $userQuery = "SELECT * FROM user_details where status='active'";
 $userResult = $db->rawQuery($userQuery);
 $userInfo = array();
-foreach($userResult as $user){
-     $userInfo[$user['user_id']] = ucwords($user['user_name']);
+foreach ($userResult as $user) {
+	$userInfo[$user['user_id']] = ucwords($user['user_name']);
 }
 //get import config
 $importQuery = "SELECT * FROM import_config WHERE status = 'active'";
@@ -101,17 +101,17 @@ $disable = "disabled = 'disabled'";
 	}
 </style>
 <?php
-if(isset($eidInfo['result_approved_datetime']) && trim($eidInfo['result_approved_datetime'])!='' && $eidInfo['result_approved_datetime']!='0000-00-00 00:00:00'){
-    $expStr=explode(" ",$eidInfo['result_approved_datetime']);
-    $eidInfo['result_approved_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-}else{
-    $eidInfo['result_approved_datetime']=$general->humanDateFormat($general->getDateTime());
+if (isset($eidInfo['result_approved_datetime']) && trim($eidInfo['result_approved_datetime']) != '' && $eidInfo['result_approved_datetime'] != '0000-00-00 00:00:00') {
+	$expStr = explode(" ", $eidInfo['result_approved_datetime']);
+	$eidInfo['result_approved_datetime'] = $general->humanDateFormat($expStr[0]) . " " . $expStr[1];
+} else {
+	$eidInfo['result_approved_datetime'] = $general->humanDateFormat($general->getDateTime());
 }
 $iResultQuery = "select * from  import_config_machines";
 $iResult = $db->rawQuery($iResultQuery);
 $machine = array();
 foreach ($iResult as $val) {
-    $machine[$val['config_machine_id']] = $val['config_machine_name'];
+	$machine[$val['config_machine_id']] = $val['config_machine_name'];
 }
 $fileArray = array(
 	1 => 'forms/update-southsudan-result.php',
@@ -130,25 +130,24 @@ require_once($fileArray[$arr['vl_form']]);
 ?>
 
 <script>
+	function changeFun() {
+		if ($('#isSampleRejected').val() == "yes") {
+			$('.rejected').show();
+			$('#sampleRejectionReason').addClass('isRequired');
+			$('#sampleTestedDateTime,#result').val('');
+			$('#sampleTestedDateTime,#result').removeClass('isRequired');
+		} else {
+			$('.rejected').hide();
+			$('#sampleRejectionReason').removeClass('isRequired');
+			$('#sampleTestedDateTime').addClass('isRequired');
+		}
 
-	function changeFun(){
-        if ($('#isSampleRejected').val() == "yes") {
-            $('.rejected').show();
-            $('#sampleRejectionReason').addClass('isRequired');
-            $('#sampleTestedDateTime,#result').val('');
-            $('#sampleTestedDateTime,#result').removeClass('isRequired');
-        } else {
-            $('.rejected').hide();
-            $('#sampleRejectionReason').removeClass('isRequired');
-            $('#sampleTestedDateTime').addClass('isRequired');
-        }
-
-        if ($('#result').val() == "") {
-            $('#sampleTestedDateTime').removeClass('isRequired');
-        } else {
-            $('#sampleTestedDateTime').addClass('isRequired');
-        }
-    }
+		if ($('#result').val() == "") {
+			$('#sampleTestedDateTime').removeClass('isRequired');
+		} else {
+			$('#sampleTestedDateTime').addClass('isRequired');
+		}
+	}
 
 	$(document).ready(function() {
 		$('#testedBy').select2({

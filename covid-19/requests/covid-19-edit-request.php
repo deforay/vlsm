@@ -30,9 +30,8 @@ $labFieldDisabled = '';
 
 
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
-$userDb = new \Vlsm\Models\Users($db);
-
-$labTechnicians = $userDb->getActiveUserInfo();
+$usersModel = new \Vlsm\Models\Users($db);
+$labTechnicians = $usersModel->getActiveUserInfo();
 $healthFacilities = $facilitiesDb->getHealthFacilities('covid19');
 $testingLabs = $facilitiesDb->getTestingLabs('covid19');
 foreach ($labTechnicians as $labTech) {
@@ -50,7 +49,7 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
 $id = base64_decode($_GET['id']);
 //$id = ($_GET['id']);
 $covid19Query = "SELECT * from form_covid19 where covid19_id=?";
-$covid19Info = $db->rawQueryOne($covid19Query,array($id));
+$covid19Info = $db->rawQueryOne($covid19Query, array($id));
 
 $covid19TestQuery = "SELECT * from covid19_tests where covid19_id=? ORDER BY test_id ASC";
 $covid19TestInfo = $db->rawQuery($covid19TestQuery, array($id));

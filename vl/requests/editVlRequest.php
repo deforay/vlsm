@@ -7,7 +7,7 @@ $sCode = $labFieldDisabled = '';
 
 
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
-
+$usersModel = new \Vlsm\Models\Users($db);
 $healthFacilities = $facilitiesDb->getHealthFacilities('vl');
 $testingLabs = $facilitiesDb->getTestingLabs('vl');
 
@@ -25,7 +25,7 @@ $importResult = $db->query($importQuery);
 $userQuery = "SELECT * FROM user_details where status='active'";
 $userResult = $db->rawQuery($userQuery);
 $userInfo = array();
-foreach($userResult as $user){
+foreach ($userResult as $user) {
      $userInfo[$user['user_id']] = ucwords($user['user_name']);
 }
 //sample rejection reason

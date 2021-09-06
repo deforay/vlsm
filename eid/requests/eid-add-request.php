@@ -28,7 +28,7 @@ include_once(APPLICATION_PATH . '/header.php');
 
 
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
-
+$usersModel = new \Vlsm\Models\Users($db);
 $healthFacilities = $facilitiesDb->getHealthFacilities('eid');
 $testingLabs = $facilitiesDb->getTestingLabs('eid');
 $userQuery = "SELECT * FROM user_details where status='active'";

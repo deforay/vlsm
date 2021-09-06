@@ -7,13 +7,13 @@ include_once(APPLICATION_PATH . '/header.php');
 
 
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
-$userDb = new \Vlsm\Models\Users($db);
+$usersModel = new \Vlsm\Models\Users($db);
 
-$labTechnicians = $userDb->getActiveUserInfo();
+$labTechnicians = $usersModel->getActiveUserInfo();
 $healthFacilities = $facilitiesDb->getHealthFacilities('covid19');
 $testingLabs = $facilitiesDb->getTestingLabs('covid19');
 foreach ($labTechnicians as $labTech) {
-    $labTechniciansResults[$labTech['user_id']] = ucwords($labTech['user_name']);
+	$labTechniciansResults[$labTech['user_id']] = ucwords($labTech['user_name']);
 }
 
 $id = base64_decode($_GET['id']);
