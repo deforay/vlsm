@@ -8,6 +8,7 @@ $labFieldDisabled = '';
 
 
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
+$usersModel = new \Vlsm\Models\Users($db);
 
 $healthFacilities = $facilitiesDb->getHealthFacilities('vl');
 $testingLabs = $facilitiesDb->getTestingLabs('vl');
@@ -17,8 +18,8 @@ $condition = "status = 'active'";
 $importResult = $general->fetchDataFromTable('import_config', $condition);
 $userResult = $general->fetchDataFromTable('user_details', $condition);
 $userInfo = array();
-foreach($userResult as $user){
-     $userInfo[$user['user_id']] = ucwords($user['user_name']);
+foreach ($userResult as $user) {
+    $userInfo[$user['user_id']] = ucwords($user['user_name']);
 }
 
 //sample rejection reason
