@@ -1,7 +1,9 @@
 <?php
 //this file is receive lab data value and update in remote db
 $data = json_decode(file_get_contents('php://input'), true);
-
+echo "<pre>";
+print_r($data);
+die;
 require_once(dirname(__FILE__) . "/../../startup.php");
 
 
@@ -107,18 +109,47 @@ if (count($data['result']) > 0) {
             $id = $db->insert('form_covid19', $lab);
         }
 
-        // $db = $db->where('covid19_id', $id);
-        // $db->delete("covid19_patient_symptoms");
-        // if (isset($symptoms) && !empty($symptoms)) {
+        $db = $db->where('covid19_id', $id);
+        $db->delete("covid19_patient_symptoms");
+        if (isset($symptoms) && !empty($symptoms)) {
 
-        //     foreach ($symptoms as $symId => $symValue) {
-        //         $symptomData = array();
-        //         $symptomData["covid19_id"] = $id;
-        //         $symptomData["symptom_id"] = $symId;
-        //         $symptomData["symptom_detected"] = $symValue;
-        //         $db->insert("covid19_patient_symptoms", $symptomData);
-        //     }
-        // }
+            foreach ($symptoms as $symId => $symValue) {
+                $db->insert("covid19_patient_symptoms", array(
+                    "covid19_id"        => $symValue['covid19_id'],
+                    "symptom_id"        => $symValue['symptom_id'],
+                    "symptom_detected"  => $symValue['symptom_detected']
+                ));
+            }
+        }
+
+        $db = $db->where('covid19_id', $id);
+        $db->delete("covid19_patient_comorbidities");
+        if (isset($comorbidities) && !empty($comorbidities)) {
+
+            foreach ($comorbidities as $comorbiditiesId => $comorbiditiesValue) {
+                $db->insert("covid19_patient_comorbidities", array(
+                    "covid19_id"            => $comorbiditiesValue['covid19_id'],
+                    "comorbidity_id"        => $comorbiditiesValue['comorbidity_id'],
+                    "comorbidity_detected"  => $comorbiditiesValue['comorbidity_detected']
+                ));
+            }
+        }
+
+        $db = $db->where('covid19_id', $id);
+        $db->delete("covid19_tests");
+        if (isset($testResults) && !empty($testResults)) {
+
+            foreach ($testResults as $testId => $test) {
+                $db->insert("covid19_tests", array(
+                    "covid19_id"                => $test['covid19_id'],
+                    "test_name"                 => $test['test_name'],
+                    "facility_id"               => $test['facility_id'],
+                    "sample_tested_datetime"    => $test['sample_tested_datetime'],
+                    "testing_platform"          => $test['testing_platform'],
+                    "result"                    => $test['result']
+                ));
+            }
+        }
 
         if ($id > 0 && isset($lab['sample_code'])) {
             $sampleCode[] = $lab['sample_code'];

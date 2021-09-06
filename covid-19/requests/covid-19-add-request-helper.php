@@ -196,7 +196,7 @@ try {
 	if ($status == 7 && $lock == 'yes') {
 		$covid19Data['locked'] = 'yes';
 	}
-	if(isset($_POST['asymptomatic']) && $_POST['asymptomatic'] != "yes"){
+	if (isset($_POST['asymptomatic']) && $_POST['asymptomatic'] != "yes") {
 		$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 		$db->delete("covid19_patient_symptoms");
 		if (isset($_POST['symptomDetected']) && !empty($_POST['symptomDetected']) || (isset($_POST['symptom']) && !empty($_POST['symptom']))) {

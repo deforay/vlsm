@@ -10,6 +10,7 @@ include_once(APPLICATION_PATH . '/header.php');
 
 $general = new \Vlsm\Models\General($db);
 $facilitiesDb = new \Vlsm\Models\Facilities($db);
+$usersModel = new \Vlsm\Models\Users($db);
 $healthFacilites = $facilitiesDb->getHealthFacilities('eid');
 
 $facilitiesDropdown = $general->generateSelectOptions($healthFacilites, null, "-- Select --");

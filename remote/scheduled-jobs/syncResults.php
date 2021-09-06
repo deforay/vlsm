@@ -236,7 +236,6 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
         "comorbidities" => $comorbidities,
         "Key" => "vlsm-lab-data--",
     );
-
     //open connection
     $ch = curl_init($url);
     $json_data = json_encode($data);
