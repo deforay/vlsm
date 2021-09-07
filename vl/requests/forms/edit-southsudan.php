@@ -8,7 +8,7 @@ $fundingSourceList = $db->query($fundingSourceQry);
 $implementingPartnerQry = "SELECT * FROM r_implementation_partners WHERE i_partner_status='active' ORDER BY i_partner_name ASC";
 $implementingPartnerList = $db->query($implementingPartnerQry);
 
-
+$lResult = $facilitiesDb->getTestingLabs('vl', true, true);
 
 if ($arr['sample_code'] == 'auto' || $arr['sample_code'] == 'alphanumeric') {
 	$sampleClass = '';
@@ -30,7 +30,7 @@ $pdQuery = "SELECT * FROM province_details";
 if ($sarr['sc_user_type'] == 'remoteuser') {
 	$sampleCode = 'remote_sample_code';
 	//check user exist in user_facility_map table
-	$chkUserFcMapQry = "Select user_id from vl_user_facility_map where user_id='" . $_SESSION['userId'] . "'";
+	$chkUserFcMapQry = "SELECT user_id FROM vl_user_facility_map WHERE user_id='" . $_SESSION['userId'] . "'";
 	$chkUserFcMapResult = $db->query($chkUserFcMapQry);
 	if ($chkUserFcMapResult) {
 		$pdQuery = "SELECT * FROM province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='" . $_SESSION['userId'] . "'";
@@ -250,7 +250,7 @@ if (isset($vlQueryInfo['reason_for_vl_result_changes']) && $vlQueryInfo['reason_
 											</select>
 										</div>
 									</div>
-									<?php if ($usersModel->isAllowed('vlTestResult.php', $systemConfig) && $_SESSION['accessType'] != 'collection-site') { ?>
+									<?php if ($_SESSION['accessType'] == 'collection-site') { ?>
 										<div class="col-md-4 col-md-4">
 											<label for="labId">Lab Name </label>
 											<select name="labId" id="labId" class="form-control" title="Please choose lab" onchange="autoFillFocalDetails();" style="width:100%;">
@@ -805,6 +805,7 @@ if (isset($vlQueryInfo['reason_for_vl_result_changes']) && $vlQueryInfo['reason_
 	provinceName = true;
 	facilityName = true;
 	$(document).ready(function() {
+		autoFillFocalDetails();
 		$('#testedBy').select2({
 			width: '100%',
 			placeholder: "Select Tested By"

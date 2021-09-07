@@ -212,7 +212,8 @@ try {
                 'result_approved_datetime' => $general->getDateTime(),
                 'import_machine_file_name' => $accResult[$i]['import_machine_file_name'],
                 'manual_result_entry' => 'no',
-                //'result_status'=>'7',
+                'result_printed_datetime' => NULL,
+                //'result_status'=>'7',                
                 'vl_test_platform' => $accResult[$i]['vl_test_platform'],
                 'import_machine_name' => $accResult[$i]['import_machine_name'],
             );

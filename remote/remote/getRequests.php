@@ -30,7 +30,7 @@ if (trim($sarr['sc_testing_lab_id']) == '') {
 //get facility map id
 $facilityMapQuery = "SELECT facility_id FROM vl_facility_map where vl_lab_id= ?";
 $fMapResult = $db->rawQuery($facilityMapQuery, $labId);
-if (count($fMapResult) > 0) {
+if ($db->count > 0) {
   $fMapResult = array_map('current', $fMapResult);
   $fMapResult = implode(",", $fMapResult);
 } else {
@@ -54,7 +54,7 @@ if (!empty($data['manifestCode'])) {
 
 
 $vlRemoteResult = $db->rawQuery($vlQuery);
-if (count($vlRemoteResult) > 0) {
-  $trackId = $app->addApiTracking('', count($vlRemoteResult), 'requests', 'vl', null, $sarr['sc_testing_lab_id'], 'sync-api');
+if ($db->count > 0) {
+  $trackId = $app->addApiTracking('', $db->count, 'requests', 'vl', null, $sarr['sc_testing_lab_id'], 'sync-api');
 }
 echo json_encode($vlRemoteResult);

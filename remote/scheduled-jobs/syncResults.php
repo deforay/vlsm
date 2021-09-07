@@ -134,10 +134,8 @@ if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == t
     $result = json_decode($curl_response, true);
 
     if (!empty($result) && count($result) > 0) {
-        //foreach ($result as $code) {
-        $db = $db->where("sample_code IN ('" . implode("','", $result) . "')");
+        $db = $db->where('sample_code', $result, 'IN');
         $id = $db->update('vl_request_form', array('data_sync' => 1));
-        //}
     }
     if (count($vlLabResult) > 0) {
         $trackId = $app->addApiTracking('', count($vlLabResult), 'results', 'vl', $url, $sarr['sc_testing_lab_id'], 'sync-api');
@@ -189,10 +187,8 @@ if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] ==
     $result = json_decode($curl_response, true);
 
     if (!empty($result) && count($result) > 0) {
-        //foreach ($result as $code) {
-        $db = $db->where("sample_code IN ('" . implode("','", $result) . "')");
+        $db = $db->where('sample_code', $result, 'IN');
         $id = $db->update('eid_form', array('data_sync' => 1));
-        //}
     }
     if (count($vlLabResult) > 0) {
         $trackId = $app->addApiTracking('', count($eidLabResult), 'results', 'eid', $url, $sarr['sc_testing_lab_id'], 'sync-api');
@@ -258,7 +254,7 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
 
     if (!empty($result) && count($result) > 0) {
         //foreach ($result as $code) {
-        $db = $db->where("sample_code IN ('" . implode("','", $result) . "')");
+        $db = $db->where('sample_code', $result, 'IN');
         $id = $db->update('form_covid19', array('data_sync' => 1));
         //}
     }
@@ -320,7 +316,7 @@ if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['he
 
     if (!empty($result) && count($result) > 0) {
         //foreach ($result as $code) {
-        $db = $db->where("sample_code IN ('" . implode("','", $result) . "')");
+        $db = $db->where('sample_code', $result, 'IN');
         $id = $db->update('form_hepatitis', array('data_sync' => 1));
         //}
     }
