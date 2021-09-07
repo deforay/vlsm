@@ -67,6 +67,7 @@ try {
 		'last_modified_by'                     => $_SESSION['userId'],
 		'last_modified_datetime'               => $general->getDateTime(),
 		'result_printed_datetime' 			  => NULL,
+        'result_dispatched_datetime' 		  => NULL,
 		'reason_for_vl_test'				  => isset($_POST['reasonVlTest']) ? $_POST['reasonVlTest'] : null,
 	);
 

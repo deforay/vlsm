@@ -128,16 +128,16 @@ if (isset($result['sample_received_at_vl_lab_datetime']) && trim($result['sample
     $sampleReceivedDate = $general->humanDateFormat($expStr[0]);
     $sampleReceivedTime = $expStr[1];
 }
-$sampleDisbatchDate = '';
-$sampleDisbatchTime = '';
+$sampleDispatchDate = '';
+$sampleDispatchTime = '';
 if (isset($result['result_printed_datetime']) && trim($result['result_printed_datetime']) != '' && $result['result_dispatched_datetime'] != '0000-00-00 00:00:00') {
     $expStr = explode(" ", $result['result_printed_datetime']);
-    $sampleDisbatchDate = $general->humanDateFormat($expStr[0]);
-    $sampleDisbatchTime = $expStr[1];
+    $sampleDispatchDate = $general->humanDateFormat($expStr[0]);
+    $sampleDispatchTime = $expStr[1];
 } else {
     $expStr = explode(" ", $currentTime);
-    $sampleDisbatchDate = $general->humanDateFormat($expStr[0]);
-    $sampleDisbatchTime = $expStr[1];
+    $sampleDispatchDate = $general->humanDateFormat($expStr[0]);
+    $sampleDispatchTime = $expStr[1];
 }
 
 if (isset($result['sample_tested_datetime']) && trim($result['sample_tested_datetime']) != '' && $result['sample_tested_datetime'] != '0000-00-00 00:00:00') {
@@ -323,7 +323,7 @@ $html .= '<td width="100%" style="line-height:20px;border-bottom:2px solid #d3d3
 $html .= '</tr>';
 
 $html .= '<tr>';
-$html .= '<td width="100%" style="line-height:14px;font-size:11px;text-align:left;color:#545252;" colspan="3">'.$sampleDisbatchDate.' '.$sampleDisbatchTime.'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Department de virologie</td>';
+$html .= '<td width="100%" style="line-height:14px;font-size:11px;text-align:left;color:#545252;" colspan="3">'.$sampleDispatchDate.' '.$sampleDispatchTime.'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Department de virologie</td>';
 $html .= '</tr>';
 $html .= '</table>';
 $html .= '</td></tr></table>';

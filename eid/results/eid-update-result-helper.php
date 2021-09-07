@@ -52,6 +52,7 @@ try {
     'reason_for_sample_rejection'       => isset($_POST['sampleRejectionReason']) ? $_POST['sampleRejectionReason'] : null,
     'last_modified_by'                  => $_SESSION['userId'],
     'result_printed_datetime' => NULL,
+    'result_dispatched_datetime' => NULL,
     'last_modified_datetime'            => $general->getDateTime()
   );
 

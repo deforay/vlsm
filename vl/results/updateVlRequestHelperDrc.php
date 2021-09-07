@@ -91,6 +91,7 @@ try {
         'lab_id' => (isset($_POST['labId']) && $_POST['labId'] != '' ? $_POST['labId'] :  NULL),
         'data_sync' => 0,
         'result_printed_datetime' => NULL,
+        'result_dispatched_datetime' => NULL,
         'vl_result_category' => $vl_result_category
     );
     if (isset($_POST['status']) && trim($_POST['status']) != '') {

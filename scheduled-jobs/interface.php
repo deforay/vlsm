@@ -169,6 +169,7 @@ if (count($interfaceInfo) > 0) {
                 'vl_test_platform' => $result['machine_used'],
                 'result_status' => 7,
                 'result_printed_datetime' => NULL,
+                'result_dispatched_datetime' => NULL,
                 'data_sync' => 0
             );
             if ($vllock == 'yes' && $data['result_status'] == 7) {
@@ -212,6 +213,7 @@ if (count($interfaceInfo) > 0) {
                 'eid_test_platform' => $result['machine_used'],
                 'result_status' => 7,
                 'result_printed_datetime' => NULL,
+                'result_dispatched_datetime' => NULL,
                 'data_sync' => 0
             );
             if ($eidlock['lock_approved_eid_samples'] == 'yes' && $data['result_status'] == 7) {
@@ -337,6 +339,7 @@ if (count($interfaceInfo) > 0) {
                 'hepatitis_test_platform' => $result['machine_used'],
                 'result_status' => 7,
                 'result_printed_datetime' => NULL,
+                'result_dispatched_datetime' => NULL,
                 'data_sync' => 0
             );
 
