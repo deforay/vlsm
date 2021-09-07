@@ -120,16 +120,16 @@ if (sizeof($requestResult) > 0) {
             $sampleReceivedDate = $general->humanDateFormat($expStr[0]);
             $sampleReceivedTime = $expStr[1];
         }
-        $sampleDisbatchDate = '';
-        $sampleDisbatchTime = '';
+        $sampleDispatchDate = '';
+        $sampleDispatchTime = '';
         if (isset($result['result_printed_datetime']) && trim($result['result_printed_datetime']) != '' && $result['result_dispatched_datetime'] != '0000-00-00 00:00:00') {
             $expStr = explode(" ", $result['result_printed_datetime']);
-            $sampleDisbatchDate = $general->humanDateFormat($expStr[0]);
-            $sampleDisbatchTime = $expStr[1];
+            $sampleDispatchDate = $general->humanDateFormat($expStr[0]);
+            $sampleDispatchTime = $expStr[1];
         }else{
             $expStr = explode(" ", $currentTime);
-            $sampleDisbatchDate = $general->humanDateFormat($expStr[0]);
-            $sampleDisbatchTime = $expStr[1];
+            $sampleDispatchDate = $general->humanDateFormat($expStr[0]);
+            $sampleDispatchTime = $expStr[1];
         }
 
         if (isset($result['sample_tested_datetime']) && trim($result['sample_tested_datetime']) != '' && $result['sample_tested_datetime'] != '0000-00-00 00:00:00') {

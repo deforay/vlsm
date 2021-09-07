@@ -196,16 +196,16 @@ if (sizeof($requestResult) > 0) {
             $sampleReceivedDate = $general->humanDateFormat($expStr[0]);
             $sampleReceivedTime = $expStr[1];
         }
-        $sampleDisbatchDate = '';
-        $sampleDisbatchTime = '';
+        $sampleDispatchDate = '';
+        $sampleDispatchTime = '';
         if (isset($result['result_printed_datetime']) && trim($result['result_printed_datetime']) != '' && $result['result_dispatched_datetime'] != '0000-00-00 00:00:00') {
             $expStr = explode(" ", $result['result_printed_datetime']);
-            $sampleDisbatchDate = $general->humanDateFormat($expStr[0]);
-            $sampleDisbatchTime = $expStr[1];
+            $sampleDispatchDate = $general->humanDateFormat($expStr[0]);
+            $sampleDispatchTime = $expStr[1];
         } else {
             $expStr = explode(" ", $currentTime);
-            $sampleDisbatchDate = $general->humanDateFormat($expStr[0]);
-            $sampleDisbatchTime = $expStr[1];
+            $sampleDispatchDate = $general->humanDateFormat($expStr[0]);
+            $sampleDispatchTime = $expStr[1];
         }
 
         $testedBy = '';
@@ -401,7 +401,7 @@ if (sizeof($requestResult) > 0) {
         $html .= '</tr>';
 
         $html .= '<tr>';
-        $html .= '<td colspan="4" style="line-height:17px;font-size:11px;text-align:left;"><span style="font-weight:bold;">DATE RESULTS RELEASED :</span> ' . $sampleDisbatchDate . " " . $sampleDisbatchTime . '</td>';
+        $html .= '<td colspan="4" style="line-height:17px;font-size:11px;text-align:left;"><span style="font-weight:bold;">DATE RESULTS RELEASED :</span> ' . $sampleDispatchDate . " " . $sampleDispatchTime . '</td>';
         $html .= '</tr>';
 
         if ($result['reason_for_sample_rejection'] != '') {

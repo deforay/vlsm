@@ -100,6 +100,7 @@ try {
         'last_modified_datetime' => $general->getDateTime(),
         'data_sync' => 0,
         'result_printed_datetime' => NULL,
+        'result_dispatched_datetime' => NULL,
         'vl_result_category' => $vl_result_category
     );
     //print_r($vldata);die;

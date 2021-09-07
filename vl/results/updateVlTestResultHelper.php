@@ -143,6 +143,7 @@ try {
         'manual_result_entry' => 'yes',
         'data_sync' => 0,
         'result_printed_datetime' => NULL,
+        'result_dispatched_datetime' => NULL,
         'vl_result_category' => $vl_result_category
     );
     $lock = $general->getGlobalConfig('lock_approved_vl_samples');

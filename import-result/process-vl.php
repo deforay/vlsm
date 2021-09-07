@@ -213,6 +213,7 @@ try {
                 'import_machine_file_name' => $accResult[$i]['import_machine_file_name'],
                 'manual_result_entry' => 'no',
                 'result_printed_datetime' => NULL,
+                'result_dispatched_datetime' => NULL,
                 //'result_status'=>'7',                
                 'vl_test_platform' => $accResult[$i]['vl_test_platform'],
                 'import_machine_name' => $accResult[$i]['import_machine_name'],
