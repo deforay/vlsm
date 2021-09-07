@@ -81,7 +81,7 @@ $commonDataToSync = array(
     'geoDivisions'  => array(
         'primaryKey' => 'geo_id',
         'tableName' => 'geographical_divisions',
-    ),
+    )
 );
 
 
@@ -176,7 +176,7 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
         'covid19ReasonForTesting' => array(
             'primaryKey' => 'test_reason_id',
             'tableName' => 'r_covid19_test_reasons',
-        ),
+        )
     );
 }
 
@@ -208,7 +208,7 @@ if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['he
         'hepatitisRejectionReasons' => array(
             'primaryKey' => 'rejection_reason_id',
             'tableName' => 'r_hepatitis_sample_rejection_reasons',
-        ),
+        )
     );
 }
 
@@ -247,7 +247,7 @@ foreach ($parsedData as $dataType => $dataValues) {
 
         if($dataType == 'healthFacilities'){
             $updatedFacilities = array_column($dataValues, 'facility_id');
-            $db->where('facility_id', $updatedFacilities, 'IN');
+            $db = $db->where('facility_id', $updatedFacilities, 'IN');
             $id = $db->delete('health_facilities');
         }
         else if($dataType == 'testingLabs'){

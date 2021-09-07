@@ -1,47 +1,36 @@
 <?php
-//this file is receive lab data value and update in remote db
-$data = json_decode(file_get_contents('php://input'), true);
-echo "<pre>";
-print_r($data);
-die;
+
 require_once(dirname(__FILE__) . "/../../startup.php");
 
+//this file receives the lab results and updates in the remote db
+$jsonResponse = file_get_contents('php://input');
 
-
-$cQuery = "SELECT * FROM global_config";
-$cResult = $db->query($cQuery);
-$arr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($cResult); $i++) {
-    $arr[$cResult[$i]['name']] = $cResult[$i]['value'];
-}
 
 $general = new \Vlsm\Models\General($db);
 $usersModel = new \Vlsm\Models\Users($db);
 $app = new \Vlsm\Models\App($db);
 
-//system config
-$systemConfigQuery = "SELECT * from system_config";
-$systemConfigResult = $db->query($systemConfigQuery);
-$sarr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
-    $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
-}
+$arr  = $general->getGlobalConfig();
+$sarr  = $general->getSystemConfig();
+
 //get remote data
 if (trim($sarr['sc_testing_lab_id']) == '') {
     $sarr['sc_testing_lab_id'] = "''";
 }
 
-$allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='form_covid19'";
-$allColResult = $db->rawQuery($allColumns);
-$oneDimensionalArray = array_map('current', $allColResult);
-$sampleCode = array();
-if (count($data['result']) > 0) {
-    $trackId = $app->addApiTracking('', count($data['result']), 'results', 'covid19', null, $sarr['sc_testing_lab_id'], 'sync-api');
+if (!empty($jsonResponse) && $jsonResponse != '[]') {
+
+    $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='form_covid19'";
+    $allColResult = $db->rawQuery($allColumns);
+    $oneDimensionalArray = array_map('current', $allColResult);
+    $sampleCode = array();
+
+    $counter = 0;
 
     $lab = array();
-    foreach ($data['result'] as $key => $remoteData) {
+    $parsedData = \JsonMachine\JsonMachine::fromString($jsonResponse, "/result");
+    foreach ($parsedData as $key => $remoteData) {
+        $counter++;
         foreach ($oneDimensionalArray as $result) {
             if (isset($remoteData[$result])) {
                 $lab[$result] = $remoteData[$result];
@@ -49,14 +38,6 @@ if (count($data['result']) > 0) {
                 $lab[$result] = null;
             }
         }
-
-        // before we unset the covid19_id field, let us fetch the
-        // test results, comorbidities and symptoms
-
-        $symptoms = (isset($data['symptoms'][$lab['covid19_id']]) && !empty($data['symptoms'][$lab['covid19_id']])) ? $data['symptoms'][$lab['covid19_id']] : array();
-        $comorbidities = (isset($data['comorbidities'][$lab['covid19_id']]) && !empty($data['comorbidities'][$lab['covid19_id']])) ? $data['comorbidities'][$lab['covid19_id']] : array();
-        $testResults = (isset($data['testResults'][$lab['covid19_id']]) && !empty($data['testResults'][$lab['covid19_id']])) ? $data['testResults'][$lab['covid19_id']] : array();
-
 
         //remove fields that we DO NOT NEED here
         $removeKeys = array(
@@ -109,51 +90,57 @@ if (count($data['result']) > 0) {
             $id = $db->insert('form_covid19', $lab);
         }
 
-        $db = $db->where('covid19_id', $id);
-        $db->delete("covid19_patient_symptoms");
-        if (isset($symptoms) && !empty($symptoms)) {
-
-            foreach ($symptoms as $symId => $symValue) {
-                $db->insert("covid19_patient_symptoms", array(
-                    "covid19_id"        => $symValue['covid19_id'],
-                    "symptom_id"        => $symValue['symptom_id'],
-                    "symptom_detected"  => $symValue['symptom_detected']
-                ));
-            }
-        }
-
-        $db = $db->where('covid19_id', $id);
-        $db->delete("covid19_patient_comorbidities");
-        if (isset($comorbidities) && !empty($comorbidities)) {
-
-            foreach ($comorbidities as $comorbiditiesId => $comorbiditiesValue) {
-                $db->insert("covid19_patient_comorbidities", array(
-                    "covid19_id"            => $comorbiditiesValue['covid19_id'],
-                    "comorbidity_id"        => $comorbiditiesValue['comorbidity_id'],
-                    "comorbidity_detected"  => $comorbiditiesValue['comorbidity_detected']
-                ));
-            }
-        }
-
-        $db = $db->where('covid19_id', $id);
-        $db->delete("covid19_tests");
-        if (isset($testResults) && !empty($testResults)) {
-
-            foreach ($testResults as $testId => $test) {
-                $db->insert("covid19_tests", array(
-                    "covid19_id"                => $test['covid19_id'],
-                    "test_name"                 => $test['test_name'],
-                    "facility_id"               => $test['facility_id'],
-                    "sample_tested_datetime"    => $test['sample_tested_datetime'],
-                    "testing_platform"          => $test['testing_platform'],
-                    "result"                    => $test['result']
-                ));
-            }
-        }
-
         if ($id > 0 && isset($lab['sample_code'])) {
             $sampleCode[] = $lab['sample_code'];
         }
+    }
+
+    // $parsedData = \JsonMachine\JsonMachine::fromString($jsonResponse, "/symptoms");
+    // foreach ($parsedData as $covid19Id => $symptoms) {
+    //     $db = $db->where('covid19_id', $covid19Id);
+    //     $db->delete("covid19_patient_symptoms");
+    //     foreach ($symptoms as $symId => $symValue) {
+    //         $db->insert("covid19_patient_symptoms", array(
+    //             "covid19_id"        => $symValue['covid19_id'],
+    //             "symptom_id"        => $symValue['symptom_id'],
+    //             "symptom_detected"  => $symValue['symptom_detected']
+    //         ));
+    //     }
+    // }
+
+    // $parsedData = \JsonMachine\JsonMachine::fromString($jsonResponse, "/comorbidities");
+    // foreach ($parsedData as $covid19Id => $comorbidities) {
+    //     $db = $db->where('covid19_id', $covid19Id);
+    //     $db->delete("covid19_patient_comorbidities");
+
+    //     foreach ($comorbidities as $comorbiditiesId => $comorbiditiesValue) {
+    //         $db->insert("covid19_patient_comorbidities", array(
+    //             "covid19_id"            => $comorbiditiesValue['covid19_id'],
+    //             "comorbidity_id"        => $comorbiditiesValue['comorbidity_id'],
+    //             "comorbidity_detected"  => $comorbiditiesValue['comorbidity_detected']
+    //         ));
+    //     }
+    // }
+
+    // $parsedData = \JsonMachine\JsonMachine::fromString($jsonResponse, "/testResults");
+    // foreach ($parsedData as $covid19Id => $testResults) {
+    //     $db = $db->where('covid19_id', $covid19Id);
+    //     $db->delete("covid19_tests");
+    //     foreach ($testResults as $testId => $test) {
+    //         $db->insert("covid19_tests", array(
+    //             "covid19_id"                => $test['covid19_id'],
+    //             "test_name"                 => $test['test_name'],
+    //             "facility_id"               => $test['facility_id'],
+    //             "sample_tested_datetime"    => $test['sample_tested_datetime'],
+    //             "testing_platform"          => $test['testing_platform'],
+    //             "result"                    => $test['result']
+    //         ));
+    //     }
+    // }
+
+
+    if ($counter > 0) {
+        $trackId = $app->addApiTracking('', $counter, 'results', 'covid19', null, $sarr['sc_testing_lab_id'], 'sync-api');
     }
 }
 

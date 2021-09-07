@@ -1,9 +1,9 @@
 <?php
-//this file receives the lab data value and updates in the remote db
-$data = json_decode(file_get_contents('php://input'), true);
 
 require_once(dirname(__FILE__) . "/../../startup.php");
 
+//this file receives the lab results and updates in the remote db
+$jsonResponse = file_get_contents('php://input');
 
 
 $cQuery = "SELECT * FROM global_config";
@@ -44,9 +44,11 @@ $allColResult = $db->rawQuery($allColumns);
 $oneDimensionalArray = array_map('current', $allColResult);
 
 $sampleCode = array();
-if (count($data['result']) > 0) {
-    $trackId = $app->addApiTracking('', count($data['result']), 'results', 'vl', null, $sarr['sc_testing_lab_id'], 'sync-api');
-    foreach ($data['result'] as $key => $remoteData) {
+if (!empty($jsonResponse) && $jsonResponse != '[]') {
+    $parsedData = \JsonMachine\JsonMachine::fromString($jsonResponse, "/result");
+    $counter = 0;
+    foreach ($parsedData as $key => $remoteData) {
+        $counter++;
         $lab = array();
         foreach ($oneDimensionalArray as $columnName) {
             if (isset($remoteData[$columnName])) {
@@ -124,6 +126,9 @@ if (count($data['result']) > 0) {
         if ($id > 0 && isset($lab['sample_code'])) {
             $sampleCode[] = $lab['sample_code'];
         }
+    }
+    if ($counter > 0) {
+        $app->addApiTracking('', $counter, 'results', 'vl', null, $sarr['sc_testing_lab_id'], 'sync-api');
     }
 }
 

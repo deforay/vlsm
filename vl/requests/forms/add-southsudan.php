@@ -8,6 +8,8 @@ $fundingSourceList = $db->query($fundingSourceQry);
 $implementingPartnerQry = "SELECT * FROM r_implementation_partners WHERE i_partner_status='active' ORDER BY i_partner_name ASC";
 $implementingPartnerList = $db->query($implementingPartnerQry);
 
+$lResult = $facilitiesDb->getTestingLabs('vl', true, true);
+
 if ($arr['sample_code'] == 'auto' || $arr['sample_code'] == 'alphanumeric' || $arr['sample_code'] == 'MMYY' || $arr['sample_code'] == 'YY') {
      $sampleClass = '';
      $maxLength = '';
@@ -188,7 +190,7 @@ $sFormat = '';
                                                        </select>
                                                   </div>
                                              </div>
-                                             <?php if ($usersModel->isAllowed('vlTestResult.php', $systemConfig) && $_SESSION['accessType'] != 'collection-site') { ?>
+                                             <?php if ($_SESSION['accessType'] == 'collection-site') { ?>
                                                   <div class="col-md-4 col-md-4">
                                                        <label for="labId">Lab Name </label>
                                                        <select name="labId" id="labId" class="form-control" title="Please choose lab" onchange="autoFillFocalDetails();" style="width:100%;">

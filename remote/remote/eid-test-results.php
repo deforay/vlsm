@@ -1,10 +1,9 @@
 <?php
-//this file is receive lab data value and update in remote db
-$data = json_decode(file_get_contents('php://input'), true);
+//this file receives the lab results and updates in the remote db
 
 require_once(dirname(__FILE__) . "/../../startup.php");
 
-
+$jsonResponse = file_get_contents('php://input');
 
 $cQuery = "SELECT * FROM global_config";
 $cResult = $db->query($cQuery);
@@ -31,15 +30,19 @@ if (trim($sarr['sc_testing_lab_id']) == '') {
     $sarr['sc_testing_lab_id'] = "''";
 }
 
-$allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='eid_form'";
-$allColResult = $db->rawQuery($allColumns);
-$oneDimensionalArray = array_map('current', $allColResult);
-$sampleCode = array();
-if (count($data['result']) > 0) {
-    $trackId = $app->addApiTracking('', count($data['result']), 'results', 'eid', null, $sarr['sc_testing_lab_id'], 'sync-api');
+if (!empty($jsonResponse) && $jsonResponse != '[]') {
 
+
+    $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='eid_form'";
+    $allColResult = $db->rawQuery($allColumns);
+    $oneDimensionalArray = array_map('current', $allColResult);
+    $sampleCode = array();
+
+    $parsedData = \JsonMachine\JsonMachine::fromString($jsonResponse, "/result");
     $lab = array();
-    foreach ($data['result'] as $key => $remoteData) {
+    $counter = 0;
+    foreach ($parsedData as $key => $remoteData) {
+        $counter++;
         foreach ($oneDimensionalArray as $result) {
             if (isset($remoteData[$result])) {
                 $lab[$result] = $remoteData[$result];
@@ -105,6 +108,9 @@ if (count($data['result']) > 0) {
         if ($id > 0 && isset($lab['sample_code'])) {
             $sampleCode[] = $lab['sample_code'];
         }
+    }
+    if ($counter > 0) {
+        $app->addApiTracking('', $counter, 'results', 'eid', null, $sarr['sc_testing_lab_id'], 'sync-api');
     }
 }
 
