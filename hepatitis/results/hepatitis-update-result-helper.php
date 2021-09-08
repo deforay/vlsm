@@ -33,12 +33,12 @@ try {
 
 
 	$resultSentToSource = 'pending';
-	
+
 	if (isset($_POST['isSampleRejected']) && $_POST['isSampleRejected'] == 'yes') {
 		$_POST['hcvCount'] = null;
 		$_POST['hbvCount'] = null;
 		$resultSentToSource = 'pending';
-	}else if (empty($_POST['hcvCount']) && empty($_POST['hbvCount'])) {
+	} else if (empty($_POST['hcvCount']) && empty($_POST['hbvCount'])) {
 		$resultSentToSource = null;
 	}
 
@@ -66,14 +66,16 @@ try {
 		'data_sync'                           => 0,
 		'last_modified_by'                     => $_SESSION['userId'],
 		'last_modified_datetime'               => $general->getDateTime(),
+		'result_printed_datetime' 			  => NULL,
+        'result_dispatched_datetime' 		  => NULL,
 		'reason_for_vl_test'				  => isset($_POST['reasonVlTest']) ? $_POST['reasonVlTest'] : null,
 	);
 
 	$db = $db->where('hepatitis_id', $_POST['hepatitisSampleId']);
 	$id = $db->update($tableName, $hepatitisData);
-	if($id > 0){
+	if ($id > 0) {
 		$_SESSION['alertMsg'] = "Hepatitis result updated successfully";
-	} else{
+	} else {
 		$_SESSION['alertMsg'] = "Please try again later";
 	}
 	//Add event log

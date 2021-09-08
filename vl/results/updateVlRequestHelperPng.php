@@ -69,8 +69,8 @@ try {
         $vl_result_category = 'rejected';
         $_POST['vlResult'] = NULL;
     }
-          $vlObj = new \Vlsm\Models\Vl($db);
-        $vl_result_category = $vlObj->vlResultCategory($_POST['vlResult']);
+    $vlObj = new \Vlsm\Models\Vl($db);
+    $vl_result_category = $vlObj->vlResultCategory($_POST['vlResult']);
     $vldata = array(
         'is_sample_rejected' => (isset($_POST['sampleQuality']) && $_POST['sampleQuality'] != '') ? $_POST['sampleQuality'] : NULL,
         'reason_for_sample_rejection' => (isset($_POST['rejectionReason']) && $_POST['rejectionReason'] != '') ? $_POST['rejectionReason'] : NULL,
@@ -99,13 +99,15 @@ try {
         'last_modified_by' => $_SESSION['userId'],
         'last_modified_datetime' => $general->getDateTime(),
         'data_sync' => 0,
+        'result_printed_datetime' => NULL,
+        'result_dispatched_datetime' => NULL,
         'vl_result_category' => $vl_result_category
     );
     //print_r($vldata);die;
     if (isset($_POST['status']) && trim($_POST['status']) != '') {
         $vldata['result_status'] = $_POST['status'];
         $lock = $general->getGlobalConfig('lock_approved_vl_samples');
-        if($_POST['status'] == 7 && $lock == 'yes'){
+        if ($_POST['status'] == 7 && $lock == 'yes') {
             $vldata['locked'] = 'yes';
         }
     }

@@ -58,7 +58,7 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 } else {
 	$allAdminMenuAccess = false;
 }
-if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('vlRequest.php', 'addVlRequest.php', 'addSamplesFromManifest.php', 'batchcode.php', 'vlRequestMail.php', 'specimenReferralManifestList.php', 'sampleList.php'))) {
+if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('vlRequest.php', 'addVlRequest.php', 'addSamplesFromManifest.php', 'batchcode.php', 'specimenReferralManifestList.php', 'sampleList.php'))) {
 	$vlRequestMenuAccess = true;
 } else {
 	$vlRequestMenuAccess = false;
@@ -422,11 +422,6 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 													<a href="/common/reference/geographical-divisions-details.php"><i class="fa fa-caret-right"></i>Geographical Divisions</a>
 												</li>
 											<?php }
-											/* if (isset($_SESSION['privileges']) && in_array("testRequestEmailConfig.php", $_SESSION['privileges'])) { ?>
-												<li class="allMenu requestEmailConfigMenu">
-													<a href="/vl/request-mail/testRequestEmailConfig.php"><i class="fa fa-caret-right"></i>Test Request Email/SMS <br>Configuration</a>
-												</li>
-											<?php } */
 											if (isset($_SESSION['privileges']) && in_array("testResultEmailConfig.php", $_SESSION['privileges'])) { ?>
 												<li class="allMenu resultEmailConfigMenu">
 													<a href="/vl/result-mail/testResultEmailConfig.php"><i class="fa fa-caret-right"></i>Test Result Email Config</a>
@@ -584,21 +579,12 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 											<a href="/vl/batch/batchcode.php"><i class="fa fa-caret-right"></i> Manage Batch</a>
 										</li>
 									<?php }
-									if (isset($_SESSION['privileges']) && in_array("vlRequestMail.php", $_SESSION['privileges'])) { ?>
-										<li class="allMenu vlRequestMailMenu">
-											<a href="/mail/vlRequestMail.php"><i class="fa fa-caret-right"></i> E-mail Test Request</a>
-										</li>
-									<?php }
 									if (isset($_SESSION['privileges']) && in_array("specimenReferralManifestList.php", $_SESSION['privileges']) && ($sarr['sc_user_type'] == 'remoteuser')) { ?>
 										<li class="allMenu specimenReferralManifestListVLMenu">
 											<a href="/specimen-referral-manifest/specimenReferralManifestList.php?t=<?php echo base64_encode('vl'); ?>"><i class="fa fa-caret-right"></i> VL Specimen Manifest</a>
 										</li>
 									<?php }
-									if (isset($_SESSION['privileges']) && in_array("sampleList.php", $_SESSION['privileges']) && ($sarr['sc_user_type'] == 'remoteuser')) { ?>
-										<!-- <li class="allMenu sampleListMenu">
-                                            <a href="/move-samples/sampleList.php"><i class="fa fa-caret-right"></i> Move Samples</a>
-                                          </li> -->
-									<?php } ?>
+									?>
 								</ul>
 							</li>
 						<?php }

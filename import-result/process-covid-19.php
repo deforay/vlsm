@@ -69,6 +69,7 @@ try {
                     'vlsm_country_id' => $arr['vl_form'],
                     'file_name' => $rResult[0]['import_machine_file_name'],
                     'imported_date_time' => $rResult[0]['result_imported_datetime'],
+                    'result_printed_datetime' => NULL
                 );
                 if ($status[$i] == 4) {
                     $data['is_sample_rejected'] = 'yes';

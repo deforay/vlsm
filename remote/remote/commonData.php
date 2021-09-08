@@ -187,30 +187,27 @@ if ($data['Key'] == 'vlsm-get-remote') {
 
 
     $condition = null;
+    // Using same facilityLastModified to check if any signatures were added
     if (isset($data['facilityLastModified']) && !empty($data['facilityLastModified'])) {
         $condition = "updated_datetime > '" . $data['facilityLastModified'] . "'";
+        $signatureCondition = "added_on > '" . $data['facilityLastModified'] . "'";
     }
     $response['facilities'] = $general->fetchDataFromTable('facility_details', $condition);
+    $response['labReportSignatories'] = $general->fetchDataFromTable('lab_report_signatories', $signatureCondition);
+    
 
     $condition = null;
     if (isset($data['healthFacilityLastModified']) && !empty($data['healthFacilityLastModified'])) {
         $condition = "updated_datetime > '" . $data['healthFacilityLastModified'] . "'";
     }
-    $configResult = $general->fetchDataFromTable('health_facilities', $condition);
-    $response['healthFacilities'] = $configResult;
+
+    $response['healthFacilities'] = $general->fetchDataFromTable('health_facilities', $condition);;
 
     $condition = null;
     if (isset($data['testingLabsLastModified']) && !empty($data['testingLabsLastModified'])) {
         $condition = "updated_datetime > '" . $data['testingLabsLastModified'] . "'";
-        $labCondition = "added_on > '" . $data['testingLabsLastModified'] . "'";
     }
-    $configResult = $general->fetchDataFromTable('testing_labs', $condition);
-    $labConfigResult = $general->fetchDataFromTable('lab_report_signatories', $labCondition);
-    /* foreach ($configResult as $key => $row) {
-        $configResult[$key]['labReportSignatories'] = $db->query("SELECT * FROM lab_report_signatories WHERE lab_id = " . $row['facility_id']);
-    } */
-    $response['testingLabs'] = $configResult;
-    $response['labReportSignatories'] = $labConfigResult;
+    $response['testingLabs'] = $general->fetchDataFromTable('testing_labs', $condition);
 
     $condition = null;
     if (isset($data['fundingSourcesLastModified']) && !empty($data['fundingSourcesLastModified'])) {
@@ -230,5 +227,6 @@ if ($data['Key'] == 'vlsm-get-remote') {
     }
     $response['geoDivisions'] = $general->fetchDataFromTable('geographical_divisions', $condition);
 
+    // using array_filter without callback will remove keys with empty values
     echo json_encode(array_filter($response));
 }

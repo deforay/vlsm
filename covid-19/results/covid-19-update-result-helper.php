@@ -29,7 +29,7 @@ try {
 	}
 
 	$resultSentToSource = null;
-	
+
 	if (isset($_POST['isSampleRejected']) && $_POST['isSampleRejected'] == 'yes') {
 		$_POST['result'] = null;
 		$resultSentToSource = 'pending';
@@ -60,8 +60,10 @@ try {
 		'result_status'                       => 8,
 		'data_sync'                           => 0,
 		'reason_for_sample_rejection'         => (isset($_POST['sampleRejectionReason']) && $_POST['isSampleRejected'] == 'yes') ? $_POST['sampleRejectionReason'] : null,
-		'last_modified_by'                    => $_SESSION['userId'],
-		'last_modified_datetime'              => $general->getDateTime()
+		'last_modified_by'                     => $_SESSION['userId'],
+		'result_printed_datetime' 			  => NULL,
+        'result_dispatched_datetime' 		  => NULL,
+		'last_modified_datetime'               => $general->getDateTime()
 	);
 
 	// echo "<pre>";print_r($covid19Data);die;
@@ -114,9 +116,9 @@ try {
 	print_r($covid19Data);die; */
 	$db = $db->where('covid19_id', $_POST['covid19SampleId']);
 	$id = $db->update($tableName, $covid19Data);
-	if($id > 0){
+	if ($id > 0) {
 		$_SESSION['alertMsg'] = "Covid-19 result updated successfully";
-	} else{
+	} else {
 		$_SESSION['alertMsg'] = "Please try again later";
 	}
 	//Add event log
