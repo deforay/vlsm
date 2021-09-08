@@ -2,23 +2,16 @@
 #require_once('../../startup.php');
 
 
-$formConfigQuery = "SELECT * FROM global_config";
-$configResult = $db->query($formConfigQuery);
-$gconfig = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($configResult); $i++) {
-     $gconfig[$configResult[$i]['name']] = $configResult[$i]['value'];
-}
-//system config
-$systemConfigQuery = "SELECT * from system_config";
-$systemConfigResult = $db->query($systemConfigQuery);
-$sarr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
-     $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
-}
 
 $general = new \Vlsm\Models\General($db);
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
+
+$facilityMap = $facilitiesDb->getFacilityMap($_SESSION['userId']);
+
+$gconfig = $general->getGlobalConfig();
+$sarr = $general->getSystemConfig();
+
+
 $tableName = "vl_request_form";
 $primaryKey = "vl_sample_id";
 
@@ -111,7 +104,26 @@ for ($i = 0; $i < count($aColumns); $i++) {
           */
 $aWhere = '';
 //$sQuery="SELECT vl.vl_sample_id,vl.facility_id,vl.patient_name,f.facility_name,f.facility_code,art.art_code,s.sample_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_vl_art_regimen as art ON vl.current_regimen=art.art_id INNER JOIN r_vl_sample_type as s ON s.sample_id=vl.sample_type";
-$sQuery = "SELECT vl.*, f.*, s.sample_name, ts.status_name, b.batch_code FROM vl_request_form as vl    
+$sQuery = "SELECT SQL_CALC_FOUND_ROWS 
+                         vl.vl_sample_id, 
+                         vl.sample_code, 
+                         vl.remote_sample_code, 
+                         vl.sample_collection_date, 
+                         vl.last_modified_datetime, 
+                         vl.patient_art_no, 
+                         vl.patient_first_name, 
+                         vl.patient_middle_name, 
+                         vl.patient_last_name, 
+                         vl.result, 
+                         vl.result_status, 
+                         vl.data_sync, 
+                         f.facility_name, 
+                         f.facility_state, 
+                         f.facility_district, 
+                         s.sample_name, 
+                         ts.status_name, 
+                         b.batch_code 
+                         FROM vl_request_form as vl    
           LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
           LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.sample_type 
           INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
@@ -229,13 +241,10 @@ if ($sWhere != '') {
 }
 $sFilter = '';
 if ($sarr['sc_user_type'] == 'remoteuser') {
-     //$sWhere = $sWhere.' AND vl.request_created_by="'.$_SESSION['userId'].'"';
-     //$sFilter = ' AND request_created_by="'.$_SESSION['userId'].'"';
-     $userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT facility_id ORDER BY facility_id SEPARATOR ',') as facility_id FROM vl_user_facility_map where user_id='" . $_SESSION['userId'] . "'";
-     $userfacilityMapresult = $db->rawQuery($userfacilityMapQuery);
-     if ($userfacilityMapresult[0]['facility_id'] != null && $userfacilityMapresult[0]['facility_id'] != '') {
-          $sWhere = $sWhere . " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")  ";
-          $sFilter = " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ") ";
+
+     if (!empty($facilityMap)) {
+          $sWhere = $sWhere . " AND vl.facility_id IN (" . $facilityMap . ")  ";
+          $sFilter = " AND vl.facility_id IN (" . $facilityMap . ") ";
      }
 } else {
      $sWhere = $sWhere . ' AND vl.result_status!=9';
@@ -253,15 +262,15 @@ if (isset($sLimit) && isset($sOffset)) {
 }
 //echo $sQuery;die;
 $rResult = $db->rawQuery($sQuery);
-/* Data set length after filtering */
-$aResultFilterTotal = $db->rawQuery("SELECT vl.vl_sample_id,vl.facility_id,vl.patient_first_name,vl.result,f.facility_name,f.facility_code,vl.patient_art_no,s.sample_name,b.batch_code,vl.sample_batch_id,ts.status_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere");
-$iFilteredTotal = count($aResultFilterTotal);
 
-/* Total data set length */
-$aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form as vl where vlsm_country_id='" . $gconfig['vl_form'] . "'" . $sFilter);
-// $aResultTotal = $countResult->fetch_row();
-//print_r($aResultTotal);
-$iTotal = $aResultTotal[0]['total'];
+/* Data set length after filtering */
+$aResultFilterTotal = $db->rawQueryOne("SELECT FOUND_ROWS() as `totalCount`");
+$iTotal = $iFilteredTotal = $aResultFilterTotal['totalCount'];
+
+
+// /* Total data set length */
+// $aResultTotal =  $db->rawQueryOne("SELECT COUNT(vl_sample_id) as totalCount FROM vl_request_form as vl WHERE vlsm_country_id='" . $gconfig['vl_form'] . "'" . $sFilter);
+// $iTotal = $aResultTotal['totalCount'];
 
 /*
           * Output
@@ -351,7 +360,7 @@ foreach ($rResult as $aRow) {
      $actions = "";
      if ($editRequest) {
           $actions .= $edit;
-     } 
+     }
      if ($syncRequest) {
           $actions .= $sync;
      }
