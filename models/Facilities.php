@@ -84,9 +84,13 @@ class Facilities
             $this->db->joinWhere("facility_details f", "f.facility_type", $facilityType);
         }
 
-        $this->db->where("map.user_id", $userId);
-        $response = $this->db->getValue("vl_user_facility_map map", "GROUP_CONCAT(DISTINCT map.facility_id SEPARATOR ',')");
-        return rtrim($response, ',');
+        $this->db->where("user_id", $userId);
+        $response = $this->db->getValue("vl_user_facility_map", "facility_id",  null);
+        if ($this->db->count > 0) {
+            return implode(",", $response);
+        } else {
+            return null;
+        }
     }
 
 
