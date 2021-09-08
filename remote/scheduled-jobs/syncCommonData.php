@@ -81,7 +81,7 @@ $commonDataToSync = array(
     'geoDivisions'  => array(
         'primaryKey' => 'geo_id',
         'tableName' => 'geographical_divisions',
-    ),
+    )
 );
 
 
@@ -176,7 +176,7 @@ if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covi
         'covid19ReasonForTesting' => array(
             'primaryKey' => 'test_reason_id',
             'tableName' => 'r_covid19_test_reasons',
-        ),
+        )
     );
 }
 
@@ -208,7 +208,7 @@ if (isset($systemConfig['modules']['hepatitis']) && $systemConfig['modules']['he
         'hepatitisRejectionReasons' => array(
             'primaryKey' => 'rejection_reason_id',
             'tableName' => 'r_hepatitis_sample_rejection_reasons',
-        ),
+        )
     );
 }
 
@@ -239,10 +239,23 @@ $jsonResponse = curl_exec($ch);
 curl_close($ch);
 
 
-$parsedData = \JsonMachine\JsonMachine::fromString($jsonResponse, "");
+$parsedData = \JsonMachine\JsonMachine::fromString($jsonResponse);
 foreach ($parsedData as $dataType => $dataValues) {
+    
 
-    if (isset($dataToSync[$dataType])) {
+    if (isset($dataToSync[$dataType]) && !empty($dataValues)) {
+
+        if($dataType == 'healthFacilities'){
+            $updatedFacilities = array_column($dataValues, 'facility_id');
+            $db = $db->where('facility_id', $updatedFacilities, 'IN');
+            $id = $db->delete('health_facilities');
+        }
+        else if($dataType == 'testingLabs'){
+            $updatedFacilities = array_column($dataValues, 'facility_id');
+            $db->where('facility_id', $updatedFacilities, 'IN');
+            $id = $db->delete('testing_labs');
+        }
+
         foreach ($dataValues as $tableData) {
             // getting column names using array_key
             // we will update all columns ON DUPLICATE
@@ -256,31 +269,29 @@ foreach ($parsedData as $dataType => $dataValues) {
     //update or insert testing labs signs
     if ($dataType == 'labReportSignatories') {
         foreach ($dataValues as $key => $sign) {
-            if (in_array($sign['lab_id'], $labId)) {
-                $db = $db->where('lab_id  = "' . $sign['lab_id'] . '"');
-                $id = $db->delete('lab_report_signatories');
-            }
-        }
 
-        foreach ($dataValues as $key => $sign) {
-            if (!file_exists(UPLOAD_PATH)) {
-                mkdir(UPLOAD_PATH);
-            }
-            if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs")) {
-                mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs");
-            }
-            if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $sign['lab_id'])) {
-                mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $sign['lab_id']);
-            }
-            if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $sign['lab_id'] . DIRECTORY_SEPARATOR . 'signatures')) {
-                mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $sign['lab_id'] . DIRECTORY_SEPARATOR . 'signatures');
+            // Deleteold signatures, before we save new ones
+            $db->where('lab_id  = ' . $sign['lab_id']);
+            $id = $db->delete('lab_report_signatories');
+
+            $signaturesFolder = UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $sign['lab_id'] . DIRECTORY_SEPARATOR . 'signatures';
+
+            if (!file_exists($signaturesFolder)) {
+                // make new folder
+                mkdir($signaturesFolder, 0777, true);
+            } else {
+                // in case folder exists, we can delete all old files
+                $images = glob("$signaturesFolder/*.{jpg,png,gif,jpeg}", GLOB_BRACE);
+                foreach ($images as $image) {
+                    @unlink($image);
+                }
             }
             // Save Data to DB
             unset($sign['signatory_id']);
             if (isset($sign['signature']) && $sign['signature'] != "") {
                 /* To save file from the url */
                 $filePath = $systemConfig['remoteURL'] . '/uploads/labs/' . $sign['lab_id'] . '/signatures/' . $sign['signature'];
-                $pathname = UPLOAD_PATH . DIRECTORY_SEPARATOR . "labs" . DIRECTORY_SEPARATOR . $sign['lab_id'] . DIRECTORY_SEPARATOR . 'signatures' . DIRECTORY_SEPARATOR . $sign['signature'];
+                $pathname = $signaturesFolder . DIRECTORY_SEPARATOR . $sign['signature'];
                 if (file_put_contents($pathname, file_get_contents($filePath))) {
                     $db->insert('lab_report_signatories', $sign);
                 }
@@ -289,8 +300,6 @@ foreach ($parsedData as $dataType => $dataValues) {
     }
 }
 
-
-error_log($db->getLastError());
 
 /* Get instance id for update last_remote_results_sync */
 $instanceResult = $db->rawQueryOne("SELECT vlsm_instance_id, instance_facility_name FROM s_vlsm_instance");

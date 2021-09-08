@@ -96,6 +96,7 @@ try {
                     'lab_id' => $rResult[0]['lab_id'],
                     'import_machine_file_name' => $rResult[0]['import_machine_file_name'],
                     'manual_result_entry' => 'no',
+                    'result_printed_datetime' => NULL
                 );
                 if ($status[$i] == '1') {
                     $data['result_reviewed_by'] = $_POST['reviewedBy'];

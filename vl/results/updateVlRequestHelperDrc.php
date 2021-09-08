@@ -76,7 +76,7 @@ try {
         $_POST['vlLog'] = '';
     }
     $vlObj = new \Vlsm\Models\Vl($db);
-        $vl_result_category = $vlObj->vlResultCategory($_POST['vlResult']);
+    $vl_result_category = $vlObj->vlResultCategory($_POST['vlResult']);
     //echo "<pre>";var_dump($_POST);die;
 
     $vldata = array(
@@ -87,10 +87,11 @@ try {
         'result_value_log' => $_POST['vlLog'],
         'result' => $_POST['vlResult'],
         'result_value_text' => $textResult,
-        //'result_printed_datetime'=>$_POST['sampleTestingDateAtLab'],
         'last_modified_datetime' => $general->getDateTime(),
         'lab_id' => (isset($_POST['labId']) && $_POST['labId'] != '' ? $_POST['labId'] :  NULL),
         'data_sync' => 0,
+        'result_printed_datetime' => NULL,
+        'result_dispatched_datetime' => NULL,
         'vl_result_category' => $vl_result_category
     );
     if (isset($_POST['status']) && trim($_POST['status']) != '') {
@@ -100,7 +101,7 @@ try {
         //}
     }
     $lock = $general->getGlobalConfig('lock_approved_vl_samples');
-    if($_POST['status'] == 7 && $lock == 'yes'){
+    if ($_POST['status'] == 7 && $lock == 'yes') {
         $vldata['locked'] = 'yes';
     }
     $db = $db->where('vl_sample_id', $_POST['vlSampleId']);

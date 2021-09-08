@@ -93,7 +93,7 @@ try {
     if (isset($_POST['approvedBy']) && trim($_POST['approvedBy']) != '') {
         $vlObj = new \Vlsm\Models\Vl($db);
         $vl_result_category = $vlObj->vlResultCategory($_POST['vlResult']);
-   }
+    }
     $vldata = array(
         'lab_id' => (isset($_POST['labId']) && $_POST['labId'] != '') ? $_POST['labId'] :  NULL,
         'lab_technician' => (isset($_POST['labTechnician']) && $_POST['labTechnician'] != '') ? $_POST['labTechnician'] :  NULL,
@@ -116,10 +116,12 @@ try {
         'last_modified_by' => $_SESSION['userId'],
         'last_modified_datetime' => $general->getDateTime(),
         'data_sync' => 0,
+        'result_printed_datetime' => NULL,
+        'result_dispatched_datetime' => NULL,
         'vl_result_category' => $vl_result_category
     );
     $lock = $general->getGlobalConfig('lock_approved_vl_samples');
-    if($_POST['status'] == 7 && $lock == 'yes'){
+    if ($_POST['status'] == 7 && $lock == 'yes') {
         $vldata['locked'] = 'yes';
     }
     $db = $db->where('vl_sample_id', $_POST['vlSampleId']);

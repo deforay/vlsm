@@ -142,10 +142,12 @@ try {
         'last_modified_datetime' => $general->getDateTime(),
         'manual_result_entry' => 'yes',
         'data_sync' => 0,
+        'result_printed_datetime' => NULL,
+        'result_dispatched_datetime' => NULL,
         'vl_result_category' => $vl_result_category
     );
     $lock = $general->getGlobalConfig('lock_approved_vl_samples');
-    if($_POST['status'] == 7 && $lock == 'yes'){
+    if ($_POST['status'] == 7 && $lock == 'yes') {
         $vldata['locked'] = 'yes';
     }
     //echo "<pre>";var_dump($vldata);die;

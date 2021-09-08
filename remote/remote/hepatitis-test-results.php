@@ -1,45 +1,40 @@
 <?php
-//this file is receive lab data value and update in remote db
-$data = json_decode(file_get_contents('php://input'), true);
+
 
 require_once(dirname(__FILE__) . "/../../startup.php");
 
-
-
-$cQuery = "SELECT * FROM global_config";
-$cResult = $db->query($cQuery);
-$arr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($cResult); $i++) {
-    $arr[$cResult[$i]['name']] = $cResult[$i]['value'];
-}
+//this file receives the lab results and updates in the remote db
+$jsonResponse = file_get_contents('php://input');
 
 $general = new \Vlsm\Models\General($db);
 $usersModel = new \Vlsm\Models\Users($db);
 $app = new \Vlsm\Models\App($db);
 
-//system config
-$systemConfigQuery = "SELECT * from system_config";
-$systemConfigResult = $db->query($systemConfigQuery);
-$sarr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
-    $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
-}
+
+$arr  = $general->getGlobalConfig();
+$sarr  = $general->getSystemConfig();
+
 //get remote data
 if (trim($sarr['sc_testing_lab_id']) == '') {
     $sarr['sc_testing_lab_id'] = "''";
 }
 
-$allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='form_hepatitis'";
-$allColResult = $db->rawQuery($allColumns);
-$oneDimensionalArray = array_map('current', $allColResult);
-$sampleCode = array();
-if (count($data['result']) > 0) {
-    $trackId = $app->addApiTracking('', count($data['result']), 'results', 'hepatitis', null, $sarr['sc_testing_lab_id'], 'sync-api');
+
+if (!empty($jsonResponse) && $jsonResponse != '[]') {
+    $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='form_hepatitis'";
+    $allColResult = $db->rawQuery($allColumns);
+    $oneDimensionalArray = array_map('current', $allColResult);
+    $sampleCode = array();
+    $counter = 0;
+
+    if ($counter > 0) {
+        $trackId = $app->addApiTracking('', $counter, 'results', 'hepatitis', null, $sarr['sc_testing_lab_id'], 'sync-api');
+    }
 
     $lab = array();
-    foreach ($data['result'] as $key => $remoteData) {
+    $parsedData = \JsonMachine\JsonMachine::fromString($jsonResponse, "/result");
+    foreach ($parsedData as $key => $remoteData) {
+        $couner++;
         foreach ($oneDimensionalArray as $result) {
             if (isset($remoteData[$result])) {
                 $lab[$result] = $remoteData[$result];
@@ -47,13 +42,6 @@ if (count($data['result']) > 0) {
                 $lab[$result] = null;
             }
         }
-
-        // before we unset the hepatitis_id field, let us fetch the
-        // test results, comorbidities and symptoms
-
-        //$risks = (isset($data['risks'][$lab['hepatitis_id']]) && !empty($data['symptoms'][$lab['hepatitis_id']])) ? $data['risks'][$lab['hepatitis_id']] : array();
-        //$comorbidities = (isset($data['comorbidities'][$lab['hepatitis_id']]) && !empty($data['comorbidities'][$lab['hepatitis_id']])) ? $data['comorbidities'][$lab['hepatitis_id']] : array();
-
 
         //remove fields that we DO NOT NEED here
         $removeKeys = array(
