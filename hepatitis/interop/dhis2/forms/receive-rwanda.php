@@ -8,11 +8,11 @@ $dhis2 = new \Vlsm\Interop\Dhis2(DHIS2_URL, DHIS2_USER, DHIS2_PASSWORD);
 $receivedCounter = 0;
 $processedCounter = 0;
 
-$data[] = "lastUpdatedDuration=60000m";
-$data[] = "ou=WItSrsnhLXI"; // Rwanda
+$data = array();
+$data[] = "lastUpdatedDuration=600d";
+$data[] = "ou=Hjw70Lodtf2"; // Rwanda
 $data[] = "ouMode=DESCENDANTS";
-$data[] = "program=nZRqRmZvdJd";
-//$data[] = "programStage=Dq1UaQrYbgr"; // We need only screening program stage to create new request
+$data[] = "program=LEhPhsbgfFB";
 $data[] = "fields=attributes[attribute,code,value],enrollments[*],orgUnit,trackedEntityInstance";
 $data[] = "paging=false";
 
@@ -20,26 +20,30 @@ $url = "/api/trackedEntityInstances.json";
 
 $jsonResponse = $dhis2->get($url, $data);
 
+var_dump($jsonResponse);die;
+
 $trackedEntityInstances = \JsonMachine\JsonMachine::fromString($jsonResponse, "/trackedEntityInstances");
 
-$dhis2GenderOptions = array('1' => 'male', '2' => 'female');
+$dhis2GenderOptions = array('Male' => 'male', 'Female' => 'female');
 $dhis2SocialCategoryOptions = array('1' => 'A', '2' => 'B', '3' => 'C', '4' => 'D');
+//$dhis2VlTestReasonOptions = array('I_VL001' => 'Initial HBV VL', 'HBV_F0012' => 'Follow up HBV VL', 'SVR12_HCV01' => 'SVR12 HCV VL');
+
 $dhis2VlTestReasonOptions = array('Initial Viral Load Test' => 'Initial HBV VL', 'HBV Follow-up Test' => 'Follow up HBV VL', 'SVR12 HCV Viral Load Test' => 'SVR12 HCV VL');
 
 $attributesDataElementMapping = [
-    'BrnMehToEvL' => 'external_sample_code', //dhis2 case id
-    //'BrnMehToEvL' => 'patient_id',
-    'AMW9BiX1by6' => 'patient_province',
-    'DAnpMxi3WXw' => 'patient_district',
+    'z12AOQeFr5H' => 'external_sample_code', //dhis2 case id
+    'iwzGzKTlYGR' => 'patient_id',
+    'JtuGgGPsSuZ' => 'patient_province',
+    'yvkYfTjxEJU' => 'patient_district',
     //'' => 'patient_city',
-    'bJWVdRUHuJE' => 'patient_occupation',
-    'VEmNYrYrHd5' => 'patient_marital_status',
-    'uj19ud2MGLp' => 'patient_phone_number',
-    //'' => 'patient_insurance',
-    'OQFenB9rqYX' => 'patient_name',
-    'zGTHEMwHv5K' => 'patient_dob',
-    'FAjryqDCKk4' => 'social_category',
-    'fK0WSCeiocf' => 'patient_gender',
+    'qYpyifGg6Yi' => 'patient_occupation',
+    'EEAIP0aO4aR' => 'patient_marital_status',
+    'iUkIkQbkxI1' => 'patient_phone_number',
+    'BzEcIK9udqH' => 'patient_insurance',
+    'p2e195R27TO' => 'patient_name',
+    'mtRPhPyLDsv' => 'patient_dob',
+    'DP8JyLEof33' => 'social_category',
+    'Rq4qM2wKYFL' => 'patient_gender',
     //'' => 'patient_nationality'
 ];
 
@@ -47,14 +51,14 @@ $attributesDataElementMapping = [
 
 
 $eventsDataElementMapping = [
-    'Qu4LXThGcZa' => 'sample_collection_date',
-    'kpRGgnpBg0o' => 'hbsag_result',
-    'bZz6gdQ8VKK' => 'anti_hcv_result',
-    'Ggd5bSi74kC' => 'hbv_vl_count',
-    'KqH0EkWPGvR' => 'hcv_vl_count',
-    'nLywSrtrjT3' => 'hepatitis_test_type',
-    'SaHBNmmUcqd' => 'lab_id',
-    'mXzNFIK76ah' => 'reason_for_vl_test'
+    'GWoBWpKWlWJ' => 'sample_collection_date',
+    'hvznTv3ZjXv' => 'hbsag_result',
+    'szTAjn4r7yM' => 'anti_hcv_result',
+    'Di17rUJDIWZ' => 'hbv_vl_count',
+    'Oem0BXNDPWL' => 'hcv_vl_count',
+    'zi6Kyccn42e' => 'hepatitis_test_type',
+    'DMQSNcqWRvI' => 'lab_id',
+    'KPFLSlmiY89' => 'reason_for_vl_test'
 ];
 
 
@@ -72,7 +76,7 @@ foreach ($trackedEntityInstances as $tracker) {
 
         $allProgramStages = array_column($enrollments['events'], 'programStage', 'event');
 
-        $screeningEventIds = array_keys($allProgramStages, 'Dq1UaQrYbgr'); // screening programStage
+        $screeningEventIds = array_keys($allProgramStages, 'ZBWBirHgmE6'); // screening programStage
 
         if (count($screeningEventIds) == 0)  continue 2; // if no screening stage, skip this tracker entirely
 
@@ -84,7 +88,7 @@ foreach ($trackedEntityInstances as $tracker) {
         $eventsData = array();
         foreach ($enrollments['events'] as $event) {
 
-            if ($event['programStage'] != 'Dq1UaQrYbgr') continue;
+            if ($event['programStage'] != 'ZBWBirHgmE6') continue;
 
             foreach ($event['dataValues'] as $dV) {
                 if (empty($eventsDataElementMapping[$dV['dataElement']])) continue;
