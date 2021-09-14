@@ -6,14 +6,10 @@ if (session_status() == PHP_SESSION_NONE) {
 
 
 $general = new \Vlsm\Models\General($db);
-//system config
-$systemConfigQuery = "SELECT * from system_config";
-$systemConfigResult = $db->query($systemConfigQuery);
-$sarr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
-	$sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
-}
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
+
+$sarr = $general->getSystemConfig();
+
 //global config
 $configQuery = "SELECT `value` FROM global_config WHERE name ='vl_form'";
 $configResult = $db->query($configQuery);
@@ -23,8 +19,7 @@ $country = $configResult[0]['value'];
 // $rpResult = $db->rawQuery($rpQuery);
 if ($sarr['sc_user_type'] == 'remoteuser') {
 	$sCode = 'remote_sample_code';
-	$vlfmQuery = "SELECT GROUP_CONCAT(DISTINCT vlfm.facility_id SEPARATOR ',') as facilityId FROM vl_user_facility_map as vlfm where vlfm.user_id='" . $_SESSION['userId'] . "'";
-	$vlfmResult = $db->rawQuery($vlfmQuery);
+	$facilityMap = $facilitiesDb->getFacilityMap($_SESSION['userId']);
 } else if ($sarr['sc_user_type'] == 'vluser' || $sarr['sc_user_type'] == 'standalone') {
 	$sCode = 'sample_code';
 }
@@ -33,17 +28,17 @@ $module = $_POST['module'];
 
 $query = "";
 if ($module == 'vl') {
-	$query .= "SELECT vl.sample_code,vl.remote_sample_code,vl.vl_sample_id FROM vl_request_form as vl where (vl.sample_code IS NOT NULL OR vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='') AND (vl.sample_code is null OR vl.sample_code ='') AND vl.vlsm_country_id = $country";
+	$query .= "SELECT vl.sample_code,vl.remote_sample_code,vl.vl_sample_id FROM vl_request_form as vl where (vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='') AND (vl.sample_code is null OR vl.sample_code ='')";
 } else if ($module == 'eid') {
-	$query .= "SELECT vl.sample_code,vl.remote_sample_code,vl.eid_id FROM eid_form as vl where (vl.sample_code IS NOT NULL OR vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='') AND (vl.sample_code is null OR vl.sample_code ='')  AND vl.vlsm_country_id = $country";
+	$query .= "SELECT vl.sample_code,vl.remote_sample_code,vl.eid_id FROM eid_form as vl where (vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='') AND (vl.sample_code is null OR vl.sample_code ='') ";
 } else if ($module == 'covid19') {
-	$query .= "SELECT vl.sample_code,vl.remote_sample_code,vl.covid19_id FROM form_covid19 as vl where (vl.sample_code IS NOT NULL OR vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='') AND (vl.sample_code is null OR vl.sample_code ='')  AND vl.vlsm_country_id = $country";
+	$query .= "SELECT vl.sample_code,vl.remote_sample_code,vl.covid19_id FROM form_covid19 as vl where (vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='') AND (vl.sample_code is null OR vl.sample_code ='') ";
 } else if ($module == 'hepatitis') {
-	$query .= "SELECT vl.sample_code,vl.remote_sample_code,vl.hepatitis_id FROM form_hepatitis as vl where (vl.sample_code IS NOT NULL OR vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='') AND (vl.sample_code is null OR vl.sample_code ='')  AND vl.vlsm_country_id = $country";
+	$query .= "SELECT vl.sample_code,vl.remote_sample_code,vl.hepatitis_id FROM form_hepatitis as vl where (vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='') AND (vl.sample_code is null OR vl.sample_code ='') ";
 }
 
-if (isset($vlfmResult[0]['facilityId'])) {
-	$query .= " AND facility_id IN(" . $vlfmResult[0]['facilityId'] . ")";
+if (!empty($facilityMap)) {
+	$query .= " AND facility_id IN(" . $facilityMap . ")";
 }
 
 if (isset($_POST['testingLab']) && $_POST['testingLab'] != "") {
@@ -51,6 +46,7 @@ if (isset($_POST['testingLab']) && $_POST['testingLab'] != "") {
 }
 
 $query .= " ORDER BY vl.request_created_datetime ASC";
+
 $result = $db->rawQuery($query);
 
 ?>

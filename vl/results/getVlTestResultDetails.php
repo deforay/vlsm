@@ -1,6 +1,6 @@
 <?php
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+     session_start();
 }
 #require_once('../../startup.php');
 
@@ -12,15 +12,14 @@ $arr = array();
 for ($i = 0; $i < sizeof($configResult); $i++) {
      $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
-//system config
-$systemConfigQuery = "SELECT * from system_config";
-$systemConfigResult = $db->query($systemConfigQuery);
-$sarr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
-     $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
-}
+
 $general = new \Vlsm\Models\General($db);
+
+$sarr = $general->getSystemConfig();
+
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
+
+
 $tableName = "vl_request_form";
 $primaryKey = "vl_sample_id";
 
@@ -396,13 +395,11 @@ if (isset($_POST['vlPrint']) && $_POST['vlPrint'] == 'print') {
      $dWhere = "WHERE vl.vlsm_country_id='" . $arr['vl_form'] . "' AND vl.result_status!=9";
 }
 if ($sarr['sc_user_type'] == 'remoteuser') {
-     //$sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
-     //$dWhere = $dWhere." AND request_created_by='".$_SESSION['userId']."'";
-     $userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT facility_id ORDER BY facility_id SEPARATOR ',') as facility_id FROM vl_user_facility_map where user_id='" . $_SESSION['userId'] . "'";
-     $userfacilityMapresult = $db->rawQuery($userfacilityMapQuery);
-     if ($userfacilityMapresult[0]['facility_id'] != null && $userfacilityMapresult[0]['facility_id'] != '') {
-          $sWhere = $sWhere . " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")";
-          $dWhere = $dWhere . " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")";
+     $facilityMap = $facilitiesDb->getFacilityMap($_SESSION['userId']);
+
+     if (!empty($facilityMap)) {
+          $sWhere = $sWhere . " AND vl.facility_id IN (" . $facilityMap . ")";
+          $dWhere = $dWhere . " AND vl.facility_id IN (" . $facilityMap . ")";
      }
 }
 $sQuery = $sQuery . ' ' . $sWhere;
@@ -455,8 +452,8 @@ foreach ($rResult as $aRow) {
           //$row[] = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '\',900,520);"><i class="fa fa-pencil-square-o"></i> Enter Result</a>
           //         <a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertSearchResultToPdf('.$aRow['vl_sample_id'].');"><i class="fa fa-file-text"> Result PDF</i></a>';
           $print = '<a href="updateVlTestResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Enter Result</a>';
-          if($aRow['result_status'] == 7 && $aRow['locked'] == 'yes'){
-               if( isset($_SESSION['privileges']) && !in_array("edit-locked-vl-samples", $_SESSION['privileges'])){
+          if ($aRow['result_status'] == 7 && $aRow['locked'] == 'yes') {
+               if (isset($_SESSION['privileges']) && !in_array("edit-locked-vl-samples", $_SESSION['privileges'])) {
                     $print = '<a href="javascript:void(0);" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Locked" disabled><i class="fa fa-lock"> Locked</i></a>';
                }
           }
