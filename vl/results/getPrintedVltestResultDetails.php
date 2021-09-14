@@ -1,6 +1,6 @@
 <?php
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+	session_start();
 }
 #require_once('../../startup.php');
 
@@ -12,15 +12,13 @@ $arr = array();
 for ($i = 0; $i < sizeof($configResult); $i++) {
 	$arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
-//system config
-$systemConfigQuery = "SELECT * from system_config";
-$systemConfigResult = $db->query($systemConfigQuery);
-$sarr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
-	$sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
-}
+
 $general = new \Vlsm\Models\General($db);
+$sarr = $general->getSystemConfig();
+
+
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
+
 $tableName = "vl_request_form";
 $primaryKey = "vl_sample_id";
 
@@ -335,13 +333,10 @@ if (isset($_POST['vlPrint']) && $_POST['vlPrint'] == 'print') {
 	$dWhere = "WHERE ((vl.result_status = 7 AND vl.result is NOT NULL AND vl.result !='') OR (vl.result_status = 4 AND (vl.result is NULL OR vl.result = ''))) AND vl.vlsm_country_id='" . $arr['vl_form'] . "' AND result_printed_datetime is NOT NULL AND result_printed_datetime not like ''";
 }
 if ($sarr['sc_user_type'] == 'remoteuser') {
-	//$sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
-	//$dWhere = $dWhere." AND request_created_by='".$_SESSION['userId']."'";
-	$userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT facility_id ORDER BY facility_id SEPARATOR ',') as facility_id FROM vl_user_facility_map where user_id='" . $_SESSION['userId'] . "'";
-	$userfacilityMapresult = $db->rawQuery($userfacilityMapQuery);
-	if ($userfacilityMapresult[0]['facility_id'] != null && $userfacilityMapresult[0]['facility_id'] != '') {
-		$sWhere = $sWhere . " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")";
-		$dWhere = $dWhere . " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")";
+	$facilityMap = $facilitiesDb->getFacilityMap($_SESSION['userId']);
+	if (!empty($facilityMap)) {
+		$sWhere = $sWhere . " AND vl.facility_id IN (" . $facilityMap . ")";
+		$dWhere = $dWhere . " AND vl.facility_id IN (" . $facilityMap . ")";
 	}
 }
 

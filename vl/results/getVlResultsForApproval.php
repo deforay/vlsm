@@ -7,6 +7,8 @@ if (session_status() == PHP_SESSION_NONE) {
 
 
 $general = new \Vlsm\Models\General($db);
+$facilitiesDb = new \Vlsm\Models\Facilities($db);
+
 $tableName = "vl_request_form";
 $primaryKey = "vl_sample_id";
 
@@ -209,11 +211,9 @@ if ($sWhere != '') {
      $sWhere = $sWhere . ' WHERE vl.vlsm_country_id="' . $vlsmFormId . '"';
 }
 if ($userType == 'remoteuser') {
-     //$sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
-     $userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT facility_id ORDER BY facility_id SEPARATOR ',') as facility_id FROM vl_user_facility_map where user_id='" . $_SESSION['userId'] . "'";
-     $userfacilityMapresult = $db->rawQuery($userfacilityMapQuery);
-     if ($userfacilityMapresult[0]['facility_id'] != null && $userfacilityMapresult[0]['facility_id'] != '') {
-          $sWhere = $sWhere . " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")  ";
+     $facilityMap = $facilitiesDb->getFacilityMap($_SESSION['userId']);
+     if (!empty($facilityMap)) {
+          $sWhere = $sWhere . " AND vl.facility_id IN (" . $facilityMap . ")  ";
      }
 }
 $sWhere = $sWhere . ' AND vl.result!=""';
