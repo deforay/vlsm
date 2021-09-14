@@ -5,7 +5,7 @@
 $dhis2 = new \Vlsm\Interop\Dhis2(DHIS2_URL, DHIS2_USER, DHIS2_PASSWORD);
 
 //$query = "SELECT * FROM form_hepatitis WHERE source_of_request LIKE 'dhis%' AND result_sent_to_source LIKE 'pending'";
-$query = "SELECT * FROM form_hepatitis WHERE source_of_request LIKE 'dhis%' AND result_status = 7";
+$query = "SELECT * FROM form_hepatitis WHERE source_of_request LIKE 'dhis%' AND result_status = 7 AND result_sent_to_source NOT LIKE 'sent'";
 $formResults = $db->rawQuery($query);
 $counter = 0;
 foreach ($formResults as $row) {
@@ -14,10 +14,11 @@ foreach ($formResults as $row) {
   $trackedEntityInstance = $sourceOfRequestArray[1];
 
   $programStages = array(
-    'Initial HBV VL' => 'UXFQ8uL45XB',
-    'Initial HCV VL' => 'UXFQ8uL45XB',
-    'Follow up HBV VL' => 'hGSprgJ8SaO',
-    'SVR12 HCV VL' => 'JYL69MJWyFc',
+    'Screening' => 'ZBWBirHgmE6',
+    'Initial HBV VL' => 'KPBuhvFV5bK',
+    'Initial HCV VL' => 'KPBuhvFV5bK',
+    'Follow up HBV VL' => 'WAyPhFAJLdv',
+    'SVR12 HCV VL' => 'qiqz1esOFKV',
   );
 
   $urlData = array();
@@ -55,14 +56,14 @@ foreach ($formResults as $row) {
 
 
   $programStagesVariables = array(
-    'labResultHcvVlCount' => 'KqH0EkWPGvR',
-    'labResultHbvVlCount' => 'Ggd5bSi74kC',
-    'followUpHbvVlCount' => 'Ggd5bSi74kC',
-    'finalConfirmationHcvVlCount' => 'KqH0EkWPGvR',
-    'dateHcvResultsAvailable' => 'ZO3rVJbTFDy',
-    'dateHbvResultsAvailable' => 'YTKJ6PrlTSl',
-    'hbvSampleId' => 'TybTedCboNb',
-    'hcvSampleId' => 'CZrar5yxcrC',
+    'labResultHcvVlCount' => 'Oem0BXNDPWL',
+    'labResultHbvVlCount' => 'Di17rUJDIWZ',
+    'followUpHbvVlCount' => 'LblBnouUMJE',
+    'finalConfirmationHcvVlCount' => 'wVmsNyyPWT0',
+    'dateHcvResultsAvailable' => 'GGLsByl8p0L',
+    'dateHbvResultsAvailable' => 'AzuU2zVke8N',
+    'hbvSampleId' => 'mVNtr2M5Nw3',
+    'hcvSampleId' => 'z6L8rdc77DL',
   );
 
 

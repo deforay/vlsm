@@ -1,6 +1,6 @@
 <?php
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+     session_start();
 }
 #require_once('../../startup.php');  
 
@@ -237,12 +237,11 @@ foreach ($rResult as $aRow) {
           $aRow['sample_collection_date'] = '';
      }
 
-     if($aRow['remote_sample']=='yes'){
+     if ($aRow['remote_sample'] == 'yes') {
           $decrypt = 'remote_sample_code';
-          
-      }else{
+     } else {
           $decrypt = 'sample_code';
-      }
+     }
 
      $patientFname = ucwords($general->crypto('decrypt', $aRow['patient_name'], $aRow[$decrypt]));
 

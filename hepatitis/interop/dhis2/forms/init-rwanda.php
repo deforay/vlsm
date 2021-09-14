@@ -9,9 +9,9 @@ $initOptionSets = array(
     //'province' => 'LqaKTLJFf4H',
     //'district' => 'HGTWO3xvXRX',
     //'socialStatus' => 'cNhaGfDzbUc',
-    'vlTestReasons' => 'MQy8ZT6aiV8',
+    'vlTestReasons' => 'zgKhu7dBYJm',
     //'gender' => 'CFbcYp2biob',
-    'testingLabs' => 'bievX3PVOGJ',
+    'testingLabs' => 'qrroYEzTQd3',
 );
 
 foreach ($initOptionSets as $t => $id) {
