@@ -118,7 +118,6 @@ try {
             $sampleJson = $app->generateSampleCode($provinceCode, $sampleCollectionDate, null, $provinceId, null, $user, 'eid');
             $sampleData = json_decode($sampleJson, true);
         }
-
         if (!isset($data['countryId']) || $data['countryId'] == '') {
             $data['countryId'] = '';
         }
@@ -132,6 +131,9 @@ try {
             'last_modified_by' => '',
             'last_modified_datetime' => $general->getDateTime()
         );
+        $eidData['remote_sample_code'] = "";
+        $eidData['sample_code'] = "";
+
         if ($roleUser['access_type'] != 'testing-lab') {
             $eidData['remote_sample_code'] = $sampleData['sampleCode'];
             $eidData['remote_sample_code_format'] = $sampleData['sampleCodeFormat'];

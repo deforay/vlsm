@@ -387,13 +387,13 @@ class App
 
     public function generateSampleCode($provinceCode, $sampleCollectionDate, $sampleFrom = null, $provinceId = '', $maxCodeKeyVal = null, $user, $testType = "")
     {
-
         $general = new \Vlsm\Models\General($this->db);
 
-        $confSampleCode = 'covid19_sample_code';
-        $confSampleCodePrefix = 'covid19_sample_code_prefix';
-        $table = "form_covid19";
-        $shortCode = 'c19';
+        $confSampleCode = '';
+        $confSampleCodePrefix = '';
+        $table = "";
+        $shortCode = '';
+
         $globalConfig = $general->getGlobalConfig();
         if (isset($testType) && $testType != "") {
             if ($testType == "covid19") {
@@ -416,7 +416,7 @@ class App
         $remotePrefix = '';
         $sampleCodeKeyCol = 'sample_code_key';
         $sampleCodeCol = 'sample_code';
-        if ($user['testing_user'] != 'yes') {
+        if ($user['access_type'] != 'testing-lab') {
             $remotePrefix = 'R';
             $sampleCodeKeyCol = 'remote_sample_code_key';
             $sampleCodeCol = 'remote_sample_code';
@@ -528,7 +528,7 @@ class App
         $remotePrefix = '';
         $sampleCodeKeyCol = 'sample_code_key';
         $sampleCodeCol = 'sample_code';
-        if ($user['testing_user'] != 'yes') {
+        if ($user['access_type'] != 'testing-lab') {
             $remotePrefix = 'R';
             $sampleCodeKeyCol = 'remote_sample_code_key';
             $sampleCodeCol = 'remote_sample_code';

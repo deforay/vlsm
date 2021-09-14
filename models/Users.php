@@ -226,7 +226,7 @@ class Users
         $result = array();
         $tokenExpiration = 30; //default is 30 days
 
-        $query = "SELECT * FROM $this->table WHERE api_token = ? and `status` = 'active'";
+        $query = "SELECT * FROM $this->table as ud INNER JOIN roles as r ON ud.role_id=r.role_id WHERE api_token = ? and ud.`status` = 'active'";
         $result = $this->db->rawQueryOne($query, array($token));
         $tokenExpiration = !empty($result['api_token_exipiration_days']) ? $result['api_token_exipiration_days'] : 30;
 
