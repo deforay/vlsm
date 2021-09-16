@@ -27,7 +27,7 @@ if ($arr['sample_code'] == 'auto' || $arr['sample_code'] == 'alphanumeric') {
 }
 //check remote user
 $pdQuery = "SELECT * FROM province_details";
-if ($sarr['sc_user_type'] == 'remoteuser') {
+if ($_SESSION['accessType'] == 'collection-site') {
 	$sampleCode = 'remote_sample_code';
 	//check user exist in user_facility_map table
 	$chkUserFcMapQry = "SELECT user_id FROM vl_user_facility_map WHERE user_id='" . $_SESSION['userId'] . "'";
@@ -726,7 +726,7 @@ if (isset($vlQueryInfo['reason_for_vl_result_changes']) && $vlQueryInfo['reason_
 												</div>
 												<?php
 												$styleStatus = '';
-												if ((($sarr['sc_user_type'] == 'remoteuser') && $vlQueryInfo['result_status'] == 9) || ($sCode != '')) {
+												if ((($_SESSION['accessType'] == 'collection-site') && $vlQueryInfo['result_status'] == 9) || ($sCode != '')) {
 													$styleStatus = "display:none";
 												?>
 													<input type="hidden" name="status" value="<?php echo $vlQueryInfo['result_status']; ?>" />
@@ -754,7 +754,7 @@ if (isset($vlQueryInfo['reason_for_vl_result_changes']) && $vlQueryInfo['reason_
 												<div class="col-md-4" style="<?php echo $styleStatus; ?>">
 													<label class="col-lg-5 control-label" for="status">Status <span class="mandatory">*</span></label>
 													<div class="col-lg-7">
-														<select class="form-control labSection <?php echo ($sarr['sc_user_type'] != 'remoteuser' && $sCode == '') ? 'isRequired' : ''; ?>" id="status" name="status" title="Please select test status">
+														<select class="form-control labSection <?php echo ($_SESSION['accessType'] == 'collection-site' && $sCode == '') ? 'isRequired' : ''; ?>" id="status" name="status" title="Please select test status">
 															<option value="">-- Select --</option>
 															<?php foreach ($statusResult as $status) { ?>
 																<option value="<?php echo $status['status_id']; ?>" <?php echo ($vlQueryInfo['result_status'] == $status['status_id']) ? 'selected="selected"' : ''; ?>><?php echo ucwords($status['status_name']); ?></option>
