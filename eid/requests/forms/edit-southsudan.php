@@ -22,7 +22,7 @@ $rKey = '';
 $pdQuery = "SELECT * FROM province_details";
 
 
-if ($usersModel->isAllowed('vlTestResult.php', $systemConfig) && $_SESSION['accessType'] != 'collection-site') {
+if ($_SESSION['accessType'] == 'collection-site') {
     $sampleCodeKey = 'remote_sample_code_key';
     $sampleCode = 'remote_sample_code';
     //check user exist in user_facility_map table
@@ -96,7 +96,7 @@ if ($sarr['sc_user_type'] == 'vluser' && $sCode != '') {
                                 </div>
                                 <table class="table" style="width:100%">
                                     <tr>
-                                        <?php if ($usersModel->isAllowed('vlTestResult.php', $systemConfig) && $_SESSION['accessType'] != 'collection-site') { ?>
+                                        <?php if ($_SESSION['accessType'] == 'collection-site') { ?>
                                             <td><label for="sampleCode">Sample ID </label></td>
                                             <td>
                                                 <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"><?php echo $eidInfo['sample_code'] ?></span>
@@ -373,7 +373,7 @@ if ($sarr['sc_user_type'] == 'vluser' && $sCode != '') {
 
                             </div>
                         </div>
-                        <?php if ($usersModel->isAllowed('vlTestResult.php', $systemConfig) && $_SESSION['accessType'] != 'collection-site') { ?>
+                        <?php if ($usersModel->isAllowed('eid-update-result.php', $systemConfig) && $_SESSION['accessType'] != 'collection-site') { ?>
                             <div class="box box-primary">
                                 <div class="box-body">
                                     <div class="box-header with-border">

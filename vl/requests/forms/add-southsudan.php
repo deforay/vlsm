@@ -28,7 +28,7 @@ if ($arr['sample_code'] == 'auto' || $arr['sample_code'] == 'alphanumeric' || $a
 //check remote user
 $rKey = '';
 $pdQuery = "SELECT * FROM province_details";
-if ($sarr['sc_user_type'] == 'remoteuser') {
+if ($_SESSION['accessType'] == 'collection-site') {
      $sampleCodeKey = 'remote_sample_code_key';
      $sampleCode = 'remote_sample_code';
      //check user exist in user_facility_map table
