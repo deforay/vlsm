@@ -110,7 +110,7 @@ try {
         vl.import_machine_name                               as machineName,
         vl.sample_tested_datetime                            as sampleTestedDateTime,
         vl.is_sample_rejected                                as isSampleRejected,
-        vl.result                                            as result,
+        COALESCE(vl.result,null)                             as result,
         vl.tested_by                                         as testedBy,
         vl.result_approved_by                                as approvedBy,
         vl.result_approved_datetime                          as approvedBy,
