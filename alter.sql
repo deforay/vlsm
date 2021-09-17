@@ -2290,3 +2290,6 @@ ALTER TABLE `eid_form` ADD `app_local_test_req_id` VARCHAR(256) NULL DEFAULT NUL
 
 -- Thana -- 06-Sep-2021
 ALTER TABLE `covid19_tests` ADD `updated_datetime` DATETIME NULL DEFAULT CURRENT_TIMESTAMP AFTER `result`;
+
+-- Amit 17 Sep 2021
+UPDATE `global_config` SET `remote_sync_needed` = 'yes' WHERE `name` = 'vl_monthly_target';
