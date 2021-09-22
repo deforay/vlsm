@@ -61,7 +61,8 @@ try {
     $sQuery = "SELECT 
         vl.app_local_test_req_id                             as localTestReqID,
         vl.eid_id                                            as eidId,
-        CASE WHEN (vl.sample_code IS NOT NULL) THEN vl.sample_code ELSE vl.remote_sample_code END as sampleCode,
+        vl.sample_code                                       as sampleCode,
+        vl.remote_sample_code                                as remoteSampleCode,
         vl.vlsm_instance_id                                  as instanceId,
         vl.vlsm_country_id                                   as formId,
         vl.facility_id                                       as facilityId,
@@ -233,7 +234,7 @@ try {
         );
 
         $app = new \Vlsm\Models\App($db);
-        $trackId = $app->addApiTracking($user['user_id'], count($rowData), 'fetch-results', 'eid', $requestUrl, $params, 'json');
+        $trackId = $app->addApiTracking($user['user_id'], count($rowData), 'get-requests', 'eid', $requestUrl, $params, 'json');
         http_response_code(200);
         echo json_encode($response);
         exit(0);
