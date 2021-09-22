@@ -246,11 +246,11 @@ if (!empty($jsonResponse) && $jsonResponse != "[]") {
 
         if (isset($dataToSync[$dataType]) && !empty($dataValues)) {
 
-            if ($dataType == 'healthFacilities') {
+            if ($dataType == 'healthFacilities' && !empty($dataValues)) {
                 $updatedFacilities = array_column($dataValues, 'facility_id');
                 $db = $db->where('facility_id', $updatedFacilities, 'IN');
                 $id = $db->delete('health_facilities');
-            } else if ($dataType == 'testingLabs') {
+            } else if ($dataType == 'testingLabs' && !empty($dataValues)) {
                 $updatedFacilities = array_column($dataValues, 'facility_id');
                 $db->where('facility_id', $updatedFacilities, 'IN');
                 $id = $db->delete('testing_labs');
